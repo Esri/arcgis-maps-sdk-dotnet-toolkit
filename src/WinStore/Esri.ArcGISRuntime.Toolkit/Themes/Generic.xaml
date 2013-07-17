@@ -1,0 +1,183 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Esri.ArcGISRuntime.Toolkit.Controls">
+
+	<!-- Default Legend Style-->
+	<Style TargetType="local:Legend">
+		<Setter Property="HorizontalContentAlignment" Value="Left" />
+		<Setter Property="VerticalContentAlignment" Value="Top" />
+		<Setter Property="Padding" Value="0" />
+		<Setter Property="Margin" Value="0" />
+		<Setter Property="IsTabStop" Value="False" />
+
+		<!-- LegendItemTemplate = template for low level legend item : image + label-->
+		<Setter Property="LegendItemTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal" Margin="1">
+						<Grid MinWidth="20" MinHeight="10">
+							<Image Source="{Binding SymbolSwatch}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</Grid>
+						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
+					</StackPanel>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
+
+		<!-- LayerLegendTemplate = template for a layer legend -->
+		<Setter Property="LayerTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal" Margin="0,4">
+						<ToolTipService.ToolTip>
+							<StackPanel MaxWidth="400">
+								<TextBlock FontWeight="Bold" Text="{Binding ParentLabel}" TextWrapping="Wrap" />
+								<TextBlock FontWeight="Bold" Text="{Binding Label}" TextWrapping="Wrap" />
+								<TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+							</StackPanel>
+						</ToolTipService.ToolTip>
+						<TextBlock Text="{Binding Label}" FontWeight="Bold" VerticalAlignment="Center"/>
+					</StackPanel>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
+
+		<!-- Optional MapLayerLegendTemplate (default is LayerLegendTemplate) = template for a map layer legend -->
+		<!-- A busy indicator and a slider for layer opacity can make sense here-->
+		<Setter Property="MapLayerTemplate">
+			<Setter.Value>
+				<DataTemplate>
+					<StackPanel  Orientation="Horizontal" Margin="0,4">
+						<ToolTipService.ToolTip>
+							<StackPanel MaxWidth="400">
+								<TextBlock FontWeight="Bold" Text="{Binding Label}" TextWrapping="Wrap" />
+								<TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+							</StackPanel>
+						</ToolTipService.ToolTip>
+						<TextBlock Text="{Binding Label}" FontWeight="Bold" VerticalAlignment="Center"/>
+					</StackPanel>
+				</DataTemplate>
+			</Setter.Value>
+		</Setter>
+
+		<!-- legend control template : here based on a itemscontrol-->
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="local:Legend">
+					<ItemsControl				ItemsSource="{TemplateBinding LayerItemsSource}"
+                                                Background="{TemplateBinding Background}"
+                                                Foreground="{TemplateBinding Foreground}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                Padding="{TemplateBinding Padding}"
+                                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        >
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Vertical" Margin="0,0,0,12">
+
+									<!--Layer Item-->
+									<ContentPresenter Content="{Binding}" ContentTemplate="{Binding Template}" />
+
+									<!--Legend Items-->
+									<ItemsControl ItemsSource="{Binding LegendItems}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate >
+												<ContentPresenter Content="{Binding}" ContentTemplate="{Binding Template}" />
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+
+								</StackPanel>
+							</DataTemplate>
+
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!--Attribution control style-->
+	<Style TargetType="local:Attribution">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="VerticalAlignment" Value="Bottom" />
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="IsHitTestVisible" Value="False" />
+
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="local:Attribution">
+					<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+						<StackPanel>
+							<ItemsControl ItemsSource="{TemplateBinding Items}" >
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+    <!-- Default ScaleLine Style-->
+    <Style TargetType="local:ScaleLine">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="HorizontalAlignment" Value="Left " />
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="TargetWidth" Value="200" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:ScaleLine">
+                    <Grid x:Name="LayoutRoot" Width="{TemplateBinding Width}">
+                        <StackPanel HorizontalAlignment="Stretch" >                            
+                            <StackPanel Orientation="Horizontal">                                
+                                <Rectangle Width="{Binding Width, ElementName=MetricScaleLine}"/>
+                                <TextBlock x:Name="MetricValue" Text="100" Foreground="{TemplateBinding Foreground}"/>
+                                <TextBlock x:Name="MetricUnit" Text="m" Foreground="{TemplateBinding Foreground}"/>
+                            </StackPanel>                            
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="2" Fill="{TemplateBinding Foreground}" Height="5" />
+                                <Rectangle Width="{Binding Width, ElementName=MetricScaleLine}"/>
+                                <Rectangle Width="2" Fill="{TemplateBinding Foreground}" Height="5" />
+                            </StackPanel>                            
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="{TemplateBinding Foreground}" Height="2" Width="4"/>
+                                <Grid>                                    
+                                    <Rectangle Fill="{TemplateBinding Foreground}" Height="2" HorizontalAlignment="Left" 
+										   Width="200" x:Name="MetricScaleLine" />                                    
+                                    <Rectangle Fill="{TemplateBinding Foreground}" Height="2" HorizontalAlignment="Left" 
+										   Width="200" x:Name="UsScaleLine" />
+                                </Grid>
+                            </StackPanel>                             
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="2" Fill="{TemplateBinding Foreground}" Height="5" />
+                                <Rectangle Width="{Binding Width, ElementName=UsScaleLine}"/>
+                                <Rectangle Width="2" Fill="{TemplateBinding Foreground}" Height="5" />
+                            </StackPanel>                            
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Width="{Binding Width, ElementName=UsScaleLine}"/>
+                                <TextBlock x:Name="UsValue" Text="USValue" Foreground="{TemplateBinding Foreground}"/>
+                                <TextBlock x:Name="UsUnit" Text="UsUnit" Foreground="{TemplateBinding Foreground}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>
+
+    
