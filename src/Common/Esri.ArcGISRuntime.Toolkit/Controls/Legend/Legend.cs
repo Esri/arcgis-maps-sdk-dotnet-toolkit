@@ -37,11 +37,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		/// </summary>
 		public Legend()
 		{
+#if NETFX_CORE || WINDOWS_PHONE
 			DefaultStyleKey = typeof(Legend);
+#endif
 			_legendTree = new LegendTree();
 			_legendTree.Refreshed += OnRefreshed;
 			_legendTree.PropertyChanged += LegendTree_PropertyChanged;
 		}
+
+#if !NETFX_CORE && !WINDOWS_PHONE
+		static Legend()
+		{
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(Legend),
+				new FrameworkPropertyMetadata(typeof(Legend)));
+		}
+#endif
 
 		void LegendTree_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
@@ -70,10 +80,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 		private static void OnScalePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			((Legend)d).OnLayersPropertyChanged((double)e.NewValue);
+			((Legend)d).OnScalePropertyChanged((double)e.NewValue);
 		}
 
-		private void OnLayersPropertyChanged(double scale)
+		private void OnScalePropertyChanged(double scale)
 		{
 			if (!_isLoaded)
 				return; // defer initialization until all parameters are well known
