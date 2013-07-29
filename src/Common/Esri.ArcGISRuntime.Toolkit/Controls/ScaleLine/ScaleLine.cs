@@ -41,12 +41,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        public ScaleLine()
-        {
+		public ScaleLine()
+		{
+#if NETFX_CORE || WINDOWS_PHONE
 			DefaultStyleKey = typeof(ScaleLine);
-        }       
+#endif
+		}
 
-        #endregion Constructor
+#if !NETFX_CORE && !WINDOWS_PHONE
+		static ScaleLine()
+		{
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(ScaleLine),
+				new FrameworkPropertyMetadata(typeof(ScaleLine)));
+		}
+#endif
+		#endregion Constructor
 
         #region OnApplyTemplate
 
