@@ -31,8 +31,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		/// </summary>
 		public Attribution()
 		{
+#if NETFX_CORE || WINDOWS_PHONE
 			DefaultStyleKey = typeof(Attribution);
+#endif
 		}
+
+#if !NETFX_CORE && !WINDOWS_PHONE
+		static Attribution()
+		{
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(Attribution),
+				new FrameworkPropertyMetadata(typeof(Attribution)));
+		}
+#endif
 		#endregion
 
 		#region DependencyProperty Layers
