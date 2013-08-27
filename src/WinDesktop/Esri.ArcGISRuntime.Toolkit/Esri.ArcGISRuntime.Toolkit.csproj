@@ -109,12 +109,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\..\Applications\DotNet\WinDesktop\API\Esri.ArcGISRuntime\Esri.ArcGISRuntime.csproj">
-      <Project>{0fc7b6ae-7a1d-4c31-8ee6-0d80f6acb13e}</Project>
-      <Name>Esri.ArcGISRuntime</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
