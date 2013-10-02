@@ -89,7 +89,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <SDKReference Include="ESRI.ArcGISRuntime, Version=10.2.0">
+    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.1.0">
       <Name>ArcGIS Runtime for Windows Store apps %28Beta%29</Name>
     </SDKReference>
     <SDKReference Include="Microsoft.VCLibs, Version=11.0">
@@ -102,6 +102,24 @@
     </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Attribution\Attribution.cs">
       <Link>Controls\Attribution\Attribution.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureDataField.cs">
+      <Link>Controls\FeatureDataField\FeatureDataField.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureHelper.cs">
+      <Link>Controls\FeatureDataField\FeatureHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\KeyValueItem.cs">
+      <Link>Controls\FeatureDataField\KeyValueItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangedEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangingEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueChangingEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\CollectionExtensions.cs">
       <Link>Controls\Legend\CollectionExtensions.cs</Link>
