@@ -57,7 +57,7 @@ Set the `GdbFeature` property to the GdbFeature you want to work with, then set 
 ```
 
 FeatureDataField Properties:
-* `GdbFeature` - GdbFeature that contains `TableSchema` used for valiation requirements and defines UI for 'FieldName'
+* `GdbFeature` - GdbFeature that contains information used for valiation requirements and defines UI for `FieldName`
 * `FieldName` - The name of the field found in GdbFeature.Attributes that UI will be created for.
 * `IsReadOnly` - Allows user to make an editable field readonly. Doesn't allow readonly fields to become editable.
 * `Value` - The current value of the FeatureDataField control.
