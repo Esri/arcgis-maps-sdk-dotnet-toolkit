@@ -55,6 +55,24 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Attribution\Attribution.cs">
       <Link>Controls\Attribution\Attribution.cs</Link>
     </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureDataField.cs">
+      <Link>Controls\FeatureDataField\FeatureDataField.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureHelper.cs">
+      <Link>Controls\FeatureDataField\FeatureHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\KeyValueItem.cs">
+      <Link>Controls\FeatureDataField\KeyValueItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangedEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangingEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueChangingEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\CollectionExtensions.cs">
       <Link>Controls\Legend\CollectionExtensions.cs</Link>
     </Compile>
@@ -98,6 +116,7 @@
     </EmbeddedResource>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
