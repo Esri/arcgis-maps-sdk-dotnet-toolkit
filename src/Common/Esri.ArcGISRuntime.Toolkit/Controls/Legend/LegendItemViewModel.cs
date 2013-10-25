@@ -108,7 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 #if NETFX_CORE || WINDOWS_PHONE
 					_swatch = new WriteableBitmap(1, 1); //Temporary image
 #else
-					_swatch = new WriteableBitmap(1, 1, dpi, dpi, PixelFormats.Default, null); //Temporary image
+					_swatch = new WriteableBitmap(1, 1, dpi, dpi, PixelFormats.Bgra32, null); //Temporary image
 #endif
 					Task<ImageSource> task = null;
 					if(_symbol is MarkerSymbol)
