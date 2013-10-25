@@ -13,6 +13,7 @@ ArcGIS Toolkit for .NET includes:
 * `Attribution` : Displays copyright/attribution information for layers in your map.
 * `ScaleLine` : Displays current scale reference.
 * `SignInDialog` (Desktop only) : SignIn dialog that challenges the user when accessign ArcGIS secured resources..
+* `FeatureDataField` : Edit control for working with individual feature attributes.
 
 ## How Do I Use It?
 * Get the Github Repo by either cloning it or downloading the zip package from the master branch.
@@ -54,6 +55,23 @@ The simplest way to use it is by setting the IdentityManager ChallengeMethod to 
 ```code
    IdentityManager.Current.ChallengeMethod = SignInDialog.DoSignIn;
 ```
+
+####FeatureDataField
+Set the `GdbFeature` property to the GdbFeature you want to work with, then set the `FieldName` property with the name of the field you would like to edit or display.
+
+```xml
+  <esriTK:FeatureDataField GdbFeature="{Binding MyGdbFeature}" FieldName="MyField" IsReadOnly="True" />
+```
+
+FeatureDataField Properties:
+* `GdbFeature` - GdbFeature that contains information used for valiation requirements and defines UI for `FieldName`
+* `FieldName` - The name of the field found in GdbFeature.Attributes that UI will be created for.
+* `IsReadOnly` - Allows user to make an editable field readonly. Doesn't allow readonly fields to become editable.
+* `Value` - The current value of the FeatureDataField control.
+* `ValidationException` - `Exception` property that hold any messaged generated when the `Value` doesn't pass validation requirement.
+* `ReadOnlyTemplate` - This `DataTemplate` is used if the `IsReadOnly` is true or if the `FieldInfo` defines the field as readonly.
+* `InputTemplate` - This `DataTemplate` is used for standard input for string, number, and datetime types. 
+* `SelectorTemplate` - This `DataTempalte` is used when `FieldInfo` defines a `CodedValueDomain`.
 
 ## Resources
 

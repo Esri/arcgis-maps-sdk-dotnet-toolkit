@@ -93,6 +93,24 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Attribution\Attribution.cs">
       <Link>Controls\Attribution\Attribution.cs</Link>
     </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureDataField.cs">
+      <Link>Controls\FeatureDataField\FeatureDataField.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureHelper.cs">
+      <Link>Controls\FeatureDataField\FeatureHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\KeyValueItem.cs">
+      <Link>Controls\FeatureDataField\KeyValueItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangedEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangingEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueChangingEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueEventArgs.cs">
+      <Link>Controls\FeatureDataField\ValueEventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\CollectionExtensions.cs">
       <Link>Controls\Legend\CollectionExtensions.cs</Link>
     </Compile>
@@ -117,15 +135,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.0.0">
-      <Name>ArcGIS Runtime for Windows Phone %28Beta%29</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.1.0">
+      <Name>ArcGIS Runtime for Windows Phone %28Beta%29</Name>
+    </SDKReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
