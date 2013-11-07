@@ -405,7 +405,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			IdentityManager.Credential credential = null;
 			try
 			{
-				credential = await IdentityManager.Current.GenerateTokenAsync(_credentialRequestInfo.ServiceUri, UserName, Password, _credentialRequestInfo.GenerateTokenOptions);
+				credential = await IdentityManager.Current.GenerateCredentialAsync(_credentialRequestInfo.ServiceUri, UserName, Password, _credentialRequestInfo.GenerateTokenOptions);
 			}
 			catch (Exception e)
 			{
