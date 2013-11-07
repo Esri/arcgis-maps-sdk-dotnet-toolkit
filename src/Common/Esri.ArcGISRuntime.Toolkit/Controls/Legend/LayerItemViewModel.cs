@@ -4,7 +4,6 @@
 // All other rights reserved.
 
 using Esri.ArcGISRuntime.Layers;
-using Esri.ArcGISRuntime.WebMap;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,8 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 		/// <param name="layer">The layer.</param>
 		/// <param name="layerLegendInfo">The layer legend info.</param>
 		/// <param name="defaultLayerDescription">The default layer description (= the map layer description).</param>
-		/// <param name="scale">The scale.</param>
-		internal LayerItemViewModel(Layer layer, LayerLegendInfo layerLegendInfo, string defaultLayerDescription, double scale)
+		internal LayerItemViewModel(Layer layer, LayerLegendInfo layerLegendInfo, string defaultLayerDescription)
 			: this(layer)
 		{
 			Debug.Assert(layerLegendInfo != null);
@@ -72,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 
 			if (layerLegendInfo.LayerLegendInfos != null)
 			{
-				LayerItems = layerLegendInfo.LayerLegendInfos.Select(info => new LayerItemViewModel(layer, info, defaultLayerDescription, scale)).ToObservableCollection();
+				LayerItems = layerLegendInfo.LayerLegendInfos.Select(info => new LayerItemViewModel(layer, info, defaultLayerDescription)).ToObservableCollection();
 			}
 
 			if (layerLegendInfo.LegendItemInfos != null)
@@ -506,7 +504,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 						bool hasLayerChildren = layerItem.LayerItems != null && layerItem.LayerItems.Any(item => !item.IsTransparent && !item.IsHidden); // if all children are transparent or hidden, the layerItem becomes a leaf 
 						bool hasNoChildren = (layerItem.LegendItems == null || !layerItem.LegendItems.Any()) &&
 											 (layerItem.LayerItems == null || !layerItem.LayerItems.Any());
-						bool isBusy = layerItem is MapLayerItem && ((MapLayerItem) layerItem).IsBusy;
+						bool isBusy = layerItem is MapLayerItem && layerItem.IsBusy;
 						if (((layerItem.IsMapLayer && LayerItemsOptions.ReturnMapLayerItems) ||
 							(!hasLayerChildren && (!hasNoChildren || isBusy))  || // Leaves are returned if they are not empty
 							LayerItemsOptions.ReturnGroupLayerItems) && !layerItem.IsTransparent)

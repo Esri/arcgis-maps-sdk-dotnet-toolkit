@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 				if (LegendTree != null)
 					LegendTree.UpdateLayerVisibilities();
 			}
-			else if (e.PropertyName == "Title")
+			else if (e.PropertyName == "DisplayName")
 			{
 				Label = layer.DisplayName;
 			}
@@ -198,8 +198,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 					if (string.IsNullOrEmpty(Label)) // Label is set with LayerID : keep it if not null
 						Label = result.LayerName;
 
-					double scale = LegendTree.Scale;
-
 					// Combine Layer and Service scale
 					double minScale = result.MinimumScale == 0.0 ? double.PositiveInfinity : result.MinimumScale;
 					if (Layer.MinScale != 0.0 && !double.IsNaN(Layer.MinScale))
@@ -216,7 +214,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 					if (result.LayerLegendInfos != null)
 					{
-						LayerItems = result.LayerLegendInfos.Select(info => new LayerItemViewModel(Layer, info, Description, scale)).ToObservableCollection();
+						LayerItems = result.LayerLegendInfos.Select(info => new LayerItemViewModel(Layer, info, Description)).ToObservableCollection();
 					}
 
 					if (result.LegendItemInfos != null)
