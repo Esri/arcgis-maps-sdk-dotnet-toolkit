@@ -2,8 +2,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls">
-
-	<!-- Default Legend Style-->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ESRI.ArcGISRuntime.Toolkit;component/Controls/SignInDialog/SignInDialog.Theme.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!-- Default Legend Style-->
 	<Style TargetType="local:Legend">
 		<Setter Property="HorizontalContentAlignment" Value="Left" />
 		<Setter Property="VerticalContentAlignment" Value="Top" />

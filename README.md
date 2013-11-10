@@ -12,6 +12,7 @@ ArcGIS Toolkit for .NET includes:
 * `Legend` -  Displays a legend for a set of layers in your map.
 * `Attribution` : Displays copyright/attribution information for layers in your map.
 * `ScaleLine` : Displays current scale reference.
+* `SignInDialog` (Desktop only) : SignIn dialog that challenges the user when accessign ArcGIS secured resources..
 * `FeatureDataField` : Edit control for working with individual feature attributes.
 
 ## How Do I Use It?
@@ -47,6 +48,12 @@ Simply set the `Layers` property to those layers that you want to display attrib
 ####ScaleLine
 ```xml
    <esriTK:ScaleLine Scale="{Binding Scale, ElementName=MyMap}" />
+```
+
+####SignInDialog (Desktop only)
+The simplest way to use it is by setting the IdentityManager ChallengeMethod to the static DoSignIn:
+```code
+   IdentityManager.Current.ChallengeMethod = SignInDialog.DoSignIn;
 ```
 
 ####FeatureDataField
