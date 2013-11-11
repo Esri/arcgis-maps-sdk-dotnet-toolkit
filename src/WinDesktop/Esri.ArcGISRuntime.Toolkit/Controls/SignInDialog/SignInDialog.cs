@@ -468,6 +468,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 			if (!string.IsNullOrEmpty(url))
 			{
+				url = Regex.Replace(url, "\\?.*", "", RegexOptions.IgnoreCase); // remove query parameters
 				string resourceName = GetResourceName(url);
 				IdentityManager.ServerInfo serverInfo = IdentityManager.Current.FindServerInfo(url);
 				string server = serverInfo == null ? Regex.Match(url, "http.?//[^/]*").ToString() : serverInfo.ServerUri;
