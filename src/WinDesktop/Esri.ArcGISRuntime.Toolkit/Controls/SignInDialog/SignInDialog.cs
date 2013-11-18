@@ -30,9 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 	/// <remarks>
 	/// This control is designed to work with the <see cref="IdentityManager" />.
 	/// The IdentityManager can be actived with code like:
-	/// ESRI.ArcGIS.Client.IdentityManager.Current.ChallengeMethod = ESRI.ArcGIS.Client.Toolkit.SignInDialog.DoSignIn;
-	/// or 
-	/// ESRI.ArcGIS.Client.IdentityManager.Current.ChallengeMethodEx = ESRI.ArcGIS.Client.Toolkit.SignInDialog.DoSignInEx;
+	/// IdentityManager.Current.ChallengeMethod = SignInDialog.DoSignIn;
 	/// In this case, the SignInDialog is created and activated in a child window.
 	/// It's also possible to put the SignInDialog in the Visual Tree and to write your own challenge method activating this SignInDialog.
 	/// </remarks>
@@ -471,7 +469,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 				url = Regex.Replace(url, "\\?.*", "", RegexOptions.IgnoreCase); // remove query parameters
 				string resourceName = GetResourceName(url);
 				IdentityManager.ServerInfo serverInfo = IdentityManager.Current.FindServerInfo(url);
-				string server = serverInfo == null ? Regex.Match(url, "http.?//[^/]*").ToString() : serverInfo.ServerUri;
+				string server = serverInfo == null ? Regex.Match(url, "https?://[^/]*").ToString() : serverInfo.ServerUri;
 				xaml = xaml.Replace("$RESOURCENAME", XamlEncode(resourceName));
 				xaml = xaml.Replace("$URL", XamlEncode(url));
 				xaml = xaml.Replace("$SERVER", XamlEncode(server));
@@ -502,15 +500,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			if (url.IndexOf("/rest/services", StringComparison.OrdinalIgnoreCase) > 0)
 				return GetSuffix(url);
 
-			url = Regex.Replace(url, "http.?//[^/]*", "");
+			url = Regex.Replace(url, "https?://[^/]*/", "");
 			url = Regex.Replace(url, ".*/items/([^/]+).*", "$1");
+			url = Regex.Replace(url, ".*/groups/([^/]+).*", "$1");
+			url = Regex.Replace(url, ".*/users/([^/]+).*", "$1");
 			return url;
 		}
 
 		private static string GetSuffix(string url)
 		{
 			url = Regex.Replace(url, "http.+/rest/services/?", "", RegexOptions.IgnoreCase);
-			url = Regex.Replace(url, "(/(MapServer|GeocodeServer|GPServer|GeometryServer|ImageServer|NAServer|FeatureServer|GeoDataServer|GlobeServer|MobileServer)).*", "$1", RegexOptions.IgnoreCase);
+			url = Regex.Replace(url, "(/(MapServer|GeocodeServer|GPServer|GeometryServer|ImageServer|NAServer|FeatureServer|GeoDataServer|GlobeServer|MobileServer|GeoenrichmentServer)).*", "$1", RegexOptions.IgnoreCase);
 			return url;
 		}
 		#endregion
