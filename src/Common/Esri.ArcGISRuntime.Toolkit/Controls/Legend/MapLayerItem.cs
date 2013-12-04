@@ -26,6 +26,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		#region Constructors
 		internal const string MapLayerType = "MapLayer Layer";
 		private bool _isQuerying;
+		private double _serviceMinScale = double.PositiveInfinity; // Max and Min scale coming from the service : to combine with max and min scale coming from the layer at client side
+		private double _serviceMaxScale = 0.0;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapLayerItem"/> class.
@@ -37,10 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			LayerType = MapLayerType;
 
 			Label = layer.DisplayName;
-			// todo
-			//MinimumResolution = layer.MinimumResolution;
-			//MaximumResolution = layer.MaximumResolution;
-			//VisibleTimeExtent = layer.VisibleTimeExtent;
+			MinimumScale = layer.MinScale;
+			MaximumScale = layer.MaxScale;
 			IsVisible = layer.Visibility == Visibility.Visible;
 		}
 
@@ -87,25 +87,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			if (layer == null)
 				return;
 
-			//if (e.PropertyName == "MinimumResolution")
-			//{
-			//	MinimumResolution = Math.Max(layer.MinimumResolution, minServiceResolution);
-			//	if (LegendTree != null)
-			//		LegendTree.UpdateLayerVisibilities();
-			//}
-			//else if (e.PropertyName == "MaximumResolution")
-			//{
-			//	MaximumResolution = Math.Min(layer.MaximumResolution, maxServiceResolution);
-			//	if (LegendTree != null)
-			//		LegendTree.UpdateLayerVisibilities();
-			//}
-			//else if (e.PropertyName == "VisibleTimeExtent")
-			//{
-			//	VisibleTimeExtent = layer.VisibleTimeExtent;
-			//	if (LegendTree != null)
-			//		LegendTree.UpdateLayerVisibilities();
-			//}
-			if (e.PropertyName == "Visibility")
+			if (e.PropertyName == "MinScale")
+			{
+				MinimumScale = Layer.MinScale != 0 && !double.IsNaN(Layer.MinScale)
+					               ? Math.Min(_serviceMinScale, Layer.MinScale)
+					               : _serviceMinScale;
+				if (LegendTree != null)
+					LegendTree.UpdateLayerVisibilities();
+			}
+			else if (e.PropertyName == "MaxScale")
+			{
+				MaximumScale = !double.IsNaN(Layer.MaxScale)
+								   ? Math.Max(_serviceMaxScale, Layer.MaxScale)
+								   : _serviceMaxScale;
+				if (LegendTree != null)
+					LegendTree.UpdateLayerVisibilities();
+			}
+			else if (e.PropertyName == "Visibility")
 			{
 				if (LegendTree != null)
 					LegendTree.UpdateLayerVisibilities();
@@ -202,9 +200,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 					// Combine Layer and Service scale
 					double minScale = result.MinimumScale == 0.0 ? double.PositiveInfinity : result.MinimumScale;
+					_serviceMinScale = minScale;
 					if (Layer.MinScale != 0.0 && !double.IsNaN(Layer.MinScale))
 						minScale = Math.Min(minScale, Layer.MinScale);
 					double maxScale = result.MaximumScale;
+					_serviceMaxScale = maxScale;
 					if (!double.IsNaN(Layer.MaxScale))
 						maxScale = Math.Max(maxScale, Layer.MaxScale);
 
