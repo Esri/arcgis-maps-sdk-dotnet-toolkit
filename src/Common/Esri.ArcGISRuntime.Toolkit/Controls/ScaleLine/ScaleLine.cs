@@ -41,21 +41,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-		public ScaleLine()
-		{
+        public ScaleLine()
+        {
 #if NETFX_CORE || WINDOWS_PHONE
-			DefaultStyleKey = typeof(ScaleLine);
+            DefaultStyleKey = typeof(ScaleLine);
 #endif
-		}
+        }
 
 #if !NETFX_CORE && !WINDOWS_PHONE
-		static ScaleLine()
-		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(ScaleLine),
-				new FrameworkPropertyMetadata(typeof(ScaleLine)));
-		}
+        static ScaleLine()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ScaleLine),
+                new FrameworkPropertyMetadata(typeof(ScaleLine)));
+        }
 #endif
-		#endregion Constructor
+        #endregion Constructor
 
         #region OnApplyTemplate
 
@@ -68,9 +68,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// a class.
         /// </summary>
 #if NETFX_CORE
-		protected
+        protected
 #else
-		public
+        public
 #endif
  override void OnApplyTemplate()
         {
@@ -218,7 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <returns>value that represents the maps scale in kilometers</returns>        
         private double GetKilometer()
         {
-            return Units.Inches.ConvertTo(((TargetWidth) / 96) * Scale, Units.Kilometers);            
+            return LinearUnits.Inches.ConvertTo(((TargetWidth) / 96) * Scale, LinearUnits.Kilometers);            
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <returns>value that represents the maps scale in meters</returns>        
         private double GetMeter()
         {
-            return Units.Inches.ConvertTo(((TargetWidth) / 96) * Scale, Units.Meters);            
+            return LinearUnits.Inches.ConvertTo(((TargetWidth) / 96) * Scale, LinearUnits.Meters);            
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <returns>value that represents the maps scale in miles</returns>        
         private double GetMile()
         {
-			return Units.Inches.ConvertTo(((TargetWidth) / 96) * Scale, Units.Miles);            
+            return LinearUnits.Inches.ConvertTo(((TargetWidth) / 96) * Scale, LinearUnits.Miles);            
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <returns>value that represents the maps scale in feet</returns>        
         private double GetFoot()
         {
-			return Units.Inches.ConvertTo(((TargetWidth) / 96) * Scale, Units.Feet);            
+            return LinearUnits.Inches.ConvertTo(((TargetWidth) / 96) * Scale, LinearUnits.Feet);            
         }
 
         private static double GetRatio(double value)

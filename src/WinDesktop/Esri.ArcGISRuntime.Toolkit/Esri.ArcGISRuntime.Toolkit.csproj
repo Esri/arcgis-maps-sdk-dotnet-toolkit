@@ -41,9 +41,11 @@
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -96,12 +98,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\SignInDialog\SignInDialog.Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\ValueConverters\VisibilityConverter.cs">
+      <Link>ValueConverters\VisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="Controls\SignInDialog\SignInDialog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
