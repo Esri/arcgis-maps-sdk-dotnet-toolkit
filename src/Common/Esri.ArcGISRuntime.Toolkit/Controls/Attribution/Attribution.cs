@@ -128,11 +128,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		private void AttachLayerHandler(Layer layer)
 		{
 			layer.PropertyChanged += Layer_PropertyChanged;
+			layer.AddPropertyChangedHandler("Visibility", Layer_PropertyChanged);
 		}
 
 		private void DetachLayerHandler(Layer layer)
 		{
 			layer.PropertyChanged -= Layer_PropertyChanged;
+			layer.RemovePropertyChangedHandler("Visibility", Layer_PropertyChanged);
 		}
 
 		private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)

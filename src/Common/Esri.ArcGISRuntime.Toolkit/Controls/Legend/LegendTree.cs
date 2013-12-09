@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 					(_layers as INotifyCollectionChanged).CollectionChanged -= Layers_CollectionChanged;
 				if (_layers != null)
 					foreach (var layer in _layers)
-						layer.PropertyChanged -= Layer_PropertyChanged;
+						layer.RemovePropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
 
 				_layers = value;
 
@@ -129,7 +129,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 					(_layers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
 				if (_layers != null)
 					foreach (var layer in _layers)
-						layer.PropertyChanged += Layer_PropertyChanged;
+						layer.AddPropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
 				UpdateMapLayerItems();
 			}
 		}
@@ -241,14 +241,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			{
 				foreach (var item in e.OldItems.OfType<Layer>())
 				{
-					item.PropertyChanged -= Layer_PropertyChanged;
+					item.RemovePropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
 				}
 			}
 			if (e.NewItems != null)
 			{
 				foreach (var item in e.NewItems.OfType<Layer>())
 				{
-					item.PropertyChanged += Layer_PropertyChanged;
+					item.AddPropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
 				}
 			}
 			UpdateMapLayerItems();

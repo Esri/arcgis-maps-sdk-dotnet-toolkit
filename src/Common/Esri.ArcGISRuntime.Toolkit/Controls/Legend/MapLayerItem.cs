@@ -61,10 +61,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			if (layer is ILegendSupport)
 				(layer as ILegendSupport).LegendChanged += Layer_LegendChanged;
 
-			//if (layer is ISublayerVisibilitySupport)
-			//	(layer as ISublayerVisibilitySupport).VisibilityChanged += Layer_VisibilityChanged;
-
 			layer.PropertyChanged += Layer_PropertyChanged;
+			layer.AddPropertyChangedHandler("DisplayName", Layer_PropertyChanged);
+			layer.AddPropertyChangedHandler("MinScale", Layer_PropertyChanged);
+			layer.AddPropertyChangedHandler("MaxScale", Layer_PropertyChanged);
+			layer.AddPropertyChangedHandler("Visibility", Layer_PropertyChanged);
+
 		}
 
 		private void DetachLayerEventHandler(Layer layer)
@@ -74,10 +76,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 				if (layer is ILegendSupport)
 					(layer as ILegendSupport).LegendChanged -= Layer_LegendChanged;
 
-				//if (layer is ISublayerVisibilitySupport)
-				//	(layer as ISublayerVisibilitySupport).VisibilityChanged -= Layer_VisibilityChanged;
-
 				layer.PropertyChanged -= Layer_PropertyChanged;
+				layer.RemovePropertyChangedHandler("DisplayName", Layer_PropertyChanged);
+				layer.RemovePropertyChangedHandler("MinScale", Layer_PropertyChanged);
+				layer.RemovePropertyChangedHandler("MaxScale", Layer_PropertyChanged);
+				layer.RemovePropertyChangedHandler("Visibility", Layer_PropertyChanged);
 			}
 		}
 
@@ -123,13 +126,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		{
 			// Structure of legend items has changed -> refresh
 			Refresh();
-		}
-
-		private void Layer_VisibilityChanged(object sender, EventArgs e)
-		{
-			// Visibility of sublayers has changed --> update layer visibility of legend items
-			if (LegendTree != null)
-				LegendTree.UpdateLayerVisibilities();
 		}
 
 		#endregion
@@ -339,4 +335,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		}
 		#endregion
 	}
+
 }
