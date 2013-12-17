@@ -38,7 +38,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             if (value == null && nullable) 
                 return new KeyValuePair<object, string>(null,"");
 
-            return domain.CodedValues.FirstOrDefault(x => x.Key != null && x.Key.Equals(value));
+#if !NETFX_CORE
+            return domain.CodedValues.FirstOrDefault(x => x.Key != null && x.Key.Equals(value));            
+#else
+            var kvp = domain.CodedValues.FirstOrDefault(x => x.Key != null && x.Key.Equals(value));
+            return new KeyValuePair<object, string>(kvp.Key, kvp.Value);
+#endif
+        }
+
+        public static GdbFeature Clone(this GdbFeature feature)
+        {
+            if (feature == null) return null;
+
+            var clone = new GdbFeature(feature.Schema);
+            clone.CopyFrom(feature.Attributes);
+            return clone;
         }
     }
 }

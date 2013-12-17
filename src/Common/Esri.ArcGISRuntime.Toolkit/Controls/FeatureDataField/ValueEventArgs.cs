@@ -1,9 +1,11 @@
-﻿namespace Esri.ArcGISRuntime.Toolkit.Controls
+﻿using System;
+
+namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
     /// <summary>
     /// Base class for ValueChangeing and ValueChange events for FeatureDataField.
     /// </summary>
-    public abstract class ValueEventArgs
+    public abstract class ValueEventArgs : EventArgs
     {
         internal ValueEventArgs(object oldValue, object newValue)
         {
