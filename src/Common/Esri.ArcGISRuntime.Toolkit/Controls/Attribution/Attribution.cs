@@ -128,18 +128,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		private void AttachLayerHandler(Layer layer)
 		{
 			layer.PropertyChanged += Layer_PropertyChanged;
-			layer.AddPropertyChangedHandler("Visibility", Layer_PropertyChanged);
+			layer.AddPropertyChangedHandler("IsVisible", Layer_PropertyChanged);
 		}
 
 		private void DetachLayerHandler(Layer layer)
 		{
 			layer.PropertyChanged -= Layer_PropertyChanged;
-			layer.RemovePropertyChangedHandler("Visibility", Layer_PropertyChanged);
+			layer.RemovePropertyChangedHandler("IsVisible", Layer_PropertyChanged);
 		}
 
 		private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == "CopyrightText" || e.PropertyName == "Visibility")
+			if (e.PropertyName == "CopyrightText" || e.PropertyName == "IsVisible")
 				UpdateAttributionItems();
 		}
 
@@ -169,7 +169,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 				Items = null;
 			else
 			{
-				var visibleCopyrights = Layers.Where(layer => layer.Visibility == Visibility.Visible).OfType<ICopyright>();
+				var visibleCopyrights = Layers.Where(layer => layer.IsVisible).OfType<ICopyright>();
 				Items = visibleCopyrights.Select(cpr => cpr.CopyrightText).Where(cpr => !string.IsNullOrEmpty(cpr))
 					.Select(cpr => cpr.Trim()).Distinct().ToList();
 			}

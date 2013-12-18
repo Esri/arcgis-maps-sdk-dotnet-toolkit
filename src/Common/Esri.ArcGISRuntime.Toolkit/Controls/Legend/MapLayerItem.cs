@@ -12,7 +12,6 @@ using System.Linq;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 #else
-using System.Windows;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Controls
@@ -27,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		internal const string MapLayerType = "MapLayer Layer";
 		private bool _isQuerying;
 		private double _serviceMinScale = double.PositiveInfinity; // Max and Min scale coming from the service : to combine with max and min scale coming from the layer at client side
-		private double _serviceMaxScale = 0.0;
+		private double _serviceMaxScale;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapLayerItem"/> class.
@@ -41,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			Label = layer.DisplayName;
 			MinimumScale = layer.MinScale;
 			MaximumScale = layer.MaxScale;
-			IsVisible = layer.Visibility == Visibility.Visible;
+			IsVisible = layer.IsVisible;
 		}
 
 		/// <summary>
@@ -65,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			layer.AddPropertyChangedHandler("DisplayName", Layer_PropertyChanged);
 			layer.AddPropertyChangedHandler("MinScale", Layer_PropertyChanged);
 			layer.AddPropertyChangedHandler("MaxScale", Layer_PropertyChanged);
-			layer.AddPropertyChangedHandler("Visibility", Layer_PropertyChanged);
+			layer.AddPropertyChangedHandler("IsVisible", Layer_PropertyChanged);
 
 		}
 
@@ -80,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 				layer.RemovePropertyChangedHandler("DisplayName", Layer_PropertyChanged);
 				layer.RemovePropertyChangedHandler("MinScale", Layer_PropertyChanged);
 				layer.RemovePropertyChangedHandler("MaxScale", Layer_PropertyChanged);
-				layer.RemovePropertyChangedHandler("Visibility", Layer_PropertyChanged);
+				layer.RemovePropertyChangedHandler("IsVisible", Layer_PropertyChanged);
 			}
 		}
 
@@ -106,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 				if (LegendTree != null)
 					LegendTree.UpdateLayerVisibilities();
 			}
-			else if (e.PropertyName == "Visibility")
+			else if (e.PropertyName == "IsVisible")
 			{
 				if (LegendTree != null)
 					LegendTree.UpdateLayerVisibilities();
