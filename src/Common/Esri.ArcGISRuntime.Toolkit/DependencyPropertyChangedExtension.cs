@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 			var dispatcher = GetDispatcher();
 			if (dispatcher != null)
 			{
-				var asyncaction = dispatcher.RunAsync(CoreDispatcherPriority.Normal, dispatchedHandler);				
+				var asyncaction = dispatcher.RunAsync(CoreDispatcherPriority.Normal, dispatchedHandler);
 			}
 			else
 				dispatchedHandler();
@@ -159,7 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 			{
 				if (_dependencyObject != null)
 				{
-					BindingOperations.SetBinding(_dependencyObject, ValueProperty, new Binding());  // No WinRT ClearBinding so set an empty binding instead
+					BindingOperations.SetBinding(this, ValueProperty, new Binding());  // No WinRT ClearBinding so set an empty binding instead
 					_dependencyObject = null;
 				}
 			}
