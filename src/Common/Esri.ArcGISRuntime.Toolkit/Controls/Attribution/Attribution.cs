@@ -167,7 +167,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 				Items = null;
 			else
 			{
-				var visibleCopyrights = Layers.Where(layer => layer.Visibility == Visibility.Visible).OfType<ICopyright>();
+				var visibleCopyrights = Layers.Where(layer => layer.IsVisible).OfType<ICopyright>();
 				Items = visibleCopyrights.Select(cpr => cpr.CopyrightText).Where(cpr => !string.IsNullOrEmpty(cpr))
 					.Select(cpr => cpr.Trim()).Distinct().ToList();
 			}

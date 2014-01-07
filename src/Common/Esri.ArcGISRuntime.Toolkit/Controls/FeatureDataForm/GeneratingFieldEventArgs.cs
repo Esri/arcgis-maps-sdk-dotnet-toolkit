@@ -1,4 +1,5 @@
 using System;
+using Esri.ArcGISRuntime.Data;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 #else
@@ -14,16 +15,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// </summary>
     public sealed class GeneratingFieldEventArgs : EventArgs
     {
-        internal GeneratingFieldEventArgs(string fieldName, string labelText)
+        internal GeneratingFieldEventArgs(string fieldName, string labelText, FieldType fieldType)
         {
             FieldName = fieldName;
             LabelText = labelText;
+            FieldType = fieldType;
         }
 
         /// <summary>
         /// Gets the name of the field being created.
         /// </summary>
         public string FieldName { get; private set; }
+
+
+        /// <summary>
+        /// Gets the field type being created.
+        /// </summary>        
+        public FieldType FieldType { get; private set; }
 
         /// <summary>
         /// Gets or sets the label text.
@@ -47,8 +55,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public Style ContainerStyle { get; set; }
 
         /// <summary>
-        /// Gets or sets the item style.
+        /// Gets or sets the fields InputTemplate property.
         /// </summary>        
-        public Style ItemStyle { get; set; }
+        public DataTemplate InputTemplate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the field DateTimeTemplate property
+        /// </summary>
+        public DataTemplate DateTimeTemplate { get; set; }
     }
 }

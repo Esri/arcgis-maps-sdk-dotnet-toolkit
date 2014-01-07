@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			//MinimumResolution = layer.MinimumResolution;
 			//MaximumResolution = layer.MaximumResolution;
 			//VisibleTimeExtent = layer.VisibleTimeExtent;
-			IsVisible = layer.Visibility == Visibility.Visible;
+			IsVisible = layer.IsVisible;
 		}
 
 		/// <summary>

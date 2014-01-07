@@ -6,7 +6,7 @@ using System.Windows.Input;
 /// no parameters and invokes the  <see cref="System.Action"/> when 
 /// the <see cref="ICommand.Execute(object)"/> method is invoked.
 /// </summary>
-public class ActionCommand : ICommand
+internal class ActionCommand : ICommand
 {
     #region Private Members
 

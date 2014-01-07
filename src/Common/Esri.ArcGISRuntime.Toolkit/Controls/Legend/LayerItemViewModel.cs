@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 		{
 			Layer = layer;
 			if (layer != null)
-				_isEnabled = (layer.Visibility == Visibility.Visible);
+				_isEnabled = layer.IsVisible;
 		}
 
 		/// <summary>
@@ -186,7 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 				{
 					_isEnabled = value;
 					if (Layer != null)
-						Layer.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+						Layer.IsVisible = value;
 					OnPropertyChanged("IsEnabled");
 				}
 			}
@@ -770,7 +770,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 		{
 			bool isEnabled;
 			if (Layer != null)
-				isEnabled = Layer.Visibility == Visibility.Visible;
+				isEnabled = Layer.IsVisible;
 			else
 				isEnabled = true;
 

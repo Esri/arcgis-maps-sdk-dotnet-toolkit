@@ -23,12 +23,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     {
 
         #region Private Members
-
+        
         private Grid _controlRoot;                
         private GdbFeature _editFeature;
         private IEnumerable<string> _validFieldNames;
-        private IDictionary<string, FrameworkElement> _fieldControls = new Dictionary<string, FrameworkElement>();
-        private List<FieldType> _notSupportFieldTypes = new List<FieldType> // these types will not be supported for editing or display.
+        private readonly IDictionary<string, FrameworkElement> _fieldControls = new Dictionary<string, FrameworkElement>();
+        private readonly List<FieldType> _notSupportFieldTypes = new List<FieldType> // these types will not be supported for editing or display.
         {
             FieldType.Blob, FieldType.Geometry, 
             FieldType.Raster, FieldType.Xml, FieldType.Unknown
@@ -127,6 +127,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Gets or sets the fields to display. A field will be 
         /// displayed according to the index of this property.
         /// </summary>        
+        /// <remarks>
+        /// <list type="bullet">
+        /// <item>if Fields property is "null" or "empty" all supported editable fields will be displayed.</item>
+        /// <item>if Fields property contains "*" then all supported fields will be displayed editable and non-editable.</item>
+        /// <item>if Fields property contains a specific set of fields "&lt;FieldName1&gt;,&lt;FieldName2&gt;" then only these 
+        /// fields show in the order they are provided. Field names are case sensitive and only supported 
+        /// field types will be rendered.</item>
+        /// </list>               
+        /// <pre>
+        /// The non-supported field types are XML, Blob, Geometry and Raster.
+        /// </pre>
+        /// </remarks>
         public ObservableCollection<string> Fields
         {
             get { return (ObservableCollection<string>)GetValue(FieldsProperty); }
@@ -196,30 +208,55 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #endregion ContainerStyle
 
-        #region ItemStyle
+        #region InputTemplate
 
         /// <summary>
-        /// Gets or sets the item style. This property can be used 
-        /// to set the item style for all fields in the FeatureDataForm.
+        /// Gets or sets the input template. This property can be used 
+        /// to set the input template for all fields in the FeatureDataForm.
         /// </summary>        
-        public Style ItemStyle
+        public DataTemplate InputTemplate
         {
-            get { return (Style)GetValue(ItemStyleProperty); }
-            set { SetValue(ItemStyleProperty, value); }
+            get { return (DataTemplate)GetValue(InputTemplateProperty); }
+            set { SetValue(InputTemplateProperty, value); }
         }
         
         /// <summary>
-        /// The dependency property for the ItemStyle property.
+        /// The dependency property for the InputTemplate property.
         /// </summary>
-        public static readonly DependencyProperty ItemStyleProperty =
-            DependencyProperty.Register("ItemStyle", typeof(Style), typeof(FeatureDataForm), new PropertyMetadata(null, OnItemStylePropertyChanged));
+        public static readonly DependencyProperty InputTemplateProperty =
+            DependencyProperty.Register("InputTemplate", typeof(DataTemplate), typeof(FeatureDataForm), new PropertyMetadata(null, OnInputTemplatePropertyChanged));
 
-        private static void OnItemStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnInputTemplatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((FeatureDataForm)d).Refresh();
         }
 
-        #endregion ItemStyle
+        #endregion InputTemplate        
+
+        #region DateTimeTemplate
+
+        /// <summary>
+        /// Gets or sets the date time template. This property can be used 
+        /// to set the date time template for all fields in the FeatureDataForm.
+        /// </summary>  
+        public DataTemplate DateTimeTemplate
+        {
+            get { return (DataTemplate)GetValue(DateTimeTemplateProperty); }
+            set { SetValue(DateTimeTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// The dependency property for the DateTimeTemplate property.
+        /// </summary>
+        public static readonly DependencyProperty DateTimeTemplateProperty =
+            DependencyProperty.Register("DateTimeTemplate", typeof(DataTemplate), typeof(FeatureDataForm), new PropertyMetadata(null, OnDateTimeTemplatePropertyChanged));
+
+        private static void OnDateTimeTemplatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((FeatureDataForm)d).Refresh();
+        }
+
+        #endregion DateTimeTemplate
 
         #region IsReadOnly
 
@@ -286,31 +323,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #endregion CancelCommand
 
-        #region HasEdit
+        #region HasEdits
 
         /// <summary>
         /// Gets a value indicating whether the form has
         /// edits that haven't been saved.
         /// </summary>        
-        public bool HasEdit
-        {
-            get { return (bool)GetValue(HasEditProperty); }
-            private set { SetValue(HasEditProperty, value); }
+        public bool HasEdits
+        { 
+            get { return (bool)GetValue(HasEditsProperty); }
+            private set { SetValue(HasEditsProperty, value); } 
         }
-
+  
         /// <summary>
-        /// The dependency property for <see cref="FeatureDataForm.HasEdit"/>.
+        /// The dependency property for <see cref="FeatureDataForm.HasEdits"/>.
         /// </summary>
-        public static readonly DependencyProperty HasEditProperty =
-            DependencyProperty.Register("HasEdit", typeof(bool), typeof(FeatureDataForm), new PropertyMetadata(false));
+         public static readonly DependencyProperty HasEditsProperty = 
+             DependencyProperty.Register("HasEdits", typeof(bool), typeof(FeatureDataForm), new PropertyMetadata(false));
+ 
 
-        #endregion HasEdit
+        
+        #endregion HasEdits
 
         #region HasError
 
         /// <summary>
         /// Get that value indicating whether the form
-        /// has any field that has a validation excption.
+        /// has any fields that have a validation excption.
         /// </summary>
         public bool HasError
         {
@@ -335,8 +374,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Occurs when each fields UI is being generated.
         /// </summary>
         public event EventHandler<GeneratingFieldEventArgs> GeneratingField;               
-        //public event EventHandler EditCompleted;
 
+        /// <summary>
+        /// Occurs when changes are applied to the GdbFeature.
+        /// </summary>
+        public event EventHandler ApplyCompleted;
+        
         #endregion Public Events
 
         #region Private Methods
@@ -356,14 +399,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     control.PropertyChanged -= ControlOnPropertyChanged;
                 }                
                 _fieldControls.Clear();                
-                HasEdit = false;
+                HasEdits = false;
                 HasError = false;
 
                 // Get collection of fields with supported field types.
                 var supportedFields = _editFeature.Schema.Fields.Where(fieldInfo => !_notSupportFieldTypes.Contains(fieldInfo.Type));
 
-                // Only use field names provided by user if they exist as part of the Schema
-                _validFieldNames = Fields.Intersect(from fieldInfo in supportedFields select fieldInfo.Name);
+                if (Fields == null || !Fields.Any())
+                {
+                    // default to only editable fields
+                    var editableSupportedFields = supportedFields.Where(fieldInfo => fieldInfo.IsEditable);
+                    _validFieldNames = editableSupportedFields.Select(fieldInfo => fieldInfo.Name);
+                }
+                else
+                {
+                    _validFieldNames = Fields.Contains("*") 
+                        ? supportedFields.Select(fieldInfo => fieldInfo.Name) // All Fields (*)
+                        : Fields.Intersect(from fieldInfo in supportedFields select fieldInfo.Name); // specific fields provided by user
+                }                
 
                 // Create UI for each field
                 foreach (var fieldName in _validFieldNames)
@@ -371,11 +424,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     // Get the field information from schema for this field.
                     var fieldInfo = _editFeature.GetFieldInfo(fieldName);
 
-                    var labelText = fieldInfo.Alias; // default the label text to field alias
+                    // default the label text to field alias if not null or empty
+                    var labelText = !string.IsNullOrEmpty(fieldInfo.Alias) 
+                        ? fieldInfo.Alias 
+                        : fieldInfo.Name; 
+
                     var isReadOnly = false;          // default readonly to false
-                    Style labelStyle = null;
-                    Style itemStyle = null;
+                    Style labelStyle = null;                    
                     Style containerStyle = null;
+                    DataTemplate inputTemplate = null;
+                    DataTemplate dateTimeTemplate = null;
 
 
                     // if user has wired into the on generating event we will expose 
@@ -383,7 +441,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     if (GeneratingField != null)
                     {
                         // Create a new event argument for field.
-                        var args = new GeneratingFieldEventArgs(fieldName, labelText) {IsReadOnly = IsReadOnly};
+                        var args = new GeneratingFieldEventArgs(fieldName, labelText, fieldInfo.Type) {IsReadOnly = IsReadOnly};
 
                         // Raise the event for user
                         GeneratingField(this, args);
@@ -394,7 +452,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                         labelText = args.LabelText;
                         isReadOnly = args.IsReadOnly;
                         labelStyle = args.LabelStyle;
-                        itemStyle = args.ItemStyle;
+                        inputTemplate = args.InputTemplate;
+                        dateTimeTemplate = args.DateTimeTemplate;
                         containerStyle = args.ContainerStyle;
                     }
 
@@ -403,9 +462,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     label.Style = labelStyle ?? LabelStyle;
                     
                     // create edit control ui
-                    var control = CreatControl(_editFeature, fieldInfo, IsReadOnly ? IsReadOnly : isReadOnly);
-                    control.Style = itemStyle ?? ItemStyle;
-
+                    var control = CreateControl(_editFeature, fieldInfo, IsReadOnly ? IsReadOnly : isReadOnly);
+                   
+                    if (fieldInfo.Type == FieldType.Date)
+                    {                       
+                        // Form or Field override of input template property.
+                        if(dateTimeTemplate != null || DateTimeTemplate != null)
+                            ((FeatureDataField)control).InputTemplate = dateTimeTemplate ?? DateTimeTemplate;                    
+                        else if (inputTemplate != null || InputTemplate != null)
+                            ((FeatureDataField)control).InputTemplate = inputTemplate ?? InputTemplate;                    
+                    }
+                    else
+                    {
+                        // Form or Field override of input template property.
+                        if (inputTemplate != null || InputTemplate != null)
+                            ((FeatureDataField)control).InputTemplate = inputTemplate ?? InputTemplate;                    
+                    }                        
+                    
                     // create container control
                     var container = CreateContainer();
                     container.Style = containerStyle ?? ContainerStyle;
@@ -458,7 +531,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <param name="fieldInfo">FieldInfo for edit control</param>
         /// <param name="isReadOnly">Value indicating if control should be readonly</param>
         /// <returns></returns>
-        private FrameworkElement CreatControl(GdbFeature feature, FieldInfo fieldInfo, bool isReadOnly)
+        private FrameworkElement CreateControl(GdbFeature feature, FieldInfo fieldInfo, bool isReadOnly)
         {
             var control = new FeatureDataField
             {
@@ -481,7 +554,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             switch (propertyChangedEventArgs.PropertyName)
             {
                 case "BindingValue":                    
-                    HasEdit = HasChange();
+                    HasEdits = HasChanges();
                     HasError = CheckForError();
                     ((ActionCommand)ApplyCommand).RaiseCanExecute();
                     ((ActionCommand)CancelCommand).RaiseCanExecute();
@@ -505,10 +578,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             
             // copy edit feature back to original feature
             GdbFeature.CopyFrom(_editFeature.Attributes);
-            HasEdit = false;
+            HasEdits = false;
             HasError = false;
             ((ActionCommand)ApplyCommand).RaiseCanExecute();
-            ((ActionCommand)CancelCommand).RaiseCanExecute();            
+            ((ActionCommand)CancelCommand).RaiseCanExecute();
+
+            // Notify user that Apply has been completed.
+            var handler = ApplyCompleted;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -517,7 +595,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>        
         private bool CanApplyChanges()
         {
-            return HasEdit && !HasError;
+            return HasEdits && !HasError;
         }
 
         /// <summary>
@@ -530,7 +608,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             
             // copy original feature back to edit feature
             _editFeature.CopyFrom(GdbFeature.Attributes);
-            HasEdit = false;
+            HasEdits = false;
             HasError = false;                 
             ((ActionCommand)ApplyCommand).RaiseCanExecute();
             ((ActionCommand)CancelCommand).RaiseCanExecute();
@@ -543,23 +621,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>        
         private bool CanCancel()
         {
-            return HasEdit;
+            return HasEdits;
         }
 
         /// <summary>
         /// Compares orignial GdbFeature to the clone GdbFeature 
-        /// to check for differnces in attribute values.
+        /// to check for differences in attribute values.
         /// </summary>        
-        private bool HasChange()
+        private bool HasChanges()
         {            
-            if (_editFeature != null && GdbFeature != null)
-            {
-                foreach (var fieldName in _validFieldNames)
-                {
-                    if(!AreEqual(_editFeature.Attributes[fieldName], GdbFeature.Attributes[fieldName]))
-                        return true;
-                }
-            }
+            if (_editFeature != null && GdbFeature != null)            
+                return _validFieldNames.Any(fieldName => !AreEqual(_editFeature.Attributes[fieldName], GdbFeature.Attributes[fieldName]));            
             return false;
         }
 
@@ -568,8 +640,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private static bool AreEqual(object o1, object o2)
         {
             return (o1 == o2) || (o1 != null && o1.Equals(o2));
-        }
+        }        
 
-        #endregion Private Methods
+        #endregion Private Methods              
     }
 }
