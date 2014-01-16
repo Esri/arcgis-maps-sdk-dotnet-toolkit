@@ -378,7 +378,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// Occurs when changes are applied to the GdbFeature.
         /// </summary>
-        public event EventHandler ApplyCompleted;
+        public event EventHandler<EventArgs> ApplyCompleted;
         
         #endregion Public Events
 
@@ -422,7 +422,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 foreach (var fieldName in _validFieldNames)
                 {
                     // Get the field information from schema for this field.
-                    var fieldInfo = _editFeature.GetFieldInfo(fieldName);
+                    var fieldInfo = _editFeature.GetFieldInfo(fieldName);                                        
 
                     // default the label text to field alias if not null or empty
                     var labelText = !string.IsNullOrEmpty(fieldInfo.Alias) 
@@ -477,7 +477,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                         // Form or Field override of input template property.
                         if (inputTemplate != null || InputTemplate != null)
                             ((FeatureDataField)control).InputTemplate = inputTemplate ?? InputTemplate;                    
-                    }                        
+                    }
+
+                    // If new feature attribute key may not exist yet which is needed for 
+                    // binding.
+                    if (!_editFeature.Attributes.ContainsKey(fieldInfo.Name))
+                    {
+                        if (fieldInfo.IsEditable)
+                        {
+                            // set default value in clone to null if field is nullable.
+                            if (fieldInfo.IsNullable)
+                                ((FeatureDataField)control).BindingValue = null;
+                        }
+                    }
                     
                     // create container control
                     var container = CreateContainer();
@@ -631,7 +643,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private bool HasChanges()
         {            
             if (_editFeature != null && GdbFeature != null)            
-                return _validFieldNames.Any(fieldName => !AreEqual(_editFeature.Attributes[fieldName], GdbFeature.Attributes[fieldName]));            
+                return _validFieldNames.Any(fieldName => !AreEqual(
+                    (_editFeature.Attributes.ContainsKey(fieldName) ? _editFeature.Attributes[fieldName] : null), 
+                    (GdbFeature.Attributes.ContainsKey(fieldName) ? GdbFeature.Attributes[fieldName] : null)));            
             return false;
         }
 

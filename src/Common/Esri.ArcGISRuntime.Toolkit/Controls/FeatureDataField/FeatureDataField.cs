@@ -162,7 +162,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         
         private static void OnBindingValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {            
-            var form = (FeatureDataField)d;                        
+            var field = (FeatureDataField)d;
+
+            // if require information is missing return.
+            if (string.IsNullOrEmpty(field.FieldName) || field.GdbFeature == null 
+                || field.GdbFeature.Attributes == null)
+            {
+                field.ValidationException = null;
+                return;
+            }
+
 #if !NETFX_CORE
             // WPF will raise this event even if the new value 
             // is same as old value. WinRT and WP8 will only 
@@ -172,40 +181,37 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             if (AreEqual(e.NewValue, e.OldValue))
             {
                 // clear out any previous validation exception.
-                form.ValidationException = null;
+                field.ValidationException = null;
                 return;
             }
             
 #endif                        
             // Update the UI controls data context object to the current value.
-            if (form._dataItem != null && !AreEqual(form._dataItem.Value,e.NewValue))
+            if (field._dataItem != null && !AreEqual(field._dataItem.Value,e.NewValue))
             {
-                form._dataItem.Value = (form._dataItem is SelectorDataItem) 
-                    ? ((SelectorDataItem) form._dataItem).SelectItem(e.NewValue) 
-                    : form._dataItem.Value = e.NewValue;                
-            }            
+                field._dataItem.Value = (field._dataItem is SelectorDataItem) 
+                    ? ((SelectorDataItem) field._dataItem).SelectItem(e.NewValue) 
+                    : field._dataItem.Value = e.NewValue;                
+            }
 
-            // If the FeatureDataField doesn't have the information require to update
-            // the GdbFeature or the FeatureDataField is initalizing itself do not raise changing or changed event.
-            if (string.IsNullOrEmpty(form.FieldName) || form.GdbFeature == null
-                || form.GdbFeature.Attributes == null || !form.GdbFeature.Attributes.ContainsKey(form.FieldName)
-                || AreEqual(form.GdbFeature.Attributes[form.FieldName], form.BindingValue))
+            var oldValue = field.GdbFeature.Attributes.ContainsKey(field.FieldName)
+                ? field.GdbFeature.Attributes[field.FieldName]
+                : null;
+            
+            if ( AreEqual(oldValue, field.BindingValue))
             {
                 // clear out any previous validation exception.
-                form.ValidationException = null;
+                field.ValidationException = null;
                 return;            
             }
-                
-
-            var oldValue = form.GdbFeature.Attributes[form.FieldName];
-
+                            
             // if value changing event is subscribed to raise event.
-            if (form.ValueChanging != null)
+            if (field.ValueChanging != null)
             {
-                var changing = new ValueChangingEventArgs(oldValue, form.BindingValue);
+                var changing = new ValueChangingEventArgs(oldValue, field.BindingValue);
 
                 // raise value changing event.
-                form.ValueChanging(form, changing);
+                field.ValueChanging(field, changing);
 
                 // if ValueChangeEventArgs return with the validation exception property
                 // set then the user has indicated that the new value doesn't not meet
@@ -215,7 +221,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 {
                     // Set the users exception to the FeatureDataField.ValidationException property.
                     // This will trigger the validation state.
-                    form.ValidationException = changing.ValidationException;
+                    field.ValidationException = changing.ValidationException;
                     return;
                 }
             }
@@ -226,14 +232,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 #endif
 
             // Attempt to update the new value back to the GdbFeature
-            var success = form.CommitChange(form.BindingValue);
+            var success = field.CommitChange(field.BindingValue);
 
             // if the ValueChanged event is subscribed to and the committed value was 
             // successfully pushed back to the GdbFeatue then rais the ValueChanged Event.
-            if (form.ValueChanged != null && success)
-                form.ValueChanged(form, new ValueChangedEventArgs(oldValue, form.BindingValue));
+            if (field.ValueChanged != null && success)
+                field.ValueChanged(field, new ValueChangedEventArgs(oldValue, field.BindingValue));
 
-            form.OnPropertyChanged("BindingValue");
+            field.OnPropertyChanged("BindingValue");
         }
 
         #endregion BindingValue    
