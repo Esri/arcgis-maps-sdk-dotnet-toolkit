@@ -242,7 +242,7 @@
                             </ScrollViewer>
                             <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
                                 <Button Content="Apply" Command="{TemplateBinding ApplyCommand}" MinWidth="80"  Margin="5" Padding="5" />
-                                <Button Content="Cancel" Command="{TemplateBinding CancelCommand}" MinWidth="80"  Margin="5" Padding="5" />
+                                <Button Content="Reset" Command="{TemplateBinding ResetCommand}" MinWidth="80"  Margin="5" Padding="5" />
                             </StackPanel>
                         </Grid>
                     </Border>

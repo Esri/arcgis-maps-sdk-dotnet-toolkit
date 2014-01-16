@@ -238,7 +238,7 @@
                                 <Button Content="{x:Static localization:Resources.FeatureDataForm_ApplyButtonText}" 
                                         Command="{TemplateBinding ApplyCommand}" MinWidth="80"  Margin="5" Padding="5" />
                                 <Button Content="{x:Static localization:Resources.FeatureDataForm_CancelButtonText}" 
-                                        Command="{TemplateBinding CancelCommand}" MinWidth="80"  Margin="5" Padding="5" />
+                                        Command="{TemplateBinding ResetCommand}" MinWidth="80"  Margin="5" Padding="5" />
                             </StackPanel>
                         </Grid>
                     </Border>

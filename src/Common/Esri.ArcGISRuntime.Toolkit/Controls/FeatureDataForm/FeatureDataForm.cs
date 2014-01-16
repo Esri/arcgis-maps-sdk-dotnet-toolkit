@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 #endif
             Fields = new ObservableCollection<string>();
             ApplyCommand = new ActionCommand(ApplyChanges,CanApplyChanges);
-            CancelCommand = new ActionCommand(Cancel,CanCancel);
+            ResetCommand = new ActionCommand(Cancel,CanCancel);
         }
 #if !NETFX_CORE && !WINDOWS_PHONE
         static FeatureDataForm()
@@ -302,26 +302,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #endregion ApplyCommand
 
-        #region CancelCommand
+        #region ResetCommand
 
         /// <summary>
         /// Gets the cancel command which an be used to cancel 
         /// any edits that have been made to the FeatureDataForm.
         /// </summary>        
-        public ICommand CancelCommand
+        public ICommand ResetCommand
         {
-            get { return (ICommand)GetValue(CancelCommandProperty); }
-            private set { SetValue(CancelCommandProperty, value); }
+            get { return (ICommand)GetValue(ResetCommandProperty); }
+            private set { SetValue(ResetCommandProperty, value); }
         }
 
 
         /// <summary>
-        /// The dependency property for the <see cref="FeatureDataForm.CancelCommand"/>
+        /// The dependency property for the <see cref="ResetCommand"/>
         /// </summary>
-        public static readonly DependencyProperty CancelCommandProperty =
-            DependencyProperty.Register("CancelCommand", typeof(ICommand), typeof(FeatureDataForm), new PropertyMetadata(null));
+        public static readonly DependencyProperty ResetCommandProperty =
+            DependencyProperty.Register("ResetCommand", typeof(ICommand), typeof(FeatureDataForm), new PropertyMetadata(null));
 
-        #endregion CancelCommand
+        #endregion ResetCommand
 
         #region HasEdits
 
@@ -477,19 +477,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                         // Form or Field override of input template property.
                         if (inputTemplate != null || InputTemplate != null)
                             ((FeatureDataField)control).InputTemplate = inputTemplate ?? InputTemplate;                    
-                    }
-
-                    // If new feature attribute key may not exist yet which is needed for 
-                    // binding.
-                    if (!_editFeature.Attributes.ContainsKey(fieldInfo.Name))
-                    {
-                        if (fieldInfo.IsEditable)
-                        {
-                            // set default value in clone to null if field is nullable.
-                            if (fieldInfo.IsNullable)
-                                ((FeatureDataField)control).BindingValue = null;
-                        }
-                    }
+                    }                   
                     
                     // create container control
                     var container = CreateContainer();
@@ -557,7 +545,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         /// <summary>
         /// Watch FeatureDataField for changes to Value and ValidationException in order to know when 
-        /// SaveCommand and CancelCommand can be active.
+        /// SaveCommand and ResetCommand can be active.
         /// </summary>
         /// <param name="sender">FeatureDataField</param>
         /// <param name="propertyChangedEventArgs">Information about which property changed.</param>
@@ -569,7 +557,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     HasEdits = HasChanges();
                     HasError = CheckForError();
                     ((ActionCommand)ApplyCommand).RaiseCanExecute();
-                    ((ActionCommand)CancelCommand).RaiseCanExecute();
+                    ((ActionCommand)ResetCommand).RaiseCanExecute();
                     break;                                
             }
         }
@@ -593,7 +581,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             HasEdits = false;
             HasError = false;
             ((ActionCommand)ApplyCommand).RaiseCanExecute();
-            ((ActionCommand)CancelCommand).RaiseCanExecute();
+            ((ActionCommand)ResetCommand).RaiseCanExecute();
 
             // Notify user that Apply has been completed.
             var handler = ApplyCompleted;
@@ -623,7 +611,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             HasEdits = false;
             HasError = false;                 
             ((ActionCommand)ApplyCommand).RaiseCanExecute();
-            ((ActionCommand)CancelCommand).RaiseCanExecute();
+            ((ActionCommand)ResetCommand).RaiseCanExecute();
             Refresh(); 
         }
 
