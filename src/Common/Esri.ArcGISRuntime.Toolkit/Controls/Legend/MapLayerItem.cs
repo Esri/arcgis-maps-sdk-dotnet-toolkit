@@ -147,7 +147,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 			//if (!(Layer is GroupLayerBase)) // GroupLayer : don't wait for layer intialized, so the user will see the layer hierarchy even if the group layer is not initialized yet (else would need to wait for all sublayers initialized)
 			//{
-				if (!Layer.IsInitialized) 
+				if (Layer.Status < LayerStatus.Initialized) 
 				{
 					IsBusy = true; // set busy indicator waiting for layer initialized
 					return; // Refresh will be done on event Initialized
