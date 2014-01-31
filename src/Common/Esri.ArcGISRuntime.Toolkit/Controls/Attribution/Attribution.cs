@@ -137,7 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 		private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == "CopyrightText" || e.PropertyName == "Visibility")
+			if (e.PropertyName == "CopyrightText" || e.PropertyName == "IsVisible")
 				UpdateAttributionItems();
 		}
 
