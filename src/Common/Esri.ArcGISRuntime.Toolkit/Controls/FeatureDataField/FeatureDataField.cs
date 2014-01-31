@@ -4,14 +4,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Data;
-#if NETFX_CORE
+#if NETFX_CORE          // Windows Store
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-#else
+#else                   // WPF & Windows Phone
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
+#if WINDOWS_PHONE       // Windows Phone
+using System.Windows.Input;
+#endif
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Controls
@@ -20,24 +25,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// FeatureDatafield is used to edit or display a single attribute from a GdbFeature.
     /// </summary>
     [TemplatePart(Name = "FeatureDataField_ContentControl", Type = typeof(ContentControl))]
-    public sealed class FeatureDataField : Control
+    public class FeatureDataField : Control, INotifyPropertyChanged
     {       
         #region Private Properties
 
         private ContentControl _contentControl;               
         private FieldInfo _fieldInfo;
-        private DataItem _dataItem;        
-
+        private DataItem _dataItem;
+        private bool _focused;
+        private string _currentState;
+    
         #endregion Private Properties
 
         #region Constructor
 
-#if NETFX_CORE || WINDOWS_PHONE
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FeatureDataField"/> class.
+        /// </summary>
         public FeatureDataField()
         {
+#if NETFX_CORE || WINDOWS_PHONE
             DefaultStyleKey = typeof(FeatureDataField);
+#endif            
         }
-#else
+
+#if !NETFX_CORE && !WINDOWS_PHONE
         static FeatureDataField()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FeatureDataField), new FrameworkPropertyMetadata(typeof(FeatureDataField)));
@@ -66,7 +79,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private static void OnGdbFeaturePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FeatureDataField)d).Refresh();            
+            var form = ((FeatureDataField)d);
+            form.Refresh();
+            form.OnPropertyChanged("GdbFeature");          
         }
 
         #endregion GdbFeature
@@ -91,7 +106,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private static void OnFieldNamePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FeatureDataField)d).Refresh();
+            var form = ((FeatureDataField)d);
+            form.Refresh();
+            form.OnPropertyChanged("FieldName");
         }
 
         #endregion FieldName
@@ -119,87 +136,113 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private static void OnIsReadOnlyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FeatureDataField)d).Refresh();
+            var form = ((FeatureDataField)d);
+            form.Refresh();
+            form.OnPropertyChanged("IsReadOnly");
         }
 
         #endregion IsReadOnly
 
-        #region Value
+        #region BindingValue
 
         /// <summary>
-        /// Gets or sets the value.
+        /// Gets or sets the binding value.
         /// </summary>        
-        public object Value
+        public object BindingValue
         {
-            get { return GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get { return GetValue(BindingValueProperty); }
+            set { SetValue(BindingValueProperty, value); }
         }
 
         /// <summary>
-        /// DependencyProperty for Value.
+        /// DependencyProperty for BindingValue.
         /// </summary>
-        public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(FeatureDataField), new PropertyMetadata(null, OnValuePropertyChanged));
+        public static readonly DependencyProperty BindingValueProperty =
+            DependencyProperty.Register("BindingValue", typeof(object), typeof(FeatureDataField), new PropertyMetadata(null, OnBindingValuePropertyChanged));
         
-        private static void OnValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var f = (FeatureDataField)d;            
+        private static void OnBindingValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {            
+            var field = (FeatureDataField)d;
+
+            // if require information is missing return.
+            if (string.IsNullOrEmpty(field.FieldName) || field.GdbFeature == null 
+                || field.GdbFeature.Attributes == null)
+            {
+                field.ValidationException = null;
+                return;
+            }
+
 #if !NETFX_CORE
             // WPF will raise this event even if the new value 
             // is same as old value. WinRT and WP8 will only 
             // raise this event if the new value is not the same
             // as the old value. This code is to enusre equality 
             // in behavior accross all platforms.
-            if (e.NewValue == e.OldValue) return; 
-#endif            
-
-            // Update the UI controls data context object to the current value.
-            if (f._dataItem != null)
-                f._dataItem.Value = e.NewValue;
-
-            // If the FeatureDataField doesn't have the information require to update
-            // the GdbFeature or the FeatureDataField is initalizing itself do not raise changing or changed event.
-            if (string.IsNullOrEmpty(f.FieldName) || f.GdbFeature == null 
-                || f.GdbFeature.Attributes == null || !f.GdbFeature.Attributes.ContainsKey(f.FieldName)
-                || f.GdbFeature.Attributes[f.FieldName] == e.NewValue)
-                return;            
-
-
-            // if value changing event is subscribed to raise event.
-            if (f.ValueChanging != null) 
+            if (AreEqual(e.NewValue, e.OldValue))
             {
-                var changing = new ValueChangingEventArgs(e.OldValue, e.NewValue);
-                
+                // clear out any previous validation exception.
+                field.ValidationException = null;
+                return;
+            }
+            
+#endif                        
+            // Update the UI controls data context object to the current value.
+            if (field._dataItem != null && !AreEqual(field._dataItem.Value,e.NewValue))
+            {
+                field._dataItem.Value = (field._dataItem is SelectorDataItem) 
+                    ? ((SelectorDataItem) field._dataItem).SelectItem(e.NewValue) 
+                    : field._dataItem.Value = e.NewValue;                
+            }
+
+            var oldValue = field.GdbFeature.Attributes.ContainsKey(field.FieldName)
+                ? field.GdbFeature.Attributes[field.FieldName]
+                : null;
+            
+            if ( AreEqual(oldValue, field.BindingValue))
+            {
+                // clear out any previous validation exception.
+                field.ValidationException = null;
+                return;            
+            }
+                            
+            // if value changing event is subscribed to raise event.
+            if (field.ValueChanging != null)
+            {
+                var changing = new ValueChangingEventArgs(oldValue, field.BindingValue);
+
                 // raise value changing event.
-                f.ValueChanging( f ,changing);
+                field.ValueChanging(field, changing);
 
                 // if ValueChangeEventArgs return with the validation exception property
                 // set then the user has indicated that the new value doesn't not meet
                 // some user defined validation requirement and the validation state
                 // should be trigger with the provided Exception.
-                if(changing.ValidationException != null)
+                if (changing.ValidationException != null)
                 {
                     // Set the users exception to the FeatureDataField.ValidationException property.
                     // This will trigger the validation state.
-                    f.ValidationException = changing.ValidationException;
+                    field.ValidationException = changing.ValidationException;
                     return;
-                }                    
+                }
             }
 
+#if NETCORE_FX
             // clear out any previous validation exception.
-            f.ValidationException = null;
+            form.ValidationException = null;
+#endif
 
             // Attempt to update the new value back to the GdbFeature
-            bool success = f.CommitChange(e.NewValue);
+            var success = field.CommitChange(field.BindingValue);
 
             // if the ValueChanged event is subscribed to and the committed value was 
             // successfully pushed back to the GdbFeatue then rais the ValueChanged Event.
-            if (f.ValueChanged != null && success)
-                f.ValueChanged( f , new ValueChangedEventArgs(e.OldValue, e.NewValue));
+            if (field.ValueChanged != null && success)
+                field.ValueChanged(field, new ValueChangedEventArgs(oldValue, field.BindingValue));
 
+            field.OnPropertyChanged("BindingValue");
         }
 
-        #endregion Value    
+        #endregion BindingValue    
 
         #region ValidationException
 
@@ -223,7 +266,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private static void OnValidationExceptionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FeatureDataField)d).UpdateValidationState();            
+            var form = ((FeatureDataField)d);
+            form.UpdateValidationState();
+            form.OnPropertyChanged("ValidationException");            
         }          
 
         #endregion ValidationException
@@ -248,7 +293,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private static void OnSelectorTemplatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FeatureDataField)d).Refresh();
+            var form = ((FeatureDataField)d);
+            form.Refresh();
+            form.OnPropertyChanged("SelectorTemplate");
         }
 
         #endregion SelectorTemplate
@@ -274,11 +321,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private static void OnInputTemplatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FeatureDataField)d).Refresh();
+            var form = ((FeatureDataField)d);
+            form.Refresh();
+            form.OnPropertyChanged("InputTemplate");
         }
 
         #endregion InputTemplate
-
+        
         #region ReadOnlyTemplate
 
         /// <summary>
@@ -299,10 +348,70 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private static void OnReadOnlyTemplatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((FeatureDataField)d).Refresh();
+            var form = ((FeatureDataField)d);
+            form.Refresh();
+            form.OnPropertyChanged("ReadOnlyTemplate");
         }
 
-        #endregion ReadOnlyTemplate       
+        #endregion ReadOnlyTemplate               
+                                
+        #region  TextBoxChangedListener
+
+        /// <summary>
+        /// *FOR INTERNAL USE ONLY* : Gets the text box changed listener.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <exclude/>        
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static TextBox GetTextBoxChangedListener(DependencyObject obj)
+        {
+            return (TextBox)obj.GetValue(TextBoxChangedListenerProperty);
+        }
+
+        /// <summary>
+        /// *FOR INTERNAL USE ONLY* : Sets the text box changed listener.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <param name="value">The value.</param>
+        /// <exclude/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void SetTextBoxChangedListener(DependencyObject obj, TextBox value)
+        {
+            obj.SetValue(TextBoxChangedListenerProperty, value);
+        }
+
+        /// <summary>
+        /// *FOR INTERNAL USE ONLY* : The text box changed listener property
+        /// </summary>
+        /// <exclude/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static readonly DependencyProperty TextBoxChangedListenerProperty =
+            DependencyProperty.RegisterAttached("TextBoxChangedListener", typeof(TextBox), typeof(FeatureDataField), new PropertyMetadata(null, OnTextBoxChangedListenerPropertyChanged));
+
+        private static void OnTextBoxChangedListenerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue != null)
+            {
+                var txtbox = ((TextBox)e.OldValue);
+                txtbox.TextChanged -= txtbox_TextChanged;
+            }
+
+            if (e.NewValue != null)
+            {
+                var txtbox = ((TextBox) e.NewValue);
+                txtbox.TextChanged += txtbox_TextChanged;
+            }
+        }
+
+       private static void txtbox_TextChanged(object sender, TextChangedEventArgs e)
+       {
+            var txtbox = (TextBox)sender;                       
+            var textbinding = txtbox.GetBindingExpression(TextBox.TextProperty);
+            if (textbinding != null)
+                textbinding.UpdateSource();
+        }
+
+        #endregion TextBoxChangedListener
 
         #endregion Public Fields
 
@@ -314,19 +423,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// event can be used to enforce application validation setting the 
         /// ValueChangingEventArgs.ValidationException.
         /// </summary>
-        public EventHandler<ValueChangingEventArgs> ValueChanging;
+        public event EventHandler<ValueChangingEventArgs> ValueChanging;
 
         /// <summary>
         /// This event is rasied when the Value property changes and the value
         /// has been successfully commit back to the GdbFeature.
         /// </summary>
-        public EventHandler<ValueChangedEventArgs> ValueChanged;
+        public event EventHandler<ValueChangedEventArgs> ValueChanged;        
 
         #endregion Events
 
         #region Override
 
 #if NETFX_CORE
+        /// <summary>
+        /// Invoked whenever application code or internal processes 
+        /// (such as a rebuilding layout pass) call ApplyTemplate. 
+        /// In simplest terms, this means the method is called just 
+        /// before a UI element displays in your app. Override this 
+        /// method to influence the default post-template logic of 
+        /// a class.
+        /// </summary>
         protected
 #else
         /// <summary>
@@ -342,14 +459,47 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             // objain require templated controls
             _contentControl = GetTemplateChild("FeatureDataField_ContentControl") as ContentControl;
 
+            if (_contentControl != null)
+            {
+                _contentControl.GotFocus += ContentControl_GotFocus;
+                _contentControl.LostFocus += ContentControl_LostFocus;                     
+            }            
+
             // Render the UI.
             Refresh();
+        }      
+
+        private void ContentControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _focused = true;            
+            UpdateValidationState();
         }
+
+        private void ContentControl_LostFocus(object sender, RoutedEventArgs e)
+        {            
+            _focused = false;
+            UpdateValidationState();
+        }      
 
         #endregion Override        
 
+        #region INotifyPropertyChanged
+
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion INotifyPropertyChanged
+
         #region Private Methods
-        
+
         /// <summary>
         /// This method is used to create the UI for the FeatureDataField.
         /// </summary>
@@ -366,7 +516,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             if (_fieldInfo == null) return;
             
             // Get the value from the GdbFeature if the attribute exists.
-            Value = GdbFeature.Attributes.ContainsKey(FieldName) ? GdbFeature.Attributes[FieldName] : null;
+            BindingValue = GdbFeature.Attributes.ContainsKey(FieldName) ? GdbFeature.Attributes[FieldName] : null;
 
             // If the FeatureDataField.IsReadOnly property has been set to true or the FieldInfo 
             if (IsReadOnly || !_fieldInfo.IsEditable)
@@ -389,7 +539,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     case FieldType.Unknown:
                     case FieldType.Xml:
                     case FieldType.Blob:
-                        this.Visibility = Visibility.Collapsed;
+                        Visibility = Visibility.Collapsed;
                         break;
                 }               
             }
@@ -424,12 +574,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     case FieldType.Unknown:
                     case FieldType.Xml:
                     case FieldType.Blob:
-                        this.Visibility = Visibility.Collapsed;
+                        Visibility = Visibility.Collapsed;
                         break;
                 }                
             }
-        }
-
+        }      
 
         /// <summary>
         /// Creates the SelectorTemplate.
@@ -443,14 +592,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             {
                 if (_fieldInfo.IsNullable)
                     values.Add(new KeyValuePair<object, string>(null, ""));
-                values.AddRange(cvd.CodedValues);
+#if !NETFX_CORE
+                values.AddRange(cvd.CodedValues);                
+#else
+                values.AddRange(cvd.CodedValues.Select(kvp => new KeyValuePair<object, string>(kvp.Key, kvp.Value)));
+#endif
             }
 
             if (_contentControl == null) return;
             _contentControl.ContentTemplate = SelectorTemplate;
-            _dataItem = new SelectorDataItem(values, ValueChangedCallback, Value);
+            _dataItem = new SelectorDataItem(values, ValueChangedCallback, BindingValue);
             _contentControl.Content = _dataItem;
-        }        
+        }       
 
         /// <summary>
         /// Creates the InputTemplate.
@@ -458,7 +611,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private void GenerateInputField()
         {            
             _contentControl.ContentTemplate = InputTemplate;
-            _contentControl.Content = new InputDataItem(ValueChangedCallback, _fieldInfo, Value);
+            _dataItem = new InputDataItem(ValueChangedCallback, _fieldInfo, BindingValue);
+            _contentControl.Content = _dataItem;
         }
 
         /// <summary>
@@ -468,7 +622,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {           
             if (_contentControl == null) return;
             _contentControl.ContentTemplate = ReadOnlyTemplate;
-            _contentControl.Content = new ReadOnlyDataItem(_fieldInfo, Value);
+            _dataItem = new ReadOnlyDataItem(_fieldInfo, BindingValue);
+            _contentControl.Content = _dataItem;
         }
         
         /// <summary>
@@ -477,8 +632,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <param name="value">new value entered or selected by user.</param>
         private void ValueChangedCallback(object value)        
         {
-            // Attempt to convert text value into correct data type.
-            Value = EnsureCorrectDataType(value);
+            // Update Value with DataItem value
+            BindingValue = value;
         }
 
         /// <summary>
@@ -497,21 +652,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 case FieldType.String:
                     return value;
                 case FieldType.Double:
-                    try { return Convert.ToDouble(value); } 
+                    try
+                    {
+                        value = EmptyStringToNull(value);
+                        return (value != null) ? (object) Convert.ToDouble(value) : null;
+                    } 
                     catch { return value; }
                 case FieldType.Integer:
                 case FieldType.Oid:
-                    try { return Convert.ToInt32(value); }
+                    try
+                    {
+                        value = EmptyStringToNull(value);
+                        return (value != null) ? (object)Convert.ToInt32(value) : null;
+                    }
                     catch { return value; }                    
                 case FieldType.Single:
-                    try { return Convert.ToSingle(value); }
+                    try
+                    {
+                        value = EmptyStringToNull(value);
+                        return (value != null) ? (object) Convert.ToSingle(value) : null;
+                    }
                     catch { return value; }                    
                 case FieldType.SmallInteger:
-                    try { return Convert.ToInt16(value); }
+                    try
+                    {
+                        value = EmptyStringToNull(value);
+                        return (value != null) ? (object) Convert.ToInt16(value) : null;
+                    }
                     catch { return value; }                    
                 case FieldType.Date:
                     try
                     {
+                        value = EmptyStringToNull(value);
+                        if (value == null) return null;
+
                         DateTime dt;                       
                         if (value is string)                            
                             return DateTime.TryParse((string)value, out dt) ? dt : value;
@@ -521,14 +695,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 default:
                     return value;;
             }
-        }        
+        }
+
+        private object EmptyStringToNull(object value)
+        {
+            if (value is string && string.IsNullOrEmpty((string)value))
+                return null;
+            return value;
+        }
 
         /// <summary>
         /// Changes the validation state from betwenn Invalid and Valid.
         /// </summary>
         private void UpdateValidationState()
-        {            
-            GoToState(_contentControl, ValidationException != null ? "InvalidState" : "ValidState");            
+        {        
+            _dataItem.ErrorMessage = ValidationException != null ? ValidationException.Message : "";
+
+            var deltaState = ValidationException != null ? _focused ? "InvalidFocusedState" : "InvalidUnfocusedState" : "ValidState";
+
+            if (_currentState != deltaState)
+            {
+                _currentState = deltaState;
+                GoToState(_contentControl, _currentState);
+            }
+
         }
 
         /// <summary>
@@ -578,6 +768,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
         /// <summary>
+        /// Changes the current value back to 
+        /// the GdbFeature last saved value.
+        /// </summary>
+        private void Cancel()
+        {
+            if (string.IsNullOrEmpty(FieldName)
+                || GdbFeature == null
+                || GdbFeature.Attributes == null
+                || !GdbFeature.Attributes.ContainsKey(FieldName))
+                return;           
+
+            // Clear validation exception
+            ValidationException = null;
+
+            // Take current GdbFeature value and override Value.
+            BindingValue = GdbFeature.Attributes[FieldName];
+        }
+
+        /// <summary>
         /// Commits FeatureDataField value back to the GdbFeature.
         /// </summary>
         /// <param name="value">The new value that will be committed.</param>
@@ -588,7 +797,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             try
             {  
                 // try to commit value
-                GdbFeature.Attributes[FieldName] = (value is KeyValueItem) ? ((KeyValueItem)value).Key : value;
+                GdbFeature.Attributes[FieldName] = EnsureCorrectDataType((value is KeyValuePair<object,string>) ? ((KeyValuePair<object,string>)value).Key : value);
+                ValidationException = null;
                 return true; // commit success
             }
             catch (Exception ex)
@@ -597,6 +807,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 return false; // commit failed.
             }
             
+        }
+
+        // Simplified equality test that handles 
+        // nulls, values, and reference
+        private static bool AreEqual(object o1, object o2)
+        {
+            return (o1 == o2) || (o1 != null && o1.Equals(o2));
         }
         
         #endregion Private Methods     
@@ -612,6 +829,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             #region Private Members
             
             private object _value;
+            private string _errorMessage;
 
             #endregion Private Members           
 
@@ -677,6 +895,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     _value = value;
                     OnPropertyChanged();
                     OnValueChanged();
+                }
+            }
+
+            /// <summary>
+            /// Gets or sets the error message.
+            /// </summary>           
+            public virtual string ErrorMessage
+            {
+                get { return _errorMessage; }
+                set
+                {
+                    if (_errorMessage == value) return;
+                    _errorMessage = value;
+                    OnPropertyChanged();
                 }
             }
 
@@ -794,11 +1026,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// SelectorDataItem is used as the binding object for the SelectorTemplate.
         /// </summary>
+#if NETFX_CORE
+        [Bindable]
+#endif
         private class SelectorDataItem : DataItem
         {
             #region  Private Members
 
-            private List<KeyValueItem> _items;
+            private List<KeyValuePair<object,string>> _items;
 
             #endregion Private Members
 
@@ -812,8 +1047,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             /// <param name="value">The default value which should be selected.</param>
             public SelectorDataItem(IEnumerable<KeyValuePair<object, string>> items, Action<object> callback, object value) : base(callback)
             {
-                Items = items.Select(kvp => new KeyValueItem() { Key = kvp.Key, Value = kvp.Value }).ToList();
-                Value = Items.FirstOrDefault(kvp => ((kvp.Key == null && value == null) || (kvp.Key != null && kvp.Key.Equals(value))));
+                Items = items != null ? items.ToList() : null;
+                Value = SelectItem(value);
+            }
+
+            /// <summary>
+            /// Looks for and item entry that has the matching key for the given input value.
+            /// </summary>
+            /// <param name="value">returns a valid selector object</param>            
+            public KeyValuePair<object,string> SelectItem(object value)
+            {
+                return Items.FirstOrDefault(kvp => ((kvp.Key == null && value == null) || (kvp.Key != null && kvp.Key.Equals(value))));
             }
 
             #endregion Constructor
@@ -823,7 +1067,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             /// <summary>
             /// The Items used to bind to the selector template.
             /// </summary>
-            public List<KeyValueItem> Items
+            public List<KeyValuePair<object,string>> Items
             {
                 get { return _items; }
                 set
@@ -844,7 +1088,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             protected override void OnValueChanged()
             {
                 if (Items == null) return;
-                var selector = (from a in Items where ((a.Key == null && Value == null) || (a.Key != null && a.Key.Equals(Value)))  select a.Key);
+                var selector = (from a in Items where (Value != null && AreEqual(a.Key,((KeyValuePair<object,string>)Value).Key))  select a.Key);
                 var enumerable = selector as string[] ?? selector.ToArray();
                 
                 if (enumerable.Any() && Callback != null)                
@@ -855,5 +1099,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
         #endregion SelectorDataItem
+        
     }
 }

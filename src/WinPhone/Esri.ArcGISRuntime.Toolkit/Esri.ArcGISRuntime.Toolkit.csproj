@@ -99,9 +99,6 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureHelper.cs">
       <Link>Controls\FeatureDataField\FeatureHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\KeyValueItem.cs">
-      <Link>Controls\FeatureDataField\KeyValueItem.cs</Link>
-    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangedEventArgs.cs">
       <Link>Controls\FeatureDataField\ValueChangedEventArgs.cs</Link>
     </Compile>
@@ -110,6 +107,15 @@
     </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueEventArgs.cs">
       <Link>Controls\FeatureDataField\ValueEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataForm\ActionCommand.cs">
+      <Link>Controls\FeatureDataForm\ActionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataForm\FeatureDataForm.cs">
+      <Link>Controls\FeatureDataForm\FeatureDataForm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataForm\GeneratingFieldEventArgs.cs">
+      <Link>Controls\FeatureDataForm\GeneratingFieldEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\CollectionExtensions.cs">
       <Link>Controls\Legend\CollectionExtensions.cs</Link>
