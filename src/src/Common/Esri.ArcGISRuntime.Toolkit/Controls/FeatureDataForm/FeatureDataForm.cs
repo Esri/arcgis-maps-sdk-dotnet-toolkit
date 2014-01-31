@@ -606,8 +606,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             if (_editFeature == null || GdbFeature == null) return;
             
-            // copy original feature back to edit feature
-            _editFeature = GdbFeature.Clone();
+            // copy original feature back to edit feature            
+            _editFeature = GdbFeature.Clone();            
             HasEdits = false;
             HasError = false;                 
             ((ActionCommand)ApplyCommand).RaiseCanExecute();

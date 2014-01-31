@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.20827.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit", "WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj", "{AE395530-9918-45B5-8F81-199136BDB367}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE395530-9918-45B5-8F81-199136BDB367}.Debug|ARM.ActiveCfg = Debug|ARM
+		{AE395530-9918-45B5-8F81-199136BDB367}.Debug|ARM.Build.0 = Debug|ARM
+		{AE395530-9918-45B5-8F81-199136BDB367}.Debug|x64.ActiveCfg = Debug|x64
+		{AE395530-9918-45B5-8F81-199136BDB367}.Debug|x64.Build.0 = Debug|x64
+		{AE395530-9918-45B5-8F81-199136BDB367}.Debug|x86.ActiveCfg = Debug|x86
+		{AE395530-9918-45B5-8F81-199136BDB367}.Debug|x86.Build.0 = Debug|x86
+		{AE395530-9918-45B5-8F81-199136BDB367}.Release|ARM.ActiveCfg = Release|ARM
+		{AE395530-9918-45B5-8F81-199136BDB367}.Release|ARM.Build.0 = Release|ARM
+		{AE395530-9918-45B5-8F81-199136BDB367}.Release|x64.ActiveCfg = Release|x64
+		{AE395530-9918-45B5-8F81-199136BDB367}.Release|x64.Build.0 = Release|x64
+		{AE395530-9918-45B5-8F81-199136BDB367}.Release|x86.ActiveCfg = Release|x86
+		{AE395530-9918-45B5-8F81-199136BDB367}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
