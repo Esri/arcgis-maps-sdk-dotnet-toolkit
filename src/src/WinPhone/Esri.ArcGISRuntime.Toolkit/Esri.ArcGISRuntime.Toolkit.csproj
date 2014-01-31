@@ -147,7 +147,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.2.0">
+    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.1.0">
       <Name>ArcGIS Runtime for Windows Phone %28Beta%29</Name>
     </SDKReference>
   </ItemGroup>

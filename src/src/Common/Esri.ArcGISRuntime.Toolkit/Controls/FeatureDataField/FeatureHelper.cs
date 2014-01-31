@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             var cvd = (CodedValueDomain)fieldInfo.Domain;
 
             // Perform coded value lookup.
-            return (cvd.CodedValues != null && cvd.CodedValues.ContainsKey(value)) ? cvd.CodedValues[value] : value;      
+            return (cvd.CodedValues != null && value != null && cvd.CodedValues.ContainsKey(value)) ? cvd.CodedValues[value] : value;      
         }
 
         public static KeyValuePair<object,string> GetCodedValue(this CodedValueDomain domain, object value, bool nullable = false)
