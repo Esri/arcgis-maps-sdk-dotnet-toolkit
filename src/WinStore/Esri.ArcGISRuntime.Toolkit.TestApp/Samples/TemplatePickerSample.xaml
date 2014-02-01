@@ -1,0 +1,99 @@
+﻿<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.TestApp.Samples.TemplatePickerSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+    xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.Controls"
+    xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+    xmlns:data="using:Esri.ArcGISRuntime.Data"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="130" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="Gray" BorderThickness="1" >
+                <StackPanel>
+                    <Button Margin="1" Click="AddLayer_OnClick"
+                            Content="Add Feature Layer"
+                            ToolTipService.ToolTip="Add a feature layer to the template picker" />
+                    <Button Margin="1" Click="AddStreetMapLayer_OnClick"
+                            Content="Add StreetMapLayer "
+                            ToolTipService.ToolTip="Add street map layer which should not impact the template picker" />
+                    <Button Margin="1" Click="SwitchLayers_OnClick"
+                            Content="Switch Layers"
+                            ToolTipService.ToolTip="Switch first layer and second layer" />
+                    <Button Margin="1" Click="RemoveLayer_OnClick"
+                            Content="Remove First Layer"
+                            ToolTipService.ToolTip="Remove first layer from the template picker" />
+                    <Button Margin="1" Click="ClearLayers_OnClick"
+                            Content="Remove all layers"
+                            ToolTipService.ToolTip="Remove all Layers from TemplatePicker" />
+                    <Button Margin="1" Click="InitNewLayers_OnClick"
+                            Content="Set new Layers collection"
+                            ToolTipService.ToolTip="Create new TemplatePicker.Layers collection (allow testing with layers not displayed in a map)" />
+                    <Border Margin="1">
+                        <ItemsControl ItemsSource="{Binding Layers, ElementName=MyTemplatePicker}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsVisible, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <Grid x:Name="Container" Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="{Binding ActualHeight, ElementName=Container}">
+                        <esriToolkit:TemplatePicker x:Name="MyTemplatePicker"
+                                                HorizontalAlignment="Center"
+                                                Layers="{Binding ElementName=MyMap, Path=Layers}"
+                                                TemplateSelected="TemplatePicker_OnTemplateSelected" />
+                    </ScrollViewer>
+                    <esri:MapView x:Name="MyMapView" Grid.Row="1">
+                        <esri:Map x:Name="MyMap">
+                            <layers:FeatureLayer DisplayName="Military Hostile Units">
+                                <layers:FeatureLayer.FeatureTable>
+                                    <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/6" />
+                                </layers:FeatureLayer.FeatureTable>
+                            </layers:FeatureLayer>
+                            <layers:FeatureLayer DisplayName="River">
+                                <layers:FeatureLayer.FeatureTable>
+                                    <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/8" UseAdvancedSymbology="False" />
+                                </layers:FeatureLayer.FeatureTable>
+                            </layers:FeatureLayer>
+                            <layers:FeatureLayer DisplayName="Area">
+                                <layers:FeatureLayer.FeatureTable>
+                                    <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False" />
+                                </layers:FeatureLayer.FeatureTable>
+                            </layers:FeatureLayer>
+                        </esri:Map>
+                    </esri:MapView>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <TextBox x:Name="StatusText" Grid.Row="1" 
+                 Margin="1"
+                 AcceptsReturn="True" 
+                 IsReadOnly="True"
+                 Text="Click on TemplatePicker to see events fired."
+              />
+
+    </Grid>
+</Page>
