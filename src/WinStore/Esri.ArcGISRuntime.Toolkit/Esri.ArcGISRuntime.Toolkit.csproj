@@ -148,7 +148,13 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\MapLayerItem.cs">
       <Link>Controls\Legend\MapLayerItem.cs</Link>
     </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\DependencyPropertyChangedExtension.cs">
+      <Link>DependencyPropertyChangedExtension.cs</Link>
+    </Compile>
     <Compile Include="Controls\FeatureDataField\KeyValuePair.cs" />
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\TemplatePicker\TemplatePicker.cs">
+      <Link>Controls\TemplatePicker\TemplatePicker.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\ScaleLine\ScaleLine.cs">
       <Link>Controls\ScaleLine\ScaleLine.cs</Link>
@@ -159,9 +165,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

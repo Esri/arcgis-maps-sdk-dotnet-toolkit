@@ -6,6 +6,7 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ESRI.ArcGISRuntime.Toolkit;component/Controls/SignInDialog/SignInDialog.Theme.xaml" />
+        <ResourceDictionary Source="/ESRI.ArcGISRuntime.Toolkit;component/Controls/TemplatePicker/TemplatePicker.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
     
     <!-- Default Legend Style-->

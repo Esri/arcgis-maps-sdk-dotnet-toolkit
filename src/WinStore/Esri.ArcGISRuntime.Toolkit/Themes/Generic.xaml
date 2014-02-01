@@ -458,6 +458,53 @@
         </Setter>
     </Style>
 
+    <!--TemplatePicker Control Template-->
+    <Style TargetType="local:TemplatePicker">
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Button Command="{Binding Command}" CommandParameter="{Binding}"
+                            Width="50" Height="50" Padding="2">
+                        <ToolTipService.ToolTip>
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold" Text="{Binding FeatureTemplate.Name}" />
+                                <TextBlock Text="{Binding FeatureTemplate.Description}"  />
+                            </StackPanel>
+                        </ToolTipService.ToolTip>
+                        <Image Source="{Binding Swatch}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Stretch="Uniform" />
+                    </Button>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapGrid Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TemplatePicker">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                        >
+                        <ItemsControl x:Name="TemplateItems" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      ItemTemplate="{TemplateBinding ItemTemplate}"
+                                      ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
 
     

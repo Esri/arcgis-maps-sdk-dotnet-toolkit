@@ -413,6 +413,57 @@
         </Setter>
     </Style>
 
+    <Style TargetType="local:TemplatePicker">
+        <Setter Property="Background"  Value="{StaticResource PhoneBackgroundColor}"/>
+        <Setter Property="BorderBrush"  Value="{StaticResource PhoneBorderBrush}"/>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{Binding Command}" CommandParameter="{Binding}"
+                                Width="80" Height="80" Padding="0" Margin="2">
+                            <ToolTipService.ToolTip>
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold" Text="{Binding FeatureTemplate.Name}" />
+                                    <TextBlock Text="{Binding FeatureTemplate.Description}"  />
+                                </StackPanel>
+                            </ToolTipService.ToolTip>
+                            <Image Source="{Binding Swatch}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Stretch="Uniform" />
+                        </Button>
+                        <TextBlock Text="{Binding FeatureType.Name}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TemplatePicker">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                        >
+                        <ItemsControl x:Name="TemplateItems" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      ItemTemplate="{TemplateBinding ItemTemplate}"
+                                      ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
 
     

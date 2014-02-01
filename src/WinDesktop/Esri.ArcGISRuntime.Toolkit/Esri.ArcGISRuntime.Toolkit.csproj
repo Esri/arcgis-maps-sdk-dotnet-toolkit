@@ -108,12 +108,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\TemplatePicker\TemplatePicker.Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\TemplatePicker\TemplatePicker.cs">
+      <Link>Controls\TemplatePicker\TemplatePicker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\DependencyPropertyChangedExtension.cs">
+      <Link>DependencyPropertyChangedExtension.cs</Link>
+    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\ValueConverters\VisibilityConverter.cs">
       <Link>ValueConverters\VisibilityConverter.cs</Link>
     </Compile>
