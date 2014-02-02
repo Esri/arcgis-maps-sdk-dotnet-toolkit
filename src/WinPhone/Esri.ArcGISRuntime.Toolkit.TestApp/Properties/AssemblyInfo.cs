@@ -6,11 +6,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Esri.ArcGISRunTime.Toolkit.TestApp")]
+[assembly: AssemblyTitle("Esri.ArcGISRuntime.Toolkit.TestApp")]
 [assembly: AssemblyDescription("Test Application for ArcGIS Runtime WinPhone Toolkit")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Esri.ArcGISRunTime.Toolkit.TestApp")]
+[assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit.TestApp")]
 [assembly: AssemblyCopyright("Copyright © Esri 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -6,9 +6,9 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using Esri.ArcGISRunTime.Toolkit.TestApp.Resources;
+using Esri.ArcGISRuntime.Toolkit.TestApp.Resources;
 
-namespace Esri.ArcGISRunTime.Toolkit.TestApp
+namespace Esri.ArcGISRuntime.Toolkit.TestApp
 {
 	public partial class App : Application
 	{

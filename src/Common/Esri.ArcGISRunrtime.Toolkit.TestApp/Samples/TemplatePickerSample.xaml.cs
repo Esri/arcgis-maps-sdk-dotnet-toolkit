@@ -14,11 +14,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 #elif SILVERLIGHT
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 #else
 using System.Windows;
-using System.Windows.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
@@ -61,7 +58,6 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 #if SILVERLIGHT
 			StatusTextScrollViewer.UpdateLayout();
 			StatusTextScrollViewer.ScrollToVerticalOffset(double.MaxValue);
-//			StatusTextScrollViewer.ScrollToVerticalOffset(StatusText.ActualHeight);
 #elif NETFX_CORE
 			var grid = (Grid)VisualTreeHelper.GetChild(StatusText, 0);
 			for (var i = 0; i <= VisualTreeHelper.GetChildrenCount(grid) - 1; i++)
@@ -79,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 #endif
 		}
 
-		private void RemoveLayer_OnClick(object sender, RoutedEventArgs e)
+		private void RemoveLayer_OnClick(object sender, EventArgs e)
 		{
 			if (MyTemplatePicker.Layers.Any())
 			{
@@ -94,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 		}
 
 		static int _index;
-		private async void AddLayer_OnClick(object sender, RoutedEventArgs e)
+		private async void AddLayer_OnClick(object sender, EventArgs e)
 		{
 			string url = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/" + (_index + 2);
 			_index = ++_index % 5;
@@ -130,14 +126,14 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 			}
 		}
 
-		private void AddStreetMapLayer_OnClick(object sender, RoutedEventArgs e)
+		private void AddStreetMapLayer_OnClick(object sender, EventArgs e)
 		{
 			var layer = new OpenStreetMapLayer { Opacity = 0.5, DisplayName = "OpenStreetMapLayer" };
 			((ObservableCollection<Layer>) MyTemplatePicker.Layers).Add(layer);
 			LogMessage("Added Layer " + GetLayerName(layer));
 		}
 
-		private void InitNewLayers_OnClick(object sender, RoutedEventArgs e)
+		private void InitNewLayers_OnClick(object sender, EventArgs e)
 		{
 			MyTemplatePicker.Layers = new ObservableCollection<Layer>();
 			LogMessage("TemplatePicker.Layers initialized with a new collection not displayed in the map");
@@ -146,7 +142,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 		}
 
 
-		private void ClearLayers_OnClick(object sender, RoutedEventArgs e)
+		private void ClearLayers_OnClick(object sender, EventArgs e)
 		{
 			var coll = MyTemplatePicker.Layers as ObservableCollection<Layer>;
 			if (coll != null)
@@ -156,7 +152,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 			}
 		}
 
-		private void SwitchLayers_OnClick(object sender, RoutedEventArgs e)
+		private void SwitchLayers_OnClick(object sender, EventArgs e)
 		{
 			var coll = MyTemplatePicker.Layers as ObservableCollection<Layer>;
 			if (coll != null && coll.Count >= 2)

@@ -1,6 +1,6 @@
-﻿using Esri.ArcGISRunTime.Toolkit.TestApp.Resources;
+﻿using Esri.ArcGISRuntime.Toolkit.TestApp.Resources;
 
-namespace Esri.ArcGISRunTime.Toolkit.TestApp
+namespace Esri.ArcGISRuntime.Toolkit.TestApp
 {
 	/// <summary>
 	/// Provides access to string resources.

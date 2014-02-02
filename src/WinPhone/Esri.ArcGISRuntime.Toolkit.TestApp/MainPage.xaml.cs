@@ -1,10 +1,8 @@
-﻿using Esri.ArcGISRuntime.Toolkit.TestApp;
-using Microsoft.Phone.Controls;
+﻿using Microsoft.Phone.Controls;
 using System;
 using System.Windows.Controls;
-using System.Windows.Navigation;
 
-namespace Esri.ArcGISRunTime.Toolkit.TestApp
+namespace Esri.ArcGISRuntime.Toolkit.TestApp
 {
 	public partial class MainPage : PhoneApplicationPage
 	{

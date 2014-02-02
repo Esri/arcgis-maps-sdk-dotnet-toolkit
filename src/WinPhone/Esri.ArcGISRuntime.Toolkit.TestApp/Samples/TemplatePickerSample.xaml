@@ -16,9 +16,20 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Opacity="1" IsMenuEnabled="True" IsVisible="True" Mode="Default">
+            <shell:ApplicationBarIconButton IconUri="/Assets/Layers.png" Text="Show/Hide Layers List" Click="TooggleLayers"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="Add Feature Layer" Click="AddLayer_OnClick" />
+                <shell:ApplicationBarMenuItem Text="Switch Layers 1 and 2" Click="SwitchLayers_OnClick" />
+                <shell:ApplicationBarMenuItem Text="Remove First Layer" Click="RemoveLayer_OnClick" />
+                <shell:ApplicationBarMenuItem Text="Remove all Layers" Click="ClearLayers_OnClick" />
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -36,58 +47,13 @@
                 <RowDefinition Height="130" />
             </Grid.RowDefinitions>
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border BorderBrush="Gray" BorderThickness="1" >
-                    <StackPanel>
-                        <Button Margin="1" Click="AddLayer_OnClick"
-                            Content="Add Feature Layer"
-                            ToolTipService.ToolTip="Add a feature layer to the template picker" />
-                        <Button Margin="1" Click="AddStreetMapLayer_OnClick"
-                            Content="Add StreetMapLayer "
-                            ToolTipService.ToolTip="Add street map layer which should not impact the template picker" />
-                        <Button Margin="1" Click="SwitchLayers_OnClick"
-                            Content="Switch Layers"
-                            ToolTipService.ToolTip="Switch first layer and second layer" />
-                        <Button Margin="1" Click="RemoveLayer_OnClick"
-                            Content="Remove First Layer"
-                            ToolTipService.ToolTip="Remove first layer from the template picker" />
-                        <Button Margin="1" Click="ClearLayers_OnClick"
-                            Content="Remove all layers"
-                            ToolTipService.ToolTip="Remove all Layers from TemplatePicker" />
-                        <Button Margin="1" Click="InitNewLayers_OnClick"
-                            Content="Set new Layers collection"
-                            ToolTipService.ToolTip="Create new TemplatePicker.Layers collection (allow testing with layers not displayed in a map)" />
-                        <Border Margin="1">
-                            <ItemsControl ItemsSource="{Binding Layers, ElementName=MyTemplatePicker}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsVisible, Mode=TwoWay}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Border>
-                    </StackPanel>
-                </Border>
-                <Grid x:Name="Container" Grid.Column="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="{Binding ActualHeight, ElementName=Container}">
-                            <esriToolkit:TemplatePicker x:Name="MyTemplatePicker"
-                                                HorizontalAlignment="Center"
-                                                Layers="{Binding ElementName=MyMap, Path=Layers}"
-                                                TemplateSelected="TemplatePicker_OnTemplateSelected" />
-                        </ScrollViewer>
-                        <esri:MapView x:Name="MyMapView" Grid.Row="1">
-                            <esri:Map x:Name="MyMap">
-                                <!--todo<layers:FeatureLayer DisplayName="Military Hostile Units">
+                <ScrollViewer>
+                    <esriToolkit:TemplatePicker x:Name="MyTemplatePicker" Loaded="InitializeFeatureServicesOnLoaded"
+                                                HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                TemplateSelected="TemplatePicker_OnTemplateSelected">
+                        <esriToolkit:TemplatePicker.Layers>
+                            <layers:LayerCollection>
+                                <layers:FeatureLayer DisplayName="Military Hostile Units">
                                     <layers:FeatureLayer.FeatureTable>
                                         <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/6" />
                                     </layers:FeatureLayer.FeatureTable>
@@ -101,12 +67,32 @@
                                     <layers:FeatureLayer.FeatureTable>
                                         <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False" />
                                     </layers:FeatureLayer.FeatureTable>
-                                </layers:FeatureLayer>-->
-                            </esri:Map>
-                        </esri:MapView>
-                    </Grid>
-                </Grid>
+                                </layers:FeatureLayer>
+                            </layers:LayerCollection>
+                        </esriToolkit:TemplatePicker.Layers>
+                    </esriToolkit:TemplatePicker>
+                </ScrollViewer>
+                <esri:MapView x:Name="MyMapView" Visibility="Collapsed" />
+                <ProgressBar x:Name="ProgressBar" Visibility="Visible" IsIndeterminate="True" VerticalAlignment="Top" />
             </Grid>
+
+            <!--Layer List-->
+            <Popup x:Name="LayersPopup" IsOpen="False" >
+                <Border Margin="1" Background="{StaticResource PhoneBackgroundBrush}" Height="800" Width="480" >
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding Layers, ElementName=MyTemplatePicker}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsVisible, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Popup>
+
             <ScrollViewer x:Name="StatusTextScrollViewer"
                           Grid.Row="1"  Margin="1"
                           HorizontalScrollBarVisibility="Auto">
