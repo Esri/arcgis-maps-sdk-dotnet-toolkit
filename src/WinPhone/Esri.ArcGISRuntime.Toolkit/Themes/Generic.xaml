@@ -419,22 +419,21 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
                         <Button Command="{Binding Command}" CommandParameter="{Binding}"
-                                Width="80" Height="80" Padding="0" Margin="2">
-                            <ToolTipService.ToolTip>
-                                <StackPanel>
-                                    <TextBlock FontWeight="Bold" Text="{Binding FeatureTemplate.Name}" />
-                                    <TextBlock Text="{Binding FeatureTemplate.Description}"  />
-                                </StackPanel>
-                            </ToolTipService.ToolTip>
+                                Width="80" Height="80" Padding="0" Margin="0">
                             <Image Source="{Binding Swatch}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Stretch="Uniform" />
                         </Button>
-                        <TextBlock Text="{Binding FeatureType.Name}" VerticalAlignment="Center"/>
-                    </StackPanel>
+                        <TextBlock Text="{Binding FeatureTemplate.Name}" TextWrapping="Wrap" Grid.Column="1"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
