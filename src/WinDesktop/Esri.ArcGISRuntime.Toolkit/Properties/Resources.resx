@@ -120,7 +120,7 @@
   <data name="FeatureDataForm_ApplyButtonText" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="FeatureDataForm_CancelButtonText" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="FeatureDataForm_ResetButtonText" xml:space="preserve">
+    <value>Reset</value>
   </data>
 </root>

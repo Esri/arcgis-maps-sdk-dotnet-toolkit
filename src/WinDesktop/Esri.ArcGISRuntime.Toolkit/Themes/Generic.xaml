@@ -237,7 +237,7 @@
                             <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
                                 <Button Content="{x:Static localization:Resources.FeatureDataForm_ApplyButtonText}" 
                                         Command="{TemplateBinding ApplyCommand}" MinWidth="80"  Margin="5" Padding="5" />
-                                <Button Content="{x:Static localization:Resources.FeatureDataForm_CancelButtonText}" 
+                                <Button Content="{x:Static localization:Resources.FeatureDataForm_ResetButtonText}" 
                                         Command="{TemplateBinding ResetCommand}" MinWidth="80"  Margin="5" Padding="5" />
                             </StackPanel>
                         </Grid>

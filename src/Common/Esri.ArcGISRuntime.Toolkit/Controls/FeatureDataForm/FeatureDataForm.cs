@@ -24,8 +24,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #region Private Members
         
-        private Grid _controlRoot;                
-        private GdbFeature _editFeature;
+        private Grid _controlRoot;
+		private GeodatabaseFeature _editFeature;
         private IEnumerable<string> _validFieldNames;
         private readonly IDictionary<string, FrameworkElement> _fieldControls = new Dictionary<string, FrameworkElement>();
         private readonly List<FieldType> _notSupportFieldTypes = new List<FieldType> // these types will not be supported for editing or display.
@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 #endif
             Fields = new ObservableCollection<string>();
             ApplyCommand = new ActionCommand(ApplyChanges,CanApplyChanges);
-            ResetCommand = new ActionCommand(Cancel,CanCancel);
+            ResetCommand = new ActionCommand(Reset,CanReset);
         }
 #if !NETFX_CORE && !WINDOWS_PHONE
         static FeatureDataForm()
@@ -94,36 +94,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #region Public Properties
 
-        #region GdbFeature
+		#region GeodatabaseFeature
 
-        /// <summary>
-        /// Gets or sets the GdbFeature that contains the 
+		/// <summary>
+		/// Gets or sets the GeodatabaseFeature that contains the 
         /// information needed to create fields and binding.
         /// </summary>        
-        public GdbFeature GdbFeature
+		public GeodatabaseFeature GeodatabaseFeature
         {
-            get { return (GdbFeature)GetValue(GdbFeatureProperty); }
-            set { SetValue(GdbFeatureProperty, value); }
+			get { return (GeodatabaseFeature)GetValue(GeodatabaseFeatureProperty); }
+			set { SetValue(GeodatabaseFeatureProperty, value); }
         }
 
         /// <summary>
-        /// The dependency property for GdbFeature.
+		/// The dependency property for GeodatabaseFeature.
         /// </summary>
-        public static readonly DependencyProperty GdbFeatureProperty =
-            DependencyProperty.Register("GdbFeature", typeof(GdbFeature), typeof(FeatureDataForm), new PropertyMetadata(null, OnGdbFeaturePropertyChanged));
+		public static readonly DependencyProperty GeodatabaseFeatureProperty =
+			DependencyProperty.Register("GeodatabaseFeature", typeof(GeodatabaseFeature), typeof(FeatureDataForm), new PropertyMetadata(null, OnGeodatabaseFeaturePropertyChanged));
 
-        private static void OnGdbFeaturePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private static void OnGeodatabaseFeaturePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var dataForm = ((FeatureDataForm) d);
-            dataForm._editFeature = ((GdbFeature) e.NewValue).Clone();
+			dataForm._editFeature = ((GeodatabaseFeature)e.NewValue).Clone();
             dataForm.Refresh();
         }
 
-        #endregion GdbFeature
+		#endregion GeodatabaseFeature
 
-        #region Fields
+		#region Fields
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the fields to display. A field will be 
         /// displayed according to the index of this property.
         /// </summary>        
@@ -376,7 +376,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public event EventHandler<GeneratingFieldEventArgs> GeneratingField;               
 
         /// <summary>
-        /// Occurs when changes are applied to the GdbFeature.
+		/// Occurs when changes are applied to the GeodatabaseFeature.
         /// </summary>
         public event EventHandler<EventArgs> ApplyCompleted;
         
@@ -389,7 +389,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         private void Refresh()
         {
-            if (_controlRoot != null && _editFeature != null && GdbFeature.Schema != null && Fields != null)
+			if (_controlRoot != null && _editFeature != null && GeodatabaseFeature.Schema != null && Fields != null)
             {
                 // Clear root element children.
                 _controlRoot.Children.Clear();
@@ -531,11 +531,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <param name="fieldInfo">FieldInfo for edit control</param>
         /// <param name="isReadOnly">Value indicating if control should be readonly</param>
         /// <returns></returns>
-        private FrameworkElement CreateControl(GdbFeature feature, FieldInfo fieldInfo, bool isReadOnly)
+		private FrameworkElement CreateControl(GeodatabaseFeature feature, FieldInfo fieldInfo, bool isReadOnly)
         {
             var control = new FeatureDataField
             {
-                GdbFeature = feature,
+				GeodatabaseFeature = feature,
                 FieldName = fieldInfo.Name,
                 IsReadOnly = isReadOnly,                
             };                        
@@ -574,10 +574,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         private void ApplyChanges()
         {
-            if (_editFeature == null || GdbFeature == null) return;
+			if (_editFeature == null || GeodatabaseFeature == null) return;
             
             // copy edit feature back to original feature
-            GdbFeature.CopyFrom(_editFeature.Attributes);
+			GeodatabaseFeature.CopyFrom(_editFeature.Attributes);
             HasEdits = false;
             HasError = false;
             ((ActionCommand)ApplyCommand).RaiseCanExecute();
@@ -602,12 +602,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// This will override all edit feature changes back
         /// to the original feature values.
         /// </summary>
-        private void Cancel()
+        private void Reset()
         {
-            if (_editFeature == null || GdbFeature == null) return;
+			if (_editFeature == null || GeodatabaseFeature == null) return;
             
             // copy original feature back to edit feature
-            _editFeature.CopyFrom(GdbFeature.Attributes);
+			_editFeature = GeodatabaseFeature.Clone();
             HasEdits = false;
             HasError = false;                 
             ((ActionCommand)ApplyCommand).RaiseCanExecute();
@@ -619,21 +619,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// This will return true if a change has 
         /// been made to the edit feature.
         /// </summary>        
-        private bool CanCancel()
+        private bool CanReset()
         {
-            return HasEdits;
+            return HasEdits || HasError;
         }
 
         /// <summary>
-        /// Compares orignial GdbFeature to the clone GdbFeature 
+		/// Compares orignial GeodatabaseFeature to the clone GeodatabaseFeature 
         /// to check for differences in attribute values.
         /// </summary>        
         private bool HasChanges()
-        {            
-            if (_editFeature != null && GdbFeature != null)            
+        {
+			if (_editFeature != null && GeodatabaseFeature != null)            
                 return _validFieldNames.Any(fieldName => !AreEqual(
-                    (_editFeature.Attributes.ContainsKey(fieldName) ? _editFeature.Attributes[fieldName] : null), 
-                    (GdbFeature.Attributes.ContainsKey(fieldName) ? GdbFeature.Attributes[fieldName] : null)));            
+                    (_editFeature.Attributes.ContainsKey(fieldName) ? _editFeature.Attributes[fieldName] : null),
+					(GeodatabaseFeature.Attributes.ContainsKey(fieldName) ? GeodatabaseFeature.Attributes[fieldName] : null)));            
             return false;
         }
 

@@ -70,11 +70,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancel.
+        ///   Looks up a localized string similar to Reset.
         /// </summary>
-        public static string FeatureDataForm_CancelButtonText {
+        public static string FeatureDataForm_ResetButtonText {
             get {
-                return ResourceManager.GetString("FeatureDataForm_CancelButtonText", resourceCulture);
+                return ResourceManager.GetString("FeatureDataForm_ResetButtonText", resourceCulture);
             }
         }
     }

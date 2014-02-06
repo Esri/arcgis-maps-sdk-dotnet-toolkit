@@ -22,7 +22,7 @@ using System.Windows.Input;
 namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
     /// <summary>
-    /// FeatureDatafield is used to edit or display a single attribute from a GdbFeature.
+	/// FeatureDatafield is used to edit or display a single attribute from a GeodatabaseFeature.
     /// </summary>
     [TemplatePart(Name = "FeatureDataField_ContentControl", Type = typeof(ContentControl))]
     public class FeatureDataField : Control, INotifyPropertyChanged
@@ -60,36 +60,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #region Public Fields
 
-        #region GdbFeature
+		#region GeodatabaseFeature
 
-        /// <summary>
-        /// Gets or sets the GdbFeature.
+		/// <summary>
+		/// Gets or sets the <see cref="Esri.ArcGISRuntime.Data.GeodatabaseFeature"/>.
         /// </summary>        
-        public GdbFeature GdbFeature
+		public GeodatabaseFeature GeodatabaseFeature
         {
-            get { return (GdbFeature)GetValue(GdbFeatureProperty); }
-            set { SetValue(GdbFeatureProperty, value); }
+			get { return (GeodatabaseFeature)GetValue(GeodatabaseFeatureProperty); }
+            set { SetValue(GeodatabaseFeatureProperty, value); }
         }
 
         /// <summary>
-        /// DependencyProperty for GdbFeature.
+        /// DependencyProperty for <see cref="GeodatabaseFeature"/>.
         /// </summary>
-        public static readonly DependencyProperty GdbFeatureProperty =
-            DependencyProperty.Register("GdbFeature", typeof(GdbFeature), typeof(FeatureDataField), new PropertyMetadata(null, OnGdbFeaturePropertyChanged));
+        public static readonly DependencyProperty GeodatabaseFeatureProperty =
+			DependencyProperty.Register("GeodatabaseFeature", typeof(GeodatabaseFeature), typeof(FeatureDataField), new PropertyMetadata(null, OnGeodatabaseFeaturePropertyChanged));
 
-        private static void OnGdbFeaturePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnGeodatabaseFeaturePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var form = ((FeatureDataField)d);
             form.Refresh();
-            form.OnPropertyChanged("GdbFeature");          
+			form.OnPropertyChanged("GeodatabaseFeature");          
         }
 
-        #endregion GdbFeature
+		#endregion GeodatabaseFeature
 
-        #region FieldName
+		#region FieldName
 
-        /// <summary>
-        /// Gets or sets the name of the field from the GdbFeature.Attributes. 
+		/// <summary>
+		/// Gets or sets the name of the field from the GeodatabaseFeature.Attributes. 
         /// The UI input generated will be for this field.
         /// </summary>       
         public string FieldName
@@ -119,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Gets or sets a value indicating whether the UI will be readonly. 
         /// If IsReadOnly is true then the UI generated will use the ReadOnlyTemplate. 
         /// Any field that is not readonly can be made readonly, but field that are 
-        /// readonly already as defined by thier FieldInfo entry in GdbFeature.Schema.Fields 
+		/// readonly already as defined by thier FieldInfo entry in GeodatabaseFeature.Schema.Fields 
         /// cannot be made editable. 
         /// </summary>        
         public bool IsReadOnly
@@ -165,8 +165,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             var field = (FeatureDataField)d;
 
             // if require information is missing return.
-            if (string.IsNullOrEmpty(field.FieldName) || field.GdbFeature == null 
-                || field.GdbFeature.Attributes == null)
+			if (string.IsNullOrEmpty(field.FieldName) || field.GeodatabaseFeature == null
+				|| field.GeodatabaseFeature.Attributes == null)
             {
                 field.ValidationException = null;
                 return;
@@ -194,8 +194,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     : field._dataItem.Value = e.NewValue;                
             }
 
-            var oldValue = field.GdbFeature.Attributes.ContainsKey(field.FieldName)
-                ? field.GdbFeature.Attributes[field.FieldName]
+			var oldValue = field.GeodatabaseFeature.Attributes.ContainsKey(field.FieldName)
+				? field.GeodatabaseFeature.Attributes[field.FieldName]
                 : null;
             
             if ( AreEqual(oldValue, field.BindingValue))
@@ -231,11 +231,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             form.ValidationException = null;
 #endif
 
-            // Attempt to update the new value back to the GdbFeature
+			// Attempt to update the new value back to the GeodatabaseFeature
             var success = field.CommitChange(field.BindingValue);
 
             // if the ValueChanged event is subscribed to and the committed value was 
-            // successfully pushed back to the GdbFeatue then rais the ValueChanged Event.
+			// successfully pushed back to the GeodatabaseFeature then rais the ValueChanged Event.
             if (field.ValueChanged != null && success)
                 field.ValueChanged(field, new ValueChangedEventArgs(oldValue, field.BindingValue));
 
@@ -249,7 +249,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// Gets or sets the validation exception. If a validation exception occurs this 
         /// property will hold the validation Exception. default validation is handled based
-        /// on FieldInfo found inside GdbFeature.Schema.Fields. Custom validation can be added
+		/// on FieldInfo found inside GeodatabaseFeature.Schema.Fields. Custom validation can be added
         /// by subsribing to ValueChanging event.
         /// </summary>     
         public Exception ValidationException
@@ -419,7 +419,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         /// <summary>
         /// This event is rasied when the Value property changes but 
-        /// has not been commit back to the GdbFeature. The ValueChanging 
+	   /// has not been commit back to the GeodatabaseFeature. The ValueChanging 
         /// event can be used to enforce application validation setting the 
         /// ValueChangingEventArgs.ValidationException.
         /// </summary>
@@ -427,7 +427,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         /// <summary>
         /// This event is rasied when the Value property changes and the value
-        /// has been successfully commit back to the GdbFeature.
+		/// has been successfully commit back to the GeodatabaseFeature.
         /// </summary>
         public event EventHandler<ValueChangedEventArgs> ValueChanged;        
 
@@ -510,13 +510,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 return;
 
             // attempt retrive the field info for our control
-            _fieldInfo = GdbFeature.GetFieldInfo(FieldName);
+			_fieldInfo = GeodatabaseFeature.GetFieldInfo(FieldName);
             
             // if field information was not obtain then draw nothing.
             if (_fieldInfo == null) return;
-            
-            // Get the value from the GdbFeature if the attribute exists.
-            BindingValue = GdbFeature.Attributes.ContainsKey(FieldName) ? GdbFeature.Attributes[FieldName] : null;
+
+			// Get the value from the GeodatabaseFeature if the attribute exists.
+			BindingValue = GeodatabaseFeature.Attributes.ContainsKey(FieldName) ? GeodatabaseFeature.Attributes[FieldName] : null;
 
             // If the FeatureDataField.IsReadOnly property has been set to true or the FieldInfo 
             if (IsReadOnly || !_fieldInfo.IsEditable)
@@ -769,25 +769,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         /// <summary>
         /// Changes the current value back to 
-        /// the GdbFeature last saved value.
+		/// the GeodatabaseFeature last saved value.
         /// </summary>
         private void Cancel()
         {
             if (string.IsNullOrEmpty(FieldName)
-                || GdbFeature == null
-                || GdbFeature.Attributes == null
-                || !GdbFeature.Attributes.ContainsKey(FieldName))
+				|| GeodatabaseFeature == null
+				|| GeodatabaseFeature.Attributes == null
+				|| !GeodatabaseFeature.Attributes.ContainsKey(FieldName))
                 return;           
 
             // Clear validation exception
             ValidationException = null;
 
-            // Take current GdbFeature value and override Value.
-            BindingValue = GdbFeature.Attributes[FieldName];
+			// Take current GeodatabaseFeature value and override Value.
+			BindingValue = GeodatabaseFeature.Attributes[FieldName];
         }
 
         /// <summary>
-        /// Commits FeatureDataField value back to the GdbFeature.
+		/// Commits FeatureDataField value back to the GeodatabaseFeature.
         /// </summary>
         /// <param name="value">The new value that will be committed.</param>
         /// <returns>returns true if the value was commited and false if the 
@@ -797,7 +797,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             try
             {  
                 // try to commit value
-                GdbFeature.Attributes[FieldName] = EnsureCorrectDataType((value is KeyValuePair<object,string>) ? ((KeyValuePair<object,string>)value).Key : value);
+				GeodatabaseFeature.Attributes[FieldName] = EnsureCorrectDataType((value is KeyValuePair<object, string>) ? ((KeyValuePair<object, string>)value).Key : value);
                 ValidationException = null;
                 return true; // commit success
             }
