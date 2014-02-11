@@ -77,6 +77,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <DocumentationFile>bin\x86\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -148,8 +149,20 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\MapLayerItem.cs">
       <Link>Controls\Legend\MapLayerItem.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\DependencyPropertyChangedExtension.cs">
-      <Link>DependencyPropertyChangedExtension.cs</Link>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListener.cs">
+      <Link>Internal\DependencyPropertyChangedListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListeners.cs">
+      <Link>Internal\DependencyPropertyChangedListeners.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\ThrottleTimer.cs">
+      <Link>Internal\ThrottleTimer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListener.cs">
+      <Link>Internal\WeakEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListeners.cs">
+      <Link>Internal\WeakEventListeners.cs</Link>
     </Compile>
     <Compile Include="Controls\FeatureDataField\KeyValuePair.cs" />
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\TemplatePicker\TemplatePicker.cs">
@@ -166,6 +179,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

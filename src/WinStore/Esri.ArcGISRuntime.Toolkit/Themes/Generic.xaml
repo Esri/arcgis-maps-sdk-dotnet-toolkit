@@ -4,17 +4,6 @@
     xmlns:controls="using:Windows.UI.Xaml.Controls"
 	xmlns:local="using:Esri.ArcGISRuntime.Toolkit.Controls">
 
-    <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Default">
-            <SolidColorBrush x:Key="FeatureDataFormBackgroundBrush" Color="#FF1D1D1D" />
-            <SolidColorBrush x:Key="FeatureDataFormBorderColorBrush" Color="#FFF4F4F4" />
-        </ResourceDictionary>
-        <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="FeatureDataFormBackgroundBrush" Color="#FFF4F4F4" />
-            <SolidColorBrush x:Key="FeatureDataFormBorderColorBrush" Color="#FF1D1D1D" />
-        </ResourceDictionary>
-    </ResourceDictionary.ThemeDictionaries>
-    
 	<!-- Default Legend Style-->
 	<Style TargetType="local:Legend">
 		<Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -192,11 +181,11 @@
 
     <!--FeatureDataForm Control Template-->
     <Style TargetType="local:FeatureDataForm">
-        <Setter Property="Background"  Value="{StaticResource FeatureDataFormBackgroundBrush}"/>
-        <Setter Property="BorderBrush"  Value="{StaticResource FeatureDataFormBorderColorBrush}"/>
-        <Setter Property="BorderThickness"  Value="1"/>
-        <Setter Property="Margin" Value="5" />
-        <Setter Property="Padding" Value="10" />
+        <Setter Property="Background"  Value="Transparent"/>
+        <Setter Property="BorderBrush"  Value="Transparent"/>
+        <Setter Property="BorderThickness"  Value="0"/>
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="LabelStyle">
             <Setter.Value>
                 <Style TargetType="TextBlock">

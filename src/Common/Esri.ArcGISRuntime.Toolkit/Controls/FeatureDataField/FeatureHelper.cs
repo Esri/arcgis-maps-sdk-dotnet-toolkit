@@ -6,7 +6,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
     internal static class FeatureHelper
     {
-        public static FieldInfo GetFieldInfo(this GdbFeature feature, string fieldName)
+        public static FieldInfo GetFieldInfo(this GeodatabaseFeature feature, string fieldName)
         {
             if (feature == null || string.IsNullOrEmpty(fieldName))
                 return null;
@@ -46,11 +46,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 #endif
         }
 
-        public static GdbFeature Clone(this GdbFeature feature)
+		public static GeodatabaseFeature Clone(this GeodatabaseFeature feature)
         {
             if (feature == null) return null;
 
-            var clone = new GdbFeature(feature.Schema);
+			var clone = new GeodatabaseFeature(feature.Schema);
             clone.CopyFrom(feature.Attributes);
             return clone;
         }
