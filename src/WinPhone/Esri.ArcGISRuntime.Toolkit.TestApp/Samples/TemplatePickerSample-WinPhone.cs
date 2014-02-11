@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 			{
 				try
 				{
-					await ((GdbFeatureServiceTable)flayer.FeatureTable).InitializeAsync();
+					await ((GeodatabaseFeatureServiceTable)flayer.FeatureTable).InitializeAsync();
 				}
 				catch{}
 			}

@@ -32,6 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp
 			var pagetype = ((sender as ListBox).SelectedItem as Sample).Page;
 			string url = "Samples/" + pagetype.Name + ".xaml";
 			MainFrame.Navigate(new Uri(url, UriKind.RelativeOrAbsolute));
+			ObjectTracker.GarbageCollect();
 		}
 	}
 }

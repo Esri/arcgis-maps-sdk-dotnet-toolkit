@@ -25,14 +25,20 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp
         public MainPage()
         {
             this.InitializeComponent();
-	        DataContext = SampleDatasource.Current;
+            DataContext = SampleDatasource.Current;
         }
 
 
-		private void SampleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var pagetype = ((sender as ListBox).SelectedItem as Sample).Page;
-			MainFrame.Navigate(pagetype);
-		}
+        private void SampleList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ObjectTracker.GarbageCollect();
+            var pagetype = ((sender as ListBox).SelectedItem as Sample).Page;
+            MainFrame.Navigate(pagetype);
+        }
+
+        private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            ObjectTracker.GarbageCollect();
+        }
     }
 }

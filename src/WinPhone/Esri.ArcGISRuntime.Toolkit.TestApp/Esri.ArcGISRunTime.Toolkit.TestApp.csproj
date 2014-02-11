@@ -69,10 +69,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\Common\Esri.ArcGISRunrtime.Toolkit.TestApp\SampleDataSource.cs">
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit.TestApp\ObjectTracker.cs">
+      <Link>ObjectTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit.TestApp\SampleDataSource.cs">
       <Link>SampleDataSource.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\Esri.ArcGISRunrtime.Toolkit.TestApp\Samples\TemplatePickerSample.xaml.cs">
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit.TestApp\Samples\TemplatePickerSample.xaml.cs">
       <Link>Samples\TemplatePickerSample.xaml.cs</Link>
       <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
     </Compile>

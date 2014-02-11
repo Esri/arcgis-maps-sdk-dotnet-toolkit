@@ -92,10 +92,13 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Common\Esri.ArcGISRunrtime.Toolkit.TestApp\SampleDataSource.cs">
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit.TestApp\ObjectTracker.cs">
+      <Link>ObjectTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit.TestApp\SampleDataSource.cs">
       <Link>SampleDataSource.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\Esri.ArcGISRunrtime.Toolkit.TestApp\Samples\TemplatePickerSample.xaml.cs">
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit.TestApp\Samples\TemplatePickerSample.xaml.cs">
       <Link>Samples\TemplatePickerSample.xaml.cs</Link>
       <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Samples\ScaleLineSample.xaml.cs">
+      <DependentUpon>ScaleLineSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StartPage.xaml.cs">
       <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
@@ -130,6 +136,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\ScaleLineSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Samples\TemplatePickerSample.xaml">
       <SubType>Designer</SubType>

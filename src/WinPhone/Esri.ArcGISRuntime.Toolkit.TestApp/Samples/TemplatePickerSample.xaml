@@ -50,22 +50,22 @@
                 <ScrollViewer>
                     <esriToolkit:TemplatePicker x:Name="MyTemplatePicker" Loaded="InitializeFeatureServicesOnLoaded"
                                                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                                                TemplateSelected="TemplatePicker_OnTemplateSelected">
+                                                TemplatePicked="TemplatePicker_OnTemplatePicked">
                         <esriToolkit:TemplatePicker.Layers>
                             <layers:LayerCollection>
                                 <layers:FeatureLayer DisplayName="Military Hostile Units">
                                     <layers:FeatureLayer.FeatureTable>
-                                        <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/6" />
+                                        <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/6" />
                                     </layers:FeatureLayer.FeatureTable>
                                 </layers:FeatureLayer>
                                 <layers:FeatureLayer DisplayName="River">
                                     <layers:FeatureLayer.FeatureTable>
-                                        <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/8" UseAdvancedSymbology="False" />
+                                        <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/8" UseAdvancedSymbology="False" />
                                     </layers:FeatureLayer.FeatureTable>
                                 </layers:FeatureLayer>
                                 <layers:FeatureLayer DisplayName="Area">
                                     <layers:FeatureLayer.FeatureTable>
-                                        <data:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False" />
+                                        <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False" />
                                     </layers:FeatureLayer.FeatureTable>
                                 </layers:FeatureLayer>
                             </layers:LayerCollection>

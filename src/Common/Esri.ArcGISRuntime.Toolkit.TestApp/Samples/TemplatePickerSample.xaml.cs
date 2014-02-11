@@ -8,6 +8,7 @@ using Esri.ArcGISRuntime.Layers;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Esri.ArcGISRuntime.Tasks.Query;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,12 +29,15 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 		public TemplatePickerSample()
 		{
 			InitializeComponent();
+			ObjectTracker.Track(this);
+			ObjectTracker.Track(MyTemplatePicker);
+			ObjectTracker.Track(MyMapView);
 		}
 
-		private void TemplatePicker_OnTemplateSelected(object sender, Controls.TemplatePicker.TemplateSelectedEventArgs e)
+		private void TemplatePicker_OnTemplatePicked(object sender, Controls.TemplatePicker.TemplatePickedEventArgs e)
 		{
 			string name = GetLayerName(e.Layer);
-			string message = "Event TemplateSelected--> Type='" + (e.FeatureType == null ? "null" : e.FeatureType.Name) + "'  Template='" + e.FeatureTemplate.Name + "'  Layer='" + name + "'";
+			string message = "Event TemplatePicked --> Type='" + (e.FeatureType == null ? "null" : e.FeatureType.Name) + "'  Template='" + e.FeatureTemplate.Name + "'  Layer='" + name + "'";
 			LogMessage(message);
 		}
 
@@ -44,8 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 			if (featureLayer != null)
 			{
 				name = featureLayer.FeatureTable.Name;
-				if (string.IsNullOrEmpty(name) && featureLayer.FeatureTable is GdbFeatureServiceTable) // not initialized yet
-					name = ((GdbFeatureServiceTable) featureLayer.FeatureTable).ServiceUri;
+				if (string.IsNullOrEmpty(name) && featureLayer.FeatureTable is GeodatabaseFeatureServiceTable) // not initialized yet
+					name = ((GeodatabaseFeatureServiceTable)featureLayer.FeatureTable).ServiceUri;
 			}
 			if (string.IsNullOrEmpty(name))
 				name = layer.GetType().Name; // fallback value
@@ -65,7 +69,6 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 				var scrollViewer = VisualTreeHelper.GetChild(grid, i) as ScrollViewer;
 				if (scrollViewer != null)
 				{
-					//scrollViewer.ScrollToVerticalOffset(scrollViewer.ExtentHeight);
 					scrollViewer.ChangeView(null, scrollViewer.ExtentHeight, null);
 					break;
 				}
@@ -75,7 +78,11 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 #endif
 		}
 
+#if NETFX_CORE
+		private void RemoveLayer_OnClick(object sender, RoutedEventArgs e)
+#else
 		private void RemoveLayer_OnClick(object sender, EventArgs e)
+#endif
 		{
 			if (MyTemplatePicker.Layers.Any())
 			{
@@ -90,11 +97,15 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 		}
 
 		static int _index;
+#if NETFX_CORE
+		private async void AddLayer_OnClick(object sender, RoutedEventArgs e)
+#else
 		private async void AddLayer_OnClick(object sender, EventArgs e)
+#endif
 		{
 			string url = "http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/" + (_index + 2);
 			_index = ++_index % 5;
-			var ft = new GdbFeatureServiceTable(new Uri(url)) { UseAdvancedSymbology = false}; // todo should work with AdvancedSymbology as well
+			var ft = new GeodatabaseFeatureServiceTable(new Uri(url)) { UseAdvancedSymbology = false}; // todo should work with AdvancedSymbology as well
 			var featureLayer = new FeatureLayer(ft);
 			((ObservableCollection<Layer>)MyTemplatePicker.Layers).Add(featureLayer);
 			LogMessage("Added Layer " + GetLayerName(featureLayer));
@@ -111,29 +122,43 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 				}
 			}
 			else
+			{
+				featureLayer.MinScale = MyMapView.Scale * 4;
+				featureLayer.MaxScale = MyMapView.Scale / 4;
 				featureLayer.MetadataChanged += InitDisplayName;
+				
+			}
+			ObjectTracker.Track(featureLayer);
 		}
 
-		private void InitDisplayName(object sender, EventArgs eventArgs)
+		private void InitDisplayName(object sender, EventArgs e)
 		{
 			var featureLayer = sender as FeatureLayer;
 			if (featureLayer != null)
 			{
 				featureLayer.MetadataChanged -= InitDisplayName;
-				var table = featureLayer.FeatureTable as GdbFeatureServiceTable;
+				var table = featureLayer.FeatureTable as GeodatabaseFeatureServiceTable;
 				if (table != null && table.IsInitialized)
 					featureLayer.DisplayName = table.Name;
 			}
 		}
 
+#if NETFX_CORE
+		private void AddStreetMapLayer_OnClick(object sender, RoutedEventArgs e)
+#else
 		private void AddStreetMapLayer_OnClick(object sender, EventArgs e)
+#endif
 		{
 			var layer = new OpenStreetMapLayer { Opacity = 0.5, DisplayName = "OpenStreetMapLayer" };
 			((ObservableCollection<Layer>) MyTemplatePicker.Layers).Add(layer);
 			LogMessage("Added Layer " + GetLayerName(layer));
 		}
 
+#if NETFX_CORE
+		private void InitNewLayers_OnClick(object sender, RoutedEventArgs e)
+#else
 		private void InitNewLayers_OnClick(object sender, EventArgs e)
+#endif
 		{
 			MyTemplatePicker.Layers = new ObservableCollection<Layer>();
 			LogMessage("TemplatePicker.Layers initialized with a new collection not displayed in the map");
@@ -142,7 +167,11 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 		}
 
 
+#if NETFX_CORE
+		private void ClearLayers_OnClick(object sender, RoutedEventArgs e)
+#else
 		private void ClearLayers_OnClick(object sender, EventArgs e)
+#endif
 		{
 			var coll = MyTemplatePicker.Layers as ObservableCollection<Layer>;
 			if (coll != null)
@@ -152,7 +181,11 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 			}
 		}
 
+#if NETFX_CORE
+		private void SwitchLayers_OnClick(object sender, RoutedEventArgs e)
+#else
 		private void SwitchLayers_OnClick(object sender, EventArgs e)
+#endif
 		{
 			var coll = MyTemplatePicker.Layers as ObservableCollection<Layer>;
 			if (coll != null && coll.Count >= 2)
@@ -166,6 +199,28 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 #endif
 				LogMessage("First layer moved after second");
 			}
+		}
+
+
+#if NETFX_CORE
+		private void TestMemoryLeak(object sender, RoutedEventArgs e)
+#else
+		private void TestMemoryLeak(object sender, EventArgs e)
+#endif
+		{
+			// Create a template picker that should be released immediatly since no more referenced
+			var templatePicker = new Controls.TemplatePicker {Layers = MyTemplatePicker.Layers};
+			ObjectTracker.Track(templatePicker);
+		}
+
+
+#if NETFX_CORE
+		private void GarbageCollect(object sender, RoutedEventArgs e)
+#else
+		private void GarbageCollect(object sender, EventArgs e)
+#endif
+		{
+			LogMessage(ObjectTracker.GarbageCollect());
 		}
 	}
 }

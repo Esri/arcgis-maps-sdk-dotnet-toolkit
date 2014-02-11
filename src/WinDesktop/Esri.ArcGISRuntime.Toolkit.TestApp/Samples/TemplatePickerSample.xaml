@@ -63,24 +63,24 @@
                         <toolkit:TemplatePicker x:Name="MyTemplatePicker" HorizontalAlignment="Center"
                                                 Layers="{Binding ElementName=MyMap, Path=Layers}"
                                                 Scale="{Binding ElementName=MyMapView, Path=Scale}"
-                                                TemplateSelected="TemplatePicker_OnTemplateSelected" />
+                                                TemplatePicked="TemplatePicker_OnTemplatePicked" />
                     </ScrollViewer>
 
                     <esri:MapView x:Name="MyMapView" Grid.Row="1">
                         <esri:Map x:Name="MyMap">
                             <esri:FeatureLayer DisplayName="Military Hostile Units">
                                 <esri:FeatureLayer.FeatureTable>
-                                    <esri:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/6" />
+                                    <esri:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/6" />
                                 </esri:FeatureLayer.FeatureTable>
                             </esri:FeatureLayer>
                             <esri:FeatureLayer DisplayName="River">
                                 <esri:FeatureLayer.FeatureTable>
-                                    <esri:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/8" UseAdvancedSymbology="False" />
+                                    <esri:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/8" UseAdvancedSymbology="False" />
                                 </esri:FeatureLayer.FeatureTable>
                             </esri:FeatureLayer>
                             <esri:FeatureLayer DisplayName="Area">
                                 <esri:FeatureLayer.FeatureTable>
-                                    <esri:GdbFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False" />
+                                    <esri:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False" />
                                 </esri:FeatureLayer.FeatureTable>
                             </esri:FeatureLayer>
                         </esri:Map>
