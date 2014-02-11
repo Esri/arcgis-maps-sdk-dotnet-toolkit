@@ -117,8 +117,20 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\TemplatePicker\TemplatePicker.cs">
       <Link>Controls\TemplatePicker\TemplatePicker.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\DependencyPropertyChangedExtension.cs">
-      <Link>DependencyPropertyChangedExtension.cs</Link>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListener.cs">
+      <Link>Internal\DependencyPropertyChangedListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListeners.cs">
+      <Link>Internal\DependencyPropertyChangedListeners.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\ThrottleTimer.cs">
+      <Link>Internal\ThrottleTimer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListener.cs">
+      <Link>Internal\WeakEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListeners.cs">
+      <Link>Internal\WeakEventListeners.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\ScaleLine\ScaleLine.cs">
