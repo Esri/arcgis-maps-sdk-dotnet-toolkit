@@ -108,12 +108,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\TemplatePicker\TemplatePicker.Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\TemplatePicker\TemplatePicker.cs">
+      <Link>Controls\TemplatePicker\TemplatePicker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListener.cs">
+      <Link>Internal\DependencyPropertyChangedListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListeners.cs">
+      <Link>Internal\DependencyPropertyChangedListeners.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\ThrottleTimer.cs">
+      <Link>Internal\ThrottleTimer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListener.cs">
+      <Link>Internal\WeakEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListeners.cs">
+      <Link>Internal\WeakEventListeners.cs</Link>
+    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\ValueConverters\VisibilityConverter.cs">
       <Link>ValueConverters\VisibilityConverter.cs</Link>
     </Compile>
