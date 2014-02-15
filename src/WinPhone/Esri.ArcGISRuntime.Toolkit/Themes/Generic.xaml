@@ -178,6 +178,60 @@
         </Setter>
     </Style>
 
+    <!--FeatureDataForm Control Template-->
+    <Style TargetType="local:FeatureDataForm">
+        <Setter Property="Background"  Value="{StaticResource PhoneBackgroundColor}"/>
+        <Setter Property="BorderBrush"  Value="{StaticResource PhoneBorderBrush}"/>
+        <Setter Property="BorderThickness"  Value="1"/>
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="LabelStyle">
+            <Setter.Value>
+                <Style TargetType="TextBlock">
+                    <Style.Setters>
+                        <Setter Property="Margin" Value="15,5,0,0" />
+                    </Style.Setters>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ContainerStyle">
+            <Setter.Value>
+                <Style TargetType="StackPanel">
+                    <Style.Setters>
+                        <Setter Property="VerticalAlignment" Value="Stretch"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    </Style.Setters>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:FeatureDataForm">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}"
+                        Margin="{TemplateBinding Margin}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        >
+                        <ScrollViewer 
+                            HorizontalScrollBarVisibility="Disabled" 
+                            VerticalScrollBarVisibility="Auto" >
+                            <Grid x:Name="FeatureDataForm_ControlRoot" 
+                              MinWidth="{TemplateBinding MinWidth}"
+                              MinHeight="{TemplateBinding MinHeight}"
+                              Width="{TemplateBinding Width}" 
+                              Height="{TemplateBinding Height}"                              
+                              />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--FeatureDataField Control Template-->
     <Style TargetType="local:FeatureDataField">
         <Setter Property="Template">
@@ -227,10 +281,16 @@
         <Setter Property="InputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBox Text="{Binding Value, Mode=TwoWay}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TextBox x:Name="InputTextBox" Text="{Binding Value, Mode=TwoWay}" 
+                             local:FeatureDataField.TextBoxChangedListener="{Binding ElementName=InputTextBox}"
+                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <TextBox.Template>
                             <ControlTemplate TargetType="TextBox">
                                 <Grid Background="Transparent">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup x:Name="CommonStates">
                                             <VisualState x:Name="Normal"/>
@@ -291,9 +351,23 @@
                                         </VisualStateGroup>
                                         <VisualStateGroup x:Name="ValidationStates">
                                             <VisualState x:Name="ValidState"/>
-                                            <VisualState x:Name="InvalidState">
+                                            <VisualState x:Name="InvalidUnfocusedState">
                                                 <Storyboard>
                                                     <ColorAnimation Duration="0" To="Red" Storyboard.TargetName="ErrorBrush" Storyboard.TargetProperty="Color" />
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="InvalidFocusedState">
+                                                <Storyboard>
+                                                    <ColorAnimation Duration="0" To="Red" Storyboard.TargetName="ErrorBrush" Storyboard.TargetProperty="Color" />
+                                                    <DoubleAnimation Storyboard.TargetName="ValidationFlyout" Storyboard.TargetProperty="Opacity"
+                                                                     From="0.0" To="1.0" Duration="0:0:1" />
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ValidationFlyout" Storyboard.TargetProperty="Visibility">
+                                                        <DiscreteObjectKeyFrame KeyTime="0">
+                                                            <DiscreteObjectKeyFrame.Value>
+                                                                <Visibility>Visible</Visibility>
+                                                            </DiscreteObjectKeyFrame.Value>
+                                                        </DiscreteObjectKeyFrame>
+                                                    </ObjectAnimationUsingKeyFrames>
                                                 </Storyboard>
                                             </VisualState>
                                         </VisualStateGroup>
@@ -307,6 +381,22 @@
                                         </Border.BorderBrush>
                                         <ContentControl x:Name="ContentElement" BorderThickness="0" HorizontalContentAlignment="Stretch" Margin="{StaticResource PhoneTextBoxInnerMargin}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="Stretch"/>
                                     </Border>
+                                    <Grid x:Name="ValidationFlyout" Visibility="Collapsed" Grid.Row="1" Margin="12,-5,12,8">
+                                        <Border Margin="4,4,-4,-4" Background="#052A2E31" CornerRadius="5"/>
+                                        <Border Margin="3,3,-3,-3" Background="#152A2E31" CornerRadius="4"/>
+                                        <Border Margin="2,2,-2,-2" Background="#252A2E31" CornerRadius="3"/>
+                                        <Border Margin="1,1,-1,-1" Background="#352A2E31" CornerRadius="2"/>
+                                        <Border Background="#FFDC000C" CornerRadius="2"/>
+                                        <Border CornerRadius="10">
+                                            <TextBlock x:Name="ErrorTextBlock"                                                
+                                                HorizontalAlignment="Left"
+                                                UseLayoutRounding="false" 
+                                                Foreground="White" 
+                                                Margin="8,4,8,4"                                                 
+                                                TextWrapping="Wrap" 
+                                                Text="{Binding ErrorMessage}"/>
+                                        </Border>
+                                    </Grid>
                                 </Grid>
                             </ControlTemplate>
                         </TextBox.Template>
@@ -319,6 +409,56 @@
                 <DataTemplate>
                     <TextBox Text="{Binding Value, Mode=OneWay}" IsReadOnly="True" />
                 </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:TemplatePicker">
+        <Setter Property="Background"  Value="{StaticResource PhoneBackgroundColor}"/>
+        <Setter Property="BorderBrush"  Value="{StaticResource PhoneBorderBrush}"/>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Command="{Binding Command}" CommandParameter="{Binding}"
+                                Width="80" Height="80" Padding="0" Margin="0">
+                            <Image Source="{Binding Swatch}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Stretch="Uniform" />
+                        </Button>
+                        <TextBlock Text="{Binding FeatureTemplate.Name}" TextWrapping="Wrap" Grid.Column="1"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TemplatePicker">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                        >
+                        <ItemsControl x:Name="TemplateItems" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      ItemTemplate="{TemplateBinding ItemTemplate}"
+                                      ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </Border>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>

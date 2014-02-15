@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 		{
 			Layer = layer;
 			if (layer != null)
-				_isEnabled = Layer.IsVisible;
+				_isEnabled = layer.IsVisible;
 		}
 
 		/// <summary>

@@ -19,27 +19,6 @@
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>Bin\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -99,9 +78,6 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\FeatureHelper.cs">
       <Link>Controls\FeatureDataField\FeatureHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\KeyValueItem.cs">
-      <Link>Controls\FeatureDataField\KeyValueItem.cs</Link>
-    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueChangedEventArgs.cs">
       <Link>Controls\FeatureDataField\ValueChangedEventArgs.cs</Link>
     </Compile>
@@ -110,6 +86,15 @@
     </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataField\ValueEventArgs.cs">
       <Link>Controls\FeatureDataField\ValueEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataForm\ActionCommand.cs">
+      <Link>Controls\FeatureDataForm\ActionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataForm\FeatureDataForm.cs">
+      <Link>Controls\FeatureDataForm\FeatureDataForm.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\FeatureDataForm\GeneratingFieldEventArgs.cs">
+      <Link>Controls\FeatureDataForm\GeneratingFieldEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\CollectionExtensions.cs">
       <Link>Controls\Legend\CollectionExtensions.cs</Link>
@@ -132,6 +117,24 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\DependencyPropertyChangedExtension.cs">
       <Link>DependencyPropertyChangedExtension.cs</Link>
     </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\TemplatePicker\TemplatePicker.cs">
+      <Link>Controls\TemplatePicker\TemplatePicker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListener.cs">
+      <Link>Internal\DependencyPropertyChangedListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListeners.cs">
+      <Link>Internal\DependencyPropertyChangedListeners.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\ThrottleTimer.cs">
+      <Link>Internal\ThrottleTimer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListener.cs">
+      <Link>Internal\WeakEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\WeakEventListeners.cs">
+      <Link>Internal\WeakEventListeners.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\ScaleLine\ScaleLine.cs">
       <Link>Controls\ScaleLine\ScaleLine.cs</Link>
@@ -144,7 +147,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.1.0">
+    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.2.0">
       <Name>ArcGIS Runtime for Windows Phone %28Beta%29</Name>
     </SDKReference>
   </ItemGroup>
