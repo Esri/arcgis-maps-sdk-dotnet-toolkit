@@ -75,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                         _relayObject.Dispose();
                         _relayObject = null;
                     }
-                });
+				}, _relayObject.Dispatcher);
             }
         }
 
