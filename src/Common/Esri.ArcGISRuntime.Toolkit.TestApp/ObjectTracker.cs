@@ -10,44 +10,43 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp
 {
     public static class ObjectTracker
     {
-        private static readonly object _Monitor = new object();
-        private static readonly List<WeakReference> _Objects = new List<WeakReference>();
-        private static bool? _ShouldTrack;
+        private static readonly object Monitor = new object();
+        private static readonly List<WeakReference> Objects = new List<WeakReference>();
+        private static bool? _shouldTrack;
 
         public static void Track(object objectToTrack)
         {
             if (ShouldTrack())
             {
-                lock (_Monitor)
+                lock (Monitor)
                 {
-                    _Objects.Add(new WeakReference(objectToTrack));
+                    Objects.Add(new WeakReference(objectToTrack));
                 }
             }
         }
 
-        private static bool ShouldTrack()
+        internal static bool ShouldTrack()
         {
-            if (_ShouldTrack == null)
+            if (_shouldTrack == null)
             {
-                _ShouldTrack = Debugger.IsAttached;
+                _shouldTrack = Debugger.IsAttached;
             }
 
-            //return _ShouldTrack.Value;
-	        return true; // todo
+            return _shouldTrack.Value;
         }
 
         public static IEnumerable<object> GetAllLiveTrackedObjects()
         {
-            lock (_Monitor)
+            lock (Monitor)
             {
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
-                return _Objects.Where(o => o.IsAlive).Select(o => o.Target);
+                return Objects.Where(o => o.IsAlive).Select(o => o.Target);
             }
         }
 
-		public static string GarbageCollect()
+        public static string GarbageCollect()
         {
             // Garbage Collect
             GC.Collect();
@@ -78,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp
             //sbStatus.AppendLine(string.Format("GC.GetTotalMemory(true): {0} Bytes, {1} MB", lBytes.ToString(), (lBytes / 1024 / 1024).ToString()));
             Debug.WriteLine(sbStatus.ToString());
             Debug.WriteLine("---------------------------------------------------------------------");
-			return sbStatus.ToString();
+            return sbStatus.ToString();
         }
     }
 }

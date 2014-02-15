@@ -4,11 +4,11 @@
 // All other rights reserved.
 
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Layers;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Esri.ArcGISRuntime.Tasks.Query;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -32,6 +32,9 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 			ObjectTracker.Track(this);
 			ObjectTracker.Track(MyTemplatePicker);
 			ObjectTracker.Track(MyMapView);
+#if !WINDOWS_PHONE
+			MyMap.InitialExtent = new Envelope(-15000000, 0, -5000000, 10000000, SpatialReferences.WebMercator);
+#endif
 		}
 
 		private void TemplatePicker_OnTemplatePicked(object sender, Controls.TemplatePicker.TemplatePickedEventArgs e)
@@ -108,39 +111,12 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp.Samples
 			var ft = new GeodatabaseFeatureServiceTable(new Uri(url)) { UseAdvancedSymbology = false}; // todo should work with AdvancedSymbology as well
 			var featureLayer = new FeatureLayer(ft);
 			((ObservableCollection<Layer>)MyTemplatePicker.Layers).Add(featureLayer);
+			await featureLayer.InitializeAsync();
+			featureLayer.DisplayName = featureLayer.FeatureTable.ServiceInfo.Name;
 			LogMessage("Added Layer " + GetLayerName(featureLayer));
-			if (MyMapView.Visibility == Visibility.Collapsed)
-			{
-				// Initialize the GdbFeatureServiceTable else it will never be done since the layer is not in a mapview
-				try
-				{
-					await ft.InitializeAsync();
-					featureLayer.DisplayName = featureLayer.FeatureTable.Name;
-				}
-				catch
-				{
-				}
-			}
-			else
-			{
-				featureLayer.MinScale = MyMapView.Scale * 4;
-				featureLayer.MaxScale = MyMapView.Scale / 4;
-				featureLayer.MetadataChanged += InitDisplayName;
-				
-			}
+			featureLayer.MinScale = MyMapView.Scale * 4;
+			featureLayer.MaxScale = MyMapView.Scale / 4;
 			ObjectTracker.Track(featureLayer);
-		}
-
-		private void InitDisplayName(object sender, EventArgs e)
-		{
-			var featureLayer = sender as FeatureLayer;
-			if (featureLayer != null)
-			{
-				featureLayer.MetadataChanged -= InitDisplayName;
-				var table = featureLayer.FeatureTable as GeodatabaseFeatureServiceTable;
-				if (table != null && table.IsInitialized)
-					featureLayer.DisplayName = table.Name;
-			}
 		}
 
 #if NETFX_CORE

@@ -41,6 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.TestApp
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            Resources["ShouldTrackVisibility"] = ObjectTracker.ShouldTrack() ? Visibility.Visible : Visibility.Collapsed;
 
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)

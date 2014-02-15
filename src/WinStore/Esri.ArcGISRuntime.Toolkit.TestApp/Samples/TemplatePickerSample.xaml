@@ -45,11 +45,11 @@
                             Click="InitNewLayers_OnClick"
                             Content="Set new Layers collection"
                             ToolTipService.ToolTip="Create new TemplatePicker.Layers collection (allow testing with layers not displayed in a map)" />
-                    <Button Margin="1"
+                    <Button Margin="1" Visibility="{StaticResource ShouldTrackVisibility}"
                             Click="TestMemoryLeak"
                             Content="Test memory Leak"
                             ToolTipService.ToolTip="Test Memory Leak" />
-                    <Button Margin="1"
+                    <Button Margin="1"  Visibility="{StaticResource ShouldTrackVisibility}"
                             Click="GarbageCollect"
                             Content="Garbage Collect Result"
                             ToolTipService.ToolTip="Garbage Collect Result" />
@@ -91,7 +91,7 @@
                                     <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/8" UseAdvancedSymbology="False" />
                                 </layers:FeatureLayer.FeatureTable>
                             </layers:FeatureLayer>
-                            <layers:FeatureLayer DisplayName="Area" IsLabelingEnabled="True">
+                            <layers:FeatureLayer DisplayName="Area">
                                 <layers:FeatureLayer.FeatureTable>
                                     <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False"/>
                                 </layers:FeatureLayer.FeatureTable>
