@@ -9,11 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-#else
-using System.Windows;
-#endif
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
@@ -26,6 +22,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		#region Constructors
 		internal const string MapLayerType = "MapLayer Layer";
 		private bool _isQuerying;
+		private double _serviceMinScale = double.PositiveInfinity; // Max and Min scale coming from the service : to combine with max and min scale coming from the layer at client side
+		private double _serviceMaxScale;
+        // Listen for layers DP changes
+        private DependencyPropertyChangedListener<MapLayerItem> _layerDisplayNameChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerMinScaleChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerMaxScaleChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerStatusChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerIsVisibleChangedListener;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapLayerItem"/> class.
@@ -37,12 +41,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			LayerType = MapLayerType;
 
 			Label = layer.DisplayName;
-			// todo
-			//MinimumResolution = layer.MinimumResolution;
-			//MaximumResolution = layer.MaximumResolution;
-			//VisibleTimeExtent = layer.VisibleTimeExtent;
+			MinimumScale = layer.MinScale;
+			MaximumScale = layer.MaxScale;
 			IsVisible = layer.IsVisible;
-		}
+        }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapLayerItem"/> class. Only useful in Design.
@@ -59,79 +61,86 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		{
 			Debug.Assert(layer != null);
 			if (layer is ILegendSupport)
-				(layer as ILegendSupport).LegendChanged += Layer_LegendChanged;
+				(layer as ILegendSupport).LegendChanged += OnLayerLegendChanged;
 
-			//if (layer is ISublayerVisibilitySupport)
-			//	(layer as ISublayerVisibilitySupport).VisibilityChanged += Layer_VisibilityChanged;
-
-			layer.PropertyChanged += Layer_PropertyChanged;
-		}
+		    _layerDisplayNameChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "DisplayName")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerMinScaleChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "MinScale")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerMaxScaleChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "MaxScale")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerIsVisibleChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "IsVisible")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerStatusChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "Status")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+        }
 
 		private void DetachLayerEventHandler(Layer layer)
 		{
 			if (layer != null)
 			{
 				if (layer is ILegendSupport)
-					(layer as ILegendSupport).LegendChanged -= Layer_LegendChanged;
-
-				//if (layer is ISublayerVisibilitySupport)
-				//	(layer as ISublayerVisibilitySupport).VisibilityChanged -= Layer_VisibilityChanged;
-
-				layer.PropertyChanged -= Layer_PropertyChanged;
-			}
+					(layer as ILegendSupport).LegendChanged -= OnLayerLegendChanged;
+                _layerDisplayNameChangedListener.Detach();
+                _layerMinScaleChangedListener.Detach();
+                _layerMaxScaleChangedListener.Detach();
+                _layerIsVisibleChangedListener.Detach();
+                _layerStatusChangedListener.Detach();
+            }
 		}
 
-		private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnLayerPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			var layer = sender as Layer;
 			if (layer == null)
 				return;
 
-			//if (e.PropertyName == "MinimumResolution")
-			//{
-			//	MinimumResolution = Math.Max(layer.MinimumResolution, minServiceResolution);
-			//	if (LegendTree != null)
-			//		LegendTree.UpdateLayerVisibilities();
-			//}
-			//else if (e.PropertyName == "MaximumResolution")
-			//{
-			//	MaximumResolution = Math.Min(layer.MaximumResolution, maxServiceResolution);
-			//	if (LegendTree != null)
-			//		LegendTree.UpdateLayerVisibilities();
-			//}
-			//else if (e.PropertyName == "VisibleTimeExtent")
-			//{
-			//	VisibleTimeExtent = layer.VisibleTimeExtent;
-			//	if (LegendTree != null)
-			//		LegendTree.UpdateLayerVisibilities();
-			//}
-			if (e.PropertyName == "IsVisible")
+			if (e.PropertyName == "MinScale")
+			{
+				MinimumScale = Layer.MinScale != 0 && !double.IsNaN(Layer.MinScale)
+					               ? Math.Min(_serviceMinScale, Layer.MinScale)
+					               : _serviceMinScale;
+				if (LegendTree != null)
+					LegendTree.UpdateLayerVisibilities();
+			}
+			else if (e.PropertyName == "MaxScale")
+			{
+				MaximumScale = !double.IsNaN(Layer.MaxScale)
+								   ? Math.Max(_serviceMaxScale, Layer.MaxScale)
+								   : _serviceMaxScale;
+				if (LegendTree != null)
+					LegendTree.UpdateLayerVisibilities();
+			}
+			else if (e.PropertyName == "IsVisible")
 			{
 				if (LegendTree != null)
 					LegendTree.UpdateLayerVisibilities();
 			}
-			else if (e.PropertyName == "Title")
+			else if (e.PropertyName == "DisplayName")
 			{
 				Label = layer.DisplayName;
 			}
-			else if (e.PropertyName == "IsInitialized")
+			else if (e.PropertyName == "Status")
 			{
 				//if (!(sender is GroupLayerBase)) // For group layers, we don't wait for initialized event 
 				Refresh();
 			}
 		}
 
-		private void Layer_LegendChanged(object sender, EventArgs e)
+		private void OnLayerLegendChanged(object sender, EventArgs e)
 		{
 			// Structure of legend items has changed -> refresh
 			Refresh();
-		}
-
-		private void Layer_VisibilityChanged(object sender, EventArgs e)
-		{
-			// Visibility of sublayers has changed --> update layer visibility of legend items
-			if (LegendTree != null)
-				LegendTree.UpdateLayerVisibilities();
 		}
 
 		#endregion
@@ -198,13 +207,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 					if (string.IsNullOrEmpty(Label)) // Label is set with LayerID : keep it if not null
 						Label = result.LayerName;
 
-					double scale = LegendTree.Scale;
-
 					// Combine Layer and Service scale
 					double minScale = result.MinimumScale == 0.0 ? double.PositiveInfinity : result.MinimumScale;
+					_serviceMinScale = minScale;
 					if (Layer.MinScale != 0.0 && !double.IsNaN(Layer.MinScale))
 						minScale = Math.Min(minScale, Layer.MinScale);
 					double maxScale = result.MaximumScale;
+					_serviceMaxScale = maxScale;
 					if (!double.IsNaN(Layer.MaxScale))
 						maxScale = Math.Max(maxScale, Layer.MaxScale);
 
@@ -216,7 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 					if (result.LayerLegendInfos != null)
 					{
-						LayerItems = result.LayerLegendInfos.Select(info => new LayerItemViewModel(Layer, info, Description, scale)).ToObservableCollection();
+						LayerItems = result.LayerLegendInfos.Select(info => new LayerItemViewModel(Layer, info, Description)).ToObservableCollection();
 					}
 
 					if (result.LegendItemInfos != null)
@@ -341,4 +350,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		}
 		#endregion
 	}
+
 }
