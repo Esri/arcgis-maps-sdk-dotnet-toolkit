@@ -9,10 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-#else
-#endif
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
@@ -27,6 +24,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		private bool _isQuerying;
 		private double _serviceMinScale = double.PositiveInfinity; // Max and Min scale coming from the service : to combine with max and min scale coming from the layer at client side
 		private double _serviceMaxScale;
+        // Listen for layers DP changes
+        private DependencyPropertyChangedListener<MapLayerItem> _layerDisplayNameChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerMinScaleChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerMaxScaleChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerStatusChangedListener;
+        private DependencyPropertyChangedListener<MapLayerItem> _layerIsVisibleChangedListener;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapLayerItem"/> class.
@@ -41,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			MinimumScale = layer.MinScale;
 			MaximumScale = layer.MaxScale;
 			IsVisible = layer.IsVisible;
-		}
+        }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapLayerItem"/> class. Only useful in Design.
@@ -58,32 +61,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		{
 			Debug.Assert(layer != null);
 			if (layer is ILegendSupport)
-				(layer as ILegendSupport).LegendChanged += Layer_LegendChanged;
+				(layer as ILegendSupport).LegendChanged += OnLayerLegendChanged;
 
-			layer.PropertyChanged += Layer_PropertyChanged;
-			layer.AddPropertyChangedHandler("DisplayName", Layer_PropertyChanged);
-			layer.AddPropertyChangedHandler("MinScale", Layer_PropertyChanged);
-			layer.AddPropertyChangedHandler("MaxScale", Layer_PropertyChanged);
-			layer.AddPropertyChangedHandler("IsVisible", Layer_PropertyChanged);
-
-		}
+		    _layerDisplayNameChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "DisplayName")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerMinScaleChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "MinScale")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerMaxScaleChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "MaxScale")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerIsVisibleChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "IsVisible")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+            _layerStatusChangedListener = new DependencyPropertyChangedListener<MapLayerItem>(this, layer, "Status")
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+            };
+        }
 
 		private void DetachLayerEventHandler(Layer layer)
 		{
 			if (layer != null)
 			{
 				if (layer is ILegendSupport)
-					(layer as ILegendSupport).LegendChanged -= Layer_LegendChanged;
-
-				layer.PropertyChanged -= Layer_PropertyChanged;
-				layer.RemovePropertyChangedHandler("DisplayName", Layer_PropertyChanged);
-				layer.RemovePropertyChangedHandler("MinScale", Layer_PropertyChanged);
-				layer.RemovePropertyChangedHandler("MaxScale", Layer_PropertyChanged);
-				layer.RemovePropertyChangedHandler("IsVisible", Layer_PropertyChanged);
-			}
+					(layer as ILegendSupport).LegendChanged -= OnLayerLegendChanged;
+                _layerDisplayNameChangedListener.Detach();
+                _layerMinScaleChangedListener.Detach();
+                _layerMaxScaleChangedListener.Detach();
+                _layerIsVisibleChangedListener.Detach();
+                _layerStatusChangedListener.Detach();
+            }
 		}
 
-		private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnLayerPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			var layer = sender as Layer;
 			if (layer == null)
@@ -114,14 +130,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			{
 				Label = layer.DisplayName;
 			}
-			else if (e.PropertyName == "IsInitialized")
+			else if (e.PropertyName == "Status")
 			{
 				//if (!(sender is GroupLayerBase)) // For group layers, we don't wait for initialized event 
 				Refresh();
 			}
 		}
 
-		private void Layer_LegendChanged(object sender, EventArgs e)
+		private void OnLayerLegendChanged(object sender, EventArgs e)
 		{
 			// Structure of legend items has changed -> refresh
 			Refresh();
