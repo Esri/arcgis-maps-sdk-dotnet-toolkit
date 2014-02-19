@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit", "WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj", "{1E83C102-5C9D-4A6C-B5B8-9A9202249262}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.TestApp", "WinDesktop\Esri.ArcGISRuntime.Toolkit.TestApp\Esri.ArcGISRuntime.Toolkit.TestApp.csproj", "{F5741E41-9423-4CFE-BAC1-AF55AE0C064D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,9 @@ Global
 		{1E83C102-5C9D-4A6C-B5B8-9A9202249262}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E83C102-5C9D-4A6C-B5B8-9A9202249262}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E83C102-5C9D-4A6C-B5B8-9A9202249262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5741E41-9423-4CFE-BAC1-AF55AE0C064D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5741E41-9423-4CFE-BAC1-AF55AE0C064D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5741E41-9423-4CFE-BAC1-AF55AE0C064D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,108 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="Esri.ArcGISRuntime.Toolkit.TestApp.Samples.TemplatePickerSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Controls;assembly=Esri.ArcGISRuntime"
+    xmlns:layers="clr-namespace:Esri.ArcGISRuntime.Layers;assembly=Esri.ArcGISRuntime"
+    xmlns:data="clr-namespace:Esri.ArcGISRuntime.Data;assembly=Esri.ArcGISRuntime"
+    xmlns:esriToolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar Opacity="1" IsMenuEnabled="True" IsVisible="True" Mode="Default">
+            <shell:ApplicationBarIconButton IconUri="/Assets/Layers.png" Text="Show/Hide Layers List" Click="TooggleLayers"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="Add Feature Layer" Click="AddLayer_OnClick" />
+                <shell:ApplicationBarMenuItem Text="Switch Layers 1 and 2" Click="SwitchLayers_OnClick" />
+                <shell:ApplicationBarMenuItem Text="Remove First Layer" Click="RemoveLayer_OnClick" />
+                <shell:ApplicationBarMenuItem Text="Remove all Layers" Click="ClearLayers_OnClick" />
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="Template Picker Sample" Style="{StaticResource PhoneTextTitle2Style}" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="130" />
+            </Grid.RowDefinitions>
+            <Grid>
+                <ScrollViewer>
+                    <esriToolkit:TemplatePicker x:Name="MyTemplatePicker" Loaded="InitializeFeatureServicesOnLoaded"
+                                                HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                TemplatePicked="TemplatePicker_OnTemplatePicked">
+                        <esriToolkit:TemplatePicker.Layers>
+                            <layers:LayerCollection>
+                                <layers:FeatureLayer DisplayName="Military Hostile Units">
+                                    <layers:FeatureLayer.FeatureTable>
+                                        <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/6" />
+                                    </layers:FeatureLayer.FeatureTable>
+                                </layers:FeatureLayer>
+                                <layers:FeatureLayer DisplayName="River">
+                                    <layers:FeatureLayer.FeatureTable>
+                                        <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/8" UseAdvancedSymbology="False" />
+                                    </layers:FeatureLayer.FeatureTable>
+                                </layers:FeatureLayer>
+                                <layers:FeatureLayer DisplayName="Area">
+                                    <layers:FeatureLayer.FeatureTable>
+                                        <data:GeodatabaseFeatureServiceTable ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/FeatureServer/9" UseAdvancedSymbology="False" />
+                                    </layers:FeatureLayer.FeatureTable>
+                                </layers:FeatureLayer>
+                            </layers:LayerCollection>
+                        </esriToolkit:TemplatePicker.Layers>
+                    </esriToolkit:TemplatePicker>
+                </ScrollViewer>
+                <esri:MapView x:Name="MyMapView" Visibility="Collapsed" />
+                <ProgressBar x:Name="ProgressBar" Visibility="Visible" IsIndeterminate="True" VerticalAlignment="Top" />
+            </Grid>
+
+            <!--Layer List-->
+            <Popup x:Name="LayersPopup" IsOpen="False" >
+                <Border Margin="1" Background="{StaticResource PhoneBackgroundBrush}" Height="800" Width="480" >
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding Layers, ElementName=MyTemplatePicker}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsVisible, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </Popup>
+
+            <ScrollViewer x:Name="StatusTextScrollViewer"
+                          Grid.Row="1"  Margin="1"
+                          HorizontalScrollBarVisibility="Auto">
+                <TextBox x:Name="StatusText"  
+                     AcceptsReturn="True" 
+                     IsReadOnly="True"
+                     Text="Click on TemplatePicker to see events fired."
+                  />
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>
