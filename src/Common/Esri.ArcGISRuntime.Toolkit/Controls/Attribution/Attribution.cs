@@ -9,6 +9,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Controls;
+using Esri.ArcGISRuntime.Geometry;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -88,6 +90,53 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #endregion
 
+        #region DependencyProperty Scale
+        /// <summary>
+        /// Gets or sets the scale for filtering layers by their visible scale range and for getting the copyrights that may depend on the scale.
+        /// </summary>
+        public double Scale
+        {
+            get { return (double)GetValue(ScaleProperty); }
+            set { SetValue(ScaleProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="Scale"/> Dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ScaleProperty =
+            DependencyProperty.Register("Scale", typeof(double), typeof(Attribution), new PropertyMetadata(double.NaN, OnScalePropertyChanged));
+
+        private static void OnScalePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var attribution = d as Attribution;
+            attribution.UpdateAttributionItems();
+        }
+        #endregion
+
+        #region DependencyProperty Extent
+        /// <summary>
+        /// Gets or sets the extent for which the layer copyrights are displayed.
+        /// </summary>
+        /// <seealso cref="IQueryCopyright"/>
+        public Envelope Extent
+        {
+            get { return (Envelope)GetValue(ExtentProperty); }
+            set { SetValue(ExtentProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="Extent"/> Dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ExtentProperty =
+            DependencyProperty.Register("Extent", typeof(Envelope), typeof(Attribution), new PropertyMetadata(null, OnExtentPropertyChanged));
+
+        private static void OnExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var attribution = d as Attribution;
+            attribution.UpdateAttributionItems();
+        }
+        #endregion
+
         #region Items Dependency Property
 
         /// <summary>
@@ -137,6 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private void AttachLayerHandler(Layer layer)
         {
             _layerPropertyChangedListeners.Attach(layer, "IsVisible");
+            _layerPropertyChangedListeners.Attach(layer, "Status");
             layer.PropertyChanged += Layer_PropertyChanged;
         }
 
@@ -148,8 +198,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "CopyrightText" || e.PropertyName == "IsVisible")
-            	UpdateAttributionItems();
+            if (e.PropertyName == "CopyrightText" || e.PropertyName == "IsVisible" || e.PropertyName == "Status")
+                UpdateAttributionItems();
         }
 
 
@@ -172,16 +222,55 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #region Private Methods
 
+        private ThrottleTimer _updateItemsTimer;
         private void UpdateAttributionItems()
+        {
+            // wait for the map to stop navigating so
+            //map navigation performance doesn't suffer from it.
+            if (_updateItemsTimer == null)
+            {
+                _updateItemsTimer = new ThrottleTimer(100) { Action = UpdateAttributionItemsImpl };
+            }
+            _updateItemsTimer.Invoke();
+        }
+
+        private void UpdateAttributionItemsImpl()
         {
             if (Layers == null)
                 Items = null;
             else
             {
-                var visibleCopyrights = Layers.Where(layer => layer.IsVisible).OfType<ICopyright>();
-                Items = visibleCopyrights.Select(cpr => cpr.CopyrightText).Where(cpr => !string.IsNullOrEmpty(cpr))
-                    .Select(cpr => cpr.Trim()).Distinct().ToList();
+                string[] items = Layers.Where(layer => layer.IsVisible && IsInScaleRange(layer))
+                                       .Select(CopyrightText).Where(cpr => !string.IsNullOrEmpty(cpr))
+                                       .Select(cpr => cpr.Trim()).Distinct()
+                                       .ToArray();
+                if (!AreEquals(Items as string[], items)) // Avoid changing Items if the list didn't change
+                    Items = items;
             }
+        }
+
+        private bool AreEquals(string[] strings1, string[] strings2)
+        {
+            return strings1 != null && strings2 != null && strings1.Length == strings2.Length && strings1.Zip(strings2, (string1, string2) => string1 == string2).All(b => b);
+        }
+
+        private bool IsInScaleRange(Layer layer)
+        {
+            return !(Scale > 0.0) || (!(layer.MinScale < Scale) && !(layer.MaxScale > Scale)); // Note: '!' useful for managing correctly NaN cases 
+        }
+
+        private string CopyrightText(Layer l)
+        {
+            if (l is IQueryCopyright)
+            {
+                return ((IQueryCopyright)l).QueryCopyright(Extent, Scale);
+            }
+            else if (l is ICopyright)
+            {
+                return ((ICopyright)l).CopyrightText;
+            }
+            else
+                return null;
         }
 
         #endregion
