@@ -19,6 +19,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -444,9 +445,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             {
                 if (symbol != null)
                 {
+                    // force the geometry type since GeometryType.Unknown doesn't work well with advanced symbology.
+                    Geometry.GeometryType geometryType = Geometry.GeometryType.Unknown;
+                    if (Layer != null && Layer.FeatureTable != null && Layer.FeatureTable.ServiceInfo != null)
+                        geometryType = Layer.FeatureTable.ServiceInfo.GeometryType;
+
                     try
                     {
-                        Swatch = await symbol.CreateSwatchAsync();
+                        Swatch = await symbol.CreateSwatchAsync(32, 32, 96, Colors.Transparent, geometryType);
                         OnPropertyChanged("Swatch");
                     }
                     catch { }
