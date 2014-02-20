@@ -75,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 
 			if (layerLegendInfo.LegendItemInfos != null)
 			{
-				LegendItems = layerLegendInfo.LegendItemInfos.Select(info => new LegendItemViewModel(info)).ToObservableCollection();
+				LegendItems = layerLegendInfo.LegendItemInfos.Select(info => new LegendItemViewModel(info, Geometry.GeometryType.Unknown)).ToObservableCollection();
 			}
 		}
 

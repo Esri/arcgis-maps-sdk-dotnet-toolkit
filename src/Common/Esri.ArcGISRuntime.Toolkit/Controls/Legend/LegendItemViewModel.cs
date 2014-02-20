@@ -8,6 +8,7 @@ using Esri.ArcGISRuntime.Symbology;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
 #if NETFX_CORE
 using Windows.Graphics.Display;
 using Windows.UI;
@@ -42,11 +43,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 		/// Initializes a new instance of the <see cref="LegendItemViewModel"/> class from a <see cref="LegendItemInfo"/>.
 		/// </summary>
 		/// <param name="legendItemInfo">The legend item info.</param>
-		internal LegendItemViewModel(LegendItemInfo legendItemInfo) : this()
+		/// <param name="geometryType">Type of the geometry.</param>
+		internal LegendItemViewModel(LegendItemInfo legendItemInfo, GeometryType geometryType)
+			: this()
 		{
 			Label = legendItemInfo.Label;
 			Symbol = legendItemInfo.Symbol;
-		} 
+			GeometryType = geometryType;
+		}
+
 		#endregion
 
 		#region Label
@@ -111,10 +116,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 					_swatch = new WriteableBitmap(1, 1, dpi, dpi, PixelFormats.Bgra32, null); //Temporary image
 #endif
 					Task<ImageSource> task = null;
-					if(_symbol is MarkerSymbol)
-						task = _symbol.CreateSwatchAsync(0, 0, dpi, Colors.Transparent);
+					if(_symbol is MarkerSymbol) // todo test on geoemtry type?
+						task = _symbol.CreateSwatchAsync(0, 0, dpi, Colors.Transparent, GeometryType);
 					else
-						task = _symbol.CreateSwatchAsync(15, 15, dpi, Colors.Transparent);
+						task = _symbol.CreateSwatchAsync(15, 15, dpi, Colors.Transparent, GeometryType);
 					task.ContinueWith((t) =>
 					{
 						if (t.Exception == null && t.IsCompleted)
@@ -278,6 +283,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 			LegendTree = null;
 		} 
 		#endregion
+
+		internal GeometryType GeometryType { get; private set; }
 
 		#region INotifyPropertyChanged Members
 		/// <summary>

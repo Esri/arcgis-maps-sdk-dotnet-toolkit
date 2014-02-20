@@ -223,6 +223,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 					IsHidden = result.IsHidden;
 
+					// For feature layers, force the geometry type since GeometryType.Unknown doesn't work well with advanced symbology.
+					Geometry.GeometryType geometryType = Geometry.GeometryType.Unknown;
+					if (Layer is FeatureLayer)
+					{
+						var fl = Layer as FeatureLayer;
+						if (fl.FeatureTable != null && fl.FeatureTable.ServiceInfo != null)
+							geometryType = fl.FeatureTable.ServiceInfo.GeometryType;
+					}
+
 					if (result.LayerLegendInfos != null)
 					{
 						LayerItems = result.LayerLegendInfos.Select(info => new LayerItemViewModel(Layer, info, Description)).ToObservableCollection();
@@ -230,7 +239,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 					if (result.LegendItemInfos != null)
 					{
-						LegendItems = result.LegendItemInfos.Select(info => new LegendItemViewModel(info)).ToObservableCollection();
+						LegendItems = result.LegendItemInfos.Select(info => new LegendItemViewModel(info, geometryType)).ToObservableCollection();
 					}
 				}
 
