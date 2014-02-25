@@ -389,11 +389,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         private void Refresh()
         {
-			if (_controlRoot != null && _editFeature != null && GeodatabaseFeature.Schema != null && Fields != null)
+            if (_controlRoot == null)
+                return;
+            
+            // Clear root element children.
+            _controlRoot.Children.Clear();
+            _controlRoot.ColumnDefinitions.Clear();
+
+			if (_editFeature != null && GeodatabaseFeature.Schema != null && Fields != null)
             {
-                // Clear root element children.
-                _controlRoot.Children.Clear();
-                _controlRoot.ColumnDefinitions.Clear();
+                
                 foreach (var control in _fieldControls.Keys.Select(key => _fieldControls[key]).OfType<FeatureDataField>())
                 {                    
                     control.PropertyChanged -= ControlOnPropertyChanged;
