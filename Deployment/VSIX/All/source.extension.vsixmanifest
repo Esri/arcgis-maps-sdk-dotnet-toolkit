@@ -10,11 +10,17 @@
 	</Metadata>
 	<Installation>
 		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0,13.0)" />
+		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.VSWinExpress" />
+		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.Premium" />
+		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.Ultimate" />
+		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
+		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
 	</Installation>
 	<Dependencies>
 		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
-		<Dependency d:Source="Project" d:ProjectName="Toolkit.WinStore" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinStore;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinStore;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinStore;VSIXIdentifierProjectOutputGroup|" />
-		<Dependency d:Source="Project" d:ProjectName="Toolkit.WinPhone" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinPhone;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinPhone;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinPhone;VSIXIdentifierProjectOutputGroup|" /><Dependency d:Source="Project" d:ProjectName="Toolkit.WinDesktop" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinDesktop;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinDesktop;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinDesktop;VSIXIdentifierProjectOutputGroup|" />
+		<Dependency d:Source="Project" d:ProjectName="Toolkit.WinPhone" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinPhone;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinPhone;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinPhone;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinPhone" />
+		<Dependency d:Source="Project" d:ProjectName="Toolkit.WinDesktop" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinDesktop;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinDesktop;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinDesktop;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinDesktop" />
+		<Dependency d:Source="Project" d:ProjectName="Toolkit.WinStore" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinStore;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinStore;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinStore;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinStore" />
 	</Dependencies>
 	<Assets>
 	</Assets>

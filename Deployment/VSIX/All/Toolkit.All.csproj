@@ -61,6 +61,7 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>VSIXContainerProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <Private>False</Private>
+      <VSIXSubPath>WinDesktop</VSIXSubPath>
     </ProjectReference>
     <ProjectReference Include="..\WinPhone\Toolkit.WinPhone.csproj">
       <Project>{D9902E13-5666-445A-8F83-F2382F496691}</Project>
@@ -68,6 +69,7 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>VSIXContainerProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <Private>False</Private>
+      <VSIXSubPath>WinPhone</VSIXSubPath>
     </ProjectReference>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
@@ -78,6 +80,7 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>VSIXContainerProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <Private>False</Private>
+      <VSIXSubPath>WinStore</VSIXSubPath>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
