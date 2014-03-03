@@ -19,6 +19,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -44,8 +45,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         // WeakEventListeners for feature layers changes (so the template picker may be released even if the feature layers are long lived object)
 
-        // Listen for feature layers initialization (MetadataChanegd event)
-        private readonly WeakEventListeners<TemplatePicker> _featureLayerMetadataChangedListeners; // Manage one WeakEventListener by FeatureLayer 
         // Listen for feature layers DP changes
         private readonly DependencyPropertyChangedListeners<TemplatePicker> _featureLayerPropertyChangedListeners;
         // Listen for Layers Collection changed
@@ -59,10 +58,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public TemplatePicker()
         {
             DefaultStyleKey = typeof(TemplatePicker);
-            _featureLayerMetadataChangedListeners = new WeakEventListeners<TemplatePicker>(this)
-            {
-                OnEventAction = (instance, source, eventArgs) => instance.OnFeatureLayerMetadataChanged(source, eventArgs)
-            };
             _featureLayerPropertyChangedListeners = new DependencyPropertyChangedListeners<TemplatePicker>(this)
             {
                 OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
@@ -77,8 +72,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             // Detach WeakEventListeners for avoiding small memory leaks
             if (_layersWeakEventListener != null)
                 _layersWeakEventListener.Detach();
-            _featureLayerMetadataChangedListeners.DetachAll();
-            _featureLayerPropertyChangedListeners.DetachAll();
         }
 
         /// <summary>
@@ -292,30 +285,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private void AttachLayerHandler(FeatureLayer flayer)
         {
-            _featureLayerMetadataChangedListeners.Attach(flayer, handler => flayer.MetadataChanged += handler, handler => flayer.MetadataChanged -= handler);
-            _featureLayerPropertyChangedListeners.Attach(flayer, "Renderer");
+            _featureLayerPropertyChangedListeners.Attach(flayer, "Renderer"); // to do: subscribe to Renderer changed events
             _featureLayerPropertyChangedListeners.Attach(flayer, "IsVisible");
             _featureLayerPropertyChangedListeners.Attach(flayer, "MinScale");
             _featureLayerPropertyChangedListeners.Attach(flayer, "MaxScale");
+            _featureLayerPropertyChangedListeners.Attach(flayer, "Status");
+            _featureLayerPropertyChangedListeners.Attach(flayer, "FeatureTable");
         }
 
         private void DetachLayerHandler(FeatureLayer flayer)
         {
-            _featureLayerMetadataChangedListeners.Detach(flayer);
             _featureLayerPropertyChangedListeners.Detach(flayer);
-        }
-
-        void OnFeatureLayerMetadataChanged(object sender, EventArgs e)
-        {
-            var featureLayer = sender as FeatureLayer;
-            if (featureLayer != null)
-            {
-                CompatUtility.ExecuteOnUIThread(() =>
-                {
-                    RebuildTemplate(featureLayer);
-                    InitItemsSource();
-                });
-            }
         }
 
         private void OnLayerPropertyChanged(DependencyObject sender, PropertyChangedEventArgs e)
@@ -324,12 +304,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             if (flayer == null)
                 return;
 
-            if (e.PropertyName == "Renderer") // to do: subscribe to Renderer changed events
+            if (e.PropertyName == "IsVisible" || e.PropertyName == "MinScale" || e.PropertyName == "MaxScale")
+                InitItemsSource();
+            else // "Renderer"/"Status"/"FeatureTable"
+            {
                 RebuildTemplate(flayer);
-            else if (e.PropertyName == "IsVisible")
                 InitItemsSource();
-            else if (e.PropertyName == "MinScale" || e.PropertyName == "MaxScale")
-                InitItemsSource();
+            }
         }
 
         private void OnLayerCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -363,7 +344,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
-                    DetachLayersHandler(_templatesByLayer.Select(kvp => kvp.Key)); // this event dosn't provide the old values
+                    DetachLayersHandler(_templatesByLayer.Select(kvp => kvp.Key)); // this event doesn't provide the old values
                     AttachLayersHandler(Layers);
                     RebuildAllTemplates();
                     break;
@@ -464,9 +445,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             {
                 if (symbol != null)
                 {
+                    // force the geometry type since GeometryType.Unknown doesn't work well with advanced symbology.
+                    Geometry.GeometryType geometryType = Geometry.GeometryType.Unknown;
+                    if (Layer != null && Layer.FeatureTable != null && Layer.FeatureTable.ServiceInfo != null)
+                        geometryType = Layer.FeatureTable.ServiceInfo.GeometryType;
+
                     try
                     {
-                        Swatch = await symbol.CreateSwatchAsync();
+                        Swatch = await symbol.CreateSwatchAsync(32, 32, 96, Colors.Transparent, geometryType);
                         OnPropertyChanged("Swatch");
                     }
                     catch { }

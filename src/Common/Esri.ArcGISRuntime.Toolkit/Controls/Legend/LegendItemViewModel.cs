@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 				}
 			}
 		}
-		ImageSource _swatch = null;
+		ImageSource _swatch;
 		/// <summary>
 		/// Gets the symbol swatch image source
 		/// </summary>
@@ -115,12 +115,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 #else
 					_swatch = new WriteableBitmap(1, 1, dpi, dpi, PixelFormats.Bgra32, null); //Temporary image
 #endif
-					Task<ImageSource> task = null;
-					if(_symbol is MarkerSymbol) // todo test on geoemtry type?
-						task = _symbol.CreateSwatchAsync(0, 0, dpi, Colors.Transparent, GeometryType);
-					else
-						task = _symbol.CreateSwatchAsync(15, 15, dpi, Colors.Transparent, GeometryType);
-					task.ContinueWith((t) =>
+					Task<ImageSource> task = _symbol.CreateSwatchAsync(0, 0, dpi, Colors.Transparent, GeometryType);
+					task.ContinueWith(t =>
 					{
 						if (t.Exception == null && t.IsCompleted)
 						{

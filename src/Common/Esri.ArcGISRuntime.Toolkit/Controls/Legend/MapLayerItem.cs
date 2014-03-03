@@ -217,7 +217,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 					if (!double.IsNaN(Layer.MaxScale))
 						maxScale = Math.Max(maxScale, Layer.MaxScale);
 
-					// Convert scale to resolution
 					MinimumScale = minScale;
 					MaximumScale = maxScale;
 
@@ -359,5 +358,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		}
 		#endregion
 	}
-
 }
