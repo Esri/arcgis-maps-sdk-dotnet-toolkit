@@ -25,15 +25,15 @@ ArcGIS Toolkit for .NET includes:
   xmlns:esriTK="using:Esri.ArcGISRuntime.Toolkit.Controls" 
 ```
 
-<i>Note: Some of the following examples assumes an ArcGIS map control named 'MyMap' is present.</i>
+<i>Note: Some of the following examples assumes an ArcGIS map view control named 'MyMapView' containing an ArcGIS map named 'MyMap' is present.</i>
 
 ####Legend
 Set the `Layers` property to the collection of layers you want to show legend for.
 If you only want to display layers that are visible at the current scale range, also set the `Scale` property. Set this to 'NaN' (or don't set it) to avoid filtering by layer scale visibility.
-Both of these properties are available for binding directly from the map. Example:
+Both of these properties are available for binding directly from the map and the map view. Example:
 ```xml
   <esriTK:Legend Layers="{Binding Layers, ElementName=MyMap}" 
-    Scale="{Binding Scale, ElementName=MyMap}" />
+    Scale="{Binding Scale, ElementName=MyMapView}" />
 ```
 Other useful properties:
 * `ShowOnlyVisibleLayers` - Don't show legend for layers not currently visible
@@ -41,13 +41,25 @@ Other useful properties:
 
 ####Attribution
 Simply set the `Layers` property to those layers that you want to display attribution for. Note that the terms of use for many services requires you to display some form of attribution, and this control will make that easy for you.
+Attribution is displayed for visible layers only.
 ```xml
   <esriTK:Attribution Layers="{Binding Layers, ElementName=MyMap}" />
+```
+If you only want to display attribution for layers that are visible at the current scale range, also set the `Scale` property. Set this to 'NaN' (or don't set it) to avoid filtering by layer scale visibility.
+```xml
+  <esriTK:Attribution Layers="{Binding Layers, ElementName=MyMap}" 
+    Scale={Binding Scale, ElementName=MyMapView} />
+```
+For a support of layers with attribution depending on the current extent and scale also set the `Extent` property.
+```xml
+  <esriTK:Attribution Layers="{Binding Layers, ElementName=MyMap}" 
+    Scale={Binding Scale, ElementName=MyMapView} 
+    Extent={Binding Extent, ElementName=MyMapView} />
 ```
 
 ####ScaleLine
 ```xml
-   <esriTK:ScaleLine Scale="{Binding Scale, ElementName=MyMap}" />
+   <esriTK:ScaleLine Scale="{Binding Scale, ElementName=MyMapView}" />
 ```
 
 ####SignInDialog (Desktop only)
