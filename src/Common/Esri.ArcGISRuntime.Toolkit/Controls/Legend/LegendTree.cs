@@ -111,17 +111,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		}
 		#endregion
 
-		private IEnumerable<Layer> _Layers;
+		private IEnumerable<Layer> _layers;
 
 		internal IEnumerable<Layer> Layers
 		{
-			get { return _Layers; }
+			get { return _layers; }
 			set {
-				if (_Layers is INotifyCollectionChanged)
-					(_Layers as INotifyCollectionChanged).CollectionChanged -= Layers_CollectionChanged;
-				_Layers = value;
-				if (_Layers is INotifyCollectionChanged)
-					(_Layers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
+				if (_layers is INotifyCollectionChanged)
+					(_layers as INotifyCollectionChanged).CollectionChanged -= Layers_CollectionChanged;
+				if (_layers != null)
+					foreach (var layer in _layers)
+						layer.RemovePropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
+
+				_layers = value;
+
+				if (_layers is INotifyCollectionChanged)
+					(_layers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
+				if (_layers != null)
+					foreach (var layer in _layers)
+						layer.AddPropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
 				UpdateMapLayerItems();
 			}
 		}
@@ -233,14 +241,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			{
 				foreach (var item in e.OldItems.OfType<Layer>())
 				{
-					item.PropertyChanged -= Layer_PropertyChanged;
+					item.RemovePropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
 				}
 			}
 			if (e.NewItems != null)
 			{
 				foreach (var item in e.NewItems.OfType<Layer>())
 				{
-					item.PropertyChanged += Layer_PropertyChanged;
+					item.AddPropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
 				}
 			}
 			UpdateMapLayerItems();
