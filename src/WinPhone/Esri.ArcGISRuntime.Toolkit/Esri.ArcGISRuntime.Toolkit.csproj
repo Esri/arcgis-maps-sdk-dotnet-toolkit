@@ -123,6 +123,12 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListeners.cs">
       <Link>Internal\DependencyPropertyChangedListeners.cs</Link>
     </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\LayerCollectionRecursiveObserver.cs">
+      <Link>Internal\LayerCollectionRecursiveObserver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\LayerEnumerationExtensions.cs">
+      <Link>Internal\LayerEnumerationExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\ThrottleTimer.cs">
       <Link>Internal\ThrottleTimer.cs</Link>
     </Compile>
