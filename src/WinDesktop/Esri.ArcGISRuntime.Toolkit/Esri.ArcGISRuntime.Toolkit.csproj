@@ -118,9 +118,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\DependencyPropertyChangedExtension.cs">
-      <Link>DependencyPropertyChangedExtension.cs</Link>
-    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\TemplatePicker\TemplatePicker.cs">
       <Link>Controls\TemplatePicker\TemplatePicker.cs</Link>
     </Compile>

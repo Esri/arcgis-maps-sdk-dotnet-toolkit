@@ -149,9 +149,6 @@
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Controls\Legend\MapLayerItem.cs">
       <Link>Controls\Legend\MapLayerItem.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\DependencyPropertyChangedExtension.cs">
-      <Link>DependencyPropertyChangedExtension.cs</Link>
-    </Compile>
     <Compile Include="..\..\Common\Esri.ArcGISRuntime.Toolkit\Internal\DependencyPropertyChangedListener.cs">
       <Link>Internal\DependencyPropertyChangedListener.cs</Link>
     </Compile>

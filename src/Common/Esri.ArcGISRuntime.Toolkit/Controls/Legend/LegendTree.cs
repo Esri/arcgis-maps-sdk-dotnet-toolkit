@@ -11,408 +11,369 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 #else
 using System.Windows;
-using System.Windows.Threading;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
-	/// <summary>
-	/// Internal class encapsulating a layer item representing the virtual root item for the legend tree.
-	/// The LayerItems collection of this item is the collection of map layer item displayed at the first level of the TOC.
-	/// This class manages the events coming from the map, from the map layers and from the map layer items.
-	/// </summary>
-	internal sealed class LegendTree : LayerItemViewModel
-	{
-		#region Constructor
-		public LegendTree()
-		{
-			LayerItemsOptions = new LayerItemsOpts(returnMapLayerItems: false, returnGroupLayerItems: false,
-			                                       returnLegendItems: false,
-			                                       showOnlyVisibleLayers: true, reverseLayersOrder: false);
-			Attach(this);
-		}
-		~LegendTree()
-		{
-			Detach();
-		} 
-		#endregion
+    /// <summary>
+    /// Internal class encapsulating a layer item representing the virtual root item for the legend tree.
+    /// The LayerItems collection of this item is the collection of map layer item displayed at the first level of the TOC.
+    /// This class manages the events coming from the map, from the map layers and from the map layer items.
+    /// </summary>
+    internal sealed class LegendTree : LayerItemViewModel
+    {
+        #region Constructor
 
-		#region LegendItemTemplate
-		/// <summary>
-		/// Gets or sets the legend item template.
-		/// </summary>
-		/// <value>The legend item template.</value>
-		private DataTemplate _legendItemTemplate;
-		internal DataTemplate LegendItemTemplate
-		{
-			get
-			{
-				return _legendItemTemplate;
-			}
-			set
-			{
- 				if (_legendItemTemplate != value)
-				{
-					_legendItemTemplate = value;
-					PropagateTemplate();
-					UpdateLayerItemsOptions();
-				}
-			}
-		}
-		#endregion
+        // Listen for layers DP changes (listen for "ShowLegend" changes)
+        private readonly DependencyPropertyChangedListeners<LegendTree> _layerPropertyChangedListeners;
 
-		#region LayerTemplate
-		private DataTemplate _layerTemplate;
-		/// <summary>
-		/// Gets or sets the layer template i.e. the template used to display a layer in the legend.
-		/// </summary>
-		/// <value>The layer template.</value>
-		internal DataTemplate LayerTemplate
-		{
-			get
-			{
-				return _layerTemplate;
-			}
-			set
-			{
- 				if (_layerTemplate != value)
-				{
-					_layerTemplate = value;
-					PropagateTemplate();
-				}
-			}
-		}
-		#endregion
+        public LegendTree()
+        {
+            LayerItemsOptions = new LayerItemsOpts(returnMapLayerItems: false, returnGroupLayerItems: false,
+                                                   returnLegendItems: false,
+                                                   showOnlyVisibleLayers: true, reverseLayersOrder: false);
+            Attach(this);
+            _layerPropertyChangedListeners = new DependencyPropertyChangedListeners<LegendTree>(this)
+            {
+                OnEventAction = (instance, source, eventArgs) => instance.Layer_PropertyChanged(source, eventArgs)
+            };
+        }
+        ~LegendTree()
+        {
+            Detach();
+        } 
+        #endregion
 
-		#region MapLayerTemplate
-		private DataTemplate _mapLayerTemplate;
-		/// <summary>
-		/// Gets or sets the map layer template.
-		/// </summary>
-		/// <value>The map layer template.</value>
-		internal DataTemplate MapLayerTemplate
-		{
-			get
-			{
-				return _mapLayerTemplate;
-			}
-			set
-			{
- 				if (_mapLayerTemplate != value)
-				{
-					_mapLayerTemplate = value;
-					PropagateTemplate();
-				}
-			}
-		}
-		#endregion
+        #region LegendItemTemplate
+        /// <summary>
+        /// Gets or sets the legend item template.
+        /// </summary>
+        /// <value>The legend item template.</value>
+        private DataTemplate _legendItemTemplate;
+        internal DataTemplate LegendItemTemplate
+        {
+            get
+            {
+                return _legendItemTemplate;
+            }
+            set
+            {
+                if (_legendItemTemplate != value)
+                {
+                    _legendItemTemplate = value;
+                    PropagateTemplate();
+                    UpdateLayerItemsOptions();
+                }
+            }
+        }
+        #endregion
 
-		private IEnumerable<Layer> _layers;
+        #region LayerTemplate
+        private DataTemplate _layerTemplate;
+        /// <summary>
+        /// Gets or sets the layer template i.e. the template used to display a layer in the legend.
+        /// </summary>
+        /// <value>The layer template.</value>
+        internal DataTemplate LayerTemplate
+        {
+            get
+            {
+                return _layerTemplate;
+            }
+            set
+            {
+                if (_layerTemplate != value)
+                {
+                    _layerTemplate = value;
+                    PropagateTemplate();
+                }
+            }
+        }
+        #endregion
 
-		internal IEnumerable<Layer> Layers
-		{
-			get { return _layers; }
-			set {
-				if (_layers is INotifyCollectionChanged)
-					(_layers as INotifyCollectionChanged).CollectionChanged -= Layers_CollectionChanged;
-				if (_layers != null)
-					foreach (var layer in _layers)
-						layer.RemovePropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
+        #region MapLayerTemplate
+        private DataTemplate _mapLayerTemplate;
+        /// <summary>
+        /// Gets or sets the map layer template.
+        /// </summary>
+        /// <value>The map layer template.</value>
+        internal DataTemplate MapLayerTemplate
+        {
+            get
+            {
+                return _mapLayerTemplate;
+            }
+            set
+            {
+                if (_mapLayerTemplate != value)
+                {
+                    _mapLayerTemplate = value;
+                    PropagateTemplate();
+                }
+            }
+        }
+        #endregion
 
-				_layers = value;
+        private IEnumerable<Layer> _layers;
 
-				if (_layers is INotifyCollectionChanged)
-					(_layers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
-				if (_layers != null)
-					foreach (var layer in _layers)
-						layer.AddPropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
-				UpdateMapLayerItems();
-			}
-		}
+        internal IEnumerable<Layer> Layers
+        {
+            get { return _layers; }
+            set {
+                if (_layers is INotifyCollectionChanged)
+                    (_layers as INotifyCollectionChanged).CollectionChanged -= Layers_CollectionChanged;
+                if (_layers != null)
+                    foreach (var layer in _layers)
+                        DetachLayerHandler(layer);
 
-		private double _Scale;
+                _layers = value;
 
-		internal double Scale
-		{
-			get { return _Scale; }
-			set { _Scale = value; OnScaleChanged(); }
-		}
+                if (_layers is INotifyCollectionChanged)
+                    (_layers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
+                if (_layers != null)
+                    foreach (var layer in _layers)
+                        AttachLayerHandler(layer);
+                UpdateMapLayerItems();
+            }
+        }
 
-		#region ShowOnlyVisibleLayers
-		private bool _showOnlyVisibleLayers = true;
-		/// <summary>
-		/// Gets or sets a value indicating whether only the visible layers are participating to the legend.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if only the visible layers are participating to the legend; otherwise, <c>false</c>.
-		/// </value>
-		internal bool ShowOnlyVisibleLayers
-		{
-			get
-			{
-				return _showOnlyVisibleLayers;
-			}
-			set
-			{
-				_showOnlyVisibleLayers = value;
-				LayerItemsOpts mode = LayerItemsOptions;
-				mode.ShowOnlyVisibleLayers = value;
-				PropagateLayerItemsOptions(mode);
-			}
-		}
-		#endregion
+        private double _scale;
 
-		#region ReverseLayersOrder
-		private bool _reverseLayersOrder;
-		/// <summary>
-		/// Gets or sets a value indicating whether only the visible layers are participating to the legend.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if only the visible layers are participating to the legend; otherwise, <c>false</c>.
-		/// </value>
-		internal bool ReverseLayersOrder
-		{
-			get
-			{
-				return _reverseLayersOrder;
-			}
-			set
-			{
-				_reverseLayersOrder = value;
-				LayerItemsOpts mode = LayerItemsOptions;
-				mode.ReverseLayersOrder = value;
-				PropagateLayerItemsOptions(mode);
-			}
-		}
-		#endregion
+        internal double Scale
+        {
+            get { return _scale; }
+            set { _scale = value; OnScaleChanged(); }
+        }
 
-		#region Refresh
-		/// <summary>
-		/// Refreshes the legend control.
-		/// </summary>
-		/// <remarks>Note : In most cases, the control is always up to date without calling the refresh method.</remarks>
-		internal void Refresh()
-		{
-			// refresh all map layer items (due to group layers we have to go through the legend hierarchy
-			LayerItems.Descendants(item => item.LayerItems).OfType<MapLayerItem>().ForEach(mapLayerItem => mapLayerItem.Refresh());
-		}
-		#endregion
+        #region ShowOnlyVisibleLayers
+        private bool _showOnlyVisibleLayers = true;
+        /// <summary>
+        /// Gets or sets a value indicating whether only the visible layers are participating to the legend.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if only the visible layers are participating to the legend; otherwise, <c>false</c>.
+        /// </value>
+        internal bool ShowOnlyVisibleLayers
+        {
+            get
+            {
+                return _showOnlyVisibleLayers;
+            }
+            set
+            {
+                _showOnlyVisibleLayers = value;
+                LayerItemsOpts mode = LayerItemsOptions;
+                mode.ShowOnlyVisibleLayers = value;
+                PropagateLayerItemsOptions(mode);
+            }
+        }
+        #endregion
 
-		#region Event Refreshed
-		/// <summary>
-		/// Occurs when the legend is refreshed. 
-		/// Give the opportunity for an application to add or remove legend items.
-		/// </summary>
-		internal event EventHandler<Legend.RefreshedEventArgs> Refreshed;
+        #region ReverseLayersOrder
+        private bool _reverseLayersOrder;
+        /// <summary>
+        /// Gets or sets a value indicating whether only the visible layers are participating to the legend.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if only the visible layers are participating to the legend; otherwise, <c>false</c>.
+        /// </value>
+        internal bool ReverseLayersOrder
+        {
+            get
+            {
+                return _reverseLayersOrder;
+            }
+            set
+            {
+                _reverseLayersOrder = value;
+                LayerItemsOpts mode = LayerItemsOptions;
+                mode.ReverseLayersOrder = value;
+                PropagateLayerItemsOptions(mode);
+            }
+        }
+        #endregion
 
-		internal void OnRefreshed(object sender, Legend.RefreshedEventArgs args)
-		{
-			EventHandler<Legend.RefreshedEventArgs> refreshed = Refreshed;
+        #region Refresh
+        /// <summary>
+        /// Refreshes the legend control.
+        /// </summary>
+        /// <remarks>Note : In most cases, the control is always up to date without calling the refresh method.</remarks>
+        internal void Refresh()
+        {
+            // refresh all map layer items (due to group layers we have to go through the legend hierarchy
+            LayerItems.Descendants(item => item.LayerItems).OfType<MapLayerItem>().ForEach(mapLayerItem => mapLayerItem.Refresh());
+        }
+        #endregion
 
-			if (refreshed != null)
-			{
-				refreshed(sender, args);
-			}
-		}
-		#endregion
+        #region Event Refreshed
+        /// <summary>
+        /// Occurs when the legend is refreshed. 
+        /// Give the opportunity for an application to add or remove legend items.
+        /// </summary>
+        internal event EventHandler<Legend.RefreshedEventArgs> Refreshed;
 
-		#region Map Event Handlers
+        internal void OnRefreshed(object sender, Legend.RefreshedEventArgs args)
+        {
+            EventHandler<Legend.RefreshedEventArgs> refreshed = Refreshed;
 
-		private ThrottleTimer updateTimer;
+            if (refreshed != null)
+            {
+                refreshed(sender, args);
+            }
+        }
+        #endregion
 
-		private void OnScaleChanged()
-		{
-			//Update Layer Visibilities is expensive, so wait for the map to stop navigating so
-			//map navigation performance doesn't suffer from it.
-			if (updateTimer == null)
-			{
-				updateTimer = new ThrottleTimer(50) { Action = UpdateLayerVisibilities };
-			}
-			updateTimer.Invoke();
-		}
+        #region Map Event Handlers
 
-		private void Layers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
-			if (e.OldItems != null)
-			{
-				foreach (var item in e.OldItems.OfType<Layer>())
-				{
-					item.RemovePropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
-				}
-			}
-			if (e.NewItems != null)
-			{
-				foreach (var item in e.NewItems.OfType<Layer>())
-				{
-					item.AddPropertyChangedHandler("ShowLegend", Layer_PropertyChanged);
-				}
-			}
-			UpdateMapLayerItems();
-		}
+        private ThrottleTimer _updateTimer;
 
-		void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName == "ShowLegend")
-				UpdateMapLayerItems();
-		}
+        private void OnScaleChanged()
+        {
+            //Update Layer Visibilities is expensive, so wait for the map to stop navigating so
+            //map navigation performance doesn't suffer from it.
+            if (_updateTimer == null)
+            {
+                _updateTimer = new ThrottleTimer(50) { Action = UpdateLayerVisibilities };
+            }
+            _updateTimer.Invoke();
+        }
 
-		#endregion
+        private void Layers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.OldItems != null)
+            {
+                foreach (Layer layer in e.OldItems.OfType<Layer>())
+                    DetachLayerHandler(layer);
+            }
+            if (e.NewItems != null)
+            {
+                foreach (Layer layer in e.NewItems.OfType<Layer>())
+                    AttachLayerHandler(layer);
+            }
+            UpdateMapLayerItems();
+        }
 
-		#region Propagate methods propagating a property to all legend items of the legend tree
-		private void PropagateTemplate()
-		{
-			// set the template on all descendants including the legend items
-			LayerItems.Descendants(item => item.LayerItems).ForEach(item =>
-			{
-				item.Template = item.GetTemplate();
-				item.LegendItems.ForEach(legendItem => legendItem.Template = legendItem.GetTemplate());
-			});
-		}
+        private void AttachLayerHandler(Layer layer)
+        {
+            _layerPropertyChangedListeners.Attach(layer, "ShowLegend");
+        }
 
-		private void PropagateLayerItemsOptions(LayerItemsOpts layerItemsOptions)
-		{
+        private void DetachLayerHandler(Layer layer)
+        {
+            _layerPropertyChangedListeners.Detach(layer);
+        }
 
-			if (!LayerItemsOptions.Equals(layerItemsOptions))
-			{
-				DeferLayerItemsSourceChanged = true;
-				LayerItemsOptions = layerItemsOptions;
-				// set value on all descendants
-				LayerItems.Descendants(layerItem => layerItem.LayerItems).ForEach(layerItem => layerItem.LayerItemsOptions = layerItemsOptions);
-				DeferLayerItemsSourceChanged = false;
-			}
-		} 
-		#endregion
+        void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "ShowLegend")
+                UpdateMapLayerItems();
+        }
 
-		#region Private Methods
+        #endregion
 
-		private void UpdateMapLayerItems()
-		{
-			var mapLayerItems = new ObservableCollection<LayerItemViewModel>();
+        #region Propagate methods propagating a property to all legend items of the legend tree
+        private void PropagateTemplate()
+        {
+            // set the template on all descendants including the legend items
+            LayerItems.Descendants(item => item.LayerItems).ForEach(item =>
+            {
+                item.Template = item.GetTemplate();
+                item.LegendItems.ForEach(legendItem => legendItem.Template = legendItem.GetTemplate());
+            });
+        }
 
-			if (Layers != null)
-			{
-				UpdateMapLayerItemsRecursive(mapLayerItems, Layers);
-			}
-			LayerItems = mapLayerItems;
-		}
+        private void PropagateLayerItemsOptions(LayerItemsOpts layerItemsOptions)
+        {
 
-		private void UpdateMapLayerItemsRecursive(ObservableCollection<LayerItemViewModel> mapLayerItems, IEnumerable<Layer> layers)
-		{
-			foreach (Layer layer in layers.Where(l => l.ShowLegend))
-			{
-				MapLayerItem mapLayerItem = FindMapLayerItem(layer);
+            if (!LayerItemsOptions.Equals(layerItemsOptions))
+            {
+                DeferLayerItemsSourceChanged = true;
+                LayerItemsOptions = layerItemsOptions;
+                // set value on all descendants
+                LayerItems.Descendants(layerItem => layerItem.LayerItems).ForEach(layerItem => layerItem.LayerItemsOptions = layerItemsOptions);
+                DeferLayerItemsSourceChanged = false;
+            }
+        } 
+        #endregion
 
-				if (mapLayerItem == null) // else reuse existing map layer item to avoid query again the legend and to keep the current state (selected, expansed, ..)
-				{
-					// Create a new map layer item
-					mapLayerItem = new MapLayerItem(layer) { LegendTree = this };
-					mapLayerItem.Refresh();
-				}
+        #region Private Methods
 
-				mapLayerItems.Add(mapLayerItem);
-				if(layer is GroupLayer)
-					UpdateMapLayerItemsRecursive(mapLayerItems, (layer as GroupLayer).ChildLayers);
-			}
-		}
+        private void UpdateMapLayerItems()
+        {
+            var mapLayerItems = new ObservableCollection<LayerItemViewModel>();
 
-		private IEnumerable<MapLayerItem> MapLayerItems
-		{
-			get
-			{
-				if (LayerItems == null)
-					return null;
+            if (Layers != null)
+            {
+                UpdateMapLayerItemsRecursive(mapLayerItems, Layers);
+            }
+            LayerItems = mapLayerItems;
+        }
 
-				return LayerItems.OfType<MapLayerItem>();
-			}
-		}
+        private void UpdateMapLayerItemsRecursive(ObservableCollection<LayerItemViewModel> mapLayerItems, IEnumerable<Layer> layers)
+        {
+            foreach (Layer layer in layers.Where(l => l.ShowLegend))
+            {
+                MapLayerItem mapLayerItem = FindMapLayerItem(layer);
 
-		private MapLayerItem FindMapLayerItem(Layer layer)
-		{
-			return MapLayerItems == null ? null : MapLayerItems.FirstOrDefault(mapLayerItem => mapLayerItem.Layer == layer);
-		}
+                if (mapLayerItem == null) // else reuse existing map layer item to avoid query again the legend and to keep the current state (selected, expansed, ..)
+                {
+                    // Create a new map layer item
+                    mapLayerItem = new MapLayerItem(layer) { LegendTree = this };
+                    mapLayerItem.Refresh();
+                }
 
-		internal void UpdateLayerVisibilities()
-		{
-			LayerItems.ForEach(layerItem =>
-				{
-					layerItem.DeferLayerItemsSourceChanged = true;
-					layerItem.UpdateLayerVisibilities(true, true, true);
-					layerItem.DeferLayerItemsSourceChanged = false;
-				}
-			);
-		}
-		#endregion
+                mapLayerItems.Add(mapLayerItem);
+                if(layer is GroupLayer)
+                    UpdateMapLayerItemsRecursive(mapLayerItems, (layer as GroupLayer).ChildLayers);
+            }
+        }
 
-		#region LayerItemsMode
+        private IEnumerable<MapLayerItem> MapLayerItems
+        {
+            get
+            {
+                if (LayerItems == null)
+                    return null;
 
-		private void UpdateLayerItemsOptions()
-		{
-			LayerItemsOpts layerItemsOptions;
-			bool returnsLegendItems = (LegendItemTemplate != null);
+                return LayerItems.OfType<MapLayerItem>();
+            }
+        }
 
-			layerItemsOptions = new LayerItemsOpts(false, false, returnsLegendItems, ShowOnlyVisibleLayers, ReverseLayersOrder);
+        private MapLayerItem FindMapLayerItem(Layer layer)
+        {
+            return MapLayerItems == null ? null : MapLayerItems.FirstOrDefault(mapLayerItem => mapLayerItem.Layer == layer);
+        }
 
-			PropagateLayerItemsOptions(layerItemsOptions);
-		}
+        internal void UpdateLayerVisibilities()
+        {
+            LayerItems.ForEach(layerItem =>
+                {
+                    layerItem.DeferLayerItemsSourceChanged = true;
+                    layerItem.UpdateLayerVisibilities(true, true, true);
+                    layerItem.DeferLayerItemsSourceChanged = false;
+                }
+            );
+        }
+        #endregion
 
-		#endregion
+        #region LayerItemsMode
 
+        private void UpdateLayerItemsOptions()
+        {
+            LayerItemsOpts layerItemsOptions;
+            bool returnsLegendItems = (LegendItemTemplate != null);
 
-		/// <summary>
-		/// The throttle timer is useful for limiting the number of requests to a method if
-		/// the method is repeatedly called many times but you only want the method raised once.
-		/// It delays raising the method until a set interval, and any previous calls to the
-		/// actions in that interval will be cancelled.
-		/// </summary>
-		private class ThrottleTimer
-		{
-			DispatcherTimer throttleTimer;
+            layerItemsOptions = new LayerItemsOpts(false, false, returnsLegendItems, ShowOnlyVisibleLayers, ReverseLayersOrder);
 
-			internal ThrottleTimer(int milliseconds) : this(milliseconds, null) { }
+            PropagateLayerItemsOptions(layerItemsOptions);
+        }
 
-			/// <summary>
-			/// Initializes a new instance of the <see cref="ThrottleTimer"/> class.
-			/// </summary>
-			/// <param name="milliseconds">Milliseconds to throttle.</param>
-			/// <param name="handler">The delegate to invoke.</param>
-			internal ThrottleTimer(int milliseconds, Action handler)
-			{
-				this.Action = handler;
-				throttleTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(milliseconds) };
-				throttleTimer.Tick += (s, e) =>
-				{
-					throttleTimer.Stop();
-					if (this.Action != null)
-						this.Action.Invoke();
-				};
-			}
+        #endregion
 
-			/// <summary>
-			/// Delegate to Invoke.
-			/// </summary>
-			/// <value>The action.</value>
-			public Action Action { get; set; }
-
-			/// <summary>
-			/// Invokes this instance (note that this will happen asynchronously and delayed).
-			/// </summary>
-			public void Invoke()
-			{
-				throttleTimer.Stop();
-				throttleTimer.Start();
-			}
-
-			/// <summary>
-			/// Cancels this timer if running.
-			/// </summary>
-			internal void Cancel()
-			{
-				throttleTimer.Stop();
-			}
-		}
-	}
+    }
 }
