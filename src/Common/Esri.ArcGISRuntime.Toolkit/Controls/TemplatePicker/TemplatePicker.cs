@@ -101,7 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             var templates = new List<TemplateItem>();
             FeatureServiceLayerInfo serviceInfo = null;
             GeodatabaseFeatureTable ft = flayer.FeatureTable;
-            if (ft != null)
+            if (ft != null && !ft.IsReadOnly)
             {
                 if (!(ft is GeodatabaseFeatureServiceTable) || ((GeodatabaseFeatureServiceTable)ft).IsInitialized) // avoid a first chance exception
                 {
