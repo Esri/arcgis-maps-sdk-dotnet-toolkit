@@ -1,26 +1,35 @@
 arcgis-toolkit-dotnet
-=====================
 
-This project contains the set of controls for use with the Esri ArcGIS Runtime SDK for .NET.
-Included are a number of controls you can use to enhance your applications. 
+This project contains source code for controls you can use with the ArcGIS Runtime SDK for .NET.  
 
+NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the instructions below on how to get started.
 
-##What is in it?
+## Controls
 
-ArcGIS Toolkit for .NET includes:
+- Legend - Displays a legend for a set of layers in your map.
+- Attribution - Displays copyright/attribution information for layers in your map.
+- ScaleLine - Displays current scale reference.
+- SignInDialog - (Desktop only) SignIn dialog that challenges the user when accessign ArcGIS secured resources.
+- FeatureDataField - Edit control for working with individual feature attributes.
+- FeatureDataForm - A simple form layout of all editable fields in a feature using the FeatureDataField for each attribute.
 
-* `Legend` -  Displays a legend for a set of layers in your map.
-* `Attribution` : Displays copyright/attribution information for layers in your map.
-* `ScaleLine` : Displays current scale reference.
-* `SignInDialog` (Desktop only) : SignIn dialog that challenges the user when accessign ArcGIS secured resources..
-* `FeatureDataField` : Edit control for working with individual feature attributes to create custom forms.
-* `FeatureDataForm` : A simple form layout of all editable fields in a feature using the FeatureDataField for each attribute.
+## Instructions
 
-## How Do I Use It?
-* Get the Github Repo by either cloning it or downloading the zip package from the master branch.
-* Add the Esri.ArcGISRuntime.Toolkit project to your existing solution.
-* Right-click the project where you want to use the toolkit, select 'Add reference', and pick the toolkit project under the solutions tab.
-* Next register the xmlns namespace in the `Page` or `UserControl` where you want to use the control:
+1. Fork and then clone the repo or download the .zip file. 
+2. Download and install the [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk).  Login to the beta community requires an Esri Global account, which can be created for free.  
+3. For Windows Desktop:
+*  Confirm that your system meets the requirements for [Windows Desktop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm).
+*  Open the solution (WinDesktop-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 or 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.
+*  Add a reference to the Esri.ArcGISRuntime.Toolkit.dll in your solution.   
+4. For Windows Store: 
+*  Confirm that your system meets the requirements for [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm). 
+*  Open the solution (WinStore-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.
+5. For Windows Phone: 
+*  Confirm that your system meets the requirements for [Windows Phone](http://developers.arcgis.com/net/phone/guide/system-requirements.htm). 
+*  Open the solution (WinPhone-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 and build the Esri.ArcGISRuntime.Toolkit.dll.
+
+## Use 
+Once a reference to the ArcGIS Toolkit is made in a project, register the xmlns namespace in the `Page` or `UserControl` where you want to use a Toolkit control:
 
 ```xml
   xmlns:esriTK="using:Esri.ArcGISRuntime.Toolkit.Controls" 
@@ -93,11 +102,9 @@ Set the `GeodatabaseFeature` property to the GeodatabaseFeature you want to work
   <esriTK:FeatureDataForm GeodatabaseFeature="{Binding MyGdbFeature}" IsReadOnly="False" />
 ```
 
-
-
 ## Resources
 
-* [ArcGIS Runtime SDK for Windows Store apps](http://developers.arcgis.com/en/windows-store/)
+* [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
 
 ## Issues
 
@@ -108,12 +115,12 @@ Find a bug or want to request a new feature?  Please let us know by submitting a
 Anyone and everyone is welcome to contribute. 
 
 ## Licensing
-Copyright 2013 Esri
+Copyright 2014 Esri
 
 This source is subject to the Microsoft Public License (Ms-PL).
 You may obtain a copy of the License at
 
-   http://opensource.org/licenses/ms-pl
+http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -121,7 +128,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-A copy of the license is available in the repository's [license]( https://raw.github.com/Esri/arcgis-toolkit-dotnet/master/license) file.
+A copy of the license is available in the repository's [license.txt]( https://raw.github.com/Esri/arcgis-toolkit-dotnet/master/license.txt) file.
 
 [](Esri Tags: ArcGIS Runtime SDK .NET WinRT WinStore WPF WinPhone C# C-Sharp DotNet XAML)
 [](Esri Language: DotNet)
