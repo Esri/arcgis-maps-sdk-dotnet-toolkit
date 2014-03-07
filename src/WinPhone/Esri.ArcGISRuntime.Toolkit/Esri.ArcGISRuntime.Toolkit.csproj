@@ -144,8 +144,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.2.0">
-      <Name>ArcGIS Runtime for Windows Phone %28Beta%29</Name>
+    <SDKReference Include="ArcGISRuntimeWindowsPhone, Version=10.2.2">
+      <Name>ArcGIS Runtime for Windows Phone %28Beta%291</Name>
     </SDKReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
