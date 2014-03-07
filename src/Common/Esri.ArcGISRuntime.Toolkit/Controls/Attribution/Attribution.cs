@@ -9,7 +9,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Controls;
 using Esri.ArcGISRuntime.Geometry;
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -85,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 DetachLayersHandler(oldLayers);
             if (newLayers != null)
                 AttachLayersHandler(newLayers);
-            UpdateAttributionItems();
+            UpdateAttributionItems(true);
         }
 
         #endregion
@@ -109,7 +108,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private static void OnScalePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var attribution = d as Attribution;
-            attribution.UpdateAttributionItems();
+            if (attribution != null && attribution._changeWithScale)
+                attribution.UpdateAttributionItems(false);
         }
         #endregion
 
@@ -133,7 +133,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private static void OnExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var attribution = d as Attribution;
-            attribution.UpdateAttributionItems();
+            if (attribution != null && attribution._changeWithExtent)
+                attribution.UpdateAttributionItems(false);
         }
         #endregion
 
@@ -199,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "CopyrightText" || e.PropertyName == "IsVisible" || e.PropertyName == "Status")
-                UpdateAttributionItems();
+                UpdateAttributionItems(true);
         }
 
 
@@ -215,7 +216,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             if (newItems != null)
                 foreach (var item in newItems)
                     AttachLayerHandler(item as Layer);
-            UpdateAttributionItems();
+            UpdateAttributionItems(true);
         }
 
         #endregion
@@ -223,10 +224,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         #region Private Methods
 
         private ThrottleTimer _updateItemsTimer;
-        private void UpdateAttributionItems()
+        private void UpdateAttributionItems(bool updateChangeFlags)
         {
+            _changeFlagsNeedUpdate |= updateChangeFlags; // change flags will be updated at the same time as AttributionItems
+
             // wait for the map to stop navigating so
             //map navigation performance doesn't suffer from it.
+            // Also useful to wait for layers to stop initializing.
             if (_updateItemsTimer == null)
             {
                 _updateItemsTimer = new ThrottleTimer(100) { Action = UpdateAttributionItemsImpl };
@@ -246,7 +250,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                                        .ToArray();
                 if (!AreEquals(Items as string[], items)) // Avoid changing Items if the list didn't change
                     Items = items;
+                if (_changeFlagsNeedUpdate)
+                    UpdateChangeFlagsImpl();
             }
+        }
+
+        // Avoid updating the copyright when no actual visible layers implement IQueryCopyright or implement IQueryCopyright
+        // but without CopyrightChangesWithExtent and/or CopyrightChangesWithScale
+        private bool _changeWithScale;
+        private bool _changeWithExtent;
+        private bool _changeFlagsNeedUpdate;
+        private void UpdateChangeFlagsImpl()
+        {
+            if (Layers == null)
+            {
+                _changeWithExtent = false;
+                _changeWithScale = false;
+            }
+            else
+            {
+                var queryCopyrights = Layers.Where(layer => layer.IsVisible).OfType<IQueryCopyright>().ToArray();
+                _changeWithExtent = queryCopyrights.Any(q => q.CopyrightChangesWithExtent);
+                _changeWithScale = queryCopyrights.Any(q => q.CopyrightChangesWithScale);
+            }
+            _changeFlagsNeedUpdate = false;
         }
 
         private bool AreEquals(string[] strings1, string[] strings2)
