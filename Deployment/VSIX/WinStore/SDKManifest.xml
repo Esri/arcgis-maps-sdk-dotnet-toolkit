@@ -2,19 +2,19 @@
 <FileList
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="SDKManifest.xsd"
-  DisplayName="Toolkit for ArcGIS Runtime" 
+  DisplayName="Toolkit for ArcGIS Runtime (Windows Store)" 
   ProductFamilyName="Esri.ArcGISRuntime.Toolkit"
   Description="Toolkit for ArcGIS Runtime (Windows Store)"
   MinVSVersion="12.0"
-  Identity="Esri.ArcGISRuntime.Toolkit.WS, Version=10.2.2.0"
+  Identity="Esri.ArcGISRuntime.Toolkit.WS, Version=10.2.2"
   MinToolsVersion="12.0" 
   AppliesTo="WindowsAppContainer + ( Managed )"
   MoreInfo="http://links.esri.com/winstoresdk"
   SupportedArchitectures="x86;x64;ARM"
-  DependsOn="Esri.ArcGISRuntime, version=10.2.2.0"
+  DependsOn="Esri.ArcGISRuntime, version=10.2.2"
   SupportsMultipleVersions="Error"
   Help="http://links.esri.com/winstoresdk">
-  <File Reference="ArcGIS.Runtime.Toolkit.dll" >
+  <File Reference="Esri.ArcGISRuntime.Toolkit.dll" >
     <ToolboxItems BlendCategory="Esri" VSCategory="Esri" />
   </File>
 </FileList>

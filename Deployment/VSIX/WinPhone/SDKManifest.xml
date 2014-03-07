@@ -2,19 +2,19 @@
 <FileList
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="SDKManifest.xsd"
-  DisplayName="Toolkit for ArcGIS Runtime" 
+  DisplayName="Toolkit for ArcGIS Runtime (Windows Phone)" 
   ProductFamilyName="Esri.ArcGISRuntime.Toolkit"
   Description="Toolkit for ArcGIS Runtime (Windows Phone)"
   MinVSVersion="11.0"
-  Identity="Esri.ArcGISRuntime.Toolkit.WP, Version=10.2.2.0"
+  Identity="Esri.ArcGISRuntime.Toolkit.WP, Version=10.2.2"
   MinToolsVersion="4.0" 
   MoreInfo="http://links.esri.com/windowsphone"
   SupportedArchitectures="x86;ARM"
-  DependsOn="Esri.ArcGISRuntime, version=10.2.2.0"
+  DependsOn="Esri.ArcGISRuntime, version=10.2.2"
   SupportsMultipleVersions="Error"
   Help="http://links.esri.com/windowsphone"
 	TargetFramework="WindowsPhone,Version=v8.0">
-  <File Reference="ArcGIS.Runtime.Toolkit.dll" >
+	<File Reference="Esri.ArcGISRuntime.Toolkit.dll" >
     <ToolboxItems BlendCategory="Esri" VSCategory="Esri" />
   </File>
 </FileList>

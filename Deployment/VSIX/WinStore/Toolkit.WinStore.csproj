@@ -60,8 +60,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Esri.ArcGISRuntime.xml">
-      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.xml</Link>
+    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Esri.ArcGISRuntime.Toolkit.xml">
+      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -70,8 +70,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x64\Release\Esri.ArcGISRuntime.xml">
-      <Link>References\CommonConfiguration\x64\Esri.ArcGISRuntime.xml</Link>
+    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x64\Release\Esri.ArcGISRuntime.Toolkit.xml">
+      <Link>References\CommonConfiguration\x64\Esri.ArcGISRuntime.Toolkit.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -80,8 +80,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\ARM\Release\Esri.ArcGISRuntime.xml">
-      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.xml</Link>
+    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml">
+      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -91,7 +91,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Themes\Generic.xbf">
-      <Link>Redist\CommonConfiguration\neutral\Themes\Generic.xbf</Link>
+      <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit\Themes\Generic.xbf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -103,6 +103,7 @@
     <Content Include="SDKManifest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
