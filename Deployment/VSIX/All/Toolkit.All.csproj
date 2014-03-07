@@ -55,14 +55,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <ProjectReference Include="..\WinDesktop\Toolkit.WinDesktop.csproj">
-      <Project>{a18c3fd4-e6e7-4410-814b-9fbd86537a17}</Project>
-      <Name>Toolkit.WinDesktop</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>VSIXContainerProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <Private>False</Private>
-      <VSIXSubPath>WinDesktop</VSIXSubPath>
-    </ProjectReference>
     <ProjectReference Include="..\WinPhone\Toolkit.WinPhone.csproj">
       <Project>{D9902E13-5666-445A-8F83-F2382F496691}</Project>
       <Name>Toolkit.WinPhone</Name>
