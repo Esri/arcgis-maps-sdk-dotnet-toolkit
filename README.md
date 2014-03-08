@@ -2,7 +2,7 @@
 
 This project contains source code for controls you can use with the ArcGIS Runtime SDK for .NET.  
 
-NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the instructions below on how to get started.
+NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the build instructions below on how to get started.
 
 ## Controls
 
@@ -13,19 +13,19 @@ NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the instruction
 - FeatureDataField - Edit control for working with individual feature attributes.
 - FeatureDataForm - A simple form layout of all editable fields in a feature using the FeatureDataField for each attribute.
 
-## Instructions
+## Build 
 
 1. Fork and then clone the repo or download the .zip file.
 2. The Toolkit requires the ArcGIS Runtime SDK for .NET.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for .NET with [Windows Desktop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm), Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm), and/or [Windows Phone](http://developers.arcgis.com/net/phone/guide/system-requirements.htm).  
 3. Download and install the [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk).  Login to the beta community requires an Esri Global account, which can be created for free.
-4. To include the Toolkit source in your projects:
+4. To include Toolkit source in your projects:
  *  In Visual Studio, add the ArcGIS Runtime Toolkit project to your solution. 
-	- Windows Desktop (WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
+    - Windows Desktop (WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
     - Windows Store	(WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
-	- Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
+    - Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
  *  For other projects in the solution, add a reference to the ArcGIS Runtime Toolkit project.
  
-Optional: Distribution of the Toolkit for the ArcGIS Runtime
+#### Optional: Build to distibute the Toolkit
 1. Windows Desktop 
  *  Open the solution (WinDesktop-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 or 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.
  *  Add a reference to the Esri.ArcGISRuntime.Toolkit.dll in your projects.  
@@ -33,8 +33,8 @@ Optional: Distribution of the Toolkit for the ArcGIS Runtime
  *  Open the solution (WinStore-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.   Be sure to build for Release on the ARM, x86, and x64 platforms.
 3. Windows Phone: 
  *  Open the solution (WinPhone-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 or 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.  Be sure to build for Release on the ARM and x86 platforms.
-4. To distribute the Toolkit for the ArcGIS Runtime SDK for .NET for use in a Windows Store or Windows Phone project, they need to be packaged as Visual Studio extensions.  Install the [Visual Studio 2013 SDK](http://msdn.microsoft.com/en-us/library/bb166441.aspx).  This SDK is required to build Visual Studio extension installers (VSIX).  
-5. Under the Deployment\VSIX folder in this repo, open the VSIX.sln and build the Windows Store and Windows Phone projects.  If you get errors indicating files cannot be found, be sure to build the Windows Store and Windows Phone Toolkit projects with for the release configuration on all platforms.  A set of *.vsix files will be generated in the project output folders. 
+4. To distribute the Toolkit for use in a Windows Store or Windows Phone project, it should be packaged as Visual Studio extension.  Install the [Visual Studio 2013 SDK](http://msdn.microsoft.com/en-us/library/bb166441.aspx).  This SDK is required to build Visual Studio extension installers (VSIX).  
+5. Under the Deployment\VSIX folder in this repo, open the VSIX.sln and build.  If you get errors indicating files cannot be found, be sure to build the Windows Store and Windows Phone Toolkit projects for the release configuration on all platforms.  A set of *.vsix files will be generated in the project output folders. 
 6. Run the vsix to install the Toolkit as an extension SDK for Windows Store or Windows Phone projects.  To add a reference in your project, open the Add Reference dialog, navigate to Windows > Extensions, and check the box next to the Toolkit for ArcGIS Runtime.  
         
 ## Use 
