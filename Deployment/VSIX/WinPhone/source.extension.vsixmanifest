@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-	<Metadata>
-		<Identity Id="Esri.ArcGISRuntime.Toolkit.WP" Version="10.2.2" Language="en-US" Publisher="Esri" />
-		<DisplayName>Toolkit for ArcGIS Runtime SDK (WinPhone)</DisplayName>
-		<Description xml:space="preserve">ArcGIS Runtime controls and utilities for Windows Phone.</Description>
-		<MoreInfo>http://developers.arcgis.com/windows-phone/</MoreInfo>
-		<License>LICENSE</License>
-		<Tags>xaml winphone arcgis esri mapping map gis</Tags>
-	</Metadata>
-	<Installation Scope="Global">
-		<InstallationTarget Id="Microsoft.ExtensionSDK" TargetPlatformIdentifier="Windows Phone" TargetPlatformVersion="v8.0" SdkName="Esri.ArcGISRuntime.Toolkit.WP" SdkVersion="10.2.2" />
-	</Installation>
-	<Dependencies>
-		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
-	</Dependencies>
-	<Assets>
-		<Asset Type="Microsoft.ExtensionSDK" d:Source="File" Path="SDKManifest.xml" />
-	</Assets>
+  <Metadata>
+    <Identity Id="Esri.ArcGISRuntime.Toolkit.WP" Version="10.2.2" Language="en-US" Publisher="Esri" />
+    <DisplayName>Toolkit for ArcGIS Runtime (WinPhone)</DisplayName>
+    <Description xml:space="preserve">ArcGIS Runtime controls and utilities for Windows Phone.</Description>
+    <MoreInfo>http://developers.arcgis.com/net</MoreInfo>
+    <License>license.txt</License>
+    <Tags>xaml winphone arcgis esri mapping map gis</Tags>
+  </Metadata>
+  <Installation Scope="Global">
+    <InstallationTarget Id="Microsoft.ExtensionSDK" TargetPlatformIdentifier="Windows Phone" TargetPlatformVersion="v8.0" SdkName="Esri.ArcGISRuntime.Toolkit.WP" SdkVersion="10.2.2" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.ExtensionSDK" d:Source="File" Path="SDKManifest.xml" />
+  </Assets>
 </PackageManifest>
 

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-	<Metadata>
-		<Identity Id="Esri.ArcGISRuntime.Toolkit" Version="10.2.2.0" Language="en-US" Publisher="Esri" />
-		<DisplayName>Toolkit for ArcGIS Runtime SDK</DisplayName>
-		<Description>ArcGIS Runtime controls and utilities.</Description>
-		<MoreInfo>http://developers.arcgis.com/</MoreInfo>
-		<License>LICENSE</License>
-		<Tags>xaml, winrt, arcgis, esri, mapping, map, gis, wpf, windows phone, windows store</Tags>
-	</Metadata>
-	<Installation>
-		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0,13.0)" />
-		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.VSWinExpress" />
-		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.Premium" />
-		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.Ultimate" />
-		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
-		<InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
-	</Installation>
-	<Dependencies>
-		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
-		<Dependency d:Source="Project" d:ProjectName="Toolkit.WinPhone" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinPhone;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinPhone;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinPhone;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinPhone" />
-		<Dependency d:Source="Project" d:ProjectName="Toolkit.WinStore" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinStore;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinStore;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinStore;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinStore" />
-	</Dependencies>
-	<Assets>
-	</Assets>
+  <Metadata>
+    <Identity Id="Esri.ArcGISRuntime.Toolkit" Version="10.2.2.0" Language="en-US" Publisher="Esri" />
+    <DisplayName>Toolkit for ArcGIS Runtime</DisplayName>
+    <Description xml:space="preserve">ArcGIS Runtime controls and utilities.</Description>
+    <MoreInfo>http://developers.arcgis.com/net</MoreInfo>
+    <License>license.txt</License>
+    <Tags>xaml, winrt, arcgis, esri, mapping, map, gis, wpf, windows phone, windows store</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[12.0,13.0)" />
+    <InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.VSWinExpress" />
+    <InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.Premium" />
+    <InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.Ultimate" />
+    <InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
+    <InstallationTarget Version="[12.0,13.0)" Id="Microsoft.VisualStudio.VSWinDesktopExpress" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
+    <Dependency d:Source="Project" d:ProjectName="Toolkit.WinPhone" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinPhone;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinPhone;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinPhone;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinPhone" />
+    <Dependency d:Source="Project" d:ProjectName="Toolkit.WinStore" Version="[10.2.2.0,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinStore;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinStore;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinStore;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinStore" />
+  </Dependencies>
+  <Assets>
+  </Assets>
 </PackageManifest>
 
