@@ -2,7 +2,7 @@
 
 This project contains source code for controls you can use with the ArcGIS Runtime SDK for .NET.  
 
-NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the build instructions below on how to get started.
+NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the build instructions below to get started.
 
 ## Controls
 
@@ -16,7 +16,7 @@ NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the build instr
 ## Build 
 
 1. Fork and then clone the repo or download the .zip file.
-2. The Toolkit requires the ArcGIS Runtime SDK for .NET.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for .NET with [Windows Desktop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm), Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm), and/or [Windows Phone](http://developers.arcgis.com/net/phone/guide/system-requirements.htm).  
+2. The Toolkit requires the ArcGIS Runtime SDK for .NET.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for .NET with [Windows Desktop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm), [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm), and/or [Windows Phone](http://developers.arcgis.com/net/phone/guide/system-requirements.htm).  
 3. Download and install the [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk).  Login to the beta community requires an Esri Global account, which can be created for free.
 4. To include Toolkit source in your projects:
  *  In Visual Studio, add the ArcGIS Runtime Toolkit project to your solution. 
