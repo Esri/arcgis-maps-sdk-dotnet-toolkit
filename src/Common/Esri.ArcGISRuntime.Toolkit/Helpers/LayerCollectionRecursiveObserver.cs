@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Diagnostics;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -17,41 +18,53 @@ using Windows.UI.Xaml;
 using System.Windows;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.Internal
+namespace Esri.ArcGISRuntime.Toolkit.Helpers
 {
     /// <summary>
     /// Helper class for observing recursively layers added/removed/moved from a layer collection.
     /// Takes care of GroupLayers by observing recursively the collection GroupLayer.ChildLayers
     /// and by observing the GroupLayer.ChildLayers property changed 
     /// </summary>
-    internal sealed class LayerCollectionRecursiveObserver
+    public sealed class LayerCollectionRecursiveObserver
     {
-        // Observer (generally a control that implements ILayerCollectionObserver interface) that delegates the observation to this object
-        readonly ILayerCollectionObserver _observer;
-
         // Listen for Layers Collection changed
         private WeakEventListener<LayerCollectionRecursiveObserver, object, NotifyCollectionChangedEventArgs> _layersWeakEventListener;
 
         // Listen for GroupLayer.ChildLayers property changed
-        private readonly DependencyPropertyChangedListeners<LayerCollectionRecursiveObserver> _layerPropertyChangedListeners;
+        private DependencyPropertyChangedListeners<LayerCollectionRecursiveObserver> _childLayersPropertyChangedListeners;
 
-        // LayerCollectionRecursiveObserver (one by GroupLayer) for listening recursively to ChildLayers
-        private IDictionary<GroupLayer, LayerCollectionRecursiveObserver> _observersByGroupLayer = new Dictionary<GroupLayer, LayerCollectionRecursiveObserver>();
+        // LayerCollectionRecursiveObserver (one by GroupLayer) for listening recursively to ChildLayers collection changed
+        private readonly IDictionary<GroupLayer, LayerCollectionRecursiveObserver> _observersByGroupLayer = new Dictionary<GroupLayer, LayerCollectionRecursiveObserver>();
 
-        // Reset Collection doesn't provide any infos about the previous collection , so we keep as private member a copy of layers collection to be able to unsubscibe
+        // Helper to raise LayerAdded/LayerRemoved/LayerMoved events.
+        // All sub _observersByGroupLayer share the same helper 
+        readonly RaiseEventsHelper _raiseEventsHelper;
+
+        // Reset Collection doesn't provide any infos about the previous collection , so we keep as private member a copy of layers collection to be able to unsubscribe
         private IEnumerable<Layer> _currentLayers;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerCollectionRecursiveObserver"/> class.
         /// </summary>
-        /// <param name="observer">The observer that delegates the observation to this object.</param>
-        public LayerCollectionRecursiveObserver(ILayerCollectionObserver observer)
+        public LayerCollectionRecursiveObserver()
         {
-            Debug.Assert(observer != null);
-            _observer = observer;
+            _raiseEventsHelper = new RaiseEventsHelper(this);
+            InitChildLayersListener();
+        }
 
-            // Initialize the collection of listeners to grouplayers ChildLayers changed
-            _layerPropertyChangedListeners = new DependencyPropertyChangedListeners<LayerCollectionRecursiveObserver>(this)
+        // Private constructor for sharing the same eventsHelper
+        private LayerCollectionRecursiveObserver(RaiseEventsHelper raiseEventsHelper)
+        {
+            Debug.Assert(raiseEventsHelper != null);
+            _raiseEventsHelper = raiseEventsHelper;
+            InitChildLayersListener();
+        }
+
+        // Initialize the listener to ChildLayers property changed
+        private void InitChildLayersListener()
+        {
+            _childLayersPropertyChangedListeners = new DependencyPropertyChangedListeners<LayerCollectionRecursiveObserver>(this)
             {
                 OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
             };
@@ -88,7 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                     layersINotifyCollectionChanged.CollectionChanged += _layersWeakEventListener.OnEvent;
                 }
                 foreach (var layer in layers)
-                    AddLayer(layer);
+                    OnLayerAdded(layer);
                 _currentLayers = layers.ToArray();
             }
         }
@@ -106,33 +119,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             if (_currentLayers != null)
             {
                 foreach (var layer in _currentLayers)
-                    RemoveLayer(layer);
+                    OnLayerRemoved(layer);
                 _currentLayers = null;
             }
         }
 
-        private void AddLayer(Layer layer)
+        // A layer has been added in the current collection
+        private void OnLayerAdded(Layer layer)
         {
             Debug.Assert(layer != null);
-            _observer.LayerAdded(layer);
+            _raiseEventsHelper.RaiseLayerAdded(layer);
 
             var glayer = layer as GroupLayer;
             if (glayer != null)
             {
-                _layerPropertyChangedListeners.Attach(glayer, "ChildLayers");
+                // If the layer added is a groupLayer, we need:
+                // 1) To subscribe to the ChildLayers property changed
+                // 2) To observe the chnaged in the hierarchy of ChildLayers 
+                _childLayersPropertyChangedListeners.Attach(glayer, "ChildLayers");
                 Debug.Assert(!_observersByGroupLayer.ContainsKey(glayer), "twice the same layer in the layer collection?");
 
                 // Create one LayerCollectionRecursiveObserver to listen to sublayers
                 if (!_observersByGroupLayer.ContainsKey(glayer))
                 {
-                    var observer = new LayerCollectionRecursiveObserver(_observer);
+                    var observer = new LayerCollectionRecursiveObserver(_raiseEventsHelper);
                     observer.StartObserving(glayer.ChildLayers);
                     _observersByGroupLayer.Add(glayer, observer);
                 }
             }
         }
 
-        private void RemoveLayer(Layer layer)
+        // A layer has been removed from the layer collection
+        private void OnLayerRemoved(Layer layer)
         {
             Debug.Assert(layer != null);
             Debug.Assert(_currentLayers.Contains(layer));
@@ -140,7 +158,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             var glayer = layer as GroupLayer;
             if (glayer != null)
             {
-                _layerPropertyChangedListeners.Detach(layer);
+                _childLayersPropertyChangedListeners.Detach(layer);
                 Debug.Assert(_observersByGroupLayer.ContainsKey(glayer), "group layer never attached?");
                 if (_observersByGroupLayer.ContainsKey(glayer))
                 {
@@ -149,7 +167,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                     _observersByGroupLayer.Remove(glayer);
                 }
             }
-            _observer.LayerRemoved(layer);
+            _raiseEventsHelper.RaiseLayerRemoved(layer);
         }
 
         private void OnLayerPropertyChanged(DependencyObject sender, PropertyChangedEventArgs e)
@@ -158,16 +176,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             if (layer == null)
                 return;
 
-            Debug.Assert(e.PropertyName == "ChildLayers");
+            Debug.Assert(e.PropertyName == "ChildLayers", "Only ChildLayers property is supposed to be observed");
             if (e.PropertyName == "ChildLayers")
             {
+                // The ChildLayers property of a group layer has changed --> reuse the same observer for observing the new ChildLayers collection 
                 var glayer = layer as GroupLayer;
                 Debug.Assert(glayer != null);
                 Debug.Assert(_observersByGroupLayer.ContainsKey(glayer), "group layer observer not created");
                 if (glayer != null && _observersByGroupLayer.ContainsKey(glayer))
                 {
                     var observer = _observersByGroupLayer[glayer];
-                    observer.StopObserving();
+                    observer.StopObserving(); // stop observing the previousChildLayers collection
                     observer.StartObserving(glayer.ChildLayers);
                 }
             }
@@ -192,14 +211,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                     break;
 
                 case NotifyCollectionChangedAction.Move:
-                    _observer.LayersMoved();
+                    _raiseEventsHelper.RaiseLayersMoved(e.NewItems.OfType<Layer>());
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
                     removed = _currentLayers.Except(layers).ToArray();
                     added = layers.Except(_currentLayers).ToArray();
                     if (!removed.Any() && !added.Any())
-                        _observer.LayersMoved(); // likeky a sort
+                        _raiseEventsHelper.RaiseLayersMoved(layers); // likeky a sort
                     break;
 
                 default:
@@ -207,21 +226,95 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
             foreach (var layer in removed)
             {
-                RemoveLayer(layer);
+                OnLayerRemoved(layer);
             }
             foreach (var layer in added)
             {
-                AddLayer(layer);
+                OnLayerAdded(layer);
             }
             _currentLayers = layers.ToArray();
         }
+
+        /// <summary>
+        /// Occurs when a layer is added in the hierarchy of the layer collection.
+        /// </summary>
+        public event EventHandler<LayerEventsArgs> LayerAdded;
+
+        /// <summary>
+        /// Occurs when a layer is removed in the hierarchy of the layer collection.
+        /// </summary>
+        public event EventHandler<LayerEventsArgs> LayerRemoved;
+
+        /// <summary>
+        /// Occurs when a layer is moved in the hierarchy of the layer collection.
+        /// </summary>
+        public event EventHandler<LayerEventsArgs> LayerMoved;
+
+        internal void RaiseLayerAdded(Layer layer)
+        {
+            if (LayerAdded != null)
+                LayerAdded(this, new LayerEventsArgs(layer));
+        }
+
+        internal void RaiseLayerRemoved(Layer layer)
+        {
+            if (LayerRemoved != null)
+                LayerRemoved(this, new LayerEventsArgs(layer));
+        }
+
+        internal void RaiseLayerMoved(Layer layer)
+        {
+            if (LayerMoved != null)
+                LayerMoved(this, new LayerEventsArgs(layer));
+        }
+
     }
 
-
-    internal interface ILayerCollectionObserver
+	/// <summary>
+	///  EventArgs type for LayerCollectionRecursiveObserver events.
+	/// </summary>
+    public class LayerEventsArgs : EventArgs
     {
-        void LayerAdded(Layer layer);
-        void LayerRemoved(Layer layer);
-        void LayersMoved();
+        internal LayerEventsArgs(Layer layer)
+        {
+            Layer = layer;
+        }
+
+		/// <summary>
+		/// Gets the layer.
+		/// </summary>
+		/// <value>
+		/// The layer.
+		/// </value>
+        public Layer Layer { get; private set; }
+    }
+
+    // Helper class that raises LayerCollectionRecursiveObserver events 
+    internal class RaiseEventsHelper
+    {
+        private readonly LayerCollectionRecursiveObserver _recursiveObserver;
+        internal RaiseEventsHelper(LayerCollectionRecursiveObserver recursiveObserver)
+        {
+            _recursiveObserver = recursiveObserver;
+        }
+
+        public void RaiseLayerAdded(Layer layer)
+        {
+            _recursiveObserver.RaiseLayerAdded(layer);
+        }
+
+        public void RaiseLayerRemoved(Layer layer)
+        {
+            _recursiveObserver.RaiseLayerRemoved(layer);
+        }
+
+        public void RaiseLayersMoved(IEnumerable<Layer> layers)
+        {
+            if (layers != null)
+            {
+                foreach (var layer in layers)
+                    _recursiveObserver.RaiseLayerMoved(layer);
+            }
+        }
     }
 }

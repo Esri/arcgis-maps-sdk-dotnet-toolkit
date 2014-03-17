@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.Helpers;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -34,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// </summary>
     [TemplatePart(Name = "TemplateItems", Type = typeof(ItemsControl))]
     [StyleTypedProperty(Property = "ItemTemplate", StyleTargetType = typeof(FrameworkElement))]
-    public class TemplatePicker : Control, ILayerCollectionObserver
+    public class TemplatePicker : Control
     {
         // Underlying ItemsControl
         private ItemsControl _itemsControl;
@@ -63,7 +64,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
             };
 
-            _layerCollectionRecursiveObserver = new LayerCollectionRecursiveObserver(this);
+            _layerCollectionRecursiveObserver = new LayerCollectionRecursiveObserver();
+            _layerCollectionRecursiveObserver.LayerAdded += (s, e) => OnLayerAdded(e.Layer);
+            _layerCollectionRecursiveObserver.LayerRemoved += (s, e) => OnLayerRemoved(e.Layer);
+            _layerCollectionRecursiveObserver.LayerMoved += (s, e) => OnLayerMoved();
         }
 
         /// <summary>
@@ -226,7 +230,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private void OnLayersPropertyChanged(IEnumerable<Layer> newLayers)
         {
-            // Stop Observing the previos collection
+            // Stop Observing the previous collection
             _layerCollectionRecursiveObserver.StopObserving();
 
             Debug.Assert(!_templatesByLayer.Any()); // here all layers should have been removed
@@ -310,7 +314,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
 
-        void ILayerCollectionObserver.LayerAdded(Layer layer)
+        private void OnLayerAdded(Layer layer)
         {
             _layerPropertyChangedListeners.Attach(layer, "IsVisible");
             _layerPropertyChangedListeners.Attach(layer, "MinScale");
@@ -326,7 +330,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             }
         }
 
-        void ILayerCollectionObserver.LayerRemoved(Layer layer)
+        private void OnLayerRemoved(Layer layer)
         {
             _layerPropertyChangedListeners.Detach(layer);
             var flayer = layer as FeatureLayer;
@@ -337,7 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             }
         }
 
-        void ILayerCollectionObserver.LayersMoved()
+        private void OnLayerMoved()
         {
             InitItemsSource();
         }
