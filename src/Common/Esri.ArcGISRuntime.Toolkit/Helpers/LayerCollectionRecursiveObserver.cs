@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Helpers
             {
                 // If the layer added is a groupLayer, we need:
                 // 1) To subscribe to the ChildLayers property changed
-                // 2) To observe the chnaged in the hierarchy of ChildLayers 
+                // 2) To observe the changes in the hierarchy of ChildLayers (layers added/removed/moved)
                 _childLayersPropertyChangedListeners.Attach(glayer, "ChildLayers");
                 Debug.Assert(!_observersByGroupLayer.ContainsKey(glayer), "twice the same layer in the layer collection?");
 

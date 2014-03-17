@@ -5,11 +5,10 @@
 
 using Esri.ArcGISRuntime.Layers;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using Esri.ArcGISRuntime.Toolkit.Helpers;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.Controls;
 using Esri.ArcGISRuntime.Geometry;
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -32,6 +31,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         // Listen for layers DP changes
         private readonly DependencyPropertyChangedListeners<Attribution> _layerPropertyChangedListeners;
 
+        // Observe recursively Layers Collection changed
+        private readonly LayerCollectionRecursiveObserver _layerCollectionRecursiveObserver;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Attribution"/> class.
         /// </summary>
@@ -42,9 +44,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 #endif
             _layerPropertyChangedListeners = new DependencyPropertyChangedListeners<Attribution>(this)
             {
-                OnEventAction = (instance, source, eventArgs) => instance.Layer_PropertyChanged(source, eventArgs)
+                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
             };
 
+            _layerCollectionRecursiveObserver = new LayerCollectionRecursiveObserver();
+            _layerCollectionRecursiveObserver.LayerAdded += (s, e) => OnLayerAdded(e.Layer);
+            _layerCollectionRecursiveObserver.LayerRemoved += (s, e) => OnLayerRemoved(e.Layer);
+            _layerCollectionRecursiveObserver.LayerMoved += (s, e) => OnLayerMoved();
         }
 
 #if !NETFX_CORE && !WINDOWS_PHONE
@@ -76,16 +82,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private static void OnLayersPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is Attribution)
-                (d as Attribution).OnLayersPropertyChanged(e.OldValue as IEnumerable<Layer>, e.NewValue as IEnumerable<Layer>);
+                (d as Attribution).OnLayersPropertyChanged(e.NewValue as IEnumerable<Layer>);
         }
 
-        private void OnLayersPropertyChanged(IEnumerable<Layer> oldLayers, IEnumerable<Layer> newLayers)
+        private void OnLayersPropertyChanged(IEnumerable<Layer> newLayers)
         {
-            if (oldLayers != null)
-                DetachLayersHandler(oldLayers);
-            if (newLayers != null)
-                AttachLayersHandler(newLayers);
-            UpdateAttributionItems();
+            // Stop Observing the previous collection
+            _layerCollectionRecursiveObserver.StopObserving();
+
+            // Start observing the new collection
+            _layerCollectionRecursiveObserver.StartObserving(newLayers);
         }
 
         #endregion
@@ -109,7 +115,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private static void OnScalePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var attribution = d as Attribution;
-            attribution.UpdateAttributionItems();
+            if (attribution != null)
+                attribution.UpdateAttributionItems();
         }
         #endregion
 
@@ -133,7 +140,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private static void OnExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var attribution = d as Attribution;
-            attribution.UpdateAttributionItems();
+            if (attribution != null)
+                attribution.UpdateAttributionItems();
         }
         #endregion
 
@@ -161,60 +169,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #region Layer Event Handlers
 
-        private void DetachLayersHandler(IEnumerable<Layer> layers)
-        {
-            if (layers != null)
-            {
-                if(layers is INotifyCollectionChanged)
-                    (layers as INotifyCollectionChanged).CollectionChanged -= Layers_CollectionChanged;
-                foreach (Layer layer in layers)
-                    DetachLayerHandler(layer);
-            }
-        }
-
-        private void AttachLayersHandler(IEnumerable<Layer> layers)
-        {
-            if (layers != null)
-            {
-                if (layers is INotifyCollectionChanged)
-                    (layers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
-                foreach (Layer layer in layers)
-                    AttachLayerHandler(layer);
-            }
-        }
-
-        private void AttachLayerHandler(Layer layer)
-        {
-            _layerPropertyChangedListeners.Attach(layer, "IsVisible");
-            _layerPropertyChangedListeners.Attach(layer, "Status");
-            layer.PropertyChanged += Layer_PropertyChanged;
-        }
-
-        private void DetachLayerHandler(Layer layer)
-        {
-            _layerPropertyChangedListeners.Detach(layer);
-            layer.PropertyChanged -= Layer_PropertyChanged;
-        }
-
-        private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnLayerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "CopyrightText" || e.PropertyName == "IsVisible" || e.PropertyName == "Status")
                 UpdateAttributionItems();
         }
 
-
-        private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnLayerAdded(Layer layer)
         {
-            var oldItems = e.OldItems;
-            System.Collections.IEnumerable newItems = e.NewItems;
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-                newItems = Layers;
-            if (oldItems != null)
-                foreach (var item in oldItems)
-                    DetachLayerHandler(item as Layer);
-            if (newItems != null)
-                foreach (var item in newItems)
-                    AttachLayerHandler(item as Layer);
+            _layerPropertyChangedListeners.Attach(layer, "IsVisible");
+            _layerPropertyChangedListeners.Attach(layer, "Status");
+            layer.PropertyChanged += OnLayerPropertyChanged;
+            UpdateAttributionItems();
+        }
+
+        private void OnLayerRemoved(Layer layer)
+        {
+            _layerPropertyChangedListeners.Detach(layer);
+            layer.PropertyChanged -= OnLayerPropertyChanged;
+            UpdateAttributionItems();
+        }
+
+        private void OnLayerMoved()
+        {
             UpdateAttributionItems();
         }
 
@@ -225,8 +202,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private ThrottleTimer _updateItemsTimer;
         private void UpdateAttributionItems()
         {
-            // wait for the map to stop navigating so
-            //map navigation performance doesn't suffer from it.
+            // wait for the map to stop navigating so map navigation performance doesn't suffer from it.
+            // also useful to avoid too much updates during initialization
             if (_updateItemsTimer == null)
             {
                 _updateItemsTimer = new ThrottleTimer(100) { Action = UpdateAttributionItemsImpl };
@@ -240,7 +217,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 Items = null;
             else
             {
-                string[] items = Layers.Where(layer => layer.IsVisible && IsInScaleRange(layer))
+                string[] items = Layers.EnumerateLeaves(l => l.IsVisible && IsInScaleRange(l))
                                        .Select(CopyrightText).Where(cpr => !string.IsNullOrEmpty(cpr))
                                        .Select(cpr => cpr.Trim()).Distinct()
                                        .ToArray();
