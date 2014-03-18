@@ -11,10 +11,10 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Layers;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.Helpers;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
 
     /// <summary>
-    /// A template picker control enables selecting feature types to add 
+    /// A template picker control enables selecting feature types to add
     /// when editing a feature layer.
     /// </summary>
     [TemplatePart(Name = "TemplateItems", Type = typeof(ItemsControl))]
@@ -46,9 +46,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         // WeakEventListeners for feature layers changes (so the template picker may be released even if the feature layers are long lived object)
 
         // Listen for feature layers DP changes
-        private readonly DependencyPropertyChangedListeners<TemplatePicker> _featureLayerPropertyChangedListeners;
-        // Listen for Layers Collection changed
-        private WeakEventListener<TemplatePicker, object, NotifyCollectionChangedEventArgs> _layersWeakEventListener;
+        private readonly DependencyPropertyChangedListeners<TemplatePicker> _layerPropertyChangedListeners;
+
+        // Observe recursively Layers Collection changed
+        private readonly LayerCollectionRecursiveObserver _layerCollectionRecursiveObserver;
 
         private ThrottleTimer _updateItemsSourceTimer;
 
@@ -58,20 +59,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public TemplatePicker()
         {
             DefaultStyleKey = typeof(TemplatePicker);
-            _featureLayerPropertyChangedListeners = new DependencyPropertyChangedListeners<TemplatePicker>(this)
+            _layerPropertyChangedListeners = new DependencyPropertyChangedListeners<TemplatePicker>(this)
             {
                 OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
             };
-        }
 
-        /// <summary>
-        /// Finalizes an instance of the <see cref="TemplatePicker"/> class.
-        /// </summary>
-        ~TemplatePicker()
-        {
-            // Detach WeakEventListeners for avoiding small memory leaks
-            if (_layersWeakEventListener != null)
-                _layersWeakEventListener.Detach();
+            _layerCollectionRecursiveObserver = new LayerCollectionRecursiveObserver();
+            _layerCollectionRecursiveObserver.LayerAdded += (s, e) => OnLayerAdded(e.Layer);
+            _layerCollectionRecursiveObserver.LayerRemoved += (s, e) => OnLayerRemoved(e.Layer);
+            _layerCollectionRecursiveObserver.LayerMoved += (s, e) => OnLayerMoved();
         }
 
         /// <summary>
@@ -104,24 +100,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             }
         }
 
-        private void RebuildAllTemplates()
-        {
-            _templatesByLayer.Clear();
-            if (Layers != null)
-            {
-                foreach (var flayer in Layers.OfType<FeatureLayer>())
-                {
-                    RebuildTemplate(flayer);
-                }
-            }
-            InitItemsSource();
-        }
-
         private void RebuildTemplate(FeatureLayer flayer)
         {
             var templates = new List<TemplateItem>();
             FeatureServiceLayerInfo serviceInfo = null;
-            var ft = flayer.FeatureTable;
+            GeodatabaseFeatureTable ft = flayer.FeatureTable;
             if (ft != null && !ft.IsReadOnly)
             {
                 if (!(ft is GeodatabaseFeatureServiceTable) || ((GeodatabaseFeatureServiceTable)ft).IsInitialized) // avoid a first chance exception
@@ -139,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 var renderer = flayer.Renderer ?? (serviceInfo.DrawingInfo == null ? null : serviceInfo.DrawingInfo.Renderer);
                 if (serviceInfo.Templates != null)
                 {
-                    foreach (var template in serviceInfo.Templates)
+                    foreach (FeatureTemplate template in serviceInfo.Templates) 
                     {
                         var item = new TemplateItem
                         {
@@ -157,9 +140,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 }
                 if (serviceInfo.Types != null)
                 {
-                    foreach (var type in serviceInfo.Types)
+                    foreach (FeatureType type in serviceInfo.Types)
                     {
-                        foreach (var template in type.Templates)
+                        foreach (FeatureTemplate template in type.Templates)
                         {
                             var item = new TemplateItem
                             {
@@ -178,7 +161,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     }
                 }
             }
-            _templatesByLayer[flayer] = templates;
+            if (templates.Any())
+                _templatesByLayer[flayer] = templates;
+            else
+                _templatesByLayer.Remove(flayer);
         }
 
         private void InitItemsSource()
@@ -199,7 +185,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 var templates = new List<TemplateItem>();
                 if (Layers != null)
                 {
-                    foreach (var flayer in Layers.OfType<FeatureLayer>().Where(l => l.IsVisible && IsInScaleRange(l)))
+                    foreach (FeatureLayer flayer in Layers.EnumerateLeaves(l => l.IsVisible && IsInScaleRange(l)).OfType<FeatureLayer>())
                     {
                         if (_templatesByLayer.ContainsKey(flayer))
                             templates.AddRange(_templatesByLayer[flayer]);
@@ -239,118 +225,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             var picker = d as TemplatePicker;
             if (picker != null)
-                picker.OnLayersPropertyChanged(e.OldValue as IEnumerable<Layer>, e.NewValue as IEnumerable<Layer>);
+                picker.OnLayersPropertyChanged(e.NewValue as IEnumerable<Layer>);
         }
 
-        private void OnLayersPropertyChanged(IEnumerable<Layer> oldLayers, IEnumerable<Layer> newLayers)
+        private void OnLayersPropertyChanged(IEnumerable<Layer> newLayers)
         {
-            DetachLayersHandler(oldLayers);
-            AttachLayersHandler(newLayers);
-            RebuildAllTemplates();
+            // Stop Observing the previous collection
+            _layerCollectionRecursiveObserver.StopObserving();
+
+            Debug.Assert(!_templatesByLayer.Any()); // here all layers should have been removed
+            // Start observing the new collection
+            _layerCollectionRecursiveObserver.StartObserving(newLayers);
         }
 
-        private void DetachLayersHandler(IEnumerable<Layer> layers)
-        {
-            if (_layersWeakEventListener != null)
-            {
-                _layersWeakEventListener.Detach();
-                _layersWeakEventListener = null;
-            }
-            if (layers != null)
-            {
-                foreach (var layer in layers.OfType<FeatureLayer>())
-                    DetachLayerHandler(layer);
-            }
-        }
-
-        private void AttachLayersHandler(IEnumerable<Layer> layers)
-        {
-            if (layers != null)
-            {
-                var layersINotifyCollectionChanged = layers as INotifyCollectionChanged;
-                if (layersINotifyCollectionChanged != null)
-                {
-                    Debug.Assert(_layersWeakEventListener == null);
-                    _layersWeakEventListener = new WeakEventListener<TemplatePicker, object, NotifyCollectionChangedEventArgs>(this)
-                    {
-                        OnEventAction = (instance, source, eventArgs) => instance.OnLayerCollectionChanged(source, eventArgs),
-                        OnDetachAction = weakEventListener => layersINotifyCollectionChanged.CollectionChanged -= weakEventListener.OnEvent
-                    };
-                    layersINotifyCollectionChanged.CollectionChanged += _layersWeakEventListener.OnEvent;
-                }
-                foreach (var layer in layers.OfType<FeatureLayer>())
-                    AttachLayerHandler(layer);
-            }
-        }
-
-        private void AttachLayerHandler(FeatureLayer flayer)
-        {
-            _featureLayerPropertyChangedListeners.Attach(flayer, "Renderer"); // to do: subscribe to Renderer changed events
-            _featureLayerPropertyChangedListeners.Attach(flayer, "IsVisible");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "MinScale");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "MaxScale");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "Status");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "FeatureTable");
-        }
-
-        private void DetachLayerHandler(FeatureLayer flayer)
-        {
-            _featureLayerPropertyChangedListeners.Detach(flayer);
-        }
 
         private void OnLayerPropertyChanged(DependencyObject sender, PropertyChangedEventArgs e)
         {
-            var flayer = sender as FeatureLayer;
-            if (flayer == null)
-                return;
-
             if (e.PropertyName == "IsVisible" || e.PropertyName == "MinScale" || e.PropertyName == "MaxScale")
                 InitItemsSource();
             else // "Renderer"/"Status"/"FeatureTable"
             {
-                RebuildTemplate(flayer);
-                InitItemsSource();
-            }
-        }
-
-        private void OnLayerCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch(e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                case NotifyCollectionChangedAction.Remove:
-                case NotifyCollectionChangedAction.Replace:
-                    if (e.NewItems != null)
-                    {
-                        foreach (var flayer in e.NewItems.OfType<FeatureLayer>())
-                        {
-                            AttachLayerHandler(flayer);
-                            RebuildTemplate(flayer);
-                        }
-                    }
-                    if (e.OldItems != null)
-                    {
-                        foreach (var flayer in e.OldItems.OfType<FeatureLayer>())
-                        {
-                            DetachLayerHandler(flayer);
-                            _templatesByLayer.Remove(flayer);
-                        }
-                    }
+                var flayer = sender as FeatureLayer;
+                Debug.Assert(flayer != null);
+                if (flayer != null)
+                {
+                    RebuildTemplate(flayer);
                     InitItemsSource();
-                    break;
-
-                case NotifyCollectionChangedAction.Move:
-                    InitItemsSource();
-                    break;
-
-                case NotifyCollectionChangedAction.Reset:
-                    DetachLayersHandler(_templatesByLayer.Select(kvp => kvp.Key)); // this event doesn't provide the old values
-                    AttachLayersHandler(Layers);
-                    RebuildAllTemplates();
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
@@ -369,6 +270,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register("ItemTemplate", typeof(DataTemplate), typeof(TemplatePicker), null);
 
+
         /// <summary>
         /// Gets or sets the template that defines the panel that controls the layout of items.
         /// </summary>
@@ -383,7 +285,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         public static readonly DependencyProperty ItemsPanelProperty =
             DependencyProperty.Register("ItemsPanel", typeof(ItemsPanelTemplate), typeof(TemplatePicker), null);
-
 
 
         /// <summary>
@@ -413,7 +314,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
 
-        private class InvokeCommand : ICommand
+        private void OnLayerAdded(Layer layer)
+        {
+            _layerPropertyChangedListeners.Attach(layer, "IsVisible");
+            _layerPropertyChangedListeners.Attach(layer, "MinScale");
+            _layerPropertyChangedListeners.Attach(layer, "MaxScale");
+            var flayer = layer as FeatureLayer;
+            if (flayer != null)
+            {
+                _layerPropertyChangedListeners.Attach(flayer, "Renderer");
+                _layerPropertyChangedListeners.Attach(flayer, "Status");
+                _layerPropertyChangedListeners.Attach(flayer, "FeatureTable");
+                RebuildTemplate(flayer);
+                InitItemsSource();
+            }
+        }
+
+        private void OnLayerRemoved(Layer layer)
+        {
+            _layerPropertyChangedListeners.Detach(layer);
+            var flayer = layer as FeatureLayer;
+            if (flayer != null && _templatesByLayer.ContainsKey(flayer))
+            {
+                _templatesByLayer.Remove(flayer);
+                InitItemsSource();
+            }
+        }
+
+        private void OnLayerMoved()
+        {
+            InitItemsSource();
+        }
+
+
+        private sealed class InvokeCommand : ICommand
         {
             private readonly Action<object> _onExecuted;
             public InvokeCommand(Action<object> onExecuted)
@@ -435,7 +369,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             }
         }
 
-        private class TemplateItem : INotifyPropertyChanged
+        private sealed class TemplateItem : INotifyPropertyChanged
         {
             public FeatureLayer Layer { get; set; }
             public FeatureType FeatureType { get; set; }
