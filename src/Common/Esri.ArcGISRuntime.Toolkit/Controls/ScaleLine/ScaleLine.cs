@@ -43,12 +43,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         public ScaleLine()
         {
-#if NETFX_CORE || WINDOWS_PHONE
+#if NETFX_CORE
             DefaultStyleKey = typeof(ScaleLine);
 #endif
         }
 
-#if !NETFX_CORE && !WINDOWS_PHONE
+#if !NETFX_CORE
         static ScaleLine()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ScaleLine),

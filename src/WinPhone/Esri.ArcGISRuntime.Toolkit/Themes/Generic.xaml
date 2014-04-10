@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls">
+	xmlns:controls="using:Windows.UI.Xaml.Controls"
+	xmlns:local="using:Esri.ArcGISRuntime.Toolkit.Controls">
 
 	<!-- Default Legend Style-->
 	<Style TargetType="local:Legend">
