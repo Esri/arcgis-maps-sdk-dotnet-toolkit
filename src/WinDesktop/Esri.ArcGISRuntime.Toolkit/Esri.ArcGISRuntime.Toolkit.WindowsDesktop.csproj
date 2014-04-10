@@ -18,20 +18,22 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\output\WinDesktop\Debug\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinDesktop\Esri.ArcGISRuntime.Toolkit\Debug\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinDesktop\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\output\WinDesktop\Release\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinDesktop\Esri.ArcGISRuntime.Toolkit\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinDesktop\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Esri.ArcGISRuntime">

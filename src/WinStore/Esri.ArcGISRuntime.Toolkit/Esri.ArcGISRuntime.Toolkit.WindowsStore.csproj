@@ -17,28 +17,10 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Esri.ArcGISRuntime.Toolkit.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <OutputPath>..\..\..\output\WinStore\ARM\Debug\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinStore\Esri.ArcGISRuntime.Toolkit\ARM\Debug\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -46,11 +28,12 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>bin\ARM\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinStore\ARM\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
-    <OutputPath>bin\ARM\Release\</OutputPath>
+    <OutputPath>..\..\..\output\WinStore\ARM\Release\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinStore\Esri.ArcGISRuntime.Toolkit\ARM\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -59,12 +42,13 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>bin\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinStore\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+    <OutputPath>..\..\..\output\WinStore\x64\Debug\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinStore\Esri.ArcGISRuntime.Toolkit\x64\Debug\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -72,11 +56,12 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>bin\x64\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinStore\x64\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
+    <OutputPath>..\..\..\output\WinStore\x64\Release\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinStore\Esri.ArcGISRuntime.Toolkit\x64\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -85,12 +70,13 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>bin\x64\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinStore\x64\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>..\..\..\output\WinStore\x86\Debug\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinStore\Esri.ArcGISRuntime.Toolkit\x86\Debug\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -98,11 +84,12 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>bin\x86\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinStore\x86\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>..\..\..\output\WinStore\x86\Release\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinStore\Esri.ArcGISRuntime.Toolkit\x86\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -111,7 +98,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>bin\x86\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinStore\x86\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <ItemGroup>

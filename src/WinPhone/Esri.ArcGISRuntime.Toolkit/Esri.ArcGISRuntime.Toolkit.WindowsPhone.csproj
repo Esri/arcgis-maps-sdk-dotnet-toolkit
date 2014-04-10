@@ -18,7 +18,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <OutputPath>..\..\..\output\WinPhone\ARM\Debug\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\ARM\Debug\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -26,11 +27,12 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>Bin\ARM\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\ARM\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
-    <OutputPath>bin\ARM\Release\</OutputPath>
+    <OutputPath>..\..\..\output\WinPhone\ARM\Release\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\ARM\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -39,12 +41,13 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>Bin\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>..\..\..\output\WinPhone\x86\Debug\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\x86\Debug\</IntermediateOutputPath>
     <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -53,10 +56,11 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
-    <DocumentationFile>Bin\x86\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\x86\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>..\..\..\output\WinPhone\x86\Release\</OutputPath>
+    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\x86\Release\</IntermediateOutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -66,7 +70,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
-    <DocumentationFile>Bin\x86\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\x86\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
