@@ -27,7 +27,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>..\..\..\output\WinPhone\ARM\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\ARM\Debug\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
@@ -41,7 +41,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>..\..\..\output\WinPhone\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\ARM\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -56,7 +56,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
-    <DocumentationFile>..\..\..\output\WinPhone\x86\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\x86\Debug\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>..\..\..\output\WinPhone\x86\Release\</OutputPath>
@@ -70,7 +70,7 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <GenerateLibraryLayout>True</GenerateLibraryLayout>
-    <DocumentationFile>..\..\..\output\WinPhone\x86\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\output\WinPhone\x86\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,6 +99,18 @@
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <PropertyGroup>
     <SDKReferenceDirectoryRoot>C:\applications\output\winprt_sdk\;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>SET output=$(TargetDir)..\..\..\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\
+xcopy $(ProjectDir)..\..\..\Deployment\VSIX\WinPhone\SDKManifest.xml "%25output%25" /Y /F
+xcopy $(TargetPath) "%25output%25References\CommonConfiguration\$(PlatformName)\" /Y  /F
+xcopy $(TargetDir)$(TargetName).xml "%25output%25References\CommonConfiguration\$(PlatformName)\" /Y  /F
+xcopy $(ProjectPriFullPath) "%25output%25Redist\CommonConfiguration\neutral\" /Y /F
+xcopy $(ProjectDir)$(TargetName)\*.* "%25output%25Redist\CommonConfiguration\neutral\$(TargetName)\" /Y /F
+xcopy $(TargetDir)$(TargetName)\Themes\Generic.xaml "%25output%25DesignTime\CommonConfiguration\neutral\$(TargetName)\Themes\" /Y /F
+xcopy $(TargetDir)$(TargetName)\Themes\Generic.xbf "%25output%25Redist\CommonConfiguration\neutral\$(TargetName)\Themes\" /Y /F
+
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
