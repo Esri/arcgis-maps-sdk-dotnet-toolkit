@@ -55,26 +55,32 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinPhone\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Esri.ArcGISRuntime.Toolkit.dll">
-      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.dll</Link>
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll">
+      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml">
+      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\output\WinPhone\ARM\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll">
+      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinPhone\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Esri.ArcGISRuntime.Toolkit.xml">
-      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\..\src\WinPhone\Esri.ArcGISRuntime.Toolkit\bin\ARM\Release\Esri.ArcGISRuntime.Toolkit.dll">
-      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\..\src\WinPhone\Esri.ArcGISRuntime.Toolkit\bin\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml">
-      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.xml</Link>
+    <Content Include="..\..\..\output\WinPhone\ARM\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml">
+      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone.pri">
+      <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone.pri</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\Generic.xbf">
+      <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\Generic.xbf</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
@@ -84,6 +90,14 @@
     <Content Include="SDKManifest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\src\WinPhone\Esri.ArcGISRuntime.Toolkit\Themes\Generic.xaml">
+      <Link>DesignTime\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\Generic.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
