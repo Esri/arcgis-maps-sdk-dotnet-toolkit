@@ -42,9 +42,11 @@ The toolkit must be referenced as an ExtensionSDK. Referencing the SDK by browsi
 There's two options to 'install' the extension sdk without building an actual installer.
  a.  Copy the contents of the folder \Output\ExtensionSDKs\ to "[USERFOLDER]\AppData\Local\Microsoft SDKs\"
  b.  Add the following tag to your app project at the very bottom of your project file right before the <Target> tags:
-```   <PropertyGroup>
-```    <SDKReferenceDirectoryRoot>[TOOLKITFOLDER]\output\ExtensionSDKs;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
-```  </PropertyGroup>
+```
+<PropertyGroup>
+    <SDKReferenceDirectoryRoot>[TOOLKITFOLDER]\output\ExtensionSDKs;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
+</PropertyGroup>
+```
 In Visual Studio, right-click the project references, select "Add Reference" and choose the "Windows 8.1->Extensions" or "Windows Phone 8.1->Extensions" tab and check off "Toolkit for ArcGIS Runtime".
 
 #####Windows Store and Windows Phone as an installable extension
