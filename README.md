@@ -29,6 +29,7 @@ See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more deta
  
 #### Optional: Build to distribute the Toolkit
 Building the SDK:
+
 1.  Open the solution (Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 Update 2 or newer and build the 3 projects.
 2.  For Windows Phone, build both ARM and x86 configurations, for Windows Store, also build x64 configuration.
 
@@ -40,8 +41,9 @@ Building the SDK:
 Make sure you built both x86, ARM and x64 (x64 doesn't apply to Windows Phone).
 The toolkit must be referenced as an ExtensionSDK. Referencing the SDK by browsing to a DLL as with desktop apps will not work.
 There's two options to 'install' the extension sdk without building an actual installer.
- a.  Copy the contents of the folder \Output\ExtensionSDKs\ to "[USERFOLDER]\AppData\Local\Microsoft SDKs\"
- b.  Add the following tag to your app project at the very bottom of your project file right before the <Target> tags:
+
+1.  Copy the contents of the folder \Output\ExtensionSDKs\ to "[USERFOLDER]\AppData\Local\Microsoft SDKs\"
+2.  Add the following tag to your app project at the very bottom of your project file right before the <Target> tags:
 ```
 <PropertyGroup>
     <SDKReferenceDirectoryRoot>[TOOLKITFOLDER]\output\ExtensionSDKs;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
