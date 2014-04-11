@@ -442,7 +442,7 @@
                                     </Border>
                                     <ScrollViewer x:Name="ContentElement" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" IsTabStop="False" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="Disabled"/>
                                     <Button x:Name="DeleteButton" BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="1" FontSize="{TemplateBinding FontSize}" IsTabStop="False" Style="{StaticResource DeleteButtonStyle}" Visibility="Collapsed" VerticalAlignment="Stretch"/>
-                                    <Grid x:Name="ValidationFlyout" Visibility="Collapsed" Grid.Row="1" Margin="5,2,12,5">
+                                    <Grid x:Name="ValidationFlyout" Visibility="Collapsed" Grid.Row="1" Margin="0,2,0,5">
                                         <Border Margin="4,4,-4,-4" Background="#052A2E31" CornerRadius="5"/>
                                         <Border Margin="3,3,-3,-3" Background="#152A2E31" CornerRadius="4"/>
                                         <Border Margin="2,2,-2,-2" Background="#252A2E31" CornerRadius="3"/>
