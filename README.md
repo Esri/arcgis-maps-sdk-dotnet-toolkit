@@ -9,12 +9,37 @@ NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the build instr
 - Legend - Displays a legend for a set of layers in your map.
 - Attribution - Displays copyright/attribution information for layers in your map.
 - ScaleLine - Displays current scale reference.
-- SignInDialog - (Desktop only) SignIn dialog that challenges the user when accessign ArcGIS secured resources.
+- SignInDialog - (Desktop only) SignIn dialog that challenges the user when accessing ArcGIS secured resources.
 - FeatureDataField - Edit control for working with individual feature attributes.
 - FeatureDataForm - A simple form layout of all editable fields in a feature using the FeatureDataField for each attribute.
 
 See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more details.
 
+## Build 
+
+1. Fork and then clone the repo or download the .zip file.
+2. The Toolkit requires the ArcGIS Runtime SDK for .NET.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for .NET with [Windows Desktop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm), [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm), and/or [Windows Phone](http://developers.arcgis.com/net/phone/guide/system-requirements.htm).  
+3. Download and install the [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk).  Login to the beta community requires an Esri Global account, which can be created for free.
+4. To include Toolkit source in your projects:
+ *  In Visual Studio, add the ArcGIS Runtime Toolkit project to your solution. 
+    - Windows Desktop (WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
+    - Windows Store	(WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
+    - Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
+ *  For other projects in the solution, add a reference to the ArcGIS Runtime Toolkit project.
+ 
+#### Optional: Build to distribute the Toolkit
+#####Windows Desktop 
+ 1.  Open the solution (WinDesktop-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 or 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.
+ 2.  Add a reference to the Esri.ArcGISRuntime.Toolkit.dll in your projects.  
+
+#####Windows Store and Windows Phone
+ 1. Install the [Visual Studio 2013 SDK](http://msdn.microsoft.com/en-us/library/bb166441.aspx).  To distribute the Toolkit for use in a Windows Store or Windows Phone project, it should be packaged as Visual Studio extension.  The Visual Studio 2013 SDK is required to build Visual Studio extension installers (VSIX). 
+ 2. Windows Store 
+   *  Open the solution (WinStore-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.   Be sure to build for Release on the ARM, x86, and x64 platforms.
+ 3. Windows Phone: 
+   *  Open the solution (WinPhone-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 or 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.  Be sure to build for Release on the ARM and x86 platforms.
+ 4. Under the Deployment\VSIX folder in this repo, open the VSIX.sln and build.  The [Visual Studio 2013 SDK](http://msdn.microsoft.com/en-us/library/bb166441.aspx) is required to open projects in this solution.  Also be sure to build the Windows Store and Windows Phone Toolkit projects for the release configuration on all platforms.  A set of *.vsix files will be generated in the project output folders. 
+ 5. Run the vsix to install the Toolkit as an extension SDK for Windows Store or Windows Phone projects.  To add a reference in your project, open the Add Reference dialog, navigate to Windows > Extensions, and check the box next to the Toolkit for ArcGIS Runtime. 
 
 ## Resources
 
