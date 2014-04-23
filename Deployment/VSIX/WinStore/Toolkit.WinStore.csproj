@@ -88,10 +88,12 @@
     <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore.pri">
       <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore.pri</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore\Themes\Generic.xbf">
       <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore\Themes\Generic.xbf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
@@ -107,9 +109,9 @@
   <ItemGroup>
     <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\Themes\Generic.xaml">
       <Link>DesignTime\CommonConfiguration\neutral\Themes\Generic.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
