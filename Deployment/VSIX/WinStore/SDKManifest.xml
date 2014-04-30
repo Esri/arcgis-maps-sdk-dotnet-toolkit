@@ -11,7 +11,7 @@
   AppliesTo="WindowsAppContainer + ( Managed )"
   MoreInfo="http://links.esri.com/dotnetsdk"
   SupportedArchitectures="x86;x64;ARM"
-  DependsOn="Esri.ArcGISRuntime, version=10.2.2"
+  DependsOn="Esri.ArcGISRuntime, version=10.2.3"
   SupportsMultipleVersions="Error"
   Help="http://links.esri.com/dotnetsdk">
   <File Reference="Esri.ArcGISRuntime.Toolkit.WindowsStore.dll" >
