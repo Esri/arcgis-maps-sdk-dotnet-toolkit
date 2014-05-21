@@ -9,19 +9,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Data;
-#if NETFX_CORE          // Windows Store
+#if NETFX_CORE          // Windows Store & Windows Phone
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-#else                   // WPF & Windows Phone
+#else                   // WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-#if WINDOWS_PHONE       // Windows Phone
-using System.Windows.Input;
-#endif
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Controls
@@ -50,12 +47,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         public FeatureDataField()
         {
-#if NETFX_CORE || WINDOWS_PHONE
+#if NETFX_CORE
             DefaultStyleKey = typeof(FeatureDataField);
 #endif            
         }
 
-#if !NETFX_CORE && !WINDOWS_PHONE
+#if !NETFX_CORE
         static FeatureDataField()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FeatureDataField), new FrameworkPropertyMetadata(typeof(FeatureDataField)));

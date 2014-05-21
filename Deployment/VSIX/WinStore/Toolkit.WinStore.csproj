@@ -55,43 +55,43 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Esri.ArcGISRuntime.Toolkit.dll">
-      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.dll</Link>
+    <Content Include="..\..\..\output\WinStore\x86\Release\Esri.ArcGISRuntime.Toolkit.WindowsStore.dll">
+      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsStore.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Esri.ArcGISRuntime.Toolkit.xml">
-      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.xml</Link>
+    <Content Include="..\..\..\output\WinStore\x86\Release\Esri.ArcGISRuntime.Toolkit.WindowsStore.xml">
+      <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsStore.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x64\Release\Esri.ArcGISRuntime.Toolkit.dll">
-      <Link>References\CommonConfiguration\x64\Esri.ArcGISRuntime.Toolkit.dll</Link>
+    <Content Include="..\..\..\output\WinStore\x64\Release\Esri.ArcGISRuntime.Toolkit.WindowsStore.dll">
+      <Link>References\CommonConfiguration\x64\Esri.ArcGISRuntime.Toolkit.WindowsStore.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x64\Release\Esri.ArcGISRuntime.Toolkit.xml">
-      <Link>References\CommonConfiguration\x64\Esri.ArcGISRuntime.Toolkit.xml</Link>
+    <Content Include="..\..\..\output\WinStore\x64\Release\Esri.ArcGISRuntime.Toolkit.WindowsStore.xml">
+      <Link>References\CommonConfiguration\x64\Esri.ArcGISRuntime.Toolkit.WindowsStore.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\ARM\Release\Esri.ArcGISRuntime.Toolkit.dll">
-      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.dll</Link>
+    <Content Include="..\..\..\output\WinStore\ARM\Release\Esri.ArcGISRuntime.Toolkit.WindowsStore.dll">
+      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.WindowsStore.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\ARM\Release\Esri.ArcGISRuntime.Toolkit.xml">
-      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.xml</Link>
+    <Content Include="..\..\..\output\WinStore\ARM\Release\Esri.ArcGISRuntime.Toolkit.WindowsStore.xml">
+      <Link>References\CommonConfiguration\ARM\Esri.ArcGISRuntime.Toolkit.WindowsStore.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Esri.ArcGISRuntime.Toolkit.pri">
-      <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.pri</Link>
+    <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore.pri">
+      <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore.pri</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\bin\x86\Release\Themes\Generic.xbf">
-      <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit\Themes\Generic.xbf</Link>
+    <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore\Themes\Generic.xbf">
+      <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore\Themes\Generic.xbf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

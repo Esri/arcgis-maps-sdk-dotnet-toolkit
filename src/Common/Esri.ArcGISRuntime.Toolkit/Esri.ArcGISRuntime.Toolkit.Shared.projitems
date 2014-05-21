@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>9beab511-e16f-4651-a7ce-96a9f69d609b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CompatUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Attribution\Attribution.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\FeatureDataField.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\FeatureHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\KeyValuePair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\ValueChangedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\ValueChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\ValueEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataForm\ActionCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataForm\FeatureDataForm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataForm\GeneratingFieldEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\CollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\LayerItemViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\Legend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\LegendItemViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\LegendTree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\MapLayerItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\ScaleLine\ScaleLine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\TemplatePicker\TemplatePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Internal\DependencyPropertyChangedListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Internal\DependencyPropertyChangedListeners.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Internal\ThrottleTimer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListeners.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ValueConverters\" />
+  </ItemGroup>
+</Project>

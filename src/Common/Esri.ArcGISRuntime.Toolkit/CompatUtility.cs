@@ -26,8 +26,6 @@ namespace Esri.ArcGISRuntime.Toolkit
 				{
 #if NETFX_CORE
 					_isInDesignMode = Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#elif WINDOWS_PHONE
-					_isInDesignMode = System.ComponentModel.DesignerProperties.IsInDesignTool;
 #else
 					var prop = System.ComponentModel.DesignerProperties.IsInDesignModeProperty;
 					_isInDesignMode
@@ -43,9 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 		public static float LogicalDpi(DependencyObject dp = null)
 		{
 #if NETFX_CORE
-				return Windows.Graphics.Display.DisplayProperties.LogicalDpi;
-#elif WINDOWS_PHONE
-				return 96f * Application.Current.Host.Content.ScaleFactor / 100 * 2;
+			return Windows.Graphics.Display.DisplayInformation.GetForCurrentView().LogicalDpi;
 #else
 			if (dp == null)
 				return 96f;
