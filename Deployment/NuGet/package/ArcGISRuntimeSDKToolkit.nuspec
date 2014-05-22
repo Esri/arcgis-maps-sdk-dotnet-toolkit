@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.5">
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>ArcGIS Runtime SDK for .NET - Toolkit $titlenote$</title>
+    <authors>Esri</authors>
+    <owners>Esri</owners>
+    <licenseUrl>https://developers.arcgis.com/net/desktop/guide/pdf/E204_E300.pdf</licenseUrl>
+    <projectUrl>http://links.esri.com/dotnetsdk</projectUrl>
+    <iconUrl>http://links.esri.com/dotnetsdklogo</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>ArcGIS Runtime controls and utilities for Windows Store and Windows Phone</description>
+    <summary>ArcGIS Runtime controls and utilities for Windows Store and Windows Phone</summary>
+    <copyright>Copyright (c) 2013-2014, Esri. All rights reserved.</copyright>
+    <tags>Mapping Map GIS Esri ArcGIS Store WindowsPhone win81 wpa81 toolkit</tags>
+    <dependencies>
+      <dependency id="$runtimeid$" version="$version$" />
+    </dependencies>
+  </metadata>
+</package>

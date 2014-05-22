@@ -1,0 +1,7 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Reference Include="ArcGIS Runtime for Windows Phone Toolkit (Beta 2)">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\sdk\wpa81\$(Platform)\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
