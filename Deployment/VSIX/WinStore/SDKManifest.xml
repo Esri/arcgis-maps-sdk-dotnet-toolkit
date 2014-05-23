@@ -2,9 +2,9 @@
 <FileList
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="SDKManifest.xsd"
-  DisplayName="Toolkit for ArcGIS Runtime (Windows Store)" 
+  DisplayName="ArcGIS Runtime Toolkit for Windows Store apps" 
   ProductFamilyName="Esri.ArcGISRuntime.Toolkit"
-  Description="Toolkit for ArcGIS Runtime (Windows Store)"
+  Description="ArcGIS Runtime Toolkit for Windows Store apps"
   MinVSVersion="12.0"
   Identity="Esri.ArcGISRuntime.Toolkit, Version=10.2.3"
   MinToolsVersion="12.0" 
