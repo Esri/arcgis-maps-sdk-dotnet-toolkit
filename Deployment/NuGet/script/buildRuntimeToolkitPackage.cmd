@@ -3,7 +3,6 @@ setlocal EnableDelayedExpansion
 
 REM package metadata
 SET VERSION=10.2.3
-SET NEXTVERSION=10.2.4
 SET RUNTIMEID=Esri.ArcGISRuntime
 SET ID=%RUNTIMEID%.Toolkit
 SET TITLENOTE=
@@ -114,7 +113,7 @@ REM ===================
 REM Generate package
 REM ===================
 
-NuGet.exe pack %PACKAGEFOLDER%\ArcGISRuntimeSDKToolkit.nuspec -properties version=%VERSION%.%BUILDNUM%%TYPE% -properties nextversion=%NEXTVERSION% -properties id=%ID% -properties TITLENOTE="%TITLENOTE%" -properties runtimeid=%RUNTIMEID%
+NuGet.exe pack %PACKAGEFOLDER%\ArcGISRuntimeSDKToolkit.nuspec -properties version=%VERSION%.%BUILDNUM%%TYPE% -properties id=%ID% -properties TITLENOTE="%TITLENOTE%" -properties runtimeid=%RUNTIMEID%
 
 REM Move package to output location
 xcopy %ID%.%VERSION%.%BUILDNUM%%TYPE%.nupkg %OUTPUTFOLDER% /S /Y

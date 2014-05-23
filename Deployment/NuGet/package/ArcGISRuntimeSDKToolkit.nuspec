@@ -15,7 +15,7 @@
     <copyright>Copyright © 2014 Esri. All rights reserved. ArcGIS is a registered trademark of Esri.</copyright>
     <tags>ArcGIS Esri map mapping GIS location Store WindowsPhone win81 wpa81 toolkit</tags>
     <dependencies>
-      <dependency id="$runtimeid$" version="[$version$,$nextversion$)" />
+      <dependency id="$runtimeid$" version="$version$" />
     </dependencies>
   </metadata>
 </package>
