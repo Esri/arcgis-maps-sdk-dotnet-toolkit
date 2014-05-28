@@ -6,7 +6,7 @@
     <title>ArcGIS Runtime SDK for .NET - Toolkit $titlenote$</title>
     <authors>Esri Inc.</authors>
     <owners>Esri Inc.</owners>
-    <licenseUrl>https://developers.arcgis.com/net/desktop/guide/pdf/E204_E300.pdf</licenseUrl>
+    <licenseUrl>http://links.esri.com/dotnetsdktoolkitlicense</licenseUrl>
     <projectUrl>http://links.esri.com/dotnetsdktoolkit</projectUrl>
     <iconUrl>http://links.esri.com/dotnetsdklogo</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
