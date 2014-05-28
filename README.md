@@ -1,8 +1,6 @@
 # arcgis-toolkit-dotnet
 
-This project contains source code for controls you can use with the [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).  
-
-NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the build instructions below to get started.
+This project contains source code for controls and utilities you can use with the [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).   Build from source code available in this repo (see instructions below) or install the latest stable release from NuGet: [https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/)   
 
 ## Controls
 
@@ -71,7 +69,7 @@ Find a bug or want to request a new feature?  Please let us know by submitting a
 
 ## Contributing
 
-Anyone and everyone is welcome to contribute. 
+Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
 ## Licensing
 Copyright 2014 Esri
