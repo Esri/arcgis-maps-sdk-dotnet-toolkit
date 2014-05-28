@@ -7,10 +7,10 @@
     <authors>Esri Inc.</authors>
     <owners>Esri Inc.</owners>
     <licenseUrl>https://developers.arcgis.com/net/desktop/guide/pdf/E204_E300.pdf</licenseUrl>
-    <projectUrl>http://links.esri.com/dotnetsdk</projectUrl>
+    <projectUrl>http://links.esri.com/dotnetsdktoolkit</projectUrl>
     <iconUrl>http://links.esri.com/dotnetsdklogo</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>ArcGIS Runtime controls and utilities for Windows Store and Windows Phone</description>
+    <description>ArcGIS Runtime controls and utilities for Windows Store and Windows Phone.</description>
     <summary>ArcGIS Runtime Toolkit for Windows Store and Windows Phone</summary>
     <copyright>Copyright © 2014 Esri. All rights reserved. ArcGIS is a registered trademark of Esri.</copyright>
     <tags>ArcGIS Esri map mapping GIS location Store WindowsPhone win81 wpa81 toolkit</tags>
