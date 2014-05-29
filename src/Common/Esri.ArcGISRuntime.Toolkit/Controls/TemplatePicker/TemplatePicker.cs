@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                         templates.Add(item);
                         if (renderer != null)
                         {
-                            var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>()); // Need to desambiguate from winstore toolkit KeyValuePair
+                            var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>()); // Need to disambiguate from winstore toolkit KeyValuePair
                             item.SetSwatch(renderer.GetSymbol(g));
                         }
                     }
@@ -151,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                             templates.Add(item);
                             if (renderer != null)
                             {
-                                var g = new Graphic(template.Prototype.Attributes);
+                                var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>());
                                 item.SetSwatch(renderer.GetSymbol(g));
                             }
                         }
