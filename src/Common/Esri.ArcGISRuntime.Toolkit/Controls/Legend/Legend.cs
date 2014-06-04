@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		}
 
 		/// <summary>
-		/// Gets or sets the layers to display the legend for.
+		/// Gets or sets the layers to display in the legend.
 		/// </summary>
 		public IEnumerable<Layer> Layers
 		{
