@@ -27,6 +27,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\LegendTree.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\MapLayerItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ScaleLine\ScaleLine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\TemplatePicker\TemplatePicker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\DependencyPropertyChangedListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\DependencyPropertyChangedListeners.cs" />
