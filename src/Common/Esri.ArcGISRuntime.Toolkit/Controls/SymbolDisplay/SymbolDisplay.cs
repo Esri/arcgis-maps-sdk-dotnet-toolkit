@@ -35,8 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// Height and Width are set and don't allow displaying the symbol at scale without clipping. In this case the symbol is stretched to fill 
     /// the available space.
     /// </para>
-    /// <para>If the symbol symbolizes a line or a polygon, the swatch is created with a default size that can be overridden
-    /// by setting either the Height/Width or the MinHeight/MinWidth.
+    /// <para>If the symbol symbolizes a line or a polygon, the swatch size is based on the Height and Width.
+    /// If the Height/Width is not set, <see cref="DefaultHeight"/> and <see cref="DefaultWidth"/> are used instead.
     /// </para>
     /// </summary>
     [TemplatePart(Name = "Image", Type = typeof(Image))]
@@ -152,7 +152,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// The symbol geometry type (<see cref="ArcGISRuntime.Geometry.GeometryType.Unknown"/> by default).
         /// <para>
         /// If the geometry type is <see cref="ArcGISRuntime.Geometry.GeometryType.Unknown"/>, the geometry type will be deduced from the symbol type.
-        /// However, in some cases such as a MarkerSymbol used to symbolize a line or area object, it may be usefull tos et this parameter.
+        /// However, in some cases such as a MarkerSymbol used to symbolize a line or an area object, it may be useful to set this parameter.
         /// </para>
         /// </summary>
         public GeometryType GeometryType
@@ -199,6 +199,44 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             _swatchDpi = newValue > 0.0 ? newValue : CompatUtility.LogicalDpi(this);
             UpdateImageSource();
         }
+
+        #endregion
+
+        #region DefaultHeight
+
+        /// <summary>
+        /// The default Height used to create swatch for line or polygon symbols when the Height is not explicitly set.
+        /// </summary>
+        public double DefaultHeight
+        {
+            get { return (double)GetValue(DefaultHeightProperty); }
+            set { SetValue(DefaultHeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="DefaultHeight"/> Dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DefaultHeightProperty =
+            DependencyProperty.Register("DefaultHeight", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(25.0, UpdateImageSource));
+
+        #endregion
+
+        #region DefaultWidth
+
+        /// <summary>
+        /// The default Width used to create swatch for line or polygon symbols when the Width is not explicitly set.
+        /// </summary>
+        public double DefaultWidth
+        {
+            get { return (double)GetValue(DefaultWidthProperty); }
+            set { SetValue(DefaultWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="DefaultWidth"/> Dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DefaultWidthProperty =
+            DependencyProperty.Register("DefaultWidth", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(30.0, UpdateImageSource));
 
         #endregion
 
@@ -343,10 +381,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
             if (geometryType != GeometryType.Point) // for point, we need to keep 0 as expected image size so RTC will calculate it to avoid clipping
             {
-                // For line and polygon, use Height/Width and MinHeight/MinWidth (may worth a specific DP)
-                double height = double.IsNaN(Height) ? MinHeight : Math.Max(Height, MinHeight);
-                double width = double.IsNaN(Width) ? MinWidth : Math.Max(Width, MinWidth);
+                // For line and polygon, use Height/Width or  DefaultHeight/DefaultWidth
+                double height = double.IsNaN(Height) ? 0.0 : Height;
+                double width = double.IsNaN(Width) ? 0.0 : Width;
 
+                if (width == 0)
+                    width = DefaultWidth;
+
+                if (height == 0)
+                    height = DefaultHeight;
+                
                 heightPixels = (int)Math.Ceiling(height * _swatchDpi / 96.0);
                 widthPixels = (int)Math.Ceiling(width * _swatchDpi / 96.0);
             }
