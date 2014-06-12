@@ -238,7 +238,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             //map navigation performance doesn't suffer from it.
             if (_updateTimer == null)
             {
-                _updateTimer = new ThrottleTimer(50) { Action = UpdateLayerVisibilities };
+                _updateTimer = new ThrottleTimer(100) { Action = UpdateLayerVisibilities };
             }
             _updateTimer.Invoke();
         }

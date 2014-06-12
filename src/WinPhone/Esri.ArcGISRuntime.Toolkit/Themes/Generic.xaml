@@ -18,8 +18,8 @@
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal" Margin="1">
 						<Grid MinWidth="20" MinHeight="10">
-							<Image Source="{Binding SymbolSwatch}"
-                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <local:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}"
+                                                 DefaultWidth="32" DefaultHeight="32" />
 						</Grid>
 						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
 					</StackPanel>
