@@ -113,9 +113,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// The symbol to display.
         /// </summary>
-        public Symbol Symbol
+#if NETFX_CORE // temporary workaround to get symbols bindable (should be removed when https://devtopia.esri.com/runtime/dotnet-api/issues/367 is fixed)
+        public object Symbol
         {
-            get { return (Symbol) GetValue(SymbolProperty); }
+            get { return GetValue(SymbolProperty); }
             set { SetValue(SymbolProperty, value); }
         }
 
@@ -123,8 +124,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Identifies the <see cref="Symbol"/> Dependency property.
         /// </summary>
         public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register("Symbol", typeof (Symbol), typeof (SymbolDisplay), new PropertyMetadata(null, UpdateImageSource));
+            DependencyProperty.Register("Symbol", typeof(object), typeof(SymbolDisplay), new PropertyMetadata(null, UpdateImageSource));
+#else
+        public Symbol Symbol
+        {
+            get { return (Symbol)GetValue(SymbolProperty); }
+            set { SetValue(SymbolProperty, value); }
+        }
 
+        /// <summary>
+        /// Identifies the <see cref="Symbol"/> Dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SymbolProperty =
+            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(SymbolDisplay), new PropertyMetadata(null, UpdateImageSource));
+#endif
         #endregion
 
         #region BackgroundColor
@@ -324,7 +337,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             try
             {
-                _image.Source = await Symbol.CreateSwatchAsync(WidthPixels, HeightPixels, _swatchDpi, BackgroundColor, GeometryType);
+                _image.Source = await ((Symbol) Symbol).CreateSwatchAsync(WidthPixels, HeightPixels, _swatchDpi, BackgroundColor, GeometryType);
             }
             catch
             {
