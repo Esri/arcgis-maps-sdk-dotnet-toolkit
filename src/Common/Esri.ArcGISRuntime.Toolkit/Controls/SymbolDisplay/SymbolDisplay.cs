@@ -15,7 +15,6 @@ using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Windows.Foundation;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
-using System.Diagnostics;
 #else
 using System.Windows.Controls;
 using System.Windows;
@@ -54,7 +53,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
 #if NETFX_CORE
             DefaultStyleKey = typeof(SymbolDisplay);
-            SubscribeToDpiChanged();
+#if !WINDOWS_PHONE_APP // Windows Phone DPI never changes
+            Loaded += (sender, args) => SubscribeToDpiChanged();
+            Unloaded +=(sender, args) => UnsubscribeToDpiChanged();
+#endif
 #endif
         }
 
@@ -65,16 +67,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 new FrameworkPropertyMetadata(typeof (SymbolDisplay)));
         }
 #endif
-
-        /// <summary>
-        /// Finalizes an instance of the <see cref="SymbolDisplay"/> class.
-        /// </summary>
-        ~SymbolDisplay()
-        {
-            // Detach WeakEventListeners for avoiding small memory leaks
-            UnsubscribeToDpiChanged();
-        }
-
 
         #endregion Constructor
 
@@ -411,13 +403,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             WidthPixels = widthPixels;
         }
 
+        // DPI Changed management
+#if NETFX_CORE && !WINDOWS_PHONE_APP // todo later for Desktop: subscribe to dpi changed in case of dpi-aware per monitor app
+
+        // Listen for dpi changed by using a weak event listener since the view is a long lived object
+        private WeakEventListener<SymbolDisplay, Windows.Graphics.Display.DisplayInformation, object> _dpiChangedWeakEventListener;
+
+        private void OnLogicalDpiChanged(Windows.Graphics.Display.DisplayInformation info, object sender)
+        {
+            if (info.LogicalDpi != _swatchDpi && SwatchDpi == 0.0) // if SwatchDpi != 0.0, the value sets by the user takes precedence
+            {
+                OnSwatchDpiChanged(info.LogicalDpi);
+            }
+        }
 
         private void SubscribeToDpiChanged()
         {
-#if NETFX_CORE // todo later for Desktop: subscribe to dpi changed in case of dpi-aware per monitor app
-            if (!CompatUtility.IsDesignMode)
+            if (!CompatUtility.IsDesignMode && _dpiChangedWeakEventListener == null)
             {
-                Debug.Assert(_dpiChangedWeakEventListener == null);
                 var viewInfo = Windows.Graphics.Display.DisplayInformation.GetForCurrentView();
                 if (viewInfo != null)
                 {
@@ -429,31 +432,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     viewInfo.DpiChanged += _dpiChangedWeakEventListener.OnEvent;
                 }
             }
-#endif
         }
-
 
         private void UnsubscribeToDpiChanged()
         {
-#if NETFX_CORE
             if (_dpiChangedWeakEventListener != null)
             {
                 var dpiChangedListener = _dpiChangedWeakEventListener;
                 _dpiChangedWeakEventListener = null;
                 CompatUtility.ExecuteOnUIThread(dpiChangedListener.Detach, Dispatcher);
-            }
-#endif
-        }
-
-#if NETFX_CORE
-        // Listen for dpi changed by using a weak event listener since the view is a long lived object
-        private WeakEventListener<SymbolDisplay, Windows.Graphics.Display.DisplayInformation, object> _dpiChangedWeakEventListener;
-
-        private void OnLogicalDpiChanged(Windows.Graphics.Display.DisplayInformation info, object sender)
-        {
-            if (info.LogicalDpi != _swatchDpi && SwatchDpi == 0.0) // if SwatchDpi != 0.0, the value sets by the user takes precedence
-            {
-                OnSwatchDpiChanged(info.LogicalDpi);
             }
         }
 #endif
