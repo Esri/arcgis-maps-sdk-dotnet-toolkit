@@ -9,8 +9,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Button Width="40" Height="40"
-                            Command="{Binding Command}" CommandParameter="{Binding}"
+                    <Button Command="{Binding Command}" CommandParameter="{Binding}"
                             Padding="0" Margin="2"
                             >
                         <ToolTipService.ToolTip>
@@ -19,8 +18,8 @@
                                 <TextBlock Text="{Binding FeatureTemplate.Description}" Visibility="{Binding FeatureTemplate.Description, Converter={StaticResource VisibilityConverter}}" />
                             </StackPanel>
                         </ToolTipService.ToolTip>
-                        <Image HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Source="{Binding Swatch}" Stretch="Uniform" />
+                        <local:SymbolDisplay HorizontalAlignment="Center" VerticalAlignment="Center" Width="35" Height="35"
+                               Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}" />
                     </Button>
                 </DataTemplate>
             </Setter.Value>
