@@ -5,12 +5,11 @@
 
 using System;
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Core;
-using Windows.ApplicationModel.Core;
 #else
 using System.Windows;
 using System.Windows.Threading;
+using System.Runtime.InteropServices;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit
@@ -38,21 +37,35 @@ namespace Esri.ArcGISRuntime.Toolkit
 			}
 		}
 
-		public static float LogicalDpi(DependencyObject dp = null)
-		{
 #if NETFX_CORE
+		public static float LogicalDpi()
+		{
 			return Windows.Graphics.Display.DisplayInformation.GetForCurrentView().LogicalDpi;
-#else
-			if (dp == null)
-				return 96f;
-			else
-			{
-				System.Windows.Media.Matrix m =
-					PresentationSource.FromDependencyObject(dp).CompositionTarget.TransformToDevice;
-				return (float)m.M11;
-			}
-#endif
 		}
+#else
+		[DllImport("gdi32.dll")]
+		public static extern int GetDeviceCaps(IntPtr hDc, int nIndex);
+
+		[DllImport("user32.dll")]
+		public static extern IntPtr GetDC(IntPtr hWnd);
+
+		[DllImport("user32.dll")]
+		public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDc);
+
+		public const int LOGPIXELSX = 88;
+
+		public static float LogicalDpi()
+		{
+			float dpi = 96.0f;
+			IntPtr hDc = GetDC(IntPtr.Zero);
+			if (hDc != IntPtr.Zero)
+			{
+				dpi = (float)GetDeviceCaps(hDc, LOGPIXELSX);
+				ReleaseDC(IntPtr.Zero, hDc);
+			}
+			return dpi;
+		}
+#endif
 
 #if NETFX_CORE
 		public static void ExecuteOnUIThread(Action action, CoreDispatcher dispatcher)
