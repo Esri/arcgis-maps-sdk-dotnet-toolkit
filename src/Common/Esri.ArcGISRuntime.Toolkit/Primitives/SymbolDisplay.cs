@@ -7,13 +7,13 @@ using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Toolkit.Internal;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Windows.Foundation;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 #else
 using System.Windows.Controls;
@@ -21,7 +21,7 @@ using System.Windows;
 using System.Windows.Media;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.Controls
+namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     
     /// <summary>
@@ -43,6 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     {
         private Image _image; // image template part
         private double _swatchDpi; // private variable to know whether the SwatchDpi DP has been explicitly set
+        private bool _isDirty; // flag indicating if the ImageSource needs to be updated
 
         #region Constructor
 
@@ -105,19 +106,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// The symbol to display.
         /// </summary>
-#if NETFX_CORE // temporary workaround to get symbols bindable (should be removed when https://devtopia.esri.com/runtime/dotnet-api/issues/367 is fixed)
-        public object Symbol
-        {
-            get { return GetValue(SymbolProperty); }
-            set { SetValue(SymbolProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Symbol"/> Dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register("Symbol", typeof(object), typeof(SymbolDisplay), new PropertyMetadata(null, UpdateImageSource));
-#else
         public Symbol Symbol
         {
             get { return (Symbol)GetValue(SymbolProperty); }
@@ -128,8 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Identifies the <see cref="Symbol"/> Dependency property.
         /// </summary>
         public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(SymbolDisplay), new PropertyMetadata(null, UpdateImageSource));
-#endif
+            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(SymbolDisplay), new PropertyMetadata(null, OnPropertyChanged));
         #endregion
 
         #region BackgroundColor
@@ -147,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Identifies the <see cref="BackgroundColor"/> Dependency property.
         /// </summary>
         public static readonly DependencyProperty BackgroundColorProperty =
-            DependencyProperty.Register("BackgroundColor", typeof(Color), typeof(SymbolDisplay), new PropertyMetadata(Colors.Transparent, UpdateImageSource));
+            DependencyProperty.Register("BackgroundColor", typeof(Color), typeof(SymbolDisplay), new PropertyMetadata(Colors.Transparent, OnPropertyChanged));
 
         #endregion
 
@@ -170,7 +157,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Identifies the <see cref="GeometryType"/> Dependency property.
         /// </summary>
         public static readonly DependencyProperty GeometryTypeProperty =
-            DependencyProperty.Register("GeometryType", typeof(GeometryType), typeof(SymbolDisplay), new PropertyMetadata(GeometryType.Unknown, UpdateImageSource));
+            DependencyProperty.Register("GeometryType", typeof(GeometryType), typeof(SymbolDisplay), new PropertyMetadata(GeometryType.Unknown, OnPropertyChanged));
 
         #endregion
 
@@ -202,7 +189,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         private void OnSwatchDpiChanged(double newValue)
         {
             _swatchDpi = newValue > 0.0 ? newValue : CompatUtility.LogicalDpi(this);
-            UpdateImageSource();
+            SetDirty();
         }
 
         #endregion
@@ -222,7 +209,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Identifies the <see cref="DefaultHeight"/> Dependency property.
         /// </summary>
         public static readonly DependencyProperty DefaultHeightProperty =
-            DependencyProperty.Register("DefaultHeight", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(25.0, UpdateImageSource));
+            DependencyProperty.Register("DefaultHeight", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(25.0, OnPropertyChanged));
 
         #endregion
 
@@ -241,7 +228,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Identifies the <see cref="DefaultWidth"/> Dependency property.
         /// </summary>
         public static readonly DependencyProperty DefaultWidthProperty =
-            DependencyProperty.Register("DefaultWidth", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(30.0, UpdateImageSource));
+            DependencyProperty.Register("DefaultWidth", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(30.0, OnPropertyChanged));
 
         #endregion
 
@@ -254,23 +241,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             // Update HeightPixels and WidthPixels as they can have changed due to a control Height or Width change (we don't subscribe to these changes)
             SetPixelsSize();
+            
+            if (_isDirty)
+            {
+                UpdateImageSource();
+            }
+            else
+            {
+                // Measure the image without constraints
+                _image.Stretch = Stretch.None;
+                _image.Height = double.NaN;
+                _image.Width = double.NaN;
+                _image.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                Size fullImageSize = _image.DesiredSize;
 
-            // Measure the image without constraints
-            _image.Stretch = Stretch.None;
-            _image.Height = double.NaN;
-            _image.Width = double.NaN;
-            _image.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            Size fullImageSize = _image.DesiredSize;
-
-            // Set the image Height/Width in order to see the full image at raw resolution
+                // Set the image Height/Width in order to see the full image at raw resolution
+                // There is a main difference between Desktop and WinStore on how Image control deals with dpi.
+                // For desktop, the dpi info is part of the bitmap and the Image control takes care of the dpi automatically.
+                // For WinStore, the Image control doesn’t take care of the dpi the swatch has been generated for. It always display the image as if it was 96dpi.
+                // The symbolDisplay control hides this difference to users.
 #if NETFX_CORE
-            _image.Height = fullImageSize.Height * 96.0 / _swatchDpi;
-            _image.Width = fullImageSize.Width * 96.0 / _swatchDpi;
+                _image.Height = fullImageSize.Height * 96.0 / _swatchDpi;
+                _image.Width = fullImageSize.Width * 96.0 / _swatchDpi;
 #else
-            _image.Height = fullImageSize.Height;
-            _image.Width = fullImageSize.Width;
+                _image.Height = fullImageSize.Height;
+                _image.Width = fullImageSize.Width;
 #endif
-            _image.Stretch = Stretch.Uniform;
+                _image.Stretch = Stretch.Uniform;
+            }
             return base.MeasureOverride(availableSize);
         }
 
@@ -289,31 +287,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
         // Private methods
-        private static void UpdateImageSource(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var symbolDisplay = (SymbolDisplay)d;
             if (symbolDisplay != null)
             {
-                symbolDisplay.SetPixelsSize();
-                symbolDisplay.UpdateImageSource();
+                symbolDisplay.SetDirty();
             }
         }
 
-        private ThrottleTimer _updateImageSourceTimer;
-        private void UpdateImageSource()
+        private void SetDirty()
         {
-            // wait for initialization of all properties
-            if (_updateImageSourceTimer == null)
-            {
-                _updateImageSourceTimer = new ThrottleTimer(100) { Action = UpdateImageSourceImpl };
-            }
-            _updateImageSourceTimer.Invoke();
+            _isDirty = true;
+            InvalidateMeasure(); // measure will recreate the swatch
         }
 
-        private void UpdateImageSourceImpl()
+        private void UpdateImageSource()
         {
             if (_image != null)
             {
+                _isDirty = false;
                 if (Symbol == null)
                 {
                     _image.Source = null;
@@ -329,7 +322,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             try
             {
-                _image.Source = await ((Symbol) Symbol).CreateSwatchAsync(WidthPixels, HeightPixels, _swatchDpi, BackgroundColor, GeometryType);
+                _image.Source = await Symbol.CreateSwatchAsync(WidthPixels, HeightPixels, _swatchDpi, BackgroundColor, GeometryType);
             }
             catch
             {
@@ -348,7 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 if (_heightPixels != value)
                 {
                     _heightPixels = value;
-                    UpdateImageSource();
+                    SetDirty();
                 }
             }
         }
@@ -362,7 +355,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 if (_widthPixels != value)
                 {
                     _widthPixels = value;
-                    UpdateImageSource();
+                    SetDirty();
                 }
             }
         }
