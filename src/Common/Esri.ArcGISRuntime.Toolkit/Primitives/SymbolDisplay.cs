@@ -250,8 +250,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 // Measure the image without constraints
                 _image.Stretch = Stretch.None;
-                _image.Height = double.NaN;
-                _image.Width = double.NaN;
+                _image.MaxHeight = double.PositiveInfinity;
+                _image.MaxWidth = double.PositiveInfinity;
                 _image.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                 Size fullImageSize = _image.DesiredSize;
 
@@ -260,31 +260,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // For desktop, the dpi info is part of the bitmap and the Image control takes care of the dpi automatically.
                 // For WinStore, the Image control doesn’t take care of the dpi the swatch has been generated for. It always display the image as if it was 96dpi.
                 // The symbolDisplay control hides this difference to users.
+
+                // Note that we set the MaxHeight and not the Height, so if the available space is smaller, the symbol will be displayed without clipping inside the available space
 #if NETFX_CORE
-                _image.Height = fullImageSize.Height * 96.0 / _swatchDpi;
-                _image.Width = fullImageSize.Width * 96.0 / _swatchDpi;
+                _image.MaxHeight = fullImageSize.Height * 96.0 / _swatchDpi;
+                _image.MaxWidth = fullImageSize.Width * 96.0 / _swatchDpi;
 #else
-                _image.Height = fullImageSize.Height;
-                _image.Width = fullImageSize.Width;
+                _image.MaxHeight = fullImageSize.Height;
+                _image.MaxWidth = fullImageSize.Width;
 #endif
                 _image.Stretch = Stretch.Uniform;
             }
             return base.MeasureOverride(availableSize);
         }
 
-        /// <summary>
-        /// Provides the behavior for the Arrange pass of layout.
-        /// </summary>
-        /// <param name="finalSize">The final area within the parent that this object should use to arrange itself and its children.</param>
-        /// <returns>The actual size that is used after the element is arranged in layout.</returns>
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            // If the image is reduced due to the constraints, change the image size in order to see the whole image (no clipping)
-            var desiredImageSize = _image.DesiredSize;
-            _image.Width = desiredImageSize.Width;
-            _image.Height = desiredImageSize.Height;
-            return base.ArrangeOverride(finalSize);
-        }
 
         // Private methods
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
