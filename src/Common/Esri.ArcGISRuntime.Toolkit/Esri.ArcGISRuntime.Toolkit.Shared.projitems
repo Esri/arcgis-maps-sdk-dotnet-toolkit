@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Internal\ThrottleTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListeners.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Primitives\SymbolDisplay.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ValueConverters\" />
