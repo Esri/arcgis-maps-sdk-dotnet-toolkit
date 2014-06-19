@@ -487,7 +487,7 @@
                                 <TextBlock Text="{Binding FeatureTemplate.Description}"  />
                             </StackPanel>
                         </ToolTipService.ToolTip>
-                        <local:SymbolDisplay  Width="35" Height="35"
+                        <primitives:SymbolDisplay  Width="35" Height="35"
                                               Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}"/>
                     </Button>
                 </DataTemplate>

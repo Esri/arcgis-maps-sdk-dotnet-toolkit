@@ -441,7 +441,7 @@
                         <Button Command="{Binding Command}" CommandParameter="{Binding}"
                                  Padding="0" Margin="0" >
                             <Viewbox Width="50" Height="50">
-                                <local:SymbolDisplay DefaultWidth="25" DefaultHeight="25" MinHeight="25" MinWidth="25"
+                                <primitives:SymbolDisplay DefaultWidth="25" DefaultHeight="25" MinHeight="25" MinWidth="25"
                                                      Symbol="{Binding Symbol}"
                                                      GeometryType="{Binding GeometryType}" />
                             </Viewbox>

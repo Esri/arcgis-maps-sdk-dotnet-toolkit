@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:Esri.ArcGISRuntime.Toolkit.ValueConverters"
-                    xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls">
+                    xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls"
+                    xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
     <Style TargetType="local:TemplatePicker">
         <Style.Resources>
             <converters:VisibilityConverter x:Key="VisibilityConverter" />
@@ -18,7 +19,7 @@
                                 <TextBlock Text="{Binding FeatureTemplate.Description}" Visibility="{Binding FeatureTemplate.Description, Converter={StaticResource VisibilityConverter}}" />
                             </StackPanel>
                         </ToolTipService.ToolTip>
-                        <local:SymbolDisplay HorizontalAlignment="Center" VerticalAlignment="Center" Width="35" Height="35"
+                        <primitives:SymbolDisplay HorizontalAlignment="Center" VerticalAlignment="Center" Width="35" Height="35"
                                Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}" />
                     </Button>
                 </DataTemplate>
