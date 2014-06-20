@@ -21,7 +21,7 @@ using System.Windows;
 using System.Windows.Media;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.Primitives
+namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 {
     
     /// <summary>
