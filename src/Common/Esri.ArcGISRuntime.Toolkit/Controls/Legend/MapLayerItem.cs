@@ -3,7 +3,6 @@
 // Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
 // All other rights reserved.
 
-using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Layers;
 using Esri.ArcGISRuntime.Toolkit.Controls.Primitives;
 using System;
@@ -228,9 +227,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 					if (Layer is FeatureLayer)
 					{
 						var fl = Layer as FeatureLayer;
-						var gdbFeatureTable = fl.FeatureTable as GeodatabaseFeatureTable;
-						if (gdbFeatureTable != null && gdbFeatureTable.ServiceInfo != null)
-							geometryType = gdbFeatureTable.ServiceInfo.GeometryType;
+						geometryType = fl.FeatureTable.GeometryType;
 					}
 
 					if (result.LayerLegendInfos != null)
