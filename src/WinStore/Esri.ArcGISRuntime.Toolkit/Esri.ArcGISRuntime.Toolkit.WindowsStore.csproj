@@ -123,6 +123,7 @@
   </PropertyGroup>
   <Import Project="..\..\Common\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="..\..\..\build\XamlTypeInfoBuildTask.targets" Condition="Exists('..\..\..\build\XamlTypeInfoBuildTask.targets')" />
   <PropertyGroup>
     <SDKReferenceDirectoryRoot>C:\applications\output\winrt_sdk\;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
   </PropertyGroup>
