@@ -443,10 +443,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 if (symbol != null)
                 {
                     // force the geometry type since GeometryType.Unknown doesn't work well with advanced symbology.
-                    var geometryType = Geometry.GeometryType.Unknown;
-                    var gdbFeatureTable = Layer == null ? null : Layer.FeatureTable as GeodatabaseFeatureTable;
-                    if (gdbFeatureTable != null && gdbFeatureTable.ServiceInfo != null)
-                        geometryType = gdbFeatureTable.ServiceInfo.GeometryType;
+                    var geometryType = Layer == null || Layer.FeatureTable == null ? Geometry.GeometryType.Unknown : Layer.FeatureTable.GeometryType;
 
                     try
                     {
