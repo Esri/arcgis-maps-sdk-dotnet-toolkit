@@ -12,12 +12,12 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Esri.ArcGISRuntime.Toolkit")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("ArcGIS Runtime Toolkit for .NET")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Esri")]
 [assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © 2014 Esri. All rights reserved.")]
+[assembly: AssemblyTrademark("ArcGIS is a registered trademark of Esri.")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -37,6 +37,6 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("10.2.2.0")]
-[assembly: AssemblyFileVersion("10.2.2.0")]
+[assembly: AssemblyVersion("10.2.4.0")]
+[assembly: AssemblyFileVersion("10.2.4.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

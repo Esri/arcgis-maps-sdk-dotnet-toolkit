@@ -104,12 +104,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             var templates = new List<TemplateItem>();
             FeatureServiceLayerInfo serviceInfo = null;
-            GeodatabaseFeatureTable ft = flayer.FeatureTable;
-            if (ft != null && !ft.IsReadOnly && flayer.Status == LayerStatus.Initialized)
+            var gdbFeatureTable = flayer.FeatureTable as GeodatabaseFeatureTable;
+            if (gdbFeatureTable != null && !gdbFeatureTable.IsReadOnly && flayer.Status == LayerStatus.Initialized)
             {
                 try
                 {
-                    serviceInfo = ft.ServiceInfo;
+                    serviceInfo = gdbFeatureTable.ServiceInfo;
                 }
                 catch{}
             }
@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                         templates.Add(item);
                         if (renderer != null)
                         {
-                            var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>()); // Need to desambiguate from winstore toolkit KeyValuePair
+                            var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>()); // Need to disambiguate from winstore toolkit KeyValuePair
                             item.SetSwatch(renderer.GetSymbol(g));
                         }
                     }
@@ -151,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                             templates.Add(item);
                             if (renderer != null)
                             {
-                                var g = new Graphic(template.Prototype.Attributes);
+                                var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>());
                                 item.SetSwatch(renderer.GetSymbol(g));
                             }
                         }
@@ -377,9 +377,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 if (symbol != null)
                 {
                     // force the geometry type since GeometryType.Unknown doesn't work well with advanced symbology.
-                    Geometry.GeometryType geometryType = Geometry.GeometryType.Unknown;
-                    if (Layer != null && Layer.FeatureTable != null && Layer.FeatureTable.ServiceInfo != null)
-                        geometryType = Layer.FeatureTable.ServiceInfo.GeometryType;
+                    var geometryType = Layer == null || Layer.FeatureTable == null ? Geometry.GeometryType.Unknown : Layer.FeatureTable.GeometryType;
 
                     try
                     {
