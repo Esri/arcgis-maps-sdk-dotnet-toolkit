@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 				if (_swatch == null)
 				{
 					var dpi = CompatUtility.LogicalDpi();
-#if NETFX_CORE || WINDOWS_PHONE
+#if NETFX_CORE
 					_swatch = new WriteableBitmap(1, 1); //Temporary image
 #else
 					_swatch = new WriteableBitmap(1, 1, dpi, dpi, PixelFormats.Bgra32, null); //Temporary image

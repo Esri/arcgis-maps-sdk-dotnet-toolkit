@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         public Attribution()
         {
-#if NETFX_CORE || WINDOWS_PHONE
+#if NETFX_CORE
             DefaultStyleKey = typeof(Attribution);
 #endif
             _layerPropertyChangedListeners = new DependencyPropertyChangedListeners<Attribution>(this)
@@ -47,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         }
 
-#if !NETFX_CORE && !WINDOWS_PHONE
+#if !NETFX_CORE
         static Attribution()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Attribution),

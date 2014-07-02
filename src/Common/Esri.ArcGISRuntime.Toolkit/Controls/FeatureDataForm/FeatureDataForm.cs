@@ -48,14 +48,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         public FeatureDataForm()
         {
-#if NETFX_CORE || WINDOWS_PHONE
+#if NETFX_CORE
             DefaultStyleKey = typeof(FeatureDataForm);
 #endif
             Fields = new ObservableCollection<string>();
             ApplyCommand = new ActionCommand(ApplyChanges,CanApplyChanges);
             ResetCommand = new ActionCommand(Reset,CanReset);
         }
-#if !NETFX_CORE && !WINDOWS_PHONE
+#if !NETFX_CORE
         static FeatureDataForm()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof (FeatureDataForm),

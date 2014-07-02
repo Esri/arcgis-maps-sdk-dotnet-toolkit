@@ -1,8 +1,6 @@
 # arcgis-toolkit-dotnet
 
-This project contains source code for controls you can use with the ArcGIS Runtime SDK for .NET.  
-
-NOTE: This library requires the ArcGIS Runtime SDK for .NET. See the build instructions below to get started.
+This project contains source code for controls and utilities you can use with the [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).   Build from source code available in this repo (see instructions below) or install the latest stable release from NuGet: [https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)   
 
 ## Controls
 
@@ -22,17 +20,36 @@ See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more deta
 3. Download and install the [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk).  Login to the beta community requires an Esri Global account, which can be created for free.
 4. To include Toolkit source in your projects:
  *  In Visual Studio, add the ArcGIS Runtime Toolkit project to your solution. 
-    - Windows Desktop (WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
-    - Windows Store	(WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
-    - Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.proj)
+    - Windows Desktop (WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsDesktop.proj)
+    - Windows Store	(WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsStore.proj)
+    - Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsPhone.proj)
  *  For other projects in the solution, add a reference to the ArcGIS Runtime Toolkit project.
  
 #### Optional: Build to distribute the Toolkit
-#####Windows Desktop 
- 1.  Open the solution (WinDesktop-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 or 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.
- 2.  Add a reference to the Esri.ArcGISRuntime.Toolkit.dll in your projects.  
+Building the SDK:
 
-#####Windows Store and Windows Phone
+1.  Open the solution (Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 Update 2 or newer and build the 3 projects.
+2.  For Windows Phone, build both ARM and x86 configurations, for Windows Store, also build x64 configuration.
+
+#####Referencing the project in a Windows Desktop (WPF) app:
+ 
+ 1.  Add a reference to the \output\WinDesktop\Release\Esri.ArcGISRuntime.Toolkit.dll in your projects.  
+
+#####Referencing the project in a Windows Store or Windows Phone app:
+Make sure you built both x86, ARM and x64 (x64 doesn't apply to Windows Phone).
+The toolkit must be referenced as an ExtensionSDK. Referencing the SDK by browsing to a DLL as with desktop apps will not work.
+There's two options to 'install' the extension sdk without building an actual installer.
+
+1.  Copy the contents of the folder \Output\ExtensionSDKs\ to "[USERFOLDER]\AppData\Local\Microsoft SDKs\"
+2.  Add the following tag to your app project at the very bottom of your project file right before the <Target> tags:
+```
+<PropertyGroup>
+    <SDKReferenceDirectoryRoot>[TOOLKITFOLDER]\output\ExtensionSDKs;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
+</PropertyGroup>
+```
+In Visual Studio, right-click the project references, select "Add Reference" and choose the "Windows 8.1->Extensions" or "Windows Phone 8.1->Extensions" tab and check off "Toolkit for ArcGIS Runtime".
+
+#####Windows Store and Windows Phone as an installable extension
  1. Install the [Visual Studio 2013 SDK](http://msdn.microsoft.com/en-us/library/bb166441.aspx).  To distribute the Toolkit for use in a Windows Store or Windows Phone project, it should be packaged as Visual Studio extension.  The Visual Studio 2013 SDK is required to build Visual Studio extension installers (VSIX). 
  2. Windows Store 
    *  Open the solution (WinStore-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.   Be sure to build for Release on the ARM, x86, and x64 platforms.
@@ -52,7 +69,7 @@ Find a bug or want to request a new feature?  Please let us know by submitting a
 
 ## Contributing
 
-Anyone and everyone is welcome to contribute. 
+Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
 ## Licensing
 Copyright 2014 Esri

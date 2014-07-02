@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		/// </summary>
 		public Legend()
 		{
-#if NETFX_CORE || WINDOWS_PHONE
+#if NETFX_CORE
 			DefaultStyleKey = typeof(Legend);
 #endif
 			_legendTree = new LegendTree();
@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			_legendTree.PropertyChanged += LegendTree_PropertyChanged;
 		}
 
-#if !NETFX_CORE && !WINDOWS_PHONE
+#if !NETFX_CORE
 		static Legend()
 		{
 			DefaultStyleKeyProperty.OverrideMetadata(typeof(Legend),
