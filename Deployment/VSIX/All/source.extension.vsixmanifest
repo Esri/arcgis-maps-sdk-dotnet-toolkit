@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Esri.ArcGISRuntime.Toolkit" Version="10.2.3" Language="en-US" Publisher="Esri" />
+    <Identity Id="Esri.ArcGISRuntime.Toolkit" Version="10.2.4" Language="en-US" Publisher="Esri" />
     <DisplayName>ArcGIS Runtime Toolkit for .NET</DisplayName>
     <Description xml:space="preserve">ArcGIS Runtime controls and utilities.</Description>
     <MoreInfo>http://links.esri.com/dotnetsdk</MoreInfo>
@@ -18,8 +18,8 @@
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
-    <Dependency d:Source="Project" d:ProjectName="Toolkit.WinPhone" Version="[10.2.3,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinPhone;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinPhone;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinPhone;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinPhone" />
-    <Dependency d:Source="Project" d:ProjectName="Toolkit.WinStore" Version="[10.2.3,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinStore;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinStore;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinStore;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinStore" />
+    <Dependency d:Source="Project" d:ProjectName="Toolkit.WinPhone" Version="[10.2.4,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinPhone;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinPhone;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinPhone;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinPhone" />
+    <Dependency d:Source="Project" d:ProjectName="Toolkit.WinStore" Version="[10.2.4,11.0)" d:InstallSource="Embed" Location="|Toolkit.WinStore;VSIXContainerProjectOutputGroup|" DisplayName="|Toolkit.WinStore;VSIXNameProjectOutputGroup|" Id="|Toolkit.WinStore;VSIXIdentifierProjectOutputGroup|" d:VsixSubPath="WinStore" />
   </Dependencies>
   <Assets>
   </Assets>
