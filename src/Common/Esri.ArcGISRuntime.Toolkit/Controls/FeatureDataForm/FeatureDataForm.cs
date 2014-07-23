@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 #if NETFX_CORE
             DefaultStyleKey = typeof(FeatureDataForm);
 #endif
-            Fields = new ObservableCollection<string>();
+            Fields = new List<string>();
             ApplyCommand = new ActionCommand(ApplyChanges,CanApplyChanges);
             ResetCommand = new ActionCommand(Reset,CanReset);
         }
@@ -144,9 +144,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// The non-supported field types are XML, Blob, Geometry and Raster.
         /// </pre>
         /// </remarks>
-        public ObservableCollection<string> Fields
+#if !NETFX_CORE
+        [System.ComponentModel.TypeConverter(typeof(Esri.ArcGISRuntime.Toolkit.TypeConverters.StringToEnumerationConverter))]
+#endif
+        public IEnumerable<string> Fields
         {
-            get { return (ObservableCollection<string>)GetValue(FieldsProperty); }
+            get { return (IEnumerable<string>)GetValue(FieldsProperty); }
             set { SetValue(FieldsProperty, value); }
         }
 
@@ -154,7 +157,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// The dependency property for the Fields property.
         /// </summary>
         public static readonly DependencyProperty FieldsProperty =
-            DependencyProperty.Register("Fields", typeof(ObservableCollection<string>), typeof(FeatureDataForm), new PropertyMetadata(null, OnFieldsPropertyChanged));
+            DependencyProperty.Register("Fields", typeof(IEnumerable<string>), typeof(FeatureDataForm), new PropertyMetadata(null, OnFieldsPropertyChanged));
 
         private static void OnFieldsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
