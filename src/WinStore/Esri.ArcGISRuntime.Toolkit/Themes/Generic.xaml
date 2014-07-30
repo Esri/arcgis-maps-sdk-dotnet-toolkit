@@ -18,8 +18,7 @@
 				<DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="1">
                         <Grid MinWidth="20" MinHeight="10">
-                            <primitives:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}" 
-                                                 DefaultWidth="32" DefaultHeight="32" />
+                            <primitives:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}" />
 						</Grid>
 						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
 					</StackPanel>

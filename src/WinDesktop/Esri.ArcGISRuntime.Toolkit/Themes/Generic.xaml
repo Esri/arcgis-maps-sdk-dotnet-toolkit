@@ -24,7 +24,6 @@
                     <StackPanel Orientation="Horizontal" Margin="1">
                         <Grid MinWidth="20" MinHeight="10">
                             <primitives:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}"
-                                                 DefaultWidth="32" DefaultHeight="32"
                                                  VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</Grid>
 						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
