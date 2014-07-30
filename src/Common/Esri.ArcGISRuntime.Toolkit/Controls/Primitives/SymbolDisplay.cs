@@ -13,15 +13,17 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Windows.Foundation;
-using Esri.ArcGISRuntime.Toolkit.Internal;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
+#if !WINDOWS_PHONE_APP
+using Esri.ArcGISRuntime.Toolkit.Internal;
+#endif
 #else
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Media;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.Primitives
+namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 {
     
     /// <summary>
@@ -31,19 +33,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </para>
     /// <para>
     /// If the symbol symbolizes a point feature, the symbol will be displayed at scale without any stretching except if the 
-    /// Height and Width are set and don't allow displaying the symbol at scale without clipping. In this case the symbol is stretched to fill 
+    /// Height/Width or MaxHeight/MaxWidth are set and don't allow displaying the symbol at scale without clipping. In this case the symbol is stretched to fill 
     /// the available space.
     /// </para>
-    /// <para>If the symbol symbolizes a line or a polygon, the swatch size is based on the Height and Width.
-    /// If the Height/Width is not set, <see cref="DefaultHeight"/> and <see cref="DefaultWidth"/> are used instead.
+    /// <para>If the symbol symbolizes a line or a polygon, the swatch size is based on the Height/Width or MaxHeight/MaxWidth.
+    /// If these properties are not set, a default 50*50 size is used instead.
     /// </para>
     /// </summary>
     [TemplatePart(Name = "Image", Type = typeof(Image))]
     public class SymbolDisplay : Control
     {
         private Image _image; // image template part
-        private double _swatchDpi; // private variable to know whether the SwatchDpi DP has been explicitly set
+        private double _swatchDpi;
         private bool _isDirty; // flag indicating if the ImageSource needs to be updated
+        private const double DefaultWidth = 50; // Default width for line or polygon swatch
+        private const double DefaultHeight = 50; // Default height for line or polygon swatch
 
         #region Constructor
 
@@ -161,77 +165,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         #endregion
 
-        #region SwatchDpi
-
-        /// <summary>
-        /// The DPI value used for creating the swatch (optional). If the SwatchDpi property is not set,
-        /// the symbol swatch is generated with the current view DPI.
-        /// </summary>
-        public double SwatchDpi
-        {
-            get { return (double)GetValue(SwatchDpiProperty); }
-            set { SetValue(SwatchDpiProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="SwatchDpi"/> Dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SwatchDpiProperty =
-            DependencyProperty.Register("SwatchDpi", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(0.0, OnSwatchDpiChanged));
-
-        private static void OnSwatchDpiChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var symbolDisplay = (SymbolDisplay)d;
-            if (symbolDisplay != null)
-                symbolDisplay.OnSwatchDpiChanged((double)e.NewValue);
-        }
-
-        private void OnSwatchDpiChanged(double newValue)
-        {
-            _swatchDpi = newValue > 0.0 ? newValue : CompatUtility.LogicalDpi(this);
-            SetDirty();
-        }
-
-        #endregion
-
-        #region DefaultHeight
-
-        /// <summary>
-        /// The default Height used to create swatch for line or polygon symbols when the Height is not explicitly set.
-        /// </summary>
-        public double DefaultHeight
-        {
-            get { return (double)GetValue(DefaultHeightProperty); }
-            set { SetValue(DefaultHeightProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="DefaultHeight"/> Dependency property.
-        /// </summary>
-        public static readonly DependencyProperty DefaultHeightProperty =
-            DependencyProperty.Register("DefaultHeight", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(25.0, OnPropertyChanged));
-
-        #endregion
-
-        #region DefaultWidth
-
-        /// <summary>
-        /// The default Width used to create swatch for line or polygon symbols when the Width is not explicitly set.
-        /// </summary>
-        public double DefaultWidth
-        {
-            get { return (double)GetValue(DefaultWidthProperty); }
-            set { SetValue(DefaultWidthProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="DefaultWidth"/> Dependency property.
-        /// </summary>
-        public static readonly DependencyProperty DefaultWidthProperty =
-            DependencyProperty.Register("DefaultWidth", typeof(double), typeof(SymbolDisplay), new PropertyMetadata(30.0, OnPropertyChanged));
-
-        #endregion
-
         /// <summary>
         /// Provides the behavior for the Measure pass of the layout cycle.
         /// </summary>
@@ -258,7 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // Set the image Height/Width in order to see the full image at raw resolution
                 // There is a main difference between Desktop and WinStore on how Image control deals with dpi.
                 // For desktop, the dpi info is part of the bitmap and the Image control takes care of the dpi automatically.
-                // For WinStore, the Image control doesn’t take care of the dpi the swatch has been generated for. It always display the image as if it was 96dpi.
+                // For WinStore, the Image control does not take care of the dpi the swatch has been generated for. It always display the image as if it was 96dpi.
                 // The symbolDisplay control hides this difference to users.
 
                 // Note that we set the MaxHeight and not the Height, so if the available space is smaller, the symbol will be displayed without clipping inside the available space
@@ -363,21 +296,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 else
                     geometryType = GeometryType.Point;
             }
-            int heightPixels = 0;
-            int widthPixels = 0;
+            int heightPixels;
+            int widthPixels;
 
-            if (geometryType != GeometryType.Point) // for point, we need to keep 0 as expected image size so RTC will calculate it to avoid clipping
+            if (geometryType == GeometryType.Point) 
             {
-                // For line and polygon, use Height/Width or  DefaultHeight/DefaultWidth
-                double height = double.IsNaN(Height) ? 0.0 : Height;
-                double width = double.IsNaN(Width) ? 0.0 : Width;
+                // for point, we need to keep 0 as expected image size so RTC will calculate it to avoid clipping
+                heightPixels = 0;
+                widthPixels = 0;
+            }
+            else
+            {
+                // For line and polygon, use Height/Width, MaxHeight/MaxWidth or  DefaultHeight/DefaultWidth
+                double height = double.IsNaN(Height) ? double.PositiveInfinity : Height;
+                double width = double.IsNaN(Width) ? double.PositiveInfinity : Width;
 
-                if (width == 0)
+                if (!double.IsNaN(MaxWidth))
+                    width = Math.Min(width, MaxWidth);
+
+                if (!double.IsNaN(MaxHeight))
+                    height = Math.Min(height, MaxHeight);
+
+                if (double.IsPositiveInfinity(width))
                     width = DefaultWidth;
 
-                if (height == 0)
+                if (double.IsPositiveInfinity(height))
                     height = DefaultHeight;
-                
+
                 heightPixels = (int)Math.Ceiling(height * _swatchDpi / 96.0);
                 widthPixels = (int)Math.Ceiling(width * _swatchDpi / 96.0);
             }
@@ -393,10 +338,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnLogicalDpiChanged(Windows.Graphics.Display.DisplayInformation info, object sender)
         {
-            if (info.LogicalDpi != _swatchDpi && SwatchDpi == 0.0) // if SwatchDpi != 0.0, the value sets by the user takes precedence
+            if (info.LogicalDpi != _swatchDpi)
             {
                 OnSwatchDpiChanged(info.LogicalDpi);
             }
+        }
+
+        private void OnSwatchDpiChanged(double newValue)
+        {
+            _swatchDpi = newValue > 0.0 ? newValue : CompatUtility.LogicalDpi(this);
+            SetDirty();
         }
 
         private void SubscribeToDpiChanged()
