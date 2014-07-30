@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
     /// the available space.
     /// </para>
     /// <para>If the symbol symbolizes a line or a polygon, the swatch size is based on the Height/Width or MaxHeight/MaxWidth.
-    /// If these properties are not set, a default 50*50 size is used instead.
+    /// If these properties are not set, a default 32*32 size is used instead.
     /// </para>
     /// </summary>
     [TemplatePart(Name = "Image", Type = typeof(Image))]
@@ -46,8 +46,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
         private Image _image; // image template part
         private double _swatchDpi;
         private bool _isDirty; // flag indicating if the ImageSource needs to be updated
-        private const double DefaultWidth = 50; // Default width for line or polygon swatch
-        private const double DefaultHeight = 50; // Default height for line or polygon swatch
+        private const double DefaultWidth = 32; // Default width for line or polygon swatch
+        private const double DefaultHeight = 32; // Default height for line or polygon swatch
 
         #region Constructor
 
