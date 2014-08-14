@@ -1,0 +1,31 @@
+﻿<UserControl 
+	x:Class="ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.DynamicAttributionSample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+	xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit">
+	<Grid>
+		<esri:MapView x:Name="MyMapView">
+			<esri:Map>
+				<esri:ArcGISTiledMapServiceLayer
+                    ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+			</esri:Map>
+		</esri:MapView>
+		
+		<Border Background="White" BorderBrush="Black" BorderThickness="1" Margin="30" Padding="20"
+                HorizontalAlignment="Right" VerticalAlignment="Top">
+			<Border.Effect>
+				<DropShadowEffect />
+			</Border.Effect>
+			<StackPanel>
+				<TextBlock Text="Sources : " FontWeight="Bold"/>
+				<toolkit:Attribution 
+					Layers="{Binding ElementName=MyMapView, Path=Map.Layers}" 
+					Extent="{Binding Extent, ElementName=MyMapView}"
+                    Scale="{Binding Scale, ElementName=MyMapView}"
+					MaxWidth="250"/>
+			</StackPanel>
+		</Border>
+	</Grid>
+</UserControl>

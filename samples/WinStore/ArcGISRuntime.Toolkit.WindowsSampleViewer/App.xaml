@@ -1,0 +1,7 @@
+﻿<Application
+    x:Class="ArcGISRuntime.Toolkit.WindowsSampleViewer.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntime.Toolkit.WindowsSampleViewer">
+
+</Application>

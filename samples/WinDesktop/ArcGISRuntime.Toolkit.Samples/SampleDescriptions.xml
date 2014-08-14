@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ArcGISRuntime.Toolkit.Samples.Desktop</name>
+    </assembly>
+    <members>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.AttributionSample">
+            <summary>
+            Demonstrates how to add attribution to the map view.
+            </summary>
+            <title>Attribution</title>
+            <category>Toolkit</category>
+            <subcategory>Attribution</subcategory>
+            <usesoffline>true</usesoffline>
+            <usesonline>false</usesonline>
+            <summary>
+            AttributionSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.AttributionSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.AttributionStylingSample">
+            <summary>
+            Demonstrates how to style attribution control.
+            </summary>
+            <title>Styling Attribution</title>
+            <category>Toolkit</category>
+            <subcategory>Attribution</subcategory>
+            <usesoffline>true</usesoffline>
+            <usesonline>false</usesonline>
+            <summary>
+            AttributionStylingSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.AttributionStylingSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.DynamicAttributionSample">
+            <summary>
+            Demonstrates how to add attribution to the map view that changes based on the maps resolution.
+            </summary>
+            <title>Dynamic Attribution</title>
+            <category>Toolkit</category>
+            <subcategory>Attribution</subcategory>
+            <usesoffline>true</usesoffline>
+            <usesonline>false</usesonline>
+            <summary>
+            DynamicAttributionSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.DynamicAttributionSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:ArcGISRuntime.Toolkit.Samples.Desktop.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:ArcGISRuntime.Toolkit.Samples.Desktop.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>

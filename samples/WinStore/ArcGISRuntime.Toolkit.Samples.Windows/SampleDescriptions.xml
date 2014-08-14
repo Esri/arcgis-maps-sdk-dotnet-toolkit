@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ArcGISRuntime.Toolkit.Samples.Windows</name>
+    </assembly>
+    <members>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.Attribution.AttributionSample">
+            <summary>
+            Demonstrates how to add attribution to the map view.
+            </summary>
+            <title>Attribution</title>
+            <category>Toolkit</category>
+            <subcategory>Attribution</subcategory>
+            <usesoffline>true</usesoffline>
+            <usesonline>false</usesonline>
+        </member>
+    </members>
+</doc>
