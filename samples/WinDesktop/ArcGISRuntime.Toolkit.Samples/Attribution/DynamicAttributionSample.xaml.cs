@@ -21,8 +21,8 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.Attribution
 	/// <title>Dynamic Attribution</title>
 	/// <category>Toolkit</category>
 	/// <subcategory>Attribution</subcategory>
-	/// <usesoffline>true</usesoffline>
-	/// <usesonline>false</usesonline>
+	/// <usesoffline>false</usesoffline>
+	/// <usesonline>true</usesonline>
 	public partial class DynamicAttributionSample : UserControl
 	{
 		public DynamicAttributionSample()

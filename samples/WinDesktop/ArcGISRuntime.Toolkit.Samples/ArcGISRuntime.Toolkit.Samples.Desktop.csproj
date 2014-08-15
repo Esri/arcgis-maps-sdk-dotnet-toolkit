@@ -76,6 +76,15 @@
     <Compile Include="Attribution\DynamicAttributionSample.xaml.cs">
       <DependentUpon>DynamicAttributionSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Legend\LegendByScaleSample.xaml.cs">
+      <DependentUpon>LegendByScaleSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Legend\LegendSample.xaml.cs">
+      <DependentUpon>LegendSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Legend\LegendsInTreeViewSample.xaml.cs">
+      <DependentUpon>LegendsInTreeViewSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -107,7 +116,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FeatureDataForm\" />
-    <Folder Include="Legend\" />
     <Folder Include="ScaleLine\" />
     <Folder Include="TemplatePicker\" />
   </ItemGroup>
@@ -121,6 +129,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Attribution\DynamicAttributionSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Legend\LegendByScaleSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Legend\LegendSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Legend\LegendsInTreeViewSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -11,8 +11,8 @@
             <title>Attribution</title>
             <category>Toolkit</category>
             <subcategory>Attribution</subcategory>
-            <usesoffline>true</usesoffline>
-            <usesonline>false</usesonline>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
             <summary>
             AttributionSample
             </summary>
@@ -29,8 +29,8 @@
             <title>Styling Attribution</title>
             <category>Toolkit</category>
             <subcategory>Attribution</subcategory>
-            <usesoffline>true</usesoffline>
-            <usesonline>false</usesonline>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
             <summary>
             AttributionStylingSample
             </summary>
@@ -47,13 +47,67 @@
             <title>Dynamic Attribution</title>
             <category>Toolkit</category>
             <subcategory>Attribution</subcategory>
-            <usesoffline>true</usesoffline>
-            <usesonline>false</usesonline>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
             <summary>
             DynamicAttributionSample
             </summary>
         </member>
         <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.Attribution.DynamicAttributionSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendByScaleSample">
+            <summary>
+            Demonstrates how to show legend from layers that are in the scale of the map view.
+            </summary>
+            <title>Dyncamic Legend</title>
+            <category>Toolkit</category>
+            <subcategory>Legend</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            LegendByScaleSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendByScaleSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendSample">
+            <summary>
+            Demonstrates how to show legend on the map view.
+            </summary>
+            <title>Legend</title>
+            <category>Toolkit</category>
+            <subcategory>Legend</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            LegendSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendsInTreeViewSample">
+            <summary>
+            Demonstrates how to show layers in a treeview and show legend for each layer on the map view.
+            </summary>
+            <title>Legends in Treeview</title>
+            <category>Toolkit</category>
+            <subcategory>Legend</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            LegendsInTreeViewSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendsInTreeViewSample.InitializeComponent">
             <summary>
             InitializeComponent
             </summary>
@@ -72,6 +126,36 @@
             <summary>
               Overrides the current thread's CurrentUICulture property for all
               resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
             </summary>
         </member>
     </members>
