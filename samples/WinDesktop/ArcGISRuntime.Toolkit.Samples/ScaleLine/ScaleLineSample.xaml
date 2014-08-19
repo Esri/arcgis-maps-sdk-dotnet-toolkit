@@ -1,0 +1,19 @@
+﻿<UserControl 
+	x:Class="ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine.ScaleLineSample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+	xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit">
+	<Grid>
+		<esri:MapView x:Name="MyMapView">
+			<esri:Map>
+				<esri:ArcGISTiledMapServiceLayer
+                    ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+			</esri:Map>
+		</esri:MapView>
+		<toolkit:ScaleLine Scale="{Binding ElementName=MyMapView, Path=Scale}"
+						   HorizontalAlignment="Right" VerticalAlignment="Bottom"
+						   Margin="10" />
+	</Grid>
+</UserControl>

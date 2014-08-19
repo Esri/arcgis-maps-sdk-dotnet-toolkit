@@ -113,8 +113,7 @@
 			</Border.Effect>
 			<TreeView ItemsSource="{Binding Map.Layers, ElementName=MyMapView}"
 					  HorizontalAlignment="Left" BorderBrush="Transparent"
-					  Width="300" HorizontalContentAlignment="Stretch"
-					  />
+					  Width="300" HorizontalContentAlignment="Stretch"/>
 		</Border>
 	</Grid>
 </UserControl>

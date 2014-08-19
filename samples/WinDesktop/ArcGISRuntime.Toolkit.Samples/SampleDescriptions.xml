@@ -128,6 +128,60 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine.ScaleLineSample">
+            <summary>
+            Demonstrates how to add Scale line to the map view.
+            </summary>
+            <title>ScaleLine</title>
+            <category>Toolkit</category>
+            <subcategory>ScaleLine</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            ScaleLineSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine.ScaleLineSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine.ScaleLineStylingSample">
+            <summary>
+            Demonstrates how to style ScaleLine control.
+            </summary>
+            <title>Styling ScaleLine</title>
+            <category>Toolkit</category>
+            <subcategory>ScaleLine</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            ScaleLineStylingSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine.ScaleLineStylingSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker.TemplatePickerSample">
+            <summary>
+            Demonstrates how to use TemplatePicker control.
+            </summary>
+            <title>TemplatePicker</title>
+            <category>Toolkit</category>
+            <subcategory>TemplatePicker</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            TemplatePickerSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker.TemplatePickerSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
             <summary>
             GeneratedInternalTypeHelper
