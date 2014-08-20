@@ -58,6 +58,24 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm.FeatureDataFormSample">
+            <summary>
+            Demonstrates how to show use FeatureDataForm to edit Features attributes.
+            </summary>
+            <title>Feature data form</title>
+            <category>Toolkit</category>
+            <subcategory>FeatureDataForm</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            FeatureDataFormSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm.FeatureDataFormSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendByScaleSample">
             <summary>
             Demonstrates how to show legend from layers that are in the scale of the map view.
