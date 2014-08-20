@@ -84,6 +84,16 @@
             <usesoffline>false</usesoffline>
             <usesonline>true</usesonline>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker.TemplatePickerWithLayerSelectionSample">
+            <summary>
+            Demonstrates how to show feature templates from selected layer.
+            </summary>
+            <title>TemplatePicker by layer</title>
+            <category>Toolkit</category>
+            <subcategory>TemplatePicker</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
         <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker.TemplatePickerSample">
             <summary>
             Demonstrates how to use TemplatePicker control.

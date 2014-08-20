@@ -12,10 +12,7 @@
 	<UserControl.Resources>
 		<converters:LayerToLayersCollectionConverter x:Key="LayerToLayerCollection"/>
 		<converters:LayerCollectionFeatureLayersConverter x:Key="LayersToFeatureLayerCollection"/>
-
-		<SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#660050EF"/>
-		<SolidColorBrush x:Key="HooverBackgroundBrush" Color="#330050EF"/>
-
+		
 		<Style x:Key="TemplatePickerStyle" TargetType="{x:Type toolkit:TemplatePicker}">
 			<Style.Resources>
 				<ValueConverters:VisibilityConverter x:Key="VisibilityConverter" />

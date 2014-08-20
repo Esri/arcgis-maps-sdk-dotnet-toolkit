@@ -2,7 +2,7 @@
 	x:Class="ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker.TemplatePickerSample"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm"
+	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker"
 	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
 	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
 	xmlns:data="using:Esri.ArcGISRuntime.Data"

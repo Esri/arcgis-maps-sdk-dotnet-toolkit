@@ -136,6 +136,9 @@
     <Compile Include="ScaleLine\ScaleLineSample.xaml.cs">
       <DependentUpon>ScaleLineSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TemplatePicker\TemplatePickerWithLayerSelectionSample.xaml.cs">
+      <DependentUpon>TemplatePickerWithLayerSelectionSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TemplatePicker\TemplatePickerSample.xaml.cs">
       <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
     </Compile>
@@ -179,6 +182,10 @@
     <Page Include="ScaleLine\ScaleLineSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TemplatePicker\TemplatePickerWithLayerSelectionSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TemplatePicker\TemplatePickerSample.xaml">
       <Generator>MSBuild:Compile</Generator>
