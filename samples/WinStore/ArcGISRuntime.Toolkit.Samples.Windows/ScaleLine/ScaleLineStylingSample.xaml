@@ -1,13 +1,14 @@
-﻿<UserControl 
-	x:Class="ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine.ScaleLineStylingSample"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Page
+	x:Class="ArcGISRuntime.Toolkit.Samples.Windows.ScaleLine.ScaleLineStylingSample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-	xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-	xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
-	xmlns:converters="clr-namespace:ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine">
+	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+	xmlns:data="using:Esri.ArcGISRuntime.Data"
+	xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.Controls"
+	xmlns:converters="using:ArcGISRuntime.Toolkit.Samples.Windows.ScaleLine">
 
-	<UserControl.Resources>
+	<Page.Resources>
 		<ResourceDictionary>
 			<!--  Dictionary with all available Styles  -->
 			<ResourceDictionary x:Key="Styles">
@@ -850,35 +851,38 @@
 				</Style>
 			</ResourceDictionary>
 		</ResourceDictionary>
-	</UserControl.Resources>
+	</Page.Resources>
 	
-	<Grid>
-		<esri:MapView x:Name="MyMapView">
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<esri:MapView x:Name="MyMapView"
+					  LayerLoaded="MyMapView_LayerLoaded">
 			<esri:Map>
-				<esri:ArcGISTiledMapServiceLayer
-                    ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+				<layers:ArcGISTiledMapServiceLayer ID="Basemap"
+					ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"/>
 			</esri:Map>
 		</esri:MapView>
-		<toolkit:ScaleLine Scale="{Binding ElementName=MyMapView, Path=Scale}"
-						   HorizontalAlignment="Right" VerticalAlignment="Bottom"
-						   Margin="10"
-						   Style="{Binding SelectedValue, ElementName=StyleComboBox}"/>
 
-		<Border Background="White" BorderBrush="Black" BorderThickness="1" Margin="30" Padding="20"
-                HorizontalAlignment="Right" VerticalAlignment="Top">
-			<Border.Effect>
-				<DropShadowEffect />
-			</Border.Effect>
+		<toolkit:ScaleLine x:Name="ScaleLine"
+			Scale="{Binding ElementName=MyMapView, Path=Scale}"
+			HorizontalAlignment="Right" VerticalAlignment="Bottom"
+			Margin="10"
+			Style="{Binding ElementName=StyleComboBox, Path=SelectedItem.Item2}"/>
+
+		<Border Background="#CC000000" 
+				HorizontalAlignment="Right" VerticalAlignment="Top"
+				Margin="30" Padding="20">
 			<StackPanel>
 				<TextBlock FontSize="16" FontWeight="Bold" 
 						   Text="ScaleLine Style: " />
 				<ComboBox x:Name="StyleComboBox"
-						  Margin="5"
-                          DisplayMemberPath="Key"
-                          ItemsSource="{Binding Source={StaticResource Styles}}"
-                          SelectedIndex="0"
-                          SelectedValuePath="Value" />
+						  Margin="5">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Item1}" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
 			</StackPanel>
 		</Border>
 	</Grid>
-</UserControl>
+</Page>

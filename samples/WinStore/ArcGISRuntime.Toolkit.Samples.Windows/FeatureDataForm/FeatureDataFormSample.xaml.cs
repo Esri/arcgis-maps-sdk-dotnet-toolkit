@@ -1,11 +1,15 @@
-﻿using Esri.ArcGISRuntime.Data;
+﻿using Esri.ArcGISRuntime.Controls;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Layers;
 using System;
+using System.Diagnostics;
 using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+using Windows.Foundation;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
-namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
+namespace ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm
 {
 	/// <summary>
 	/// Demonstrates how to show use FeatureDataForm to edit Features attributes.
@@ -15,14 +19,14 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
 	/// <subcategory>FeatureDataForm</subcategory>
 	/// <usesoffline>false</usesoffline>
 	/// <usesonline>true</usesonline>
-	public partial class FeatureDataFormSample : UserControl
+	public sealed partial class FeatureDataFormSample : Page
 	{
 		private FeatureLayer _editedLayer;
 		private GeodatabaseFeature _editedFeature;
 
 		public FeatureDataFormSample()
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 		}
 
 		private async void MyMapView_MapViewTapped(object sender, Esri.ArcGISRuntime.Controls.MapViewInputEventArgs e)
@@ -30,10 +34,10 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
 			try
 			{
 				if (MyDataForm.ResetCommand.CanExecute(null))
-					MyDataForm.ResetCommand.Execute(null);	
-				
+					MyDataForm.ResetCommand.Execute(null);
+
 				MyDataForm.GeodatabaseFeature = null;
-				
+
 				if (_editedLayer != null)
 					_editedLayer.ClearSelection();
 
@@ -62,7 +66,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(string.Format("Error occured : {0}", ex.ToString()), "Sample error");
+				var _x = new MessageDialog(string.Format("Error occured : {0}", ex.ToString()), "Sample error").ShowAsync();
 			}
 		}
 
@@ -84,7 +88,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(string.Format("Error occured : {0}", ex.ToString()), "Sample error");
+				var _x = new MessageDialog(string.Format("Error occured : {0}", ex.ToString()), "Sample error").ShowAsync();
 			}
 		}
 
@@ -100,6 +104,14 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
 
 			DescriptionTextArea.Visibility = Visibility.Visible;
 			DataFormArea.Visibility = Visibility.Collapsed;
+		}
+
+		private void MyMapView_LayerLoaded(object sender, LayerLoadedEventArgs e)
+		{
+			if (e.LoadError == null)
+				return;
+
+			Debug.WriteLine(string.Format("Error while loading layer : {0} - {1}", e.Layer.ID, e.LoadError.Message));
 		}
 	}
 }

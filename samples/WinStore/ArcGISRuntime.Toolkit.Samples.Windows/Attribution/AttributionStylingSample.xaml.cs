@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Data;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
-namespace ArcGISRuntime.Toolkit.Samples.Desktop.Attribution
+namespace ArcGISRuntime.Toolkit.Samples.Windows.Attribution
 {
 	/// <summary>
 	/// Demonstrates how to style attribution control.
@@ -14,17 +14,17 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.Attribution
 	/// <subcategory>Attribution</subcategory>
 	/// <usesoffline>false</usesoffline>
 	/// <usesonline>true</usesonline>
-	public partial class AttributionStylingSample : UserControl
+	public sealed partial class AttributionStylingSample : Page
 	{
 		public AttributionStylingSample()
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 		}
 	}
 
 	public class StringJoinConverter : IValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, string language)
 		{
 			if (value is IEnumerable<string>)
 			{
@@ -33,7 +33,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.Attribution
 			return value;
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object ConvertBack(object value, Type targetType, object parameter, string language)
 		{
 			throw new NotImplementedException();
 		}
