@@ -136,10 +136,11 @@
     <Compile Include="ScaleLine\ScaleLineSample.xaml.cs">
       <DependentUpon>ScaleLineSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TemplatePicker\TemplatePickerSample.xaml.cs">
+      <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TemplatePicker\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsStore.csproj">
       <Project>{2d6828a8-83d2-4dc5-8212-595560086ce7}</Project>
@@ -178,6 +179,10 @@
     <Page Include="ScaleLine\ScaleLineSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TemplatePicker\TemplatePickerSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

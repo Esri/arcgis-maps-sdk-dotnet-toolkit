@@ -1,6 +1,6 @@
 ﻿<Page
-	x:Class="ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm.LegendByScaleSample"
-xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	x:Class="ArcGISRuntime.Toolkit.Samples.Windows.Legend.LegendByScaleSample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm"
 	xmlns:esri="using:Esri.ArcGISRuntime.Controls"

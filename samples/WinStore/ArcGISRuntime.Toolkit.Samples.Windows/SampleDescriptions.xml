@@ -34,7 +34,7 @@
             <usesoffline>false</usesoffline>
             <usesonline>true</usesonline>
         </member>
-        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm.LegendByScaleSample">
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.Legend.LegendByScaleSample">
             <summary>
             Demonstrates how to show legend from layers that are in the scale of the map view.
             </summary>
@@ -81,6 +81,16 @@
             <title>ScaleLine</title>
             <category>Toolkit</category>
             <subcategory>ScaleLine</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker.TemplatePickerSample">
+            <summary>
+            Demonstrates how to use TemplatePicker control.
+            </summary>
+            <title>TemplatePicker</title>
+            <category>Toolkit</category>
+            <subcategory>TemplatePicker</subcategory>
             <usesoffline>false</usesoffline>
             <usesonline>true</usesonline>
         </member>

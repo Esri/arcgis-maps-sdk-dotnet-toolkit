@@ -9,7 +9,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm
+namespace ArcGISRuntime.Toolkit.Samples.Windows.Legend
 {
 	/// <summary>
 	/// Demonstrates how to show legend from layers that are in the scale of the map view.
