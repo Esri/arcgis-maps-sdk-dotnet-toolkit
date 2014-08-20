@@ -11,23 +11,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 {
 	/// <summary>
-	/// Demonstrates how to use TemplatePicker control.
+	/// Demonstrates how to show feature templates from selected layer.
 	/// </summary>
-	/// <title>TemplatePicker</title>
+	/// <title>TemplatePicker by layer</title>
 	/// <category>Toolkit</category>
 	/// <subcategory>TemplatePicker</subcategory>
 	/// <usesoffline>false</usesoffline>
 	/// <usesonline>true</usesonline>
-	public partial class TemplatePickerSample : UserControl
+	public partial class TemplatePickerWithLayerSelectionSample : UserControl
 	{
-		private FeatureTemplate _selectedTemplate; 
-
-		public TemplatePickerSample()
+		public TemplatePickerWithLayerSelectionSample()
 		{
 			InitializeComponent();
 		}
@@ -64,6 +63,9 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 				if (e.FeatureTemplate.DrawingTool == FeatureEditTool.Line)
 					requestedShape = DrawShape.Polyline;
 
+				Selection.Visibility = Visibility.Collapsed;
+				SelectedInfo.Visibility = Visibility.Visible;
+
 				// Request location for the new feature
 				var addedGeometry = await MyMapView.Editor.RequestShapeAsync(requestedShape, symbol);
 
@@ -75,6 +77,60 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 			{
 				MessageBox.Show(string.Format("Error occured : {0}", exception.ToString()), "Sample error");
 			}
+
+			Selection.Visibility = Visibility.Visible;
+			SelectedInfo.Visibility = Visibility.Collapsed;
+		}
+
+		private void Cancel_Click(object sender, RoutedEventArgs e)
+		{
+			if (MyMapView.Editor.IsActive && MyMapView.Editor.Cancel.CanExecute(null))
+			{
+				MyMapView.Editor.Cancel.Execute(null);
+				Selection.Visibility = Visibility.Visible;
+				SelectedInfo.Visibility = Visibility.Collapsed;
+			}
+		}
+	}
+
+	public class LayerToLayersCollectionConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			if (value == null)
+				return null;
+			var layer = value as Layer;
+			var layersCollection = new LayerCollection();
+			layersCollection.Add(layer);
+
+			return layersCollection;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public class LayerCollectionFeatureLayersConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			if (value == null)
+				return null;
+
+			var layers = value as LayerCollection;
+			var layersCollection = new LayerCollection();
+
+			foreach (var layer in layers.OfType<FeatureLayer>())
+				layersCollection.Add(layer);
+
+			return layersCollection;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

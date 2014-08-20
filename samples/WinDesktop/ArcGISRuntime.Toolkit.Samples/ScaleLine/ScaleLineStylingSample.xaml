@@ -870,8 +870,10 @@
 				<DropShadowEffect />
 			</Border.Effect>
 			<StackPanel>
-				<TextBlock VerticalAlignment="Center" FontSize="12" Text="ScaleLine Style: " />
+				<TextBlock FontSize="16" FontWeight="Bold" 
+						   Text="ScaleLine Style: " />
 				<ComboBox x:Name="StyleComboBox"
+						  Margin="5"
                           DisplayMemberPath="Key"
                           ItemsSource="{Binding Source={StaticResource Styles}}"
                           SelectedIndex="0"

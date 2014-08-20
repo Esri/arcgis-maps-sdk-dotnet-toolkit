@@ -182,6 +182,24 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker.TemplatePickerWithLayerSelectionSample">
+            <summary>
+            Demonstrates how to show feature templates from selected layer.
+            </summary>
+            <title>TemplatePicker by layer</title>
+            <category>Toolkit</category>
+            <subcategory>TemplatePicker</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            TemplatePickerWithLayerSelectionSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker.TemplatePickerWithLayerSelectionSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
         <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
             <summary>
             GeneratedInternalTypeHelper
