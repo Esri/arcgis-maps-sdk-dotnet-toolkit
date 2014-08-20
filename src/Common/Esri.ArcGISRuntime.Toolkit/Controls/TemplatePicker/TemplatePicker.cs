@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             var templates = new List<TemplateItem>();
             FeatureServiceLayerInfo serviceInfo = null;
-            var gdbFeatureTable = flayer.FeatureTable as GeodatabaseFeatureTable;
+            var gdbFeatureTable = flayer.FeatureTable as ArcGISFeatureTable;
             if (gdbFeatureTable != null && !gdbFeatureTable.IsReadOnly && flayer.Status == LayerStatus.Initialized)
             {
                 try
