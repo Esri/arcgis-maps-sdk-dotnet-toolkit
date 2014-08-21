@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             var templates = new List<TemplateItem>();
             FeatureServiceLayerInfo serviceInfo = null;
-            var gdbFeatureTable = flayer.FeatureTable as GeodatabaseFeatureTable;
+            var gdbFeatureTable = flayer.FeatureTable as ArcGISFeatureTable;
             if (gdbFeatureTable != null && !gdbFeatureTable.IsReadOnly && flayer.Status == LayerStatus.Initialized)
             {
                 try
@@ -443,7 +443,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 if (symbol != null)
                 {
                     // force the geometry type since GeometryType.Unknown doesn't work well with advanced symbology.
-                    var geometryType = Layer == null || Layer.FeatureTable == null ? Geometry.GeometryType.Unknown : Layer.FeatureTable.GeometryType;
+                    var geometryType = Geometry.GeometryType.Unknown;
+                    var gdbFeatureTable = Layer == null ? null : Layer.FeatureTable as GeodatabaseFeatureTable;
+                    if (gdbFeatureTable != null && gdbFeatureTable.ServiceInfo != null)
+                        geometryType = gdbFeatureTable.ServiceInfo.GeometryType;
 
                     try
                     {
