@@ -70,8 +70,8 @@ namespace ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker
 
 				// Request location for the new feature
 				var addedGeometry = await MyMapView.Editor.RequestShapeAsync(requestedShape, symbol);
-
-				// Add new feature to the MapView. In call gdbFeatureTable.ApplyEdits to commit changes to the service
+		
+						// Add new feature to the MapView. Note that this doesn't commit changes automatically to the service
 				var id = await gdbFeatureTable.AddAsync(e.FeatureTemplate.Prototype.Attributes, addedGeometry);
 			}
 			catch (TaskCanceledException) { } // Editing canceled

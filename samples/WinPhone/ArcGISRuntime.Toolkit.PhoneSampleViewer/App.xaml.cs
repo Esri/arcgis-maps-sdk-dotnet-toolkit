@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Phone.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -35,7 +36,25 @@ namespace ArcGISRuntime.Toolkit.PhoneSampleViewer
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
-        }
+
+#if WINDOWS_PHONE_APP
+			HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+#endif
+
+		}
+
+#if WINDOWS_PHONE_APP
+		private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+		{
+			Frame rootFrame = Window.Current.Content as Frame;
+
+			if (rootFrame != null && rootFrame.CanGoBack)
+			{
+				e.Handled = true;
+				rootFrame.GoBack();
+			}
+		}
+#endif
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -91,7 +110,7 @@ namespace ArcGISRuntime.Toolkit.PhoneSampleViewer
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+                if (!rootFrame.Navigate(typeof(SamplesPage), e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }

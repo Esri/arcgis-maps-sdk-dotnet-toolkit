@@ -3,17 +3,18 @@ using Esri.ArcGISRuntime.Controls;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Layers;
-using Esri.ArcGISRuntime.Symbology;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Media;
+using Windows.UI;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
-namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
+namespace ArcGISRuntime.Toolkit.Samples.Phone.TemplatePicker
 {
 	/// <summary>
 	/// Demonstrates how to show feature templates from selected layer.
@@ -23,7 +24,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 	/// <subcategory>TemplatePicker</subcategory>
 	/// <usesoffline>false</usesoffline>
 	/// <usesonline>true</usesonline>
-	public partial class TemplatePickerWithLayerSelectionSample : UserControl
+	public sealed partial class TemplatePickerWithLayerSelectionSample : Page
 	{
 		public TemplatePickerWithLayerSelectionSample()
 		{
@@ -34,16 +35,12 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 		{
 			try
 			{
-				TemplateName.Text = e.FeatureTemplate.Name;
-				TargetedLayer.Text = e.Layer.DisplayName;
-				TemplateDescription.Text = e.FeatureTemplate.Description;
-
 				GeometryType geometryType = GeometryType.Unknown;
 				var gdbFeatureTable = e.Layer.FeatureTable as GeodatabaseFeatureTable;
 				if (gdbFeatureTable != null && gdbFeatureTable.ServiceInfo != null)
 					geometryType = gdbFeatureTable.ServiceInfo.GeometryType;
 
-				Symbol symbol = null;
+				Esri.ArcGISRuntime.Symbology.Symbol symbol = null;
 
 				// Get symbol from the renderer if that is defined
 				if (e.Layer.Renderer != null)
@@ -52,7 +49,6 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 						Enumerable.Empty<KeyValuePair<string, object>>());
 
 					symbol = e.Layer.Renderer.GetSymbol(g);
-					SelectedSymbol.Source = await symbol.CreateSwatchAsync(32, 32, 96, Colors.Transparent, geometryType);
 				}
 
 				// Define what we shape we request from the editor
@@ -62,8 +58,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 				if (e.FeatureTemplate.DrawingTool == FeatureEditTool.Line)
 					requestedShape = DrawShape.Polyline;
 
-				Selection.Visibility = Visibility.Collapsed;
-				SelectedInfo.Visibility = Visibility.Visible;
+				ToggleTemplatePickerViewVisibility();
 
 				// Request location for the new feature
 				var addedGeometry = await MyMapView.Editor.RequestShapeAsync(requestedShape, symbol);
@@ -74,27 +69,35 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 			catch (TaskCanceledException) { } // Editing canceled
 			catch (Exception exception)
 			{
-				MessageBox.Show(string.Format("Error occured : {0}", exception.ToString()), "Sample error");
+				var _x = new MessageDialog(string.Format("Error occured : {0}", exception.ToString()), "Sample error").ShowAsync();
 			}
-
-			Selection.Visibility = Visibility.Visible;
-			SelectedInfo.Visibility = Visibility.Collapsed;
 		}
 
-		private void Cancel_Click(object sender, RoutedEventArgs e)
+		private void AddFeature_Click(object sender, RoutedEventArgs e)
 		{
-			if (MyMapView.Editor.IsActive && MyMapView.Editor.Cancel.CanExecute(null))
-			{
-				MyMapView.Editor.Cancel.Execute(null);
-				Selection.Visibility = Visibility.Visible;
-				SelectedInfo.Visibility = Visibility.Collapsed;
-			}
+			ToggleTemplatePickerViewVisibility();
+		}
+
+		private void ToggleTemplatePickerViewVisibility()
+		{
+			if (TemplatePickerView.Visibility == Visibility.Collapsed)
+				TemplatePickerView.Visibility = Visibility.Visible;
+			else
+				TemplatePickerView.Visibility = Visibility.Collapsed;
+		}
+
+		private void MyMapView_LayerLoaded(object sender, LayerLoadedEventArgs e)
+		{
+			if (e.LoadError == null)
+				return;
+
+			Debug.WriteLine(string.Format("Error while loading layer : {0} - {1}", e.Layer.ID, e.LoadError.Message));
 		}
 	}
 
 	public class LayerToLayersCollectionConverter : IValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, string language)
 		{
 			if (value == null)
 				return null;
@@ -105,7 +108,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 			return layersCollection;
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object ConvertBack(object value, Type targetType, object parameter, string language)
 		{
 			throw new NotImplementedException();
 		}
@@ -113,7 +116,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 
 	public class LayerCollectionFeatureLayersConverter : IValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, string language)
 		{
 			if (value == null)
 				return null;
@@ -127,7 +130,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 			return layersCollection;
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object ConvertBack(object value, Type targetType, object parameter, string language)
 		{
 			throw new NotImplementedException();
 		}

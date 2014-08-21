@@ -57,8 +57,12 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
 
 					// Set feature that is being edited to data form
 					MyDataForm.GeodatabaseFeature = _editedFeature;
-					break;
+					return;
 				}
+
+				// No features found
+				DescriptionTextArea.Visibility = Visibility.Visible;
+				DataFormArea.Visibility = Visibility.Collapsed;
 			}
 			catch (Exception ex)
 			{
@@ -76,8 +80,8 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm
 				// Commit changes to the local cache
 				await _editedLayer.FeatureTable.UpdateAsync(_editedFeature);
 
-				// To commit changed to the service use ApplyEdits
-				// await (_editedLayer.FeatureTable as GeodatabaseFeatureServiceTable).ApplyEditsAsync();
+				// To commit changed to the service use ApplyEdits from service table
+				// await (_editedLayer.FeatureTable as ServiceFeatureTable).ApplyEditsAsync();
 
 				DescriptionTextArea.Visibility = Visibility.Visible;
 				DataFormArea.Visibility = Visibility.Collapsed;

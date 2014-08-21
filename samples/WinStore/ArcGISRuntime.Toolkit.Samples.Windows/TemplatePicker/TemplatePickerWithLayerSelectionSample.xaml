@@ -13,7 +13,6 @@
 		<local:LayerToLayersCollectionConverter x:Key="LayerToLayerCollection"/>
 		<local:LayerCollectionFeatureLayersConverter x:Key="LayersToFeatureLayerCollection"/>
 
-
 		<Style x:Key="TemplatePickerStyle" TargetType="toolkit:TemplatePicker">
 			<Setter Property="ItemTemplate">
 				<Setter.Value>
