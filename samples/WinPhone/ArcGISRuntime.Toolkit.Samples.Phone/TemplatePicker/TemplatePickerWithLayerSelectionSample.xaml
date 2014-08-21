@@ -120,7 +120,8 @@
 					HorizontalAlignment="Stretch"
 					HorizontalContentAlignment="Stretch"
 					Layers="{Binding SelectedItem, Converter={StaticResource LayerToLayerCollection}, ElementName=TemplateSelectionList}"
-					TemplatePicked="MyTemplatePicker_TemplatePicked" />
+					TemplatePicked="MyTemplatePicker_TemplatePicked"
+					VerticalAlignment="Top"/>
 			</ScrollViewer>
 		</Grid>
 	</Grid>

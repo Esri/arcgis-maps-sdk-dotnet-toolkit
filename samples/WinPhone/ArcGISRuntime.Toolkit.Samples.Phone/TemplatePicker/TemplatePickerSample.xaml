@@ -111,7 +111,8 @@
                         Layers="{Binding ElementName=MyMapView, Path=Map.Layers}"
                         Scale="{Binding ElementName=MyMapView, Path=Scale}"
                         TemplatePicked="MyTemplatePicker_TemplatePicked" 
-						HorizontalAlignment="Left"/>
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"/>
 				</ScrollViewer>
 			</Grid>
 		</Grid>
