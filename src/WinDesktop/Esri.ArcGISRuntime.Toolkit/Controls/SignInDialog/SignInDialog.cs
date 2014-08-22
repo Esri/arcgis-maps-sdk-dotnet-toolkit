@@ -95,14 +95,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		#endregion
 
 		#region Public property CredentialRequestInfo
-		private IdentityManager.CredentialRequestInfo _credentialRequestInfo;
+		private CredentialRequestInfo _credentialRequestInfo;
 		/// <summary>
 		/// Gets the information about the ArcGIS service that needs a credential for getting access to. This property is set by calling <see cref="GetCredentialAsync"/>.
 		/// </summary>
 		/// <value>
 		/// The credential request info.
 		/// </value>
-		public IdentityManager.CredentialRequestInfo CredentialRequestInfo
+		public CredentialRequestInfo CredentialRequestInfo
 		{
 			get { return _credentialRequestInfo; }
 			private set
@@ -127,13 +127,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		/// <param name="credentialRequestInfo">The credential request info.</param>
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException">credentialRequestInfo</exception>
-		public async Task<IdentityManager.Credential> GetCredentialAsync(IdentityManager.CredentialRequestInfo credentialRequestInfo)
+		public async Task<Credential> GetCredentialAsync(CredentialRequestInfo credentialRequestInfo)
 		{
 			if (credentialRequestInfo == null)
 				throw new ArgumentNullException("credentialRequestInfo");
 			Cancel(); // cancel previous task
 			CredentialRequestInfo = credentialRequestInfo;
-			Tcs = new TaskCompletionSource<IdentityManager.Credential>();
+			Tcs = new TaskCompletionSource<Credential>();
 
 			using (credentialRequestInfo.CancellationToken.Register(Cancel, true))
 			{
@@ -281,20 +281,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		/// <summary>
 		/// Static challenge method leaveraging the SignInDialog in a child window.
 		/// </summary>
-		public static Task<IdentityManager.Credential> DoSignIn(IdentityManager.CredentialRequestInfo credentialRequestInfo)
+		public static Task<Credential> DoSignIn(CredentialRequestInfo credentialRequestInfo)
 		{
 			Dispatcher d = Application.Current == null ? null : Application.Current.Dispatcher;
-			Task<IdentityManager.Credential> doSignInTask;
+			Task<Credential> doSignInTask;
 
 			if (d != null && !d.CheckAccess())
 			{
 				//Ensure we are showing up the SignInDialog on the UI thread
-				var tcs = new TaskCompletionSource<IdentityManager.Credential>();
+				var tcs = new TaskCompletionSource<Credential>();
 				d.BeginInvoke((Action)(async () =>
 				{
 					try
 					{
-						IdentityManager.Credential crd = await DoSignInInUIThread(credentialRequestInfo);
+						Credential crd = await DoSignInInUIThread(credentialRequestInfo);
 						tcs.TrySetResult(crd);
 					}
 					catch (Exception error)
@@ -316,7 +316,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			});
 		}
 
-		private static Task<IdentityManager.Credential> DoSignInInUIThread(IdentityManager.CredentialRequestInfo credentialRequestInfo)
+		private static Task<Credential> DoSignInInUIThread(CredentialRequestInfo credentialRequestInfo)
 		{
 			// Create the ChildWindow that contains the SignInDialog
 			var childWindow = new Window
@@ -379,7 +379,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		{
 			if (IsReady)
 			{
-				var credential = new IdentityManager.Credential { Credentials = new NetworkCredential(UserName, Password) };
+				var credential = new ArcGISNetworkCredential { Credentials = new NetworkCredential(UserName, Password) };
 				Debug.Assert(Tcs != null); // due to test on IsReady
 				Tcs.TrySetResult(credential);
 				Tcs = null;
@@ -400,7 +400,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 			long requestID = ++_requestID;
 			Exception error = null;
-			IdentityManager.Credential credential = null;
+			Credential credential = null;
 			try
 			{
 				credential = await IdentityManager.Current.GenerateCredentialAsync(_credentialRequestInfo.ServiceUri, UserName, Password, _credentialRequestInfo.GenerateTokenOptions);
@@ -468,7 +468,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			{
 				url = Regex.Replace(url, "\\?.*", "", RegexOptions.IgnoreCase); // remove query parameters
 				string resourceName = GetResourceName(url);
-				IdentityManager.ServerInfo serverInfo = IdentityManager.Current.FindServerInfo(url);
+				ServerInfo serverInfo = IdentityManager.Current.FindServerInfo(url);
 				string server = serverInfo == null ? Regex.Match(url, "https?://[^/]*").ToString() : serverInfo.ServerUri;
 				xaml = xaml.Replace("$RESOURCENAME", XamlEncode(resourceName));
 				xaml = xaml.Replace("$URL", XamlEncode(url));
@@ -516,8 +516,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		#endregion
 
 		// Private properties
-		private TaskCompletionSource<IdentityManager.Credential> _tcs;
-		private TaskCompletionSource<IdentityManager.Credential> Tcs
+		private TaskCompletionSource<Credential> _tcs;
+		private TaskCompletionSource<Credential> Tcs
 		{
 			get { return _tcs; }
 			set
@@ -583,7 +583,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			{
 				if (_signInDialog._credentialRequestInfo != null)
 				{
-					if (_signInDialog._credentialRequestInfo.AuthenticationType == IdentityManager.AuthenticationType.Token)
+					if (_signInDialog._credentialRequestInfo.AuthenticationType == AuthenticationType.Token)
 						_signInDialog.GenerateToken();
 					else
 						_signInDialog.GenerateNetworkCredential();
