@@ -17,7 +17,7 @@
 					ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/MapServer" />
 				<esri:FeatureLayer DisplayName="Damage to Residential Buildings ">
 					<esri:FeatureLayer.FeatureTable>
-						<esri:GeodatabaseFeatureServiceTable 
+						<esri:ServiceFeatureTable 
 							ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0" 
 							UseAdvancedSymbology="False" />
 					</esri:FeatureLayer.FeatureTable>

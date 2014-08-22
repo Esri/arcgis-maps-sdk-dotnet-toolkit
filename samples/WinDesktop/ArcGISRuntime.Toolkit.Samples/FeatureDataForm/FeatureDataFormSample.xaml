@@ -15,19 +15,19 @@
 					ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
 				<esri:FeatureLayer DisplayName="Water Mains">
 					<esri:FeatureLayer.FeatureTable>
-						<esri:GeodatabaseFeatureServiceTable
+						<esri:ServiceFeatureTable
                             ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/16" />
 					</esri:FeatureLayer.FeatureTable>
 				</esri:FeatureLayer>
 				<esri:FeatureLayer DisplayName="Water Hydrants">
 					<esri:FeatureLayer.FeatureTable>
-						<esri:GeodatabaseFeatureServiceTable
+						<esri:ServiceFeatureTable
                             ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/8" />
 					</esri:FeatureLayer.FeatureTable>
 				</esri:FeatureLayer>
 				<esri:FeatureLayer DisplayName="Water Pumps">
 					<esri:FeatureLayer.FeatureTable>
-						<esri:GeodatabaseFeatureServiceTable
+						<esri:ServiceFeatureTable
                             ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/9" />
 					</esri:FeatureLayer.FeatureTable>
 				</esri:FeatureLayer>

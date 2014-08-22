@@ -21,7 +21,7 @@
 					ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/MapServer" />
 				<layers:FeatureLayer DisplayName="Damage to Residential Buildings ">
 					<layers:FeatureLayer.FeatureTable>
-						<data:GeodatabaseFeatureServiceTable 
+						<data:ServiceFeatureTable 
 							ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0" 
 							UseAdvancedSymbology="False" />
 					</layers:FeatureLayer.FeatureTable>
