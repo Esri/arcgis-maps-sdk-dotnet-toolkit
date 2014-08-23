@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// IdentityManager.Current.ChallengeHandler = new Esri.ArcGISRuntime.Toolkit.Controls.SignInDialog();
     /// </code>
     /// </remarks>
-    public class SignInDialog : Control, INotifyPropertyChanged
+    internal class SignInDialog : Control, INotifyPropertyChanged // might be public
     {
         #region Constructors
         private TaskCompletionSource<Credential> _tcs;
@@ -192,6 +192,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register("Title", typeof(string), typeof(SignInDialog), null);
 
+        #endregion
+
+        #region Public Property CredentialSaveOption
+
+        private CredentialSaveOption _credentialSaveOption;
+
+        /// <summary>
+        /// Gets or sets the option that specifies the initial state of the dialog's Save Credential check
+        //     box. The default value is clear (unchecked).
+        /// </summary>
+        public CredentialSaveOption CredentialSaveOption
+        {
+            get { return _credentialSaveOption; }
+            set
+            {
+                if (_credentialSaveOption != value)
+                {
+                    _credentialSaveOption = value;
+                    OnPropertyChanged("CredentialSaveOption");
+                }
+            }
+        }
         #endregion
 
         #region IChallengeHandler interface:  CreateCredentialAsync
@@ -463,25 +485,119 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     }
 
 
-	/// <summary>
-	/// Identifies the state of the dialog box option on whether to save credentials.
-	/// </summary>
-	public enum CredentialSaveOption
-	{
-		/// <summary>
-		/// The "Save credentials?" dialog box is not selected, indicating that the user doesn't want their credentials saved.
-		/// </summary>
-		Unselected = 0,
+    /// <summary>
+    /// *FOR INTERNAL USE ONLY* Convert a  CredentialSaveOption to a bool.
+    /// </summary>
+    /// <exclude/>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    internal class CredentialSaveOptionBoolConverter : IValueConverter
+    {
+        /// <summary>
+        /// Modifies the source data before passing it to the target for display in the UI.
+        /// </summary>
+        /// <param name="value">The source data being passed to the target.</param>
+        /// <param name="targetType">The type of the target property.</param>
+        /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+        /// <param name="language">The language of the conversion.</param>
+        /// <returns>
+        /// The value to be passed to the target dependency property.
+        /// </returns>
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is CredentialSaveOption)
+            {
+                var credentialSaveOption = (CredentialSaveOption)value;
+                return credentialSaveOption == CredentialSaveOption.Selected;
+            }
+            return null;
+        }
 
-		/// <summary>
-		/// The "Save credentials?" dialog box is selected, indicating that the user wants their credentials saved.
-		/// </summary>
-		Selected,
+        /// <summary>
+        /// Modifies the target data before passing it to the source object. This method is called only in TwoWay bindings.
+        /// </summary>
+        /// <param name="value">The target data being passed to the source.</param>
+        /// <param name="targetType">The type of the target property.</param>
+        /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+        /// <param name="language">The language of the conversion.</param>
+        /// <returns>
+        /// The value to be passed to the source object.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            if (value is bool)
+            {
+                var val = (bool)value;
+                return val ? CredentialSaveOption.Selected : CredentialSaveOption.Unselected;
+            }
+            return null;
+        }
+    }
 
-		/// <summary>
-		/// The "Save credentials?" dialog box is not displayed at all.
-		/// </summary>
-		Hidden
-	}
+    /// <summary>
+    /// *FOR INTERNAL USE ONLY* Convert a  CredentialSaveOption to a visibility.
+    /// </summary>
+    /// <exclude/>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    internal class CredentialSaveOptionVisibilityConverter : IValueConverter
+    {
+        /// <summary>
+        /// Modifies the source data before passing it to the target for display in the UI.
+        /// </summary>
+        /// <param name="value">The source data being passed to the target.</param>
+        /// <param name="targetType">The type of the target property.</param>
+        /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+        /// <param name="language">The language of the conversion.</param>
+        /// <returns>
+        /// The value to be passed to the target dependency property.
+        /// </returns>
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            if (value is CredentialSaveOption)
+            {
+                var credentialSaveOption = (CredentialSaveOption)value;
+                return credentialSaveOption == CredentialSaveOption.Hidden ? Visibility.Collapsed : Visibility.Visible;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Modifies the target data before passing it to the source object. This method is called only in TwoWay bindings.
+        /// </summary>
+        /// <param name="value">The target data being passed to the source.</param>
+        /// <param name="targetType">The type of the target property.</param>
+        /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+        /// <param name="language">The language of the conversion.</param>
+        /// <returns>
+        /// The value to be passed to the source object.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    /// <summary>
+    /// Identifies the state of the dialog box option on whether to save credentials.
+    /// </summary>
+    public enum CredentialSaveOption
+    {
+        /// <summary>
+        /// The "Save credentials?" dialog box is not selected, indicating that the user doesn't want their credentials saved.
+        /// </summary>
+        Unselected = 0,
+
+        /// <summary>
+        /// The "Save credentials?" dialog box is selected, indicating that the user wants their credentials saved.
+        /// </summary>
+        Selected,
+
+        /// <summary>
+        /// The "Save credentials?" dialog box is not displayed at all.
+        /// </summary>
+        Hidden
+    }
 } 
 

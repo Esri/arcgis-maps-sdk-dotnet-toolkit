@@ -485,6 +485,8 @@
                         <Grid.Resources>
                             <converters:VisibilityConverter x:Key="VisibilityConverter" />
                             <local:SignInDialogMessageConverter x:Key="MessageConverter" />
+                            <local:CredentialSaveOptionBoolConverter x:Key="CredentialSaveOptionBoolConverter" />
+                            <local:CredentialSaveOptionVisibilityConverter x:Key="CredentialSaveOptionVisibilityConverter" />
                         </Grid.Resources>
 
                         <StackPanel HorizontalAlignment="Stretch">
@@ -494,6 +496,9 @@
                             <TextBlock Text="{Binding CredentialRequestInfo, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource MessageConverter}}" TextWrapping="Wrap" />
                             <TextBox Header="User name" Text="{Binding UserName, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <PasswordBox Header="Password" IsPasswordRevealButtonEnabled="True" Password="{Binding Password, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox Content="Save Credential"
+                                      Visibility="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CredentialSaveOptionVisibilityConverter}}"
+                                      IsChecked="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, Converter={StaticResource CredentialSaveOptionBoolConverter}}"/>
 
                             <!--  Error  -->
                             <Grid Background="{StaticResource PhoneAccentBrush}" Visibility="{Binding ErrorMessage, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource VisibilityConverter}}">
