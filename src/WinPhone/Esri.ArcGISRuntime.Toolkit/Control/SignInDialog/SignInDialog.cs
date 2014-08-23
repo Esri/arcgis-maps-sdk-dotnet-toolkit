@@ -6,7 +6,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Net;
@@ -202,32 +201,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         public Task<Credential> CreateCredentialAsync(CredentialRequestInfo credentialRequestInfo)
         {
-            if (credentialRequestInfo == null)
-                throw new ArgumentNullException("credentialRequestInfo");
-
-            var serverInfo = IdentityManager.Current.FindServerInfo(credentialRequestInfo.ServiceUri);
-
-            // Check if we need to use OAuth for login.
-            // In this case we don't have to display the SignInDialog by ourself but we have to go through the OAuth authorization page
-            bool isOauth = false;
-            if (serverInfo != null && credentialRequestInfo.AuthenticationType == AuthenticationType.Token)
-            {
-                if (serverInfo.TokenAuthenticationType != TokenAuthenticationType.ArcGISToken)
-                {
-                    isOauth = true; // portal secured by OAuth
-                }
-                else if (!string.IsNullOrEmpty(serverInfo.OwningSystemUri))
-                {
-                    // server federated to OAuth portal?
-                    // Check if the portal uses OAuth
-                    isOauth = IdentityManager.Current.ServerInfos.Any(s => SameOwningSystem(s, serverInfo) && s.TokenAuthenticationType != TokenAuthenticationType.ArcGISToken);
-                }
-            }
-
-            if (isOauth)
-                // OAuth case --> call GenerateCredentialAsync (that will throw an exception if the OAuthAuthorize component is not set)
-                return TaskUpcast<TokenCredential, Credential>(IdentityManager.Current.GenerateCredentialAsync(credentialRequestInfo.ServiceUri, credentialRequestInfo.GenerateTokenOptions));
-
             return ExecuteOnUIThread(() => DoSignInInUIThread(credentialRequestInfo));
         }
 
@@ -322,20 +295,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 sender.Content = null;
             }
         }
-
-        private static bool SameOwningSystem(ServerInfo info1, ServerInfo info2)
-        {
-            string owningSystemUrl1 = info1.OwningSystemUri;
-            string owningSystemUrl2 = info2.OwningSystemUri;
-            if (owningSystemUrl1 == null || owningSystemUrl2 == null)
-                return false;
-
-            // test without taking care of the scheme
-            owningSystemUrl1 = owningSystemUrl1.Replace("https:", "http:");
-            owningSystemUrl2 = owningSystemUrl2.Replace("https:", "http:");
-            return owningSystemUrl1 == owningSystemUrl2;
-        }
-
 
         #endregion
 
@@ -437,21 +396,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
         #endregion
 
-        private static Task<U> TaskUpcast<T, U>(Task<T> task) where T : U
-        {
-            var tcs = new TaskCompletionSource<U>();
-            task.ContinueWith(t =>
-            {
-                if (t.IsFaulted)
-                    tcs.SetException(t.Exception.InnerExceptions);
-                else if (t.IsCanceled)
-                    tcs.SetCanceled();
-                else
-                    tcs.SetResult(t.Result);
-            }, TaskContinuationOptions.ExecuteSynchronously);
-            return tcs.Task;
-        }
-
     }
 
     /// <summary>
@@ -517,5 +461,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             throw new NotImplementedException();
         }
     }
+
+
+	/// <summary>
+	/// Identifies the state of the dialog box option on whether to save credentials.
+	/// </summary>
+	public enum CredentialSaveOption
+	{
+		/// <summary>
+		/// The "Save credentials?" dialog box is not selected, indicating that the user doesn't want their credentials saved.
+		/// </summary>
+		Unselected = 0,
+
+		/// <summary>
+		/// The "Save credentials?" dialog box is selected, indicating that the user wants their credentials saved.
+		/// </summary>
+		Selected,
+
+		/// <summary>
+		/// The "Save credentials?" dialog box is not displayed at all.
+		/// </summary>
+		Hidden
+	}
 } 
 
