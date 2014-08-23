@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     public class SignInDialog : Control, INotifyPropertyChanged
     {
         #region Constructors
-        private TaskCompletionSource<IdentityManager.Credential> _tcs;
+        private TaskCompletionSource<Credential> _tcs;
         private long _requestID; // flag allowing the reuse of the same dialog after cancelling a request
 
         /// <summary>
@@ -47,14 +47,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         #endregion
 
         #region CredentialRequestInfo
-        private IdentityManager.CredentialRequestInfo _credentialRequestInfo;
+        private CredentialRequestInfo _credentialRequestInfo;
         /// <summary>
         /// Gets the information about the ArcGIS service that needs a credential for getting access to. This property is set by calling <see cref="CreateCredentialAsync"/>.
         /// </summary>
         /// <value>
         /// The credential request info.
         /// </value>
-        public IdentityManager.CredentialRequestInfo CredentialRequestInfo
+        public CredentialRequestInfo CredentialRequestInfo
         {
             get { return _credentialRequestInfo; }
             private set
@@ -200,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <summary>
         /// Challenge handler leaveraging the SignInDialog in a content dialog.
         /// </summary>
-        public Task<IdentityManager.Credential> CreateCredentialAsync(IdentityManager.CredentialRequestInfo credentialRequestInfo)
+        public Task<Credential> CreateCredentialAsync(CredentialRequestInfo credentialRequestInfo)
         {
             if (credentialRequestInfo == null)
                 throw new ArgumentNullException("credentialRequestInfo");
@@ -210,9 +210,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             // Check if we need to use OAuth for login.
             // In this case we don't have to display the SignInDialog by ourself but we have to go through the OAuth authorization page
             bool isOauth = false;
-            if (serverInfo != null && credentialRequestInfo.AuthenticationType == IdentityManager.AuthenticationType.Token)
+            if (serverInfo != null && credentialRequestInfo.AuthenticationType == AuthenticationType.Token)
             {
-                if (serverInfo.TokenAuthenticationType != IdentityManager.TokenAuthenticationType.ArcGISToken)
+                if (serverInfo.TokenAuthenticationType != TokenAuthenticationType.ArcGISToken)
                 {
                     isOauth = true; // portal secured by OAuth
                 }
@@ -220,18 +220,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 {
                     // server federated to OAuth portal?
                     // Check if the portal uses OAuth
-                    isOauth = IdentityManager.Current.ServerInfos.Any(s => SameOwningSystem(s, serverInfo) && s.TokenAuthenticationType != IdentityManager.TokenAuthenticationType.ArcGISToken);
+                    isOauth = IdentityManager.Current.ServerInfos.Any(s => SameOwningSystem(s, serverInfo) && s.TokenAuthenticationType != TokenAuthenticationType.ArcGISToken);
                 }
             }
 
             if (isOauth)
                 // OAuth case --> call GenerateCredentialAsync (that will throw an exception if the OAuthAuthorize component is not set)
-                return IdentityManager.Current.GenerateCredentialAsync(credentialRequestInfo.ServiceUri, credentialRequestInfo.GenerateTokenOptions);
+                return TaskUpcast<TokenCredential, Credential>(IdentityManager.Current.GenerateCredentialAsync(credentialRequestInfo.ServiceUri, credentialRequestInfo.GenerateTokenOptions));
 
             return ExecuteOnUIThread(() => DoSignInInUIThread(credentialRequestInfo));
         }
 
-        private async Task<IdentityManager.Credential> DoSignInInUIThread(IdentityManager.CredentialRequestInfo credentialRequestInfo)
+        private async Task<Credential> DoSignInInUIThread(CredentialRequestInfo credentialRequestInfo)
         {
             var signInDialog = this;
 
@@ -257,7 +257,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             var _ = contentDialog.ShowAsync(); // don't await else that would block here
 
             // Wait for the creation of the credential
-            IdentityManager.Credential crd;
+            Credential crd;
             try
             {
                 crd = await signInDialog.WaitForCredentialAsync(credentialRequestInfo);
@@ -272,11 +272,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
 
-        private async Task<IdentityManager.Credential> WaitForCredentialAsync(IdentityManager.CredentialRequestInfo credentialRequestInfo)
+        private async Task<Credential> WaitForCredentialAsync(CredentialRequestInfo credentialRequestInfo)
         {
             Debug.Assert(credentialRequestInfo != null);
             Cancel(); // cancel previous task
-            _tcs = new TaskCompletionSource<IdentityManager.Credential>();
+            _tcs = new TaskCompletionSource<Credential>();
             CredentialRequestInfo = credentialRequestInfo; // Will update 'IsReady' status
             //using (credentialRequestInfo.CancellationToken.Register(Cancel, true)); // for any reason, I get a crash if using true as last argument (whatever the callback, WinPhone bug?)
             using (credentialRequestInfo.CancellationToken.Register(() =>
@@ -323,7 +323,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             }
         }
 
-        private static bool SameOwningSystem(IdentityManager.ServerInfo info1, IdentityManager.ServerInfo info2)
+        private static bool SameOwningSystem(ServerInfo info1, ServerInfo info2)
         {
             string owningSystemUrl1 = info1.OwningSystemUri;
             string owningSystemUrl2 = info2.OwningSystemUri;
@@ -341,10 +341,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         #region Credential Generation
 
-        private async Task<IdentityManager.Credential> GenerateCredentialAsync()
+        private async Task<Credential> GenerateCredentialAsync()
         {
             ErrorMessage = null;
-            IdentityManager.Credential crd = _credentialRequestInfo != null && _credentialRequestInfo.AuthenticationType == IdentityManager.AuthenticationType.Token
+            Credential crd = _credentialRequestInfo != null && _credentialRequestInfo.AuthenticationType == AuthenticationType.Token
                 ? await GenerateTokenCredentialAsync()
                 : GenerateNetworkCredential();
 
@@ -357,13 +357,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
         // Create a network credential from username/password 
-        private IdentityManager.Credential GenerateNetworkCredential()
+        private Credential GenerateNetworkCredential()
         {
-            return IsReady ? new IdentityManager.Credential { Credentials = new NetworkCredential(UserName, Password) } : null;
+            return IsReady ? new ArcGISNetworkCredential { Credentials = new NetworkCredential(UserName, Password) } : null;
         }
 
         // Token Generation
-        private async Task<IdentityManager.Credential> GenerateTokenCredentialAsync()
+        private async Task<Credential> GenerateTokenCredentialAsync()
         {
             if (!IsReady)
                 return null;
@@ -371,7 +371,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
             long requestID = _requestID;
             Exception error = null;
-            IdentityManager.Credential credential;
+            Credential credential;
             try
             {
                 credential = await IdentityManager.Current.GenerateCredentialAsync(_credentialRequestInfo.ServiceUri, UserName, Password, _credentialRequestInfo.GenerateTokenOptions);
@@ -436,6 +436,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             return await task;
         }
         #endregion
+
+        private static Task<U> TaskUpcast<T, U>(Task<T> task) where T : U
+        {
+            var tcs = new TaskCompletionSource<U>();
+            task.ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                    tcs.SetException(t.Exception.InnerExceptions);
+                else if (t.IsCanceled)
+                    tcs.SetCanceled();
+                else
+                    tcs.SetResult(t.Result);
+            }, TaskContinuationOptions.ExecuteSynchronously);
+            return tcs.Task;
+        }
+
     }
 
     /// <summary>
@@ -458,7 +474,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            var credentialRequestInfo = value as IdentityManager.CredentialRequestInfo;
+            var credentialRequestInfo = value as CredentialRequestInfo;
             if (credentialRequestInfo != null)
             {
                 if (targetType == typeof (string))
@@ -474,7 +490,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                         server = server.Substring(0, index);
 
                     string message = string.Format("Enter account information to sign in to {0}", server);
-                    if (credentialRequestInfo.AuthenticationType == IdentityManager.AuthenticationType.NetworkCredential)
+                    if (credentialRequestInfo.AuthenticationType == AuthenticationType.NetworkCredential)
                         message += " (NetworkCredential Authentication).";
                     else
                         message += ".";
