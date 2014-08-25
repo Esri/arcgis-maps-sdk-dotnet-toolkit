@@ -39,7 +39,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker
 				TemplateDescription.Text = e.FeatureTemplate.Description;
 
 				GeometryType geometryType = GeometryType.Unknown;
-				var gdbFeatureTable = e.Layer.FeatureTable as GeodatabaseFeatureTable;
+				var gdbFeatureTable = e.Layer.FeatureTable as ServiceFeatureTable;
 				if (gdbFeatureTable != null && gdbFeatureTable.ServiceInfo != null)
 					geometryType = gdbFeatureTable.ServiceInfo.GeometryType;
 

@@ -26,8 +26,6 @@ namespace ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker
 	/// <usesonline>true</usesonline>
 	public sealed partial class TemplatePickerWithLayerSelectionSample : Page
 	{
-		private FeatureTemplate _selectedTemplate;
-
 		public TemplatePickerWithLayerSelectionSample()
 		{
 			InitializeComponent();
@@ -35,14 +33,14 @@ namespace ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker
 
 		private async void MyTemplatePicker_TemplatePicked(object sender,  Esri.ArcGISRuntime.Toolkit.Controls.TemplatePicker.TemplatePickedEventArgs e)
 		{
-					try
+			try
 			{
 				TemplateName.Text = e.FeatureTemplate.Name;
 				TargetedLayer.Text = e.Layer.DisplayName;
 				TemplateDescription.Text = e.FeatureTemplate.Description;
 
 				GeometryType geometryType = GeometryType.Unknown;
-				var gdbFeatureTable = e.Layer.FeatureTable as GeodatabaseFeatureTable;
+				var gdbFeatureTable = e.Layer.FeatureTable as ServiceFeatureTable;
 				if (gdbFeatureTable != null && gdbFeatureTable.ServiceInfo != null)
 					geometryType = gdbFeatureTable.ServiceInfo.GeometryType;
 
