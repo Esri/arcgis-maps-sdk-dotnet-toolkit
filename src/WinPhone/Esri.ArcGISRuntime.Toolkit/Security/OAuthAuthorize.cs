@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Esri.ArcGISRuntime.Security;
 
-namespace Esri.ArcGISRuntime.Toolkit
+namespace Esri.ArcGISRuntime.Toolkit.Security
 {
 	/// <summary>
 	/// WinPhone OAuthAuthorize component which encapsulates the redirection of the user to the OAuth authorization URI by using a WebView.
