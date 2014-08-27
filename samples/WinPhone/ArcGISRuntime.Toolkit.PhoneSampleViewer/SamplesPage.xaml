@@ -1,0 +1,46 @@
+﻿<Page
+    x:Class="ArcGISRuntime.Toolkit.PhoneSampleViewer.SamplesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ArcGISRuntime.Toolkit.PhoneSampleViewer">
+
+	<Page.Resources>
+		<CollectionViewSource
+            x:Name="groupedItemsViewSource"
+            Source="{Binding SamplesByCategory}"
+            IsSourceGrouped="true"
+            ItemsPath="Items" />
+	</Page.Resources>
+
+	<Grid>
+		<ListView ItemsSource="{Binding Source={StaticResource groupedItemsViewSource}}"
+				  ItemClick="ListView_ItemClick" 
+				  SelectionMode="None" 
+				  IsSwipeEnabled="False" 
+				  IsItemClickEnabled="True">
+			<ListView.GroupStyle>
+				<GroupStyle>
+					<GroupStyle.HeaderTemplate>
+						<DataTemplate>
+							<Border Background="Transparent" Padding="5" HorizontalAlignment="Stretch">
+								<Border Background="{StaticResource PhoneAccentBrush}" 
+											BorderBrush="{StaticResource PhoneAccentBrush}" 
+											BorderThickness="2" HorizontalAlignment="Stretch">
+									<TextBlock Text="{Binding Name}" Foreground="{StaticResource PhoneForegroundBrush}" 
+											   Style="{StaticResource ListViewItemTextBlockStyle}"
+											   HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+											   Padding="5"/>
+								</Border>
+							</Border>
+						</DataTemplate>
+					</GroupStyle.HeaderTemplate>
+				</GroupStyle>
+			</ListView.GroupStyle>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Name}" Style="{StaticResource ListViewItemTextBlockStyle}" Padding="5" />
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</Grid>
+</Page>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Esri.ArcGISRuntime.Toolkit.WS" Version="10.2.3" Language="en-US" Publisher="Esri" />
+    <Identity Id="Esri.ArcGISRuntime.Toolkit.WS" Version="10.2.4" Language="en-US" Publisher="Esri" />
     <DisplayName>ArcGIS Runtime Toolkit for Windows Store apps</DisplayName>
     <Description xml:space="preserve">ArcGIS Runtime controls and utilities for Windows Store.</Description>
     <MoreInfo>http://links.esri.com/dotnetsdk</MoreInfo>
@@ -9,7 +9,7 @@
     <Tags>xaml, winrt, arcgis, esri, mapping, map, gis, wpf, windows store</Tags>
   </Metadata>
   <Installation Scope="Global">
-    <InstallationTarget Id="Microsoft.ExtensionSDK" TargetPlatformIdentifier="Windows" TargetPlatformVersion="v8.1" SdkName="Esri.ArcGISRuntime.Toolkit.WS" SdkVersion="10.2.3" />
+    <InstallationTarget Id="Microsoft.ExtensionSDK" TargetPlatformIdentifier="Windows" TargetPlatformVersion="v8.1" SdkName="Esri.ArcGISRuntime.Toolkit.WS" SdkVersion="10.2.4" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
