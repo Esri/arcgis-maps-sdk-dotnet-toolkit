@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 			{
 				System.Windows.Media.Matrix m =
 					PresentationSource.FromDependencyObject(dp).CompositionTarget.TransformToDevice;
-				return (float)m.M11;
+				return (float)m.M11 * 96.0f;
 			}
 #endif
 		}
