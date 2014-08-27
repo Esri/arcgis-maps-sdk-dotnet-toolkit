@@ -182,14 +182,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <param name="unit">imperial unit</param>
         private void SetUsUnit(double value, string unit)
         {
-            var ratio = GetRatio(value);
+            var roundedValue = GetRoundedValue(value);
             
             if (_usUnit != null)
                 _usUnit.Text = unit;
             if(_usValue != null)
-                _usValue.Text = string.Format("{0}", Math.Floor(ratio * value));
+                _usValue.Text = string.Format("{0}", roundedValue);
             if (_usScaleLine != null)
-                _usScaleLine.Width = TargetWidth * ratio;
+                _usScaleLine.Width = TargetWidth * roundedValue / value;
 
         }
 
@@ -200,14 +200,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// <param name="unit">metric unit</param>
         private void SetMetricUnit(double value, string unit)
         {
-            var ratio = GetRatio(value);
-
+            var roundedValue = GetRoundedValue(value);
+            
             if (_metricUnit != null)
                 _metricUnit.Text = unit;
             if (_metricValue != null)
-                _metricValue.Text = string.Format("{0}", Math.Floor(ratio * value));
+                _metricValue.Text = string.Format("{0}", (int)roundedValue);
             if (_metricScaleLine != null)
-                _metricScaleLine.Width = ratio * TargetWidth;
+                _metricScaleLine.Width = TargetWidth * roundedValue / value;
         }       
 
         /// <summary>
@@ -254,16 +254,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             return LinearUnits.Inches.ConvertTo(((TargetWidth) / 96) * Scale, LinearUnits.Feet);            
         }
 
-        private static double GetRatio(double value)
+        private static double GetRoundedValue(double value)
         {
             if (double.IsNaN(value)) return 0;
             if (value >= 1000)
-                return (value - (value % 1000)) / value;           
+                return value - (value % 1000);           
             if (value >= 100)
-                return (value - (value % 100)) / value;           
+                return value - (value % 100);           
             if (value >= 10)
-                return (value - (value % 10)) / value;
-            return 1;
+                return value - (value % 10);
+            if (value >= 1)
+                return (int)value;
+            return value;
         }
 
         #endregion Private Methods
