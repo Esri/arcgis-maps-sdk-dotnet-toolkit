@@ -33,7 +33,7 @@
 			<StatusBarItem >
 				<StackPanel Orientation="Horizontal">
 					<TextBlock Text="Sample: " />
-					<TextBlock Text="{Binding UserControl.Name}" />
+					<TextBlock Text="{Binding SampleType.Name}" />
 					<TextBlock Text=".xaml" />
 				</StackPanel>
 			</StatusBarItem>

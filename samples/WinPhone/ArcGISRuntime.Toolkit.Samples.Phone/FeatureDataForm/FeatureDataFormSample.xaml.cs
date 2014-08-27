@@ -93,6 +93,8 @@ namespace ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataForm
 				// To commit changed to the service use ApplyEdits
 				// await (_editedLayer.FeatureTable as ServiceFeatureTable).ApplyEditsAsync();
 
+				_editedLayer.ClearSelection();
+
 				DataFormView.Visibility = Visibility.Collapsed;
 				ToggleAppBar();
 			}

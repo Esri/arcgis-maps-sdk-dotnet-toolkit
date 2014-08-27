@@ -83,6 +83,8 @@ namespace ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm
 				// To commit changed to the service use ApplyEdits
 				// await (_editedLayer.FeatureTable as ServiceFeatureTable).ApplyEditsAsync();
 
+				_editedLayer.ClearSelection();
+
 				DescriptionTextArea.Visibility = Visibility.Visible;
 				DataFormArea.Visibility = Visibility.Collapsed;
 			}

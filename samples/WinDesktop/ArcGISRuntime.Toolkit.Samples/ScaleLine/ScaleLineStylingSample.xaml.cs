@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine
 {
@@ -18,6 +22,17 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine
 		public ScaleLineStylingSample()
 		{
 			InitializeComponent();
+			var stylesDictionary = Resources["Styles"] as ResourceDictionary;
+
+			var styles = new List<Tuple<string, Style>>();
+			foreach (var key in stylesDictionary.Keys)
+			{
+				var value = stylesDictionary[key] as Style;
+				styles.Add(Tuple.Create(key.ToString(), value));
+			}
+			
+			styles.Sort();
+			StyleComboBox.ItemsSource = styles;
 		}
 	}
 
@@ -50,6 +65,30 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public class ResourceSortConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			var resouceDictionary = value as ResourceDictionary;
+			if (resouceDictionary == null)
+				return null;
+	
+			var styles = new List<Style>();
+			foreach (var item in resouceDictionary.OfType<Style>())
+			{
+				styles.Add(item);
+			}
+
+			styles.Sort();
+			return styles;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			throw new NotImplementedException();
 		}

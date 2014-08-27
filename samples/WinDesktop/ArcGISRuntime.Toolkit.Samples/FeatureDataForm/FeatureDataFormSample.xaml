@@ -54,6 +54,7 @@
 						x:Name="MyDataForm"
 						Grid.Row="1"
 						Margin="5"
+						Background="Transparent"
 						ApplyCompleted="MyDataForm_ApplyCompleted" />
 					<Button Content="Cancel" Margin="5" Grid.Row="2" Click="Cancel_Click"/>
 				</Grid>

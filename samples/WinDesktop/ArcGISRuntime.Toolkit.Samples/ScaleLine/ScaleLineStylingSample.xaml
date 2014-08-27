@@ -8,7 +8,7 @@
 	xmlns:converters="clr-namespace:ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine">
 
 	<UserControl.Resources>
-		<ResourceDictionary>
+		<ResourceDictionary>			
 			<!--  Dictionary with all available Styles  -->
 			<ResourceDictionary x:Key="Styles">
 				<Style x:Key="Default" TargetType="toolkit:ScaleLine" />
@@ -874,10 +874,9 @@
 						   Text="ScaleLine Style: " />
 				<ComboBox x:Name="StyleComboBox"
 						  Margin="5"
-                          DisplayMemberPath="Key"
-                          ItemsSource="{Binding Source={StaticResource Styles}}"
+                          DisplayMemberPath="Item1"
                           SelectedIndex="0"
-                          SelectedValuePath="Value" />
+                          SelectedValuePath="Item2" />
 			</StackPanel>
 		</Border>
 	</Grid>

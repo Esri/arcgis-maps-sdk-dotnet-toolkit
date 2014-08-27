@@ -32,6 +32,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Phone.ScaleLine
 				styles.Add(Tuple.Create(item.Key.ToString(), item.Value as Style));
 			}
 
+			styles.Sort();
 			StyleComboBox.ItemsSource = styles;
 		}
 

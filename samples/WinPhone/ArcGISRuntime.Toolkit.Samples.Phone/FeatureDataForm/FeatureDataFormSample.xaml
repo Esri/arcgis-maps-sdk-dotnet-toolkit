@@ -57,6 +57,7 @@
 					x:Name="MyDataForm"
 					Grid.Row="1"
 					BorderThickness="0"
+					Background="Transparent"
 					ApplyCompleted="MyDataForm_ApplyCompleted" />
 			</Grid>
 		</Grid>

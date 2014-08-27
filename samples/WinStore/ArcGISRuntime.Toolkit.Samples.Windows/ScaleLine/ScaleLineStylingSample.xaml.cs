@@ -32,6 +32,8 @@ namespace ArcGISRuntime.Toolkit.Samples.Windows.ScaleLine
 				styles.Add(Tuple.Create(item.Key.ToString(), item.Value as Style));
 			}
 
+			styles.Sort();
+
 			StyleComboBox.ItemsSource = styles;
 		}
 
