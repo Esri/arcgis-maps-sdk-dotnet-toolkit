@@ -4,22 +4,22 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F3DA76B4-A20D-4C87-B182-822BC404D749}</ProjectGuid>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4B17FB88-351F-42ED-8FEF-36ECB724059D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
-    <AssemblyName>Esri.ArcGISRuntime.Toolkit.WindowsPhone</AssemblyName>
+    <RootNamespace>ArcGISRuntime.Toolkit.Samples.Phone</RootNamespace>
+    <AssemblyName>ArcGISRuntime.Toolkit.Samples.Phone</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\output\WinPhone\ARM\Debug\</OutputPath>
-    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\ARM\Debug\</IntermediateOutputPath>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
@@ -27,12 +27,10 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>..\..\..\output\WinPhone\ARM\Debug\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
-    <GenerateLibraryLayout>True</GenerateLibraryLayout>
+    <DocumentationFile>SampleDescriptions.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
-    <OutputPath>..\..\..\output\WinPhone\ARM\Release\</OutputPath>
-    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\ARM\Release\</IntermediateOutputPath>
+    <OutputPath>bin\ARM\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -41,26 +39,21 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <DocumentationFile>..\..\..\output\WinPhone\ARM\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
-    <GenerateLibraryLayout>True</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\output\WinPhone\x86\Debug\</OutputPath>
-    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\x86\Debug\</IntermediateOutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <GenerateLibraryLayout>True</GenerateLibraryLayout>
-    <DocumentationFile>..\..\..\output\WinPhone\x86\Debug\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
+    <DocumentationFile>SampleDescriptions.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\..\output\WinPhone\x86\Release\</OutputPath>
-    <IntermediateOutputPath>..\..\..\output\intermediate\WinPhone\Esri.ArcGISRuntime.Toolkit\x86\Release\</IntermediateOutputPath>
+    <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_PHONE_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
@@ -69,13 +62,9 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
-    <GenerateLibraryLayout>True</GenerateLibraryLayout>
-    <DocumentationFile>..\..\..\output\WinPhone\x86\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.4">
       <Name>ArcGIS Runtime for Windows Phone</Name>
     </SDKReference>
@@ -84,10 +73,81 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Themes\Generic.xaml">
+    <Compile Include="Attribution\AttributionSample.xaml.cs">
+      <DependentUpon>AttributionSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Attribution\DynamicAttributionSample.xaml.cs">
+      <DependentUpon>DynamicAttributionSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FeatureDataForm\FeatureDataFormSample.xaml.cs">
+      <DependentUpon>FeatureDataFormSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Legend\LegendByScaleSample.xaml.cs">
+      <DependentUpon>LegendByScaleSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Legend\LegendSample.xaml.cs">
+      <DependentUpon>LegendSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScaleLine\ScaleLineSample.xaml.cs">
+      <DependentUpon>ScaleLineSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScaleLine\ScaleLineStylingSample.xaml.cs">
+      <DependentUpon>ScaleLineStylingSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TemplatePicker\TemplatePickerSample.xaml.cs">
+      <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TemplatePicker\TemplatePickerWithLayerSelectionSample.xaml.cs">
+      <DependentUpon>TemplatePickerWithLayerSelectionSample.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsPhone.csproj">
+      <Project>{f3da76b4-a20d-4c87-b182-822bc404d749}</Project>
+      <Name>Esri.ArcGISRuntime.Toolkit.WindowsPhone</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Attribution\AttributionSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Attribution\DynamicAttributionSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FeatureDataForm\FeatureDataFormSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Legend\LegendByScaleSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Legend\LegendSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScaleLine\ScaleLineSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ScaleLine\ScaleLineStylingSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TemplatePicker\TemplatePickerSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TemplatePicker\TemplatePickerWithLayerSelectionSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SampleDescriptions.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
@@ -95,24 +155,11 @@
   <PropertyGroup Condition=" '$(TargetPlatformIdentifier)' == '' ">
     <TargetPlatformIdentifier>WindowsPhoneApp</TargetPlatformIdentifier>
   </PropertyGroup>
-  <Import Project="..\..\Common\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <Import Project="..\..\..\build\XamlTypeInfoBuildTask.targets" Condition="Exists('..\..\..\build\XamlTypeInfoBuildTask.targets')" />
-    <!--<PropertyGroup>
+  <!--<PropertyGroup>
     <SDKReferenceDirectoryRoot>C:\applications\output\winprt_sdk\;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
   </PropertyGroup>-->
-  <PropertyGroup>
-    <PostBuildEvent>SET output=$(TargetDir)..\..\..\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.4\
-xcopy $(ProjectDir)..\..\..\Deployment\VSIX\WinPhone\SDKManifest.xml "%25output%25" /Y /F
-xcopy $(TargetPath) "%25output%25References\CommonConfiguration\$(PlatformName)\" /Y  /F
-xcopy $(TargetDir)$(TargetName).xml "%25output%25References\CommonConfiguration\$(PlatformName)\" /Y  /F
-xcopy $(ProjectPriFullPath) "%25output%25Redist\CommonConfiguration\neutral\" /Y /F
-xcopy $(ProjectDir)$(TargetName)\*.* "%25output%25Redist\CommonConfiguration\neutral\$(TargetName)\" /Y /F
-xcopy $(TargetDir)$(TargetName)\Themes\Generic.xaml "%25output%25DesignTime\CommonConfiguration\neutral\$(TargetName)\Themes\" /Y /F
-xcopy $(TargetDir)$(TargetName)\Themes\Generic.xbf "%25output%25Redist\CommonConfiguration\neutral\$(TargetName)\Themes\" /Y /F
-
-</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
