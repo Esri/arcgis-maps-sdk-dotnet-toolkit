@@ -69,28 +69,4 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.ScaleLine
 			throw new NotImplementedException();
 		}
 	}
-
-	public class ResourceSortConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			var resouceDictionary = value as ResourceDictionary;
-			if (resouceDictionary == null)
-				return null;
-	
-			var styles = new List<Style>();
-			foreach (var item in resouceDictionary.OfType<Style>())
-			{
-				styles.Add(item);
-			}
-
-			styles.Sort();
-			return styles;
-		}
-
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			throw new NotImplementedException();
-		}
-	}
 }
