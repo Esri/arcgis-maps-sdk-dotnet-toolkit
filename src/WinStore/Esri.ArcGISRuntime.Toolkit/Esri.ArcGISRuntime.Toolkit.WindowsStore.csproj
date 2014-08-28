@@ -124,9 +124,9 @@
   <Import Project="..\..\Common\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <Import Project="..\..\..\build\XamlTypeInfoBuildTask.targets" Condition="Exists('..\..\..\build\XamlTypeInfoBuildTask.targets')" />
-  <!--<PropertyGroup>
+  <PropertyGroup>
     <SDKReferenceDirectoryRoot>C:\applications\output\winrt_sdk\;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
-  </PropertyGroup>-->
+  </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>SET output=$(TargetDir)..\..\..\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.4\
 xcopy $(ProjectDir)..\..\..\Deployment\VSIX\WinStore\SDKManifest.xml "%25output%25" /Y /F
