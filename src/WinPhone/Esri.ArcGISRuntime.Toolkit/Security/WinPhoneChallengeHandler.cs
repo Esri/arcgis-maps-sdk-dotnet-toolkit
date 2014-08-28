@@ -22,10 +22,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
     /// </code>
     /// </para>
     /// <para/>
-    /// Optionally, depending on the <see cref="AllowSaveCredentials"/> value, the credentials are cached in the <see cref="PasswordVault"/> in a secure manner.
-    /// The <see cref="PasswordVault"/> roams credentials to other Windows8 systems.
+    /// Optionally, depending on the <see cref="AllowSaveCredentials"/> value, the credentials may be cached in the <see cref="PasswordVault"/> in a secure manner.
+    /// In this case, the <see cref="PasswordVault"/> roams credentials to other Windows8 systems.
+    /// <para/>
+    /// By default the WinPhoneChallengeHandler doesn't allow saving the Credentials. To allow it, the <see cref="WinPhoneChallengeHandler"/> can be instantiated with code like:
+    /// <code>
+    ///  IdentityManager.Current.ChallengeHandler = new Esri.ArcGISRuntime.Toolkit.Security.WinPhoneChallengeHandler { AllowSaveCredentials = true, CredentialSaveOption = CredentialSaveOption.Selected  };
+    /// </code>
     /// </summary>
-    public class WinPhoneChallengeHandler // : IChallengeHandler to add when checked in
+    public class WinPhoneChallengeHandler : IChallengeHandler
     {
         private bool _allowSaveCredentials;
         private bool _areCredentialsRestored;
@@ -53,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the credentials can be saved in the credential locker.
+        /// Gets or sets a value indicating whether the entered credentials may be saved in the credential locker.
         /// <para/>
         /// The first time AllowSaveCredentials is set to true, the cached credentials are added to the <see cref="IdentityManager.AddCredential">IdentityManager</see>
         /// </summary>
@@ -80,8 +85,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
 
         /// <summary>
         /// Gets or sets the option that specifies the initial state of the dialog's Save Credential check
-        //     box. The default value is clear (unchecked).
+        /// box. This property is ignored if <see cref="AllowSaveCredentials"/> is set to false.
         /// </summary>
+        /// <para>If the value is Hidden, the user will have no choice to save the entered credential or not.
+        /// The credential will always be saved if <see cref="AllowSaveCredentials"/> is set to true.</para>
+        /// <remarks>The default value is Unselected.</remarks>
         public CredentialSaveOption CredentialSaveOption
         {
             get { return _credentialSaveOption; }
