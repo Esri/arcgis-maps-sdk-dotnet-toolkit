@@ -31,12 +31,6 @@ namespace ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataForm
 		{
 			this.InitializeComponent();
 			CreateAppBar();
-			MyMapView.NavigationCompleted += MyMapView_NavigationCompleted;
-		}
-
-		void MyMapView_NavigationCompleted(object sender, EventArgs e)
-		{
-			Debug.WriteLine(MyMapView.Extent.ToJson());
 		}
 
 		private async void MyMapView_MapViewTapped(object sender, Esri.ArcGISRuntime.Controls.MapViewInputEventArgs e)
