@@ -15,7 +15,7 @@
 					ShowLegend="False" />
 				<esri:ArcGISDynamicMapServiceLayer DisplayName="Water Network"
 					ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/MapServer" />
-				<esri:FeatureLayer DisplayName="Damage to Residential Buildings ">
+				<esri:FeatureLayer DisplayName="Damage to Residential Buildings">
 					<esri:FeatureLayer.FeatureTable>
 						<esri:ServiceFeatureTable 
 							ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0" 

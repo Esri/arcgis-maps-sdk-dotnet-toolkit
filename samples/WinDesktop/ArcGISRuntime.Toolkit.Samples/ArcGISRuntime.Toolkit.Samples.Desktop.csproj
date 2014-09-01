@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>SampleDescriptions.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -88,6 +89,9 @@
     <Compile Include="ScaleLine\ScaleLineStylingSample.xaml.cs">
       <DependentUpon>ScaleLineStylingSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SymbolDisplay\SymbolDisplaySample.xaml.cs">
+      <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TemplatePicker\TemplatePickerSample.xaml.cs">
       <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
     </Compile>
@@ -110,7 +114,9 @@
       <Name>Esri.ArcGISRuntime.Toolkit.WindowsDesktop</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="SampleDescriptions.xml" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Attribution\AttributionSample.xaml">
       <SubType>Designer</SubType>
@@ -148,6 +154,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SymbolDisplay\SymbolDisplaySample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TemplatePicker\TemplatePickerSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -156,9 +166,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="SampleDescriptions.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

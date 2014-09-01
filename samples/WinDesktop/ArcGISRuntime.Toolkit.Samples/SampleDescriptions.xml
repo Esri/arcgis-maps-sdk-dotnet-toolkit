@@ -182,6 +182,29 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay.SymbolDisplaySample">
+            <summary>
+            Demonstrates how to show symbol outside of the map using SymbolDisplay control.
+            </summary>
+            <title>SymbolDisplay</title>
+            <category>Toolkit</category>
+            <subcategory>SymbolDisplay</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            SymbolDisplaySample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay.SymbolDisplaySample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay.SymbolDisplaySample.Assessment">
+            <summary>
+            Model class to wrap symbol and feature information into one object for binding
+            </summary>
+        </member>
         <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker.TemplatePickerSample">
             <summary>
             Demonstrates how to use TemplatePicker control.
