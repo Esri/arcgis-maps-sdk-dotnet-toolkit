@@ -95,6 +95,9 @@
     <Compile Include="ScaleLine\ScaleLineStylingSample.xaml.cs">
       <DependentUpon>ScaleLineStylingSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SymbolDisplay\SymbolDisplaySample.xaml.cs">
+      <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TemplatePicker\TemplatePickerSample.xaml.cs">
       <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
     </Compile>
@@ -134,6 +137,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ScaleLine\ScaleLineStylingSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SymbolDisplay\SymbolDisplaySample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,12 +1,22 @@
-﻿using Esri.ArcGISRuntime.Data;
+﻿using Esri.ArcGISRuntime.ArcGISServices;
+using Esri.ArcGISRuntime.Controls;
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Layers;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Query;
 using System;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 
-namespace ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay
+namespace ArcGISRuntime.Toolkit.Samples.Windows.SymbolDisplay
 {
 	/// <summary>
 	/// Demonstrates how to show symbol outside of the map using SymbolDisplay control.
@@ -16,11 +26,11 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay
 	/// <subcategory>SymbolDisplay</subcategory>
 	/// <usesoffline>false</usesoffline>
 	/// <usesonline>true</usesonline>
-	public partial class SymbolDisplaySample : UserControl
+	public sealed partial class SymbolDisplaySample : Page
 	{
 		public SymbolDisplaySample()
 		{
-			InitializeComponent();
+			this.InitializeComponent();
 			LoadFeatures();
 		}
 
@@ -34,10 +44,11 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay
 
 				// Get incidents that has incidentid
 				var damageAssessments = await damageAssessmentTable.QueryAsync(new QueryFilter() 
-				{ 
-					WhereClause = "incidentid <> ''" , MaximumRows = 100
+				{
+					WhereClause = "incidentid <> ''",
+					MaximumRows = 100
 				});
-			
+
 				var assessments = new List<Assessment>();
 				// Create assessment items from search results
 				foreach (var assessment in damageAssessments)
@@ -52,11 +63,11 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay
 				}
 
 				FeatureList.ItemsSource = assessments;
-	
+
 			}
 			catch (Exception exception)
 			{
-				MessageBox.Show(string.Format("Error occured : {0}", exception.ToString()), "Sample error");
+				var _x = new MessageDialog(string.Format("Error occured : {0}", exception.ToString()), "Sample error").ShowAsync();
 			}
 		}
 
@@ -65,7 +76,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Desktop.SymbolDisplay
 		/// </summary>
 		internal class Assessment
 		{
-			public Symbol Symbol {get; set;}
+			public Esri.ArcGISRuntime.Symbology.Symbol Symbol { get; set; }
 			public GeodatabaseFeature Feature { get; set; }
 		}
 	}
