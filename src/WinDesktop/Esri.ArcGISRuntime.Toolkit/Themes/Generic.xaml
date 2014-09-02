@@ -21,10 +21,10 @@
 		<Setter Property="LegendItemTemplate">
 			<Setter.Value>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal" Margin="1">
-						<Grid MinWidth="20" MinHeight="10">
-							<Image Source="{Binding SymbolSwatch}"
-                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" Margin="1">
+                        <Grid MinWidth="20" MinHeight="10">
+                            <primitives:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}"
+                                                 VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</Grid>
 						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
 					</StackPanel>
