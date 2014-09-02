@@ -73,7 +73,7 @@
     <DocumentationFile>..\..\..\output\WinPhone\x86\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Security\OAuthAuthorize.cs" />
+    <Compile Include="Security\OAuthAuthorizeHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

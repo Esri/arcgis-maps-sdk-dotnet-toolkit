@@ -12,9 +12,9 @@ using Esri.ArcGISRuntime.Security;
 namespace Esri.ArcGISRuntime.Toolkit.Security
 {
 	/// <summary>
-	/// WinPhone OAuthAuthorize component which encapsulates the redirection of the user to the OAuth authorization URI by using a WebView.
+	/// WinPhone OAuthAuthorize handler which encapsulates the redirection of the user to the OAuth authorization URI by using a WebView.
 	/// </summary>
-	public class OAuthAuthorize : IOAuthAuthorize
+	public class OAuthAuthorizeHandler : IOAuthAuthorizeHandler
 	{
 		private string _callbackUrl;
 		private TaskCompletionSource<IDictionary<string, string>> _tcs;
