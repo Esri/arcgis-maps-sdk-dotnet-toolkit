@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>SampleDescriptions.xml</DocumentationFile>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +58,9 @@
     </Compile>
     <Compile Include="Attribution\DynamicAttributionSample.xaml.cs">
       <DependentUpon>DynamicAttributionSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FeatureDataField\FeatureDataFieldSample.xaml.cs">
+      <DependentUpon>FeatureDataFieldSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="FeatureDataForm\FeatureDataFormSample.xaml.cs">
       <DependentUpon>FeatureDataFormSample.xaml</DependentUpon>
@@ -115,9 +119,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SampleDescriptions.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Attribution\AttributionSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +130,10 @@
     <Page Include="Attribution\DynamicAttributionSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FeatureDataField\FeatureDataFieldSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="FeatureDataForm\FeatureDataFormSample.xaml">
       <SubType>Designer</SubType>
@@ -166,6 +171,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SampleDescriptions.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

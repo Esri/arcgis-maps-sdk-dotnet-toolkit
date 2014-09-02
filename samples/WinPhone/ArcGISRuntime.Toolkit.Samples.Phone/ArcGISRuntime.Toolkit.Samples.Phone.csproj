@@ -79,6 +79,9 @@
     <Compile Include="Attribution\DynamicAttributionSample.xaml.cs">
       <DependentUpon>DynamicAttributionSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FeatureDataField\FeatureDataFieldSample.xaml.cs">
+      <DependentUpon>FeatureDataFieldSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FeatureDataForm\FeatureDataFormSample.xaml.cs">
       <DependentUpon>FeatureDataFormSample.xaml</DependentUpon>
     </Compile>
@@ -117,6 +120,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Attribution\DynamicAttributionSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FeatureDataField\FeatureDataFieldSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

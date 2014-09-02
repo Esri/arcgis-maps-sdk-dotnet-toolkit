@@ -58,6 +58,29 @@
             InitializeComponent
             </summary>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataField.FeatureDataFieldSample">
+            <summary>
+            Demonstrates how to show attributes using FeatureDataField.
+            </summary>
+            <title>Feature data field</title>
+            <category>Toolkit</category>
+            <subcategory>FeatureDataField</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+            <summary>
+            FeatureDataFieldSample
+            </summary>
+        </member>
+        <member name="M:ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataField.FeatureDataFieldSample.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataField.FeatureDataFieldSample.Assessment">
+            <summary>
+            Model class to wrap symbol and feature information into one object for binding
+            </summary>
+        </member>
         <member name="T:ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm.FeatureDataFormSample">
             <summary>
             Demonstrates how to show use FeatureDataForm to edit Features attributes.

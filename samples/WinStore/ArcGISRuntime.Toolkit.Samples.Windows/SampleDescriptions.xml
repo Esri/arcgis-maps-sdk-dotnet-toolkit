@@ -34,6 +34,27 @@
             <usesoffline>false</usesoffline>
             <usesonline>true</usesonline>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataField.FeatureDataFieldSample">
+            <summary>
+            Demonstrates how to show attributes using FeatureDataField.
+            </summary>
+            <title>Feature data field</title>
+            <category>Toolkit</category>
+            <subcategory>FeatureDataField</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataField.FeatureDataFieldSample.Assessment">
+            <summary>
+            Model class to wrap symbol and feature information into one object for binding
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataField.DateTimeConverter">
+            <summary>
+            DatePicker uses DateTimeOffset type in Date property insetead of DateTime so we need to 
+            convert DateTime used by FeatureDataField to DateTimeOffset and back.
+            </summary>
+        </member>
         <member name="T:ArcGISRuntime.Toolkit.Samples.Windows.Legend.LegendByScaleSample">
             <summary>
             Demonstrates how to show legend from layers that are in the scale of the map view.

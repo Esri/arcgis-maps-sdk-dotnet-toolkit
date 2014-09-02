@@ -24,6 +24,27 @@
             <usesoffline>false</usesoffline>
             <usesonline>true</usesonline>
         </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataField.FeatureDataFieldSample">
+            <summary>
+            Demonstrates how to show attributes using FeatureDataField.
+            </summary>
+            <title>Feature data field</title>
+            <category>Toolkit</category>
+            <subcategory>FeatureDataField</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataField.FeatureDataFieldSample.Assessment">
+            <summary>
+            Model class to wrap symbol and feature information into one object for binding
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataField.DateTimeConverter">
+            <summary>
+            DatePicker uses DateTimeOffset type in Date property insetead of DateTime so we need to 
+            convert DateTime used by FeatureDataField to DateTimeOffset and back.
+            </summary>
+        </member>
         <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataForm.FeatureDataFormSample">
             <summary>
             Demonstrates how to show use FeatureDataForm to edit Features attributes.
