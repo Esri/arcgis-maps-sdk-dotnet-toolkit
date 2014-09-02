@@ -7,6 +7,7 @@
 	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
 	xmlns:data="using:Esri.ArcGISRuntime.Data"
 	xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.Controls"
+	xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Controls.Primitives"
 	xmlns:ValueConverters="using:Esri.ArcGISRuntime.Toolkit.ValueConverters;assembly=Esri.ArcGISRuntime.Toolkit" >
 
 	<Page.Resources>
@@ -30,10 +31,9 @@
 								</Grid.ColumnDefinitions>
 								<Border Width="40" Height="40"							
 									Padding="0" Margin="2">
-									<Image HorizontalAlignment="Center" VerticalAlignment="Center"
-										Source="{Binding Swatch}" Stretch="Uniform" />
+									<primitives:SymbolDisplay Symbol="{Binding Symbol}"/>
 								</Border>
-								<StackPanel Grid.Column="1">
+								<StackPanel Grid.Column="1" Margin="5,0,0,0">
 									<TextBlock FontWeight="Bold" Text="{Binding FeatureTemplate.Name}"
 											   Width="300"/>
 									<TextBlock Text="{Binding FeatureTemplate.Description}"

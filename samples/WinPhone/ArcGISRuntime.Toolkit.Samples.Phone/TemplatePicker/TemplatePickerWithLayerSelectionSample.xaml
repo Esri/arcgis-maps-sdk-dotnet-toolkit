@@ -12,60 +12,8 @@
 	<Page.Resources>
 		<local:LayerToLayersCollectionConverter x:Key="LayerToLayerCollection"/>
 		<local:LayerCollectionFeatureLayersConverter x:Key="LayersToFeatureLayerCollection"/>
-
-		<Style TargetType="toolkit:TemplatePicker">
-			<Setter Property="Background"  Value="{StaticResource PhoneBackgroundColor}"/>
-			<Setter Property="BorderBrush"  Value="{StaticResource PhoneForegroundBrush}"/>
-			<Setter Property="ItemTemplate">
-				<Setter.Value>
-					<DataTemplate>
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto"/>
-								<ColumnDefinition Width="*"/>
-							</Grid.ColumnDefinitions>
-							<Button Command="{Binding Command}" CommandParameter="{Binding}"
-                            Width="80" Height="80" Padding="0" Margin="0">
-								<Image Source="{Binding Swatch}"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Stretch="Uniform" />
-							</Button>
-							<TextBlock 
-							Text="{Binding FeatureTemplate.Name}" 
-							TextWrapping="Wrap" 
-							Grid.Column="1"
-                            VerticalAlignment="Center" Margin="10,0,0,0"/>
-						</Grid>
-					</DataTemplate>
-				</Setter.Value>
-			</Setter>
-			<Setter Property="ItemsPanel">
-				<Setter.Value>
-					<ItemsPanelTemplate>
-						<StackPanel />
-					</ItemsPanelTemplate>
-				</Setter.Value>
-			</Setter>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="toolkit:TemplatePicker">
-						<Border Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        Padding="{TemplateBinding Padding}" >
-							<ItemsControl x:Name="TemplateItems" 
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    ItemTemplate="{TemplateBinding ItemTemplate}"
-                                    ItemsPanel="{TemplateBinding ItemsPanel}" />
-						</Border>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
 	</Page.Resources>
-
+	
 	<!-- Application command bar -->
 	<Page.BottomAppBar>
 		<CommandBar IsOpen="True">
