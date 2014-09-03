@@ -15,9 +15,9 @@ using Esri.ArcGISRuntime.Security;
 namespace Esri.ArcGISRuntime.Toolkit.Security
 {
 	/// <summary>
-	/// Desktop OAuthAuthorize component which encapsulates the redirection of the user to the OAuth authorization URI by using a WebBrowser.
+	/// Desktop OAuthAuthorize handler which encapsulates the redirection of the user to the OAuth authorization URI by using a WebBrowser.
 	/// </summary>
-	public class OAuthAuthorize : IOAuthAuthorize
+	public class OAuthAuthorizeHandler : IOAuthAuthorizeHandler
 	{
 		private Window _window;
 		private TaskCompletionSource<IDictionary<string, string>> _tcs;
@@ -89,12 +89,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
 		// Check if the web browser is redirected to the callback url
 		void WebBrowserOnNavigating(object sender, NavigatingCancelEventArgs e)
 		{
+			const string portalApprovalMarker = "/oauth2/approval";
 			var webBrowser = sender as WebBrowser;
 			Uri uri = e.Uri;
-			if (webBrowser == null || uri == null || _tcs == null)
+			if (webBrowser == null || uri == null || _tcs == null || string.IsNullOrEmpty(uri.AbsoluteUri))
 				return;
 
-			if (!String.IsNullOrEmpty(uri.AbsoluteUri) && uri.AbsoluteUri.StartsWith(_callbackUrl))
+			bool isRedirected = uri.AbsoluteUri.StartsWith(_callbackUrl) ||
+				_callbackUrl.Contains(portalApprovalMarker) && uri.AbsoluteUri.Contains(portalApprovalMarker); // Portal OAuth workflow with org defined at runtime --> the redirect uri can change
+			if (isRedirected)
 			{
 				// The web browser is redirected to the callbackUrl ==> close the window, decode the parameters returned as fragments or query, and return these parameters as result of the Task
 				e.Cancel = true;
