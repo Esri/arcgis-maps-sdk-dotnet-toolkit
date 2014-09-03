@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
 		// Check if the web browser is redirected to the callback url
 		void WebBrowserOnNavigating(object sender, NavigatingCancelEventArgs e)
 		{
-			const string portalApprovalMarker = "/sharing/oauth2/approval";
+			const string portalApprovalMarker = "/oauth2/approval";
 			var webBrowser = sender as WebBrowser;
 			Uri uri = e.Uri;
 			if (webBrowser == null || uri == null || _tcs == null || string.IsNullOrEmpty(uri.AbsoluteUri))

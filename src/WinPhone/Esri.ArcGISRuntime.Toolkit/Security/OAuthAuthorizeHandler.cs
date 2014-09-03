@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
 		// Check if the web view is redirected to the callback url
 		void WebViewOnNavigationStarting(WebView webView, WebViewNavigationStartingEventArgs args)
 		{
-			const string portalApprovalMarker = "/sharing/oauth2/approval";
+			const string portalApprovalMarker = "/oauth2/approval";
 			Uri uri = args.Uri;
 			if (webView == null || uri == null || _tcs == null || string.IsNullOrEmpty(uri.AbsoluteUri))
 				return;
