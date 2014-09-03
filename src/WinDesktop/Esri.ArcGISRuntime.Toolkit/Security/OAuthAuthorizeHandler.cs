@@ -15,9 +15,9 @@ using Esri.ArcGISRuntime.Security;
 namespace Esri.ArcGISRuntime.Toolkit.Security
 {
 	/// <summary>
-	/// Desktop OAuthAuthorize component which encapsulates the redirection of the user to the OAuth authorization URI by using a WebBrowser.
+	/// Desktop OAuthAuthorize handler which encapsulates the redirection of the user to the OAuth authorization URI by using a WebBrowser.
 	/// </summary>
-	public class OAuthAuthorize : IOAuthAuthorize
+	public class OAuthAuthorizeHandler : IOAuthAuthorizeHandler
 	{
 		private Window _window;
 		private TaskCompletionSource<IDictionary<string, string>> _tcs;
