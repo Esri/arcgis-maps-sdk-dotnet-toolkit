@@ -227,7 +227,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 					if (Layer is FeatureLayer)
 					{
 						var fl = Layer as FeatureLayer;
-						geometryType = fl.FeatureTable.GeometryType;
+						if (fl.FeatureTable != null && fl.FeatureTable.ServiceInfo != null)
+							geometryType = fl.FeatureTable.ServiceInfo.GeometryType;
 					}
 
 					if (result.LayerLegendInfos != null)

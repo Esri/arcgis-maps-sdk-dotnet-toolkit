@@ -68,7 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\SignInDialog\SignInDialog.cs" />
-    <Compile Include="Security\OAuthAuthorizeHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

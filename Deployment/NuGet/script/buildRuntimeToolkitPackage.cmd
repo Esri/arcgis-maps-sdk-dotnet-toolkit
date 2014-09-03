@@ -2,7 +2,7 @@ setlocal EnableDelayedExpansion
 @ECHO OFF
 
 REM package metadata
-SET VERSION=10.2.4
+SET VERSION=10.2.3
 SET RUNTIMEID=Esri.ArcGISRuntime
 SET ID=%RUNTIMEID%.Toolkit
 SET TITLENOTE=
