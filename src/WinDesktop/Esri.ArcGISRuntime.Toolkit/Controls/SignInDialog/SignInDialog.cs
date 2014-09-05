@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 	/// </remarks>
 	[TemplatePart(Name = "RichTextBoxMessage", Type = typeof(RichTextBox))]
 	[TemplatePart(Name = "RichTextBoxErrorMessage", Type = typeof(RichTextBox))]
-	public class SignInDialog : Control, INotifyPropertyChanged
+	internal class SignInDialog : Control, INotifyPropertyChanged // might be public
 	{
 
 		#region Constructors
@@ -51,8 +51,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		/// </summary>
 		public SignInDialog()
 		{
-			GenerateCredentialCommand = new GenerateCredentialCommandImpl(this);
-			CancelCommand = new CancelCommandImpl(this);
+			GenerateCredentialCommand = new ActionCommand(async ()=> await GenerateCredentialAsync(), () => IsReady);
+			CancelCommand = new ActionCommand(Cancel, () => _tcs != null);
 			DataContext = this;
 		}
 
@@ -265,6 +265,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 		#endregion
 
+		#region Public Property CredentialSaveOption
+
+		private CredentialSaveOption _credentialSaveOption;
+
+		/// <summary>
+		/// Gets or sets the option that specifies the initial state of the dialog's Save Credential check
+		/// box. The default value is clear (unchecked).
+		/// </summary>
+		public CredentialSaveOption CredentialSaveOption
+		{
+			get { return _credentialSaveOption; }
+			set
+			{
+				if (_credentialSaveOption != value)
+				{
+					_credentialSaveOption = value;
+					OnPropertyChanged("CredentialSaveOption");
+				}
+			}
+		}
+		#endregion
+
 		/// <summary>
 		/// Gets the generate credential command allowing to generate a credential asynchronously.
 		/// </summary>
@@ -278,43 +300,43 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 		#region DoSignIn static challenge method
 
-		/// <summary>
-		/// Static challenge method leaveraging the SignInDialog in a child window.
-		/// </summary>
-		public static Task<Credential> DoSignIn(CredentialRequestInfo credentialRequestInfo)
-		{
-			Dispatcher d = Application.Current == null ? null : Application.Current.Dispatcher;
-			Task<Credential> doSignInTask;
+		///// <summary>
+		///// Static challenge method leaveraging the SignInDialog in a child window.
+		///// </summary>
+		//public static Task<Credential> DoSignIn(CredentialRequestInfo credentialRequestInfo)
+		//{
+		//	Dispatcher d = Application.Current == null ? null : Application.Current.Dispatcher;
+		//	Task<Credential> doSignInTask;
 
-			if (d != null && !d.CheckAccess())
-			{
-				//Ensure we are showing up the SignInDialog on the UI thread
-				var tcs = new TaskCompletionSource<Credential>();
-				d.BeginInvoke((Action)(async () =>
-				{
-					try
-					{
-						Credential crd = await DoSignInInUIThread(credentialRequestInfo);
-						tcs.TrySetResult(crd);
-					}
-					catch (Exception error)
-					{
-						tcs.TrySetException(error);
-					}
-				}));
-				doSignInTask = tcs.Task;
-			}
-			else
-				doSignInTask = DoSignInInUIThread(credentialRequestInfo);
+		//	if (d != null && !d.CheckAccess())
+		//	{
+		//		//Ensure we are showing up the SignInDialog on the UI thread
+		//		var tcs = new TaskCompletionSource<Credential>();
+		//		d.BeginInvoke((Action)(async () =>
+		//		{
+		//			try
+		//			{
+		//				Credential crd = await DoSignInInUIThread(credentialRequestInfo);
+		//				tcs.TrySetResult(crd);
+		//			}
+		//			catch (Exception error)
+		//			{
+		//				tcs.TrySetException(error);
+		//			}
+		//		}));
+		//		doSignInTask = tcs.Task;
+		//	}
+		//	else
+		//		doSignInTask = DoSignInInUIThread(credentialRequestInfo);
 
-			return doSignInTask.ContinueWith(t =>
-			{
-				// Flatten the exceptions
-				if (t.Exception != null)
-					throw t.Exception.Flatten().InnerException;
-				return t.Result;
-			});
-		}
+		//	return doSignInTask.ContinueWith(t =>
+		//	{
+		//		// Flatten the exceptions
+		//		if (t.Exception != null)
+		//			throw t.Exception.Flatten().InnerException;
+		//		return t.Result;
+		//	});
+		//}
 
 		private static Task<Credential> DoSignInInUIThread(CredentialRequestInfo credentialRequestInfo)
 		{
@@ -366,67 +388,174 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			}, ts); 
 
 			// Show the window
-			childWindow.ShowDialog();
+			childWindow.Show(); // showdialog?
 
 			return doSignInTask;
 		}
 
 		#endregion
 
-		#region NetworkCredential Generation
+		#region IChallengeHandler interface:  CreateCredentialAsync
 
-		private void GenerateNetworkCredential()
+		/// <summary>
+		/// Challenge handler leaveraging the SignInDialog in a child window dialog.
+		/// </summary>
+		public Task<Credential> CreateCredentialAsync(CredentialRequestInfo credentialRequestInfo)
 		{
-			if (IsReady)
+			return ExecuteOnUIThread(() => DoSignInInUIThread(credentialRequestInfo));
+		}
+
+		//private async Task<Credential> DoSignInInUIThread(CredentialRequestInfo credentialRequestInfo)
+		//{
+		//	var signInDialog = this;
+
+		//	// Create the ContentDialog that contains the SignInDialog
+		//	var contentDialog = new ContentDialog
+		//	{
+		//		SecondaryButtonText = "cancel",
+		//		PrimaryButtonText = "sign in",
+		//		FullSizeDesired = true,
+		//		Content = signInDialog,
+		//	};
+
+		//	contentDialog.PrimaryButtonClick += ContentDialogOnPrimaryButtonClick;
+
+		//	// Bind the Title so the ContentDialog Title is the SignInDialog title (that will be initialized later)
+		//	contentDialog.SetBinding(ContentDialog.TitleProperty, new Binding { Path = new PropertyPath("Title"), Source = signInDialog });
+
+		//	contentDialog.SetBinding(ContentDialog.IsPrimaryButtonEnabledProperty, new Binding { Path = new PropertyPath("IsReady"), Source = signInDialog });
+
+		//	contentDialog.Closed += ContentDialogOnClosed; // be sure the SignInDialog is deactivated when pressing back button
+
+		//	// Show the content dialog
+		//	var _ = contentDialog.ShowAsync(); // don't await else that would block here
+
+		//	// Wait for the creation of the credential
+		//	Credential crd;
+		//	try
+		//	{
+		//		crd = await signInDialog.WaitForCredentialAsync(credentialRequestInfo);
+		//	}
+		//	finally
+		//	{
+		//		// Close the content dialog
+		//		contentDialog.Hide();
+		//	}
+
+		//	return crd;
+		//}
+
+
+		private async Task<Credential> WaitForCredentialAsync(CredentialRequestInfo credentialRequestInfo)
+		{
+			Debug.Assert(credentialRequestInfo != null);
+			Cancel(); // cancel previous task
+			_tcs = new TaskCompletionSource<Credential>();
+			CredentialRequestInfo = credentialRequestInfo; // Will update 'IsReady' status
+			//using (credentialRequestInfo.CancellationToken.Register(Cancel, true)); // for any reason, I get a crash if using true as last argument (whatever the callback, WinPhone bug?)
+			using (credentialRequestInfo.CancellationToken.Register(() =>
 			{
-				var credential = new ArcGISNetworkCredential { Credentials = new NetworkCredential(UserName, Password) };
-				Debug.Assert(Tcs != null); // due to test on IsReady
-				Tcs.TrySetResult(credential);
-				Tcs = null;
-				ErrorMessage = null;
+				if (_tcs != null)
+				{
+					_tcs.TrySetCanceled();
+					_tcs = null;
+				}
+			}, false))
+			{
+				return await _tcs.Task;
 			}
 		}
+
+		private void Cancel()
+		{
+			IsBusy = false;
+			ErrorMessage = null;
+			_requestID++;
+			CredentialRequestInfo = null;
+			if (_tcs != null)
+			{
+				_tcs.TrySetCanceled();
+				_tcs = null;
+			}
+		}
+
+		//private void ContentDialogOnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+		//{
+		//	// try to generate the credential
+		//	var _ = GenerateCredentialAsync();
+		//	args.Cancel = true; // don't close the dialog for now, wait for the generation result
+		//}
+
+		//private void ContentDialogOnClosed(ContentDialog sender, ContentDialogClosedEventArgs args)
+		//{
+		//	sender.Closed -= ContentDialogOnClosed;
+		//	var signInDialog = sender.Content as SignInDialog;
+		//	if (signInDialog != null)
+		//	{
+		//		signInDialog.Cancel(); // be sure the SignInDialog is deactivated when pressing back button
+		//		sender.Content = null;
+		//	}
+		//}
+
 		#endregion
 
-		#region Token Generation
+		#region Credential Generation
 
-		private async void GenerateToken()
+		private async Task<Credential> GenerateCredentialAsync()
+		{
+			ErrorMessage = null;
+			Credential crd = _credentialRequestInfo != null && _credentialRequestInfo.AuthenticationType == AuthenticationType.Token
+				? await GenerateTokenCredentialAsync()
+				: GenerateNetworkCredential();
+
+			if (crd != null && _tcs != null)
+			{
+				_tcs.SetResult(crd);
+				_tcs = null;
+			}
+			return crd;
+		}
+
+		// Create a network credential from username/password 
+		private Credential GenerateNetworkCredential()
+		{
+			return IsReady ? new ArcGISNetworkCredential { Credentials = new NetworkCredential(UserName, Password) } : null;
+		}
+
+		// Token Generation
+		private async Task<Credential> GenerateTokenCredentialAsync()
 		{
 			if (!IsReady)
-				return;
-
+				return null;
 			IsBusy = true;
-			ErrorMessage = null;
-
-			long requestID = ++_requestID;
+			// ErrorMessage = null // todo whre?
+			long requestID = _requestID; // todo ++ somewhere
 			Exception error = null;
-			Credential credential = null;
+			Credential credential;
 			try
 			{
 				credential = await IdentityManager.Current.GenerateCredentialAsync(_credentialRequestInfo.ServiceUri, UserName, Password, _credentialRequestInfo.GenerateTokenOptions);
 			}
 			catch (Exception e)
 			{
+				credential = null;
 				error = e;
 			}
-			if (requestID != _requestID || Tcs == null)
-				return; // No more the current request
+			if (requestID != _requestID || _tcs == null)
+				return null; // No more the current request
 
 			IsBusy = false;
 
-			if (error == null)
-			{
-				Tcs.TrySetResult(credential);
-				Tcs = null;
-			}
-			else
+			if (error != null)
 			{
 				// Display the error message and let the user try again
 				string message = error.Message;
 				if (string.IsNullOrEmpty(message) && error.InnerException != null)
 					message = error.InnerException.Message;
+				message = Regex.Replace(message, "Error code '[0-9]*' : '([^']*)'", "$1"); // Remove Error code from the message
 				ErrorMessage = message;
 			}
+			return credential;
 		}
 		#endregion
 
@@ -517,6 +646,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 		// Private properties
 		private TaskCompletionSource<Credential> _tcs;
+		// todo remove?
 		private TaskCompletionSource<Credential> Tcs
 		{
 			get { return _tcs; }
@@ -539,85 +669,107 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
 		private void UpdateCanGenerate()
 		{
-			((GenerateCredentialCommandImpl)GenerateCredentialCommand).OnCanExecuteChanged();
+			((ActionCommand)GenerateCredentialCommand).RaiseCanExecute();
 		}
 
 		private void UpdateCanCancel()
 		{
-			((CancelCommandImpl)CancelCommand).OnCanExecuteChanged();
+			((ActionCommand)CancelCommand).RaiseCanExecute();
 		}
 
-		private void Cancel()
+
+		#region ExecuteOnUIThread Utils
+
+		// Execute a task in the UI thread
+		internal static Task<T> ExecuteOnUIThread<T>(Func<Task<T>> f)
 		{
-			IsBusy = false;
-			if (Tcs != null)
-			{
-				Tcs.TrySetCanceled();
-				Tcs = null;
-			}
+			var dispatcher = GetDispatcher();
+			return dispatcher == null ? f() : ExecuteOnUIThread(f, dispatcher);
 		}
 
-		#region Commands implementation
-		private class GenerateCredentialCommandImpl : ICommand
+//		private static Dispatcher GetDispatcher()
+//		{
+//			if (_dispatcher == null)
+//#if WINDOWS_PHONE
+//				_dispatcher = Application.Current == null ? null : Deployment.Current.Dispatcher;
+//#else
+//				_dispatcher = Application.Current == null ? null : Application.Current.Dispatcher;
+//#endif
+//			return _dispatcher != null && !_dispatcher.CheckAccess() ? _dispatcher : null;
+//		}
+
+		private static Dispatcher GetDispatcher()
 		{
-			private readonly SignInDialog _signInDialog;
-
-			internal GenerateCredentialCommandImpl(SignInDialog signInDialog)
-			{
-				_signInDialog = signInDialog;
-			}
-
-			public bool CanExecute(object parameter)
-			{
-				return _signInDialog.IsReady;
-			}
-
-			public event EventHandler CanExecuteChanged;
-			internal void OnCanExecuteChanged()
-			{
-				if (CanExecuteChanged != null)
-					CanExecuteChanged(this, EventArgs.Empty);
-			}
-
-			public void Execute(object parameter)
-			{
-				if (_signInDialog._credentialRequestInfo != null)
-				{
-					if (_signInDialog._credentialRequestInfo.AuthenticationType == AuthenticationType.Token)
-						_signInDialog.GenerateToken();
-					else
-						_signInDialog.GenerateNetworkCredential();
-				}
-			}
+			return Application.Current != null && Application.Current.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess()
+				? Application.Current.Dispatcher
+				: null;
 		}
-
-		private class CancelCommandImpl : ICommand
+		//private static void ExecuteOnUIThread(Action action)
+		//{
+		//	var dispatcher = GetDispatcher();
+		//	if (dispatcher != null)
+		//		dispatcher.BeginInvoke(action);
+		//	else
+		//		action();
+		//}
+		private async static Task<T> ExecuteOnUIThread<T>(Func<Task<T>> f, Dispatcher dispatcher)
 		{
-			private readonly SignInDialog _signInDialog;
-
-			internal CancelCommandImpl(SignInDialog signInDialog)
-			{
-				_signInDialog = signInDialog;
-			}
-
-			public bool CanExecute(object parameter)
-			{
-				return _signInDialog.Tcs != null;
-			}
-
-			public event EventHandler CanExecuteChanged;
-			internal void OnCanExecuteChanged()
-			{
-				if (CanExecuteChanged != null)
-					CanExecuteChanged(this, EventArgs.Empty);
-			}
-
-			public void Execute(object parameter)
-			{
-				_signInDialog.Cancel();
-			}
+			Debug.Assert(dispatcher != null);
+			//var tcs = new TaskCompletionSource<T>();
+			//dispatcher.BeginInvoke(new Action(async () =>
+			//								  {
+			//									  try
+			//									  {
+			//										  T result = await f();
+			//										  tcs.TrySetResult(result);
+			//									  }
+			//									  catch (Exception error)
+			//									  {
+			//										  tcs.TrySetException(error);
+			//									  } 
+			//								  }));
+			//return tcs.Task;
+			Task<T> task = null;
+			await dispatcher.BeginInvoke(new Action(() => { task = f(); }));
+			return await task;
 		}
 		#endregion
+
+		//#region Commands implementation
+		//private class GenerateCredentialCommandImpl : ICommand
+		//{
+		//	private readonly SignInDialog _signInDialog;
+
+		//	internal GenerateCredentialCommandImpl(SignInDialog signInDialog)
+		//	{
+		//		_signInDialog = signInDialog;
+		//	}
+
+		//	public bool CanExecute(object parameter)
+		//	{
+		//		return _signInDialog.IsReady;
+		//	}
+
+		//	public event EventHandler CanExecuteChanged;
+		//	internal void OnCanExecuteChanged()
+		//	{
+		//		if (CanExecuteChanged != null)
+		//			CanExecuteChanged(this, EventArgs.Empty);
+		//	}
+
+		//	public void Execute(object parameter)
+		//	{
+		//		if (_signInDialog._credentialRequestInfo != null)
+		//		{
+		//			if (_signInDialog._credentialRequestInfo.AuthenticationType == AuthenticationType.Token)
+		//				_signInDialog.GenerateToken();
+		//			else
+		//				_signInDialog.GenerateNetworkCredential();
+		//		}
+		//	}
+		//}
+
+		//#endregion
 
 	}
 
@@ -739,5 +891,121 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 			obj.SetValue(PasswordTextProperty, value);
 		}
 	}
+
+	/// <summary>
+	/// *FOR INTERNAL USE ONLY* Convert a  CredentialSaveOption to a bool.
+	/// </summary>
+	/// <exclude/>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	internal class CredentialSaveOptionBoolConverter : IValueConverter
+	{
+		/// <summary>
+		/// Modifies the source data before passing it to the target for display in the UI.
+		/// </summary>
+		/// <param name="value">The source data being passed to the target.</param>
+		/// <param name="targetType">The type of the target property.</param>
+		/// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+		/// <param name="culture">The culture of the conversion.</param>
+		/// <returns>
+		/// The value to be passed to the target dependency property.
+		/// </returns>
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			if (value is CredentialSaveOption)
+			{
+				var credentialSaveOption = (CredentialSaveOption)value;
+				return credentialSaveOption == CredentialSaveOption.Selected;
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Modifies the target data before passing it to the source object. This method is called only in TwoWay bindings.
+		/// </summary>
+		/// <param name="value">The target data being passed to the source.</param>
+		/// <param name="targetType">The type of the target property.</param>
+		/// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+		/// <param name="culture">The culture of the conversion.</param>
+		/// <returns>
+		/// The value to be passed to the source object.
+		/// </returns>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			if (value is bool)
+			{
+				var val = (bool)value;
+				return val ? CredentialSaveOption.Selected : CredentialSaveOption.Unselected;
+			}
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// *FOR INTERNAL USE ONLY* Convert a  CredentialSaveOption to a visibility.
+	/// </summary>
+	/// <exclude/>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	internal class CredentialSaveOptionVisibilityConverter : IValueConverter
+	{
+		/// <summary>
+		/// Modifies the source data before passing it to the target for display in the UI.
+		/// </summary>
+		/// <param name="value">The source data being passed to the target.</param>
+		/// <param name="targetType">The type of the target property.</param>
+		/// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+		/// <param name="culture">The culture of the conversion.</param>
+		/// <returns>
+		/// The value to be passed to the target dependency property.
+		/// </returns>
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			if (value is CredentialSaveOption)
+			{
+				var credentialSaveOption = (CredentialSaveOption)value;
+				return credentialSaveOption == CredentialSaveOption.Hidden ? Visibility.Collapsed : Visibility.Visible;
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Modifies the target data before passing it to the source object. This method is called only in TwoWay bindings.
+		/// </summary>
+		/// <param name="value">The target data being passed to the source.</param>
+		/// <param name="targetType">The type of the target property.</param>
+		/// <param name="parameter">An optional parameter to be used in the converter logic.</param>
+		/// <param name="culture">The culture of the conversion.</param>
+		/// <returns>
+		/// The value to be passed to the source object.
+		/// </returns>
+		/// <exception cref="System.NotImplementedException"></exception>
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+
+	/// <summary>
+	/// Identifies the state of the dialog box option on whether to save credentials.
+	/// </summary>
+	public enum CredentialSaveOption
+	{
+		/// <summary>
+		/// The "Save credentials?" dialog box is not selected, indicating that the user doesn't want their credentials saved.
+		/// </summary>
+		Unselected = 0,
+
+		/// <summary>
+		/// The "Save credentials?" dialog box is selected, indicating that the user wants their credentials saved.
+		/// </summary>
+		Selected,
+
+		/// <summary>
+		/// The "Save credentials?" dialog box is not displayed at all.
+		/// </summary>
+		Hidden
+	}
+
 } 
 
