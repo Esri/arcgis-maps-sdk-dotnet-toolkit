@@ -134,7 +134,8 @@ namespace ArcGISRuntime.Toolkit.DesktopSampleViewer
 					"Printing", 
 					"Portal", 
 					"Security", 
-					"Extras" 
+					"Extras", 
+					"Toolkit"
 				};
 				
 				// find all groups defined in the samples and put groups into correct order

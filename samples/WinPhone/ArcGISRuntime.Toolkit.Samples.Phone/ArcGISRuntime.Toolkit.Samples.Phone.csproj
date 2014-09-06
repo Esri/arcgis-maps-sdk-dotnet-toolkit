@@ -79,6 +79,9 @@
     <Compile Include="Attribution\DynamicAttributionSample.xaml.cs">
       <DependentUpon>DynamicAttributionSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FeatureDataField\FeatureDataFieldSample.xaml.cs">
+      <DependentUpon>FeatureDataFieldSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FeatureDataForm\FeatureDataFormSample.xaml.cs">
       <DependentUpon>FeatureDataFormSample.xaml</DependentUpon>
     </Compile>
@@ -94,6 +97,9 @@
     </Compile>
     <Compile Include="ScaleLine\ScaleLineStylingSample.xaml.cs">
       <DependentUpon>ScaleLineStylingSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SymbolDisplay\SymbolDisplaySample.xaml.cs">
+      <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplatePicker\TemplatePickerSample.xaml.cs">
       <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
@@ -117,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="FeatureDataField\FeatureDataFieldSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="FeatureDataForm\FeatureDataFormSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -137,6 +147,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SymbolDisplay\SymbolDisplaySample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="TemplatePicker\TemplatePickerSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -147,7 +161,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SampleDescriptions.xml" />
+    <EmbeddedResource Include="SampleDescriptions.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

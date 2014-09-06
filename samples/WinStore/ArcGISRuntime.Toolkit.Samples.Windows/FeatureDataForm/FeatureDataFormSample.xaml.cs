@@ -61,8 +61,12 @@ namespace ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataForm
 
 					// Set feature that is being edited to data form
 					MyDataForm.GeodatabaseFeature = _editedFeature;
-					break;
+					return;
 				}
+
+				// No features found
+				DescriptionTextArea.Visibility = Visibility.Visible;
+				DataFormArea.Visibility = Visibility.Collapsed;
 			}
 			catch (Exception ex)
 			{

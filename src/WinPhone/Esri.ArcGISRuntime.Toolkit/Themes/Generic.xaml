@@ -17,10 +17,9 @@
 		<Setter Property="LegendItemTemplate">
 			<Setter.Value>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal" Margin="1">
-						<Grid MinWidth="20" MinHeight="10">
-							<Image Source="{Binding SymbolSwatch}"
-                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" Margin="1">
+                        <Grid MinWidth="20" MinHeight="10">
+                            <primitives:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}" />
 						</Grid>
 						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
 					</StackPanel>
@@ -440,13 +439,14 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Command="{Binding Command}" CommandParameter="{Binding}"
-                                Width="80" Height="80" Padding="0" Margin="0">
-                            <Image Source="{Binding Swatch}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Stretch="Uniform" />
+                                 Padding="0" Margin="0" >
+                            <Viewbox Width="50" Height="50">
+                                <primitives:SymbolDisplay MinHeight="25" MinWidth="25"
+                                                     Symbol="{Binding Symbol}"
+                                                     GeometryType="{Binding GeometryType}" />
+                            </Viewbox>
                         </Button>
-                        <TextBlock Text="{Binding FeatureTemplate.Name}" TextWrapping="Wrap" Grid.Column="1"
+                        <TextBlock Text="{Binding FeatureTemplate.Name}" TextWrapping="Wrap" Grid.Column="1" Margin="5,0,0,0"
                                    VerticalAlignment="Center"/>
                     </Grid>
                 </DataTemplate>

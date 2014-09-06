@@ -74,6 +74,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Control\SignInDialog\SignInDialog.cs" />
+    <Compile Include="Security\OAuthAuthorizeHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\CredentialManager.cs" />
     <Compile Include="Security\PhoneChallengeHandler.cs" />

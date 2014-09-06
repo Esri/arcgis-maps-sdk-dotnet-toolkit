@@ -6,6 +6,7 @@
 	xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
 	xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
 	xmlns:converters="clr-namespace:ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker" 
+	xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls.Primitives;assembly=Esri.ArcGISRuntime.Toolkit"
 	xmlns:ValueConverters="clr-namespace:Esri.ArcGISRuntime.Toolkit.ValueConverters;assembly=Esri.ArcGISRuntime.Toolkit" 
 	x:Class="ArcGISRuntime.Toolkit.Samples.Desktop.TemplatePicker.TemplatePickerWithLayerSelectionSample">
 
@@ -33,8 +34,8 @@
 								</Grid.ColumnDefinitions>
 								<Border Width="40" Height="40"							
 									Padding="0" Margin="2">
-									<Image HorizontalAlignment="Center" VerticalAlignment="Center"
-										Source="{Binding Swatch}" Stretch="Uniform" />
+									<primitives:SymbolDisplay
+										Symbol="{Binding Symbol}"/>
 								</Border>
 								<StackPanel Grid.Column="1">
 									<TextBlock FontWeight="Bold" Text="{Binding FeatureTemplate.Name}" />

@@ -103,6 +103,9 @@
     <Compile Include="Attribution\DynamicAttributionSample.xaml.cs">
       <DependentUpon>DynamicAttributionSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FeatureDataField\FeatureDataFieldSample.xaml.cs">
+      <DependentUpon>FeatureDataFieldSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Legend\LegendByScaleSample.xaml.cs">
       <DependentUpon>LegendByScaleSample.xaml</DependentUpon>
     </Compile>
@@ -118,6 +121,9 @@
     </Compile>
     <Compile Include="ScaleLine\ScaleLineSample.xaml.cs">
       <DependentUpon>ScaleLineSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SymbolDisplay\SymbolDisplaySample.xaml.cs">
+      <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
     </Compile>
     <Compile Include="TemplatePicker\TemplatePickerWithLayerSelectionSample.xaml.cs">
       <DependentUpon>TemplatePickerWithLayerSelectionSample.xaml</DependentUpon>
@@ -145,6 +151,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="FeatureDataField\FeatureDataFieldSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Legend\LegendByScaleSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -164,6 +174,10 @@
     <Page Include="ScaleLine\ScaleLineSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SymbolDisplay\SymbolDisplaySample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TemplatePicker\TemplatePickerWithLayerSelectionSample.xaml">
       <Generator>MSBuild:Compile</Generator>

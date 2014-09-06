@@ -65,7 +65,7 @@ namespace ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataForm
 
 					// Set feature that is being edited to data form
 					MyDataForm.GeodatabaseFeature = _editedFeature;
-					break;
+					return;
 				}
 			}
 			catch (Exception ex)

@@ -16,10 +16,9 @@
 		<Setter Property="LegendItemTemplate">
 			<Setter.Value>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal" Margin="1">
-						<Grid MinWidth="20" MinHeight="10">
-							<Image Source="{Binding SymbolSwatch}"
-                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" Margin="1">
+                        <Grid MinWidth="20" MinHeight="10">
+                            <primitives:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}" />
 						</Grid>
 						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
 					</StackPanel>
@@ -480,17 +479,15 @@
             <Setter.Value>
                 <DataTemplate>
                     <Button Command="{Binding Command}" CommandParameter="{Binding}"
-                            Width="50" Height="50" Padding="2">
+                            Padding="2">
                         <ToolTipService.ToolTip>
                             <StackPanel>
                                 <TextBlock FontWeight="Bold" Text="{Binding FeatureTemplate.Name}" />
                                 <TextBlock Text="{Binding FeatureTemplate.Description}"  />
                             </StackPanel>
                         </ToolTipService.ToolTip>
-                        <Image Source="{Binding Swatch}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Stretch="Uniform" />
+                        <primitives:SymbolDisplay  Width="35" Height="35"
+                                              Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}"/>
                     </Button>
                 </DataTemplate>
             </Setter.Value>

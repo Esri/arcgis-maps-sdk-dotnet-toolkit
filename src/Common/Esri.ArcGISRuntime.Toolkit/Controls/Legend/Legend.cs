@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 #if NETFX_CORE
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -56,9 +57,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		void LegendTree_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == "LayerItemsSource")
-				LayerItemsSource = _legendTree.LayerItemsSource;
+				UpdateLayerItemsSource();
 			else if (e.PropertyName == "LayerItems")
 				LayerItems = _legendTree.LayerItems;
+		}
+
+		private ThrottleTimer _updateTimer;
+		private void UpdateLayerItemsSource()
+		{
+			if (_updateTimer == null)
+			{
+				_updateTimer = new ThrottleTimer(100) { Action = UpdateLayerItemsSourceImpl };
+			}
+			_updateTimer.Invoke();
+		}
+
+		private void UpdateLayerItemsSourceImpl()
+		{
+			LayerItemsSource = _legendTree.LayerItemsSource;
 		}
 
 		#endregion

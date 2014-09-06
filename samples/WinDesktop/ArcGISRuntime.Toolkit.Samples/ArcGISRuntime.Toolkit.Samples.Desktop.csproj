@@ -22,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>SampleDescriptions.xml</DocumentationFile>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +59,9 @@
     <Compile Include="Attribution\DynamicAttributionSample.xaml.cs">
       <DependentUpon>DynamicAttributionSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FeatureDataField\FeatureDataFieldSample.xaml.cs">
+      <DependentUpon>FeatureDataFieldSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FeatureDataForm\FeatureDataFormSample.xaml.cs">
       <DependentUpon>FeatureDataFormSample.xaml</DependentUpon>
     </Compile>
@@ -88,6 +93,9 @@
     <Compile Include="ScaleLine\ScaleLineStylingSample.xaml.cs">
       <DependentUpon>ScaleLineStylingSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SymbolDisplay\SymbolDisplaySample.xaml.cs">
+      <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TemplatePicker\TemplatePickerSample.xaml.cs">
       <DependentUpon>TemplatePickerSample.xaml</DependentUpon>
     </Compile>
@@ -110,7 +118,6 @@
       <Name>Esri.ArcGISRuntime.Toolkit.WindowsDesktop</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Page Include="Attribution\AttributionSample.xaml">
       <SubType>Designer</SubType>
@@ -123,6 +130,10 @@
     <Page Include="Attribution\DynamicAttributionSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FeatureDataField\FeatureDataFieldSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="FeatureDataForm\FeatureDataFormSample.xaml">
       <SubType>Designer</SubType>
@@ -145,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ScaleLine\ScaleLineStylingSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SymbolDisplay\SymbolDisplaySample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
