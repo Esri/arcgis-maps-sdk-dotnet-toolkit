@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// The SignInDialog Control can manage Network or Token credential.
     /// </summary>
     /// <remarks>
-    /// This control is designed to work with the <see cref="IdentityManager" /> and the <see cref="Security.WinPhoneChallengeHandler"/>.
+    /// This control is designed to work with the <see cref="IdentityManager" /> and the <see cref="Security.PhoneChallengeHandler"/>.
     /// </remarks>
     internal class SignInDialog : Control, INotifyPropertyChanged // might be public later
     {
@@ -196,7 +196,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         /// <summary>
         /// Gets or sets the option that specifies the initial state of the dialog's Save Credential check
-        //     box. The default value is clear (unchecked).
+        /// box. The default value is clear (unchecked).
         /// </summary>
         public CredentialSaveOption CredentialSaveOption
         {
