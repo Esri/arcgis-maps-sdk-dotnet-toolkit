@@ -34,8 +34,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Internal\ThrottleTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListeners.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)ValueConverters\" />
+    <Compile Include="$(MSBuildThisFileDirectory)ValueConverters\VisibilityConverter.cs" />
   </ItemGroup>
 </Project>
