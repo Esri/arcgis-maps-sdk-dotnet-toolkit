@@ -1,33 +1,40 @@
-﻿using System;
+﻿// (c) Copyright ESRI.
+// This source is subject to the Microsoft Public License (Ms-PL).
+// Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
+// All other rights reserved.
+
+using System.IO.IsolatedStorage;
+using System.Linq;
+using Esri.ArcGISRuntime.Security;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+
 #if NETFX_CORE
 #error "Intended for Desktop only"
 #endif
-using System.Security.Cryptography;
-using Esri.ArcGISRuntime.Security;
 
 namespace Esri.ArcGISRuntime.Toolkit.Security
 {
 
     /// <summary>
-    /// Helper class for managing the storage of credentials in the credential locker
+    /// Helper class for managing the storage of credentials in the isolated storage in a secure manner
     /// </summary>
     internal static class CredentialManager
     {
-        private const string ResourcePrefix = "ArcGISRuntime "; // Prefix to disambiguate with PasswordCredentials that would be saved by the app itself
-
         // password is stored with a prefix depending on the type of credential, so we are able to reinstantiate the right credential
         private const string PasswordPrefix = "Password:";
         private const string OAuthRefreshTokenPrefix = "OAuthRefreshToken:";
         private const string OAuthAccessTokenPrefix = "OAuthAccessToken:";
         private const string NetworkCredentialPasswordPrefix = "NetworkCredentialPassword:";
+        private const string CertificateCredentialPrefix = "Certificate:";
 
 
         /// <summary>
-        /// Adds a credential to the credential locker.
+        /// Adds a credential to the isolated storage.
         /// </summary>
         /// <param name="credential">The credential to be added.</param>
         public static void AddCredential(Credential credential)
@@ -38,11 +45,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
             var serverInfo = IdentityManager.Current.FindServerInfo(credential.ServiceUri);
             var host = serverInfo == null ? credential.ServiceUri : serverInfo.ServerUri;
 
-            string passwordValue = null;  // value stored as password in the password locker
+            string passwordValue = null;  // value stored as password in the isolated storage
             string userName = null;
             var oAuthTokenCredential = credential as OAuthTokenCredential;
             var arcGISTokenCredential = credential as ArcGISTokenCredential;
             var arcGISNetworkCredential = credential as ArcGISNetworkCredential;
+            var certificateCredential = credential as CertificateCredential;
             if (oAuthTokenCredential != null)
             {
                 userName = oAuthTokenCredential.UserName;
@@ -72,23 +80,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
                     }
                 }
             }
+            else if (certificateCredential != null)
+            {
+                // certificateCredential: store the serial number
+                if (certificateCredential.ClientCertificate != null)
+                {
+                    passwordValue = CertificateCredentialPrefix + certificateCredential.ClientCertificate.GetSerialNumberString();
+                }
+            }
 
-            // Store the value in the password locker
-			//if (passwordValue != null)
-			//{
-			//	var passwordVault = new PasswordVault();
-			//	var resource = ResourcePrefix + host;
-			//	// remove previous resource stored for the same host
-			//	try // FindAllByResource throws an exception when no pc are stored
-			//	{
-			//		foreach (PasswordCredential pc in passwordVault.FindAllByResource(resource))
-			//			passwordVault.Remove(pc);
-			//	}
-			//	catch {}
-
-			//	passwordVault.Add(new PasswordCredential(resource, userName, passwordValue));
-			//}
+            // Store the value in the isolated storage
+            if (passwordValue != null)
+            {
+                AddCachedCredential(host, userName, passwordValue);
+            }
         }
+
+
+
 
         /// <summary>
         /// Removes all ArcGISRuntime credentials.
@@ -96,175 +105,204 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
         /// <remark>Remove application credentials only.</remark>
         public static void RemoveAllCredentials()
         {
-			//var passwordVault = new PasswordVault();
-			//foreach (PasswordCredential passwordCredential in passwordVault.RetrieveAll())
-			//{
-			//	if (passwordCredential.Resource.StartsWith(ResourcePrefix))
-			//		passwordVault.Remove(passwordCredential);
-			//}
+            RemoveCachedCredentials();
         }
 
         /// <summary>
-        /// Retrieves all ArcGISRuntime credentials stored in the Credential Locker.
+        /// Retrieves all ArcGISRuntime credentials stored in the isolated storage.
         /// </summary>
         public static IEnumerable<Credential>  RetrieveAll()
         {
-			var credentials = new List<Credential>();
-			//var passwordVault = new PasswordVault();
-			//foreach (PasswordCredential passwordCredential in passwordVault.RetrieveAll().Where(pc => pc.Resource.StartsWith(ResourcePrefix)))
-			//{
-			//	Credential credential = null;
-			//	passwordCredential.RetrievePassword();
-			//	string userName = passwordCredential.UserName;
-			//	string passwordValue = passwordCredential.Password; // value stored as password
-			//	string serviceUrl = passwordCredential.Resource.Substring(ResourcePrefix.Length);
+            var credentials = new List<Credential>();
+            foreach(var cachedCredential in GetCachedCredentials())
+            {
+                Credential credential = null;
+                string userName = cachedCredential.UserName;
+                string passwordValue = cachedCredential.Password; // value stored as password
+                string serviceUrl = cachedCredential.Url;
 
-			//	// Create the credential depending on the type
-			//	if (passwordValue.StartsWith(PasswordPrefix))
-			//	{
-			//		string password = passwordValue.Substring(PasswordPrefix.Length);
-			//		credential = new ArcGISTokenCredential { ServiceUri = serviceUrl, UserName = userName, Password = password, Token = "dummy"}; // dummy to remove once the token will be refreshed pro actively
-			//	}
-			//	else if (passwordValue.StartsWith(OAuthRefreshTokenPrefix))
-			//	{
-			//		string refreshToken = passwordValue.Substring(OAuthRefreshTokenPrefix.Length);
-			//		credential = new OAuthTokenCredential
-			//		{
-			//			ServiceUri = serviceUrl,
-			//			UserName = userName,
-			//			OAuthRefreshToken = refreshToken,
-			//			Token = "dummy"
-			//		};
-			//	}
-			//	else if (passwordValue.StartsWith(OAuthAccessTokenPrefix))
-			//	{
-			//		string token = passwordValue.Substring(OAuthAccessTokenPrefix.Length);
-			//		credential = new OAuthTokenCredential
-			//		{
-			//			ServiceUri = serviceUrl,
-			//			UserName = userName,
-			//			Token = token,
-			//		};
-			//	}
-			//	else if (passwordValue.StartsWith(NetworkCredentialPasswordPrefix))
-			//	{
-			//		string password = passwordValue.Substring(NetworkCredentialPasswordPrefix.Length);
-			//		credential = new ArcGISNetworkCredential {ServiceUri = serviceUrl, Credentials = new NetworkCredential(userName, password)};
-			//	}
+                // Create the credential depending on the type
+                if (passwordValue.StartsWith(PasswordPrefix))
+                {
+                    string password = passwordValue.Substring(PasswordPrefix.Length);
+                    credential = new ArcGISTokenCredential { ServiceUri = serviceUrl, UserName = userName, Password = password, Token = "dummy" }; // dummy to remove once the token will be refreshed pro actively
+                }
+                else if (passwordValue.StartsWith(OAuthRefreshTokenPrefix))
+                {
+                    string refreshToken = passwordValue.Substring(OAuthRefreshTokenPrefix.Length);
+                    credential = new OAuthTokenCredential
+                    {
+                        ServiceUri = serviceUrl,
+                        UserName = userName,
+                        OAuthRefreshToken = refreshToken,
+                        Token = "dummy"
+                    };
+                }
+                else if (passwordValue.StartsWith(OAuthAccessTokenPrefix))
+                {
+                    string token = passwordValue.Substring(OAuthAccessTokenPrefix.Length);
+                    credential = new OAuthTokenCredential
+                    {
+                        ServiceUri = serviceUrl,
+                        UserName = userName,
+                        Token = token,
+                    };
+                }
+                else if (passwordValue.StartsWith(NetworkCredentialPasswordPrefix))
+                {
+                    string password = passwordValue.Substring(NetworkCredentialPasswordPrefix.Length);
+                    credential = new ArcGISNetworkCredential { ServiceUri = serviceUrl, Credentials = new NetworkCredential(userName, password) };
+                }
+                else if (passwordValue.StartsWith(CertificateCredentialPrefix))
+                {
+                    string serial = passwordValue.Substring(CertificateCredentialPrefix.Length);
+                    var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+                    X509Certificate2Collection certificates;
+                    try
+                    {
+                        store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+                        // Find certificate by serial number
+                        certificates = store.Certificates.Find(X509FindType.FindBySerialNumber, serial, true);
+                    }
+                    catch (Exception)
+                    {
+                        certificates = null;
+                    }
+                    finally
+                    {
+                        store.Close();
+                    }
+                    if (certificates != null && certificates.Count > 0)
+                        credential = new CertificateCredential(certificates[0]) { ServiceUri = serviceUrl };
+                }
 
-			//	if (credential != null)
-			//	{
-			//		credentials.Add(credential);
-			//	}
-			//}
+                if (credential != null)
+                {
+                    credentials.Add(credential);
+                }
+            }
             return credentials;
         }
 
-		public static void EncryptInMemoryData(byte[] Buffer, MemoryProtectionScope Scope)
-		{
-			if (Buffer.Length <= 0)
-				throw new ArgumentException("Buffer");
-			if (Buffer == null)
-				throw new ArgumentNullException("Buffer");
+ 
+        // Isolated storage private methods
+        private const string CredentialFilePath = "ArcGISRuntimeCredentials"; // File created in the isolated storage
+
+        // gets the IsolatedStorageFile
+        private static IsolatedStorageFile GetStore()
+        {
+            return IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
+        }
+
+        // Removes all cached credentials
+        private static void RemoveCachedCredentials()
+        {
+            try
+            {
+                using (var isoStore = GetStore())
+                {
+                    if (isoStore.FileExists(CredentialFilePath))
+                        isoStore.DeleteFile(CredentialFilePath);
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        // gets cached credentials from the isolated storage
+        private static IEnumerable<CachedCredential> GetCachedCredentials()
+        {
+            var cachedCredentials = new List<CachedCredential>();
+            try
+            {
+                using (var isoStore = GetStore())
+                {
+                    if (isoStore.FileExists(CredentialFilePath))
+                    {
+                        using (var reader = new StreamReader(isoStore.OpenFile(CredentialFilePath, FileMode.Open, FileAccess.Read)))
+                        {
+                            string url;
+                            while (!string.IsNullOrEmpty(url = reader.ReadLine()))
+                            {
+                                var credentialStorage = new CachedCredential { Url = url, UserName = reader.ReadLine(), Password = Decrypt(reader.ReadLine()) };
+                                // remove duplicates
+                                foreach (var sc in cachedCredentials.Where(c => c.Url == url).ToArray())
+                                    cachedCredentials.Remove(sc);
+
+                                cachedCredentials.Add(credentialStorage);
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+            return cachedCredentials;
+        }
+
+        // Adds a credential to the cache
+        private static void AddCachedCredential(string host, string userName, string passwordValue)
+        {
+            try
+            {
+                string secret = Encrypt(passwordValue);
+
+                using (var isoStore = GetStore())
+                {
+                    using (var writer = new StreamWriter(isoStore.OpenFile(CredentialFilePath, FileMode.Append, FileAccess.Write)))
+                    {
+                        writer.WriteLine(host);
+                        writer.WriteLine(userName ?? "");
+                        writer.WriteLine(secret);
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private class CachedCredential
+        {
+            public string Url { get; set; }
+            public string UserName { get; set; }
+            public string Password { get; set; }
+        }
 
 
-			// Encrypt the data in memory. The result is stored in the same same array as the original data.
-			ProtectedMemory.Protect(Buffer, Scope);
+        // Encrypt and decrypt private methods
+        private static string Encrypt(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return string.Empty;
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(str);
 
-		}
+            // Protect buffer must be 16 bytes in length or in multiples of 16 bytes. 
+            int adjustedSize = 16*((buffer.Length - 1)/16 +1);
+            if (adjustedSize != buffer.Length)
+            {
+                // Add padding null bytes
+                var bytes = new List<byte>(buffer);
+                bytes.AddRange(Enumerable.Repeat((byte)0, adjustedSize - buffer.Length));
+                buffer = bytes.ToArray();
+            }
 
-		public static void DecryptInMemoryData(byte[] Buffer, MemoryProtectionScope Scope)
-		{
-			if (Buffer.Length <= 0)
-				throw new ArgumentException("Buffer");
-			if (Buffer == null)
-				throw new ArgumentNullException("Buffer");
+            // Encrypt the data in memory. The result is stored in the same same array as the original data.
+            ProtectedMemory.Protect(buffer, MemoryProtectionScope.SameLogon);
+            return Convert.ToBase64String(buffer);
+        }
 
+        private static string Decrypt(string str)
+        {
+            byte[] buffer = Convert.FromBase64String(str);
+            // Decrypt the data in memory. The result is stored in the same same array as the original data.
+            ProtectedMemory.Unprotect(buffer, MemoryProtectionScope.SameLogon);
 
-			// Decrypt the data in memory. The result is stored in the same same array as the original data.
-			ProtectedMemory.Unprotect(Buffer, Scope);
-
-		}
-
-		public static byte[] CreateRandomEntropy()
-		{
-			// Create a byte array to hold the random value. 
-			byte[] entropy = new byte[16];
-
-			// Create a new instance of the RNGCryptoServiceProvider. 
-			// Fill the array with a random value. 
-			new RNGCryptoServiceProvider().GetBytes(entropy);
-
-			// Return the array. 
-			return entropy;
-
-
-		}
-
-		public static int EncryptDataToStream(byte[] Buffer, byte[] Entropy, DataProtectionScope Scope, Stream S)
-		{
-			if (Buffer.Length <= 0)
-				throw new ArgumentException("Buffer");
-			if (Buffer == null)
-				throw new ArgumentNullException("Buffer");
-			if (Entropy.Length <= 0)
-				throw new ArgumentException("Entropy");
-			if (Entropy == null)
-				throw new ArgumentNullException("Entropy");
-			if (S == null)
-				throw new ArgumentNullException("S");
-
-			int length = 0;
-
-			// Encrypt the data in memory. The result is stored in the same same array as the original data. 
-			byte[] encrptedData = ProtectedData.Protect(Buffer, Entropy, Scope);
-
-			// Write the encrypted data to a stream. 
-			if (S.CanWrite && encrptedData != null)
-			{
-				S.Write(encrptedData, 0, encrptedData.Length);
-
-				length = encrptedData.Length;
-			}
-
-			// Return the length that was written to the stream.  
-			return length;
-
-		}
-
-		public static byte[] DecryptDataFromStream(byte[] Entropy, DataProtectionScope Scope, Stream S, int Length)
-		{
-			if (S == null)
-				throw new ArgumentNullException("S");
-			if (Length <= 0)
-				throw new ArgumentException("Length");
-			if (Entropy == null)
-				throw new ArgumentNullException("Entropy");
-			if (Entropy.Length <= 0)
-				throw new ArgumentException("Entropy");
-
-
-
-			byte[] inBuffer = new byte[Length];
-			byte[] outBuffer;
-
-			// Read the encrypted data from a stream. 
-			if (S.CanRead)
-			{
-				S.Read(inBuffer, 0, Length);
-
-				outBuffer = ProtectedData.Unprotect(inBuffer, Entropy, Scope);
-			}
-			else
-			{
-				throw new IOException("Could not read the stream.");
-			}
-
-			// Return the length that was written to the stream.  
-			return outBuffer;
-
-		}
-
-
+            // Remove padding null bytes
+            int size = buffer.Length;
+            while (size > 0 && buffer[size - 1] == 0)
+                size--;
+            return System.Text.Encoding.UTF8.GetString(buffer, 0, size);
+        }
     }
 }

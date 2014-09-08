@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="Controls\SignInDialog\SignInDialog.cs" />
     <Compile Include="Security\CredentialManager.cs" />
-    <Compile Include="Security\DesktopChallengeHandler.cs" />
+    <Compile Include="Security\SignInChallengeHandler.cs" />
     <Compile Include="Security\OAuthAuthorizeHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
