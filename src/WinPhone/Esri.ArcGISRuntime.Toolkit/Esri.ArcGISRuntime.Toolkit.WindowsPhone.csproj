@@ -73,8 +73,11 @@
     <DocumentationFile>..\..\..\output\WinPhone\x86\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Control\SignInDialog\SignInDialog.cs" />
     <Compile Include="Security\OAuthAuthorizeHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\CredentialManager.cs" />
+    <Compile Include="Security\PhoneChallengeHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.4">
