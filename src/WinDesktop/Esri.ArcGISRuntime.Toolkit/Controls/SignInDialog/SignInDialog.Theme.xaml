@@ -99,7 +99,7 @@
                                 <!--  Password  -->
                                 <TextBlock Margin="0,10,0,0" Text="Password:" />
                                 <PasswordBox TabIndex="1" local:TextInputManager.EnterCommand="{Binding GenerateCredentialCommand}" local:TextInputManager.PasswordText="{Binding Password, Mode=TwoWay, ValidatesOnExceptions=True}" />
-                                <CheckBox Content="Save Credential" Margin="0,10,0,0"
+                                <CheckBox Content="Remember my credentials" Margin="0,10,0,0"
                                       Visibility="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CredentialSaveOptionVisibilityConverter}}"
                                       IsChecked="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, Converter={StaticResource CredentialSaveOptionBoolConverter}}"/>
 
