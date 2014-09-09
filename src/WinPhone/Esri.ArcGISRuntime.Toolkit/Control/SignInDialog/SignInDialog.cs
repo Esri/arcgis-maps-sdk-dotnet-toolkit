@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// The SignInDialog Control can manage Network or Token credential.
     /// </summary>
     /// <remarks>
-    /// This control is designed to work with the <see cref="IdentityManager" /> and the <see cref="Security.PhoneChallengeHandler"/>.
+    /// This control is designed to work with the <see cref="IdentityManager" /> and the <see cref="Security.SignInChallengeHandler"/>.
     /// </remarks>
     internal class SignInDialog : Control, INotifyPropertyChanged // might be public later
     {

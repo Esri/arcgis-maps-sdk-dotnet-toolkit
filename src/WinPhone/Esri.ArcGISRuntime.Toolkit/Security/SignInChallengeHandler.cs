@@ -18,19 +18,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
     /// This component is designed to work with the <see cref="IdentityManager" />.
     /// It can be initialized with code like:
     /// <code>
-    /// IdentityManager.Current.ChallengeHandler = new Esri.ArcGISRuntime.Toolkit.Security.PhoneChallengeHandler();
+	/// IdentityManager.Current.ChallengeHandler = new Esri.ArcGISRuntime.Toolkit.Security.SignInChallengeHandler();
     /// </code>
     /// </para>
     /// <para/>
     /// Optionally, depending on the <see cref="AllowSaveCredentials"/> value, the credentials may be cached in the <see cref="PasswordVault"/> in a secure manner.
     /// In this case, the <see cref="PasswordVault"/> roams credentials to other Windows8 systems.
     /// <para/>
-    /// By default the PhoneChallengeHandler doesn't allow saving the Credentials. To allow it, the <see cref="PhoneChallengeHandler"/> can be instantiated with code like:
+	/// By default the SignInChallengeHandler doesn't allow saving the Credentials. To allow it, the <see cref="SignInChallengeHandler"/> can be instantiated with code like:
     /// <code>
-    ///  IdentityManager.Current.ChallengeHandler = new Esri.ArcGISRuntime.Toolkit.Security.PhoneChallengeHandler { AllowSaveCredentials = true, CredentialSaveOption = CredentialSaveOption.Selected  };
+	///  IdentityManager.Current.ChallengeHandler = new Esri.ArcGISRuntime.Toolkit.Security.SignInChallengeHandler { AllowSaveCredentials = true, CredentialSaveOption = CredentialSaveOption.Selected  };
     /// </code>
     /// </summary>
-    public class PhoneChallengeHandler : IChallengeHandler
+    public class SignInChallengeHandler : IChallengeHandler
     {
         private bool _allowSaveCredentials;
         private bool _areCredentialsRestored;
@@ -38,18 +38,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Security
         private CredentialSaveOption _credentialSaveOption;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PhoneChallengeHandler"/> class.
+        /// Initializes a new instance of the <see cref="SignInChallengeHandler"/> class.
         /// </summary>
-        public PhoneChallengeHandler() : this(new SignInDialog())
+        public SignInChallengeHandler() : this(new SignInDialog())
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PhoneChallengeHandler"/> class.
+        /// Initializes a new instance of the <see cref="SignInChallengeHandler"/> class.
         /// </summary>
         /// <param name="signInDialog">The underlying SignInDialog that will displayed inside a ContentDialog.</param>
         /// <exception cref="System.ArgumentNullException">signInDialog</exception>
-        internal PhoneChallengeHandler(SignInDialog signInDialog) // might be public
+        internal SignInChallengeHandler(SignInDialog signInDialog) // might be public
         {
             if (signInDialog == null)
                 throw new ArgumentNullException("signInDialog");
