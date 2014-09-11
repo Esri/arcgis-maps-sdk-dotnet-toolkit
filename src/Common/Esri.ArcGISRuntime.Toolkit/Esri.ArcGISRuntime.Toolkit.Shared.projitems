@@ -28,13 +28,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Legend\MapLayerItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\TemplatePicker\TemplatePicker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helpers\LayerCollectionRecursiveObserver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\DependencyPropertyChangedListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\DependencyPropertyChangedListeners.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Internal\LayerEnumerationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\ThrottleTimer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Internal\WeakEventListeners.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)ValueConverters\" />
   </ItemGroup>
 </Project>
