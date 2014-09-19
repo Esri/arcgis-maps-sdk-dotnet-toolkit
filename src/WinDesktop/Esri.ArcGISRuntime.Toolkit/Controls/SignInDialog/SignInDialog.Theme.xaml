@@ -30,6 +30,7 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Width" Value="300" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -41,6 +42,8 @@
                         <Grid >
                             <Grid.Resources>
                                 <converters:VisibilityConverter x:Key="VisibilityConverter" />
+                                <local:CredentialSaveOptionBoolConverter x:Key="CredentialSaveOptionBoolConverter" />
+                                <local:CredentialSaveOptionVisibilityConverter x:Key="CredentialSaveOptionVisibilityConverter" />
                             </Grid.Resources>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -49,6 +52,12 @@
 
                             <!--  Body  -->
                             <StackPanel Grid.Row="0" MinHeight="50">
+                                <Grid MinHeight="5">
+                                    <ProgressBar Height="5"
+                                                 HorizontalAlignment="Stretch" IsIndeterminate="{Binding IsBusy, RelativeSource={RelativeSource TemplatedParent}}"
+                                                 Visibility="{Binding IsBusy, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource VisibilityConverter}}" />
+                                </Grid>
+
                                 <!--  Info about the Url  -->
                                 <RichTextBox x:Name="RichTextBoxMessage" Margin="0,2"
                                              Background="Transparent" BorderBrush="Transparent"
@@ -64,7 +73,8 @@
                                         </Paragraph>
                                     </FlowDocument>
                                 </RichTextBox>
-
+                                
+ 
                                 <!--  Error message  -->
                                 <Grid MinHeight="15" Margin="0,2">
                                     <Grid x:Name="errorMessage" Background="#FFF24444" Visibility="{Binding ErrorMessage, Converter={StaticResource VisibilityConverter}}">
@@ -89,6 +99,9 @@
                                 <!--  Password  -->
                                 <TextBlock Margin="0,10,0,0" Text="Password:" />
                                 <PasswordBox TabIndex="1" local:TextInputManager.EnterCommand="{Binding GenerateCredentialCommand}" local:TextInputManager.PasswordText="{Binding Password, Mode=TwoWay, ValidatesOnExceptions=True}" />
+                                <CheckBox Content="Remember my credentials" Margin="0,10,0,0"
+                                      Visibility="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CredentialSaveOptionVisibilityConverter}}"
+                                      IsChecked="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, Converter={StaticResource CredentialSaveOptionBoolConverter}}"/>
 
                             </StackPanel>
 
@@ -96,16 +109,9 @@
                             <!--  Footer with OK/Cancel buttons  -->
                             <StackPanel Grid.Row="1" Margin="5"
                                         HorizontalAlignment="Right" Orientation="Horizontal">
-                                <Grid>
-                                    <Button Margin="5" Command="{Binding GenerateCredentialCommand}"
-                                            Content="OK" Padding="5"
-                                            TabIndex="2"
-                                            Visibility="{Binding IsBusy, Converter={StaticResource VisibilityConverter}, ConverterParameter=reverse}" />
-                                    <Button Margin="5" Content="Signing in....  "
-                                            IsHitTestVisible="False" IsTabStop="False"
-                                            Padding="5"
-                                            Visibility="{Binding IsBusy, Converter={StaticResource VisibilityConverter}}" />
-                                </Grid>
+                                <Button Margin="5" Command="{Binding GenerateCredentialCommand}"
+                                        Content="OK" Padding="5"
+                                        TabIndex="2" />
                                 <Button Margin="5" Command="{Binding CancelCommand}"
                                         Content="Cancel" Padding="5"
                                         TabIndex="3" />

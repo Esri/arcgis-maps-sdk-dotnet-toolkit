@@ -9,12 +9,14 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Net;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Esri.ArcGISRuntime.Security;
+
+#if !WINDOWS_PHONE_APP
+#error "Intended for WinPhone only"
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Controls
 {
@@ -219,7 +221,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         public Task<Credential> CreateCredentialAsync(CredentialRequestInfo credentialRequestInfo)
         {
-            return ExecuteOnUIThread(() => DoSignInInUIThread(credentialRequestInfo));
+            return CompatUtility.ExecuteOnUIThread(() => DoSignInInUIThread(credentialRequestInfo));
         }
 
         private async Task<Credential> DoSignInInUIThread(CredentialRequestInfo credentialRequestInfo)
@@ -386,31 +388,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             PropertyChangedEventHandler propertyChanged = PropertyChanged;
             if (propertyChanged != null)
                 propertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-
-        #region ExecuteOnUIThread Utils
-
-        // Execute a task in the UI thread
-        internal static Task<T> ExecuteOnUIThread<T>(Func<Task<T>> f)
-        {
-            var dispatcher = GetDispatcher();
-            return dispatcher == null ? f() : ExecuteOnUIThread(f, dispatcher);
-        }
-
-        private static CoreDispatcher GetDispatcher()
-        {
-            return Application.Current != null && CoreApplication.MainView != null && CoreApplication.MainView.CoreWindow != null && !CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess
-                ? CoreApplication.MainView.CoreWindow.Dispatcher
-                : null;
-        }
-
-        private static async Task<T> ExecuteOnUIThread<T>(Func<Task<T>> f, CoreDispatcher dispatcher)
-        {
-            Debug.Assert(dispatcher != null);
-            Task<T> task = null;
-            await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { task = f(); });
-            return await task;
         }
         #endregion
 
