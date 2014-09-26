@@ -55,12 +55,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll">
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.4\References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll">
       <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml">
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.4\References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml">
       <Link>References\CommonConfiguration\x86\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -76,12 +76,12 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone.pri">
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.4\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone.pri">
       <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone.pri</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\Generic.xbf">
+    <Content Include="..\..\..\output\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.4\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\Generic.xbf">
       <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\Generic.xbf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
