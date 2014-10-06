@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:controls="using:Windows.UI.Xaml.Controls"
-	xmlns:local="using:Esri.ArcGISRuntime.Toolkit.Controls">
-
-	<!-- Default Legend Style-->
+    xmlns:converters="using:Esri.ArcGISRuntime.Toolkit.ValueConverters"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.Controls"
+    xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Controls.Primitives">
+    
+    <!-- Default Legend Style-->
 	<Style TargetType="local:Legend">
 		<Setter Property="HorizontalContentAlignment" Value="Left" />
 		<Setter Property="VerticalContentAlignment" Value="Top" />
@@ -16,10 +17,9 @@
 		<Setter Property="LegendItemTemplate">
 			<Setter.Value>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal" Margin="1">
-						<Grid MinWidth="20" MinHeight="10">
-							<Image Source="{Binding SymbolSwatch}"
-                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" Margin="1">
+                        <Grid MinWidth="20" MinHeight="10">
+                            <primitives:SymbolDisplay Symbol="{Binding Symbol}" GeometryType="{Binding GeometryType}" />
 						</Grid>
 						<TextBlock Text="{Binding Label}" Margin="5,0,0,0" VerticalAlignment="Center" />
 					</StackPanel>
@@ -439,13 +439,14 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Command="{Binding Command}" CommandParameter="{Binding}"
-                                Width="80" Height="80" Padding="0" Margin="0">
-                            <Image Source="{Binding Swatch}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Stretch="Uniform" />
+                                 Padding="0" Margin="0" >
+                            <Viewbox Width="50" Height="50">
+                                <primitives:SymbolDisplay MinHeight="25" MinWidth="25"
+                                                     Symbol="{Binding Symbol}"
+                                                     GeometryType="{Binding GeometryType}" />
+                            </Viewbox>
                         </Button>
-                        <TextBlock Text="{Binding FeatureTemplate.Name}" TextWrapping="Wrap" Grid.Column="1"
+                        <TextBlock Text="{Binding FeatureTemplate.Name}" TextWrapping="Wrap" Grid.Column="1" Margin="5,0,0,0"
                                    VerticalAlignment="Center"/>
                     </Grid>
                 </DataTemplate>
@@ -477,6 +478,65 @@
         </Setter>
     </Style>
 
-</ResourceDictionary>
 
-    
+    <!-- Default SymbolDisplay Style-->
+    <Style TargetType="primitives:SymbolDisplay">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="primitives:SymbolDisplay">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Image x:Name="Image" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="local:SignInDialog">
+        <Setter Property="Title" Value="Sign In" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:SignInDialog">
+                    <Grid>
+                        <Grid.Resources>
+                            <converters:VisibilityConverter x:Key="VisibilityConverter" />
+                            <local:SignInDialogMessageConverter x:Key="MessageConverter" />
+                            <local:CredentialSaveOptionBoolConverter x:Key="CredentialSaveOptionBoolConverter" />
+                            <local:CredentialSaveOptionVisibilityConverter x:Key="CredentialSaveOptionVisibilityConverter" />
+                        </Grid.Resources>
+
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <Grid MinHeight="5">
+                                <ProgressBar HorizontalAlignment="Stretch" IsIndeterminate="{Binding IsBusy, RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding IsBusy, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource VisibilityConverter}}" />
+                            </Grid>
+                            <TextBlock Text="{Binding CredentialRequestInfo, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource MessageConverter}}" TextWrapping="Wrap" />
+                            <TextBox Header="User name" Text="{Binding UserName, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <PasswordBox Header="Password" IsPasswordRevealButtonEnabled="True" Password="{Binding Password, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox Content="Save Credential"
+                                      Visibility="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CredentialSaveOptionVisibilityConverter}}"
+                                      IsChecked="{Binding CredentialSaveOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, Converter={StaticResource CredentialSaveOptionBoolConverter}}"/>
+
+                            <!--  Error  -->
+                            <Grid Background="{StaticResource PhoneAccentBrush}" Visibility="{Binding ErrorMessage, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource VisibilityConverter}}">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding ErrorMessage, RelativeSource={RelativeSource TemplatedParent}}" TextWrapping="Wrap" />
+                                    <TextBlock FontWeight="Bold" Text="Please try again." />
+                                </StackPanel>
+                            </Grid>
+
+                        </StackPanel>
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

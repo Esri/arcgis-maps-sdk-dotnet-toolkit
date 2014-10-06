@@ -1,0 +1,89 @@
+﻿<UserControl 
+	x:Class="ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataField.FeatureDataFieldSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit">
+		
+	<Grid>
+		<ListView Margin="10" Name="FeatureList">
+			<ListView.View>
+				<GridView>
+					<!-- show object id in a textblock since it's not editable in any way -->
+					<GridViewColumn Header="ObjectId" Width="150">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<toolkit:FeatureDataField GeodatabaseFeature="{Binding Feature, Mode=TwoWay}" FieldName="objectid" 
+														  IsReadOnly="True">
+									<toolkit:FeatureDataField.ReadOnlyTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding Value, Mode=OneWay}" Background="Transparent" />
+										</DataTemplate>
+									</toolkit:FeatureDataField.ReadOnlyTemplate>
+								</toolkit:FeatureDataField>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<!-- show incident id in a TextBox but set that to ReadOnly -->
+					<GridViewColumn Header="IncidentId" Width="150">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<toolkit:FeatureDataField GeodatabaseFeature="{Binding Feature, Mode=TwoWay}" 
+														  FieldName="incidentid" 
+														  IsReadOnly="True"/>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<!-- show damage type domain and keep it editable -->
+					<GridViewColumn Header="Damage type" Width="150">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<toolkit:FeatureDataField GeodatabaseFeature="{Binding Feature, Mode=TwoWay}" 
+														  FieldName="typdamage" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<!-- show habitable domain and but set it read only -->
+					<GridViewColumn Header="Habitable" Width="150">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<toolkit:FeatureDataField GeodatabaseFeature="{Binding Feature, Mode=TwoWay}" 
+															  FieldName="habitable" IsReadOnly="True" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+					<!-- show predisval and keep it editable and set width explicitily -->
+					<GridViewColumn Header="Value Before Damage" Width="150">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<toolkit:FeatureDataField GeodatabaseFeature="{Binding Feature, Mode=TwoWay}" 
+														  FieldName="predisval" MinWidth="100"/>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<!-- show inspdate and set it read only -->
+					<GridViewColumn Header="Inspection Date" Width="150">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<toolkit:FeatureDataField GeodatabaseFeature="{Binding Feature, Mode=TwoWay}" 
+														  FieldName="inspdate" MinWidth="100"/>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<!-- show lastupdate and set it read only -->
+					<GridViewColumn Header="Last updated" Width="150">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<toolkit:FeatureDataField GeodatabaseFeature="{Binding Feature, Mode=TwoWay}" 
+														  FieldName="lastupdate" MinWidth="100" IsReadOnly="True"/>
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
+</UserControl>

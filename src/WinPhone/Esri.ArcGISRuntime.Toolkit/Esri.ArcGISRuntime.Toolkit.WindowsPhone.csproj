@@ -73,11 +73,15 @@
     <DocumentationFile>..\..\..\output\WinPhone\x86\Release\Esri.ArcGISRuntime.Toolkit.WindowsPhone.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Control\SignInDialog\SignInDialog.cs" />
+    <Compile Include="Security\OAuthAuthorizeHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\CredentialManager.cs" />
+    <Compile Include="Security\SignInChallengeHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.3">
-      <Name>ArcGIS Runtime for Windows Phone %28Beta 2%29</Name>
+    <SDKReference Include="Esri.ArcGISRuntime, Version=10.2.4">
+      <Name>ArcGIS Runtime for Windows Phone</Name>
     </SDKReference>
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Phone</Name>
@@ -89,6 +93,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
@@ -97,11 +102,12 @@
   </PropertyGroup>
   <Import Project="..\..\Common\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="..\..\..\build\XamlTypeInfoBuildTask.targets" Condition="Exists('..\..\..\build\XamlTypeInfoBuildTask.targets')" />
   <PropertyGroup>
     <SDKReferenceDirectoryRoot>C:\applications\output\winprt_sdk\;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>SET output=$(TargetDir)..\..\..\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.3\
+    <PostBuildEvent>SET output=$(TargetDir)..\..\..\ExtensionSDKs\WindowsPhoneApp\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.4\
 xcopy $(ProjectDir)..\..\..\Deployment\VSIX\WinPhone\SDKManifest.xml "%25output%25" /Y /F
 xcopy $(TargetPath) "%25output%25References\CommonConfiguration\$(PlatformName)\" /Y  /F
 xcopy $(TargetDir)$(TargetName).xml "%25output%25References\CommonConfiguration\$(PlatformName)\" /Y  /F

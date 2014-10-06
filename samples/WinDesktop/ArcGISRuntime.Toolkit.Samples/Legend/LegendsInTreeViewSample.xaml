@@ -1,0 +1,77 @@
+﻿<UserControl 
+	x:Class="ArcGISRuntime.Toolkit.Samples.Desktop.Legend.LegendsInTreeViewSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+	xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
+	xmlns:toolkitPrimitives="using:Esri.ArcGISRuntime.Toolkit.Controls.Primitives"
+	xmlns:local="clr-namespace:ArcGISRuntime.Toolkit.Samples.Desktop.Legend">
+
+	<UserControl.Resources>
+		<local:EnumeratorConverter x:Key="enumerator" />
+
+		<HierarchicalDataTemplate 
+			DataType="{x:Type esri:Layer}" 
+            ItemsSource="{Binding Path=ChildLayers}">
+			<Expander>
+				<Expander.Header>
+					<CheckBox IsChecked="{Binding IsVisible}" >
+						<TextBlock Text="{Binding DisplayName}" FontWeight="Bold" MaxWidth="250" 
+								   TextTrimming="CharacterEllipsis" >
+							<TextBlock.Style>
+								<Style TargetType="TextBlock">
+									<Setter Property="TextBlock.Foreground" Value="Red" />
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding InitializationException}" Value="{x:Null}">
+											<Setter Property="TextBlock.Foreground" Value="Black" />
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</CheckBox>
+				</Expander.Header>
+				<StackPanel Margin="20,5,0,0">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Opacity : "/>
+						<Slider Value="{Binding Opacity, Mode=TwoWay}" 
+							Maximum="1" Width="100" HorizontalAlignment="Left"/>
+					</StackPanel>
+					<esri:Legend Layers="{Binding Converter={StaticResource enumerator}}" 
+							ShowOnlyVisibleLayers="False" />
+				</StackPanel>
+			</Expander>
+		</HierarchicalDataTemplate>
+	</UserControl.Resources>
+	
+	<Grid>
+		<esri:MapView x:Name="MyMapView" LayerLoaded="MyMapView_OnLayerLoaded">
+			<esri:Map>
+				<esri:ArcGISTiledMapServiceLayer DisplayName="Street Map" 
+					ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" 
+					ShowLegend="False" />
+				<esri:ArcGISDynamicMapServiceLayer DisplayName="Water Network"
+					ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/MapServer" />
+				<esri:FeatureLayer DisplayName="Damage to Residential Buildings ">
+					<esri:FeatureLayer.FeatureTable>
+						<esri:ServiceFeatureTable 
+							ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0" 
+							UseAdvancedSymbology="False" />
+					</esri:FeatureLayer.FeatureTable>
+				</esri:FeatureLayer>
+			</esri:Map>
+		</esri:MapView>
+
+		<Border Background="White" BorderBrush="Black" BorderThickness="1" Margin="30" Padding="10,20,20,20"
+                HorizontalAlignment="Right" VerticalAlignment="Top">
+			<Border.Effect>
+				<DropShadowEffect />
+			</Border.Effect>
+			<TreeView ItemsSource="{Binding Map.Layers, ElementName=MyMapView}"
+					  HorizontalAlignment="Left" BorderBrush="Transparent"
+					  Width="300" HorizontalContentAlignment="Stretch"/>
+		</Border>
+	</Grid>
+</UserControl>

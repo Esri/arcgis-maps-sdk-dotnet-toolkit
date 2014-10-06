@@ -474,11 +474,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 			{
 				if (_layerItemsSource == null || _isDirty)
 				{
-					_layerItemsSource = GetLayerItemsSource().ToList();
+					var newLayerItemsSources = GetLayerItemsSource().ToList();
+					if (!AreEquals(_layerItemsSource, newLayerItemsSources)) // Avoid changing ItemSources if the list didn't change
+						_layerItemsSource = newLayerItemsSources;
 					_isDirty = false;
 				}
 				return _layerItemsSource;
 			}
+		}
+
+		private static bool AreEquals<T>(IEnumerable<T> enum1, IEnumerable<T> enum2) where T: class
+		{
+			return enum1 != null && enum2 != null && enum1.Count() == enum2.Count() && enum1.Zip(enum2, (item1, item2) => item1 == item2).All(b => b);
 		}
 
 		private IEnumerable<LegendItemViewModel> GetLayerItemsSource()

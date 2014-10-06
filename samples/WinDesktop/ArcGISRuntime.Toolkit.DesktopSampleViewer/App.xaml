@@ -1,0 +1,8 @@
+﻿<Application x:Class="ArcGISRuntime.Toolkit.DesktopSampleViewer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="ViewerWindow.xaml"
+			 Startup="Application_Startup">
+	<Application.Resources>
+	</Application.Resources>
+</Application>

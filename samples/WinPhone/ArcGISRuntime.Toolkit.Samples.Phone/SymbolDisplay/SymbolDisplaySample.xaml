@@ -1,0 +1,51 @@
+﻿<Page
+	x:Class="ArcGISRuntime.Toolkit.Samples.Phone.SymbolDisplay.SymbolDisplaySample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Windows.ScaleLine"
+	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+	xmlns:data="using:Esri.ArcGISRuntime.Data"
+	xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.Controls"
+	xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Controls.Primitives">
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid x:Name="Table" Margin="30">
+			<ListView x:Name="FeatureList" Grid.Row="1">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<primitives:SymbolDisplay
+								Symbol="{Binding Symbol}" Margin="5"/>
+							<Grid Margin="5">
+								<Grid.RowDefinitions>
+									<RowDefinition />
+									<RowDefinition />
+								</Grid.RowDefinitions>
+								<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" 
+										   Style="{ThemeResource TitleTextBlockStyle}">
+									<Run Text="ID = "/>
+									<Run Text="{Binding Feature.Attributes[objectid]}"/>
+								</TextBlock>
+								<!-- Damage Type -->
+								<StackPanel Orientation="Horizontal" Grid.Row="1">
+									<TextBlock Text="Damage type = " VerticalAlignment="Center" />
+									<toolkit:FeatureDataField 
+												  GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+												  FieldName="typdamage" IsReadOnly="True" VerticalAlignment="Center">
+										<toolkit:FeatureDataField.ReadOnlyTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Value, Mode=OneWay}" 
+													 Foreground="{ThemeResource ApplicationForegroundThemeBrush}" />
+											</DataTemplate>
+										</toolkit:FeatureDataField.ReadOnlyTemplate>
+									</toolkit:FeatureDataField>
+								</StackPanel>
+							</Grid>
+						</StackPanel>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</Grid>
+	</Grid>
+</Page>

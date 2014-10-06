@@ -1,0 +1,115 @@
+﻿<Page
+	x:Class="ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataField.FeatureDataFieldSample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Windows.FeatureDataField"
+	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+	xmlns:data="using:Esri.ArcGISRuntime.Data"
+	xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.Controls"
+	xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Controls.Primitives">
+
+	<Page.Resources>
+		<local:DateTimeConverter x:Key="dateTimeConverter" />
+	</Page.Resources>
+	
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid x:Name="Table" Margin="30">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Grid x:Name="ListViewHeaders" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  Width="100" />
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+					<ColumnDefinition  Width="2*"/>
+					<ColumnDefinition  />
+				</Grid.ColumnDefinitions>
+				<TextBlock Text="Object id" />
+				<TextBlock Grid.Column="1" Text="Incident id" />
+				<TextBlock Grid.Column="2" Text="Damage type" />
+				<TextBlock Grid.Column="3" Text="Habitable" />
+				<TextBlock Grid.Column="4" Text="Value Before Damage" />
+				<TextBlock Grid.Column="5" Text="Inspection Date" />
+				<TextBlock Grid.Column="6" Text="Last Updated" />
+			</Grid>
+			<ListView x:Name="FeatureList" Grid.Row="1">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<Grid Width="{Binding ElementName=Table, Path=ActualWidth}" >
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition  Width="100" />
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+								<ColumnDefinition Width="2*" />
+								<ColumnDefinition  />
+							</Grid.ColumnDefinitions>
+
+							<!-- show object id in a textblock since it's not editable in any way -->
+							<toolkit:FeatureDataField 
+								GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+								FieldName="objectid" IsReadOnly="True">
+								<toolkit:FeatureDataField.ReadOnlyTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Value, Mode=OneWay}" 
+												 Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
+									</DataTemplate>
+								</toolkit:FeatureDataField.ReadOnlyTemplate>
+							</toolkit:FeatureDataField>
+							
+							<!-- show incident id in a TextBox but set that to ReadOnly -->
+							<toolkit:FeatureDataField 
+								Grid.Column="1" 
+								GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+								FieldName="incidentid" 
+								IsReadOnly="True"/>
+
+							<!-- show damage type domain and keep it editable -->
+							<toolkit:FeatureDataField 
+								Grid.Column="2" 
+								GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+								FieldName="typdamage" />
+
+							<!-- show habitable domain and but set it read only -->
+							<toolkit:FeatureDataField 
+								Grid.Column="3" 
+								GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+								FieldName="habitable" IsReadOnly="True"/>
+
+							<!-- show predisval and keep it editable and set width explicitily -->
+							<toolkit:FeatureDataField 
+								Grid.Column="4" 
+								GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+								FieldName="predisval" MinWidth="100"/>
+
+							<!-- show inspdate -->
+							<toolkit:FeatureDataField 
+								Grid.Column="5" 
+								GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+								FieldName="inspdate">
+								<toolkit:FeatureDataField.InputTemplate>
+									<DataTemplate>
+										<DatePicker Date="{Binding Value, Mode=TwoWay, 
+											Converter={StaticResource dateTimeConverter}}"/>
+									</DataTemplate>
+								</toolkit:FeatureDataField.InputTemplate>
+							</toolkit:FeatureDataField>
+
+							<!-- show lastupdate and set it read only -->
+							<toolkit:FeatureDataField 
+								Grid.Column="6" 
+								GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+								FieldName="lastupdate" MinWidth="100" IsReadOnly="True"/>
+						</Grid>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</Grid>
+	</Grid>
+</Page>

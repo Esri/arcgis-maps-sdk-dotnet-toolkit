@@ -1,12 +1,12 @@
-﻿// (c) Copyright ESRI.
-// This source is subject to the Microsoft Public License (Ms-PL).
-// Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
-// All other rights reserved.
-
-using System;
+﻿using System;
+#if NETFX_CORE
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+#else
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.ValueConverters
 {
@@ -27,7 +27,11 @@ namespace Esri.ArcGISRuntime.Toolkit.ValueConverters
 		/// <returns>
 		/// The value to be passed to the target dependency property.
 		/// </returns>
+#if NETFX_CORE
+		object IValueConverter.Convert(object value, Type targetType, object parameter, string culture)
+#else
 		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+#endif
 		{
 			bool vis;
 			if (value is string)
@@ -52,7 +56,11 @@ namespace Esri.ArcGISRuntime.Toolkit.ValueConverters
 		/// <returns>
 		/// The value to be passed to the source object.
 		/// </returns>
+#if NETFX_CORE
+		object IValueConverter.ConvertBack(object value, Type targetType, object parameter, string culture)
+#else
 		object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+#endif
 		{
 			var visibility = (Visibility)value;
 			return (visibility == Visibility.Visible);

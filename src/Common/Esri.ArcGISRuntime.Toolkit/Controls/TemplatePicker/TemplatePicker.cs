@@ -8,6 +8,7 @@ using System.Linq;
 using Esri.ArcGISRuntime.ArcGISServices;
 using Esri.ArcGISRuntime.Controls;
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Layers;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,6 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Windows.UI;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -46,11 +45,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         // WeakEventListeners for feature layers changes (so the template picker may be released even if the feature layers are long lived object)
 
         // Listen for feature layers DP changes
-        private readonly DependencyPropertyChangedListeners<TemplatePicker> _featureLayerPropertyChangedListeners;
+        private DependencyPropertyChangedListeners<TemplatePicker> _featureLayerPropertyChangedListeners;
         // Listen for Layers Collection changed
         private WeakEventListener<TemplatePicker, object, NotifyCollectionChangedEventArgs> _layersWeakEventListener;
 
         private ThrottleTimer _updateItemsSourceTimer;
+        private bool _isLoaded;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplatePicker"/> class.
@@ -58,20 +58,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public TemplatePicker()
         {
             DefaultStyleKey = typeof(TemplatePicker);
-            _featureLayerPropertyChangedListeners = new DependencyPropertyChangedListeners<TemplatePicker>(this)
-            {
-                OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
-            };
+            Loaded += (sender, args) => OnLoaded();
+            Unloaded += (sender, args) => OnUnloaded();
         }
 
-        /// <summary>
-        /// Finalizes an instance of the <see cref="TemplatePicker"/> class.
-        /// </summary>
-        ~TemplatePicker()
+        private void OnLoaded()
         {
-            // Detach WeakEventListeners for avoiding small memory leaks
-            if (_layersWeakEventListener != null)
-                _layersWeakEventListener.Detach();
+            _isLoaded = true;
+            DetachLayersHandler();
+            AttachLayersHandler(Layers);
+            RebuildAllTemplates();
+        }
+
+        private void OnUnloaded()
+        {
+            _isLoaded = false;
+            DetachLayersHandler();
         }
 
         /// <summary>
@@ -121,12 +123,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             var templates = new List<TemplateItem>();
             FeatureServiceLayerInfo serviceInfo = null;
-            var ft = flayer.FeatureTable;
-            if (ft != null && !ft.IsReadOnly && flayer.Status == LayerStatus.Initialized)
+            var gdbFeatureTable = flayer.FeatureTable as ArcGISFeatureTable;
+            if (gdbFeatureTable != null && !gdbFeatureTable.IsReadOnly && flayer.Status == LayerStatus.Initialized)
             {
                 try
                 {
-                    serviceInfo = ft.ServiceInfo;
+                    serviceInfo = gdbFeatureTable.ServiceInfo;
                 }
                 catch{}
             }
@@ -148,7 +150,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                         if (renderer != null)
                         {
                             var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>()); // Need to disambiguate from winstore toolkit KeyValuePair
-                            item.SetSwatch(renderer.GetSymbol(g));
+                            item.SetSymbol(renderer.GetSymbol(g));
                         }
                     }
                 }
@@ -169,7 +171,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                             if (renderer != null)
                             {
                                 var g = new Graphic(template.Prototype.Attributes ?? Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, object>>());
-                                item.SetSwatch(renderer.GetSymbol(g));
+                                item.SetSymbol(renderer.GetSymbol(g));
                             }
                         }
                     }
@@ -184,7 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             //map navigation performance doesn't suffer from it.
             if (_updateItemsSourceTimer == null)
             {
-                _updateItemsSourceTimer = new ThrottleTimer(50) { Action = InitItemsSourceImpl };
+                _updateItemsSourceTimer = new ThrottleTimer(100) { Action = InitItemsSourceImpl };
             }
             _updateItemsSourceTimer.Invoke();
         }
@@ -236,27 +238,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             var picker = d as TemplatePicker;
             if (picker != null)
-                picker.OnLayersPropertyChanged(e.OldValue as IEnumerable<Layer>, e.NewValue as IEnumerable<Layer>);
+                picker.OnLayersPropertyChanged(e.NewValue as IEnumerable<Layer>);
         }
 
-        private void OnLayersPropertyChanged(IEnumerable<Layer> oldLayers, IEnumerable<Layer> newLayers)
+        private void OnLayersPropertyChanged(IEnumerable<Layer> newLayers)
         {
-            DetachLayersHandler(oldLayers);
-            AttachLayersHandler(newLayers);
-            RebuildAllTemplates();
+            if (_isLoaded) // else useless to subscribe to events and to build templates for now
+            {
+                DetachLayersHandler();
+                AttachLayersHandler(newLayers);
+                RebuildAllTemplates();
+            }
         }
 
-        private void DetachLayersHandler(IEnumerable<Layer> layers)
+        private void DetachLayersHandler()
         {
             if (_layersWeakEventListener != null)
             {
                 _layersWeakEventListener.Detach();
                 _layersWeakEventListener = null;
             }
-            if (layers != null)
+            if (_featureLayerPropertyChangedListeners != null)
             {
-                foreach (var layer in layers.OfType<FeatureLayer>())
-                    DetachLayerHandler(layer);
+                _featureLayerPropertyChangedListeners.DetachAll();
+                _featureLayerPropertyChangedListeners = null;
             }
         }
 
@@ -264,6 +269,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             if (layers != null)
             {
+                // Subscribe to Layers Collection changes
                 var layersINotifyCollectionChanged = layers as INotifyCollectionChanged;
                 if (layersINotifyCollectionChanged != null)
                 {
@@ -275,6 +281,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     };
                     layersINotifyCollectionChanged.CollectionChanged += _layersWeakEventListener.OnEvent;
                 }
+
+                // Subscribe to FeatureLayers Property Changes
+                Debug.Assert(_featureLayerPropertyChangedListeners == null);
+                _featureLayerPropertyChangedListeners = new DependencyPropertyChangedListeners<TemplatePicker>(this)
+                {
+                    OnEventAction = (instance, source, eventArgs) => instance.OnLayerPropertyChanged(source, eventArgs)
+                };
+
                 foreach (var layer in layers.OfType<FeatureLayer>())
                     AttachLayerHandler(layer);
             }
@@ -282,17 +296,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         private void AttachLayerHandler(FeatureLayer flayer)
         {
-            _featureLayerPropertyChangedListeners.Attach(flayer, "Renderer"); // to do: subscribe to Renderer changed events
-            _featureLayerPropertyChangedListeners.Attach(flayer, "IsVisible");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "MinScale");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "MaxScale");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "Status");
-            _featureLayerPropertyChangedListeners.Attach(flayer, "FeatureTable");
+            if (_featureLayerPropertyChangedListeners != null)
+            {
+                _featureLayerPropertyChangedListeners.Attach(flayer, "Renderer"); // to do: subscribe to Renderer changed events
+                _featureLayerPropertyChangedListeners.Attach(flayer, "IsVisible");
+                _featureLayerPropertyChangedListeners.Attach(flayer, "MinScale");
+                _featureLayerPropertyChangedListeners.Attach(flayer, "MaxScale");
+                _featureLayerPropertyChangedListeners.Attach(flayer, "Status");
+                _featureLayerPropertyChangedListeners.Attach(flayer, "FeatureTable");
+            }
         }
 
         private void DetachLayerHandler(FeatureLayer flayer)
         {
-            _featureLayerPropertyChangedListeners.Detach(flayer);
+            if (_featureLayerPropertyChangedListeners != null)
+                _featureLayerPropertyChangedListeners.Detach(flayer);
         }
 
         private void OnLayerPropertyChanged(DependencyObject sender, PropertyChangedEventArgs e)
@@ -341,7 +359,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
-                    DetachLayersHandler(_templatesByLayer.Select(kvp => kvp.Key)); // this event doesn't provide the old values
+                    DetachLayersHandler();
                     AttachLayersHandler(Layers);
                     RebuildAllTemplates();
                     break;
@@ -437,23 +455,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             public FeatureLayer Layer { get; set; }
             public FeatureType FeatureType { get; set; }
             public FeatureTemplate FeatureTemplate { get; set; }
-            public ImageSource Swatch { get; set; }
-            internal async void SetSwatch(Symbology.Symbol symbol)
+            public Symbology.Symbol Symbol { get; set; }
+            public GeometryType GeometryType { get; set; }
+            internal void SetSymbol(Symbology.Symbol symbol)
             {
                 if (symbol != null)
                 {
                     // force the geometry type since GeometryType.Unknown doesn't work well with advanced symbology.
-                    Geometry.GeometryType geometryType = Geometry.GeometryType.Unknown;
-                    if (Layer != null && Layer.FeatureTable != null && Layer.FeatureTable.ServiceInfo != null)
-                        geometryType = Layer.FeatureTable.ServiceInfo.GeometryType;
-
-                    try
-                    {
-                        Swatch = await symbol.CreateSwatchAsync(32, 32, 96, Colors.Transparent, geometryType);
-                        OnPropertyChanged("Swatch");
-                    }
-                    catch { }
+                    var geometryType = GeometryType.Unknown;
+                    var gdbFeatureTable = Layer == null ? null : Layer.FeatureTable as GeodatabaseFeatureTable;
+                    if (gdbFeatureTable != null && gdbFeatureTable.ServiceInfo != null)
+                        geometryType = gdbFeatureTable.ServiceInfo.GeometryType;
+                    GeometryType = geometryType;
                 }
+                Symbol = symbol;
+                OnPropertyChanged("GeometryType");
+                OnPropertyChanged("Symbol");
             }
             public ICommand Command { get; set; }
             private void OnPropertyChanged(string propertyName)
@@ -483,7 +500,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             /// Gets the feature layer of the selected template.
             /// </summary>
             /// <value>
-            /// The faeture layer.
+            /// The feature layer.
             /// </value>
             public FeatureLayer Layer { get; private set; }
 

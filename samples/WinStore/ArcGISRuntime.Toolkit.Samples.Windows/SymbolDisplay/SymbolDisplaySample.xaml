@@ -1,0 +1,69 @@
+﻿<Page
+	x:Class="ArcGISRuntime.Toolkit.Samples.Windows.SymbolDisplay.SymbolDisplaySample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Windows.ScaleLine"
+	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+	xmlns:data="using:Esri.ArcGISRuntime.Data"
+	xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.Controls"
+	xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Controls.Primitives">
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid x:Name="Table" Margin="30">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Grid x:Name="ListViewHeaders" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+					<ColumnDefinition  />
+				</Grid.ColumnDefinitions>
+				<TextBlock Text="Symbol" />
+				<TextBlock Grid.Column="1" Text="Object id" />
+				<TextBlock Grid.Column="2" Text="X" />
+				<TextBlock Grid.Column="3" Text="Y" />
+				<TextBlock Grid.Column="4" Text="Incident id" />
+				<TextBlock Grid.Column="5" Text="Damage type" />
+			</Grid>
+			<ListView x:Name="FeatureList" Grid.Row="1">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<Grid Width="{Binding ElementName=Table, Path=ActualWidth}" >
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+								<ColumnDefinition  />
+							</Grid.ColumnDefinitions>
+							<primitives:SymbolDisplay Symbol="{Binding Symbol}" HorizontalAlignment="Left"/>
+							<TextBlock Grid.Column="1" Text="{Binding Feature.Attributes[objectid]}"  />
+							<TextBlock Grid.Column="2" Text="{Binding Feature.Geometry.X}" />
+							<TextBlock Grid.Column="3" Text="{Binding Feature.Geometry.Y}" />
+							<TextBlock Grid.Column="4" Text="{Binding Feature.Attributes[incidentid]}"  />
+							<toolkit:FeatureDataField Grid.Column="5" 
+												  GeodatabaseFeature="{Binding Feature, Mode=TwoWay}"
+												  FieldName="typdamage" IsReadOnly="True">
+								<toolkit:FeatureDataField.ReadOnlyTemplate>
+									<DataTemplate>
+										<TextBox Text="{Binding Value, Mode=OneWay}" 
+												 Foreground="{ThemeResource ApplicationForegroundThemeBrush}"
+												 IsReadOnly="True" Background="Transparent" 
+												 BorderThickness="0"/>
+									</DataTemplate>
+								</toolkit:FeatureDataField.ReadOnlyTemplate>
+							</toolkit:FeatureDataField>
+						</Grid>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</Grid>
+	</Grid>
+</Page>
