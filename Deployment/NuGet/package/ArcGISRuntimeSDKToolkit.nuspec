@@ -10,10 +10,10 @@
     <projectUrl>http://links.esri.com/dotnetsdktoolkit</projectUrl>
     <iconUrl>http://links.esri.com/dotnetsdklogo</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>ArcGIS Runtime controls and utilities for Windows Store and Windows Phone.</description>
-    <summary>ArcGIS Runtime Toolkit for Windows Store and Windows Phone</summary>
+    <description>ArcGIS Runtime controls and utilities for Windows Store, Windows Phone, and Windows Desktop.</description>
+    <summary>ArcGIS Runtime Toolkit for Windows Store, Windows Phone, and Windows Desktop</summary>
     <copyright>Copyright © 2014 Esri. All rights reserved. ArcGIS is a registered trademark of Esri.</copyright>
-    <tags>ArcGIS Esri map mapping GIS location Store WindowsPhone win81 wpa81 toolkit</tags>
+    <tags>ArcGIS Esri map mapping GIS location Store WindowsPhone win81 wpa81 toolkit Windows Desktop WPF</tags>
     <dependencies>
       <dependency id="$runtimeid$" version="$version$" />
     </dependencies>
