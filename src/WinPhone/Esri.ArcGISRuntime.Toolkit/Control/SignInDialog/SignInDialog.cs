@@ -18,9 +18,10 @@ using Esri.ArcGISRuntime.Security;
 #error "Intended for WinPhone only"
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.Controls
+namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 {
     /// <summary>
+    /// *FOR INTERNAL USE ONLY*
     /// The SignInDialog Control challenges the user for a credential
     /// when trying to access secured ArcGIS services.
     /// The SignInDialog Control can manage Network or Token credential.
@@ -28,7 +29,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// <remarks>
     /// This control is designed to work with the <see cref="IdentityManager" /> and the <see cref="Security.SignInChallengeHandler"/>.
     /// </remarks>
-    internal class SignInDialog : Control, INotifyPropertyChanged // might be public later
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class SignInDialog : Control, INotifyPropertyChanged
     {
         #region Constructors
         private TaskCompletionSource<Credential> _tcs;
@@ -398,7 +400,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// </summary>
     /// <exclude/>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal class SignInDialogMessageConverter : IValueConverter
+    public class SignInDialogMessageConverter : IValueConverter
     {
 
         /// <summary>
@@ -463,7 +465,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// </summary>
     /// <exclude/>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal class CredentialSaveOptionBoolConverter : IValueConverter
+    public class CredentialSaveOptionBoolConverter : IValueConverter
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -512,7 +514,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// </summary>
     /// <exclude/>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal class CredentialSaveOptionVisibilityConverter : IValueConverter
+    public class CredentialSaveOptionVisibilityConverter : IValueConverter
     {
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.

@@ -500,17 +500,17 @@
     </Style>
 
 
-    <Style TargetType="local:SignInDialog">
+    <Style TargetType="primitives:SignInDialog">
         <Setter Property="Title" Value="Sign In" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:SignInDialog">
+                <ControlTemplate TargetType="primitives:SignInDialog">
                     <Grid>
                         <Grid.Resources>
                             <converters:VisibilityConverter x:Key="VisibilityConverter" />
-                            <local:SignInDialogMessageConverter x:Key="MessageConverter" />
-                            <local:CredentialSaveOptionBoolConverter x:Key="CredentialSaveOptionBoolConverter" />
-                            <local:CredentialSaveOptionVisibilityConverter x:Key="CredentialSaveOptionVisibilityConverter" />
+                            <primitives:SignInDialogMessageConverter x:Key="MessageConverter" />
+                            <primitives:CredentialSaveOptionBoolConverter x:Key="CredentialSaveOptionBoolConverter" />
+                            <primitives:CredentialSaveOptionVisibilityConverter x:Key="CredentialSaveOptionVisibilityConverter" />
                         </Grid.Resources>
 
                         <StackPanel HorizontalAlignment="Stretch">

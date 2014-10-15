@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Windows.Security.Credentials;
 using Esri.ArcGISRuntime.Security;
 using Esri.ArcGISRuntime.Toolkit.Controls;
+using Esri.ArcGISRuntime.Toolkit.Controls.Primitives;
 
 #if !WINDOWS_PHONE_APP
 #error "Intended for WinPhone only"
