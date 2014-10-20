@@ -72,10 +72,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsDesktop.csproj">
-      <Project>{1e83c102-5c9d-4a6c-b5b8-9a9202249262}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.WindowsDesktop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ArcGISRuntime.Toolkit.Samples\ArcGISRuntime.Toolkit.Samples.Desktop.csproj">
       <Project>{50f9230c-de67-4ec9-8448-e92e144c088c}</Project>
       <Name>ArcGISRuntime.Toolkit.Samples.Desktop</Name>
