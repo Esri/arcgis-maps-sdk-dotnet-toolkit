@@ -19,16 +19,26 @@ See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more deta
 
 1. Fork and then clone the repo or download the .zip file.
 2. The Toolkit requires the ArcGIS Runtime SDK for .NET.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for .NET with [Windows Desktop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm), [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm), and/or [Windows Phone](http://developers.arcgis.com/net/phone/guide/system-requirements.htm).  
-3. Download and install the [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk). 
-4. To include Toolkit source in your projects:
+ * Note that [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) is referenced by using Nuget package. It is restored when solution is build first time.
+3. To include Toolkit source in your projects:
  *  In Visual Studio, add the ArcGIS Runtime Toolkit project to your solution. 
     - Windows Desktop (WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsDesktop.proj)
     - Windows Store	(WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsStore.proj)
     - Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsPhone.proj)
  *  For other projects in the solution, add a reference to the ArcGIS Runtime Toolkit project.
- 
+
+#### Optional: Change references to use installed SDK
+You might have installed full [ArcGIS Runtime SDK for .NET SDK](http://esriurl.com/dotnetsdk) to your machine and you would prefer to use it instead of using NuGet installation. 
+
+1. Remove / Uninstall Esri.ArcGISRuntime.Toolkit NuGet-package reference from the solution.
+  * Click "Manage NuGet Packages for solution..." from Tools \ NuGet Package Manager
+  * See Installed Packages tab and remove "Esri.ArcGISRuntime.Toolkit" package
+2. [Add references](https://developers.arcgis.com/net/desktop/guide/add-arcgis-runtime-sdk-references.htm) to projects. 
+3. If you are using samples, make sure that you change them to use SDK references too.
+
+
 #### Optional: Build to distribute the Toolkit
-Building the SDK:
+Building the Toolkit:
 
 1.  Open the solution (Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 Update 2 or newer and build the 3 projects.
 2.  For Windows Phone, build both ARM and x86 configurations, for Windows Store, also build x64 configuration.
