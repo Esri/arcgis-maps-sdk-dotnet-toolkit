@@ -78,7 +78,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="TypeConverters\StringToEnumerationConverter.cs" />
-    <Compile Include="ValueConverters\VisibilityConverter.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
