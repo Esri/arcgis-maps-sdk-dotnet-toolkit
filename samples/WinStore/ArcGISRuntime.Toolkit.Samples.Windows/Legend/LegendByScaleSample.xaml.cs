@@ -1,0 +1,37 @@
+﻿using Esri.ArcGISRuntime.Controls;
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Layers;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using Windows.Foundation;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+
+namespace ArcGISRuntime.Toolkit.Samples.Windows.Legend
+{
+	/// <summary>
+	/// Demonstrates how to show legend from layers that are in the scale of the map view.
+	/// </summary>
+	/// <title>Dynamic Legend</title>
+	/// <category>Toolkit</category>
+	/// <subcategory>Legend</subcategory>
+	/// <usesoffline>false</usesoffline>
+	/// <usesonline>true</usesonline>
+	public sealed partial class LegendByScaleSample : Page
+	{
+		public LegendByScaleSample()
+		{
+			this.InitializeComponent();
+		}
+		
+		private void MyMapView_LayerLoaded(object sender, LayerLoadedEventArgs e)
+		{
+			if (e.LoadError == null)
+				return;
+
+			Debug.WriteLine(string.Format("Error while loading layer : {0} - {1}", e.Layer.ID, e.LoadError.Message));
+		}
+	}
+}

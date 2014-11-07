@@ -1,0 +1,162 @@
+﻿<Page
+	x:Class="ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker.TemplatePickerWithLayerSelectionSample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Windows.TemplatePicker"
+	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+	xmlns:data="using:Esri.ArcGISRuntime.Data"
+	xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.Controls"
+	xmlns:primitives="using:Esri.ArcGISRuntime.Toolkit.Controls.Primitives"
+	xmlns:ValueConverters="using:Esri.ArcGISRuntime.Toolkit.ValueConverters;assembly=Esri.ArcGISRuntime.Toolkit" >
+
+	<Page.Resources>
+		<local:LayerToLayersCollectionConverter x:Key="LayerToLayerCollection"/>
+		<local:LayerCollectionFeatureLayersConverter x:Key="LayersToFeatureLayerCollection"/>
+
+		<Style x:Key="TemplatePickerStyle" TargetType="toolkit:TemplatePicker">
+			<Setter Property="ItemTemplate">
+				<Setter.Value>
+					<DataTemplate>
+						<Button 
+								Background="Transparent"
+								HorizontalContentAlignment="Stretch"
+								VerticalContentAlignment="Center"
+								Command="{Binding Command}" CommandParameter="{Binding}"
+								Margin="1">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition />
+									<ColumnDefinition />
+								</Grid.ColumnDefinitions>
+								<Border Width="40" Height="40"							
+									Padding="0" Margin="2">
+									<primitives:SymbolDisplay Symbol="{Binding Symbol}"/>
+								</Border>
+								<StackPanel Grid.Column="1" Margin="5,0,0,0">
+									<TextBlock FontWeight="Bold" Text="{Binding FeatureTemplate.Name}"
+											   Width="300"/>
+									<TextBlock Text="{Binding FeatureTemplate.Description}"
+											   TextTrimming="CharacterEllipsis"/>
+								</StackPanel>
+							</Grid>
+						</Button>
+					</DataTemplate>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="ItemsPanel">
+				<Setter.Value>
+					<ItemsPanelTemplate>
+						<WrapGrid Orientation="Vertical"/>
+					</ItemsPanelTemplate>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="toolkit:TemplatePicker">
+						<Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+							<ItemsControl x:Name="TemplateItems" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      ItemTemplate="{TemplateBinding ItemTemplate}"
+                                      ItemsPanel="{TemplateBinding ItemsPanel}" />
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Page.Resources>
+	
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<esri:MapView x:Name="MyMapView" >
+			<esri:Map>
+				<esri:Map.InitialViewpoint>
+					<esri:ViewpointExtent XMin="-9814734.78302023" YMin="5126661.52171208" XMax="-9812986.3299354" YMax="5127537.93382084" />
+				</esri:Map.InitialViewpoint>
+				<layers:ArcGISTiledMapServiceLayer DisplayName="Street Map" 
+					ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+				<layers:FeatureLayer DisplayName="Water Mains">
+					<layers:FeatureLayer.FeatureTable>
+						<data:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/16" />
+					</layers:FeatureLayer.FeatureTable>
+				</layers:FeatureLayer>
+				<layers:FeatureLayer DisplayName="Water Hydrants">
+					<layers:FeatureLayer.FeatureTable>
+						<data:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/8" />
+					</layers:FeatureLayer.FeatureTable>
+				</layers:FeatureLayer>
+				<layers:FeatureLayer DisplayName="Water Pumps">
+					<layers:FeatureLayer.FeatureTable>
+						<data:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/9" />
+					</layers:FeatureLayer.FeatureTable>
+				</layers:FeatureLayer>
+			</esri:Map>
+		</esri:MapView>
+
+		<Border Background="#CC000000" 
+				HorizontalAlignment="Right" VerticalAlignment="Top"
+				Margin="30" Padding="20" MaxWidth="350">
+			<Grid>
+				<Grid x:Name="Selection">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition />
+					</Grid.RowDefinitions>
+					<StackPanel>
+						<TextBlock Text="Select layer : " FontSize="16" Margin="5"/>
+						<ComboBox x:Name="TemplateSelectionList"
+						ItemsSource="{Binding Map.Layers, Converter={StaticResource LayersToFeatureLayerCollection}, ElementName=MyMapView}" 
+						DisplayMemberPath="DisplayName"/>
+					</StackPanel>
+					<ScrollViewer x:Name="FeatureSelection"
+						VerticalScrollBarVisibility="Auto" 	
+						Grid.Row="1" 	
+						Margin="5">
+						<toolkit:TemplatePicker 
+							Width="400"
+							HorizontalAlignment="Stretch"
+							HorizontalContentAlignment="Stretch"
+							Layers="{Binding SelectedItem, Converter={StaticResource LayerToLayerCollection}, ElementName=TemplateSelectionList}"
+							TemplatePicked="MyTemplatePicker_TemplatePicked" 
+							Style="{StaticResource TemplatePickerStyle}"/>
+					</ScrollViewer>
+				</Grid>
+
+				<Grid x:Name="SelectedInfo" Visibility="Collapsed">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition />
+						<RowDefinition Height="auto"/>
+					</Grid.RowDefinitions>
+					<TextBlock Text="Add feature to the map" FontSize="16" FontWeight="Bold" Margin="5"/>
+					<StackPanel Grid.Row="1" Margin="5"  >
+						<StackPanel Orientation="Horizontal" Margin="5">
+							<TextBlock Text="Selected template: " FontWeight="Bold"/>
+							<TextBlock x:Name="TemplateName" VerticalAlignment="Center"/>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal" Margin="5">
+							<TextBlock Text="Targeted layer: " FontWeight="Bold"/>
+							<TextBlock x:Name="TargetedLayer" VerticalAlignment="Center"/>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal" Margin="5">
+							<TextBlock Text="Template description: " FontWeight="Bold"/>
+							<TextBlock x:Name="TemplateDescription" VerticalAlignment="Center"/>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal" Margin="5">
+							<TextBlock Text="Selected symbol: " FontWeight="Bold"/>
+							<Image x:Name="SelectedSymbol" Width="40" Height="40" />
+						</StackPanel>
+					</StackPanel>
+					<Button Content="Cancel" Grid.Row="2" Click="Cancel_Click"
+							HorizontalAlignment="Stretch"/>
+				</Grid>
+			</Grid>
+		</Border>
+	</Grid>
+</Page>

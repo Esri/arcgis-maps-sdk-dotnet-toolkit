@@ -1,0 +1,64 @@
+﻿<UserControl 
+	x:Class="ArcGISRuntime.Toolkit.Samples.Desktop.FeatureDataForm.FeatureDataFormSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+	xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Controls;assembly=Esri.ArcGISRuntime.Toolkit">
+
+	<Grid>
+		<esri:MapView x:Name="MyMapView" 
+					  MapViewTapped="MyMapView_MapViewTapped">
+			<esri:Map InitialViewpoint="-9814734.78302023,5126661.52171208,-9812986.3299354,5127537.93382084">
+				<esri:ArcGISTiledMapServiceLayer DisplayName="Street Map" 
+					ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+				<esri:FeatureLayer DisplayName="Water Mains">
+					<esri:FeatureLayer.FeatureTable>
+						<esri:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/16" />
+					</esri:FeatureLayer.FeatureTable>
+				</esri:FeatureLayer>
+				<esri:FeatureLayer DisplayName="Water Hydrants">
+					<esri:FeatureLayer.FeatureTable>
+						<esri:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/8" />
+					</esri:FeatureLayer.FeatureTable>
+				</esri:FeatureLayer>
+				<esri:FeatureLayer DisplayName="Water Pumps">
+					<esri:FeatureLayer.FeatureTable>
+						<esri:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/9" />
+					</esri:FeatureLayer.FeatureTable>
+				</esri:FeatureLayer>
+			</esri:Map>
+		</esri:MapView>
+
+		<Border Background="White" BorderBrush="Black" BorderThickness="1" Margin="30" Padding="20"
+                HorizontalAlignment="Right" VerticalAlignment="Top">
+			<Border.Effect>
+				<DropShadowEffect />
+			</Border.Effect>
+			<Grid>
+				<Grid x:Name="DescriptionTextArea">
+					<TextBlock Text="Select feature from the map." FontSize="16" FontWeight="Bold"/>
+				</Grid>
+				<Grid x:Name="DataFormArea" Visibility="Collapsed">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition />
+						<RowDefinition Height="auto"/>
+					</Grid.RowDefinitions>
+					<TextBlock Text="Edit Attributes" FontSize="16" FontWeight="Bold"/>
+					<toolkit:FeatureDataForm	
+						x:Name="MyDataForm"
+						Grid.Row="1"
+						Margin="5"
+						Background="Transparent"
+						ApplyCompleted="MyDataForm_ApplyCompleted" />
+					<Button Content="Cancel" Margin="5" Grid.Row="2" Click="Cancel_Click"/>
+				</Grid>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>

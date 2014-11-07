@@ -6,8 +6,8 @@ SET VERSION=10.2.4
 SET RUNTIMEID=Esri.ArcGISRuntime
 SET ID=%RUNTIMEID%.Toolkit
 SET TITLENOTE=
-SET TYPE=-beta
-SET BUILDNUM=591
+SET TYPE=
+SET BUILDNUM=748
 
 REM source locations
 SET WINSTORETOOLKITFOLDER=..\..\..\output\WinStore\VSIX
@@ -73,7 +73,7 @@ xcopy %EXTENSIONSDKFOLDER%\%VERSION%\wpa81\Redist\CommonConfiguration\neutral %P
 xcopy %EXTENSIONSDKFOLDER%\%VERSION%\wpa81\Redist\CommonConfiguration\neutral %PACKAGEFOLDER%\sdk\wpa81\x86\ /S /Y
 
 REM copy design assembly
-xcopy %EXTENSIONSDKFOLDER%\%VERSION%\wpa81\DesignTime\CommonConfiguration\x86 %PACKAGEFOLDER%\sdk\wpa81\x86\ /S /Y
+REM xcopy %EXTENSIONSDKFOLDER%\%VERSION%\wpa81\DesignTime\CommonConfiguration\x86 %PACKAGEFOLDER%\sdk\wpa81\x86\ /S /Y
 
 REM copy Generic.xaml to all platforms
 xcopy %EXTENSIONSDKFOLDER%\%VERSION%\wpa81\DesignTime\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\Generic.xaml %PACKAGEFOLDER%\sdk\wpa81\ARM\Esri.ArcGISRuntime.Toolkit.WindowsPhone\Themes\ /S /Y
@@ -102,12 +102,13 @@ REM =================
 REM DESKTOP STAGING
 REM =================
 
-REM TODO
+xcopy %WINDESKTOPTOOLKITFOLDER%\Release\Esri.ArcGISRuntime.Toolkit.dll %PACKAGEFOLDER%\sdk\net45\ /S /Y
+xcopy %WINDESKTOPTOOLKITFOLDER%\Release\Esri.ArcGISRuntime.Toolkit.xml %PACKAGEFOLDER%\sdk\net45\ /S /Y
 
 REM rename .targets files to match package ID
 rename %PACKAGEFOLDER%\build\win81\Esri.ArcGISRuntime.Toolkit.targets %ID%.targets
 rename %PACKAGEFOLDER%\build\wpa81\Esri.ArcGISRuntime.Toolkit.targets %ID%.targets
-REM rename %PACKAGEFOLDER%\build\net45\Esri.ArcGISRuntime.targets %ID%.targets
+rename %PACKAGEFOLDER%\build\net45\Esri.ArcGISRuntime.Toolkit.targets %ID%.targets
 
 REM ===================
 REM Generate package

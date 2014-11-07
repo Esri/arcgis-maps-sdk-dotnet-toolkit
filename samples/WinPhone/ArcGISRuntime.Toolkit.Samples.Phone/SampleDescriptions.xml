@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ArcGISRuntime.Toolkit.Samples.Phone</name>
+    </assembly>
+    <members>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.Attribution.AttributionSample">
+            <summary>
+            Demonstrates how to add attribution to the map view.
+            </summary>
+            <title>Attribution</title>
+            <category>Toolkit</category>
+            <subcategory>Attribution</subcategory>
+            <usesoffline>true</usesoffline>
+            <usesonline>false</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.Attribution.DynamicAttributionSample">
+            <summary>
+            Demonstrates how to add attribution to the map view that changes based on the maps resolution.
+            </summary>
+            <title>Dynamic Attribution</title>
+            <category>Toolkit</category>
+            <subcategory>Attribution</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.FeatureDataForm.FeatureDataFormSample">
+            <summary>
+            Demonstrates how to show use FeatureDataForm to edit Features attributes.
+            </summary>
+            <title>Feature data form</title>
+            <category>Toolkit</category>
+            <subcategory>FeatureDataForm</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.Legend.LegendByScaleSample">
+            <summary>
+            Demonstrates how to show legend from layers that are in the scale of the map view.
+            </summary>
+            <title>Dynamic Legend</title>
+            <category>Toolkit</category>
+            <subcategory>Legend</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.Legend.LegendSample">
+            <summary>
+            Demonstrates how to show legend on the map view.
+            </summary>
+            <title>Legend</title>
+            <category>Toolkit</category>
+            <subcategory>Legend</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.ScaleLine.ScaleLineSample">
+            <summary>
+            Demonstrates how to add Scale line to the map view.
+            </summary>
+            <title>ScaleLine</title>
+            <category>Toolkit</category>
+            <subcategory>ScaleLine</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.ScaleLine.ScaleLineStylingSample">
+            <summary>
+            Demonstrates how to style ScaleLine control.
+            </summary>
+            <title>Styling ScaleLine</title>
+            <category>Toolkit</category>
+            <subcategory>ScaleLine</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.SymbolDisplay.SymbolDisplaySample">
+            <summary>
+            Demonstrates how to show symbol outside of the map using SymbolDisplay control.
+            </summary>
+            <title>SymbolDisplay</title>
+            <category>Toolkit</category>
+            <subcategory>SymbolDisplay</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.SymbolDisplay.SymbolDisplaySample.Assessment">
+            <summary>
+            Model class to wrap symbol and feature information into one object for binding
+            </summary>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.TemplatePicker.TemplatePickerSample">
+            <summary>
+            Demonstrates how to use TemplatePicker control.
+            </summary>
+            <title>TemplatePicker</title>
+            <category>Toolkit</category>
+            <subcategory>TemplatePicker</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+        <member name="T:ArcGISRuntime.Toolkit.Samples.Phone.TemplatePicker.TemplatePickerWithLayerSelectionSample">
+            <summary>
+            Demonstrates how to show feature templates from selected layer.
+            </summary>
+            <title>TemplatePicker by layer</title>
+            <category>Toolkit</category>
+            <subcategory>TemplatePicker</subcategory>
+            <usesoffline>false</usesoffline>
+            <usesonline>true</usesonline>
+        </member>
+    </members>
+</doc>

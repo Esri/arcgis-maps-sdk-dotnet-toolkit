@@ -4,6 +4,8 @@
 // All other rights reserved.
 
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Core;
@@ -49,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 			{
 				System.Windows.Media.Matrix m =
 					PresentationSource.FromDependencyObject(dp).CompositionTarget.TransformToDevice;
-				return (float)m.M11;
+				return (float)m.M11 * 96.0f;
 			}
 #endif
 		}
@@ -61,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 				action();
 			else
 			{
-				var asyncaction = dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action());
+				var asyncAction = dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action());
 			}
 		}
 #else
@@ -71,6 +73,45 @@ namespace Esri.ArcGISRuntime.Toolkit
 				action();
 			else
 				dispatcher.BeginInvoke(action);
+		}
+#endif
+
+		// Execute a task in the UI thread
+		internal static Task<T> ExecuteOnUIThread<T>(Func<Task<T>> f)
+		{
+			var dispatcher = GetDispatcher();
+			return dispatcher == null ? f() : ExecuteOnUIThread(f, dispatcher);
+		}
+
+#if NETFX_CORE
+		private static CoreDispatcher GetDispatcher()
+		{
+			return Application.Current != null && CoreApplication.MainView != null && CoreApplication.MainView.CoreWindow != null && !CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess
+				? CoreApplication.MainView.CoreWindow.Dispatcher
+				: null;
+		}
+
+		private static async Task<T> ExecuteOnUIThread<T>(Func<Task<T>> f, CoreDispatcher dispatcher)
+		{
+			Debug.Assert(dispatcher != null);
+			Task<T> task = null;
+			await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { task = f(); });
+			return await task;
+		}
+#else
+		private static Dispatcher GetDispatcher()
+		{
+			return Application.Current != null && Application.Current.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess()
+				? Application.Current.Dispatcher
+				: null;
+		}
+
+		private async static Task<T> ExecuteOnUIThread<T>(Func<Task<T>> f, Dispatcher dispatcher)
+		{
+			Debug.Assert(dispatcher != null);
+			Task<T> task = null;
+			await dispatcher.BeginInvoke(new Action(() => { task = f(); }));
+			return await task;
 		}
 #endif
 	}

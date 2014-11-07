@@ -1,0 +1,66 @@
+﻿<Page
+	x:Class="ArcGISRuntime.Toolkit.Samples.Phone.TemplatePicker.TemplatePickerSample"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:ArcGISRuntime.Toolkit.Samples.Phone.TemplatePicker"
+	xmlns:esri="using:Esri.ArcGISRuntime.Controls"
+	xmlns:layers="using:Esri.ArcGISRuntime.Layers"
+	xmlns:data="using:Esri.ArcGISRuntime.Data"
+	xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.Controls">
+
+	<!-- Application command bar -->
+	<Page.BottomAppBar>
+		<CommandBar IsOpen="True">
+			<AppBarButton Icon="Edit" Label="Add feature" Click="AddFeature_Click" />
+		</CommandBar>
+	</Page.BottomAppBar>
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<esri:MapView x:Name="MyMapView" >
+			<esri:Map>
+				<esri:Map.InitialViewpoint>
+					<esri:ViewpointExtent XMin="-9814577.7206458505" YMin="5126848.9692501482" XMax="-9814330.5456751585" YMax="5127244.5135717373" />
+				</esri:Map.InitialViewpoint>
+				<layers:ArcGISTiledMapServiceLayer DisplayName="Street Map" 
+					ServiceUri="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" />
+				<layers:FeatureLayer DisplayName="Water Mains">
+					<layers:FeatureLayer.FeatureTable>
+						<data:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/16" />
+					</layers:FeatureLayer.FeatureTable>
+				</layers:FeatureLayer>
+				<layers:FeatureLayer DisplayName="Water Hydrants">
+					<layers:FeatureLayer.FeatureTable>
+						<data:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/8" />
+					</layers:FeatureLayer.FeatureTable>
+				</layers:FeatureLayer>
+				<layers:FeatureLayer DisplayName="Water Pumps">
+					<layers:FeatureLayer.FeatureTable>
+						<data:ServiceFeatureTable
+                            ServiceUri="http://sampleserver6.arcgisonline.com/arcgis/rest/services/Water_Network/FeatureServer/9" />
+					</layers:FeatureLayer.FeatureTable>
+				</layers:FeatureLayer>
+			</esri:Map>
+		</esri:MapView>
+
+		<Grid x:Name="TemplatePickerView" Visibility="Collapsed" Background="{ThemeResource AppBarBackgroundThemeBrush}">
+			<Grid Margin="10">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<TextBlock Text="Select feature template and add it to the map: " FontSize="16" FontWeight="Bold"/>
+				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="20,5,0,0">
+					<toolkit:TemplatePicker 
+						x:Name="MyTemplatePicker"
+                        Layers="{Binding ElementName=MyMapView, Path=Map.Layers}"
+                        Scale="{Binding ElementName=MyMapView, Path=Scale}"
+                        TemplatePicked="MyTemplatePicker_TemplatePicked" 
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"/>
+				</ScrollViewer>
+			</Grid>
+		</Grid>
+	</Grid>
+</Page>

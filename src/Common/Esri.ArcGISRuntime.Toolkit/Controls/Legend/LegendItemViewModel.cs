@@ -91,41 +91,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 				if (_symbol != value)
 				{
 					_symbol = value;
-					_swatch = null;
 					OnPropertyChanged("Symbol");
-					OnPropertyChanged("SymbolSwatch");
 				}
-			}
-		}
-		ImageSource _swatch;
-		/// <summary>
-		/// Gets the symbol swatch image source
-		/// </summary>
-		public ImageSource SymbolSwatch
-		{
-			get
-			{
-				if (_symbol == null)
-					return null;
-				if (_swatch == null)
-				{
-					var dpi = CompatUtility.LogicalDpi();
-#if NETFX_CORE
-					_swatch = new WriteableBitmap(1, 1); //Temporary image
-#else
-					_swatch = new WriteableBitmap(1, 1, dpi, dpi, PixelFormats.Bgra32, null); //Temporary image
-#endif
-					Task<ImageSource> task = _symbol.CreateSwatchAsync(0, 0, dpi, Colors.Transparent, GeometryType);
-					task.ContinueWith(t =>
-					{
-						if (t.Exception == null && t.IsCompleted)
-						{
-							_swatch = t.Result;
-							OnPropertyChanged("SymbolSwatch");
-						}
-					}, TaskScheduler.FromCurrentSynchronizationContext());
-				}
-				return _swatch;
 			}
 		}
 		#endregion
@@ -258,6 +225,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 		}
 		#endregion
 
+		#region GeometryType
+		private GeometryType _geometryType;
+
+		/// <summary>
+		/// The symbol geometry type (<see cref="ArcGISRuntime.Geometry.GeometryType.Unknown"/> by default).
+		/// <para>
+		/// If the geometry type is <see cref="ArcGISRuntime.Geometry.GeometryType.Unknown"/>, the geometry type will be deduced from the symbol type.
+		/// However, in some cases such as a MarkerSymbol used to symbolize a line or an area object, it may be usefull to set this parameter.
+		/// </para>
+		/// </summary>
+		public GeometryType GeometryType
+		{
+			get { return _geometryType; }
+			private set
+			{
+				if (_geometryType != value)
+				{
+					_geometryType = value;
+					OnPropertyChanged("GeometryType");
+				}
+			}
+		}
+
+		#endregion
+
 		#region internal LegendTree/Attach/Detach
 		/// <summary>
 		/// Gets or sets the parent legend tree.
@@ -279,8 +271,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls.Primitives
 			LegendTree = null;
 		} 
 		#endregion
-
-		internal GeometryType GeometryType { get; private set; }
 
 		#region INotifyPropertyChanged Members
 		/// <summary>

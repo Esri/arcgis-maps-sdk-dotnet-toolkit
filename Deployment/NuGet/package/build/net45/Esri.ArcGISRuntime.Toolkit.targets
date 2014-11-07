@@ -1,0 +1,8 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Reference Include="Esri.ArcGISRuntime.Toolkit">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\sdk\net45\Esri.ArcGISRuntime.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
+
