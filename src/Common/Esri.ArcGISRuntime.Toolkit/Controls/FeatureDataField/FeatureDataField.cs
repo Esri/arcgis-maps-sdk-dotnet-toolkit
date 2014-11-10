@@ -118,10 +118,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         #region IsReadOnly
 
         /// <summary>
-        /// Gets or sets a value indicating whether the UI will be readonly. 
+        /// Gets or sets a value indicating whether the UI will be read-only. 
         /// If IsReadOnly is true then the UI generated will use the ReadOnlyTemplate. 
-        /// Any field that is not readonly can be made readonly, but field that are 
-		/// readonly already as defined by thier FieldInfo entry in GeodatabaseFeature.Schema.Fields 
+        /// Any field that is not read-only can be made read-only, but field that are 
+		/// read-only already as defined by their FieldInfo entry in GeodatabaseFeature.Schema.Fields 
         /// cannot be made editable. 
         /// </summary>        
         public bool IsReadOnly
@@ -178,8 +178,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             // WPF will raise this event even if the new value 
             // is same as old value. WinRT and WP8 will only 
             // raise this event if the new value is not the same
-            // as the old value. This code is to enusre equality 
-            // in behavior accross all platforms.
+            // as the old value. This code is to ensure equality 
+            // in behavior across all platforms.
             if (AreEqual(e.NewValue, e.OldValue))
             {
                 // clear out any previous validation exception.
@@ -227,6 +227,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                     return;
                 }
             }
+					
+			// FieldInfo Validation
+			if(field._fieldInfo != null)
+			{
+				var ensuredValue = field.EnsureCorrectDataType(field.BindingValue);
+
+				// Null-able Validation
+				if (field._fieldInfo.IsNullable == false && ensuredValue == null)
+				{
+					field.ValidationException = new ArgumentException(string.Format("Required field '{0}' cannot be null.", field._fieldInfo.Alias ?? field.FieldName));
+					return;
+				}
+
+				// Range Domain Validation
+				if (field._fieldInfo.Domain != null && !(field._fieldInfo.Domain is CodedValueDomain) && ensuredValue != null)
+				{
+					var rangeDomain = field._fieldInfo.Domain;					
+
+					if (rangeDomain is RangeDomain<IComparable>)
+						field.ValidationException = field.ValidateRangeDomain<IComparable>((RangeDomain<IComparable>)rangeDomain, (IComparable)ensuredValue);
+					if (field.ValidationException != null)
+						return;
+				}
+			}
 
 #if NETCORE_FX
             // clear out any previous validation exception.
@@ -237,12 +261,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             var success = field.CommitChange(field.BindingValue);
 
             // if the ValueChanged event is subscribed to and the committed value was 
-			// successfully pushed back to the GeodatabaseFeature then rais the ValueChanged Event.
+			// successfully pushed back to the GeodatabaseFeature then raise the ValueChanged Event.
             if (field.ValueChanged != null && success)
                 field.ValueChanged(field, new ValueChangedEventArgs(oldValue, field.BindingValue));
 
             field.OnPropertyChanged("BindingValue");
-        }
+        }		
 
         #endregion BindingValue    
 
@@ -252,7 +276,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// Gets or sets the validation exception. If a validation exception occurs this 
         /// property will hold the validation Exception. default validation is handled based
 		/// on FieldInfo found inside GeodatabaseFeature.Schema.Fields. Custom validation can be added
-        /// by subsribing to ValueChanging event.
+        /// by subscribing to ValueChanging event.
         /// </summary>     
         public Exception ValidationException
         {
@@ -334,7 +358,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         /// <summary>
         /// Gets or sets the read only template. This template is used for fields
-        /// that are readonly. 
+        /// that are read-only. 
         /// </summary>      
         public DataTemplate ReadOnlyTemplate
         {
@@ -420,7 +444,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         #region Events
 
         /// <summary>
-        /// This event is rasied when the Value property changes but 
+        /// This event is raised when the Value property changes but 
 	   /// has not been commit back to the GeodatabaseFeature. The ValueChanging 
         /// event can be used to enforce application validation setting the 
         /// ValueChangingEventArgs.ValidationException.
@@ -428,7 +452,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public event EventHandler<ValueChangingEventArgs> ValueChanging;
 
         /// <summary>
-        /// This event is rasied when the Value property changes and the value
+        /// This event is raised when the Value property changes and the value
 		/// has been successfully commit back to the GeodatabaseFeature.
         /// </summary>
         public event EventHandler<ValueChangedEventArgs> ValueChanged;        
@@ -458,7 +482,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             base.OnApplyTemplate();
 
-            // objain require templated controls
+            // obtain required template controls
             _contentControl = GetTemplateChild("FeatureDataField_ContentControl") as ContentControl;
 
             if (_contentControl != null)
@@ -511,7 +535,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             if (_contentControl == null)
                 return;
 
-            // attempt retrive the field info for our control
+            // attempt retrieve the field info for our control
 			_fieldInfo = GeodatabaseFeature.GetFieldInfo(FieldName);
             
             // if field information was not obtain then draw nothing.
@@ -639,8 +663,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
         /// <summary>
-        /// Tries to make sure that the value can be converted to the correct datatype if
-        /// the input control works with a differnt datatype. i.e. Textbox works with string data.
+        /// Tries to make sure that the value can be converted to the correct DataType if
+        /// the input control works with a different DataType. i.e. Textbox works with string data.
         /// </summary>
         /// <param name="value">The value to check</param>
         /// <returns>Either a corrected data type or the input value.</returns>
@@ -707,7 +731,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         }
 
         /// <summary>
-        /// Changes the validation state from betwenn Invalid and Valid.
+        /// Changes the validation state from between Invalid and Valid.
         /// </summary>
         private void UpdateValidationState()
         {        
@@ -792,7 +816,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 		/// Commits FeatureDataField value back to the GeodatabaseFeature.
         /// </summary>
         /// <param name="value">The new value that will be committed.</param>
-        /// <returns>returns true if the value was commited and false if the 
+        /// <returns>returns true if the value was committed and false if the 
         /// value didn't pass validation.</returns>
         private bool CommitChange(object value)
         {
@@ -817,6 +841,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             return (o1 == o2) || (o1 != null && o1.Equals(o2));
         }
+
+		private Exception ValidateRangeDomain<T>(RangeDomain<T> rangeDomain, T value) where T : IComparable
+		{
+			if (rangeDomain.MinValue.CompareTo(value) > 0 || rangeDomain.MaxValue.CompareTo(value) < 0)
+				return new ArgumentException(string.Format("Value has to be between {0} and {1}", rangeDomain.MinValue, rangeDomain.MaxValue));			
+			return null;
+		}
         
         #endregion Private Methods     
 
@@ -824,7 +855,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
 
         /// <summary>
         /// Abstract base class for all DataItem derived class. They all should have 
-        /// a Value property and notify the FeatureDataField when thier value changes.
+        /// a Value property and notify the FeatureDataField when their value changes.
         /// </summary>
         private abstract class DataItem : INotifyPropertyChanged
         {
@@ -841,7 +872,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             /// Creates new instance of DataItem and sets the callback property.
             /// </summary>
             /// <param name="callback">The callback to be raised 
-            /// when Value proeprty changes.</param>
+            /// when Value property changes.</param>
             protected DataItem(Action<object> callback)
             {
                 Callback = callback;
@@ -851,7 +882,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             /// Creates new instance of DataItem and sets the callback and value property.
             /// </summary>
             /// <param name="callback">The callback to be raised 
-            /// when Value proeprty changes.</param>
+            /// when Value property changes.</param>
             /// <param name="value">The default value.</param>
             protected DataItem(Action<object> callback, object value) : this (callback)
             {             
@@ -863,7 +894,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             #region Public Properties
 
             /// <summary>
-            /// Callback for notifying FeatureDataField that the value proepry has changed.
+            /// Callback for notifying FeatureDataField that the value property has changed.
             /// </summary>
             protected readonly Action<object> Callback;
 
@@ -872,7 +903,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             #region Virutal Methods
 
             /// <summary>
-            /// Rasies the callback and passes the new value.
+            /// Raises the callback and passes the new value.
             /// </summary>
             protected virtual void OnValueChanged()
             {
@@ -934,7 +965,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         #region ReadOnlyDataItem
 
         /// <summary>
-        /// ReadOnlyDataItem is a bindable object for ReadOnlyTeample.
+        /// ReadOnlyDataItem is a bind-able object for ReadOnlyTeample.
         /// </summary>
         private class ReadOnlyDataItem : DataItem
         {
@@ -996,7 +1027,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         #region InputDataItem
 
         /// <summary>
-        /// InputDataItem is a bindable object for InputTemplate.
+        /// InputDataItem is a bind-able object for InputTemplate.
         /// </summary>
         private class InputDataItem : DataItem
         {
