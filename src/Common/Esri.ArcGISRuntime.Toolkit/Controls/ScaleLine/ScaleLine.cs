@@ -164,6 +164,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         /// </summary>
         private void Refresh()
         {
+#if WINDOWS_PHONE_APP
+            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+                return;
+#endif
+
             var miles = GetMile();
             SetUsUnit(
                 miles >= 1 ? miles : GetFoot(), 
