@@ -27,6 +27,13 @@ See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more deta
     - Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsPhone.proj)
  *  For other projects in the solution, add a reference to the ArcGIS Runtime Toolkit project.
 
+## Requirements
+
+* Supported system configurations for: 
+  * [Windows Destkop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm)
+  * [Windows Phone](http://developers.arcgis.com/net/store/guide/system-requirements.htm)
+  * [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm)
+
 #### Optional: Change references to use installed SDK
 You might have installed full [ArcGIS Runtime SDK for .NET SDK](http://esriurl.com/dotnetsdk) to your machine and you would prefer to use it instead of using NuGet installation. 
 
