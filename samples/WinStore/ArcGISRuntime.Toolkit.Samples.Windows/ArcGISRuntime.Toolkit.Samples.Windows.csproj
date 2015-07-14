@@ -16,7 +16,7 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>9905f92f</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>1e7854cf</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -184,13 +184,13 @@
     <EmbeddedResource Include="SampleDescriptions.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\src\WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsStore.csproj">
       <Project>{2d6828a8-83d2-4dc5-8212-595560086ce7}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit.WindowsStore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
@@ -200,12 +200,12 @@
   <PropertyGroup>
     <SDKReferenceDirectoryRoot>C:\applications\output\winrt_sdk\;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
   </PropertyGroup>
-  <Import Project="..\..\..\packages\Esri.ArcGISRuntime.10.2.4.748\build\win81\Esri.ArcGISRuntime.targets" Condition="Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.4.748\build\win81\Esri.ArcGISRuntime.targets')" />
+  <Import Project="..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets" Condition="Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.4.748\build\win81\Esri.ArcGISRuntime.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Esri.ArcGISRuntime.10.2.4.748\build\win81\Esri.ArcGISRuntime.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

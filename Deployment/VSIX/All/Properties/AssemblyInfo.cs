@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Esri")]
 [assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit")]
-[assembly: AssemblyCopyright("Copyright © Esri 2014")]
+[assembly: AssemblyCopyright("Copyright © Esri 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -24,6 +24,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("10.2.2.0")]
-[assembly: AssemblyFileVersion("10.2.2.0")]
+[assembly: AssemblyVersion("10.2.5.0")]
+[assembly: AssemblyFileVersion("10.2.5.0")]
 [assembly: ComVisible(false)]
