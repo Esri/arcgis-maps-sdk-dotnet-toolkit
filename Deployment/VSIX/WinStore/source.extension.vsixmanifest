@@ -9,7 +9,7 @@
 	<Tags>xaml, winrt, arcgis, esri, mapping, map, gis, wpf, windows store</Tags>
   </Metadata>
   <Installation Scope="Global">
-	<InstallationTarget Id="Microsoft.ExtensionSDK" TargetPlatformIdentifier="Windows" TargetPlatformVersion="v8.1" SdkName="Esri.ArcGISRuntime.Toolkit.WS" SdkVersion="10.2.5" />
+	<InstallationTarget Id="Microsoft.ExtensionSDK" TargetPlatformIdentifier="Windows" TargetPlatformVersion="v8.1" SdkName="Esri.ArcGISRuntime.Toolkit.WS" SdkVersion="10.2.6" />
   </Installation>
   <Dependencies>
 	<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
