@@ -16,7 +16,7 @@
     <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Esri.ArcGISRuntime.Toolkit.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <NuGetPackageImportStamp>7c09e889</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>d682a5c7</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -140,12 +140,12 @@ xcopy $(TargetDir)$(TargetName)\Themes\Generic.xbf "%25output%25Redist\CommonCon
 
 </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets" Condition="Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets')" />
+  <Import Project="..\..\..\packages\Esri.ArcGISRuntime.10.2.6.1026\build\win81\Esri.ArcGISRuntime.targets" Condition="Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.6.1026\build\win81\Esri.ArcGISRuntime.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Esri.ArcGISRuntime.10.2.5.857\build\win81\Esri.ArcGISRuntime.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Esri.ArcGISRuntime.10.2.6.1026\build\win81\Esri.ArcGISRuntime.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Esri.ArcGISRuntime.10.2.6.1026\build\win81\Esri.ArcGISRuntime.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
