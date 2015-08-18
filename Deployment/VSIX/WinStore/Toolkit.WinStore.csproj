@@ -85,12 +85,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.5\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore.pri">
+    <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.6\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore.pri">
       <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore.pri</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.5\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore\Themes\Generic.xbf">
+    <Content Include="..\..\..\output\ExtensionSDKs\Windows\v8.1\ExtensionSDKs\Esri.ArcGISRuntime.Toolkit\10.2.6\Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore\Themes\Generic.xbf">
       <Link>Redist\CommonConfiguration\neutral\Esri.ArcGISRuntime.Toolkit.WindowsStore\Themes\Generic.xbf</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
