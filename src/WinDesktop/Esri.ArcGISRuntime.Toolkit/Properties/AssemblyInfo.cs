@@ -17,7 +17,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Esri")]
 [assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit")]
-[assembly: AssemblyCopyright("Copyright ESRI © 2016. All rights reserved")]
+[assembly: AssemblyCopyright("Copyright ESRI © 2015. All Rights Reserved")]
 [assembly: AssemblyTrademark("ArcGIS is a registered trademark of Esri.")]
 [assembly: AssemblyCulture("")]
 
@@ -56,8 +56,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("10.2.7.0")]
-[assembly: AssemblyFileVersion("10.2.7.0")]
+[assembly: AssemblyVersion("10.2.6.0")]
+[assembly: AssemblyFileVersion("10.2.6.0")]
 
 [assembly: System.Windows.Markup.XmlnsPrefix("http://schemas.esri.com/arcgis/runtime/2013", "esri")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.esri.com/arcgis/runtime/2013", "Esri.ArcGISRuntime.Toolkit.Controls")]

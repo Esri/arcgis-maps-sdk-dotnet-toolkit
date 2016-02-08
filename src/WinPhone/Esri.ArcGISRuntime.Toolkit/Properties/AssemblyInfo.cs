@@ -16,7 +16,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Esri")]
 [assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit")]
-[assembly: AssemblyCopyright("Copyright © 2016 Esri. All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2015 Esri. All rights reserved.")]
 [assembly: AssemblyTrademark("ArcGIS is a registered trademark of Esri.")]
 [assembly: AssemblyCulture("")]
 
@@ -37,6 +37,6 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("10.2.7.0")]
-[assembly: AssemblyFileVersion("10.2.7.0")]
+[assembly: AssemblyVersion("10.2.6.0")]
+[assembly: AssemblyFileVersion("10.2.6.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
