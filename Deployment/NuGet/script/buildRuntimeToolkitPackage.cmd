@@ -2,12 +2,12 @@ setlocal EnableDelayedExpansion
 @ECHO OFF
 
 REM package metadata
-SET VERSION=10.2.7
+SET VERSION=10.2.6
 SET RUNTIMEID=Esri.ArcGISRuntime
 SET ID=%RUNTIMEID%.Toolkit
 SET TITLENOTE=
 SET TYPE=
-SET BUILDNUM=1234
+SET BUILDNUM=1026
 
 REM source locations
 SET WINSTORETOOLKITFOLDER=..\..\..\output\WinStore\VSIX
