@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
     /// </summary>
     public class Attribution : Control
     {
-        #region Constructor
+#region Constructor
 
         // Listen for layers DP changes
         private readonly DependencyPropertyChangedListeners<Attribution> _layerPropertyChangedListeners;
@@ -54,9 +54,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 new FrameworkPropertyMetadata(typeof(Attribution)));
         }
 #endif
-        #endregion
+#endregion
 
-        #region DependencyProperty Layers
+#region DependencyProperty Layers
 
         /// <summary>
         /// Gets or sets the layers to display attribution for.
@@ -88,9 +88,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             UpdateAttributionItems();
         }
 
-        #endregion
+#endregion
 
-        #region DependencyProperty Scale
+#region DependencyProperty Scale
         /// <summary>
         /// Gets or sets the scale for filtering layers by their visible scale range and for getting the copyrights that may depend on the scale.
         /// </summary>
@@ -111,9 +111,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             var attribution = d as Attribution;
             attribution.UpdateAttributionItems();
         }
-        #endregion
+#endregion
 
-        #region DependencyProperty Extent
+#region DependencyProperty Extent
         /// <summary>
         /// Gets or sets the extent for which the layer copyrights are displayed.
         /// </summary>
@@ -135,9 +135,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             var attribution = d as Attribution;
             attribution.UpdateAttributionItems();
         }
-        #endregion
+#endregion
 
-        #region Items Dependency Property
+#region Items Dependency Property
 
         /// <summary>
         /// Gets the items to display in attribution control.
@@ -157,9 +157,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         public static readonly DependencyProperty ItemsProperty =
             DependencyProperty.Register("Items", typeof(IEnumerable<string>), typeof(Attribution), new PropertyMetadata(null));
         
-        #endregion
+#endregion
 
-        #region Layer Event Handlers
+#region Layer Event Handlers
 
         private void DetachLayersHandler(IEnumerable<Layer> layers)
         {
@@ -218,9 +218,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
             UpdateAttributionItems();
         }
 
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
 
         private ThrottleTimer _updateItemsTimer;
         private void UpdateAttributionItems()
@@ -273,6 +273,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
                 return null;
         }
 
-        #endregion
+#endregion
     }
 }
