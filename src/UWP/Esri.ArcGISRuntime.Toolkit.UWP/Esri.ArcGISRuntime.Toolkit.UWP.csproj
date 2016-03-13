@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
-    <AssemblyName>Esri.ArccGISRuntime.Toolkit.UWP</AssemblyName>
+    <AssemblyName>Esri.ArcGISRuntime.Toolkit.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -101,7 +101,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\x64\Release\Esri.ArccGISRuntime.Toolkit.UWP.XML</DocumentationFile>
+    <DocumentationFile>bin\x64\Release\Esri.ArcGISRuntime.Toolkit.UWP.xml</DocumentationFile>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug .NET Native|AnyCPU'">
     <OutputPath>bin\Debug .NET Native\</OutputPath>
@@ -163,11 +164,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">
-      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Universal</Name>
-    </SDKReference>
   </ItemGroup>
   <Import Project="..\..\Common\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
