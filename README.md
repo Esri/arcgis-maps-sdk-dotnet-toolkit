@@ -96,7 +96,7 @@ Copyright 2014 Esri
 This source is subject to the Microsoft Public License (Ms-PL).
 You may obtain a copy of the License at
 
-http://www.microsoft.com/en-us/openness/licenses.aspx#MPL
+https://opensource.org/licenses/ms-pl
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
