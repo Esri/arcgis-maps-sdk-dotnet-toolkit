@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CompatUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\AttachmentEditor\AttachmentEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Attribution\Attribution.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\FeatureDataField.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\FeatureDataField\FeatureHelper.cs" />
