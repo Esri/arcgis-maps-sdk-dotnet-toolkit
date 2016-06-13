@@ -563,7 +563,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Controls
         {
             switch (propertyChangedEventArgs.PropertyName)
             {
-                case "BindingValue":                    
+                case "BindingValue":
+				case "ValidationException":
                     HasEdits = HasChanges();
                     HasError = CheckForError();
                     ((ActionCommand)ApplyCommand).RaiseCanExecute();
