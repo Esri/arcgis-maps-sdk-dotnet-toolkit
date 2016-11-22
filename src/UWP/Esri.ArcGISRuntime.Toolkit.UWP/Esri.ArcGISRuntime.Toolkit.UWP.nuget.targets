@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(NuGetPackageRoot)' == ''">
+    <NuGetPackageRoot>$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+  </PropertyGroup>
+  <ImportGroup>
+    <Import Project="$(NuGetPackageRoot)\Esri.ArcGISRuntime\10.2.7.1234\build\win81\Esri.ArcGISRuntime.targets" Condition="Exists('$(NuGetPackageRoot)\Esri.ArcGISRuntime\10.2.7.1234\build\win81\Esri.ArcGISRuntime.targets')" />
+  </ImportGroup>
+</Project>
