@@ -30,9 +30,11 @@ See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more deta
 ## Requirements
 
 * Supported system configurations for: 
-  * [Windows Destkop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm)
-  * [Windows Phone](http://developers.arcgis.com/net/store/guide/system-requirements.htm)
-  * [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm)
+  * [Windows Desktop](https://developers.arcgis.com/net/latest/wpf/guide/system-requirements.htm)
+  * [Windows Universal](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
+  * [Xamarin Android](https://developers.arcgis.com/net/latest/android/guide/system-requirements.htm)
+  * [Xamarin iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
+  * [Xamarin.Forms](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
 
 #### Optional: Change references to use installed SDK
 You might have installed full [ArcGIS Runtime SDK for .NET SDK](http://esriurl.com/dotnetsdk) to your machine and you would prefer to use it instead of using NuGet installation. 

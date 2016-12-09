@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
+  <metadata minClientVersion="2.5">
+    <id>Esri.ArcGISRuntime.Toolkit.WPF</id>
+    <version>$version$</version>
+    <title>ArcGIS Runtime Toolkit for .NET</title>
+    <authors>Esri Inc.</authors>
+    <owners>Esri Inc.</owners>
+    <licenseUrl>http://links.esri.com/dotnetsdklicense</licenseUrl>
+    <projectUrl>http://links.esri.com/runtime-dotnet-sdk</projectUrl>
+    <iconUrl>http://links.esri.com/dotnetsdklogo</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>ArcGIS Runtime Toolkit provides extra controls and utilities for the ArcGIS Runtime .NET SDK.</description>
+    <summary>ArcGIS Runtime Toolkit provides extra controls and utilities for the ArcGIS Runtime .NET SDK.</summary>
+    <copyright>Copyright © 2016 Esri. All rights reserved.</copyright>
+    <tags>Esri ArcGIS Runtime GIS map maps mapping location spatial 3D Windows Presentation Foundation WPF Desktop Classic</tags>
+    <references>
+      <group targetFramework="net452">
+        <reference file="Esri.ArcGISRuntime.Toolkit.dll" />
+      </group>
+    </references>
+    <dependencies>
+      <group targetFramework="net452">
+        <dependency id="Esri.ArcGISRuntime.WPF" version="100.0.*" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
