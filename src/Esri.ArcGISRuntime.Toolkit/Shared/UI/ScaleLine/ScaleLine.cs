@@ -176,6 +176,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void Refresh()
         {
+            if((double.IsNaN(MapScale) || MapScale <= 0) && !Internal.DesignTime.IsDesignMode)
+            {
+                Visibility = Visibility.Collapsed;
+                return;
+            }
+            Visibility = Visibility.Visible;
             var miles = ConvertInchesTo(LinearUnits.Miles);
             SetUsUnit(
                 miles >= 1 ? miles : ConvertInchesTo(LinearUnits.Feet),
@@ -195,7 +201,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <returns>value that represents the maps scale in meters</returns>
         private double ConvertInchesTo(LinearUnit unit)
         {
-            return LinearUnits.Inches.ConvertTo(unit, (TargetWidth / 96) * MapScale);
+            return LinearUnits.Inches.ConvertTo(unit, (TargetWidth / 96) * GetScale());
+        }
+
+        private double GetScale()
+        {
+            if(Internal.DesignTime.IsDesignMode && double.IsNaN(MapScale))
+            {
+                return 50000; // In design-mode we'll just return a dummy 1:50000 if the scale isn't set
+            }
+            return MapScale;
         }
 
         private static double GetRoundedValue(double value)
