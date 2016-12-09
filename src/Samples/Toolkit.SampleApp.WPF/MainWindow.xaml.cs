@@ -54,5 +54,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.WPF
                 MessageBox.Show(ex.Message, "Failed to load map");
             }
         }
+
+        private void Compass_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // When tapping the compass, reset the rotation
+            mapView.SetViewpointRotationAsync(0);
+        }
     }
 }

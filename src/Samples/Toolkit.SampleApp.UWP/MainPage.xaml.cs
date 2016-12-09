@@ -27,5 +27,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
         {
             this.InitializeComponent();
         }
+
+        private void Compass_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            // When tapping the compass, reset the rotation
+            mapView.SetViewpointRotationAsync(0);
+        }
     }
 }

@@ -42,6 +42,9 @@
                                Margin="10" Grid.Column="2" />
 
      
+        <esri:Compass Heading="{Binding MapRotation, ElementName=mapView, Mode=OneWay}" Grid.Row="1"
+                               Margin="20" Grid.Column="2" MouseDown="Compass_MouseDown" />
+        
         <Grid Grid.Column="0" Grid.Row="1">
             <TabControl x:Name="tabControl">
                 <TabItem Header="ToC" >

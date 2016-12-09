@@ -31,5 +31,7 @@
                                HorizontalAlignment="Left" VerticalAlignment="Bottom"
                                Margin="20,40" />
 
+        <esriToolkit:Compass Heading="{x:Bind mapView.MapRotation, Mode=OneWay}" Margin="20" Tapped="Compass_Tapped" />
+
     </Grid>
 </Page>
