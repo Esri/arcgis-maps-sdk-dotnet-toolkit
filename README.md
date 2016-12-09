@@ -39,9 +39,9 @@ Building the Toolkit:
 1.  Open the solution (Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2015 Update 3 or newer and build the 2 Toolkit projects projects.
 2. Nuget packages are generated for you to directly reference in the output folders.
 
-#####Referencing the project in a Windows Desktop (WPF) app:
+#####Referencing the project in an app:
  
- 1.  Create a local nuget-repository and place the generated nuget package in this folder. Then add the nuget package using the standard Nuget reference manager in Visual Studio.  
+ 1.  Create a local nuget-repository and place the generated nuget packages in this folder. Then add the nuget package using the standard Nuget reference manager in Visual Studio.
 
 ## Resources
 
