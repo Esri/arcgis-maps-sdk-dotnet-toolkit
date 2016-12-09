@@ -14,10 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Geometry;
 using System.Windows;
+using Esri.ArcGISRuntime.Geometry;
 #if NETFX_CORE
-using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Shapes;
@@ -176,11 +175,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void Refresh()
         {
-            if((double.IsNaN(MapScale) || MapScale <= 0) && !Internal.DesignTime.IsDesignMode)
+            if ((double.IsNaN(MapScale) || MapScale <= 0) && !Internal.DesignTime.IsDesignMode)
             {
                 Visibility = Visibility.Collapsed;
                 return;
             }
+
             Visibility = Visibility.Visible;
             var miles = ConvertInchesTo(LinearUnits.Miles);
             SetUsUnit(
@@ -206,10 +206,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private double GetScale()
         {
-            if(Internal.DesignTime.IsDesignMode && double.IsNaN(MapScale))
+            if (Internal.DesignTime.IsDesignMode && double.IsNaN(MapScale))
             {
                 return 50000; // In design-mode we'll just return a dummy 1:50000 if the scale isn't set
             }
+
             return MapScale;
         }
 

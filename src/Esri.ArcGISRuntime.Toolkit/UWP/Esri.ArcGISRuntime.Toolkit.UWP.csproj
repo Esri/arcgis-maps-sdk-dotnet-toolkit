@@ -55,7 +55,6 @@
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\Shared\stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.cs" />
     <EmbeddedResource Include="Properties\Esri.ArcGISRuntime.Toolkit.rd.xml" />

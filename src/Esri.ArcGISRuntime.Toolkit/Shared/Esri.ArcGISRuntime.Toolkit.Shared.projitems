@@ -15,6 +15,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\Legend\LayerLegend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\SymbolDisplay\SymbolDisplay.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WeakEventListener.cs" />
   </ItemGroup>
 </Project>

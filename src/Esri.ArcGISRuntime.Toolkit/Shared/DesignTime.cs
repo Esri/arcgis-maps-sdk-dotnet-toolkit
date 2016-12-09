@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         private static bool? s_isInDesignMode;
 
         /// <summary>
-        /// Gets a value indicating if the process is in design mode (running in Blend
+        /// Gets a value indicating whether the process is in design mode (running in Blend
         /// or Visual Studio).
         /// </summary>
         public static bool IsDesignMode

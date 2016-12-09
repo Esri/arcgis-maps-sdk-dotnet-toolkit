@@ -116,6 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     return visual.CompositionTarget.TransformToDevice.M11;
 #endif
             }
+
             return 1;
         }
     }

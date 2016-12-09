@@ -131,9 +131,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             (sender as Layer).Loaded -= Layer_Loaded;
 #if NETFX_CORE
-            var _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateLegend);
+            var ignore_ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateLegend);
 #else
-            var _ = Dispatcher.InvokeAsync(UpdateLegend);
+            var ignore = Dispatcher.InvokeAsync(UpdateLegend);
 #endif
         }
 

@@ -30,6 +30,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties
         {
             return s_resource.GetString(name);
         }
-
     }
 }

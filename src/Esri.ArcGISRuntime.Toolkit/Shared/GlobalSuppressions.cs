@@ -14,4 +14,5 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System.Diagnostics.CodeAnalysis;
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1308:Variable names must not be prefixed", Justification = "We use _camelCase")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1311:Static readonly fields must begin with upper-case letter", Justification = "We use s_camelCase")]

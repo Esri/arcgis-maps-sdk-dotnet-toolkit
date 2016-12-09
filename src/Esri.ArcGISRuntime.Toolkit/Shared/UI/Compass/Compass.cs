@@ -14,18 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.UI.Controls;
-using System.Windows;
 using System;
 using System.ComponentModel;
+using System.Windows;
 #if NETFX_CORE
-using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
 #else
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -39,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     public class Compass : Control
     {
-        private bool m_isVisible;
+        private bool _isVisible;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
@@ -57,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #endif
         {
             base.OnApplyTemplate();
-            m_isVisible = false;
+            _isVisible = false;
             UpdateCompassRotation(false);
         }
 
@@ -75,9 +70,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public static readonly DependencyProperty HeadingProperty =
             DependencyProperty.Register(nameof(Heading), typeof(double), typeof(Compass), new PropertyMetadata(0d, OnHeadingPropertyChanged));
-
-
-
 
         /// <summary>
         /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
@@ -129,15 +121,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             bool autoHide = AutoHide && !Internal.DesignTime.IsDesignMode;
             if (Math.Round(heading) == 0 && autoHide)
             {
-                if (m_isVisible)
+                if (_isVisible)
                 {
-                    m_isVisible = false;
+                    _isVisible = false;
                     VisualStateManager.GoToState(this, "HideCompass", useTransitions);
                 }
             }
-            else if (!m_isVisible)
+            else if (!_isVisible)
             {
-                m_isVisible = true;
+                _isVisible = true;
                 VisualStateManager.GoToState(this, "ShowCompass", useTransitions);
             }
         }

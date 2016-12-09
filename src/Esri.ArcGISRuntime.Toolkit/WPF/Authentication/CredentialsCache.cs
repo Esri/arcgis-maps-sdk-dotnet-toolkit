@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Esri.ArcGISRuntime.Toolkit.Authentication
 {
+    /// <summary>
+    /// A helper class for stoting credentials in the cache
+    /// </summary>
     public static class CredentialsCache
     {
         private static string AppNamePrefix()
@@ -13,18 +16,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             return System.Windows.Application.Current.GetType().FullName + "|";
         }
 
+        /// <summary>
+        /// Saves a credential to the credentials cache
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="password">The password</param>
+        /// <param name="serviceUri">The endpoint to associate the credentials with</param>
         public static void SaveCredential(string username, SecureString password, Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
             CredentialManager.WriteCredential(AppNamePrefix() + host, username, password);
         }
 
+        /// <summary>
+        /// Removes a credential from the cache
+        /// </summary>
+        /// <param name="serviceUri"></param>
         public static void DeleteCredential(Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
             CredentialManager.DeleteCredential(AppNamePrefix() + host);
         }
 
+        /// <summary>
+        /// Gets a credential from the cache
+        /// </summary>
+        /// <param name="serviceUri">The endpoint to get the credential from</param>
+        /// <returns>A tuple of username + password</returns>
         public static Tuple<string, SecureString> ReadCredential(Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
@@ -36,6 +54,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             return null;
         }
 
+        /// <summary>
+        /// Clears the credential cache
+        /// </summary>
         public static void ClearCredentials()
         {
             var prefix = AppNamePrefix();
