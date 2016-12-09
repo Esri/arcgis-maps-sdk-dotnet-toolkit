@@ -26,17 +26,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.WPF
             Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
             InitializeComponent();
 
-          
-            
+            // Configure this app to use the Toolkit's Authentication Challenge Handler
+            Esri.ArcGISRuntime.Security.AuthenticationManager.Current.ChallengeHandler =
+                new Esri.ArcGISRuntime.Toolkit.Authentication.ChallengeHandler(this.Dispatcher);
         }
 
-        System.Threading.CancellationTokenSource tcs;
         private void mapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
-            if (tcs != null)
-                tcs.Cancel();
-            tcs = new System.Threading.CancellationTokenSource();
-           
         }
 
         private async void OpenMap_Click(object sender, RoutedEventArgs e)

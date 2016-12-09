@@ -75,8 +75,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\SignInForm\SignInForm.Theme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\CertificateHelper.cs" />
+    <Compile Include="Authentication\ChallengeHandler.cs" />
+    <Compile Include="Authentication\CredentialsCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -86,6 +93,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Resources.cs" />
+    <Compile Include="UI\SignInForm\SignInForm.cs" />
     <EmbeddedResource Include="LocalizedStrings\Resources.resx" />
     <None Include="Esri.ArcGISRuntime.Toolkit.WPF.nuspec" />
     <None Include="GenerateNugetPackage.targets" />
