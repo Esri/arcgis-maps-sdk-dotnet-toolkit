@@ -12,7 +12,12 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <esriUI:MapView x:Name="mapView">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <esriUI:MapView x:Name="mapView" Grid.Column="1">
             <esriUI:MapView.Map>
                 <esri:Map>
                     <esri:Map.Basemap>
@@ -29,9 +34,23 @@
 
         <esriToolkit:ScaleLine MapScale="{x:Bind mapView.MapScale, Mode=OneWay}"
                                HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                               Margin="20,40" />
+                               Margin="20,40" Grid.Column="1" />
 
-        <esriToolkit:Compass Heading="{x:Bind mapView.MapRotation, Mode=OneWay}" Margin="20" Tapped="Compass_Tapped" />
+        <esriToolkit:Compass Heading="{x:Bind mapView.MapRotation, Mode=OneWay}" Margin="20" Tapped="Compass_Tapped" Grid.Column="1" />
+
+        
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{x:Bind mapView.Map.OperationalLayers, Mode=OneWay}" Margin="10">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                            <esriToolkit:LayerLegend LayerContent="{Binding}" ShowEntireTreeHiarchy="True" Margin="10,0" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
     </Grid>
 </Page>

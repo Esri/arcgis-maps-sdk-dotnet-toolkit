@@ -56,16 +56,18 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Legend" >
-                    <ItemsControl ItemsSource="{Binding Map.AllLayers, ElementName=mapView}">
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding Map.OperationalLayers, ElementName=mapView, Mode=OneWay}" Margin="10">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                                    
+                                        <esri:LayerLegend LayerContent="{Binding}" ShowEntireTreeHiarchy="True" Margin="10,0" />
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    </ScrollViewer>
                 </TabItem>
                 <TabItem Header="Templates" >
                 </TabItem>
