@@ -3,17 +3,17 @@
   <metadata minClientVersion="2.5">
     <id>Esri.ArcGISRuntime.Toolkit.UWP</id>
     <version>$version$</version>
-    <title>ArcGIS Runtime Toolkit for .NET</title>
+    <title>ArcGIS Runtime SDK for .NET - Universal apps</title>
     <authors>Esri Inc.</authors>
     <owners>Esri Inc.</owners>
-    <licenseUrl>http://links.esri.com/dotnetsdklicense</licenseUrl>
-    <projectUrl>http://links.esri.com/runtime-dotnet-sdk</projectUrl>
+    <licenseUrl>http://links.esri.com/dotnetsdktoolkitlicense</licenseUrl>
+    <projectUrl>http://links.esri.com/dotnetsdktoolkit</projectUrl>
     <iconUrl>http://links.esri.com/dotnetsdklogo</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>ArcGIS Runtime Toolkit provides extra controls and utilities for the ArcGIS Runtime .NET SDK.</description>
-    <summary>ArcGIS Runtime Toolkit provides extra controls and utilities for the ArcGIS Runtime .NET SDK.</summary>
-    <copyright>Copyright © 2016 Esri. All rights reserved.</copyright>
-    <tags>Esri ArcGIS Runtime GIS map maps mapping location spatial 3D Universal apps UWP</tags>
+    <description>ArcGIS Runtime controls and utilities for Windows Universal apps (UWP).</description>
+    <summary>ArcGIS Runtime Toolkit for Windows Universal apps(UWP)</summary>
+    <copyright>Copyright © 2016 Esri. All rights reserved. ArcGIS is a registered trademark of Esri.</copyright>
+    <tags>ArcGIS Esri map mapping GIS location Store WindowsPhone UAP UWP toolkit Windows</tags>
     <references>
       <group targetFramework="uap10.0">
         <reference file="Esri.ArcGISRuntime.Toolkit.dll" />
@@ -21,7 +21,7 @@
     </references>
     <dependencies>
       <group targetFramework="uap10.0">
-        <dependency id="Esri.ArcGISRuntime.UWP" version="100.0.*" />
+        <dependency id="Esri.ArcGISRuntime.UWP" version="100.*" />
       </group>
     </dependencies>
   </metadata>
