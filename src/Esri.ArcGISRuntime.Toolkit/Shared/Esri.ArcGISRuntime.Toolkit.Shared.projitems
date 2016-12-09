@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Compass\Compass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\ScaleLine\ScaleLine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakEventListener.cs" />
   </ItemGroup>
 </Project>
