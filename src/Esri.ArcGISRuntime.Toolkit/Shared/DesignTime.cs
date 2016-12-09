@@ -35,8 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 {
 #if NETFX_CORE
                     s_isInDesignMode = Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#elif !XAMARIN      // Design-time detection is TODO
-                    // http://geekswithblogs.net/lbugnion/archive/2009/09/05/detecting-design-time-mode-in-wpf-and-silverlight.aspx
+#elif !XAMARIN
                     var prop = DesignerProperties.IsInDesignModeProperty;
                     s_isInDesignMode
                         = (bool)DependencyPropertyDescriptor

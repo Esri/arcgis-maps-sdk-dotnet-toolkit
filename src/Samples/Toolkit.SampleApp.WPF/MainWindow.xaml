@@ -35,6 +35,8 @@
             </MenuItem>
         </Menu>
 
+        <TextBlock Text="Please open a map from the 'Maps' menu" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
         <esri:MapView x:Name="mapView" Grid.Column="2" GeoViewTapped="mapView_GeoViewTapped" Grid.Row="1" />
 
         <esri:ScaleLine MapScale="{Binding MapScale, ElementName=mapView, Mode=OneWay}" Grid.Row="1"
@@ -53,6 +55,9 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+                        <esri:TableOfContents Grid.Row="0" x:Name="toc"
+                              GeoView="{Binding ElementName=mapView}" ShowLegend="False" />
+                        <CheckBox Content="Show Legend" IsChecked="{Binding ShowLegend, ElementName=toc, Mode=TwoWay}" Grid.Row="1" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Legend" >

@@ -8,7 +8,7 @@
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/ScaleLine/ScaleLine.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/SignInForm/SignInForm.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/SymbolDisplay/SymbolDisplay.Theme.xaml" />
-        <!--<ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/TableOfContents/TableOfContents.Theme.xaml" />-->
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/TableOfContents/TableOfContents.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
    

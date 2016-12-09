@@ -87,6 +87,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\TableOfContents\TableOfContents.Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\CertificateHelper.cs" />
@@ -102,6 +106,9 @@
     </Compile>
     <Compile Include="Resources.cs" />
     <Compile Include="UI\SignInForm\SignInForm.cs" />
+    <Compile Include="UI\TableOfContents\LayerContentViewModel.cs" />
+    <Compile Include="UI\TableOfContents\ObservableLayerContentList.cs" />
+    <Compile Include="UI\TableOfContents\TableOfContents.cs" />
     <EmbeddedResource Include="LocalizedStrings\Resources.resx" />
     <None Include="Esri.ArcGISRuntime.Toolkit.WPF.nuspec" />
     <None Include="GenerateNugetPackage.targets" />
