@@ -82,13 +82,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             if (Symbol == null)
             {
                 img.Source = null;
+                img.Width = 0;
+                img.Height = 0;
             }
             else
             {
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 try
                 {
-                    var imageData = await Symbol.CreateSwatchAsync(GetDpi());
+                    var scale = GetScaleFactor();
+                    var imageData = await Symbol.CreateSwatchAsync(scale * 96);
+                    img.Width = imageData.Width / scale;
+                    img.Height = imageData.Height / scale;
                     img.Source = await imageData.ToImageSourceAsync();
                 }
                 catch
@@ -99,20 +104,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private double GetDpi()
+        private double GetScaleFactor()
         {
             if (!Internal.DesignTime.IsDesignMode)
             {
-
 #if NETFX_CORE
-                return Windows.Graphics.Display.DisplayInformation.GetForCurrentView()?.LogicalDpi ?? 96f;
+                return Windows.Graphics.Display.DisplayInformation.GetForCurrentView()?.RawPixelsPerViewPixel ?? 1;
 #else
                 var visual = PresentationSource.FromVisual(this);
                 if (visual != null)
-                    return visual.CompositionTarget.TransformToDevice.M11 * 96;
+                    return visual.CompositionTarget.TransformToDevice.M11;
 #endif
             }
-            return 96;
+            return 1;
         }
     }
 }
