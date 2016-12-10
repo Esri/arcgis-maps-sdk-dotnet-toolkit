@@ -119,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
 
             bool autoHide = AutoHide && !Internal.DesignTime.IsDesignMode;
-            if (Math.Round(heading) == 0 && autoHide)
+            if (Math.Round(heading % 360) == 0 && autoHide)
             {
                 if (_isVisible)
                 {
