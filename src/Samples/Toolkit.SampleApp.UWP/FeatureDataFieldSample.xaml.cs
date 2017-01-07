@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -20,6 +19,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Requests for features with the same fields to be displayed with <see cref="Esri.ArcGISRuntime.Toolkit.UI.FeatureDataField"/>
+        /// </summary>
+        /// <returns></returns>
         private async Task LoadFeaturesAsync()
         {
             string error = null;
@@ -37,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             {
                 error = exception.Message;
             }
-            if(!string.IsNullOrEmpty(error))
+            if (!string.IsNullOrEmpty(error))
             {
                 await new MessageDialog($"Error occured : {error}", "Sample error").ShowAsync();
             }
@@ -46,19 +49,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
         private async void LoadFeatures_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             await LoadFeaturesAsync();
-        }
-    }
-
-    public class ValueConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            return value;
         }
     }
 }
