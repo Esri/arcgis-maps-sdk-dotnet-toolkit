@@ -12,6 +12,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)DesignTime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Compass\Compass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\FeatureHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\InputDataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\SelectorDataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\ReadOnlyDataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\DataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\ValueChangedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\ValueChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\ValueEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\FeatureDataField\FeatureDataField.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Legend\LayerLegend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\SymbolDisplay\SymbolDisplay.cs" />

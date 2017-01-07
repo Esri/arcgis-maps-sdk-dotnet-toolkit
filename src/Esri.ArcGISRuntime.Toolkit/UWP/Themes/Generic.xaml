@@ -4,6 +4,7 @@
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/ScaleLine/ScaleLine.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Compass/Compass.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/SymbolDisplay/SymbolDisplay.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/FeatureDataField/FeatureDataField.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
