@@ -232,7 +232,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Identifies the <see cref="BindingValue"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ValidationExceptionProperty =
-            DependencyProperty.Register(nameof(BindingValue), typeof(object), typeof(FeatureDataField), new PropertyMetadata(null, OnValidationExceptionPropertyChanged));
+            DependencyProperty.Register(nameof(ValidationException), typeof(object), typeof(FeatureDataField), new PropertyMetadata(null, OnValidationExceptionPropertyChanged));
 
         private static void OnValidationExceptionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

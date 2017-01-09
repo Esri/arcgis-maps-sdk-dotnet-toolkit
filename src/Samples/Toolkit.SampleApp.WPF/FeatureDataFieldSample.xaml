@@ -13,12 +13,12 @@
                                     Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                <esri:FeatureDataField Feature="{Binding}"
                                                        FieldName="objectid"
                                                        IsReadOnly="True">
                                     <esri:FeatureDataField.ReadOnlyTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding FallbackValue, Mode=OneWay}"
+                                            <TextBlock Text="{Binding Value, Mode=OneWay}"
                                                        Background="Transparent" />
                                         </DataTemplate>
                                     </esri:FeatureDataField.ReadOnlyTemplate>
@@ -31,7 +31,7 @@
                                     Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                <esri:FeatureDataField Feature="{Binding}"
                                                        FieldName="incidentid"
                                                        IsReadOnly="True" />
                             </DataTemplate>
@@ -42,7 +42,7 @@
                                     Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                <esri:FeatureDataField Feature="{Binding}"
                                                        FieldName="typdamage" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -52,7 +52,7 @@
                                     Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                <esri:FeatureDataField Feature="{Binding}"
                                                        FieldName="habitable" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -62,7 +62,7 @@
                                     Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                <esri:FeatureDataField Feature="{Binding}"
                                                        FieldName="predisval"
                                                        MinWidth="100" />
                             </DataTemplate>
@@ -73,7 +73,7 @@
                                     Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                <esri:FeatureDataField Feature="{Binding}"
                                                        FieldName="inspdate"
                                                        MinWidth="100" />
                             </DataTemplate>
@@ -84,7 +84,7 @@
                                     Width="150">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                <esri:FeatureDataField Feature="{Binding}"
                                                        FieldName="lastupdate"
                                                        MinWidth="100"
                                                        IsReadOnly="True" />

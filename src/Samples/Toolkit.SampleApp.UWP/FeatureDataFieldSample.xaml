@@ -53,7 +53,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <!-- 'objectid' is read-only field that will display as read-only, provide a TextBlock for ReadOnlyTemplate -->
-                            <esriToolkit:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                            <esriToolkit:FeatureDataField Feature="{Binding}"
                                                           FieldName="objectid"
                                                           IsReadOnly="True">
                                 <esriToolkit:FeatureDataField.ReadOnlyTemplate>
@@ -65,26 +65,26 @@
                             </esriToolkit:FeatureDataField>
                             <!-- 'incidentid' is an editable text field but can be displayed as read-only by setting IsReadOnly="True" -->
                             <esriToolkit:FeatureDataField Grid.Column="1"
-                                                          Feature="{Binding Mode=TwoWay}"
+                                                          Feature="{Binding}"
                                                           FieldName="incidentid"
                                                           IsReadOnly="True" />
                              <!-- 'typdamage' is an editable coded-value domain field, leave it as editable --> 
                             <esriToolkit:FeatureDataField Grid.Column="2"
-                                                          Feature="{Binding Mode=TwoWay}"
+                                                          Feature="{Binding}"
                                                           FieldName="typdamage" />
                              <!-- 'habitable' is an editable coded-value domain field, make it read-only --> 
                             <esriToolkit:FeatureDataField Grid.Column="3"
-                                                          Feature="{Binding Mode=TwoWay}"
+                                                          Feature="{Binding}"
                                                           FieldName="habitable"
                                                           IsReadOnly="True" />
                              <!-- 'predisval' is an editable double field, leave it as editable and provide minimum width --> 
                             <esriToolkit:FeatureDataField Grid.Column="4"
-                                                          Feature="{Binding Mode=TwoWay}"
+                                                          Feature="{Binding}"
                                                           FieldName="predisval"
                                                           MinWidth="100" />
                              <!-- 'inspdate' is an editable date field, leave it as editable and provide a DatePicker for InputTemplate --> 
                             <esriToolkit:FeatureDataField Grid.Column="5"
-                                                          Feature="{Binding Mode=TwoWay}"
+                                                          Feature="{Binding}"
                                                           FieldName="inspdate">
                                 <esriToolkit:FeatureDataField.InputTemplate>
                                     <DataTemplate>
