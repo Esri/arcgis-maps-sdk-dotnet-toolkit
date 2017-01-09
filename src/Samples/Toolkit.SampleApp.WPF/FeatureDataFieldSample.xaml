@@ -1,0 +1,99 @@
+﻿<Window x:Class="Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataFieldSample"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <!-- This sample uses fields defined by this feature service
+         http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0 -->
+    <Grid>
+        <ListView x:Name="FeatureList">
+            <ListView.View>
+                <GridView>
+                    <!-- 'objectid' is read-only field that will display as read-only, provide a TextBlock for ReadOnlyTemplate -->
+                    <GridViewColumn Header="Object ID"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                       FieldName="objectid"
+                                                       IsReadOnly="True">
+                                    <esri:FeatureDataField.ReadOnlyTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FallbackValue, Mode=OneWay}"
+                                                       Background="Transparent" />
+                                        </DataTemplate>
+                                    </esri:FeatureDataField.ReadOnlyTemplate>
+                                </esri:FeatureDataField>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <!-- 'incidentid' is an editable text field but can be displayed as read-only by setting IsReadOnly="True" -->
+                    <GridViewColumn Header="Incident ID"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                       FieldName="incidentid"
+                                                       IsReadOnly="True" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <!-- 'typdamage' is an editable coded-value domain field, leave it as editable -->
+                    <GridViewColumn Header="Damage Type"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                       FieldName="typdamage" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <!-- 'habitable' is an editable coded-value domain field, make it read-only -->
+                    <GridViewColumn Header="Habitable"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                       FieldName="habitable" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <!-- 'predisval' is an editable double field, leave it as editable and provide minimum width -->
+                    <GridViewColumn Header="Value Before Damage"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                       FieldName="predisval"
+                                                       MinWidth="100" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <!-- 'inspdate' is an editable date field, leave it as editable and provide a DatePicker for InputTemplate -->
+                    <GridViewColumn Header="Inspection Date"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                       FieldName="inspdate"
+                                                       MinWidth="100" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <!-- 'lastupdate' is an editable date field, make it read-only -->
+                    <GridViewColumn Header="Last updated"
+                                    Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <esri:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                       FieldName="lastupdate"
+                                                       MinWidth="100"
+                                                       IsReadOnly="True" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
+        

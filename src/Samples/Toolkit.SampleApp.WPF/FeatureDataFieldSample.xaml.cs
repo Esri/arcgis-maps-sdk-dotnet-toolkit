@@ -2,8 +2,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
+using System.Windows;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples
 {
@@ -11,14 +10,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
     /// Demonstrates how to display or edit attributes of an <see cref="ArcGISFeature"/>
     /// from a <see cref="ServiceFeatureTable"/> using <see cref="UI.FeatureDataField"/>.
     /// </summary>
-    public sealed partial class FeatureDataFieldSample : Page
+    public partial class FeatureDataFieldSample : Window
     {
         /// <summary>
         /// Initializes a new instance of <see cref="FeatureDataFieldSample"/> class.
         /// </summary>
         public FeatureDataFieldSample()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             var _ = LoadFeaturesAsync();
         }
 
@@ -28,7 +27,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
         /// <returns>A task that represents the asynchronous loading of features. </returns>
         private async Task LoadFeaturesAsync()
         {
-            string error = null;
             try
             {
                 var table = new ServiceFeatureTable(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0"));
@@ -46,11 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             }
             catch (Exception exception)
             {
-                error = exception.Message;
-            }
-            if (!string.IsNullOrEmpty(error))
-            {
-                await new MessageDialog($"Error occured : {error}", "Sample error").ShowAsync();
+                MessageBox.Show($"Error occured : {exception.Message}", "Sample error");
             }
         }
     }

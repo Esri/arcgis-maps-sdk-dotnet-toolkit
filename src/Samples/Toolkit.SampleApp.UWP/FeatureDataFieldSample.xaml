@@ -1,29 +1,19 @@
 ﻿<Page x:Class="Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataFieldSample"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:local="using:Esri.ArcGISRuntime.Toolkit.Samples"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      mc:Ignorable="d"
       xmlns:esriUI="using:Esri.ArcGISRuntime.UI.Controls"
       xmlns:esri="using:Esri.ArcGISRuntime.Mapping"
       xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI">
+    <!-- This sample uses fields defined by this feature service
+         http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0 -->
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Button Content="Load"
-                HorizontalAlignment="Center" 
-                Click="LoadFeatures_Click"/>
-        <Grid x:Name="Table"
-              Grid.Row="1"
-              Margin="30">
+        <Grid Margin="30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Grid x:Name="ListViewHeaders">
+            <!-- Column headers use matching field name or alias -->
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition  Width="100" />
                     <ColumnDefinition />
@@ -33,11 +23,11 @@
                     <ColumnDefinition  Width="2*" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Object id" />
+                <TextBlock Text="Object ID" />
                 <TextBlock Grid.Column="1"
-                           Text="Incident id" />
+                           Text="Incident ID" />
                 <TextBlock Grid.Column="2"
-                           Text="Damage type" />
+                           Text="Damage Type" />
                 <TextBlock Grid.Column="3"
                            Text="Habitable" />
                 <TextBlock Grid.Column="4"
@@ -47,6 +37,7 @@
                 <TextBlock Grid.Column="6"
                            Text="Last Updated" />
             </Grid>
+            <!-- Row values use FeatureDataField to display attribute values -->
             <ListView x:Name="FeatureList"
                       Grid.Row="1">
                 <ListView.ItemTemplate>
@@ -61,10 +52,8 @@
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <!-- This sample uses fields defined by this feature service
-                                 http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0 -->
                             <!-- 'objectid' is read-only field that will display as read-only, provide a TextBlock for ReadOnlyTemplate -->
-                            <esriToolkit:FeatureDataField Feature="{Binding Feature, Mode=TwoWay}"
+                            <esriToolkit:FeatureDataField Feature="{Binding Mode=TwoWay}"
                                                           FieldName="objectid"
                                                           IsReadOnly="True">
                                 <esriToolkit:FeatureDataField.ReadOnlyTemplate>
@@ -79,21 +68,21 @@
                                                           Feature="{Binding Mode=TwoWay}"
                                                           FieldName="incidentid"
                                                           IsReadOnly="True" />
-                            <!-- 'typdamage' is an editable coded-value domain field, leave it as editable -->
+                             <!-- 'typdamage' is an editable coded-value domain field, leave it as editable --> 
                             <esriToolkit:FeatureDataField Grid.Column="2"
                                                           Feature="{Binding Mode=TwoWay}"
                                                           FieldName="typdamage" />
-                            <!-- 'habitable' is an editable coded-value domain field, make it read-only -->
+                             <!-- 'habitable' is an editable coded-value domain field, make it read-only --> 
                             <esriToolkit:FeatureDataField Grid.Column="3"
                                                           Feature="{Binding Mode=TwoWay}"
                                                           FieldName="habitable"
                                                           IsReadOnly="True" />
-                            <!-- 'predisval' is an editable double field, leave it as editable and provide minimum width -->
+                             <!-- 'predisval' is an editable double field, leave it as editable and provide minimum width --> 
                             <esriToolkit:FeatureDataField Grid.Column="4"
                                                           Feature="{Binding Mode=TwoWay}"
                                                           FieldName="predisval"
                                                           MinWidth="100" />
-                            <!-- 'inspdate' is an editable date field, leave it as editable and provide a DatePicker for InputTemplate -->
+                             <!-- 'inspdate' is an editable date field, leave it as editable and provide a DatePicker for InputTemplate --> 
                             <esriToolkit:FeatureDataField Grid.Column="5"
                                                           Feature="{Binding Mode=TwoWay}"
                                                           FieldName="inspdate">
@@ -103,7 +92,7 @@
                                     </DataTemplate>
                                 </esriToolkit:FeatureDataField.InputTemplate>
                             </esriToolkit:FeatureDataField>
-                            <!-- 'lastupdate' is an editable date field, make it read-only -->
+                             <!-- 'lastupdate' is an editable date field, make it read-only --> 
                             <esriToolkit:FeatureDataField Grid.Column="6"
                                                           Feature="{Binding Mode=TwoWay}"
                                                           FieldName="lastupdate"
