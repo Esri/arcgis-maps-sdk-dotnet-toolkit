@@ -29,8 +29,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Sets the user-defined validation exception.
+        /// Gets or sets the user-defined validation exception.
         /// </summary>
-        public Exception ValidationException { internal get; set; }
+        public Exception ValidationException { get; set; }
     }
 }

@@ -216,7 +216,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Gets or sets the validation exception.
+        /// Gets the validation exception.
         /// </summary>
         /// <remarks>
         /// Default validation is handled based on field schema.
@@ -225,7 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public Exception ValidationException
         {
             get { return (Exception)GetValue(ValidationExceptionProperty); }
-            set { SetValue(ValidationExceptionProperty, value); }
+            internal set { SetValue(ValidationExceptionProperty, value); }
         }
 
         /// <summary>
@@ -243,6 +243,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets or sets the template used when field is bound to a coded-value domain.
         /// </summary>
+        /// <seealso cref="ReadOnlyTemplate"/>
+        /// <seealso cref="InputTemplate"/>
         public DataTemplate SelectorTemplate
         {
             get { return (DataTemplate)GetValue(SelectorTemplateProperty); }
@@ -264,6 +266,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets or sets the template used for providing input when field is not bound to a coded-value domain.
         /// </summary>
+        /// <seealso cref="ReadOnlyTemplate"/>
+        /// <seealso cref="SelectorTemplate"/>
         public DataTemplate InputTemplate
         {
             get { return (DataTemplate)GetValue(InputTemplateProperty); }
@@ -286,6 +290,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Gets or sets the template used when <see cref="IsReadOnly"/> is <c>true</c>
         /// or field is read-only as defined by field schema.
         /// </summary>
+        /// <seealso cref="InputTemplate"/>
+        /// <seealso cref="SelectorTemplate"/>
         public DataTemplate ReadOnlyTemplate
         {
             get { return (DataTemplate)GetValue(ReadOnlyTemplateProperty); }
@@ -331,9 +337,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// *FOR INTERNAL USE ONLY* : The text box changed listener property
         /// </summary>
+        /// <remarks>
+        /// Subscribes to TextBox.TextChanged to perform validation while the string content is updated.
+        /// If a two-way binding on Text property exists, UpdateSource will push the change to feature attribute,
+        /// which will trigger validation based on field type and raise <see cref="ValueChanging"/> to also
+        /// accommodate any custom validation.
+        /// </remarks>
         /// <exclude/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static readonly DependencyProperty TextBoxChangedListenerProperty =
+        internal static readonly DependencyProperty TextBoxChangedListenerProperty =
             DependencyProperty.RegisterAttached("TextBoxChangedListener", typeof(TextBox), typeof(FeatureDataField), new PropertyMetadata(null, OnTextBoxChangedListenerPropertyChanged));
 
         private static void OnTextBoxChangedListenerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -488,54 +500,78 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return null;
             }
 
-            var valueString = Convert.ToString(value, CultureInfo.InvariantCulture);
-            if (string.IsNullOrEmpty(valueString))
-            {
-                return null;
-            }
+            var valueString = value as string;
 
             switch (_field.FieldType)
             {
                 case FieldType.Date:
                     {
-                        DateTimeOffset dateValue;
-                        if (DateTimeOffset.TryParse(valueString, out dateValue))
+                        if (value is DateTimeOffset)
                         {
-                            return dateValue;
+                            return value;
                         }
 
-                        break;
+                        if (string.IsNullOrEmpty(valueString))
+                        {
+                            return null;
+                        }
+
+                        return DateTimeOffset.Parse(valueString);
                     }
 
                 case FieldType.Float32:
                 case FieldType.Float64:
                     {
+                        if (value is double)
+                        {
+                            return value;
+                        }
+
                         return Convert.ToDouble(valueString, CultureInfo.InvariantCulture);
                     }
 
                 case FieldType.Guid:
                     {
-                        Guid guidValue;
-                        if (Guid.TryParse(valueString, out guidValue))
+                        if (value is Guid)
                         {
-                            return guidValue;
+                            return value;
                         }
 
-                        break;
+                        if (string.IsNullOrEmpty(valueString))
+                        {
+                            return null;
+                        }
+
+                        return Guid.Parse(valueString);
                     }
 
                 case FieldType.Int16:
                     {
+                        if (value is short)
+                        {
+                            return value;
+                        }
+
                         return Convert.ToInt16(valueString, CultureInfo.InvariantCulture);
                     }
 
                 case FieldType.Int32:
                     {
+                        if (value is int)
+                        {
+                            return value;
+                        }
+
                         return Convert.ToInt32(valueString, CultureInfo.InvariantCulture);
                     }
 
                 case FieldType.OID:
                     {
+                        if (value is long)
+                        {
+                            return value;
+                        }
+
                         return Convert.ToInt64(valueString, CultureInfo.InvariantCulture);
                     }
 
@@ -612,17 +648,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return false;
             }
 
+            bool isStoryboardStarted = false;
             foreach (var state in from VisualStateGroup @group in groups
                                   where @group.Name == "ValidationStates"
                                   from VisualState state in @group.States
                                   where state.Name == stateName
                                   select state)
             {
+                isStoryboardStarted = true;
                 state.Storyboard.Begin();
-                return true;
             }
 
-            return false;
+            return isStoryboardStarted;
         }
 
         /// <summary>

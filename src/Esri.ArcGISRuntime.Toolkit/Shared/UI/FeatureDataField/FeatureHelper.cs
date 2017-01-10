@@ -43,32 +43,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             var codeValue = cvd.CodedValues?.FirstOrDefault(c => c.Code != null && c.Code.Equals(value));
             return codeValue?.Name ?? value;
         }
-
-        public static KeyValuePair<object, string> GetCodedValue(this CodedValueDomain domain, object value, bool nullable = false)
-        {
-            if (nullable && value == null)
-            {
-                return new KeyValuePair<object, string>(null, string.Empty);
-            }
-
-            var cvd = domain?.CodedValues?.FirstOrDefault(c => c.Code != null && c.Code.Equals(value));
-            if (cvd == null)
-            {
-                return default(KeyValuePair<object, string>);
-            }
-
-            return new KeyValuePair<object, string>(cvd.Code, cvd.Name);
-        }
-
-        public static ArcGISFeature Clone(this ArcGISFeature feature)
-        {
-            if (feature?.FeatureTable is ArcGISFeatureTable)
-            {
-                return null;
-            }
-
-            var table = (ArcGISFeatureTable)feature.FeatureTable;
-            return table.CreateFeature(feature.Attributes, feature.Geometry) as ArcGISFeature;
-        }
     }
 }
