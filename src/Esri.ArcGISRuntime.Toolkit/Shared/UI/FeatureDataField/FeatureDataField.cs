@@ -391,6 +391,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         private void Refresh()
         {
+            if (Internal.DesignTime.IsDesignMode)
+            {
+                if (_contentControl != null)
+                {
+                    _contentControl.Content = new ReadOnlyDataItem($"[{FieldName}]", null);
+                    _contentControl.ContentTemplate = IsReadOnly ? ReadOnlyTemplate : InputTemplate;
+                }
+                return;
+            }
             // Content control, container for the control, and Field, which provides schema for attribute field,
             // are both required to generate the control.
             if (_contentControl == null || Feature == null)
