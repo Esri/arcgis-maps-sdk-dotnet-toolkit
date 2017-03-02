@@ -16,6 +16,7 @@
 
 using System.Windows;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -71,6 +72,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Gets or sets the scale that the ScaleLine will
         /// use to calculate scale in metric and imperial units.
         /// </summary>
+        /// <seealso cref="SetMapView"/>
+        /// <seealso cref="MapViewProperty"/>
         public double MapScale
         {
             get { return (double)GetValue(MapScaleProperty); }
@@ -240,6 +243,88 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 return value;
             }
+        }
+
+        /// <summary>
+        /// Gets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
+        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
+        /// </summary>
+        /// <param name="scaleLine">The scaleline control this would be attached to</param>
+        /// <returns>The MapView the scaleline is associated with.</returns>
+        public static MapView GetMapView(DependencyObject scaleLine)
+        {
+            return (MapView)scaleLine.GetValue(MapViewProperty);
+        }
+
+        /// <summary>
+        /// Sets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
+        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
+        /// </summary>
+        /// <param name="scaleLine">The scaleline control this would be attached to</param>
+        /// <param name="mapView">The mapview to calculate the scale for</param>
+        public static void SetMapView(DependencyObject scaleLine, MapView mapView)
+        {
+            scaleLine.SetValue(MapViewProperty, mapView);
+        }
+
+        /// <summary>
+        /// Identifies the MapView Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty MapViewProperty =
+            DependencyProperty.RegisterAttached("MapView", typeof(MapView), typeof(ScaleLine), new PropertyMetadata(null, OnMapViewPropertyChanged));
+
+        private static void OnMapViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = e.NewValue as MapView;
+            var inpc = view as System.ComponentModel.INotifyPropertyChanged;
+            if (inpc != null)
+            {
+                inpc.PropertyChanged += (s, args) => MapView_PropertyChanged(view, args.PropertyName, d as ScaleLine);
+            }
+        }
+
+        private static void MapView_PropertyChanged(MapView view, string propertyName, ScaleLine scaleLine)
+        {
+            if ((propertyName == nameof(MapView.VisibleArea) || propertyName == nameof(MapView.IsNavigating)) && view.IsNavigating == false)
+            {
+                var scale = CalculateScale(view.VisibleArea, view.UnitsPerPixel);
+                scaleLine.MapScale = scale;
+            }
+        }
+
+        /// <summary>
+        /// Calculates the scale at the center of a polygon, at a given pixel size
+        /// </summary>
+        /// <remarks>
+        /// A pixel is a device independent logical pixel - ie 1/96 inches.
+        /// </remarks>
+        /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
+        /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference</param>
+        /// <returns>The MapScale for the center of the view</returns>
+        public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon visibleArea, double unitsPerPixel)
+        {
+            if (visibleArea == null)
+            {
+                return double.NaN;
+            }
+
+            if (visibleArea.SpatialReference == null)
+            {
+                return double.NaN;
+            }
+
+            if (double.IsNaN(unitsPerPixel) || unitsPerPixel <= 0)
+            {
+                return double.NaN;
+            }
+
+            var center = visibleArea.Extent.GetCenter();
+            var centerOnePixelOver = new Geometry.MapPoint(center.X + unitsPerPixel, center.Y, center.SpatialReference);
+            
+            // Calculate the geodedetic distance between two points one 'pixel' apart
+            var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
+            double distanceInInches = result.Distance;
+            return distanceInInches * 96;
         }
     }
 }
