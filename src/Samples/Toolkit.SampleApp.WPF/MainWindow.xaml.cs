@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             var samples = SampleDatasource.Current.Samples;
             Dictionary<string, MenuItem> rootMenus = new Dictionary<string, MenuItem>();
             MenuItem samplesItem = new MenuItem() { Header = "Samples" };
-            foreach (var sample in samples)
+            foreach (var sample in samples.OrderBy(s=>s.Category))
             {
                 MenuItem sampleitem = new MenuItem() { Header = sample.Name, Tag = sample };
                 sampleitem.Click += (s, e) => { sampleitem_Click(sample, s as MenuItem); };
