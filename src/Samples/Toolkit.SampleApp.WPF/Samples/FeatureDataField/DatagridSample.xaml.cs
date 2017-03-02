@@ -3,23 +3,26 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples
+namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
 {
     /// <summary>
     /// Demonstrates how to display or edit attributes of an <see cref="ArcGISFeature"/>
     /// from a <see cref="ServiceFeatureTable"/> using <see cref="UI.FeatureDataField"/>.
     /// </summary>
-    public partial class FeatureDataFieldSample : Window
+    public partial class DataGridSample : UserControl
     {
         /// <summary>
         /// Initializes a new instance of <see cref="FeatureDataFieldSample"/> class.
         /// </summary>
-        public FeatureDataFieldSample()
+        public DataGridSample()
         {
             InitializeComponent();
             var _ = LoadFeaturesAsync();
         }
+
+        private ServiceFeatureTable table;
 
         /// <summary>
         /// Requests for features whose attributes will be displayed in <see cref="UI.FeatureDataField"/>
@@ -29,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
         {
             try
             {
-                var table = new ServiceFeatureTable(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0"));
+                table = new ServiceFeatureTable(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0"));
                 table.FeatureRequestMode = FeatureRequestMode.ManualCache;
                 await table.LoadAsync();
                 var queryParameters = new QueryParameters()
@@ -45,6 +48,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             catch (Exception exception)
             {
                 MessageBox.Show($"Error occured : {exception.Message}", "Sample error");
+            }
+        }
+        
+        private async void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (sender as System.Windows.Controls.Button);
+            var feature = btn.DataContext as ArcGISFeature;
+            if(feature != null)
+            {
+                btn.IsEnabled = false;
+                var table = (feature.FeatureTable as ServiceFeatureTable);
+                try
+                {
+                    await table.UpdateFeatureAsync(feature);
+                }
+                catch(System.Exception ex)
+                {
+                    MessageBox.Show("Failed to apply edit: " + ex.Message);
+                    btn.IsEnabled = true;
+                    return;
+                }
+                try
+                {
+                    var result = await table.ApplyEditsAsync();
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show("Failed to submit data back to the server: " + ex.Message);
+                }
+                btn.IsEnabled = true;
             }
         }
     }

@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples.WPF
+namespace Esri.ArcGISRuntime.Toolkit.Samples
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -29,32 +29,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.WPF
             // Configure this app to use the Toolkit's Authentication Challenge Handler
             Esri.ArcGISRuntime.Security.AuthenticationManager.Current.ChallengeHandler =
                 new Esri.ArcGISRuntime.Toolkit.Authentication.ChallengeHandler(this.Dispatcher);
+            LoadSamples();
+
         }
 
-        private void mapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
+        private void LoadSamples()
         {
-        }
-
-        private async void OpenMap_Click(object sender, RoutedEventArgs e)
-        {
-
-            var id = (sender as MenuItem).Tag as string;
-            var map = new Map(new Uri("http://www.arcgis.com/home/item.html?id=" + id));
-            try
+            var samples = SampleDatasource.Current.Samples;
+            Dictionary<string, MenuItem> rootMenus = new Dictionary<string, MenuItem>();
+            MenuItem samplesItem = new MenuItem() { Header = "Samples" };
+            foreach (var sample in samples)
             {
-                await map.LoadAsync();
-                mapView.Map = map;
+                MenuItem sampleitem = new MenuItem() { Header = sample.Name, Tag = sample };
+                sampleitem.Click += (s, e) => { sampleitem_Click(sample, s as MenuItem); };
+                MenuItem root = samplesItem;
+                if (sample.Category != null)
+                {
+                    if (!rootMenus.ContainsKey(sample.Category))
+                    {
+                        rootMenus[sample.Category] = new MenuItem() { Header = sample.Category };
+                        menu.Items.Add(rootMenus[sample.Category]);
+                    }
+                    root = rootMenus[sample.Category];
+                }
+                root.Items.Add(sampleitem);
             }
-            catch(System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Failed to load map");
-            }
+            if (samplesItem.Items.Count > 0)
+                menu.Items.Insert(0, samplesItem);
+
         }
 
-        private void Compass_MouseDown(object sender, MouseButtonEventArgs e)
+        private MenuItem currentSampleMenuItem;
+        private void sampleitem_Click(Sample sample, MenuItem menu)
         {
-            // When tapping the compass, reset the rotation
-            mapView.SetViewpointRotationAsync(0);
+            var c = sample.Page.GetConstructor(new Type[] { });
+            var ctrl = c.Invoke(new object[] { }) as UIElement;
+            SampleContainer.Child = ctrl;
+            if (currentSampleMenuItem != null)
+                currentSampleMenuItem.IsChecked = false;
+            menu.IsChecked = true;
+            currentSampleMenuItem = menu;
         }
     }
 }

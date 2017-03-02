@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Compass.MapViewCompassSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.Legend"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+
+        <esri:MapView Map="http://www.arcgis.com/home/webmap/viewer.html?webmap=c50de463235e4161b206d000587af18b" x:Name="mapView"/>
+
+        <esri:Compass x:Name="compass"  Heading="{Binding MapRotation, ElementName=mapView, Mode=OneWay}" 
+                               Margin="20" MouseDown="Compass_MouseDown" AutoHide="False" />
+
+        <Border Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" BorderBrush="Black" Background="#AAFFFFFF">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding AutoHide, ElementName=compass, Mode=TwoWay}" Content="Auto-hide when North Up" />
+                <Button Content="Rotate Left" Click="RotateLeft_Click" />
+                <Button Content="Rotate Right" Click="RotateRight_Click" />
+                <Button Content="Reset Rotation" Click="Reset_Click" />
+            </StackPanel>
+        </Border>
+
+        <!--<esri:Compass Heading="{Binding Camera.Heading, ElementName=mapView, Mode=OneWay}" Grid.Row="1"
+                               Margin="20" Grid.Column="2" MouseDown="Compass_MouseDown" />-->
+    </Grid>
+</UserControl>
