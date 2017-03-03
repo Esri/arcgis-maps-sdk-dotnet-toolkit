@@ -58,3 +58,4 @@ using System.Windows;
 
 [assembly: System.Windows.Markup.XmlnsPrefix("http://schemas.esri.com/arcgis/runtime/2013", "esri")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.esri.com/arcgis/runtime/2013", "Esri.ArcGISRuntime.Toolkit.UI")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.esri.com/arcgis/runtime/2013", "Esri.ArcGISRuntime.Toolkit.UI.Controls")]

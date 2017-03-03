@@ -61,21 +61,21 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="UI\Compass\Compass.Theme.xaml">
+    <Page Include="UI\Controls\Compass\Compass.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="UI\FeatureDataField\FeatureDataField.Theme.xaml">
+    <Page Include="UI\Controls\FeatureDataField\FeatureDataField.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="UI\Legend\LayerLegend.Theme.xaml">
+    <Page Include="UI\Controls\Legend\LayerLegend.Theme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ScaleLine\ScaleLine.Theme.xaml">
+    <Page Include="UI\Controls\ScaleLine\ScaleLine.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -85,7 +85,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="UI\SymbolDisplay\SymbolDisplay.Theme.xaml">
+    <Page Include="UI\Controls\SymbolDisplay\SymbolDisplay.Theme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

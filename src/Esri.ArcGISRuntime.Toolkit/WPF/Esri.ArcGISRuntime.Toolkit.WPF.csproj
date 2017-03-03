@@ -62,21 +62,21 @@
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\Shared\stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UI\FeatureDataField\FeatureDataField.Theme.xaml">
+    <Page Include="UI\Controls\FeatureDataField\FeatureDataField.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="UI\Compass\Compass.Theme.xaml">
+    <Page Include="UI\Controls\Compass\Compass.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="UI\Legend\LayerLegend.Theme.xaml">
+    <Page Include="UI\Controls\Legend\LayerLegend.Theme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ScaleLine\ScaleLine.Theme.xaml">
+    <Page Include="UI\Controls\ScaleLine\ScaleLine.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -84,15 +84,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\SignInForm\SignInForm.Theme.xaml">
+    <Page Include="UI\Controls\SignInForm\SignInForm.Theme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\SymbolDisplay\SymbolDisplay.Theme.xaml">
+    <Page Include="UI\Controls\SymbolDisplay\SymbolDisplay.Theme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\TableOfContents\TableOfContents.Theme.xaml">
+    <Page Include="UI\Controls\TableOfContents\TableOfContents.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -110,10 +110,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Resources.cs" />
-    <Compile Include="UI\SignInForm\SignInForm.cs" />
-    <Compile Include="UI\TableOfContents\LayerContentViewModel.cs" />
-    <Compile Include="UI\TableOfContents\ObservableLayerContentList.cs" />
-    <Compile Include="UI\TableOfContents\TableOfContents.cs" />
+    <Compile Include="UI\Controls\SignInForm\SignInForm.cs" />
+    <Compile Include="UI\Controls\TableOfContents\LayerContentViewModel.cs" />
+    <Compile Include="UI\Controls\TableOfContents\ObservableLayerContentList.cs" />
+    <Compile Include="UI\Controls\TableOfContents\TableOfContents.cs" />
     <EmbeddedResource Include="LocalizedStrings\Resources.resx" />
     <None Include="Esri.ArcGISRuntime.Toolkit.WPF.nuspec" />
     <None Include="GenerateNugetPackage.targets" />
