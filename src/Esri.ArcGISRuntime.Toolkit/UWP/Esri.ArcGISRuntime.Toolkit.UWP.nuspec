@@ -21,7 +21,7 @@
     </references>
     <dependencies>
       <group targetFramework="uap10.0">
-        <dependency id="Esri.ArcGISRuntime.UWP" version="100.*" />
+        <dependency id="Esri.ArcGISRuntime.UWP" version="[100.0,100.1)" />
       </group>
     </dependencies>
   </metadata>

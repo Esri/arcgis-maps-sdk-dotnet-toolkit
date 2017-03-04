@@ -21,7 +21,7 @@
     </references>
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="Esri.ArcGISRuntime.WPF" version="100.*" />
+        <dependency id="Esri.ArcGISRuntime.WPF" version="[100.0,100.1)" />
       </group>
     </dependencies>
   </metadata>
