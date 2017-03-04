@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.UWP", "Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj", "{3596C206-41C8-4405-A5C7-382E79E8D091}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolkit", "Toolkit", "{30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleApps", "SampleApps", "{FB597A95-9488-44D2-B5CC-F2FFAD2A29CD}"
 EndProject
