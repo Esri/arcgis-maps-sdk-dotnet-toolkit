@@ -59,7 +59,7 @@
                 <DataTemplate>
                     <ComboBox ItemsSource="{Binding Items}"
                               SelectedItem="{Binding Value, Mode=TwoWay}"
-                              DisplayMemberPath="Name" />
+                              DisplayMemberPath="Name" HorizontalAlignment="Stretch" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>

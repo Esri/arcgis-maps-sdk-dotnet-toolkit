@@ -1,56 +1,53 @@
 ﻿<Page
-    x:Class="Esri.ArcGISRuntime.Toolkit.Samples.MainPage"
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.Samples"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esriUI="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:esri="using:Esri.ArcGISRuntime.Mapping"
     xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:uwptoolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <local:SamplesVM x:Key="vm" />
+    </Page.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        
-        <esriUI:MapView x:Name="mapView" Grid.Column="1">
-            <esriUI:MapView.Map>
-                <esri:Map>
-                    <esri:Map.Basemap>
-                        <esri:Basemap>
-                            <esri:ArcGISTiledLayer Source="http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer" />
-                        </esri:Basemap>
-                    </esri:Map.Basemap>
-                    <esri:ArcGISMapImageLayer Id="layer1"
-                                              Source="http://sampleserver6.arcgisonline.com/arcgis/rest/services/SampleWorldCities/MapServer" />
-                </esri:Map>
-            </esriUI:MapView.Map>
-        </esriUI:MapView>
 
+        <SplitView  Grid.Row="1" x:Name="splitView">
+            <SplitView.Pane>
+                <ListView x:Name="sampleView" Background="White" Grid.Row="1" SelectionMode="None"
+										IsRightTapEnabled="False"
+										IsItemClickEnabled="True"
+										IsHoldingEnabled="False"
+										IsDoubleTapEnabled="False"
+										ItemClick="sampleView_ItemClick"
+										ItemsSource="{Binding Samples, Source={StaticResource vm}}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ToolTipService.ToolTip="{Binding Description}">
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True">
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Key}" FontSize="18" FontWeight="Bold"/>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
 
-        <esriToolkit:ScaleLine MapScale="{x:Bind mapView.MapScale, Mode=OneWay}"
-                               HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                               Margin="20,40" Grid.Column="1" />
-
-        <esriToolkit:Compass Heading="{x:Bind mapView.MapRotation, Mode=OneWay}" Margin="20" Tapped="Compass_Tapped" Grid.Column="1" />
-
-        
-        <ScrollViewer>
-            <ItemsControl ItemsSource="{x:Bind mapView.Map.OperationalLayers, Mode=OneWay}" Margin="10">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                            <esriToolkit:LayerLegend LayerContent="{Binding}" ShowEntireTreeHiarchy="True" Margin="10,0" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </SplitView.Pane>
+            <Grid>
+                <Frame x:Name="rootFrame" Background="#FF7CB27C" />
+            </Grid>
+        </SplitView>
+     
     </Grid>
 </Page>

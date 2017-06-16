@@ -23,12 +23,14 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Select a sample from the menu"
-					   FontSize="24"
-					   HorizontalAlignment="Center"
-					   VerticalAlignment="Center"
-					   />
-              
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="ArcGIS Runtime Toolkit for WPF" FontFamily="Segoe UI Light"
+                      FontSize="48" />
+
+                    <TextBlock Text="Please select a sample from the menu" FontSize="24" />
+                </StackPanel>
+               
             </Grid>
 
         </Border>

@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

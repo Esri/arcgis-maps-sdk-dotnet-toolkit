@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Compass
         {
             Camera camera = sceneView.Camera;
             camera = camera.RotateTo(heading + (isDelta ? camera.Heading : 0), camera.Pitch, camera.Roll);
-            sceneView.SetViewpointCamera(camera);
+            sceneView.SetViewpointCameraAsync(camera);
         }
     }
 }

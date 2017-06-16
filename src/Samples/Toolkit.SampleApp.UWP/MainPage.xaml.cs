@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -16,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -26,12 +27,81 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
         public MainPage()
         {
             this.InitializeComponent();
+            this.Loaded += RootFrame_Loaded;
+            rootFrame.Navigated += RootFrame_Navigated;
+        }
+        private void RootFrame_Loaded(object sender, RoutedEventArgs e)
+        {
+            var currentView = SystemNavigationManager.GetForCurrentView();
+            currentView.BackRequested += (s, args) =>
+            {
+                if (rootFrame.CanGoBack)
+                {
+                    rootFrame.GoBack();
+                    args.Handled = true;
+                }
+            };
+
+            var samples = SampleDatasource.Current.Samples;
+            Sample sample = null;
+            if (sample == null)
+            {
+                rootFrame.Navigate(typeof(WelcomePage));
+            }
+            else
+            {
+                if (!rootFrame.Navigate(sample.Page))
+                {
+                    throw new Exception("Failed to create initial page");
+                }
+
+                //Window.Current.SetTitleBar(new TextBlock() { Text = sample.Name });
+                //SampleTitle.Text = sample.Name;
+            }
+        }
+        private void RootFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            var currentView = SystemNavigationManager.GetForCurrentView();
+            currentView.AppViewBackButtonVisibility = rootFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+            if (rootFrame.Content is WelcomePage)
+            {
+                splitView.DisplayMode = SplitViewDisplayMode.Inline;
+                splitView.IsPaneOpen = true;
+            }
+            else
+            {
+                splitView.DisplayMode = SplitViewDisplayMode.Overlay;
+                splitView.IsPaneOpen = false;
+            }
+        }
+        private void sampleView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var sample = e.ClickedItem as Sample;
+            NavigateSample(sample);
         }
 
-        private void Compass_Tapped(object sender, TappedRoutedEventArgs e)
+        public void NavigateSample(Sample sample)
         {
-            // When tapping the compass, reset the rotation
-            mapView.SetViewpointRotationAsync(0);
+            if (sample == null) return;
+            if (!rootFrame.Navigate(sample.Page, null))
+            {
+                throw new Exception("Failed to create initial page");
+            }
+        }
+        public Frame SampleFrame
+        {
+            get { return rootFrame; }
+        }
+    }
+
+    public class SamplesVM
+    {
+        public ICollectionView Samples
+        {
+            get
+            {
+                return SampleDatasource.Current.CollectionViewSource.View;
+            }
         }
     }
 }
