@@ -320,7 +320,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var center = visibleArea.Extent.GetCenter();
             var centerOnePixelOver = new Geometry.MapPoint(center.X + unitsPerPixel, center.Y, center.SpatialReference);
-            
+
             // Calculate the geodedetic distance between two points one 'pixel' apart
             var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
             double distanceInInches = result.Distance;

@@ -47,13 +47,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal DataItem(Action<object> callback, object value)
             : this(callback)
         {
-            Value = value;
+            _value = value;
         }
 
         /// <summary>
         /// Raises <see cref="_callback"/> with the current <see cref="Value"/> property.
         /// </summary>
-        protected virtual void OnValueChanged() => _callback?.Invoke(Value);
+        protected virtual void OnValueChanged() => _callback?.Invoke(GetBoundValue());
+
+        internal virtual object GetBoundValue() => Value;
 
         private object _value;
 

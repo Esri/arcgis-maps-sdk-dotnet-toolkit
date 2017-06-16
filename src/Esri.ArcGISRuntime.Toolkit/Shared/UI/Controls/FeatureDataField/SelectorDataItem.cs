@@ -37,10 +37,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="callback">callback raised when <see cref="DataItem.Value"/> property changes.</param>
         /// <param name="value">default value selected.</param>
         /// <param name="items">coded-value domain options.</param>
-        public SelectorDataItem(Action<object> callback, object value, IEnumerable<KeyValuePair<object, string>> items)
+        public SelectorDataItem(Action<object> callback, object value, IEnumerable<Esri.ArcGISRuntime.Data.CodedValue> items)
             : base(callback)
         {
-            Items = items?.ToList();
+            _items = items?.ToList();
             Value = GetSelectedItem(value);
         }
 
@@ -49,18 +49,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="value">key value.</param>
         /// <returns>matching key-value.</returns>
-        public KeyValuePair<object, string> GetSelectedItem(object value)
+        public Esri.ArcGISRuntime.Data.CodedValue GetSelectedItem(object value)
         {
-            return Items?.FirstOrDefault(kvp => kvp.Key != null && kvp.Key.Equals(value)) ??
-                default(KeyValuePair<object, string>);
+            return Items?.FirstOrDefault(kvp => kvp?.Code != null && kvp.Code.Equals(value)) ??
+                default(Esri.ArcGISRuntime.Data.CodedValue);
         }
 
-        private IList<KeyValuePair<object, string>> _items;
+        private IList<Esri.ArcGISRuntime.Data.CodedValue> _items;
 
         /// <summary>
         /// Gets or sets the Items used as source for <see cref="FeatureDataField.SelectorTemplate"/>
         /// </summary>
-        public IList<KeyValuePair<object, string>> Items
+        public IList<Esri.ArcGISRuntime.Data.CodedValue> Items
         {
             get
             {
@@ -77,6 +77,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _items = value;
                 OnValueChanged();
             }
+        }
+
+        public override object Value
+        {
+            get
+            {
+                return base.Value;
+            }
+
+            set
+            {
+                if (value != null && !(value is Esri.ArcGISRuntime.Data.CodedValue))
+                {
+                    // this shouldn't happen!
+                }
+
+                base.Value = value;
+            }
+        }
+
+        internal override object GetBoundValue()
+        {
+            if (Value is Esri.ArcGISRuntime.Data.CodedValue)
+            {
+                return ((Esri.ArcGISRuntime.Data.CodedValue)Value).Code;
+            }
+
+            return base.GetBoundValue();
         }
     }
 }
