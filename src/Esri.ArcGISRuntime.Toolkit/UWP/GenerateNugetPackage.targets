@@ -3,7 +3,7 @@
   <PropertyGroup>
     <NuGetToolsPath>$([System.IO.Path]::Combine($(IntermediateOutputPath), ".nuget"))</NuGetToolsPath>
     <NuGetExePath>$(NuGetToolsPath)\NuGet.exe</NuGetExePath>
-    <PackageVersion>100.0.0-beta1</PackageVersion>
+    <PackageVersion>100.1.0-beta2</PackageVersion>
     <PackageOutputDir Condition="$(PackageOutputDir) == ''">$(TargetDir.Trim('\\'))</PackageOutputDir>
 
     <!-- Commands -->
