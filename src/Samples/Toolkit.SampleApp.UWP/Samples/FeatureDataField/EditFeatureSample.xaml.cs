@@ -1,31 +1,33 @@
 ﻿using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
+using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
+
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
 {
     /// <summary>
-    /// Interaction logic for EditFeatureSample.xaml
+    /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public partial class EditFeatureSample : UserControl
+    public sealed partial class EditFeatureSample : Page
     {
         public EditFeatureSample()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             overlay.Visibility = Visibility.Collapsed;
             Map map = new Map(Basemap.CreateLightGrayCanvasVector());
             map.OperationalLayers.Add(new FeatureLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0")));
@@ -40,7 +42,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
                 tcs.Cancel();
             tcs = new System.Threading.CancellationTokenSource();
 
-            mapView.Cursor = Cursors.Wait;
             try
             {
                 var features = await mapView.IdentifyLayerAsync(mapView.Map.OperationalLayers[0], e.Position, 3, false, 1, tcs.Token);
@@ -49,16 +50,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
                     return;
                 ShowEditPanel(feature);
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
-            }
-            finally
-            {
-                mapView.Cursor = Cursors.Arrow;
             }
         }
-
-        private void overlay_MouseDown(object sender, MouseButtonEventArgs e)
+        
+        private void overlay_PointerDown(object sender, PointerRoutedEventArgs e)
         {
             CloseEditPanel();
         }
@@ -67,24 +64,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
         {
             overlay.DataContext = feature;
             overlay.Visibility = Visibility.Visible;
-            mapView.Effect = new BlurEffect() { Radius = 10 };
+
+            if (AnimationExtensions.IsBlurSupported)
+            {
+                AnimationExtensions.Blur(mapView, 10).Start();
+            }
+            else
+            {
+                overlay.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 255, 255, 255));
+            }
         }
 
         private void CloseEditPanel()
         {
             overlay.DataContext = null;
             overlay.Visibility = Visibility.Collapsed;
-            mapView.Effect = null;
+            if (AnimationExtensions.IsBlurSupported)
+                AnimationExtensions.Blur(mapView, 0).Start();
         }
 
         private async void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            if(DamageField.ValidationException != null || OccupantsField.ValidationException != null || DescriptionField.ValidationException != null)
+            if (DamageField.ValidationException != null || OccupantsField.ValidationException != null || DescriptionField.ValidationException != null)
             {
-                MessageBox.Show("Some fields contain an invalid value");
+                var _ = new Windows.UI.Popups.MessageDialog("Some fields contain an invalid value").ShowAsync();
                 return;
             }
-            var btn = (sender as System.Windows.Controls.Button);
+            var btn = (sender as Button);
             var feature = btn.DataContext as ArcGISFeature;
             if (feature != null)
             {
@@ -96,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
                 }
                 catch (System.Exception ex)
                 {
-                    MessageBox.Show("Failed to apply edit: " + ex.Message);
+                    var _ = new Windows.UI.Popups.MessageDialog("Failed to apply edit: " + ex.Message).ShowAsync();
                     btn.IsEnabled = true;
                     return;
                 }
@@ -107,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
                 }
                 catch (System.Exception ex)
                 {
-                    MessageBox.Show("Failed to submit data back to the server: " + ex.Message);
+                    var _ = new Windows.UI.Popups.MessageDialog("Failed to submit data back to the server: " + ex.Message).ShowAsync();
                 }
                 btn.IsEnabled = true;
             }

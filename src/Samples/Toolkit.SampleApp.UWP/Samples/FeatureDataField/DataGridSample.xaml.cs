@@ -4,24 +4,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
+using Telerik.Data.Core;
+using Telerik.UI.Xaml.Controls.Grid;
+using Telerik.UI.Xaml.Controls.Grid.Primitives;
+using System.ComponentModel;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
 {
-    /// <summary>
-    /// Demonstrates how to display or edit attributes of an <see cref="ArcGISFeature"/>
-    /// from a <see cref="ServiceFeatureTable"/> using <see cref="UI.FeatureDataField"/>.
-    /// </summary>
-    public sealed partial class FeatureDataFieldSample : Page
+    public sealed partial class DataGridSample : Page
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="FeatureDataFieldSample"/> class.
+        /// Initializes a new instance of <see cref="DataGridSample"/> class.
         /// </summary>
-        public FeatureDataFieldSample()
+        public DataGridSample()
         {
             this.InitializeComponent();
             var _ = LoadFeaturesAsync();
         }
-
         /// <summary>
         /// Requests for features whose attributes will be displayed in <see cref="UI.FeatureDataField"/>
         /// </summary>
@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             string error = null;
             try
             {
-                var table = new ServiceFeatureTable(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0"));
+                var table = new ServiceFeatureTable(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessmentStatePlane/FeatureServer/0"));
                 table.FeatureRequestMode = FeatureRequestMode.ManualCache;
                 await table.LoadAsync();
                 var queryParameters = new QueryParameters()
@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
                 // Request for the same fields defined in the ListView.ItemTemplate.
                 var outFields = new string[] { "objectid", "incidentid", "typdamage", "habitable", "predisval", "inspdate", "lastupdate" };
                 var features = await table.PopulateFromServiceAsync(queryParameters, true, outFields);
-                FeatureList.ItemsSource = features.ToList();
+                grid.ItemsSource = features.ToList();
             }
             catch (Exception exception)
             {

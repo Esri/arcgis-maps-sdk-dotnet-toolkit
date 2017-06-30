@@ -398,8 +398,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _contentControl.Content = new ReadOnlyDataItem($"[{FieldName}]", null);
                     _contentControl.ContentTemplate = IsReadOnly ? ReadOnlyTemplate : InputTemplate;
                 }
+
                 return;
             }
+
             // Content control, container for the control, and Field, which provides schema for attribute field,
             // are both required to generate the control.
             if (_contentControl == null || Feature == null)
@@ -456,16 +458,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var items = new List<KeyValuePair<object, string>>();
+            var items = new List<Esri.ArcGISRuntime.Data.CodedValue>();
             if (_field.IsNullable)
             {
-                items.Add(new KeyValuePair<object, string>(null, string.Empty));
+                items.Add(default(Esri.ArcGISRuntime.Data.CodedValue));
             }
 
-            items.AddRange(cvd.CodedValues.Select(kvp => new KeyValuePair<object, string>(kvp.Code, kvp.Name)));
-            _contentControl.ContentTemplate = SelectorTemplate;
+            items.AddRange(cvd.CodedValues);
+            _contentControl.Content = null;
+            _contentControl.ContentTemplate = null;
             _dataItem = new SelectorDataItem(ValueChangedCallback, BindingValue, items);
             _contentControl.Content = _dataItem;
+            _contentControl.ContentTemplate = SelectorTemplate;
         }
 
         /// <summary>

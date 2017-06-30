@@ -23,7 +23,5 @@
             </StackPanel>
         </Border>
 
-        <!--<esri:Compass Heading="{Binding Camera.Heading, ElementName=mapView, Mode=OneWay}" Grid.Row="1"
-                               Margin="20" Grid.Column="2" MouseDown="Compass_MouseDown" />-->
     </Grid>
 </UserControl>

@@ -77,18 +77,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Layers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            if (e.OldItems != null)
+            {
+                foreach (var item in e.OldItems.OfType<Mapping.Layer>())
+                {
+                    LayerRemoved(item);
+                }
+            }
             if (e.NewItems != null)
             {
                 foreach (var item in e.NewItems.OfType<Mapping.Layer>().Where(l=>IncludeLayer(l)))
                 {
                     LayerAdded(item);
-                }
-            }
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.NewItems.OfType<Mapping.Layer>())
-                {
-                    LayerRemoved(item);
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             var vm = new LayerContentViewModel(layer, _owningView, null, _showLegend);
             _activeLayers.Insert(idx, vm);
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changedItem: vm, index: Count - idx - 1));
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changedItem: vm, index: idx));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
         }
@@ -138,10 +138,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (idx >= 0)
                 {
                     _activeLayers.RemoveAt(idx);
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, changedItem: vm, index: idx));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Items[]"));
                 }
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, changedItem: vm, index: Count - idx - 1));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Items[]"));
             }
         }
 

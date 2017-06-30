@@ -67,7 +67,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Layer layer = (LayerContent as Layer);
                 GeoView gview;
                 if (layer.LoadStatus != LoadStatus.NotLoaded && _view.TryGetTarget(out gview))
-                    UpdateLayerViewState(gview.GetLayerViewState(layer));
+                {
+                    try
+                    {
+                        var viewState = gview.GetLayerViewState(layer);
+                        UpdateLayerViewState(viewState);
+                    }
+                    catch(ArgumentException)
+                    { }
+                }
                 else
                     UpdateLayerViewState(null);
             }
