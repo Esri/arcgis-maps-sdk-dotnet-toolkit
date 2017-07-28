@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !XAMARIN
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -183,3 +185,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(ShowEntireTreeHiarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.UpdateLegend()));
     }
 }
+#endif
