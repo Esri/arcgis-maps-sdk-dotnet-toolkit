@@ -108,15 +108,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         
         private void AddToActiveLayers(Layer layer)
         {
-            var idx = GetIndexOfLayer(layer);
-            if (idx < 0)
-            {
-                // Shouldn't really happen
-                return;
-            }
             var vm = new LayerContentViewModel(layer, _owningView, null, _showLegend);
-            _activeLayers.Insert(idx, vm);
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changedItem: vm, index: idx));
+
+            //JH: Insert at 0 so that list is ordered in the same way the layers are added - base at bottom
+            _activeLayers.Insert(0, vm);
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changedItem: vm, index: 0));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
         }
@@ -131,14 +127,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void RemoveFromActiveLayers(Mapping.Layer layer)
         { 
-            var vm = _activeLayers.Where(l => l.LayerContent == layer).FirstOrDefault();
+            var vm = _activeLayers.FirstOrDefault(l => l.LayerContent == layer);
             if (vm != null)
             {
                 var idx = _activeLayers.IndexOf(vm);
+
                 if (idx >= 0)
                 {
                     _activeLayers.RemoveAt(idx);
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, changedItem: vm, index: idx));
+
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Items[]"));
                 }
@@ -180,10 +178,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
         public IEnumerator<LayerContentViewModel> GetEnumerator()
         {
-            for (int i = _activeLayers.Count - 1; i >= 0 ; i--)
-            {
-                yield return _activeLayers[i];
-            }
+            //JH: The order between the list used internally and when used as backing list was reversed, this caused indices to not be the same
+            //resulting in an exception on call to 
+            // CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, changedItem: vm, index: idx));
+
+            return ((IEnumerable<LayerContentViewModel>) _activeLayers).GetEnumerator();
         }
 
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
