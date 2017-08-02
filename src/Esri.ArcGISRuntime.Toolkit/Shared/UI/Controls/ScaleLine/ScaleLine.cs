@@ -45,12 +45,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TextBlock _metricUnit;
         private Rectangle _metricScaleLine;
         private Rectangle _usScaleLine;
-
+        private static double _dpi =
+#if __IOS__
+            96 * UIKit.UIScreen.MainScreen.Scale;
+#else
+            96;
+#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        public ScaleLine() : base()
+        public ScaleLine()
         {
 #if !XAMARIN
             DefaultStyleKey = typeof(ScaleLine);
@@ -255,14 +260,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// 1. (target_width_pixels / 96) = target_width_inches
+        /// 1. (target_width_pixels / DPI) = target_width_inches
         /// 2. target_width_inches * map_scale = map_scale_inches
         /// 3. map_scale_inches converted to meters = map_scale_meters
         /// </summary>
         /// <returns>value that represents the maps scale in meters</returns>
         private double ConvertInchesTo(LinearUnit unit)
         {
-            return LinearUnits.Inches.ConvertTo(unit, (TargetWidth / 96) * GetScale());
+            return LinearUnits.Inches.ConvertTo(unit, (TargetWidth / _dpi) * GetScale());
         }
 
         private double GetScale()
@@ -386,7 +391,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Calculates the scale at the center of a polygon, at a given pixel size
         /// </summary>
         /// <remarks>
-        /// A pixel is a device independent logical pixel - ie 1/96 inches.
+        /// A pixel is a device independent logical pixel - ie 1/96 inches on Windows platforms.
         /// </remarks>
         /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
         /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference</param>
@@ -414,7 +419,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Calculate the geodedetic distance between two points one 'pixel' apart
             var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
             double distanceInInches = result.Distance;
-            return distanceInInches * 96;
+            return distanceInInches * _dpi;
         }
     }
 }
