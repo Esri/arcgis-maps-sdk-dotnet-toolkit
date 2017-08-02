@@ -30,13 +30,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Spacing = 0
             };
 
+            var font = UIFont.SystemFontOfSize(11);
             _combinedScaleLine = new RectangleView(200, 2) { BackgroundColor = ForegroundColor };
             _metricScaleLine = new RectangleView(200, 2);
-            _metricValue = new UILabel() { Text = "100" };
-            _metricUnit = new UILabel() { Text = "m" };
+            _metricValue = new UILabel() { Text = "100", Font = font };
+            _metricUnit = new UILabel() { Text = "m", Font = font };
             _usScaleLine = new RectangleView(200, 2);
-            _usValue = new UILabel() { Text = "USValue" };
-            _usUnit = new UILabel() { Text = "USUnit" };
+            _usValue = new UILabel() { Text = "USValue", Font = font };
+            _usUnit = new UILabel() { Text = "USUnit", Font = font };
 
             _metricScaleLine.PropertyChanged += ScaleLine_PropertyChanged;
             _usScaleLine.PropertyChanged += ScaleLine_PropertyChanged;
@@ -118,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             fourthRowStackView.AddArrangedSubview(_secondUsTickLine);
 
             // ==========================================================================
-            //// Fifth row - placeholder, imperial numeric text, imperial unit text
+            // Fifth row - placeholder, imperial numeric text, imperial unit text
             // ==========================================================================
             var fifthRowStackView = new UIStackView()
             {
