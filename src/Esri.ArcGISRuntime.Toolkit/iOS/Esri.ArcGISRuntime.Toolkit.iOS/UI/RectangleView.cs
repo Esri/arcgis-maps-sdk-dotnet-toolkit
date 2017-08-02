@@ -17,17 +17,54 @@
 using CoreGraphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
-    internal class RectangleView : UIView
+    internal class RectangleView : UIView, INotifyPropertyChanged
     {
+        public RectangleView() { }
+
+        public RectangleView(double width, double height)
+        {
+            Width = width;
+            Height = height;
+        }
+
         public double Width
         {
-            get { return Frame.Width; }
-            set { Frame = new CGRect(Frame.X, Frame.Y, value, Frame.Height); }
+            get => _size.Width;
+            set
+            {
+                _size.Width = (nfloat)value;
+                InvalidateIntrinsicContentSize();
+                OnPropertyChanged();
+            }
+        }
+
+        public double Height
+        {
+            get => _size.Height;
+            set
+            {
+                _size.Height = (nfloat)value;
+                InvalidateIntrinsicContentSize();
+                OnPropertyChanged();
+            }
+        }
+
+        private CGSize _size = CGSize.Empty;
+
+        public override CGSize IntrinsicContentSize => _size;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// The ScaleLine Control generates a line representing
     /// a certain distance on the map in both Metric and US units.
     /// </summary>
-    public class ScaleLine : Control
+    public partial class ScaleLine : Control
     {
         private TextBlock _usValue;
         private TextBlock _usUnit;
@@ -46,16 +46,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Rectangle _metricScaleLine;
         private Rectangle _usScaleLine;
 
-#if !XAMARIN
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        public ScaleLine()
+        public ScaleLine() : base()
         {
+#if !XAMARIN
             DefaultStyleKey = typeof(ScaleLine);
+#elif __IOS__
+            ForegroundColor = UIKit.UIColor.Black;
+            TargetWidth = 200;
+            Initialize();
+#endif
         }
 
+#if !XAMARIN
         /// <inheritdoc/>
 #if NETFX_CORE
         protected override void OnApplyTemplate()
