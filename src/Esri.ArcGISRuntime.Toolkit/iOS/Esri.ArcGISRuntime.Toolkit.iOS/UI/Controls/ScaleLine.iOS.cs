@@ -48,6 +48,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             BackgroundColor = UIColor.Clear;
 
+            if (!DesignTime.IsDesignMode)
+                Hidden = true;
+
             var rootStackView = new UIStackView()
             {
                 Axis = UILayoutConstraintAxis.Vertical,
