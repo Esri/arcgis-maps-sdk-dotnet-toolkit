@@ -10,7 +10,10 @@ using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    public partial class ScaleLine
+    [Register("ScaleLine")]
+    [DisplayName("Scaleline")]
+    [Category("ArcGIS Runtime Controls")]
+    public partial class ScaleLine : IComponent
     {
         private RectangleView _firstMetricTickLine;
         private RectangleView _secondMetricTickLine;
@@ -19,8 +22,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private RectangleView _secondUsTickLine;
         private RectangleView _combinedScaleLine;
 
+#pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
+        /// <summary>
+        /// Internal use only.  Invoked by the Xamarin iOS designer.
+        /// </summary>
+        /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
+#pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
+        public ScaleLine(IntPtr handle) : base(handle)
+        {
+            Initialize();
+        }
+
+        /// <inheritdoc />
+        public override void AwakeFromNib()
+        {
+            var component = (IComponent)this;
+            DesignTime.IsDesignMode = component.Site != null && component.Site.DesignMode;
+
+            Initialize();
+
+            base.AwakeFromNib();
+        }
+
         private void Initialize()
         {
+            BackgroundColor = UIColor.Clear;
+
             var rootStackView = new UIStackView()
             {
                 Axis = UILayoutConstraintAxis.Vertical,
@@ -35,9 +62,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _metricScaleLine = new RectangleView(200, 2);
             _metricValue = new UILabel() { Text = "100", Font = font };
             _metricUnit = new UILabel() { Text = "m", Font = font };
-            _usScaleLine = new RectangleView(200, 2);
-            _usValue = new UILabel() { Text = "USValue", Font = font };
-            _usUnit = new UILabel() { Text = "USUnit", Font = font };
+            _usScaleLine = new RectangleView(_metricScaleLine.Width * .9144, 2);
+            _usValue = new UILabel() { Text = "300", Font = font };
+            _usUnit = new UILabel() { Text = "ft", Font = font };
 
             _metricScaleLine.PropertyChanged += ScaleLine_PropertyChanged;
             _usScaleLine.PropertyChanged += ScaleLine_PropertyChanged;
@@ -160,7 +187,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
         }
 
-        private UIColor _foregroundColor;
+        private UIColor _foregroundColor = UIColor.Black;
         public UIColor ForegroundColor
         {
             get => _foregroundColor;
@@ -182,6 +209,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _secondUsTickLine.BackgroundColor = value;
                 _scaleLineStartSegment.BackgroundColor = value;
             }
+        }
+
+        /// <summary>
+        /// Internal use only.  Invoked by the Xamarin iOS designer.
+        /// </summary>
+        ISite IComponent.Site { get; set; }
+
+        private EventHandler _disposed;
+
+        /// <summary>
+        /// Internal use only
+        /// </summary>
+        event EventHandler IComponent.Disposed
+        {
+            add { _disposed += value; }
+            remove { _disposed -= value; }
         }
     }
 }

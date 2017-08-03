@@ -60,8 +60,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if !XAMARIN
             DefaultStyleKey = typeof(ScaleLine);
 #elif __IOS__
-            ForegroundColor = UIKit.UIColor.Black;
-            TargetWidth = 200;
             Initialize();
 #endif
         }
@@ -138,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
 #if XAMARIN
-        private double _targetWidth;
+        private double _targetWidth = 200;
 #endif
 
         /// <summary>
