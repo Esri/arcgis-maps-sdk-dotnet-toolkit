@@ -24,6 +24,9 @@ using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
+    /// <summary>
+    /// Draws a rectangle on the screen
+    /// </summary>
     internal class RectangleView : UIView, INotifyPropertyChanged
     {
         public RectangleView() { }
@@ -34,6 +37,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             Height = height;
         }
 
+        /// <summary>
+        /// Gets or sets the rectangle's width
+        /// </summary>
         public double Width
         {
             get => _size.Width;
@@ -45,6 +51,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
+        /// <summary>
+        /// Gets or sets the rectangle's height
+        /// </summary>
         public double Height
         {
             get => _size.Height;
@@ -60,6 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public override CGSize IntrinsicContentSize => _size;
 
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-
+using CoreGraphics;
 using Foundation;
 using UIKit;
-using CoreGraphics;
-using System.ComponentModel;
+
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -48,9 +48,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             BackgroundColor = UIColor.Clear;
 
+            // At run-time, don't display the sub-views until their dimensions have been calculated
             if (!DesignTime.IsDesignMode)
                 Hidden = true;
 
+            // Vertically-oriented stack view for containing all scalebar components
             var rootStackView = new UIStackView()
             {
                 Axis = UILayoutConstraintAxis.Vertical,
@@ -60,6 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Spacing = 0
             };
 
+            // Initialize scalebar components with placeholder sizes and values
             var font = UIFont.SystemFontOfSize(11);
             _combinedScaleLine = new RectangleView(200, 2) { BackgroundColor = ForegroundColor };
             _metricScaleLine = new RectangleView(200, 2);
@@ -69,6 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _usValue = new UILabel() { Text = "300", Font = font };
             _usUnit = new UILabel() { Text = "ft", Font = font };
 
+            // Listen for width updates on metric and imperial scale lines to update the combined scale line
             _metricScaleLine.PropertyChanged += ScaleLine_PropertyChanged;
             _usScaleLine.PropertyChanged += ScaleLine_PropertyChanged;
 
@@ -166,7 +170,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             fifthRowStackView.AddArrangedSubview(_usValue);
             fifthRowStackView.AddArrangedSubview(_usUnit);
 
-            // Add all rows to the root stack view
+            // Add all scalebar rows to the root stack view
             rootStackView.AddArrangedSubview(firstRowStackView);
             rootStackView.AddArrangedSubview(secondRowStackView);
             rootStackView.AddArrangedSubview(thirdRowStackView);
@@ -175,13 +179,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             AddSubview(rootStackView);
 
+            // Anchor the root stack view to the bottom left of the view
             rootStackView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
             rootStackView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
 
+            // Set up constraints to resize scalebar components when scale line resizes
             metricWidthPlaceholder.WidthAnchor.ConstraintEqualTo(_metricScaleLine.WidthAnchor).Active = true;
             metricWidthPlaceholder.HeightAnchor.ConstraintEqualTo(_firstMetricTickLine.HeightAnchor).Active = true;
             usWidthPlaceholder.WidthAnchor.ConstraintEqualTo(_usScaleLine.WidthAnchor).Active = true;
-            usWidthPlaceholder.HeightAnchor.ConstraintEqualTo(_usScaleLine.HeightAnchor).Active = true;
+            usWidthPlaceholder.HeightAnchor.ConstraintEqualTo(_usValue.HeightAnchor).Active = true;
         }
 
         private void ScaleLine_PropertyChanged(object sender, PropertyChangedEventArgs e)
