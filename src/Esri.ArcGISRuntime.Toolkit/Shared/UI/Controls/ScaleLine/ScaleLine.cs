@@ -343,6 +343,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
         private MapView _mapView;
 
+        /// <summary>
+        /// Gets or sets the MapView for which the scale is displayed. This will accurately reflect the scale at the center of the MapView
+        /// </summary>
         public MapView MapView
         {
             get { return _mapView; }

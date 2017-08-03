@@ -191,6 +191,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private UIColor _foregroundColor = UIColor.Black;
+
+        /// <summary>
+        /// Gets or sets the color of the foreground elements of the <see cref="ScaleLine"/>
+        /// </summary>
         public UIColor ForegroundColor
         {
             get => _foregroundColor;
