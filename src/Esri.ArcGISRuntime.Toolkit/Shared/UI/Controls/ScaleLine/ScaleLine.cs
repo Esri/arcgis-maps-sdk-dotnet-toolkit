@@ -45,12 +45,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TextBlock _metricUnit;
         private Rectangle _metricScaleLine;
         private Rectangle _usScaleLine;
-        private static double _dpi =
-#if __IOS__
-            96 * UIKit.UIScreen.MainScreen.Scale;
-#else
-            96;
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
@@ -258,14 +252,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// 1. (target_width_pixels / DPI) = target_width_inches
+        /// 1. (target_width_pixels / 96) = target_width_inches
         /// 2. target_width_inches * map_scale = map_scale_inches
         /// 3. map_scale_inches converted to meters = map_scale_meters
         /// </summary>
         /// <returns>value that represents the maps scale in meters</returns>
         private double ConvertInchesTo(LinearUnit unit)
         {
-            return LinearUnits.Inches.ConvertTo(unit, (TargetWidth / _dpi) * GetScale());
+            return LinearUnits.Inches.ConvertTo(unit, (TargetWidth / 96) * GetScale());
         }
 
         private double GetScale()
@@ -420,7 +414,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Calculate the geodedetic distance between two points one 'pixel' apart
             var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
             double distanceInInches = result.Distance;
-            return distanceInInches * _dpi;
+            return distanceInInches * 96;
         }
     }
 }
