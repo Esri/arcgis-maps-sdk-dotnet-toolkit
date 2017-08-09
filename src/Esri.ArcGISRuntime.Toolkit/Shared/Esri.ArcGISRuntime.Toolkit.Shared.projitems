@@ -9,6 +9,7 @@
     <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit.UI</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\buildnum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Compass\Compass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\DataItem.cs" />
@@ -25,5 +26,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\DesignTime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakEventListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Properties\" />
   </ItemGroup>
 </Project>

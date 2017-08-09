@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2017 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -15,18 +15,7 @@
 //  ******************************************************************************/
 
 using System.Reflection;
-using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("Esri.ArcGISRuntime.Toolkit.UI")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit.UI")]
-[assembly: AssemblyCopyright("Copyright © ESRI 2016")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyVersion("100.1.0.0")]
+[assembly: AssemblyFileVersion("100.1.0.0")]
 
-[assembly: ComVisible(false)]
