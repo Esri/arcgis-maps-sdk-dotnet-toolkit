@@ -63,7 +63,7 @@
       <Link>LocalizedStrings\Resources.resx</Link>
     </EmbeddedResource>
   </ItemGroup>
-  <Import Project="..\..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+  <Import Project="..\..\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.Xamarin.iOS.100.1.0\build\Xamarin.iOS10\Esri.ArcGISRuntime.Xamarin.iOS.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.Xamarin.iOS.100.1.0\build\Xamarin.iOS10\Esri.ArcGISRuntime.Xamarin.iOS.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
