@@ -49,41 +49,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        public ScaleLine()
-        {
-#if !XAMARIN
-            DefaultStyleKey = typeof(ScaleLine);
-#elif __IOS__
-            Initialize();
-#endif
-        }
+        public ScaleLine() => Initialize();
 
-#if !XAMARIN
-        /// <inheritdoc/>
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
-#endif
-        {
-            base.OnApplyTemplate();
-
-            // Get a reference to the templated parts
-            _usUnit = GetTemplateChild("UsUnit") as TextBlock;
-            _usValue = GetTemplateChild("UsValue") as TextBlock;
-            _metricUnit = GetTemplateChild("MetricUnit") as TextBlock;
-            _metricValue = GetTemplateChild("MetricValue") as TextBlock;
-            _usScaleLine = GetTemplateChild("UsScaleLine") as Rectangle;
-            _metricScaleLine = GetTemplateChild("MetricScaleLine") as Rectangle;
-            Refresh();
-        }
-#endif
-
-#if XAMARIN
-        private double _mapScale;
-#endif
-
-        // Warning on XML summary doc before compiler conditional is incorrect
 #pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>
         /// Gets or sets the scale that the ScaleLine will
@@ -93,45 +60,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <seealso cref="SetMapView"/>
         /// <seealso cref="MapViewProperty"/>
 #endif
-        public double MapScale
 #pragma warning restore CS1587 // XML comment is not placed on a valid language element
+        public double MapScale
         {
-#if !XAMARIN
-            get { return (double)GetValue(MapScaleProperty); }
-            set { SetValue(MapScaleProperty, value); }
-#else
-            get { return _mapScale; }
-            set
-            {
-                _mapScale = value;
-                Refresh();
-            }
-#endif
+            get => MapScaleImpl;
+            set => MapScaleImpl = value;
         }
-
-#if !XAMARIN
-        /// <summary>
-        /// The dependency property for the Scale property.
-        /// </summary>
-        public static readonly DependencyProperty MapScaleProperty =
-           DependencyProperty.Register(nameof(MapScale), typeof(double), typeof(ScaleLine), new PropertyMetadata(default(double), OnMapScalePropertyChanged));
-
-        /// <summary>
-        /// The property changed event that is raised when
-        /// the value of Scale property changes.
-        /// </summary>
-        /// <param name="d">ScaleLine</param>
-        /// <param name="e">Contains information related to the change to the Scale property.</param>
-        private static void OnMapScalePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var scaleLine = (ScaleLine)d;
-            scaleLine.Refresh();
-        }
-#endif
-
-#if XAMARIN
-        private double _targetWidth = 200;
-#endif
 
         /// <summary>
         /// Gets or sets the width that will be used to
@@ -139,38 +73,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public double TargetWidth
         {
-#if !XAMARIN
-            get { return (double)GetValue(TargetWidthProperty); }
-            set { SetValue(TargetWidthProperty, value); }
-#else
-            get { return _targetWidth; }
-            set
-            {
-                _targetWidth = value;
-                Refresh();
-            }
-#endif
+            get => TargetWidthImpl;
+            set => TargetWidthImpl = value;
         }
-
-#if !XAMARIN
-        /// <summary>
-        /// Identifies the dependency property for the <see cref="TargetWidth"/> property.
-        /// </summary>
-        public static readonly DependencyProperty TargetWidthProperty =
-            DependencyProperty.Register(nameof(TargetWidth), typeof(double), typeof(ScaleLine), new PropertyMetadata(default(double), OnTargetWidthPropertyChanged));
-
-        /// <summary>
-        /// The property changed handler that is called when
-        /// the value of TargetWidth property changes.
-        /// </summary>
-        /// <param name="d">ScaleLine</param>
-        /// <param name="e">Contains information related to the change to the TargetWidth property.</param>
-        private static void OnTargetWidthPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var scaleLine = (ScaleLine)d;
-            scaleLine.Refresh();
-        }
-#endif
 
         /// <summary>
         /// Sets the imperial units section of the scale line
@@ -242,15 +147,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 kilometers >= 1 ? Properties.Resources.GetString("KilometerAbbreviation") : Properties.Resources.GetString("MeterAbbreviation"));
         }
 
-        private void SetVisibility(bool isVisible)
-        {
-#if __IOS__
-            Hidden = !isVisible;
-#else
-            Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
-#endif
-        }
-
         /// <summary>
         /// 1. (target_width_pixels / 96) = target_width_inches
         /// 2. target_width_inches * map_scale = map_scale_inches
@@ -300,58 +196,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#if !XAMARIN
-        /// <summary>
-        /// Gets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
-        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
-        /// </summary>
-        /// <param name="scaleLine">The scaleline control this would be attached to</param>
-        /// <returns>The MapView the scaleline is associated with.</returns>
-        public static MapView GetMapView(DependencyObject scaleLine)
-        {
-            return (MapView)scaleLine.GetValue(MapViewProperty);
-        }
-
-        /// <summary>
-        /// Sets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
-        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
-        /// </summary>
-        /// <param name="scaleLine">The scaleline control this would be attached to</param>
-        /// <param name="mapView">The mapview to calculate the scale for</param>
-        public static void SetMapView(DependencyObject scaleLine, MapView mapView)
-        {
-            scaleLine.SetValue(MapViewProperty, mapView);
-        }
-
-        /// <summary>
-        /// Identifies the MapView Dependency Property
-        /// </summary>
-        public static readonly DependencyProperty MapViewProperty =
-            DependencyProperty.RegisterAttached("MapView", typeof(MapView), typeof(ScaleLine), new PropertyMetadata(null, OnMapViewPropertyChanged));
-
-        private static void OnMapViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var scaleLine = (ScaleLine)d;
-            scaleLine.WireMapViewPropertyChanged(e.OldValue as MapView, e.NewValue as MapView);
-        }
-#else
-        private MapView _mapView;
-
-        /// <summary>
-        /// Gets or sets the MapView for which the scale is displayed. This will accurately reflect the scale at the center of the MapView
-        /// </summary>
-        public MapView MapView
-        {
-            get { return _mapView; }
-            set
-            {
-                var oldView = _mapView;
-                _mapView = value;
-                WireMapViewPropertyChanged(oldView, _mapView);
-            }
-        }
-#endif
-
         private void WireMapViewPropertyChanged(MapView oldMapView, MapView newMapView)
         {
             var inpc = oldMapView as INotifyPropertyChanged;
@@ -369,16 +213,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void MapView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var view =
-#if XAMARIN
-                MapView;
-#else
-                ScaleLine.GetMapView(this);
-#endif
+            var view = GetMapView(this);
             if ((e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating)) && !view.IsNavigating)
             {
-                var scale = CalculateScale(view.VisibleArea, view.UnitsPerPixel);
-                MapScale = scale;
+                MapScale = CalculateScale(view.VisibleArea, view.UnitsPerPixel);
             }
         }
 

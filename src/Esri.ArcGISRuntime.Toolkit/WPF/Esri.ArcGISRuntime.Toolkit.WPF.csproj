@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+  <Import Project="..\Shared\Windows\Esri.ArcGISRuntime.Toolkit.Windows.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildThisFileDirectory)GenerateNugetPackage.targets" />
   <Import Project="..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets')" />

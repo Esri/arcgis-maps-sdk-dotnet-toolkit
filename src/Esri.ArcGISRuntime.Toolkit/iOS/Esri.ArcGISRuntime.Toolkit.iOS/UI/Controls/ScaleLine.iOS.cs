@@ -255,5 +255,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             add { _disposed += value; }
             remove { _disposed -= value; }
         }
+
+        private void SetVisibility(bool isVisible)
+        {
+            Hidden = !isVisible;
+        }
     }
 }
