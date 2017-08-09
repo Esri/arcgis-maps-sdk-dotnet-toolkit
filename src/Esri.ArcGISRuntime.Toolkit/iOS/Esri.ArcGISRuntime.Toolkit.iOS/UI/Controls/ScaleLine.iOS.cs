@@ -43,6 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
 #pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public ScaleLine(IntPtr handle) : base(handle)
         {
             Initialize();
