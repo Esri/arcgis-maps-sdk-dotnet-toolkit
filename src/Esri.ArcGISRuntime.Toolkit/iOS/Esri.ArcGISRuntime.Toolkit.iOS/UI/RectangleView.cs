@@ -69,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public override CGSize IntrinsicContentSize => _size;
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
