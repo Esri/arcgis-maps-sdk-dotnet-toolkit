@@ -27,6 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Draws a rectangle on the screen
     /// </summary>
+    /// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size.
+    /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
     internal class RectangleView : UIView, INotifyPropertyChanged
     {
         public RectangleView() { }
