@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2016 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -18,4 +18,3 @@ using System.Reflection;
 
 [assembly: AssemblyVersion("100.1.0.0")]
 [assembly: AssemblyFileVersion("100.1.0.0")]
-

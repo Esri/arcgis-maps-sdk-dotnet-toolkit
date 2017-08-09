@@ -25,7 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Esri.ArcGISRuntime.Toolkit.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Shared\AllEsri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Shared\All\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Shared\AllEsri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Shared\All\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Esri.ArcGISRuntime, Version=100.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">

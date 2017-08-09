@@ -224,7 +224,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Calculates the scale at the center of a polygon, at a given pixel size
         /// </summary>
         /// <remarks>
-        /// A pixel is a device independent logical pixel - ie 1/96 inches on Windows platforms.
+        /// A pixel is a device independent logical pixel - ie 1/96 inches.
         /// </remarks>
         /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
         /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference</param>
