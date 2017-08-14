@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.MeasureToolbar.MeasureToolbarSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.MeasureToolbar"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"    
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <esri:MapView x:Name="mapView"/>
+        <esri:MeasureToolbar VerticalAlignment="Top"
+                             HorizontalAlignment="Right"
+                             MapView="{Binding ElementName=mapView}"/>
+    </Grid>
+</UserControl>

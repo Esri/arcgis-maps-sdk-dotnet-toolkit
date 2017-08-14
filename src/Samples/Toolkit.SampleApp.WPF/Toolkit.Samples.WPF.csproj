@@ -75,6 +75,9 @@
     <Compile Include="Samples\Legend\LegendSample.xaml.cs">
       <DependentUpon>LegendSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\MeasureToolbar\MeasureToolbarSample.xaml.cs">
+      <DependentUpon>MeasureToolbarSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\ScaleLine\ScaleLineSample.xaml.cs">
       <DependentUpon>ScaleLineSample.xaml</DependentUpon>
     </Compile>
@@ -113,6 +116,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Samples\Legend\LegendSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\MeasureToolbar\MeasureToolbarSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

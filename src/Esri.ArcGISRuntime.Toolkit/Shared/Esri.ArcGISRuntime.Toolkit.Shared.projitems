@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueChangingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Legend\LayerLegend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\MeasureToolbar\MeasureToolbar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\DesignTime.cs" />
