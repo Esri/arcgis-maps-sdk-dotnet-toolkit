@@ -18,19 +18,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
+
 #if NETFX_CORE
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
 #else
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Media;
 #endif
 
@@ -41,6 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class MeasureToolbar : Control
     {
+        // Supported measure mode
         private enum MeasureToolbarMode
         {
             None,
@@ -48,14 +52,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Area,
             Feature
         }
-
-        private ToggleButton _measureLengthButton;
-        private ToggleButton _measureAreaButton;
-        private ToggleButton _measureFeatureButton;
-        private TextBlock _measureResultTextBlock;
-        private ButtonBase _clearButton;
-        private UIElement _linearUnitsSelector;
-        private UIElement _areaUnitsSelector;
 
         private MeasureToolbarMode _mode = MeasureToolbarMode.None;
 
@@ -76,8 +72,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        // Used for selecting measure mode
+        private ToggleButton _measureLengthButton;
+        private ToggleButton _measureAreaButton;
+        private ToggleButton _measureFeatureButton;
+
+        // Used for displaying and configuring measurement result
+        private TextBlock _measureResultTextBlock;
+        private UIElement _linearUnitsSelector;
+        private UIElement _areaUnitsSelector;
+
+        // Used for clearing map and measurement result
+        private ButtonBase _clearButton;
+
+        // Used for replacing measure editors
         private SketchEditor _originalSketchEditor;
-        private Geometry.Geometry _geometry;
+
+        // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay() { Id = "MeasureFeatureResultOverlay" };
 
         /// <summary>
@@ -118,13 +129,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _clearButton = GetTemplateChild("Clear") as ButtonBase;
             if (_clearButton != null)
             {
+                _measureFeatureResultOverlay.Graphics.CollectionChanged += (s, e) =>
+                  {
+                      if (Mode == MeasureToolbarMode.Feature)
+                      {
+                          _clearButton.IsEnabled = _measureFeatureResultOverlay.Graphics.Any();
+                      }
+                  };
                 _clearButton.Click += OnClear;
             }
 
             _measureResultTextBlock = GetTemplateChild("MeasureResult") as TextBlock;
             if (_measureResultTextBlock != null)
             {
-                _measureResultTextBlock.Text = "Tap to measure.";
+                _measureResultTextBlock.Text = "Toggle a measure mode";
             }
 
             _linearUnitsSelector = GetTemplateChild("LinearUnitsSelector") as UIElement;
@@ -143,6 +161,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.LinearUnits.NauticalMiles,
                     Geometry.LinearUnits.Yards
                 };
+            }
+
+            if (SelectedLinearUnit == null)
+            {
                 SelectedLinearUnit = Geometry.LinearUnits.Meters;
             }
 
@@ -161,6 +183,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.AreaUnits.SquareMillimeters,
                     Geometry.AreaUnits.SquareYards
                 };
+            }
+
+            if (SelectedAreaUnit == null)
+            {
                 SelectedAreaUnit = Geometry.AreaUnits.SquareMiles;
             }
 
@@ -183,286 +209,221 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 SelectionFillSymbol = AreaSketchEditor?.Style?.FillSymbol;
             }
+
+            Mode = MeasureToolbarMode.None;
         }
 
+        /// <summary>
+        /// Updates UI based on measure mode.
+        /// - Only one of the measure toggle buttons is enabled
+        /// - Only one of the units selector is visible
+        /// - Updates instruction text
+        /// - Assigns the appropriate SketchEditor
+        /// - Updates command to execute on clear
+        /// </summary>
         private void PrepareMeasureMode()
         {
-            switch (_mode)
+            var isMeasuringLength = _mode == MeasureToolbarMode.Line;
+            var isMeasuringArea = _mode == MeasureToolbarMode.Area;
+            var isMeasuringFeature = _mode == MeasureToolbarMode.Feature;
+
+            var sketchEditor = isMeasuringLength ?
+                LineSketchEditor :
+                (isMeasuringArea ? AreaSketchEditor : _originalSketchEditor);
+            if (MapView.SketchEditor != sketchEditor)
             {
-                case MeasureToolbarMode.None:
-                    {
-                        if (MapView.SketchEditor != _originalSketchEditor)
-                        {
-                            MapView.SketchEditor.IsVisible = false;
-                            MapView.SketchEditor.IsEnabled = false;
-                            MapView.SketchEditor = _originalSketchEditor;
-                        }
+                MapView.SketchEditor = sketchEditor;
+            }
 
-                        _measureFeatureResultOverlay.IsVisible = false;
-                        if (_measureLengthButton != null)
-                        {
-                            _measureLengthButton.IsChecked = false;
-                        }
+            MapView.SketchEditor.IsVisible = isMeasuringLength || isMeasuringArea;
+            _measureFeatureResultOverlay.IsVisible = isMeasuringFeature;
 
-                        if (_measureAreaButton != null)
-                        {
-                            _measureAreaButton.IsChecked = false;
-                        }
+            if (_measureLengthButton != null)
+            {
+                _measureLengthButton.IsChecked = isMeasuringLength;
+            }
 
-                        if (_measureFeatureButton != null)
-                        {
-                            _measureFeatureButton.IsChecked = false;
-                        }
+            if (_measureAreaButton != null)
+            {
+                _measureAreaButton.IsChecked = isMeasuringArea;
+            }
 
-                        if (_linearUnitsSelector != null)
-                        {
-                            _linearUnitsSelector.Visibility = Visibility.Visible;
-                        }
+            if (_measureFeatureButton != null)
+            {
+                _measureFeatureButton.IsChecked = isMeasuringFeature;
+            }
 
-                        if (_areaUnitsSelector != null)
-                        {
-                            _areaUnitsSelector.Visibility = Visibility.Collapsed;
-                        }
+            if (_linearUnitsSelector != null)
+            {
+                _linearUnitsSelector.Visibility = !isMeasuringArea ? Visibility.Visible : Visibility.Collapsed;
+            }
 
-                        if (_measureResultTextBlock != null)
-                        {
-                            _measureResultTextBlock.Text = "Select measure mode";
-                        }
+            if (_areaUnitsSelector != null)
+            {
+                _areaUnitsSelector.Visibility = isMeasuringArea ? Visibility.Visible : Visibility.Collapsed;
+            }
 
-                        break;
-                    }
+            DisplayResult();
 
-                case MeasureToolbarMode.Line:
-                    {
-                        if (MapView.SketchEditor != LineSketchEditor)
-                        {
-                            MapView.SketchEditor.IsVisible = false;
-                            MapView.SketchEditor.IsEnabled = false;
-                            MapView.SketchEditor = LineSketchEditor;
-                        }
-
-                        MapView.SketchEditor.IsVisible = true;
-                        MapView.SketchEditor.IsEnabled = true;
-                        _measureFeatureResultOverlay.IsVisible = false;
-                        if (_measureLengthButton != null)
-                        {
-                            _measureLengthButton.IsChecked = true;
-                        }
-
-                        if (_measureAreaButton != null)
-                        {
-                            _measureAreaButton.IsChecked = false;
-                        }
-
-                        if (_measureFeatureButton != null)
-                        {
-                            _measureFeatureButton.IsChecked = false;
-                        }
-
-                        if (_linearUnitsSelector != null)
-                        {
-                            _linearUnitsSelector.Visibility = Visibility.Visible;
-                        }
-
-                        if (_areaUnitsSelector != null)
-                        {
-                            _areaUnitsSelector.Visibility = Visibility.Collapsed;
-                        }
-
-                        if (LineSketchEditor.Geometry != null)
-                        {
-                            DisplayResult(LineSketchEditor.Geometry);
-                        }
-                        else if (_measureResultTextBlock != null)
-                        {
-                            _measureResultTextBlock.Text = "Tap to sketch line";
-                        }
-
-                        break;
-                    }
-
-                case MeasureToolbarMode.Area:
-                    {
-                        if (MapView.SketchEditor != AreaSketchEditor)
-                        {
-                            MapView.SketchEditor.IsVisible = false;
-                            MapView.SketchEditor.IsEnabled = false;
-                            MapView.SketchEditor = AreaSketchEditor;
-                        }
-
-                        MapView.SketchEditor.IsVisible = true;
-                        MapView.SketchEditor.IsEnabled = true;
-                        _measureFeatureResultOverlay.IsVisible = false;
-                        if (_measureLengthButton != null)
-                        {
-                            _measureLengthButton.IsChecked = false;
-                        }
-
-                        if (_measureAreaButton != null)
-                        {
-                            _measureAreaButton.IsChecked = true;
-                        }
-
-                        if (_measureFeatureButton != null)
-                        {
-                            _measureFeatureButton.IsChecked = false;
-                        }
-
-                        if (_linearUnitsSelector != null)
-                        {
-                            _linearUnitsSelector.Visibility = Visibility.Collapsed;
-                        }
-
-                        if (_areaUnitsSelector != null)
-                        {
-                            _areaUnitsSelector.Visibility = Visibility.Visible;
-                        }
-
-                        if (AreaSketchEditor.Geometry != null)
-                        {
-                            DisplayResult(AreaSketchEditor.Geometry);
-                        }
-                        else if (_measureResultTextBlock != null)
-                        {
-                            _measureResultTextBlock.Text = "Tap to sketch area";
-                        }
-
-                        break;
-                    }
-
-                case MeasureToolbarMode.Feature:
-                    {
-                        if (MapView.SketchEditor != _originalSketchEditor)
-                        {
-                            MapView.SketchEditor.IsVisible = false;
-                            MapView.SketchEditor.IsEnabled = false;
-                            MapView.SketchEditor = _originalSketchEditor;
-                        }
-
-                        _measureFeatureResultOverlay.IsVisible = true;
-                        if (_measureLengthButton != null)
-                        {
-                            _measureLengthButton.IsChecked = false;
-                        }
-
-                        if (_measureAreaButton != null)
-                        {
-                            _measureAreaButton.IsChecked = false;
-                        }
-
-                        if (_measureFeatureButton != null)
-                        {
-                            _measureFeatureButton.IsChecked = true;
-                        }
-
-                        if (_linearUnitsSelector != null)
-                        {
-                            _linearUnitsSelector.Visibility = Visibility.Visible;
-                        }
-
-                        if (_areaUnitsSelector != null)
-                        {
-                            _areaUnitsSelector.Visibility = Visibility.Collapsed;
-                        }
-
-                        var geometry = _measureFeatureResultOverlay.Graphics.FirstOrDefault()?.Geometry;
-                        if (geometry != null)
-                        {
-                            DisplayResult(geometry);
-                        }
-                        else if (_measureResultTextBlock != null)
-                        {
-                            _measureResultTextBlock.Text = "Tap a feature";
-                        }
-
-                        break;
-                    }
+            if (_clearButton != null)
+            {
+                if (isMeasuringLength || isMeasuringArea)
+                {
+                    Binding binding = new Binding();
+                    binding.Path = new PropertyPath(nameof(SketchEditor.CancelCommand));
+                    _clearButton.DataContext = MapView.SketchEditor;
+                    _clearButton.SetBinding(ButtonBase.CommandProperty, binding);
+                }
+                else
+                {
+                    _clearButton.ClearValue(ButtonBase.CommandProperty);
+                }
             }
         }
 
+        /// <summary>
+        /// Updates visibility of unit selector based on geometry type.
+        /// </summary>
+        /// <param name="geometry">geometry to measure</param>
         private void PrepareUnitSelector(Geometry.Geometry geometry)
         {
-            if (geometry is Polygon || geometry is Envelope)
+            var isMeasuringArea = geometry is Polygon || geometry is Envelope;
+            if (_linearUnitsSelector != null)
             {
-                if (_linearUnitsSelector != null)
-                {
-                    _linearUnitsSelector.Visibility = Visibility.Collapsed;
-                }
-
-                if (_areaUnitsSelector != null)
-                {
-                    _areaUnitsSelector.Visibility = Visibility.Visible;
-                }
+                _linearUnitsSelector.Visibility = !isMeasuringArea ? Visibility.Visible : Visibility.Collapsed;
             }
-            else if (geometry is Polyline)
-            {
-                if (_linearUnitsSelector != null)
-                {
-                    _linearUnitsSelector.Visibility = Visibility.Visible;
-                }
 
-                if (_areaUnitsSelector != null)
-                {
-                    _areaUnitsSelector.Visibility = Visibility.Collapsed;
-                }
+            if (_areaUnitsSelector != null)
+            {
+                _areaUnitsSelector.Visibility = isMeasuringArea ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
-        private void DisplayResult(Geometry.Geometry geometry)
+        /// <summary>
+        /// Displays the measurement result
+        /// </summary>
+        /// <param name="geometry">geometry to measure</param>
+        private void DisplayResult(Geometry.Geometry geometry = null)
         {
-            _geometry = geometry;
             if (_measureResultTextBlock != null)
             {
                 double measurement = 0;
+                if (geometry == null)
+                {
+                    switch (Mode)
+                    {
+                        case MeasureToolbarMode.Line:
+                            {
+                                geometry = LineSketchEditor.Geometry;
+                                break;
+                            }
+
+                        case MeasureToolbarMode.Area:
+                            {
+                                geometry = AreaSketchEditor.Geometry;
+                                break;
+                            }
+
+                        case MeasureToolbarMode.Feature:
+                            {
+                                geometry = _measureFeatureResultOverlay.Graphics.FirstOrDefault()?.Geometry;
+                                break;
+                            }
+                    }
+                }
+
                 if (geometry is Polyline)
                 {
                     measurement = GeometryEngine.LengthGeodetic(geometry, SelectedLinearUnit, GeodeticCurveType.ShapePreserving);
                 }
-
-                if (geometry is Polygon || geometry is Envelope)
+                else if (geometry is Polygon || geometry is Envelope)
                 {
                     measurement = GeometryEngine.AreaGeodetic(geometry, SelectedAreaUnit, GeodeticCurveType.ShapePreserving);
                 }
 
-                _measureResultTextBlock.Text = string.Format("{0:0,0.00}", measurement);
+                if (measurement == 0)
+                {
+                    var instruction = Mode == MeasureToolbarMode.None ?
+                        "Toggle a measure mode" : (Mode == MeasureToolbarMode.Feature ? "Tap a feature" : "Tap to sketch");
+                    _measureResultTextBlock.Text = instruction;
+                }
+                else
+                {
+                    _measureResultTextBlock.Text = string.Format("{0:0,0.00}", measurement);
+                }
             }
         }
 
+        /// <summary>
+        /// Toggles between measure modes and starts SketchEditor when not already started for length and area.
+        /// </summary>
+        /// <param name="sender">Toggle button that raised click event</param>
+        /// <param name="e">Contains information or event data associated with routed event</param>
         private async void OnToggleMeasureMode(object sender, RoutedEventArgs e)
         {
             var toggleButton = (ToggleButton)sender;
-            await MeasureAsync(toggleButton);
+            Mode = toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
+               (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
+               toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
+               toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
+               MeasureToolbarMode.None;
+            while (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
+            {
+                try
+                {
+                    if (MapView.SketchEditor.Geometry != null)
+                    {
+                        break;
+                    }
+
+                    var creationMode = Mode == MeasureToolbarMode.Line ? SketchCreationMode.Polyline : SketchCreationMode.Polygon;
+                    var geometry = await MapView.SketchEditor.StartAsync(creationMode);
+                    DisplayResult(geometry);
+                }
+                catch (TaskCanceledException)
+                {
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
+                }
+
+                Mode = toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
+                    (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
+                    toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
+                    toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
+                    MeasureToolbarMode.None;
+            }
         }
 
+        /// <summary>
+        /// Displays the measurement result for the given new geometry.
+        /// </summary>
+        /// <param name="sender">SketchEditor that raised GeometryChanged event</param>
+        /// <param name="e">Data for the GeometryChanged event</param>
         private void OnGeometryChanged(object sender, GeometryChangedEventArgs e)
         {
             DisplayResult(e.NewGeometry);
         }
 
+        /// <summary>
+        /// Identifies the polyline or polygon feature or graphic whose geometry will be measured.
+        /// </summary>
+        /// <param name="sender">MapView that raised GeoViewTapped event</param>
+        /// <param name="e">Data for the GeoViewTapped event</param>
         private async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
         {
-            if (_clearButton != null)
-            {
-                if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
-                {
-                    _clearButton.IsEnabled = MapView.SketchEditor.CancelCommand.CanExecute(null);
-                }
-
-                var hasGraphics = _measureFeatureResultOverlay.Graphics.Count > 0;
-                _clearButton.IsEnabled = hasGraphics;
-            }
-
             if (Mode != MeasureToolbarMode.Feature)
             {
                 return;
             }
 
-            var layerResult = await MapView.IdentifyLayersAsync(e.Position, 2, false);
-            var geometry = layerResult.FirstOrDefault()?.GeoElements?.FirstOrDefault()?.Geometry;
+            var identifyLayersResult = await MapView.IdentifyLayersAsync(e.Position, 2, false);
+           var geometry = GetGeometry(identifyLayersResult);
             if (geometry == null)
             {
-                var graphicResult = await MapView.IdentifyGraphicsOverlaysAsync(e.Position, 2, false);
-                geometry = graphicResult.FirstOrDefault()?.Graphics?.FirstOrDefault()?.Geometry;
+                var identifyGraphicsOverlaysResult = await MapView.IdentifyGraphicsOverlaysAsync(e.Position, 2, false);
+                geometry = GetGeometry(identifyGraphicsOverlaysResult);
             }
 
             PrepareUnitSelector(geometry);
@@ -471,7 +432,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 symbol = SelectionLineSymbol;
             }
-            else if (geometry is Polygon || _geometry is Envelope)
+            else if (geometry is Polygon || geometry is Envelope)
             {
                 symbol = SelectionFillSymbol;
             }
@@ -489,56 +450,67 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DisplayResult(geometry);
         }
 
-        private async Task MeasureAsync(ToggleButton toggleButton)
+        /// <summary>
+        /// Recursively checks SublayerResults and returns the geometry of the first polyline or polygon feature.
+        /// </summary>
+        /// <param name="identifyLayerResults">Results returned from identifying layers</param>
+        /// <returns>the first polyline or polygon geometry</returns>
+        private Geometry.Geometry GetGeometry(IEnumerable<IdentifyLayerResult> identifyLayerResults)
         {
-            var isChecked = toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value;
-            Mode = isChecked ?
-                (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
-                toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
-                toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
-                MeasureToolbarMode.None;
-            while (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
+            foreach (var result in identifyLayerResults)
             {
-                try
+                foreach (var geoElement in result.GeoElements)
                 {
-                    var creationMode = Mode == MeasureToolbarMode.Line ? SketchCreationMode.Polyline : SketchCreationMode.Polygon;
-                    if (MapView.SketchEditor.CancelCommand.CanExecute(null))
+                    if (geoElement.Geometry is Polyline || geoElement.Geometry is Polygon)
                     {
-                        break;
+                        return geoElement.Geometry;
                     }
-
-                    var geometry = await MapView.SketchEditor.StartAsync(creationMode);
-                    DisplayResult(geometry);
-                }
-                catch (TaskCanceledException)
-                {
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
                 }
 
-                isChecked = toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value;
-                Mode = isChecked ?
-                    (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
-                    toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
-                    toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
-                    MeasureToolbarMode.None;
+                var geometry = GetGeometry(result.SublayerResults);
+                if (geometry != null)
+                {
+                    return geometry;
+                }
             }
+
+            return null;
         }
 
-        private void OnClear(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Returns the geometry of the first polyline or polygon graphic.
+        /// </summary>
+        /// <param name="identifyGraphicsOverlayResults">Results returned from identifying graphics</param>
+        /// <returns>the first polyline or polygon geometry</returns>
+        private Geometry.Geometry GetGeometry(IEnumerable<IdentifyGraphicsOverlayResult> identifyGraphicsOverlayResults)
         {
-            ClearGraphics();
+            foreach (var result in identifyGraphicsOverlayResults)
+            {
+                foreach (var graphic in result.Graphics)
+                {
+                    if (graphic.Geometry is Polyline || graphic.Geometry is Polygon)
+                    {
+                        return graphic.Geometry;
+                    }
+                }
+            }
+
+            return null;
         }
 
-        private void ClearGraphics()
+        /// <summary>
+        /// Clears the map of any graphics from measuring distance, area or feature.
+        /// This will also clear undo/redo stack.
+        /// </summary>
+        /// <param name="sender">Button that raised clicked event</param>
+        /// <param name="e">Contains information or event data associated with routed event</param>
+        private void OnClear(object sender, RoutedEventArgs e)
         {
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {
                 if (MapView.SketchEditor.CancelCommand.CanExecute(null))
                 {
-                    MapView.SketchEditor.CancelCommand.Execute(null);
+                    MapView.SketchEditor.CancelCommand.CanExecute(null);
                 }
             }
             else if (Mode == MeasureToolbarMode.Feature)
@@ -546,11 +518,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _measureFeatureResultOverlay.Graphics.Clear();
             }
 
-            DisplayResult(null);
+            DisplayResult();
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Esri.ArcGISRuntime.UI.Controls.MapView"/> where measuring distances and areas will be done.
+        /// Gets or sets the map view where measuring distances and areas will be done.
         /// </summary>
         public MapView MapView
         {
@@ -598,7 +570,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="SketchEditor"/> used for measuring distances.
+        /// Gets or sets the sketch editor used for measuring distances.
         /// </summary>
         public SketchEditor LineSketchEditor
         {
@@ -632,7 +604,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="SketchEditor"/> used for measuring areas.
+        /// Gets or sets the sketch edtiro used for measuring areas.
         /// </summary>
         public SketchEditor AreaSketchEditor
         {
@@ -666,7 +638,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Symbology.Symbol"/> used for highlighting the polyline graphic or feature whose geometry is measured for distance.
+        /// Gets or sets the symbol used for highlighting the polyline feature or graphic whose geometry is measured for distance.
         /// </summary>
         public Symbology.Symbol SelectionLineSymbol
         {
@@ -684,7 +656,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var toolbar = (MeasureToolbar)d;
             var symbol = e.NewValue as Symbology.Symbol;
-            var graphic = toolbar._measureFeatureResultOverlay.Graphics?.FirstOrDefault();
+            var graphic = toolbar._measureFeatureResultOverlay.Graphics.FirstOrDefault();
             if (graphic?.Geometry is Polyline)
             {
                 graphic.Symbol = symbol;
@@ -692,7 +664,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Symbology.Symbol"/> used for highlighting the polygon graphic or feature whose geometry is measured for area.
+        /// Gets or sets the symbol used for highlighting the polygon feature or graphic whose geometry is measured for area.
         /// </summary>
         public Symbology.Symbol SelectionFillSymbol
         {
@@ -718,7 +690,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Color"/> used for highlighting the graphic or feature whose geometry is measured for area.
+        /// Gets or sets the color used for highlighting the feature or graphic whose geometry is measured for distance or area.
         /// </summary>
         public Color SelectionColor
         {
@@ -755,7 +727,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(LinearUnits), typeof(IEnumerable<LinearUnit>), typeof(MeasureToolbar), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the <see cref="Geometry.LinearUnit"/> used to display for distance measurements.
+        /// Gets or sets the unit used to display for distance measurements.
         /// </summary>
         public LinearUnit SelectedLinearUnit
         {
@@ -772,7 +744,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnSelectedLinearUnitPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var toolbar = (MeasureToolbar)d;
-            toolbar.DisplayResult(toolbar._geometry);
+            toolbar.DisplayResult();
         }
 
         /// <summary>
@@ -791,7 +763,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(AreaUnits), typeof(IEnumerable<AreaUnit>), typeof(MeasureToolbar), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the <see cref="Geometry.AreaUnit"/> used to display for area measurements.
+        /// Gets or sets the unit used to display for area measurements.
         /// </summary>
         public AreaUnit SelectedAreaUnit
         {
@@ -808,7 +780,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnSelectedAreaUnitPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var toolbar = (MeasureToolbar)d;
-            toolbar.DisplayResult(toolbar._geometry);
+            toolbar.DisplayResult();
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <Style TargetType="{x:Type controls:MeasureToolbar}">
         <Setter Property="Template">
             <Setter.Value>
@@ -17,47 +16,52 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <ToggleButton x:Name="MeasureLength"
-                                    FontFamily="Segoe UI Symbol"
-                                    Content="&#x1f4cf;" />
+                                          ToolTip="Length"
+                                          FontFamily="Segoe UI Symbol"
+                                          Content="&#x1f4cf;" />
                             <ToggleButton x:Name="MeasureArea"
-                                    Grid.Column="1"
-                                    FontFamily="Segoe UI Symbol"
-                                    Content="&#x1f4d0;" />
+                                          ToolTip="Area"
+                                          Grid.Column="1"
+                                          FontFamily="Segoe UI Symbol"
+                                          Content="&#x1f4d0;" />
                             <ToggleButton x:Name="MeasureFeature"
-                                    Grid.Column="2"
-                                    FontFamily="Segoe UI Symbol"
-                                    Content="&#xe242;" />
+                                          ToolTip="Feature"
+                                          Grid.Column="2"
+                                          FontFamily="Segoe UI Symbol"
+                                          Content="&#xe242;" />
                             <TextBlock x:Name="MeasureResult"
                                        Grid.Column="3"
                                        TextTrimming="CharacterEllipsis" />
-                            <Grid Grid.Column="4">
-                                <ComboBox x:Name="AreaUnitsSelector"
-                                          Visibility="Collapsed"
-                                          SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedAreaUnit, Mode=TwoWay}"
-                                          ItemsSource="{TemplateBinding AreaUnits}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding PluralDisplayName}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                                <ComboBox x:Name="LinearUnitsSelector"
-                                          Visibility="Visible"
-                                          SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedLinearUnit, Mode=TwoWay}"
-                                          ItemsSource="{TemplateBinding LinearUnits}">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding PluralDisplayName}" />
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                            </Grid>
+                            <ComboBox x:Name="AreaUnitsSelector"
+                                      ToolTip="Units"
+                                      Visibility="Collapsed"
+                                      Grid.Column="4"
+                                      SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedAreaUnit, Mode=TwoWay}"
+                                      ItemsSource="{TemplateBinding AreaUnits}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PluralDisplayName}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <ComboBox x:Name="LinearUnitsSelector"
+                                      ToolTip="Units"
+                                      Visibility="Visible"
+                                      Grid.Column="4"
+                                      SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedLinearUnit, Mode=TwoWay}"
+                                      ItemsSource="{TemplateBinding LinearUnits}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PluralDisplayName}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                             <Button x:Name="Undo"
                                     Grid.Column="5"
                                     FontFamily="Segoe UI Symbol"
@@ -71,6 +75,7 @@
                                     DataContext="{TemplateBinding MapView}"
                                     Command="{Binding Path=SketchEditor.RedoCommand}" />
                             <Button x:Name="Clear"
+                                    IsEnabled="False"
                                     Grid.Column="7"
                                     FontFamily="Segoe UI Symbol"
                                     Content="&#xE107;" />
@@ -79,5 +84,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>    
+    </Style>
 </ResourceDictionary>
