@@ -13,16 +13,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.UWP", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.WPF", "Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj", "{3CB7F885-C81C-44DC-8AF6-3DBBC983422F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Shared", "Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.shproj", "{C8657C80-A1AB-4D77-9F75-C923AB330AFB}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.WPF", "Samples\Toolkit.SampleApp.WPF\Toolkit.Samples.WPF.csproj", "{75555B1C-1AED-401F-BEC6-A791AAB70D57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.iOS", "Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj", "{B845A5FB-B7BD-4085-867E-E44BF36AF5AB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Shared", "Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.shproj", "{C8657C80-A1AB-4D77-9F75-C923AB330AFB}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{3cb7f885-c81c-44dc-8af6-3dbbc983422f}*SharedItemsImports = 4
 		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{b845a5fb-b7bd-4085-867e-e44bf36af5ab}*SharedItemsImports = 4
+		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{3cb7f885-c81c-44dc-8af6-3dbbc983422f}*SharedItemsImports = 4
 		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{c8657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
