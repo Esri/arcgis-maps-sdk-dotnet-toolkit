@@ -27,7 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Shared\All\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Shared\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -41,7 +41,7 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DocumentationFile>bin\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Shared\All\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>..\Shared\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   <ItemGroup>
@@ -52,7 +52,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\Shared\All\stylecop.json" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\Shared\stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,8 +90,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <Import Project="..\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
-  <Import Project="..\Shared\Windows\Esri.ArcGISRuntime.Toolkit.Windows.Shared.projitems" Label="Shared" />
+  <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -23,6 +23,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Legend\LayerLegend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.Xamarin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\DesignTime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakEventListener.cs" />

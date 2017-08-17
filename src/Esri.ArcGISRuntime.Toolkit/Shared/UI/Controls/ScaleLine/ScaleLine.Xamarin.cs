@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if XAMARIN
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -72,3 +73,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private MapView GetMapView(ScaleLine scaleline) => scaleline.MapView;
     }
 }
+#endif

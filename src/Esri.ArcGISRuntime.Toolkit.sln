@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.UWP", "Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj", "{3596C206-41C8-4405-A5C7-382E79E8D091}"
 EndProject
@@ -13,27 +13,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.UWP", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.WPF", "Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj", "{3CB7F885-C81C-44DC-8AF6-3DBBC983422F}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Shared", "Esri.ArcGISRuntime.Toolkit\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.shproj", "{C8657C80-A1AB-4D77-9F75-C923AB330AFB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.WPF", "Samples\Toolkit.SampleApp.WPF\Toolkit.Samples.WPF.csproj", "{75555B1C-1AED-401F-BEC6-A791AAB70D57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.iOS", "Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj", "{B845A5FB-B7BD-4085-867E-E44BF36AF5AB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Windows.Shared", "Esri.ArcGISRuntime.Toolkit\Shared\Windows\Esri.ArcGISRuntime.Toolkit.Windows.Shared.shproj", "{D55ED245-40A6-4F93-88C9-4B543CC8986A}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Xamarin.Shared", "Esri.ArcGISRuntime.Toolkit\Shared\Xamarin\Esri.ArcGISRuntime.Toolkit.Xamarin.Shared.shproj", "{DDDB9800-2A3A-4FBF-8A42-859FACED24B8}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Shared", "Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.shproj", "{C8657C80-A1AB-4D77-9F75-C923AB330AFB}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Esri.ArcGISRuntime.Toolkit\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{3596c206-41c8-4405-a5c7-382e79e8d091}*SharedItemsImports = 4
-		Esri.ArcGISRuntime.Toolkit\Shared\Windows\Esri.ArcGISRuntime.Toolkit.Windows.Shared.projitems*{3596c206-41c8-4405-a5c7-382e79e8d091}*SharedItemsImports = 4
-		Esri.ArcGISRuntime.Toolkit\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{3cb7f885-c81c-44dc-8af6-3dbbc983422f}*SharedItemsImports = 4
-		Esri.ArcGISRuntime.Toolkit\Shared\Windows\Esri.ArcGISRuntime.Toolkit.Windows.Shared.projitems*{3cb7f885-c81c-44dc-8af6-3dbbc983422f}*SharedItemsImports = 4
-		Esri.ArcGISRuntime.Toolkit\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{b845a5fb-b7bd-4085-867e-e44bf36af5ab}*SharedItemsImports = 4
-		Esri.ArcGISRuntime.Toolkit\Shared\Xamarin\Esri.ArcGISRuntime.Toolkit.Xamarin.Shared.projitems*{b845a5fb-b7bd-4085-867e-e44bf36af5ab}*SharedItemsImports = 4
-		Esri.ArcGISRuntime.Toolkit\Shared\All\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{c8657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit\Shared\Windows\Esri.ArcGISRuntime.Toolkit.Windows.Shared.projitems*{d55ed245-40a6-4f93-88c9-4b543cc8986a}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit\Shared\Xamarin\Esri.ArcGISRuntime.Toolkit.Xamarin.Shared.projitems*{dddb9800-2a3a-4fbf-8a42-859faced24b8}*SharedItemsImports = 13
+		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{3cb7f885-c81c-44dc-8af6-3dbbc983422f}*SharedItemsImports = 4
+		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{b845a5fb-b7bd-4085-867e-e44bf36af5ab}*SharedItemsImports = 4
+		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{c8657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,10 +132,8 @@ Global
 		{3596C206-41C8-4405-A5C7-382E79E8D091} = {30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}
 		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1} = {FB597A95-9488-44D2-B5CC-F2FFAD2A29CD}
 		{3CB7F885-C81C-44DC-8AF6-3DBBC983422F} = {30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}
-		{C8657C80-A1AB-4D77-9F75-C923AB330AFB} = {30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}
 		{75555B1C-1AED-401F-BEC6-A791AAB70D57} = {FB597A95-9488-44D2-B5CC-F2FFAD2A29CD}
 		{B845A5FB-B7BD-4085-867E-E44BF36AF5AB} = {30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}
-		{D55ED245-40A6-4F93-88C9-4B543CC8986A} = {30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}
-		{DDDB9800-2A3A-4FBF-8A42-859FACED24B8} = {30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}
+		{C8657C80-A1AB-4D77-9F75-C923AB330AFB} = {30B1D58C-DDDA-40F3-ACAB-A5516896AB4B}
 	EndGlobalSection
 EndGlobal
