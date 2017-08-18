@@ -42,6 +42,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The MeasureToolbar control is used to measure distances and areas on a <see cref="MapView"/>.
     /// </summary>
+    [TemplatePart(Name = "MeasureLength", Type = typeof(ToggleButton))]
+    [TemplatePart(Name = "MeasureArea", Type = typeof(ToggleButton))]
+    [TemplatePart(Name = "MeasureResult", Type = typeof(TextBlock))]
     public class MeasureToolbar : Control
     {
         // Supported measure mode
@@ -140,11 +143,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             _measureResultTextBlock = GetTemplateChild("MeasureResult") as TextBlock;
-            if (_measureResultTextBlock != null)
-            {
-                _measureResultTextBlock.Text = "Toggle a measure mode";
-            }
-
             _linearUnitsSelector = GetTemplateChild("LinearUnitsSelector") as UIElement;
             _areaUnitsSelector = GetTemplateChild("AreaUnitsSelector") as UIElement;
             if (LinearUnits == null || !LinearUnits.Any())
@@ -211,6 +209,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             Mode = MeasureToolbarMode.None;
+            PrepareMeasureMode();
         }
 
         /// <summary>
@@ -230,12 +229,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var sketchEditor = isMeasuringLength ?
                 LineSketchEditor :
                 (isMeasuringArea ? AreaSketchEditor : _originalSketchEditor);
-            if (MapView.SketchEditor != sketchEditor)
+            if (MapView != null)
             {
-                MapView.SketchEditor = sketchEditor;
+                if (MapView.SketchEditor != sketchEditor)
+                {
+                    MapView.SketchEditor = sketchEditor;
+                }
+
+                MapView.SketchEditor.IsVisible = isMeasuringLength || isMeasuringArea;
             }
 
-            MapView.SketchEditor.IsVisible = isMeasuringLength || isMeasuringArea;
             _measureFeatureResultOverlay.IsVisible = isMeasuringFeature;
 
             if (_measureLengthButton != null)
@@ -269,14 +272,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (isMeasuringLength || isMeasuringArea)
                 {
-                    Binding binding = new Binding();
-                    binding.Path = new PropertyPath(nameof(SketchEditor.CancelCommand));
-                    _clearButton.DataContext = MapView.SketchEditor;
-                    _clearButton.SetBinding(ButtonBase.CommandProperty, binding);
+                    _clearButton.IsEnabled = MapView.SketchEditor.Geometry != null;
                 }
                 else
                 {
-                    _clearButton.ClearValue(ButtonBase.CommandProperty);
+                    _clearButton.IsEnabled = _measureFeatureResultOverlay.Graphics.Any();
                 }
             }
         }
@@ -341,7 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     measurement = GeometryEngine.AreaGeodetic(geometry, SelectedAreaUnit, GeodeticCurveType.ShapePreserving);
                 }
 
-                if (measurement == 0)
+                if (geometry == null)
                 {
                     var instruction = Mode == MeasureToolbarMode.None ?
                         "Toggle a measure mode" : (Mode == MeasureToolbarMode.Feature ? "Tap a feature" : "Tap to sketch");
@@ -367,15 +367,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
                toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
                MeasureToolbarMode.None;
-            while (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
+            if (MapView.SketchEditor.Geometry == null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
             {
                 try
                 {
-                    if (MapView.SketchEditor.Geometry != null)
-                    {
-                        break;
-                    }
-
                     var creationMode = Mode == MeasureToolbarMode.Line ? SketchCreationMode.Polyline : SketchCreationMode.Polygon;
                     var geometry = await MapView.SketchEditor.StartAsync(creationMode);
                     DisplayResult(geometry);
@@ -387,12 +382,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     System.Diagnostics.Debug.WriteLine(ex.Message, ex.GetType().Name);
                 }
-
-                Mode = toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
-                    (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
-                    toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
-                    toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
-                    MeasureToolbarMode.None;
             }
         }
 
@@ -403,6 +392,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="e">Data for the GeometryChanged event</param>
         private void OnGeometryChanged(object sender, GeometryChangedEventArgs e)
         {
+            if (_clearButton != null)
+            {
+                _clearButton.IsEnabled = e.NewGeometry != null;
+            }
             DisplayResult(e.NewGeometry);
         }
 
@@ -508,10 +501,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {
-                if (MapView.SketchEditor.CancelCommand.CanExecute(null))
-                {
-                    MapView.SketchEditor.CancelCommand.CanExecute(null);
-                }
+                MapView.SketchEditor.ClearGeometry();
             }
             else if (Mode == MeasureToolbarMode.Feature)
             {

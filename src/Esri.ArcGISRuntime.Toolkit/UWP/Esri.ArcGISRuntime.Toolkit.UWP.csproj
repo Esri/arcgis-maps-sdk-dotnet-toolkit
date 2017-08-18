@@ -59,7 +59,6 @@
     <Compile Include="Resources.cs" />
     <EmbeddedResource Include="Properties\Esri.ArcGISRuntime.Toolkit.rd.xml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Page Include="UI\Controls\Compass\Compass.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -94,6 +93,24 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Clear.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\MeasureArea.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\MeasureFeature.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\MeasureLength.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Redo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Undo.scale-200.png" />
   </ItemGroup>
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
