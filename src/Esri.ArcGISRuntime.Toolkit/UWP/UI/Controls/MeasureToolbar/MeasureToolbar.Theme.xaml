@@ -40,9 +40,17 @@
                                 </Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment"
-                                            Value="Stretch" />
+                                            Value="Left" />
                                     <Setter Property="VerticalAlignment"
-                                            Value="Stretch" />
+                                            Value="Center" />
+                                    <Setter Property="Padding"
+                                            Value="8,4,8,4" />
+                                </Style>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Left" />
+                                    <Setter Property="VerticalContentAlignment"
+                                            Value="Center" />
                                 </Style>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
