@@ -130,22 +130,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Clear.scale-200.png" />
+    <Resource Include="Assets\MeasureArea.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\MeasureArea.scale-200.png" />
+    <Resource Include="Assets\MeasureFeature.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\MeasureFeature.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\MeasureLength.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Redo.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Undo.scale-200.png" />
+    <Resource Include="Assets\MeasureLength.png" />
   </ItemGroup>
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -396,6 +396,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _clearButton.IsEnabled = e.NewGeometry != null;
             }
+
             DisplayResult(e.NewGeometry);
         }
 
@@ -412,7 +413,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             var identifyLayersResult = await MapView.IdentifyLayersAsync(e.Position, 2, false);
-           var geometry = GetGeometry(identifyLayersResult);
+            var geometry = GetGeometry(identifyLayersResult);
             if (geometry == null)
             {
                 var identifyGraphicsOverlaysResult = await MapView.IdentifyGraphicsOverlaysAsync(e.Position, 2, false);
@@ -430,14 +431,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 symbol = SelectionFillSymbol;
             }
 
-            var graphic = _measureFeatureResultOverlay.Graphics.FirstOrDefault();
-            if (graphic == null)
+            if (geometry != null)
             {
-                _measureFeatureResultOverlay.Graphics.Add(new Graphic(geometry, symbol) { IsSelected = true });
-            }
-            else
-            {
-                graphic.Geometry = geometry;
+                var graphic = _measureFeatureResultOverlay.Graphics.FirstOrDefault();
+                if (graphic == null)
+                {
+                    _measureFeatureResultOverlay.Graphics.Add(new Graphic(geometry, symbol) { IsSelected = true });
+                }
+                else
+                {
+                    graphic.Geometry = geometry;
+                }
             }
 
             DisplayResult(geometry);

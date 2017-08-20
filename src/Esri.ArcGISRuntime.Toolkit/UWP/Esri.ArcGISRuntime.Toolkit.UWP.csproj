@@ -95,22 +95,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Clear.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Assets\MeasureArea.scale-200.png" />
+    <Content Include="Assets\MeasureAreaDark.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\MeasureFeature.scale-200.png" />
+    <Content Include="Assets\MeasureFeatureDark.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\MeasureLength.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Redo.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\Undo.scale-200.png" />
+    <Content Include="Assets\MeasureLengthDark.scale-200.png" />
   </ItemGroup>
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

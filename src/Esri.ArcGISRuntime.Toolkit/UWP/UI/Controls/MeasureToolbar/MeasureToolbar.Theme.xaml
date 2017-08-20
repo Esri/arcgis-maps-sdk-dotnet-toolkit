@@ -1,6 +1,32 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <BitmapImage x:Key="MeasureLengthImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureLength.png" />
+            <BitmapImage x:Key="MeasureAreaImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureArea.png" />
+            <BitmapImage x:Key="MeasureFeatureImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeature.png" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <BitmapImage x:Key="MeasureLengthImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureLength.png" />
+            <BitmapImage x:Key="MeasureAreaImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureArea.png" />
+            <BitmapImage x:Key="MeasureFeatureImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeature.png" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <BitmapImage x:Key="MeasureLengthImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureLengthDark.png" />
+            <BitmapImage x:Key="MeasureAreaImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureAreaDark.png" />
+            <BitmapImage x:Key="MeasureFeatureImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeatureDark.png" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
     <Style TargetType="controls:MeasureToolbar">
         <Setter Property="Background"
                 Value="{ThemeResource ComboBoxBackground}" />
@@ -25,70 +51,70 @@
                             MinWidth="{TemplateBinding MinWidth}"
                             MaxWidth="{TemplateBinding MaxWidth}">
                         <Grid>
-                            <Grid.Resources>
-                                <Style TargetType="Image">
-                                    <Setter Property="Height"
-                                            Value="20" />
-                                    <Setter Property="Width"
-                                            Value="20" />
-                                    <Setter Property="Stretch"
-                                            Value="UniformToFill" />
-                                </Style>
-                                <Style TargetType="ToggleButton">
-                                    <Setter Property="Padding"
-                                            Value="8,4,8,4" />
-                                </Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="HorizontalAlignment"
-                                            Value="Left" />
-                                    <Setter Property="VerticalAlignment"
-                                            Value="Center" />
-                                    <Setter Property="Padding"
-                                            Value="8,4,8,4" />
-                                </Style>
-                                <Style TargetType="ComboBox">
-                                    <Setter Property="HorizontalContentAlignment"
-                                            Value="Left" />
-                                    <Setter Property="VerticalContentAlignment"
-                                            Value="Center" />
-                                </Style>
-                            </Grid.Resources>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <ToggleButton x:Name="MeasureLength"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
                                           ToolTipService.ToolTip="Length">
                                 <ToggleButton.Content>
-                                    <Image Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureLength.png" />
+                                    <Image Source="{ThemeResource MeasureLengthImage}"
+                                           Height="20"
+                                           Width="20"
+                                           Stretch="UniformToFill" />
                                 </ToggleButton.Content>
                             </ToggleButton>
                             <ToggleButton x:Name="MeasureArea"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
                                           ToolTipService.ToolTip="Area"
                                           Grid.Column="1">
                                 <ToggleButton.Content>
-                                    <Image Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureArea.png" />
+                                    <Image Source="{ThemeResource MeasureAreaImage}"
+                                           Height="20"
+                                           Width="20"
+                                           Stretch="UniformToFill" />
                                 </ToggleButton.Content>
                             </ToggleButton>
                             <ToggleButton x:Name="MeasureFeature"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
                                           ToolTipService.ToolTip="Feature"
                                           Grid.Column="2">
                                 <ToggleButton.Content>
-                                    <Image Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeature.png" />
+                                    <Image Source="{ThemeResource MeasureFeatureImage}"
+                                           Height="20"
+                                           Width="20"
+                                           Stretch="UniformToFill" />
                                 </ToggleButton.Content>
                             </ToggleButton>
                             <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="8,4,8,4"
                                     Grid.Column="3">
                                 <TextBlock x:Name="MeasureResult"
-                                           TextTrimming="CharacterEllipsis" />
+                                           TextTrimming="CharacterEllipsis"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center" />
                             </Border>
                             <ComboBox x:Name="AreaUnitsSelector"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Center"
                                       ToolTipService.ToolTip="Units"
                                       Visibility="Collapsed"
                                       Grid.Column="4"
@@ -101,6 +127,8 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                             <ComboBox x:Name="LinearUnitsSelector"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Center"
                                       ToolTipService.ToolTip="Units"
                                       Visibility="Visible"
                                       Grid.Column="4"
@@ -113,30 +141,42 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                             <Button x:Name="Undo"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Undo"
                                     Grid.Column="5"
                                     DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=SketchEditor.UndoCommand}">
-                                <Button.Content>
-                                    <Image Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/Undo.png" />
-                                </Button.Content>
-                            </Button>
+                                    Command="{Binding Path=SketchEditor.UndoCommand}"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Content="&#xE7A7;" />
                             <Button x:Name="Redo"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Redo"
                                     Grid.Column="6"
                                     DataContext="{TemplateBinding MapView}"
-                                    Command="{Binding Path=SketchEditor.RedoCommand}">
-                                <Button.Content>
-                                    <Image Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/Redo.png" />
-                                </Button.Content>
-                            </Button>
+                                    Command="{Binding Path=SketchEditor.RedoCommand}"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Content="&#xE7A6;" />
                             <Button x:Name="Clear"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
                                     ToolTipService.ToolTip="Clear"
-                                    Grid.Column="7">
-                                <Button.Content>
-                                    <Image Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/Clear.png" />
-                                </Button.Content>
-                            </Button>
+                                    Grid.Column="7"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Content="&#xE74D;" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
