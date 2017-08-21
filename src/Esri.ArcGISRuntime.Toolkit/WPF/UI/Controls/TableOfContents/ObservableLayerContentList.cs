@@ -50,8 +50,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend) : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend)
         {
         }
-        
 
+        private bool _reverseOrder;
+
+        public bool ReverseOrder
+        {
+            get { return _reverseOrder; }
+            set
+            {
+                if (_reverseOrder != value)
+                {
+                    _reverseOrder = value;
+                    _activeLayers.Reverse();
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+                }
+            }
+        }
+        
         private bool IncludeLayer(Mapping.Layer layer)
         {
             if (layer.ShowInLegend)
@@ -63,11 +79,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private int GetIndexOfLayer(Mapping.Layer layer)
         {
             int i = 0;
-            foreach (var item in _allLayers)
+            foreach (var item in (ReverseOrder ? _allLayers.Reverse() : _allLayers))
             {
                 if (item == layer)
                     return i;
-                if (layer.ShowInLegend)
+                if (IncludeLayer(item) && _activeLayers.Any(l=>l.LayerContent == item))
                 {
                     i++;
                 }
@@ -167,7 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc cref="IReadOnlyList{T}.this"/>
         public LayerContentViewModel this[int index]
         {
-            get { return _activeLayers[Count - index - 1]; }
+            get { return _activeLayers [index]; }
             set { throw new InvalidOperationException("ReadOnly"); }
         }
 
@@ -180,7 +196,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
         public IEnumerator<LayerContentViewModel> GetEnumerator()
         {
-            for (int i = _activeLayers.Count - 1; i >= 0 ; i--)
+            for (int i = 0; i < _activeLayers.Count; i++)
             {
                 yield return _activeLayers[i];
             }

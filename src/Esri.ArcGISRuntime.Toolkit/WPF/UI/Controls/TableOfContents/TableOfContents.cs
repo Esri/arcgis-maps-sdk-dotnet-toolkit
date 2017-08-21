@@ -172,7 +172,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var map = (GeoView as MapView).Map;
                         if (map != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegend);
+                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegend) { ReverseOrder = true };
                         }
                         System.Windows.Data.Binding b = new System.Windows.Data.Binding();
                         b.Source = GeoView;
@@ -184,7 +184,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         var scene = (GeoView as SceneView).Scene;
                         if(scene != null)
-                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegend);
+                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegend) { ReverseOrder = true };
                         System.Windows.Data.Binding b = new System.Windows.Data.Binding();
                         b.Source = GeoView;
                         b.Path = new PropertyPath(nameof(SceneView.Scene));
@@ -246,6 +246,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnShowLegendPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((TableOfContents)d).RebuildList();
+        }
+
+        /// <summary>
+        /// Changes the visible display order. If true, the bottom layer is showed last in the Table of Contents.
+        /// </summary>
+        public bool ReverseOrder
+        {
+            get { return (bool)GetValue(ReverseOrderProperty); }
+            set { SetValue(ReverseOrderProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ReverseOrder"/> dependency property.
+        /// </summary>        
+        public static readonly DependencyProperty ReverseOrderProperty =
+            DependencyProperty.Register("ReverseOrder", typeof(bool), typeof(TableOfContents), new PropertyMetadata(true, OnReverseOrderPropertyChanged));
+
+        private static void OnReverseOrderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((TableOfContents)d).layerContentList.ReverseOrder = (bool)e.NewValue;
         }
     }
 }

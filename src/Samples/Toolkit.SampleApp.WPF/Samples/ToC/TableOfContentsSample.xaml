@@ -19,10 +19,12 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <esri:TableOfContents Grid.Row="0" x:Name="toc"
                               GeoView="{Binding ElementName=mapView}" ShowLegend="False" />
             <CheckBox Content="Show Legend" IsChecked="{Binding ShowLegend, ElementName=toc, Mode=TwoWay}" Grid.Row="1" />
+            <CheckBox Content="Reverse Order" IsChecked="{Binding ReverseOrder, ElementName=toc, Mode=TwoWay}" Grid.Row="2" />
         </Grid>
 
 
