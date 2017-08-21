@@ -112,7 +112,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (loadable.LoadStatus != LoadStatus.Loaded)
                 {
                     loadable.Loaded += OnLayerContentLoaded;
-                    return;
                 }
             }
             if (LayerContent.SublayerContents != null && LayerContent.SublayerContents.Count > 0)
