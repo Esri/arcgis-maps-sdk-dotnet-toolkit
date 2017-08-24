@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private SketchEditor _originalSketchEditor;
 
         // Used for highlighting feature for measurement
-        private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay() { Id = "MeasureFeatureResultOverlay" };
+        private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MeasureToolbar"/> class.
@@ -137,6 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                       if (Mode == MeasureToolbarMode.Feature)
                       {
                           _clearButton.IsEnabled = _measureFeatureResultOverlay.Graphics.Any();
+                          AddMeasureFeatureResultOverlay(MapView);
                       }
                   };
                 _clearButton.Click += OnClear;
@@ -237,9 +238,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 MapView.SketchEditor.IsVisible = isMeasuringLength || isMeasuringArea;
-            }
 
-            _measureFeatureResultOverlay.IsVisible = isMeasuringFeature;
+                if (isMeasuringFeature)
+                {
+                    AddMeasureFeatureResultOverlay(MapView);
+                }
+                else
+                {
+                    RemoveMeasureFeatureResultOverlay(MapView);
+                }
+            }
 
             if (_measureLengthButton != null)
             {
@@ -447,6 +455,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DisplayResult(geometry);
         }
 
+        private void RemoveMeasureFeatureResultOverlay(MapView mapView)
+        {
+            if (mapView?.GraphicsOverlays != null && mapView.GraphicsOverlays.Contains(_measureFeatureResultOverlay))
+            {
+                mapView.GraphicsOverlays.Remove(_measureFeatureResultOverlay);
+            }
+        }
+
+        private void AddMeasureFeatureResultOverlay(MapView mapView)
+        {
+            if (mapView == null || !_measureFeatureResultOverlay.Graphics.Any())
+            {
+                return;
+            }
+
+            if (mapView.GraphicsOverlays == null)
+            {
+                mapView.GraphicsOverlays = new GraphicsOverlayCollection();
+            }
+
+            if (!mapView.GraphicsOverlays.Contains(_measureFeatureResultOverlay))
+            {
+                mapView.GraphicsOverlays.Add(_measureFeatureResultOverlay);
+            }
+        }
+
         /// <summary>
         /// Recursively checks SublayerResults and returns the geometry of the first polyline or polygon feature.
         /// </summary>
@@ -544,22 +578,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 oldMapView.SketchEditor = toolbar._originalSketchEditor;
                 oldMapView.GeoViewTapped -= toolbar.OnMapViewTapped;
-                if (oldMapView.GraphicsOverlays.Any(o => o == toolbar._measureFeatureResultOverlay))
-                {
-                    oldMapView.GraphicsOverlays.Remove(toolbar._measureFeatureResultOverlay);
-                }
+                toolbar.RemoveMeasureFeatureResultOverlay(oldMapView);
             }
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
             toolbar._originalSketchEditor = newMapView.SketchEditor;
-
-            if (newMapView.GraphicsOverlays == null)
-            {
-                newMapView.GraphicsOverlays = new GraphicsOverlayCollection();
-            }
-
-            newMapView.GraphicsOverlays.Add(toolbar._measureFeatureResultOverlay);
-
             toolbar.DisplayResult(newMapView.SketchEditor.Geometry);
         }
 
@@ -676,7 +699,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var toolbar = (MeasureToolbar)d;
             var symbol = e.NewValue as Symbology.Symbol;
-            var graphic = toolbar._measureFeatureResultOverlay.Graphics?.FirstOrDefault();
+            var graphic = toolbar._measureFeatureResultOverlay.Graphics.FirstOrDefault();
             if (graphic?.Geometry is Polygon || graphic?.Geometry is Envelope)
             {
                 graphic.Symbol = symbol;
