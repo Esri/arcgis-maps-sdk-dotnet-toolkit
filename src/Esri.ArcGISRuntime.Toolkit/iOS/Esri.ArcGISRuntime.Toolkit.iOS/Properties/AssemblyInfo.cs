@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2017 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -15,18 +15,25 @@
 //  ******************************************************************************/
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following
+// General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Esri.ArcGISRuntime.Toolkit.UI")]
+[assembly: AssemblyTitle("Esri.ArcGISRuntime.Toolkit")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit.UI")]
-[assembly: AssemblyCopyright("Copyright © ESRI 2016")]
+[assembly: AssemblyCompany("Esri")]
+[assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit")]
+[assembly: AssemblyCopyright("Copyright ©Esri 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("b845a5fb-b7bd-4085-867e-e44bf36af5ab")]
