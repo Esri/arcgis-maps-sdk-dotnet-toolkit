@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal static class FeatureHelper
     {
-        public static Field GetField(this ArcGISFeature feature, string fieldName)
+        public static Field GetField(this Feature feature, string fieldName)
         {
             return feature?.FeatureTable?.Fields?.FirstOrDefault(f => f.Name == fieldName);
         }

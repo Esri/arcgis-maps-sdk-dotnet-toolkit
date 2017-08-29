@@ -35,7 +35,7 @@ using Esri.ArcGISRuntime.Data;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// The FeatureDataField control is used to display or edit a single field attribute of an <see cref="ArcGISFeature"/>.
+    /// The FeatureDataField control is used to display or edit a single field attribute of an <see cref="Feature"/>.
     /// </summary>
     public class FeatureDataField : Control
     {
@@ -85,11 +85,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ArcGISFeature">Feature</see> that owns the field attribute the schema and values of fields.
+        /// Gets or sets the <see cref="Data.Feature">Feature</see> that owns the field attribute the schema and values of fields.
         /// </summary>
-        public ArcGISFeature Feature
+        public Feature Feature
         {
-            get { return (ArcGISFeature)GetValue(FeatureProperty); }
+            get { return (Feature)GetValue(FeatureProperty); }
             set { SetValue(FeatureProperty, value); }
         }
 
@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="Feature"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty FeatureProperty =
-            DependencyProperty.Register(nameof(Feature), typeof(ArcGISFeature), typeof(FeatureDataField), new PropertyMetadata(null, OnFeaturePropertyChanged));
+            DependencyProperty.Register(nameof(Feature), typeof(Feature), typeof(FeatureDataField), new PropertyMetadata(null, OnFeaturePropertyChanged));
 
         private static void OnFeaturePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
