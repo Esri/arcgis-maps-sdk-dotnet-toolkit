@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !XAMARIN
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -801,3 +802,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#endif
