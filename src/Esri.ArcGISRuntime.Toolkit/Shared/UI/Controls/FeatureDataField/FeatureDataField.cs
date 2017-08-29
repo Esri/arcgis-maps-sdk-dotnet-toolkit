@@ -410,7 +410,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return;
             }
-            
+
             _field = Feature.GetField(FieldName);
 
             if (_field == null)
