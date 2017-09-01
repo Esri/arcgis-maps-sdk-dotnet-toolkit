@@ -108,3 +108,6 @@ Backup*/
 UpgradeLog*.XML
 output/
 project.lock.json
+
+# UWP auto-generated NuGet file
+*.nuget.targets
