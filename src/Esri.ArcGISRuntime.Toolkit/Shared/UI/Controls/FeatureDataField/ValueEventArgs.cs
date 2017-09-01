@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
 using System;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -42,4 +41,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public object NewValue { get; private set; }
     }
 }
-#endif

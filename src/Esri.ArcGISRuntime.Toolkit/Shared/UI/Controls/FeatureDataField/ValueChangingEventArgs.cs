@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
 using System;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -35,4 +34,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Exception ValidationException { get; set; }
     }
 }
-#endif
