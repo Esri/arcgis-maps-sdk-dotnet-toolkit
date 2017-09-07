@@ -720,7 +720,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="SelectionColor"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SelectionColorProperty =
-            DependencyProperty.Register(nameof(SelectionColor), typeof(Color), typeof(MeasureToolbar), new PropertyMetadata(Colors.Cyan, OnSelectionFillSymbolPropertyChanged));
+            DependencyProperty.Register(nameof(SelectionColor), typeof(Color), typeof(MeasureToolbar), new PropertyMetadata(Colors.Cyan, OnSelectionColorPropertyChanged));
 
         private static void OnSelectionColorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
