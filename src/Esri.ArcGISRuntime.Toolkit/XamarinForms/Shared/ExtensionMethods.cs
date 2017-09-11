@@ -17,10 +17,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
     {
         internal static NativeColor ToNativeColor(this Color color)
         {
+            var a = (byte)(255 * color.A);
+            var r = (byte)(255 * color.R);
+            var g = (byte)(255 * color.G);
+            var b = (byte)(255 * color.B);
 #if NETFX_CORE
-            return NativeColor.FromArgb((byte)color.A, (byte)color.R, (byte)color.G, (byte)color.B);
+            return NativeColor.FromArgb(a, r, g, b);
 #elif __ANDROID__
-            return NativeColor.Argb((int)color.A, (int)color.R, (int)color.G, (int)color.B);
+            return NativeColor.Argb(a, r, g, b);
 #endif
         }
 
