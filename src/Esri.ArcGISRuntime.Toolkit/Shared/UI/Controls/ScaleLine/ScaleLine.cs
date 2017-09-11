@@ -53,11 +53,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        public ScaleLine
+        public ScaleLine ()
 #if __ANDROID__
-            (Android.Content.Context context) : base(context)
-#else
-            ()
+            : base(Android.App.Application.Context)
 #endif
             => Initialize();
 
