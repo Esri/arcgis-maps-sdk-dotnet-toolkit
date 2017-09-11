@@ -54,6 +54,8 @@
     </Compile>
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Controls\ScaleLine.Android.cs" />
+    <Compile Include="UI\RectangleView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
