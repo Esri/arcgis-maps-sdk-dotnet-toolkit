@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
-    <AssemblyName>Esri.ArcGISRuntime.Toolkit.Android</AssemblyName>
+    <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
