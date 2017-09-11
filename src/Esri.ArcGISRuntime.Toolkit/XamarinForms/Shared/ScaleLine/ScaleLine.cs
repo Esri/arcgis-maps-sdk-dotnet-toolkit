@@ -19,6 +19,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         internal ScaleLine(UI.Controls.ScaleLine nativeScaleLine)
         {
             NativeScaleLine = nativeScaleLine;
+
+#if NETFX_CORE
+            nativeScaleLine.SizeChanged += (o, e) => InvalidateMeasure();
+#endif
         }
 
         internal readonly UI.Controls.ScaleLine NativeScaleLine;
@@ -41,8 +45,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private static void OnTargetWidthChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var nativeView = ((ScaleLine)bindable).NativeScaleLine;
-            if (nativeView != null)
-                nativeView.TargetWidth = newValue != null ? (double)newValue : nativeView.TargetWidth;
+            if (newValue != null)
+                nativeView.TargetWidth = (double)newValue;
         }
 
         /// <summary>
@@ -110,8 +114,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private static void OnMapScaleChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var nativeView = ((ScaleLine)bindable).NativeScaleLine;
-            if (nativeView != null)
-                nativeView.MapScale = newValue != null ? (double)newValue : nativeView.MapScale;
+            if (newValue != null)
+                nativeView.MapScale = (double)newValue;
         }
 
         /// <summary>
@@ -132,16 +136,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private static void OnForegroundChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var nativeView = ((ScaleLine)bindable).NativeScaleLine;
-            if (nativeView != null)
-                nativeView.ForegroundColor = newValue != null ? ((Color)newValue).ToNativeColor() : nativeView.ForegroundColor;
+            if (newValue != null)
+                nativeView.SetForeground(((Color)newValue).ToNativeColor());
         }
 
         private void MapView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var view = GetMapView(this);
-            if ((e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating)) && !view.IsNavigating)
+            if ((e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating)))
             {
-                MapScale = CalculateScale(view.VisibleArea, view.UnitsPerPixel);
+                var mapView = GetMapView(this);
+                if (mapView.IsNavigating)
+                    return;
+                MapScale = CalculateScale(mapView.VisibleArea, mapView.UnitsPerPixel);
+                InvalidateMeasure();
             }
         }
 

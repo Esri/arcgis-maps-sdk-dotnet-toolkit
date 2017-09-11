@@ -9,6 +9,7 @@ using NativePoint = Windows.Foundation.Point;
 #endif
 #if NETFX_CORE
 using NativeColor = Windows.UI.Color;
+using Windows.UI.Xaml.Media;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
@@ -28,9 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
 #endif
         }
 
-        internal static Color ToXamarinFormsColor(this NativeColor color)
+        internal static void SetForeground(this UI.Controls.ScaleLine scaleline, NativeColor color)
         {
-            return Color.FromRgba(color.R, color.G, color.B, color.A);
+#if NETFX_CORE
+            scaleline.Foreground = new SolidColorBrush(color);
+#else
+            scaleline.ForegroundColor = color;
+#endif
         }
     }
 }
