@@ -165,7 +165,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (SelectedLinearUnit == null)
             {
-                SelectedLinearUnit = Geometry.LinearUnits.Meters;
+                SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ? 
+                    Geometry.LinearUnits.Meters :
+                    LinearUnits.FirstOrDefault();
             }
 
             if (AreaUnits == null || !AreaUnits.Any())
@@ -187,7 +189,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (SelectedAreaUnit == null)
             {
-                SelectedAreaUnit = Geometry.AreaUnits.SquareMiles;
+                SelectedAreaUnit = AreaUnits.Any(u => u == Geometry.AreaUnits.SquareMiles) ?
+                    Geometry.AreaUnits.SquareMiles :
+                    AreaUnits.FirstOrDefault();
             }
 
             if (LineSketchEditor == null)
@@ -449,6 +453,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else
                 {
+                    graphic.Symbol = symbol;
                     graphic.Geometry = geometry;
                 }
             }
