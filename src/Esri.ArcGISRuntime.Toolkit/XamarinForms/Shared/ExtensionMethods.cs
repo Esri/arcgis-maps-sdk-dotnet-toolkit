@@ -1,13 +1,9 @@
 ﻿using Xamarin.Forms;
 #if __ANDROID__
-using NativePoint = Android.Graphics.PointF;
 using NativeColor = Android.Graphics.Color;
 #elif __IOS__
-using NativePoint = CoreGraphics.CGPoint;
+using NativeColor = UIKit.UIColor;
 #elif NETFX_CORE
-using NativePoint = Windows.Foundation.Point;
-#endif
-#if NETFX_CORE
 using NativeColor = Windows.UI.Color;
 using Windows.UI.Xaml.Media;
 #endif
@@ -26,6 +22,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
             return NativeColor.FromArgb(a, r, g, b);
 #elif __ANDROID__
             return NativeColor.Argb(a, r, g, b);
+#elif __IOS__
+            return NativeColor.FromRGBA(r, g, b, a);
 #endif
         }
 

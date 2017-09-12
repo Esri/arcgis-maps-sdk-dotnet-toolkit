@@ -29,11 +29,14 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.UWP", "Esri.ArcGISRuntime.Toolkit\XamarinForms\UWP\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.UWP.csproj", "{789DFC6B-E631-4002-90A4-CA6609DB4CAE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.iOS", "Esri.ArcGISRuntime.Toolkit\XamarinForms\iOS\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.iOS.csproj", "{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{3596c206-41c8-4405-a5c7-382e79e8d091}*SharedItemsImports = 4
 		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{3cb7f885-c81c-44dc-8af6-3dbbc983422f}*SharedItemsImports = 4
 		Esri.ArcGISRuntime.Toolkit\XamarinForms\Shared\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Shared.projitems*{789dfc6b-e631-4002-90a4-ca6609db4cae}*SharedItemsImports = 4
+		Esri.ArcGISRuntime.Toolkit\XamarinForms\Shared\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Shared.projitems*{a3c4f5ed-a5bf-4fac-9d20-9b4222578333}*SharedItemsImports = 4
 		Esri.ArcGISRuntime.Toolkit\XamarinForms\Shared\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Shared.projitems*{a8c6414a-fbe0-40d6-ab0e-5f35cde53b4a}*SharedItemsImports = 4
 		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{b845a5fb-b7bd-4085-867e-e44bf36af5ab}*SharedItemsImports = 4
 		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{c8657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
@@ -187,6 +190,22 @@ Global
 		{789DFC6B-E631-4002-90A4-CA6609DB4CAE}.Release|x64.Build.0 = Release|x64
 		{789DFC6B-E631-4002-90A4-CA6609DB4CAE}.Release|x86.ActiveCfg = Release|x86
 		{789DFC6B-E631-4002-90A4-CA6609DB4CAE}.Release|x86.Build.0 = Release|x86
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|x64.Build.0 = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Debug|x86.Build.0 = Debug|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|ARM.Build.0 = Release|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|x64.ActiveCfg = Release|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|x64.Build.0 = Release|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|x86.ActiveCfg = Release|Any CPU
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -203,6 +222,7 @@ Global
 		{A8C6414A-FBE0-40D6-AB0E-5F35CDE53B4A} = {4AF3E27B-DCAB-4819-8ECE-C55FCF54391A}
 		{D3D6AAED-8C2E-4177-B59C-C640E3681B3D} = {4AF3E27B-DCAB-4819-8ECE-C55FCF54391A}
 		{789DFC6B-E631-4002-90A4-CA6609DB4CAE} = {4AF3E27B-DCAB-4819-8ECE-C55FCF54391A}
+		{A3C4F5ED-A5BF-4FAC-9D20-9B4222578333} = {4AF3E27B-DCAB-4819-8ECE-C55FCF54391A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E4123114-3398-48EA-ACDD-7F636647FF6B}

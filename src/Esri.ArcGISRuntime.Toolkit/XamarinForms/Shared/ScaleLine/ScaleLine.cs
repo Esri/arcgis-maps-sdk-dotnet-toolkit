@@ -44,9 +44,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnTargetWidthChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var nativeView = ((ScaleLine)bindable).NativeScaleLine;
             if (newValue != null)
-                nativeView.TargetWidth = (double)newValue;
+            {
+                var scaleline = (ScaleLine)bindable;
+                scaleline.NativeScaleLine.TargetWidth = (double)newValue;
+                scaleline.InvalidateMeasure();
+            }
         }
 
         /// <summary>
@@ -113,9 +116,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnMapScaleChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var nativeView = ((ScaleLine)bindable).NativeScaleLine;
             if (newValue != null)
-                nativeView.MapScale = (double)newValue;
+            {
+                var scaleline = (ScaleLine)bindable;
+                scaleline.NativeScaleLine.MapScale = (double)newValue;
+                scaleline.InvalidateMeasure();
+            }
         }
 
         /// <summary>
@@ -148,7 +154,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 if (mapView.IsNavigating)
                     return;
                 MapScale = CalculateScale(mapView.VisibleArea, mapView.UnitsPerPixel);
-                InvalidateMeasure();
             }
         }
 

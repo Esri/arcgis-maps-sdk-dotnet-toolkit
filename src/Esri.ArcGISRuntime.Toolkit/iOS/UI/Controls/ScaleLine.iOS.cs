@@ -36,6 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private RectangleView _firstUsTickLine;
         private RectangleView _secondUsTickLine;
         private RectangleView _combinedScaleLine;
+        private UIStackView _rootStackView;
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
         /// <summary>
@@ -69,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Hidden = true;
 
             // Vertically-oriented stack view for containing all scalebar components
-            var rootStackView = new UIStackView()
+            _rootStackView = new UIStackView()
             {
                 Axis = UILayoutConstraintAxis.Vertical,
                 Alignment = UIStackViewAlignment.Leading,
@@ -187,29 +188,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             fifthRowStackView.AddArrangedSubview(_usUnit);
 
             // Add all scalebar rows to the root stack view
-            rootStackView.AddArrangedSubview(firstRowStackView);
-            rootStackView.AddArrangedSubview(secondRowStackView);
-            rootStackView.AddArrangedSubview(thirdRowStackView);
-            rootStackView.AddArrangedSubview(fourthRowStackView);
-            rootStackView.AddArrangedSubview(fifthRowStackView);
+            _rootStackView.AddArrangedSubview(firstRowStackView);
+            _rootStackView.AddArrangedSubview(secondRowStackView);
+            _rootStackView.AddArrangedSubview(thirdRowStackView);
+            _rootStackView.AddArrangedSubview(fourthRowStackView);
+            _rootStackView.AddArrangedSubview(fifthRowStackView);
 
-            AddSubview(rootStackView);
+            AddSubview(_rootStackView);
 
             // Anchor the root stack view to the bottom left of the view
-            rootStackView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
-            rootStackView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
+            _rootStackView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
+            _rootStackView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
 
             // Set up constraints to resize scalebar components when scale line resizes
             metricWidthPlaceholder.WidthAnchor.ConstraintEqualTo(_metricScaleLine.WidthAnchor).Active = true;
             metricWidthPlaceholder.HeightAnchor.ConstraintEqualTo(_firstMetricTickLine.HeightAnchor).Active = true;
             usWidthPlaceholder.WidthAnchor.ConstraintEqualTo(_usScaleLine.WidthAnchor).Active = true;
             usWidthPlaceholder.HeightAnchor.ConstraintEqualTo(_usValue.HeightAnchor).Active = true;
+
+            InvalidateIntrinsicContentSize();
         }
 
         private void ScaleLine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Update the scale line to be the longer of the metric or imperial lines
             _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
+            InvalidateIntrinsicContentSize();
+        }
+
+        private bool _isSizeValid = false;
+        public override void InvalidateIntrinsicContentSize()
+        {
+            _isSizeValid = false;
+            base.InvalidateIntrinsicContentSize();
         }
 
         private UIColor _foregroundColor = UIColor.Black;
@@ -240,6 +251,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        private CGSize _intrinsicContentSize;
+        /// <inheritdoc />
+        public override CGSize IntrinsicContentSize
+        {
+            get
+            {
+                if (!_isSizeValid)
+                {
+                    _isSizeValid = true;
+                    _intrinsicContentSize = MeasureSize();
+                }
+                return _intrinsicContentSize;
+            }
+        }
+
+        /// <inheritdoc />
+        public override CGSize SizeThatFits(CGSize size)
+        {
+            var widthThatFits = Math.Min(size.Width, IntrinsicContentSize.Width);
+            var heightThatFits = Math.Min(size.Height, IntrinsicContentSize.Height);
+            return new CGSize(widthThatFits, heightThatFits);
+        }
+
         /// <summary>
         /// Internal use only.  Invoked by the Xamarin iOS designer.
         /// </summary>
@@ -259,6 +293,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void SetVisibility(bool isVisible)
         {
             Hidden = !isVisible;
+        }
+
+        /// <summary>
+        /// Aggregates the size of the view's sub-views
+        /// </summary>
+        /// <returns>The size of the view</returns>
+        private CGSize MeasureSize()
+        {
+            var totalHeight = 0d;
+            var totalWidth = 0d;
+            foreach (var row in _rootStackView.ArrangedSubviews)
+            {
+                var rowWidth = 0d;
+                var rowHeight = 0d;
+                foreach (var view in ((UIStackView)row).ArrangedSubviews)
+                {
+                    var elementSize = view.IntrinsicContentSize;
+                    if (elementSize.Height > rowHeight)
+                    {
+                        rowHeight = elementSize.Height;
+                    }
+                    rowWidth += elementSize.Width;
+                }
+                if (rowWidth > totalWidth)
+                {
+                    totalWidth = rowWidth;
+                }
+                totalHeight += rowHeight;
+            }
+
+            return new CGSize(totalWidth, totalHeight);
         }
     }
 }
