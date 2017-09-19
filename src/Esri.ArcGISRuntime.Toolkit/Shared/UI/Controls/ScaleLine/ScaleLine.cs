@@ -25,6 +25,10 @@ using Windows.UI.Xaml.Shapes;
 using Control = UIKit.UIView;
 using TextBlock = UIKit.UILabel;
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
+#elif __ANDROID__
+using Control = Android.Views.ViewGroup;
+using TextBlock = Android.Widget.TextView;
+using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
 #else
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -49,7 +53,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        public ScaleLine() => Initialize();
+        public ScaleLine ()
+#if __ANDROID__
+            : base(Android.App.Application.Context)
+#endif
+            => Initialize();
 
 #pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>
@@ -254,5 +262,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             double distanceInInches = result.Distance;
             return distanceInInches * 96;
         }
+
     }
 }

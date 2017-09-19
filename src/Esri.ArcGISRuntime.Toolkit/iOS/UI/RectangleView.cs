@@ -71,6 +71,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public override CGSize IntrinsicContentSize => _size;
 
+        public override CGSize SizeThatFits(CGSize size)
+        {
+            var widthThatFits = Math.Min(size.Width, IntrinsicContentSize.Width);
+            var heightThatFits = Math.Min(size.Height, IntrinsicContentSize.Height);
+            return new CGSize(widthThatFits, heightThatFits);
+        }
+
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
         public event PropertyChangedEventHandler PropertyChanged;
 

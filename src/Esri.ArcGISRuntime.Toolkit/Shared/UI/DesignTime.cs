@@ -41,7 +41,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         = (bool)DependencyPropertyDescriptor
                         .FromProperty(prop, typeof(FrameworkElement))
                         .Metadata.DefaultValue;
-#elif XAMARIN
+#elif __ANDROID__
+                    // Assume we're in design-time if there is no application context
+                    s_isInDesignMode = Android.App.Application.Context == null;
+#else
                     s_isInDesignMode = false;
 #endif
                 }
