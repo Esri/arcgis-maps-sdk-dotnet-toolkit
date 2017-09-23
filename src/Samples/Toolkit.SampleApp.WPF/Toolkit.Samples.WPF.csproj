@@ -72,6 +72,9 @@
     <Compile Include="Samples\FeatureDataField\EditFeatureSample.xaml.cs">
       <DependentUpon>EditFeatureSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\Legend\LayerLegendSample.xaml.cs">
+      <DependentUpon>LayerLegendSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\Legend\LegendSample.xaml.cs">
       <DependentUpon>LegendSample.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
     <Page Include="Samples\FeatureDataField\EditFeatureSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Samples\Legend\LayerLegendSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\Legend\LegendSample.xaml">
       <Generator>MSBuild:Compile</Generator>

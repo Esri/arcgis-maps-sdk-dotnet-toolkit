@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 (newView as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
                 newView.LayerViewStateChanged += GeoView_LayerViewStateChanged;
-                newView.ViewpointChanged += GeoView_NavigationCompleted;
+                newView.ViewpointChanged += GeoView_ViewpointChanged;
                 _scaleChanged = true;
                 _isScaleSet = false;
             }
@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RebuildList();
         }
 
-        private void GeoView_NavigationCompleted(object sender, EventArgs e)
+        private void GeoView_ViewpointChanged(object sender, EventArgs e)
         {
             UpdateScaleVisiblity();
         }
@@ -218,7 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var map = (GeoView as MapView).Map;
                         if (map != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal, RespectScaleRangeInternal) { ReverseOrder = ReverseLayerOrder };
+                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal, RespectScaleRangeInternal) { ReverseOrder = !ReverseLayerOrder };
                         }
 
                         Binding b = new Binding();
@@ -232,7 +232,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var scene = (GeoView as SceneView).Scene;
                         if (scene != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal, RespectScaleRangeInternal) { ReverseOrder = ReverseLayerOrder };
+                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal, RespectScaleRangeInternal) { ReverseOrder = !ReverseLayerOrder };
                         }
 
                         Binding b = new Binding();
@@ -302,7 +302,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnReverseLayerOrderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayerList)d)._layerContentList.ReverseOrder = (bool)e.NewValue;
+            ((LayerList)d)._layerContentList.ReverseOrder = !(bool)e.NewValue;
         }
     }
 }
