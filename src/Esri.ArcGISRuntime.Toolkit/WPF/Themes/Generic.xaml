@@ -4,7 +4,8 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Compass/Compass.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Legend/LayerLegend.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Legend/Legend.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SignInForm/SignInForm.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />

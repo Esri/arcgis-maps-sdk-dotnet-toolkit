@@ -21,7 +21,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueChangingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Legend\LayerLegend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\LayerContentViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerLegend\LayerLegend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\ObservableLayerContentList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\LayerList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Legend\Legend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\MeasureToolbar\MeasureToolbar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.Windows.cs" />
@@ -32,5 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Properties\" />
+    <Folder Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\" />
   </ItemGroup>
 </Project>

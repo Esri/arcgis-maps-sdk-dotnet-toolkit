@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        public ScaleLine ()
+        public ScaleLine()
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
@@ -262,6 +262,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             double distanceInInches = result.Distance;
             return distanceInInches * 96;
         }
-
     }
 }

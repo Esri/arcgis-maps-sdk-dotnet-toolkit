@@ -72,7 +72,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="UI\Controls\Legend\LayerLegend.Theme.xaml">
+    <Page Include="UI\Controls\LayerLegend\LayerLegend.Theme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -97,6 +97,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Controls\Legend\Legend.Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\Controls\TableOfContents\TableOfContents.Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,8 +120,6 @@
     </Compile>
     <Compile Include="Resources.cs" />
     <Compile Include="UI\Controls\SignInForm\SignInForm.cs" />
-    <Compile Include="UI\Controls\TableOfContents\LayerContentViewModel.cs" />
-    <Compile Include="UI\Controls\TableOfContents\ObservableLayerContentList.cs" />
     <Compile Include="UI\Controls\TableOfContents\TableOfContents.cs" />
     <EmbeddedResource Include="LocalizedStrings\Resources.resx" />
     <None Include="Esri.ArcGISRuntime.Toolkit.WPF.nuspec" />
