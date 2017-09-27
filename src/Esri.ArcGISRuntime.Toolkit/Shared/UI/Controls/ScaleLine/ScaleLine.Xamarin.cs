@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private double MapScaleImpl
         {
-            get => _mapScale;
+            get { return _mapScale; }
             set
             {
                 _mapScale = value;
@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private double TargetWidthImpl
         {
-            get => _targetWidth;
+            get { return _targetWidth; }
             set
             {
                 _targetWidth = value;

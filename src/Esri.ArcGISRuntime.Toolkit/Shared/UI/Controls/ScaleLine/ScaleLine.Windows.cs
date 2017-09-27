@@ -83,8 +83,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private double TargetWidthImpl
         {
-            get => (double)GetValue(TargetWidthProperty);
-            set => SetValue(TargetWidthProperty, value);
+            get { return (double)GetValue(TargetWidthProperty); }
+            set { SetValue(TargetWidthProperty, value); }
         }
 
         /// <summary>

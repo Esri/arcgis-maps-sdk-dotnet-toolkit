@@ -48,14 +48,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public ScaleLine(Context context) : base(context) => Initialize();
+        public ScaleLine(Context context) : base(context) { Initialize(); }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public ScaleLine(Context context, IAttributeSet attr) : base(context, attr) => Initialize();
+        public ScaleLine(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
 
         private void Initialize()
         {
@@ -192,7 +192,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public Color ForegroundColor
         {
-            get => _foregroundColor;
+            get { return _foregroundColor; }
             set
             {
                 _foregroundColor = value;
