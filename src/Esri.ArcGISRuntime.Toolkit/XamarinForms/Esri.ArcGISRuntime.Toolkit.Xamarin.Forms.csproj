@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <TargetFrameworks>xamarinios10;uap10.0;monoandroid71</TargetFrameworks>
+    <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.Forms apps</Title>
+    <Description>ArcGIS Runtime controls and utilities for Xamarin.Forms apps.</Description>
+    <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D iOS Android UWP Xamarin.Forms Xamarin Mobile toolkit</PackageTags>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid71'">
+    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
+    <ProjectReference Include="..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'monoandroid71'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.1.0" />
+    <ProjectReference Include="..\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'xamarinios10'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.1.0" />
+    <ProjectReference Include="..\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0-beta.69" PrivateAssets="all" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.1.0" />
+    <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
+  </ItemGroup>
+  
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+</Project>
+
+

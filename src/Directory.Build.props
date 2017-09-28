@@ -1,0 +1,67 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>Esri Inc.</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Esri/arcgis-toolkit-dotnet/master/license.txt</PackageLicenseUrl>
+    <PackageReleaseNotes>v100.1-beta2: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.1-beta2 </PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <Copyright>Copyright © 2014-2017 Esri.</Copyright>
+    <Version>100.1.0-beta3</Version>
+
+    <DefaultLanguage>en-US</DefaultLanguage>
+
+    <IsUwpProject>$(MSBuildProjectName.Contains('.UWP'))</IsUwpProject>
+    <IsiOSProject>$(MSBuildProjectName.Contains('.iOS'))</IsiOSProject>
+    <IsAndroidProject>$(MSBuildProjectName.Contains('.Android'))</IsAndroidProject>
+    <IsWPFProject>$(MSBuildProjectName.Contains('.WPF'))</IsWPFProject>
+    <IsXamarinFormsProject>$(MSBuildProjectName.Contains('.Xamarin.Forms'))</IsXamarinFormsProject>
+    <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
+    <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
+    <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true'">false</IsToolkitLibrary>
+    <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
+
+    <ArcGISRuntimeDependencyVersion>100.1.0</ArcGISRuntimeDependencyVersion>
+
+    <PackageOutputPath>$(MSBuildThisFileDirectory)\..\NuGet\</PackageOutputPath>
+
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
+
+  
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition="$(IsToolkitLibrary)" >
+      
+      <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+      </PropertyGroup>
+
+      <ItemGroup>
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
+        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0-beta.69" PrivateAssets="all" />
+      </ItemGroup>
+    </When>
+  </Choose>
+
+  <Choose>
+    <When Condition="$(IsToolkitLibrary) and '$(IsWPFProject)' != 'true'" >
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime" Version="100.1.0" />
+      </ItemGroup>
+    </When>
+  </Choose>
+
+  <Choose>
+    <When Condition="$(IsToolkitLibrary) and '$(IsWPFProject)' == 'true'" >
+      <ItemGroup >
+        <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.1.0" ExcludeAssets="contentFiles;build" IncludeAssets="compile" />
+      </ItemGroup>
+    </When>
+  </Choose>
+
+</Project>
