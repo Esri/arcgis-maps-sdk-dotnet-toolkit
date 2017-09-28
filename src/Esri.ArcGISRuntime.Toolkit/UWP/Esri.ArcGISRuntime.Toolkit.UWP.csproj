@@ -24,6 +24,11 @@
     <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
     <Content Include="**\*.png" Exclude="**\bin\**\*.png;**\obj\**\*.png" />
   </ItemGroup>
+  <PropertyGroup> 
+    <PreBuildEvent>cd "$(MSBuildThisFileDirectory)"
+      .\copy_resource_files.cmd
+    </PreBuildEvent> 
+  </PropertyGroup> 
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 </Project>
