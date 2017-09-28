@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>monoandroid71</TargetFramework>
+    <TargetFramework>monoandroid60</TargetFramework>
     <PackageId>Esri.ArcGISRuntime.Toolkit.Android</PackageId>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.Android apps</Title>
     <Description>ArcGIS Runtime controls and utilities for Xamarin.Android apps.</Description>

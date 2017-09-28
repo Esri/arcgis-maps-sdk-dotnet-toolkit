@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 
   <PropertyGroup>
-    <TargetFrameworks>xamarinios10;uap10.0;monoandroid71</TargetFrameworks>
+    <TargetFrameworks>xamarinios10;uap10.0;monoandroid60</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.Forms apps</Title>
     <Description>ArcGIS Runtime controls and utilities for Xamarin.Forms apps.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D iOS Android UWP Xamarin.Forms Xamarin Mobile toolkit</PackageTags>
@@ -14,7 +14,7 @@
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid71'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'monoandroid60'">
     <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
 
@@ -23,7 +23,7 @@
     <ProjectReference Include="..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'monoandroid71'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'monoandroid60'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.1.0" />
     <ProjectReference Include="..\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj" />
   </ItemGroup>
