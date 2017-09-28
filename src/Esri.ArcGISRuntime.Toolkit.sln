@@ -23,6 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.UWP", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.WPF", "Samples\Toolkit.SampleApp.WPF\Toolkit.Samples.WPF.csproj", "{75555B1C-1AED-401F-BEC6-A791AAB70D57}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26E85B83-D430-4A75-9431-8A014AA7117E}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Esri.ArcGISRuntime.Toolkit\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{c8657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
