@@ -28,9 +28,6 @@
     <ArcGISRuntimeDependencyVersion>100.1.0</ArcGISRuntimeDependencyVersion>
 
     <PackageOutputPath>$(MSBuildThisFileDirectory)\..\NuGet\</PackageOutputPath>
-
-    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
-
   
   </PropertyGroup>
 
@@ -38,28 +35,13 @@
     <When Condition="$(IsToolkitLibrary)" >
       
       <PropertyGroup>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       </PropertyGroup>
 
       <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
-        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0-beta.69" PrivateAssets="all" />
-      </ItemGroup>
-    </When>
-  </Choose>
-
-  <Choose>
-    <When Condition="$(IsToolkitLibrary) and '$(IsWPFProject)' != 'true'" >
-      <ItemGroup>
-        <PackageReference Include="Esri.ArcGISRuntime" Version="100.1.0" />
-      </ItemGroup>
-    </When>
-  </Choose>
-
-  <Choose>
-    <When Condition="$(IsToolkitLibrary) and '$(IsWPFProject)' == 'true'" >
-      <ItemGroup >
-        <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.1.0" ExcludeAssets="contentFiles;build" IncludeAssets="compile" />
       </ItemGroup>
     </When>
   </Choose>

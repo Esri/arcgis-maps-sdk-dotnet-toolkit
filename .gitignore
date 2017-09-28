@@ -117,3 +117,4 @@ project.lock.json
 
 # Visual Studio 2017 auto-generated files
 src/.vs/
+NuGet/
