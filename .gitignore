@@ -114,3 +114,6 @@ project.lock.json
 
 # Xamarin Android auto-generated resource file
 *Resource.Designer.cs
+
+# Visual Studio 2017 auto-generated files
+src/.vs/
