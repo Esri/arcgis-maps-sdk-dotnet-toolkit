@@ -33,4 +33,5 @@
   </PropertyGroup> 
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\..\..\build\XamlTypeInfoBuildTask.targets" />
 </Project>
