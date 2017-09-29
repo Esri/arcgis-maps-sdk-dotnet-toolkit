@@ -26,6 +26,11 @@
     <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
     <Content Include="**\*.png" Exclude="**\bin\**\*.png;**\obj\**\*.png" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
+  </ItemGroup>
+  
   <PropertyGroup> 
     <PreBuildEvent>cd "$(MSBuildThisFileDirectory)"
       .\copy_resource_files.cmd
