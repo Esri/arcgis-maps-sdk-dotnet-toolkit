@@ -228,7 +228,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Visibility = isVisible ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Gone;
         }
-
+        
+        /// <inheritdoc />
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -246,6 +247,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SetMeasuredDimension(width, height);
         }
 
+        /// <inheritdoc />
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             // Forward layout call to the root layout
