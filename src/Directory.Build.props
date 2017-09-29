@@ -27,7 +27,7 @@
 
     <ArcGISRuntimeDependencyVersion>100.1.0</ArcGISRuntimeDependencyVersion>
 
-    <PackageOutputPath>$(MSBuildThisFileDirectory)\..\NuGet\</PackageOutputPath>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)\..\NuGet\$(Configuration)</PackageOutputPath>
   
   </PropertyGroup>
 
