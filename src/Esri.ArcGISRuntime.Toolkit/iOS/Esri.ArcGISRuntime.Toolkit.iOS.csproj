@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>xamarinios10</TargetFramework>
+    <TargetFramework>$(iOSTargetFramework)</TargetFramework>
     <PackageId>Esri.ArcGISRuntime.Toolkit.iOS</PackageId>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.iOS apps</Title>
     <Description>ArcGIS Runtime controls and utilities for Xamarin.iOS apps.</Description>
