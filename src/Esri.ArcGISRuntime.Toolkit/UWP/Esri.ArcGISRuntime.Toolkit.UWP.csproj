@@ -39,4 +39,11 @@
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildThisFileDirectory)\..\..\..\build\XamlTypeInfoBuildTask.targets" />
+
+  <!-- Workaround for Esri.ArcGISRuntime.UWP-100.1 overriding the PackageId -->
+  <Target Name="PackageIdWorkAround" AfterTargets="TPMinVCheck" >
+    <PropertyGroup>
+      <PackageId>Esri.ArcGISRuntime.Toolkit.UWP</PackageId>
+    </PropertyGroup>
+  </Target>
 </Project>
