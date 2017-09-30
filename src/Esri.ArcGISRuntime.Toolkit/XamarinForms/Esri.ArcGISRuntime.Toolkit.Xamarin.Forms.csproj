@@ -14,10 +14,6 @@
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
-  </PropertyGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <ProjectReference Include="..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj" />
   </ItemGroup>

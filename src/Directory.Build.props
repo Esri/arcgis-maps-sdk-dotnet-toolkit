@@ -1,6 +1,7 @@
 <Project>
 
   <PropertyGroup>
+    <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <NoPackageAnalysis>true</NoPackageAnalysis>
@@ -15,6 +16,7 @@
 
     <DefaultLanguage>en-US</DefaultLanguage>
 
+    <!--Project type identifiers-->
     <IsUwpProject>$(MSBuildProjectName.Contains('.UWP'))</IsUwpProject>
     <IsiOSProject>$(MSBuildProjectName.Contains('.iOS'))</IsiOSProject>
     <IsAndroidProject>$(MSBuildProjectName.Contains('.Android'))</IsAndroidProject>
@@ -24,21 +26,20 @@
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
     <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true'">false</IsToolkitLibrary>
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
-
+    
+    <!--Framework versions-->
     <UWPTargetPlatformVersion>10.0.14393.0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.10586.0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid60</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
     
-    <ArcGISRuntimeDependencyVersion>100.1.0</ArcGISRuntimeDependencyVersion>
-    <XamarinFormsDependencyVersion>2.4.0.282</XamarinFormsDependencyVersion> <!-- 2.3.4.270 -->
-    
+  
+    <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
     <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
     <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\Output\intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
 
   </PropertyGroup>
-
 
   <Choose>
     <When Condition="'$(TargetFramework)' == 'uap10.0'" >
@@ -61,6 +62,10 @@
       </ItemGroup>
     </When>
   </Choose>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
+  </PropertyGroup>
 
   <Choose>
     <When Condition="$(IsToolkitLibrary)" >      
