@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public double Width
         {
-            get => _size.Width;
+            get { return _size.Width; }
             set
             {
                 _size.Width = (nfloat)value;
@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public double Height
         {
-            get => _size.Height;
+            get { return _size.Height; }
             set
             {
                 _size.Height = (nfloat)value;

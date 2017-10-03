@@ -230,7 +230,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public UIColor ForegroundColor
         {
-            get => _foregroundColor;
+            get { return _foregroundColor; }
             set
             {
                 _foregroundColor = value;

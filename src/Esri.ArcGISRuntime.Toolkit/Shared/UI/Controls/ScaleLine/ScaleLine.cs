@@ -57,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
-            => Initialize();
+            { Initialize(); }
 
 #pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>
@@ -71,8 +71,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning restore CS1587 // XML comment is not placed on a valid language element
         public double MapScale
         {
-            get => MapScaleImpl;
-            set => MapScaleImpl = value;
+            get { return MapScaleImpl; }
+            set { MapScaleImpl = value; }
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public double TargetWidth
         {
-            get => TargetWidthImpl;
-            set => TargetWidthImpl = value;
+            get { return TargetWidthImpl; }
+            set { TargetWidthImpl = value; }
         }
 
         /// <summary>
