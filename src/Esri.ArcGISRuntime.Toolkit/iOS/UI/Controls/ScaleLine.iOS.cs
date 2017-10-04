@@ -217,6 +217,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private bool _isSizeValid = false;
+
+        /// <inheritdoc />
         public override void InvalidateIntrinsicContentSize()
         {
             _isSizeValid = false;
