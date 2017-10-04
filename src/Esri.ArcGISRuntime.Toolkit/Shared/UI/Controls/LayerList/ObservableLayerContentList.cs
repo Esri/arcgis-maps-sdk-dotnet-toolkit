@@ -34,16 +34,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private List<LayerContentViewModel> _activeLayers = new List<LayerContentViewModel>();
         private IReadOnlyList<Mapping.Layer> _allLayers;
         private bool _showLegend;
-        private bool _useScaleVisibility;
         private WeakReference<ArcGISRuntime.UI.Controls.GeoView> _owningView;
 
-        private ObservableLayerContentList(WeakReference<ArcGISRuntime.UI.Controls.GeoView> owningView, IReadOnlyList<Layer> allLayers, bool showLegend, bool useScaleVisibility)
+        private ObservableLayerContentList(WeakReference<ArcGISRuntime.UI.Controls.GeoView> owningView, IReadOnlyList<Layer> allLayers, bool showLegend)
         {
             (allLayers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
             _allLayers = allLayers;
             _showLegend = showLegend;
             _owningView = owningView;
-            _useScaleVisibility = useScaleVisibility;
             foreach (var item in allLayers.Where(l => IncludeLayer(l)))
             {
                 LayerAdded(item);
@@ -55,9 +53,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="mapView">MapView and its Map to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        /// <param name="useScaleVisibility">Generates legend based on layer's visibility based on current scale.</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend, bool useScaleVisibility)
-            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend, useScaleVisibility)
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend)
         {
         }
 
@@ -67,9 +64,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="sceneView">SceneView and its Scene to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        /// <param name="useScaleVisibility">Generates legend based on layer's visibility based on current scale.</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend, bool useScaleVisibility)
-            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend, useScaleVisibility)
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend)
         {
         }
 

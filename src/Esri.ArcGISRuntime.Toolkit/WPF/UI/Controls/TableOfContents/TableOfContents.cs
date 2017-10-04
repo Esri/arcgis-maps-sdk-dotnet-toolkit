@@ -18,9 +18,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DefaultStyleKey = typeof(TableOfContents);
         }
 
-        /// <inheritdoc/>
-        protected override bool ShowLegendInternal => ShowLegend;
-
         /// <summary>
         /// Gets or sets a value indicating whether to show a legend for the layers in the tree view
         /// </summary>
@@ -38,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnShowLegendPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((TableOfContents)d).RebuildList();
+            ((TableOfContents)d).ShowLegendInternal = (bool)e.NewValue;
         }
     }
 }

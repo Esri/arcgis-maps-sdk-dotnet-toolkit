@@ -43,49 +43,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             DefaultStyleKey = typeof(Legend);
         }
-
-        /// <inheritdoc/>
-        protected override bool RespectScaleRangeInternal => RespectScaleRange;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
-        /// are used to determine when legend for layer is displayed.
-        /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
-        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
-        /// </remarks>
-        public bool RespectScaleRange
-        {
-            get { return (bool)GetValue(RespectScaleRangeProperty); }
-            set { SetValue(RespectScaleRangeProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="RespectScaleRange"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty RespectScaleRangeProperty =
-            DependencyProperty.Register(nameof(RespectScaleRange), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnRespectScaleRangePropertyChanged));
-
-        private static void OnRespectScaleRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((Legend)d).RebuildList();
-        }
-
-        /// <summary>
-        /// Gets or sets the title used by control.
-        /// </summary>
-        public string Title
-        {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Title"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register(nameof(Title), typeof(string), typeof(Legend), new PropertyMetadata("Legend"));
     }
 }
 #endif

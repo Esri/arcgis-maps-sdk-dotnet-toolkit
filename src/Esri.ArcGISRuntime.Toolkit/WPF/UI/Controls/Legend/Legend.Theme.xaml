@@ -15,64 +15,22 @@
         <Setter Property="LayerItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding LayerContent.Name}" />
-                        <ItemsControl ItemsSource="{Binding Sublayers}"
-                                      Grid.Row="1">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,2">
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsInScaleRange, Mode=OneWay}"
-                                                                 Value="false">
-                                                        <Setter Property="Visibility"
-                                                                Value="Collapsed" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding HasError}"
-                                                                 Value="True">
-                                                        <Setter Property="Visibility"
-                                                                Value="Collapsed" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
-                                        <controls:SymbolDisplay Symbol="{Binding Symbol, Mode=OneTime}"
-                                                                Margin="0,0,5,0">
-                                            <controls:SymbolDisplay.Style>
-                                                <Style TargetType="controls:SymbolDisplay">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Symbol, Mode=OneTime}"
-                                                                     Value="{x:Null}">
-                                                            <Setter Property="Visibility"
-                                                                    Value="Collapsed" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </controls:SymbolDisplay.Style>
-                                        </controls:SymbolDisplay>
-                                        <TextBlock Text="{Binding LayerContent.Name, Mode=OneWay}"
-                                                   Grid.Column="1"
-                                                   VerticalAlignment="Center" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Grid>
+                    <StackPanel>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasError, Mode=OneWay}" Value="True">
+                                        <Setter Property="Visibility"  Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="{Binding LayerContent.Name}"
+                                   FontWeight="Bold" />
+                        <controls:LayerLegend LayerContent="{Binding LayerContent}"
+                                              ShowEntireTreeHiarchy="True"                                             
+                                              Margin="10,0" />
+                    </StackPanel>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -82,19 +40,13 @@
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{TemplateBinding Title}" />
+                        <ScrollViewer>
                             <ItemsControl x:Name="List"
-                                          Grid.Row="1"
                                           ItemTemplate="{TemplateBinding LayerItemTemplate}"
                                           Margin="{TemplateBinding Padding}"
                                           BorderThickness="0"
                                           Padding="0" />
-                        </Grid>
+                        </ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

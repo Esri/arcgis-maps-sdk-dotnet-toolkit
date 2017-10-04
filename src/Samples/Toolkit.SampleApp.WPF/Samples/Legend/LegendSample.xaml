@@ -24,9 +24,9 @@
                          x:Name="legend"
                          GeoView="{Binding ElementName=mapView}"
                          ReverseLayerOrder="False"
-                         RespectScaleRange="True" />
-            <CheckBox Content="Respect Scale Range"
-                      IsChecked="{Binding RespectScaleRange, ElementName=legend, Mode=TwoWay}"
+                         FilterByVisibleScaleRange="True" />
+            <CheckBox Content="Filter By Visible Scale Range"
+                      IsChecked="{Binding FilterByVisibleScaleRange, ElementName=legend, Mode=TwoWay}"
                       Grid.Row="1" />
             <CheckBox Content="Reverse Layer Order"
                       IsChecked="{Binding ReverseLayerOrder, ElementName=legend, Mode=TwoWay}"

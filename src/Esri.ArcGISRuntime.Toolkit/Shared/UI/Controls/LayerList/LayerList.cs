@@ -105,6 +105,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RebuildList();
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
+        /// are used to determine when legend for layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
+        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
+        /// </remarks>
+        public bool FilterByVisibleScaleRange
+        {
+            get { return (bool)GetValue(FilterByVisibleScaleRangeProperty); }
+            set { SetValue(FilterByVisibleScaleRangeProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="FilterByVisibleScaleRange"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty FilterByVisibleScaleRangeProperty =
+            DependencyProperty.Register(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnFilterByVisibleScaleRangePropertyChanged));
+
+        private static void OnFilterByVisibleScaleRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayerList)d).RebuildList();
+        }
+
         private void GeoView_ViewpointChanged(object sender, EventArgs e)
         {
             UpdateScaleVisiblity();
@@ -112,6 +137,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void UpdateScaleVisiblity()
         {
+            if (!FilterByVisibleScaleRange)
+                return;
             if (_scaleChanged)
             {
                 var scale = GeoView.GetCurrentViewpoint(ViewpointType.CenterAndScale)?.TargetScale ??
@@ -191,21 +218,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private ObservableLayerContentList _layerContentList;
 
-        /// <summary>
-        /// Gets a value indicating whether legend is displayed.
-        /// </summary>
-        protected virtual bool ShowLegendInternal => true;
+        private bool _showLegendInternal;
 
         /// <summary>
-        /// Gets a value indicating whether to use scale to determine when to display legend.
+        /// Gets or sets a value indicating whether legend is displayed.
         /// </summary>
-        protected virtual bool RespectScaleRangeInternal => true;
+        internal bool ShowLegendInternal
+        {
+            get
+            {
+                return _showLegendInternal;
+            }
+            set
+            {
+                if (_showLegendInternal != value)
+                {
+                    _showLegendInternal = value;
+                    RebuildList();
+                }
+            }
+        }
 
         /// <summary>
         /// Generates layer list for a set of <see cref="Layer"/>s in a <see cref="Map"/> or <see cref="Scene"/>
         /// contained in a <see cref="GeoView"/>
         /// </summary>
-        protected void RebuildList()
+        private void RebuildList()
         {
             var list = GetTemplateChild("List") as ItemsControl;
             if (list != null)
@@ -218,7 +256,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var map = (GeoView as MapView).Map;
                         if (map != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal, RespectScaleRangeInternal) { ReverseOrder = !ReverseLayerOrder };
+                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal) { ReverseOrder = !ReverseLayerOrder };
                         }
 
                         Binding b = new Binding();
@@ -232,7 +270,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var scene = (GeoView as SceneView).Scene;
                         if (scene != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal, RespectScaleRangeInternal) { ReverseOrder = !ReverseLayerOrder };
+                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal) { ReverseOrder = !ReverseLayerOrder };
                         }
 
                         Binding b = new Binding();
