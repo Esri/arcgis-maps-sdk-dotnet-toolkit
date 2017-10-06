@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="ArcGISRuntimeToolkit-4142-4b79-9599-7893dcd05d7c" Publisher="CN=mort5161" Version="1.0.0.0" />
+  <Identity Name="ArcGISRuntimeToolkit-4142-4b79-9599-7893dcd05d7c" Publisher="CN=ArcGIS Runtime Team" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="fad76590-4142-4b79-9599-7893dcd05d7c" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>ArcGISRuntime Toolkit Sample App</DisplayName>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit.iOS", "Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj", "{B8713B42-BAA5-4D62-86C2-1585EF2DF0EC}"
 EndProject
@@ -136,8 +136,6 @@ Global
 		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Debug|x86.Build.0 = Debug|x86
 		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Debug|x86.Deploy.0 = Debug|x86
 		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Release|ARM.ActiveCfg = Release|ARM
 		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Release|ARM.Build.0 = Release|ARM
 		{A59A0CCB-B4EF-4F81-ABE0-E6315407D5F1}.Release|ARM.Deploy.0 = Release|ARM
