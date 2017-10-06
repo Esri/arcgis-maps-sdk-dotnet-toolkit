@@ -1,12 +1,11 @@
-image: Visual Studio 2017
+version: 100.1.{build}
 branches:
   only:
-  - master
   - v100
-version: 100.1.{build}
+skip_branch_with_pr: true
+image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
-skip_branch_with_pr: true
 nuget:
   disable_publish_on_pr: true
 before_build:
