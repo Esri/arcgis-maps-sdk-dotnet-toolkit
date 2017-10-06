@@ -1,0 +1,16 @@
+{
+  "version": "100.1.0-beta3",
+  "publicReleaseRefSpec": [
+    "^refs/heads/master$", // we release out of master
+    "^refs/heads/dev$", // we release out of dev
+    "^refs/heads/v\\d+\\.\\d+" // we also release branches starting with vN.N
+  ],
+  "nugetPackageVersion":{
+    "semVer": 2
+  },
+  "cloudBuild": {
+    "buildNumber": {
+      "enabled": true
+    }
+  }
+}
