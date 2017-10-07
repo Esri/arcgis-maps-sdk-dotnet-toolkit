@@ -24,6 +24,11 @@ See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more deta
     - Windows Universal	(\src\Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj)
  *  For other projects in the solution, add a reference to the ArcGIS Runtime Toolkit project.
 
+## Requirements for Compiling
+ - Visual Studio 2017 Update 3+
+ - .NET Core 2.0 SDK
+ - Xamarin iOS and Android SDKs
+
 ## Requirements
 
 * Supported system configurations for: 
@@ -33,15 +38,10 @@ See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more deta
   * [Xamarin iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
   * [Xamarin.Forms](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
 
-#### Optional: Build to distribute the Toolkit
-Building the Toolkit:
-
-1.  Open the solution (Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2015 Update 3 or newer and build the 2 Toolkit projects projects.
-2. Nuget packages are generated for you to directly reference in the output folders.
-
-#####Referencing the project in an app:
+### Referencing the toolkit in an app:
  
- 1.  Create a local nuget-repository and place the generated nuget packages in this folder. Then add the nuget package using the standard Nuget reference manager in Visual Studio.
+ 1.  Create a local nuget-repository and point it to the \Output\NuGet\Release folder. Then add the nuget package using the standard Nuget reference manager in Visual Studio.
+ 2. It is also possible to point a nuget repository to the latest build. It is automatically updated after each pull-request gets merged: https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet 
 
 ## Resources
 
@@ -54,6 +54,10 @@ Find a bug or want to request a new feature?  Please let us know by submitting a
 ## Contributing
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
+
+### v10.2.7
+If you're looking for the earlier Toolkit released with v10.2.7, you can find it in the 10.2.7 tag:
+https://github.com/Esri/arcgis-toolkit-dotnet/tree/v10.2.7
 
 ## Licensing
 Copyright © 2014-2016 Esri.
