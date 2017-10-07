@@ -19,6 +19,8 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Toolkit.Samples.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>10A1504B6BC54F8B285C6B6F7D54BFEEC2273FE7</PackageCertificateThumbprint>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>ARM;x86;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>

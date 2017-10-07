@@ -11,8 +11,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
-    <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
-    <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
 
