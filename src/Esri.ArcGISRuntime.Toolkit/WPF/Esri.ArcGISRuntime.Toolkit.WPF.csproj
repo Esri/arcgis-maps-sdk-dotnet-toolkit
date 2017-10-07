@@ -10,6 +10,8 @@
     <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
     <OutputPath>bin\$(Configuration)\</OutputPath>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <PropertyGroup>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>

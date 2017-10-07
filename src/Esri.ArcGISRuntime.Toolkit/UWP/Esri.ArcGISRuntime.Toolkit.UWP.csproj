@@ -11,6 +11,8 @@
     <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
     <IncludeContentInPack>false</IncludeContentInPack>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   
   <ItemGroup>
