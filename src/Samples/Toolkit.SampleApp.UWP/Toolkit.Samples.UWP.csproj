@@ -10,7 +10,6 @@
     <RootNamespace>Esri.ArcGISRuntime.Toolkit.SampleApp</RootNamespace>
     <AssemblyName>Esri.ArcGISRuntime.Toolkit.SampleApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <TargetFramework>uap10.0</TargetFramework>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
