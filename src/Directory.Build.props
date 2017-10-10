@@ -12,7 +12,6 @@
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <Copyright>Copyright © 2014-2017 Esri.</Copyright>
-    <Version>100.1.0-beta3</Version>
 
     <DefaultLanguage>en-US</DefaultLanguage>
 
