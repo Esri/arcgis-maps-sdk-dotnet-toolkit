@@ -31,7 +31,6 @@
     <UWPTargetPlatformMinVersion>10.0.10586.0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid60</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-    
   
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
@@ -51,6 +50,9 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       </PropertyGroup>
+      <ItemGroup>
+        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0-beta.69" PrivateAssets="all" />
+      </ItemGroup>
       <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
       </ItemGroup>

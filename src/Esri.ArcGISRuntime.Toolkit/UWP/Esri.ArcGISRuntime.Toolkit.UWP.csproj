@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>uap10.0</TargetFramework>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
+    <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <PackageId>Esri.ArcGISRuntime.Toolkit.UWP</PackageId>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit for Universal Windows Platform (UWP) apps</Title>
     <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP) apps.</Description>
@@ -13,6 +16,8 @@
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
+    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.1.0" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="LocalizedStrings\en-US\Resources.resw" />
