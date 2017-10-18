@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !XAMARIN
+
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
@@ -27,3 +29,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#endif

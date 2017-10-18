@@ -9,6 +9,10 @@ using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
+    /// <summary>
+    /// The ScaleLine Control generates a line representing
+    /// a certain distance on the map in both Metric and US units.
+    /// </summary>
     public class ScaleLine : View
     {
         /// <summary>
@@ -64,9 +68,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         /// <param name="scaleLine">The scaleline control this would be attached to</param>
         /// <param name="mapView">The mapview to calculate the scale for</param>
-        public static void SetMapView(BindableObject scaleline, MapView mapView)
+        public static void SetMapView(BindableObject scaleLine, MapView mapView)
         {
-            scaleline.SetValue(MapViewProperty, mapView);
+            scaleLine.SetValue(MapViewProperty, mapView);
         }
 
         /// <summary>
@@ -75,9 +79,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         /// <param name="scaleLine">The scaleline control this would be attached to</param>
         /// <returns>The MapView the scaleline is associated with.</returns>
-        public static MapView GetMapView(BindableObject scaleline)
+        public static MapView GetMapView(BindableObject scaleLine)
         {
-            return scaleline.GetValue(MapViewProperty) as MapView;
+            return scaleLine.GetValue(MapViewProperty) as MapView;
         }
 
         private static void OnMapViewChanged(BindableObject bindable, object oldValue, object newValue)

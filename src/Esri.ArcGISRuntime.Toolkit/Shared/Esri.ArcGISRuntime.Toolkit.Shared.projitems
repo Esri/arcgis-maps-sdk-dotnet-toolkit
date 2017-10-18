@@ -9,33 +9,6 @@
     <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit.UI</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Properties\buildnum.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Compass\Compass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\DataItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\FeatureDataField.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\FeatureHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\InputDataItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ReadOnlyDataItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\SelectorDataItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueChangedEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueChangingEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\FeatureDataField\ValueEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\LayerContentViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerLegend\LayerLegend.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\ObservableLayerContentList.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\LayerList.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\Legend\Legend.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\MeasureToolbar\MeasureToolbar.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\ScaleLine\ScaleLine.Xamarin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\Controls\SymbolDisplay\SymbolDisplay.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UI\DesignTime.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WeakEventListener.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Properties\" />
-    <Folder Include="$(MSBuildThisFileDirectory)UI\Controls\LayerList\" />
+     <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
   </ItemGroup>
 </Project>

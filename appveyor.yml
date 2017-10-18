@@ -1,0 +1,18 @@
+version: 100.1.{build}
+branches:
+  only:
+  - v100
+skip_branch_with_pr: true
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+nuget:
+  disable_publish_on_pr: true
+before_build:
+- cmd: msbuild /t:restore src/Esri.ArcGISRuntime.Toolkit.sln
+build:
+  project: src/Esri.ArcGISRuntime.Toolkit.sln
+  verbosity: minimal
+artifacts:
+- path: .\Output\NuGet\Release\*.nupkg
+  name: NuGet

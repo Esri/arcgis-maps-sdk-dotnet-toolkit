@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(iOSTargetFramework);uap10.0;$(AndroidTargetFramework)</TargetFrameworks>
+    <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.Forms apps</Title>
+    <Description>ArcGIS Runtime controls and utilities for Xamarin.Forms apps.</Description>
+    <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D iOS Android UWP Xamarin.Forms Xamarin Mobile toolkit</PackageTags>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</RootNamespace>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+	  <!-- Work around MSBuild bug when building from comandline: https://github.com/Microsoft/msbuild/issues/2274 -->
+    <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
+    <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
+    <ProjectReference Include="..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <ProjectReference Include="..\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+    <ProjectReference Include="..\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.1.0" />
+    <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
+  </ItemGroup>
+  
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+</Project>
+
+

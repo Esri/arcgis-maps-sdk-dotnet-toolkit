@@ -1,131 +1,51 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3596C206-41C8-4405-A5C7-382E79E8D091}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>uap10.0</TargetFramework>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
+    <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
+    <PackageId>Esri.ArcGISRuntime.Toolkit.UWP</PackageId>
+    <Title>ArcGIS Runtime SDK for .NET - Toolkit for Universal Windows Platform (UWP) apps</Title>
+    <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP) apps.</Description>
+    <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP UAP Universal Windows Platform uap10.0 Desktop Mobile toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
     <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
-    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Shared\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Release\Esri.ArcGISRuntime.Toolkit.xml</DocumentationFile>
-    <CodeAnalysisRuleSet>..\Shared\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
-    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <IncludeContentInPack>false</IncludeContentInPack>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
+    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.1.0" />
+  </ItemGroup>
+  <ItemGroup>
     <PRIResource Include="LocalizedStrings\en-US\Resources.resw" />
-    <None Include="Esri.ArcGISRuntime.Toolkit.UWP.nuspec" />
-    <None Include="GenerateNugetPackage.targets" />
-    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)..\Shared\stylecop.json" />
+    <EmbeddedResource Include="**\*.rd.xml" />
+    <Page Include="**\*.xaml" Exclude="**\bin\**\*.xaml;**\obj\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
+    <Content Include="**\*.png" Exclude="**\bin\**\*.png;**\obj\**\*.png" />
   </ItemGroup>
+  
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources.cs" />
-    <EmbeddedResource Include="Properties\Esri.ArcGISRuntime.Toolkit.rd.xml" />
+    <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
-  <ItemGroup>
-    <Page Include="UI\Controls\Compass\Compass.Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="UI\Controls\FeatureDataField\FeatureDataField.Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="UI\Controls\Legend\Legend.Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Controls\LayerLegend\LayerLegend.Theme.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Controls\MeasureToolbar\MeasureToolbar.Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="UI\Controls\ScaleLine\ScaleLine.Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="UI\Controls\SymbolDisplay\SymbolDisplay.Theme.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\MeasureArea.scale-200.png" />
-    <Content Include="Assets\MeasureAreaDark.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\MeasureFeature.scale-200.png" />
-    <Content Include="Assets\MeasureFeatureDark.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Assets\MeasureLength.scale-200.png" />
-    <Content Include="Assets\MeasureLengthDark.scale-200.png" />
-  </ItemGroup>
+  
+  <PropertyGroup> 
+    <PreBuildEvent>cd "$(MSBuildThisFileDirectory)"
+      .\copy_resource_files.cmd
+    </PreBuildEvent> 
+  </PropertyGroup> 
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
-    <VisualStudioVersion>14.0</VisualStudioVersion>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>cd "$(ProjectDir) "
-.\copy_resource_files.cmd
-</PreBuildEvent>
-  </PropertyGroup>
-  <Import Project="$(MSBuildThisFileDirectory)GenerateNugetPackage.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+  <Import Project="$(MSBuildThisFileDirectory)\..\..\..\build\XamlTypeInfoBuildTask.targets" />
+
+  <!-- Workaround for Esri.ArcGISRuntime.UWP-100.1 overriding the PackageId -->
+  <Target Name="PackageIdWorkAround" AfterTargets="TPMinVCheck" >
+    <PropertyGroup>
+      <PackageId>Esri.ArcGISRuntime.Toolkit.UWP</PackageId>
+    </PropertyGroup>
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
