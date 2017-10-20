@@ -1,0 +1,53 @@
+﻿<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esriUI="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:esri="using:Esri.ArcGISRuntime.Mapping"
+    xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:uwptoolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <local:SamplesVM x:Key="vm" />
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+
+        <SplitView  Grid.Row="1" x:Name="splitView">
+            <SplitView.Pane>
+                <ListView x:Name="sampleView" Background="White" Grid.Row="1" SelectionMode="None"
+										IsRightTapEnabled="False"
+										IsItemClickEnabled="True"
+										IsHoldingEnabled="False"
+										IsDoubleTapEnabled="False"
+										ItemClick="sampleView_ItemClick"
+										ItemsSource="{Binding Samples, Source={StaticResource vm}}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ToolTipService.ToolTip="{Binding Description}">
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True">
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Key}" FontSize="18" FontWeight="Bold"/>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </SplitView.Pane>
+            <Grid>
+                <Frame x:Name="rootFrame" Background="#FF7CB27C" />
+            </Grid>
+        </SplitView>
+     
+    </Grid>
+</Page>

@@ -1,0 +1,55 @@
+﻿<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.ScaleLine.ScaleLineSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.ScaleLine"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        
+        <esri:MapView Map="{x:Bind Map}" x:Name="mapView"/>
+
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Background="White" BorderBrush="Black" BorderThickness="1" Width="350">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Basic Scale Calculation" />
+                <esriToolkit:ScaleLine MapScale="{x:Bind mapView.MapScale, Mode=OneWay}" Grid.Row="1" />
+                <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
+                    <ToolTipService.ToolTip>
+                        <TextBlock MaxWidth="300" TextWrapping="Wrap">
+                            The basic scale calculation uses the MapScale property from the MapView. This is only an estimated scale calculation,
+                            which is only true for the center of the spatial reference where the scale distortion is 1x. This is an efficient calculation,
+                            and is also the value used for setting layer scale ranges, zooming to a given scale etc.
+                        </TextBlock>
+                    </ToolTipService.ToolTip>
+                </TextBlock>
+
+                <TextBlock Text="Advanced Scale Calculation" Grid.Row="2" />
+                <esriToolkit:ScaleLine esriToolkit:ScaleLine.MapView="{x:Bind mapView}" Grid.Row="3" />
+                <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
+                    <ToolTipService.ToolTip>
+                        <TextBlock MaxWidth="300" TextWrapping="Wrap">
+                            The advanced scale calculation does a more accurate calculation based on the center of the screen, and will often change as you pan.
+                            This is useful for projections where huge scale distortions occur across the map.
+                            For performance reasons, the scale is only recalculated every time the MapView has stopped zooming/panning.
+                        </TextBlock>
+                    </ToolTipService.ToolTip>
+                </TextBlock>
+            </Grid>
+
+        </Border>
+    </Grid>
+</Page>

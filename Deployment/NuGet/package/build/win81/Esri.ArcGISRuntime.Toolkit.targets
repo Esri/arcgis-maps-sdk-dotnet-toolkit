@@ -1,7 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Reference Include="ArcGIS Runtime Toolkit for Windows Store apps">
-      <HintPath>$(MSBuildThisFileDirectory)..\..\sdk\win81\$(Platform)\Esri.ArcGISRuntime.Toolkit.WindowsStore.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-</Project>

@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFramework>$(AndroidTargetFramework)</TargetFramework>
+    <PackageId>Esri.ArcGISRuntime.Toolkit.Android</PackageId>
+    <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.Android apps</Title>
+    <Description>ArcGIS Runtime controls and utilities for Xamarin.Android apps.</Description>
+    <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D Android Xamarin Mobile toolkit</PackageTags>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
+    <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
+    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\WPF\Properties\Resources.cs">
+      <Link>Properties\Resources.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\WPF\LocalizedStrings\Resources.resx">
+      <Link>LocalizedStrings\Resources.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+</Project>

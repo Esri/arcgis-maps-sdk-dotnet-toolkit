@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>c8657c80-a1ab-4d77-9f75-c923ab330afb</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit.UI</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+     <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
+  </ItemGroup>
+</Project>

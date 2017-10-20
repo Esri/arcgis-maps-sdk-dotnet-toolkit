@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField.EditFeatureSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+
+        <esri:MapView x:Name="mapView" GeoViewTapped="mapView_GeoViewTapped" />
+        
+        <Grid Background="#01FFFFFF" x:Name="overlay" MouseDown="overlay_MouseDown">
+            <Grid VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="400" MinHeight="200" Margin="20" Background="White">
+
+                <StackPanel Margin="20">
+                    <TextBlock Text="Incident #:" />
+                    <TextBlock Text="{Binding Attributes[objectid], StringFormat=Incident:{0}}" FontSize="24" FontWeight="Bold" />
+                    
+                    <TextBlock Text="Damage Type" FontWeight="Bold" Margin="5" />
+                    <esri:FeatureDataField Feature="{Binding}" FieldName="typdamage" IsReadOnly="False" x:Name="DamageField" />
+                    <TextBlock Text="Number of occupants" FontWeight="Bold" Margin="5" />
+                    <esri:FeatureDataField Feature="{Binding}" FieldName="numoccup" IsReadOnly="False" x:Name="OccupantsField" />
+                    <TextBlock Text="Description" FontWeight="Bold" Margin="5" />
+                    <esri:FeatureDataField Feature="{Binding}" FieldName="descdamage" IsReadOnly="False" x:Name="DescriptionField" />
+                    <Button Content="Apply" HorizontalAlignment="Right" Padding="30,5" Margin="0,40,0,0" Click="ApplyButton_Click" />
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+        
+    </Grid>
+</UserControl>

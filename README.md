@@ -1,102 +1,94 @@
-# arcgis-toolkit-dotnet
+# ArcGIS Runtime SDK for .NET - Toolkit
 
-This project contains source code for controls and utilities you can use with the [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).   Build from source code available in this repo (see instructions below) or install the latest stable release from NuGet: [https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)   
+The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).
+
+You can use the Toolkit in your projects by:
+1. Building the source code available in this repo (see instructions below)
+2. Installing the latest stable release or pre-release from NuGet
+    - Stable: [![NuGet](https://img.shields.io/nuget/v/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
+    - Pre-release: [![NuGet](https://img.shields.io/nuget/vpre/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)   
+
+Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x and 10.2.x
+
+- [100.x (current version)](https://developers.arcgis.com/net/latest/)
+- [10.2.x (previous version)](https://developers.arcgis.com/net/10-2/)
+
+**The Toolkit for v100.x is currently in Beta: [Get the latest!](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)**
 
 ## Features
 
-- Legend - Displays a legend for a set of layers in your map.
-- Attribution - Displays copyright/attribution information for layers in your map.
+- Compass - Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
+- Legend - Displays a legend for a single layer in your map (and optionally for its sub layers).
 - ScaleLine - Displays current scale reference.
-- SignInChallengeHandler - (Desktop and Phone only) Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources.  
-- FeatureDataField - Edit control for working with individual feature attributes.
-- FeatureDataForm - A simple form layout of all editable fields in a feature using the FeatureDataField for each attribute.
-- SymbolDisplay - Displays a symbol outside of a map control.
-- TemplatePicker - Displays symbols of selectable feature types advertised by a feature layer. 
+- ChallengeHandler - (WPF only) Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources, as well as helper classes for storing credentials in Windows' credentials cache. 
+- SymbolDisplay - Renders a symbol in a control.
+- TableOfContents (WPF)- Creates a tree-view of the entire map document. Optionally displays legend information for the layers as well. 
 
-See the [wiki](https://github.com/Esri/arcgis-toolkit-dotnet/wiki) for more details.
+## Instructions for Building
 
-## Instructions 
+1. Confirm that your system meets the requirements for compiling the Toolkit:
+    - Visual Studio 2017 Update 3 (or later) with the following workloads:
+        - `Universal Windows Platform development` (UWP)
+        - `.NET desktop development` (WPF)
+        - `Mobile development with .NET` (Xamarin.Android, Xamarin.iOS, and Xamarin.Forms)
+2. Confirm your system meets the requirements for developing with ArcGIS Runtime SDK for .NET:
+   - [WPF](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm)
+   - [UWP](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
+   - [Xamarin.Android](https://developers.arcgis.com/net/latest/android/guide/system-requirements.htm)
+   - [Xamarin.iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
+   - [Xamarin.Forms (Android, iOS, and UWP)](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
+3. Fork and then clone the repo or download the .zip file.
+4. Include (i) or reference (ii) the Toolkit in your projects:
+* Note the Toolkit references [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) by Nuget package. The package is automatically downloaded when you build the solution for the first time.
+    1. Include the appropriate platform Projects in your Solution.
+        - WPF (src\Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj)
+        - UWP (\src\Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj)
+        - Xamarin.Android (\src\Esri.ArcGISRuntime.Toolkit\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj)
+        - Xamarin.iOS (\src\Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj)
+        - Xamarin.Forms (\src\Esri.ArcGISRuntime.Toolkit\XamarinForms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj)
+    2. Build the Toolkit and reference the NuGet package you built.
+        - Building each Toolkit project automatically creates the NuGet package for each platform in the project Output folder.
+        - Create a local nuget source/feed and set it to the \Output\NuGet\Release folder.
+        - Add the nuget package using the standard Nuget package manager dialog in Visual Studio.
+        - It is also possible to create a nuget source pointing to the latest build (automatically updated after each pull-request gets merged): `https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet`.
+        - See [Setting Up Local NuGet Feeds](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds) for more information.
 
-1. Fork and then clone the repo or download the .zip file.
-2. The Toolkit requires the ArcGIS Runtime SDK for .NET.  Confirm that your system meets the requirements for using the ArcGIS Runtime SDK for .NET with [Windows Desktop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm), [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm), and/or [Windows Phone](http://developers.arcgis.com/net/phone/guide/system-requirements.htm).  
- * Note that [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) is referenced by using a Nuget package. It is automatically downloaded when the solution is built for the first time.
-3. To include Toolkit source in your projects:
- *  In Visual Studio, add the ArcGIS Runtime Toolkit project to your solution. 
-    - Windows Desktop (WinDesktop\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsDesktop.proj)
-    - Windows Store	(WinStore\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsStore.proj)
-    - Windows Phone (WinPhone\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.WindowsPhone.proj)
- *  For other projects in the solution, add a reference to the ArcGIS Runtime Toolkit project.
+## System Requirements
 
-## Requirements
-
-* Supported system configurations for: 
-  * [Windows Destkop](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm)
-  * [Windows Phone](http://developers.arcgis.com/net/store/guide/system-requirements.htm)
-  * [Windows Store](http://developers.arcgis.com/net/store/guide/system-requirements.htm)
-
-#### Optional: Change references to use installed SDK
-You might have installed full [ArcGIS Runtime SDK for .NET SDK](http://esriurl.com/dotnetsdk) to your machine and you would prefer to use it instead of using NuGet installation. 
-
-1. Remove / Uninstall Esri.ArcGISRuntime.Toolkit NuGet-package reference from the solution.
-  * Click "Manage NuGet Packages for solution..." from Tools \ NuGet Package Manager
-  * See Installed Packages tab and remove "Esri.ArcGISRuntime.Toolkit" package
-2. [Add references](https://developers.arcgis.com/net/desktop/guide/add-arcgis-runtime-sdk-references.htm) to projects. 
-3. If you are using samples, make sure that you change them to use SDK references too.
-
-
-#### Optional: Build to distribute the Toolkit
-Building the Toolkit:
-
-1.  Open the solution (Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 Update 2 or newer and build the 3 projects.
-2.  For Windows Phone, build both ARM and x86 configurations, for Windows Store, also build x64 configuration.
-
-#####Referencing the project in a Windows Desktop (WPF) app:
- 
- 1.  Add a reference to the \output\WinDesktop\Release\Esri.ArcGISRuntime.Toolkit.dll in your projects.  
-
-#####Referencing the project in a Windows Store or Windows Phone app:
-Make sure you built both x86, ARM and x64 (x64 doesn't apply to Windows Phone).
-The Toolkit must be referenced as an ExtensionSDK. Referencing the SDK by browsing to a DLL as with desktop apps will not work.
-There's two options to 'install' the extension sdk without building an actual installer.
-
-1.  Copy the contents of the folder \Output\ExtensionSDKs\ to "[USERFOLDER]\AppData\Local\Microsoft SDKs\"
-2.  Add the following tag to your app project at the very bottom of your project file right before the <Target> tags:
-```
-<PropertyGroup>
-    <SDKReferenceDirectoryRoot>[TOOLKITFOLDER]\output\ExtensionSDKs;$(SDKReferenceDirectoryRoot)</SDKReferenceDirectoryRoot>
-</PropertyGroup>
-```
-In Visual Studio, right-click the project references, select "Add Reference" and choose the "Windows 8.1->Extensions" or "Windows Phone 8.1->Extensions" tab and check the box next to "ArcGIS Runtime Toolkit...".
-
-#####Windows Store and Windows Phone as an installable extension
- 1. Install the [Visual Studio 2013 SDK](http://msdn.microsoft.com/en-us/library/bb166441.aspx).  To distribute the Toolkit for use in a Windows Store or Windows Phone project, it should be packaged as Visual Studio extension.  The Visual Studio 2013 SDK is required to build Visual Studio extension installers (VSIX). 
- 2. Windows Store 
-   *  Open the solution (WinStore-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.   Be sure to build for Release on the ARM, x86, and x64 platforms.
- 3. Windows Phone: 
-   *  Open the solution (WinPhone-Esri.ArcGISRuntime.Toolkit.sln) in Visual Studio 2012 or 2013 and build the Esri.ArcGISRuntime.Toolkit.dll.  Be sure to build for Release on the ARM and x86 platforms.
- 4. Under the Deployment\VSIX folder in this repo, open the VSIX.sln and build.  The [Visual Studio 2013 SDK](http://msdn.microsoft.com/en-us/library/bb166441.aspx) is required to open projects in this solution.  Also be sure to build the Windows Store and Windows Phone Toolkit projects for the release configuration on all platforms.  A set of *.vsix files will be generated in the project output folders. 
- 5. Run the vsix to install the Toolkit as an extension SDK for Windows Store or Windows Phone projects.  To add a reference in your project, open the Add Reference dialog, navigate to Windows > Extensions, and check the box next to the "ArcGIS Runtime Toolkit...". 
+* Requirements for development and deployment: 
+  * [Windows Desktop](https://developers.arcgis.com/net/latest/wpf/guide/system-requirements.htm)
+  * [Universal Windows Platform (UWP)](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
+  * [Xamarin.Android](https://developers.arcgis.com/net/latest/android/guide/system-requirements.htm)
+  * [Xamarin.iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
+  * [Xamarin.Forms](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
 
 ## Resources
 
 * [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
-* [Visual Studio 2013 SDK](http://www.microsoft.com/en-us/download/details.aspx?id=40758)
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by submitting an issue.
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-toolkit-dotnet/issues/new).
 
 ## Contributing
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
-## Licensing
-Copyright 2014 Esri
+## v10.2.7
 
-This source is subject to the Microsoft Public License (Ms-PL).
+Looking for the Toolkit for ArcGIS Runtime SDK for .NET v10.2.7?
+
+Go to the 10.2.7 tag: https://github.com/Esri/arcgis-toolkit-dotnet/tree/v10.2.7
+
+## Licensing
+
+Copyright © 2014-2017 Esri.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-https://opensource.org/licenses/ms-pl
+   http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -104,4 +96,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-A copy of the license is available in the repository's [license.txt]( https://raw.github.com/Esri/arcgis-toolkit-dotnet/master/license.txt) file.
+A copy of the license is available in the repository's [license.txt](/license.txt) file.

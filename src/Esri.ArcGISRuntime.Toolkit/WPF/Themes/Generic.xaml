@@ -1,0 +1,17 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Compass/Compass.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Legend/LayerLegend.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SignInForm/SignInForm.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/TableOfContents/TableOfContents.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+   
+</ResourceDictionary>

@@ -1,0 +1,93 @@
+﻿<Page x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField.DataGridSample"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField"
+      xmlns:esriUI="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:esri="using:Esri.ArcGISRuntime.Mapping"
+      xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+      xmlns:telerikUI="using:Telerik.UI.Xaml.Controls.Grid"
+      xmlns:telerikCore="using:Telerik.Data.Core"
+      >
+    <!-- This sample uses fields defined by this feature service
+         http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessmentStatePlane/FeatureServer/0 -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <telerikUI:RadDataGrid x:Name="grid" AutoGenerateColumns="False" UserGroupMode="Disabled" UserSortMode="None">
+          <telerikUI:RadDataGrid.Columns>
+            <local:DataGridFeatureColumn Header="ID" FieldName="objectid" />
+                <telerikUI:DataGridTemplateColumn Header="Object ID" CanUserSort="True" >
+                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <!-- 'objectid' is read-only field that will display as read-only, provide a TextBlock for ReadOnlyTemplate -->
+                            <esriToolkit:FeatureDataField Feature="{Binding}"
+                                                          FieldName="objectid"
+                                                          IsReadOnly="True">
+                                <esriToolkit:FeatureDataField.ReadOnlyTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Value, Mode=OneWay}"
+                                                   Foreground="{ThemeResource ApplicationForegroundThemeBrush}" />
+                                    </DataTemplate>
+                                </esriToolkit:FeatureDataField.ReadOnlyTemplate>
+                            </esriToolkit:FeatureDataField>
+                        </DataTemplate>
+                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                </telerikUI:DataGridTemplateColumn>
+                <telerikUI:DataGridTemplateColumn Header="Damage Type" CanUserResize="True" CanUserSort="True" >
+                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <!-- 'typdamage' is an editable coded-value domain field, leave it as editable -->
+                            <esriToolkit:FeatureDataField Feature="{Binding}"
+                                                          FieldName="typdamage" />
+                        </DataTemplate>
+                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                </telerikUI:DataGridTemplateColumn>
+                <telerikUI:DataGridTemplateColumn Header="Habitable">
+                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <!-- 'habitable' is an editable coded-value domain field, make it read-only -->
+                            <esriToolkit:FeatureDataField Feature="{Binding}"
+                                                          FieldName="habitable"
+                                                          HorizontalAlignment="Stretch"
+                                                          IsReadOnly="True" />
+                        </DataTemplate>
+                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                </telerikUI:DataGridTemplateColumn>
+                <telerikUI:DataGridTemplateColumn Header="Value Before Damage">
+                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <!-- 'predisval' is an editable double field, leave it as editable and provide minimum width -->
+                            <esriToolkit:FeatureDataField Feature="{Binding}"
+                                                          FieldName="predisval"
+                                                          MinWidth="100" />
+                        </DataTemplate>
+                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                </telerikUI:DataGridTemplateColumn>
+                <telerikUI:DataGridTemplateColumn Header="Inspection Data">
+                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <!-- 'inspdate' is an editable date field, leave it as editable and provide a DatePicker for InputTemplate -->
+                            <esriToolkit:FeatureDataField Feature="{Binding}"
+                                                          FieldName="inspdate">
+                                <esriToolkit:FeatureDataField.InputTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Date="{Binding Value, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </esriToolkit:FeatureDataField.InputTemplate>
+                            </esriToolkit:FeatureDataField>
+                        </DataTemplate>
+                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                </telerikUI:DataGridTemplateColumn>
+                <telerikUI:DataGridTemplateColumn Header="Last Updated">
+                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <!-- 'lastupdate' is an editable date field, make it read-only -->
+                            <esriToolkit:FeatureDataField Feature="{Binding Mode=TwoWay}"
+                                                          FieldName="lastupdate"
+                                                          MinWidth="100"
+                                                          IsReadOnly="True" />
+                        </DataTemplate>
+                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                </telerikUI:DataGridTemplateColumn>
+            </telerikUI:RadDataGrid.Columns>
+        </telerikUI:RadDataGrid>
+    </Grid>
+</Page>
