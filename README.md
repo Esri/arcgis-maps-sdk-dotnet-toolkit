@@ -4,7 +4,16 @@ The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can 
 
 You can use the Toolkit in your projects by:
 1. Building the source code available in this repo (see instructions below)
-2. Installing the latest stable release from NuGet: [https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)   
+2. Installing the latest stable release or pre-release from NuGet
+    - Stable: [![NuGet](https://img.shields.io/nuget/v/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
+    - Pre-release: [![NuGet](https://img.shields.io/nuget/vpre/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)   
+
+Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x and 10.2.x
+
+- [100.x (current version)](https://developers.arcgis.com/net/latest/)
+- [10.2.x (previous version)](https://developers.arcgis.com/net/10-2/)
+
+**The Toolkit for v100.x is currently in Beta: [Get the latest!](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)**
 
 ## Features
 
@@ -17,31 +26,32 @@ You can use the Toolkit in your projects by:
 
 ## Instructions for Building
 
-1. Fork and then clone the repo or download the .zip file.
-2. The Toolkit requires ArcGIS Runtime SDK for .NET. 
- * Confirm that your system meets the requirements for using ArcGIS Runtime SDK for .NET with:
+1. Confirm that your system meets the requirements for compiling the Toolkit:
+    - Visual Studio 2017 Update 3 (or later) with the following workloads:
+        - `Universal Windows Platform development` (UWP)
+        - `.NET desktop development` (WPF)
+        - `Mobile development with .NET` (Xamarin.Android, Xamarin.iOS, and Xamarin.Forms)
+2. Confirm your system meets the requirements for developing with ArcGIS Runtime SDK for .NET:
    - [WPF](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm)
    - [UWP](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
    - [Xamarin.Android](https://developers.arcgis.com/net/latest/android/guide/system-requirements.htm)
    - [Xamarin.iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
    - [Xamarin.Forms (Android, iOS, and UWP)](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
- * Note that the Toolkit references [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) by Nuget package. The package is automatically downloaded when you build the solution for the first time.
-3. Confirm that your system meets the requirements for compiling the Toolkit
-    - Visual Studio 2017 Update 3+
-    - .NET Core 2.0 SDK
-    - Xamarin.iOS and Xamarin.Android SDKs
-4. Include or reference the Toolkit in your projects:
-    - a. Include the appropriate platform Projects in your Solution.
-     - WPF (src\Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj)
-     - UWP (\src\Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj)
-     - Xamarin.Android (\src\Esri.ArcGISRuntime.Toolkit\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj)
-     - Xamarin.iOS (\src\Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj)
-     - Xamarin.Forms (\src\Esri.ArcGISRuntime.Toolkit\XamarinForms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj)
-    - b. Build the Toolkit and reference the NuGet package you built.
-     - Building each Toolkit project automatically creates the NuGet package for each platform in the project Output folder.
-     - Create a local nuget source and set it to the \Output\NuGet\Release folder.
-     - Add the nuget package using the standard Nuget package manager dialog in Visual Studio.
-     * It is also possible to create a nuget source pointing to the latest build (automatically updated after each pull-request gets merged): `https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet` 
+3. Fork and then clone the repo or download the .zip file.
+4. Include (i) or reference (ii) the Toolkit in your projects:
+* Note the Toolkit references [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) by Nuget package. The package is automatically downloaded when you build the solution for the first time.
+    1. Include the appropriate platform Projects in your Solution.
+        - WPF (src\Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj)
+        - UWP (\src\Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj)
+        - Xamarin.Android (\src\Esri.ArcGISRuntime.Toolkit\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj)
+        - Xamarin.iOS (\src\Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj)
+        - Xamarin.Forms (\src\Esri.ArcGISRuntime.Toolkit\XamarinForms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj)
+    2. Build the Toolkit and reference the NuGet package you built.
+        - Building each Toolkit project automatically creates the NuGet package for each platform in the project Output folder.
+        - Create a local nuget source/feed and set it to the \Output\NuGet\Release folder.
+        - Add the nuget package using the standard Nuget package manager dialog in Visual Studio.
+        - It is also possible to create a nuget source pointing to the latest build (automatically updated after each pull-request gets merged): `https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet`.
+        - See [Setting Up Local NuGet Feeds](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds) for more information.
 
 ## System Requirements
 
@@ -65,11 +75,13 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
 ## v10.2.7
+
 Looking for the Toolkit for ArcGIS Runtime SDK for .NET v10.2.7?
 
 Go to the 10.2.7 tag: https://github.com/Esri/arcgis-toolkit-dotnet/tree/v10.2.7
 
 ## Licensing
+
 Copyright © 2014-2017 Esri.
 
 Licensed under the Apache License, Version 2.0 (the "License");
