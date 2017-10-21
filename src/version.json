@@ -9,11 +9,7 @@
   },
   "cloudBuild": {
     "buildNumber": {
-      "enabled": true,
-      "includeCommitId": {
-        "when": "nonPublicReleaseOnly",
-        "where": "buildMetadata"
-      }
+      "enabled": true
     }
   }
 }
