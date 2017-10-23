@@ -28,7 +28,7 @@
     
     <!--Framework versions-->
     <UWPTargetPlatformVersion>10.0.14393.0</UWPTargetPlatformVersion>
-    <UWPTargetPlatformMinVersion>10.0.10586.0</UWPTargetPlatformMinVersion>
+    <UWPTargetPlatformMinVersion>10.0.14393.0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid60</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
   
