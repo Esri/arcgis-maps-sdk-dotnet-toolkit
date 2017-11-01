@@ -17,12 +17,28 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 
 ## Features
 
-- Compass - Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
-- Legend - Displays a legend for a single layer in your map (and optionally for its sub layers).
-- ScaleLine - Displays current scale reference.
-- ChallengeHandler - (WPF only) Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources, as well as helper classes for storing credentials in Windows' credentials cache. 
-- SymbolDisplay - Renders a symbol in a control.
-- TableOfContents (WPF)- Creates a tree-view of the entire map document. Optionally displays legend information for the layers as well. 
+- Compass: Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
+- FeatureDataField: Displays and optionally allows editing of a single field attribute of a feature.
+- Legend: Displays a legend for a single layer in your map (and optionally for its sub layers).
+- MeasureToolbar: Allows measurement of distances and areas on the map view.
+- ScaleLine: Displays current scale reference.
+- SignInForm: Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources.
+- ChallengeHandler: Displays SignInForm when accessing secure ArcGIS resources, as well as helper classes for storing credentials in Windows' credentials cache. 
+- SymbolDisplay: Renders a symbol in a control.
+- TableOfContents: Creates a tree-view of the entire map document. Optionally displays legend information for the layers. 
+
+## Feature availibility by platform/API
+
+|Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
+|---|---|---|---|---|---|
+|Compass   |*   |*   |   |   |   |
+|FeatureDataField   |*   |*   |   |   |   |
+|Legend   |*   |*   |   |   |   |
+|MeasureToolbar   |*   |*   |   |   |   |
+|ScaleLine   |*   |*   |*   |*   |*   |
+|SignInForm   |   |*   |   |   |   |
+|SymbolDisplay   |*   |*   |   |   |   |
+|TableOfContents   |   |*   |   |   |   |
 
 ## Instructions for Building
 
