@@ -34,13 +34,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private DelegateCommand _zoomToCommand;
         private WeakReference<GeoView> _view;
         private bool _generateLegend;
+        private bool _filterByVisibleScale;
 
-        public LayerContentViewModel(ILayerContent layerContent, WeakReference<GeoView> view, Symbology.Symbol symbol = null, bool generateLegend = true)
+        public LayerContentViewModel(ILayerContent layerContent, WeakReference<GeoView> view, Symbology.Symbol symbol = null, bool generateLegend = true, bool filterByVisibleScale = false)
         {
             LayerContent = layerContent;
             _view = view;
             Symbol = symbol;
             _generateLegend = generateLegend;
+            _filterByVisibleScale = filterByVisibleScale;
             if (LayerContent is INotifyPropertyChanged)
             {
                 (LayerContent as INotifyPropertyChanged).PropertyChanged += LayerContentViewModel_PropertyChanged;
@@ -137,7 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (LayerContent.SublayerContents != null && LayerContent.SublayerContents.Count > 0)
             {
-                _sublayers = new List<LayerContentViewModel>(LayerContent.SublayerContents.Where(t => t.ShowInLegend).Select(t => new LayerContentViewModel(t, _view, null, _generateLegend))).ToArray();
+                _sublayers = new List<LayerContentViewModel>(LayerContent.SublayerContents.Where(t => t.ShowInLegend).Select(t => new LayerContentViewModel(t, _view, null, _generateLegend, _filterByVisibleScale))).ToArray();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
             }
             else
@@ -158,7 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     if (legend != null && legend.Count > 0)
                     {
-                        _sublayers = new List<LayerContentViewModel>(legend.Select(l => new LayerContentViewModel(new LegendContentInfo(l, LayerContent.IsVisibleAtScale), _view, l.Symbol, _generateLegend)));
+                        _sublayers = new List<LayerContentViewModel>(legend.Select(l => new LayerContentViewModel(new LegendContentInfo(l, LayerContent.IsVisibleAtScale), _view, l.Symbol, _generateLegend, _filterByVisibleScale)));
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
                     }
                 }
@@ -180,9 +182,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             IsInScaleRange = isParentVisible && LayerContent.IsVisibleAtScale(scale);
             _currentScale = scale;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInScaleRange)));
-            if (Sublayers != null)
+            if (_isSublayersInitialized && _sublayers != null)
             {
-                foreach (var item in Sublayers)
+                foreach (var item in _sublayers)
                 {
                     item.UpdateScaleVisibility(scale, IsInScaleRange);
                 }
@@ -271,14 +273,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get
             {
+
                 // Lazy initalization of sublayers
                 if (!_isSublayersInitialized)
                 {
                     _isSublayersInitialized = true;
                     BuildSublayerList();
                 }
-
-                return _sublayers;
+                foreach (var s in _sublayers ?? Enumerable.Empty<LayerContentViewModel>())
+                {
+                    if (!_filterByVisibleScale)
+                        yield return s;
+                    else if (s.IsInScaleRange)
+                        yield return s;
+                }
             }
         }
 

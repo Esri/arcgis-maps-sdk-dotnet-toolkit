@@ -34,13 +34,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private List<LayerContentViewModel> _activeLayers = new List<LayerContentViewModel>();
         private IReadOnlyList<Mapping.Layer> _allLayers;
         private bool _showLegend;
+        private bool _excludeError;
         private WeakReference<ArcGISRuntime.UI.Controls.GeoView> _owningView;
 
-        private ObservableLayerContentList(WeakReference<ArcGISRuntime.UI.Controls.GeoView> owningView, IReadOnlyList<Layer> allLayers, bool showLegend)
+        private ObservableLayerContentList(WeakReference<ArcGISRuntime.UI.Controls.GeoView> owningView, IReadOnlyList<Layer> allLayers, bool showLegend, bool excludeError)
         {
             (allLayers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
             _allLayers = allLayers;
             _showLegend = showLegend;
+            _excludeError = excludeError;
             _owningView = owningView;
             foreach (var item in allLayers.Where(l => IncludeLayer(l)))
             {
@@ -53,8 +55,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="mapView">MapView and its Map to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend)
-            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend)
+        /// <param name="excludeError">Skip layers that failed to load.</param>
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend, bool excludeError)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend, excludeError)
         {
         }
 
@@ -64,8 +67,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="sceneView">SceneView and its Scene to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend)
-            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend)
+        /// <param name="excludeError">Skip layers that failed to load.</param>
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend, bool excludeError)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend, excludeError)
         {
         }
 
@@ -84,6 +88,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _reverseOrder = value;
                     _activeLayers.Reverse();
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
+                }
+            }
+        }
+
+        private bool _filterByVisibleScaleRange;
+
+        public bool FilterByVisibleScaleRange
+        {
+            get
+            {
+                return _filterByVisibleScaleRange;
+            }
+
+            set
+            {
+                if (_filterByVisibleScaleRange != value)
+                {
+                    _filterByVisibleScaleRange = value;
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
                 }
@@ -160,7 +184,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var vm = new LayerContentViewModel(layer, _owningView, null, _showLegend);
+            var vm = new LayerContentViewModel(layer, _owningView, null, _showLegend, FilterByVisibleScaleRange);
             _activeLayers.Insert(idx, vm);
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changedItem: vm, index: idx));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
@@ -229,7 +253,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             for (int i = 0; i < _activeLayers.Count; i++)
             {
-                yield return _activeLayers[i];
+                var layer = _activeLayers[i];
+                if (_excludeError && layer.HasError)
+                    continue;
+                if (!FilterByVisibleScaleRange)
+                    yield return layer;
+                else if (layer.IsInScaleRange)
+                    yield return layer;
             }
         }
 

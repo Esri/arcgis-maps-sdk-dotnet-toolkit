@@ -13,7 +13,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="TableOfContents"/> class.
         /// </summary>
-        public TableOfContents() : base()
+        public TableOfContents() : base(false)
         {
             DefaultStyleKey = typeof(TableOfContents);
         }

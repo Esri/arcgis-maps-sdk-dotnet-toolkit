@@ -43,12 +43,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private bool _isScaleSet = false;
         private bool _scaleChanged;
+        private bool _excludeError = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerList"/> class.
         /// </summary>
-        internal LayerList()
+        /// <param name="excludeError">Indicates whether legend is displayed for  layers that failed to load.</param>
+        internal LayerList(bool excludeError)
         {
+            _excludeError = excludeError;
         }
 
         /// <inheritdoc/>
@@ -137,8 +140,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void UpdateScaleVisiblity()
         {
-            if (!FilterByVisibleScaleRange)
-                return;
             if (_scaleChanged)
             {
                 var scale = GeoView.GetCurrentViewpoint(ViewpointType.CenterAndScale)?.TargetScale ??
@@ -238,7 +239,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-
+        
         /// <summary>
         /// Generates layer list for a set of <see cref="Layer"/>s in a <see cref="Map"/> or <see cref="Scene"/>
         /// contained in a <see cref="GeoView"/>
@@ -256,7 +257,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var map = (GeoView as MapView).Map;
                         if (map != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal) { ReverseOrder = !ReverseLayerOrder };
+                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal, _excludeError)
+                            {
+                                ReverseOrder = !ReverseLayerOrder,
+                                FilterByVisibleScaleRange = FilterByVisibleScaleRange,
+                            };
                         }
 
                         Binding b = new Binding();
@@ -270,7 +275,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var scene = (GeoView as SceneView).Scene;
                         if (scene != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal) { ReverseOrder = !ReverseLayerOrder };
+                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal, _excludeError)
+                            {
+                                ReverseOrder = !ReverseLayerOrder,
+                                FilterByVisibleScaleRange = FilterByVisibleScaleRange,
+                            };
                         }
 
                         Binding b = new Binding();
@@ -284,6 +293,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         foreach (var l in layers)
                         {
+                            if (!(l.LayerContent is Layer))
+                                continue;
                             var layer = l.LayerContent as Layer;
                             if (layer.LoadStatus == LoadStatus.Loaded)
                             {
