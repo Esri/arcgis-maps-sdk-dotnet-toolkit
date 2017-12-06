@@ -118,3 +118,4 @@ project.lock.json
 # Visual Studio 2017 auto-generated files
 src/.vs/
 NuGet/
+src/Samples/Toolkit.SampleApp.UWP/BundleArtifacts/

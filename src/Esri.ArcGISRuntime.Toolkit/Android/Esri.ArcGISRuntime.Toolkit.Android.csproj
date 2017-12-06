@@ -15,7 +15,7 @@
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.1.0" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.2.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\WPF\Properties\Resources.cs">
