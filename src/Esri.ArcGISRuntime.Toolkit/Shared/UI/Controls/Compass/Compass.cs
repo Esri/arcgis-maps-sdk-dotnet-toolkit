@@ -14,19 +14,14 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-
-using System;
-using System.ComponentModel;
-using System.Windows;
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+#elif __IOS__
+using Control = UIKit.UIView;
+#elif __ANDROID__
+using Control = Android.Views.ViewGroup;
 #else
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -34,107 +29,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The Compass Control showing the heading on the map when the rotation is not North up / 0.
     /// </summary>
-    public class Compass : Control
+    public partial class Compass : Control
     {
-        private bool _isVisible;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         public Compass()
-        {
-            DefaultStyleKey = typeof(Compass);
-        }
-
-        /// <inheritdoc/>
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
+#if __ANDROID__
+            : base(Android.App.Application.Context)
 #endif
-        {
-            base.OnApplyTemplate();
-            _isVisible = false;
-            UpdateCompassRotation(false);
-        }
+            { Initialize(); }
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
         /// </summary>
         public double Heading
         {
-            get { return (double)GetValue(HeadingProperty); }
-            set { SetValue(HeadingProperty, value); }
+            get { return HeadingImpl; }
+            set { HeadingImpl = value; }
         }
-
-        /// <summary>
-        /// Identifies the <see cref="Heading"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty HeadingProperty =
-            DependencyProperty.Register(nameof(Heading), typeof(double), typeof(Compass), new PropertyMetadata(0d, OnHeadingPropertyChanged));
 
         /// <summary>
         /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
         /// </summary>
         public bool AutoHide
         {
-            get { return (bool)GetValue(AutoHideProperty); }
-            set { SetValue(AutoHideProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="AutoHide"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty AutoHideProperty =
-            DependencyProperty.Register(nameof(AutoHide), typeof(bool), typeof(Compass), new PropertyMetadata(true, OnAutoHidePropertyChanged));
-
-        private static void OnAutoHidePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var compass = (Compass)d;
-            compass.UpdateCompassRotation(false);
-        }
-
-        /// <summary>
-        /// The property changed event that is raised when
-        /// the value of Scale property changes.
-        /// </summary>
-        /// <param name="d">ScaleLine</param>
-        /// <param name="e">Contains information related to the change to the Scale property.</param>
-        private static void OnHeadingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var compass = (Compass)d;
-            compass.UpdateCompassRotation(true);
-        }
-
-        private void UpdateCompassRotation(bool useTransitions)
-        {
-            double heading = Heading;
-            if (double.IsNaN(heading))
-            {
-                heading = 0;
-            }
-
-            var transform = GetTemplateChild("RotateTransform") as RotateTransform;
-            if (transform != null)
-            {
-                transform.Angle = -heading;
-            }
-
-            bool autoHide = AutoHide && !DesignTime.IsDesignMode;
-            if (Math.Round(heading % 360) == 0 && autoHide)
-            {
-                if (_isVisible)
-                {
-                    _isVisible = false;
-                    VisualStateManager.GoToState(this, "HideCompass", useTransitions);
-                }
-            }
-            else if (!_isVisible)
-            {
-                _isVisible = true;
-                VisualStateManager.GoToState(this, "ShowCompass", useTransitions);
-            }
+            get { return AutoHideImpl; }
+            set { AutoHideImpl = value; }
         }
     }
 }
-#endif
