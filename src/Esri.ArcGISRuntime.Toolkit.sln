@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit.iOS", "Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj", "{B8713B42-BAA5-4D62-86C2-1585EF2DF0EC}"
 EndProject
@@ -32,6 +32,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.UWP", "Samples\Toolkit.SampleApp.UWP\Toolkit.Samples.UWP.csproj", "{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.Android", "Samples\Toolkit.SampleApp.Android\Toolkit.Samples.Android.csproj", "{27F5F55F-9553-4A63-B462-FC410D6C7168}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -157,6 +159,8 @@ Global
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Debug|x86.Build.0 = Debug|x86
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Debug|x86.Deploy.0 = Debug|x86
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|Any CPU.ActiveCfg = Release|x86
+		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|Any CPU.Build.0 = Release|x86
+		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|Any CPU.Deploy.0 = Release|x86
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|ARM.ActiveCfg = Release|ARM
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|ARM.Build.0 = Release|ARM
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|ARM.Deploy.0 = Release|ARM
@@ -166,6 +170,30 @@ Global
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x86.ActiveCfg = Release|x86
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x86.Build.0 = Release|x86
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x86.Deploy.0 = Release|x86
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|ARM.Build.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|ARM.Deploy.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|x64.Build.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|x86.Build.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|ARM.ActiveCfg = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|ARM.Build.0 = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|ARM.Deploy.0 = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|x64.ActiveCfg = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|x64.Build.0 = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|x64.Deploy.0 = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|x86.ActiveCfg = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|x86.Build.0 = Release|Any CPU
+		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -179,6 +207,7 @@ Global
 		{552428BC-A0A9-4A03-832F-CD3EA9DCEE31} = {BD5B4F64-D32F-4DF3-B34D-070B7D526579}
 		{75555B1C-1AED-401F-BEC6-A791AAB70D57} = {94D7A0A9-8C78-4E5E-9EAB-6C5D1CF0E8A0}
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7} = {94D7A0A9-8C78-4E5E-9EAB-6C5D1CF0E8A0}
+		{27F5F55F-9553-4A63-B462-FC410D6C7168} = {94D7A0A9-8C78-4E5E-9EAB-6C5D1CF0E8A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD437263-1C96-46A9-A641-C312BF7DAF99}
