@@ -35,7 +35,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             RunOnUiThread(() =>
             {
                 scaleLine.MapScale = mapView.MapScale;
-                //compass.Heading = mapView.MapRotation;
             });
         }
     }
