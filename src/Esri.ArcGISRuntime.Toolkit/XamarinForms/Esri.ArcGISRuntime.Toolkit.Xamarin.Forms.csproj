@@ -32,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.1.0" />
-    <PackageReference Include="Xamarin.Forms" Version="2.3.4.270" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.2.0" />
+    <PackageReference Include="Xamarin.Forms" Version="2.4.0.74863" />
   </ItemGroup>
   
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
