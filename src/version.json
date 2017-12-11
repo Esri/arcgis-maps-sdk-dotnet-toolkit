@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/AArnott/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
-  "version": "100.1.0-beta3.{height}",
+  "version": "100.2.0-beta3.{height}",
   "publicReleaseRefSpec": [
     "^refs/tags/v\\d+\\.\\d+" // we release out of tags starting with vN.N
   ],
