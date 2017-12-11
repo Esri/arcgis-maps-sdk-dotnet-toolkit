@@ -47,6 +47,7 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
         - `Universal Windows Platform development` (UWP)
         - `.NET desktop development` (WPF)
         - `Mobile development with .NET` (Xamarin.Android, Xamarin.iOS, and Xamarin.Forms)
+        - '.NET Core 2.0 SDK'
 2. Confirm your system meets the requirements for developing with ArcGIS Runtime SDK for .NET:
    - [WPF](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm)
    - [UWP](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
