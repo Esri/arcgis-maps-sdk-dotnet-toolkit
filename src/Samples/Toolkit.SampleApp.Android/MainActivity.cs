@@ -9,7 +9,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
     [Activity(Label = "Toolkit.Samples.Droid", MainLauncher = true)]
     public class MainActivity : Activity
     {
-        UI.Controls.Compass compass;
         UI.Controls.ScaleLine scaleLine;
         MapView mapView;
 
@@ -26,16 +25,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             mapView.ViewpointChanged += MapView_ViewpointChanged;
 
             scaleLine = FindViewById<UI.Controls.ScaleLine>(Resource.Id.scaleLine);
-            compass = FindViewById<UI.Controls.Compass>(Resource.Id.compass);
         }
 
         private void MapView_ViewpointChanged(object sender, System.EventArgs e)
         {
-            compass.Heading = mapView.MapRotation;
             RunOnUiThread(() =>
             {
                 scaleLine.MapScale = mapView.MapScale;
-                //compass.Heading = mapView.MapRotation;
             });
         }
     }
