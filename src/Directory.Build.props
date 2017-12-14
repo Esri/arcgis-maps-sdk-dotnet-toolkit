@@ -34,8 +34,6 @@
   
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
-    <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
-    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\Output\intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
 
   </PropertyGroup>
 
@@ -49,6 +47,8 @@
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
+        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\Output\intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
       </PropertyGroup>
       <ItemGroup>
         <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="all" />
