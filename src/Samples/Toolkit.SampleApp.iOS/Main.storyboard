@@ -32,9 +32,8 @@
                             <constraint id="679" firstItem="224" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height"/>
                             <constraint id="680" firstItem="224" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width"/>
                             <constraint id="914" firstItem="224" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="0"/>
-                            <constraint id="915" firstItem="224" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="0"/>
-                            <constraint id="912" firstItem="451" firstAttribute="bottom" secondItem="224" secondAttribute="bottom" constant="25"/>
-                            <constraint id="913" firstItem="451" firstAttribute="leading" secondItem="224" secondAttribute="leading" constant="25"/>
+                            <constraint id="915" firstItem="224" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="0"/>                           
+                            <constraint id="913" firstItem="451" firstAttribute="left" secondItem="224" secondAttribute="left" constant="25"/>
                         </constraints>
                     </view>
                     <connections>

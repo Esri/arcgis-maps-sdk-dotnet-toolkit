@@ -22,6 +22,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             scaleLine.MapScale = mapView.MapScale;
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            // Attach the scaleline to always sit right on top of the attribution text
+            scaleLine.BottomAnchor.ConstraintEqualTo(mapView.AttributionTopAnchor, -10).Active = true;
+        }
+
         public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
