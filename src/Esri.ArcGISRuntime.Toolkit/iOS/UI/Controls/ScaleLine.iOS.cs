@@ -25,7 +25,6 @@ using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    [Register("ScaleLine")]
     [DisplayName("Scaleline")]
     [Category("ArcGIS Runtime Controls")]
     public partial class ScaleLine : IComponent

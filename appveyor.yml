@@ -1,15 +1,17 @@
-version: 100.1.{build}
+version: 100.2.0-beta3.{build}
 branches:
   only:
   - master
-skip_branch_with_pr: true
 image: Visual Studio 2017
 configuration: Release
 platform: Any CPU
 nuget:
   disable_publish_on_pr: true
 before_build:
-- cmd: msbuild /t:restore src/Esri.ArcGISRuntime.Toolkit.sln
+- cmd: >-
+    msbuild /t:restore src/Esri.ArcGISRuntime.Toolkit.sln
+    
+    msbuild /t:restore src/Esri.ArcGISRuntime.Toolkit.sln
 build:
   project: src/Esri.ArcGISRuntime.Toolkit.sln
   verbosity: minimal
