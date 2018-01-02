@@ -957,6 +957,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             obj.playTimer.Interval = newValue;
         }
 
+        /// <summary>
+        /// Gets or sets the how fast the thumb(s) moves across the Tick Marks of the TimeSlider.
+        /// </summary>
+		public PlaybackDirection PlaybackDirection
+        {
+            get { return (PlaybackDirection)GetValue(PlaybackDirectionProperty); }
+            set { SetValue(PlaybackDirectionProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="PlaybackDirection"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PlaybackDirectionProperty =
+            DependencyProperty.Register(nameof(PlaybackDirection), typeof(PlaybackDirection), typeof(TimeSlider),
+                new PropertyMetadata(PlaybackDirection.Forward));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the animating of the TimeSlider thumb(s) will restart playing 
+        /// when the end of the TickBar is reached.
+        /// </summary>
+		public LoopMode LoopMode
+        {
+            get { return (LoopMode)GetValue(LoopModeProperty); }
+            set { SetValue(LoopModeProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="LoopMode"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LoopModeProperty =
+            DependencyProperty.Register(nameof(LoopMode), typeof(LoopMode), typeof(TimeSlider), new PropertyMetadata(LoopMode.None));
+
         private void SetButtonVisibility()
         {
             Visibility viz = (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext()) ? Visibility.Visible : Visibility.Collapsed;
@@ -1328,23 +1360,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the animating of the TimeSlider thumb(s) will restart playing 
-        /// when the end of the TickBar is reached.
-        /// </summary>
-		public bool Loop
-        {
-            get { return (bool)GetValue(LoopProperty); }
-            set { SetValue(LoopProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Loop"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LoopProperty =
-            DependencyProperty.Register("Loop", typeof(bool), typeof(TimeSlider), new PropertyMetadata(false));
-
-
-        /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>
         /// </summary>
         public string FullExtentLabelFormat
@@ -1386,14 +1401,47 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void playTimer_Tick(object sender, EventArgs e)
         {
-            bool isFinished = !StepForward();
+            var isFinished = PlaybackDirection == PlaybackDirection.Forward ? !StepForward() : !StepBack();
             if (isFinished)
             {
-                if (!Loop)
+                if (LoopMode == LoopMode.None)
+                {
                     IsPlaying = false;
+                }
                 else
                 {
-                    Rewind();
+                    // We want to rely on step indexes, so we use the known backing type here since that's most efficent.
+                    // If the backing type changes, the implemetation here will need to be updated accordingly
+                    var timeStepsList = (List<DateTimeOffset>)TimeSteps;
+
+                    // Get the current start and end time step indexes
+                    var startTimeStepIndex = timeStepsList.IndexOf(CurrentValidExtent.StartTime);
+                    var endTimeStepIndex = timeStepsList.IndexOf(CurrentValidExtent.EndTime);
+
+                    if (LoopMode == LoopMode.Repeat)
+                    {
+                        if (PlaybackDirection == PlaybackDirection.Forward)
+                        {
+                            StepBack(startTimeStepIndex);
+                        }
+                        else
+                        {
+                            StepForward(timeStepsList.Count - (endTimeStepIndex - startTimeStepIndex));
+                        }
+                    }
+                    else if (LoopMode == LoopMode.Reverse)
+                    {
+                        if (PlaybackDirection == PlaybackDirection.Forward)
+                        {
+                            PlaybackDirection = PlaybackDirection.Backward;
+                            StepBack();
+                        }
+                        else
+                        {
+                            PlaybackDirection = PlaybackDirection.Forward;
+                            StepForward();
+                        }
+                    }
                 }
             }
         }
