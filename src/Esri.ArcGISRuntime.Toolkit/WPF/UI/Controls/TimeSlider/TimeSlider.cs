@@ -977,17 +977,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets a value indicating whether the animating of the TimeSlider thumb(s) will restart playing 
         /// when the end of the TickBar is reached.
         /// </summary>
-		public LoopMode LoopMode
+		public LoopMode PlaybackLoopMode
         {
             get { return (LoopMode)GetValue(LoopModeProperty); }
             set { SetValue(LoopModeProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="LoopMode"/> dependency property.
+        /// Identifies the <see cref="PlaybackLoopMode"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty LoopModeProperty =
-            DependencyProperty.Register(nameof(LoopMode), typeof(LoopMode), typeof(TimeSlider), new PropertyMetadata(LoopMode.None));
+            DependencyProperty.Register(nameof(PlaybackLoopMode), typeof(LoopMode), typeof(TimeSlider), new PropertyMetadata(LoopMode.None));
 
         private void SetButtonVisibility()
         {
@@ -1404,7 +1404,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var isFinished = PlaybackDirection == PlaybackDirection.Forward ? !StepForward() : !StepBack();
             if (isFinished)
             {
-                if (LoopMode == LoopMode.None)
+                if (PlaybackLoopMode == LoopMode.None)
                 {
                     IsPlaying = false;
                 }
@@ -1418,7 +1418,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var startTimeStepIndex = timeStepsList.IndexOf(CurrentValidExtent.StartTime);
                     var endTimeStepIndex = timeStepsList.IndexOf(CurrentValidExtent.EndTime);
 
-                    if (LoopMode == LoopMode.Repeat)
+                    if (PlaybackLoopMode == LoopMode.Repeat)
                     {
                         if (PlaybackDirection == PlaybackDirection.Forward)
                         {
@@ -1429,7 +1429,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             StepForward(timeStepsList.Count - (endTimeStepIndex - startTimeStepIndex));
                         }
                     }
-                    else if (LoopMode == LoopMode.Reverse)
+                    else if (PlaybackLoopMode == LoopMode.Reverse)
                     {
                         if (PlaybackDirection == PlaybackDirection.Forward)
                         {
