@@ -8,7 +8,7 @@
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Esri/arcgis-toolkit-dotnet/master/license.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>v100.1-beta2: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.1-beta2 </PackageReleaseNotes>
+    <PackageReleaseNotes>v100.2-beta3: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.2-beta3 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <Copyright>Copyright © 2014-2017 Esri.</Copyright>
@@ -28,14 +28,12 @@
     
     <!--Framework versions-->
     <UWPTargetPlatformVersion>10.0.14393.0</UWPTargetPlatformVersion>
-    <UWPTargetPlatformMinVersion>10.0.10586.0</UWPTargetPlatformMinVersion>
+    <UWPTargetPlatformMinVersion>10.0.14393.0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid60</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
   
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
-    <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
-    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\Output\intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
 
   </PropertyGroup>
 
@@ -49,9 +47,11 @@
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
+        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\Output\intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
       </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0-beta.69" PrivateAssets="all" />
+        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="all" />
       </ItemGroup>
       <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
