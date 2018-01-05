@@ -20,11 +20,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Esri.ArcGISRuntime;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

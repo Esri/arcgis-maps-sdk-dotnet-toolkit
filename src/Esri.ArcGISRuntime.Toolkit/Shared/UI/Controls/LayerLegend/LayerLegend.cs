@@ -19,14 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
-using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #else
+using System.Windows;
 using System.Windows.Controls;
 #endif
 
@@ -185,24 +184,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty ShowEntireTreeHiarchyProperty =
             DependencyProperty.Register(nameof(ShowEntireTreeHiarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.UpdateLegend()));
-    }
-    
-    internal class LayerLegendInfo
-    {
-        internal LayerLegendInfo(LegendInfo info)
-        {
-            Name = info?.Name;
-            Symbol = info?.Symbol ?? null;
-        }
-
-        internal LayerLegendInfo(ILayerContent content)
-        {
-            Name = content?.Name;
-            Symbol = null;
-        }
-
-        public string Name { get; }
-        public Symbology.Symbol Symbol { get; }
     }
 }
 #endif
