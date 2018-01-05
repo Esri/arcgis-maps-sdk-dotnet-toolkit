@@ -38,11 +38,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
-        public Legend()
-            : base(true)
+        public Legend() : base()
         {
             DefaultStyleKey = typeof(Legend);
-            
+
         }
     }
 }

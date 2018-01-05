@@ -43,17 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private bool _isScaleSet = false;
         private bool _scaleChanged;
-        private bool _excludeError = false;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LayerList"/> class.
-        /// </summary>
-        /// <param name="excludeError">Indicates whether legend is displayed for  layers that failed to load.</param>
-        internal LayerList(bool excludeError)
-        {
-            _excludeError = excludeError;
-        }
-
+        
         /// <inheritdoc/>
 #if NETFX_CORE
         protected override void OnApplyTemplate()
@@ -257,7 +247,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var map = (GeoView as MapView).Map;
                         if (map != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal, _excludeError)
+                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal)
                             {
                                 ReverseOrder = !ReverseLayerOrder,
                                 FilterByVisibleScaleRange = FilterByVisibleScaleRange,
@@ -275,7 +265,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var scene = (GeoView as SceneView).Scene;
                         if (scene != null)
                         {
-                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal, _excludeError)
+                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal)
                             {
                                 ReverseOrder = !ReverseLayerOrder,
                                 FilterByVisibleScaleRange = FilterByVisibleScaleRange,

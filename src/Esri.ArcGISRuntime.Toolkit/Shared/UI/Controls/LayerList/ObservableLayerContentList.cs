@@ -34,15 +34,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private List<LayerContentViewModel> _activeLayers = new List<LayerContentViewModel>();
         private IReadOnlyList<Mapping.Layer> _allLayers;
         private bool _showLegend;
-        private bool _excludeError;
         private WeakReference<ArcGISRuntime.UI.Controls.GeoView> _owningView;
 
-        private ObservableLayerContentList(WeakReference<ArcGISRuntime.UI.Controls.GeoView> owningView, IReadOnlyList<Layer> allLayers, bool showLegend, bool excludeError)
+        private ObservableLayerContentList(WeakReference<ArcGISRuntime.UI.Controls.GeoView> owningView, IReadOnlyList<Layer> allLayers, bool showLegend)
         {
             (allLayers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
             _allLayers = allLayers;
             _showLegend = showLegend;
-            _excludeError = excludeError;
             _owningView = owningView;
             foreach (var item in allLayers.Where(l => IncludeLayer(l)))
             {
@@ -55,9 +53,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="mapView">MapView and its Map to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        /// <param name="excludeError">Skip layers that failed to load.</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend, bool excludeError)
-            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend, excludeError)
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend)
         {
         }
 
@@ -67,9 +64,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="sceneView">SceneView and its Scene to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        /// <param name="excludeError">Skip layers that failed to load.</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend, bool excludeError)
-            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend, excludeError)
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend)
         {
         }
 
@@ -94,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private bool _filterByVisibleScaleRange;
+        private bool _filterByVisibleScaleRange = true;
 
         public bool FilterByVisibleScaleRange
         {
@@ -108,6 +104,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_filterByVisibleScaleRange != value)
                 {
                     _filterByVisibleScaleRange = value;
+                    foreach(var layer in _activeLayers)
+                    {
+                        layer.FilterByVisibleScaleRange = _filterByVisibleScaleRange;
+                    }
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
                 }
@@ -253,13 +253,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             for (int i = 0; i < _activeLayers.Count; i++)
             {
-                var layer = _activeLayers[i];
-                if (_excludeError && layer.HasError)
-                    continue;
-                if (!FilterByVisibleScaleRange)
-                    yield return layer;
-                else if (layer.IsInScaleRange)
-                    yield return layer;
+                yield return _activeLayers[i];
             }
         }
 

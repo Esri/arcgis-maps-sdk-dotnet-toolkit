@@ -93,12 +93,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
 
-            var items = new ObservableCollection<LegendInfo>();
+            var items = new ObservableCollection<LayerLegendInfo>();
             ctrl.ItemsSource = items;
             LoadRecursive(items, LayerContent, ShowEntireTreeHiarchy);
         }
 
-        private async void LoadRecursive(IList<LegendInfo> itemsList, ILayerContent content, bool recursive)
+        private async void LoadRecursive(IList<LayerLegendInfo> itemsList, ILayerContent content, bool recursive)
         {
             if (content == null)
             {
@@ -107,12 +107,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
+                if(LayerContent.Name != content.Name)
+                    itemsList.Add(new LayerLegendInfo(content));
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 var legendInfo = await content.GetLegendInfosAsync();
 #pragma warning restore ESRI1800
                 foreach (var item in legendInfo)
                 {
-                    itemsList.Add(item);
+                    itemsList.Add(new LayerLegendInfo(item));
                 }
             }
             catch
@@ -183,6 +185,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty ShowEntireTreeHiarchyProperty =
             DependencyProperty.Register(nameof(ShowEntireTreeHiarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.UpdateLegend()));
+    }
+    
+    internal class LayerLegendInfo
+    {
+        internal LayerLegendInfo(LegendInfo info)
+        {
+            Name = info?.Name;
+            Symbol = info?.Symbol ?? null;
+        }
+
+        internal LayerLegendInfo(ILayerContent content)
+        {
+            Name = content?.Name;
+            Symbol = null;
+        }
+
+        public string Name { get; }
+        public Symbology.Symbol Symbol { get; }
     }
 }
 #endif
