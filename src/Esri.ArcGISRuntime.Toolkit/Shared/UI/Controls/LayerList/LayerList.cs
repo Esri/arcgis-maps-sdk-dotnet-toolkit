@@ -120,7 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnFilterByVisibleScaleRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((LayerList)d).RebuildList();
+            ((LayerList)d).UpdateLegendVisiblity();
         }
 
         private void GeoView_ViewpointChanged(object sender, EventArgs e)
@@ -134,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var scale = GeoView.GetCurrentViewpoint(ViewpointType.CenterAndScale)?.TargetScale ??
                     (GeoView as MapView)?.MapScale;
-                if (scale.HasValue && _layerContentList != null)
+                if (scale.HasValue && (_layerContentList?.Any() ?? false))
                 {
                     _isScaleSet = true;
                     foreach (var item in _layerContentList)
@@ -143,6 +143,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
 
                     _scaleChanged = false;
+                }
+            }
+        }
+
+        private void UpdateLegendVisiblity()
+        {
+            if (_layerContentList != null)
+            {
+                foreach (var item in _layerContentList)
+                {
+                    item.UpdateLegendVisiblity(FilterByVisibleScaleRange);
                 }
             }
         }
@@ -250,7 +261,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal)
                             {
                                 ReverseOrder = !ReverseLayerOrder,
-                                FilterByVisibleScaleRange = FilterByVisibleScaleRange,
                             };
                         }
 
@@ -268,7 +278,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal)
                             {
                                 ReverseOrder = !ReverseLayerOrder,
-                                FilterByVisibleScaleRange = FilterByVisibleScaleRange,
                             };
                         }
 

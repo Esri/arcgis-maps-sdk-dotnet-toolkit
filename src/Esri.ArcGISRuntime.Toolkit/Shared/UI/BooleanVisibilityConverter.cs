@@ -15,34 +15,35 @@
 //  ******************************************************************************/
 
 #if !XAMARIN
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI.Controls;
-
+using System;
+using System.Globalization;
 #if NETFX_CORE
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 #else
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Data;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
-    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
-    /// </summary>
-    [TemplatePart(Name = "List", Type = typeof(ItemsControl))]
-    public class Legend : LayerList
+    internal class BooleanVisibilityConverter : IValueConverter
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Legend"/> class.
-        /// </summary>
-        public Legend() : base()
-        {
-            DefaultStyleKey = typeof(Legend);
-            base.ShowLegendInternal = true;
-        }
+        public object Convert(object value, Type targetType, object parameter,
+#if NETFX_CORE
+            string language
+#else
+            CultureInfo culture
+#endif
+            ) => (value is bool ? (bool)value : false)  ? Visibility.Visible : Visibility.Collapsed;
+
+        public object ConvertBack(object value, Type targetType, object parameter,
+#if NETFX_CORE
+            string language
+#else
+            CultureInfo culture
+#endif
+            ) => throw new NotSupportedException();
     }
 }
 #endif

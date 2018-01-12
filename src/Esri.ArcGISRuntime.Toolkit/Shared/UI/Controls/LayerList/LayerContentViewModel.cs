@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
@@ -32,14 +33,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private DelegateCommand _zoomToCommand;
         private WeakReference<GeoView> _view;
         private bool _generateLegend;
-
-        public LayerContentViewModel(ILayerContent layerContent, WeakReference<GeoView> view, Symbology.Symbol symbol = null, bool generateLegend = true, bool filterByVisibleScale = false)
+        private SynchronizationContext _context;
+        public LayerContentViewModel(ILayerContent layerContent, WeakReference<GeoView> view, Symbology.Symbol symbol = null, bool generateLegend = true)
         {
+            _context = SynchronizationContext.Current ?? new SynchronizationContext();
             LayerContent = layerContent;
             _view = view;
             Symbol = symbol;
             _generateLegend = generateLegend;
-            FilterByVisibleScaleRange = filterByVisibleScale;
             if (LayerContent is INotifyPropertyChanged)
             {
                 (LayerContent as INotifyPropertyChanged).PropertyChanged += LayerContentViewModel_PropertyChanged;
@@ -120,7 +121,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnLayerContentLoaded(object sender, EventArgs e)
         {
             _isSublayersInitialized = false;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+            _context.Post((o) =>
+               {
+                   PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+                   PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
+               }, null);
         }
 
         private async void BuildSublayerList()
@@ -136,19 +141,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (LayerContent.SublayerContents != null && LayerContent.SublayerContents.Count > 0)
             {
-                _sublayers = new List<LayerContentViewModel>(LayerContent.SublayerContents.Where(t => t.ShowInLegend).Select(t => new LayerContentViewModel(t, _view, null, _generateLegend, FilterByVisibleScaleRange))).ToArray();
+                _sublayers = new List<LayerContentViewModel>(LayerContent.SublayerContents.ToArray().Where(t => t.ShowInLegend).Select(t => new LayerContentViewModel(t, _view, null, _generateLegend))).ToArray();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
             }
             else
             {
                 _sublayers = null;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
                 if (_generateLegend)
                 {
                     IReadOnlyList<LayerLegendInfo> legend;
                     try
                     {
                         var result = await LayerContent.GetLegendInfosAsync();
+                        if (result == null)
+                            return;
                         legend = new ReadOnlyCollection<LayerLegendInfo>(new List<LayerLegendInfo>(from r in result select new LayerLegendInfo(r)));
                     }
                     catch
@@ -158,8 +167,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     if (legend != null && legend.Count > 0)
                     {
-                        _sublayers = new List<LayerContentViewModel>(legend.Select(l => new LayerContentViewModel(new LegendContentInfo(l, LayerContent.IsVisibleAtScale), _view, l.Symbol, _generateLegend, FilterByVisibleScaleRange)));
+                        _sublayers = new List<LayerContentViewModel>(legend.Select(l => new LayerContentViewModel(new LegendContentInfo(l, LayerContent.IsVisibleAtScale), _view, l.Symbol, _generateLegend)));
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
                     }
                 }
             }
@@ -173,8 +183,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private double _currentScale = double.NaN;
+        private bool _filterByVisibleScaleRange = true;
+        internal void UpdateLegendVisiblity(bool filterByVisibleScaleRange)
+        {
+            if (_filterByVisibleScaleRange == filterByVisibleScaleRange)
+                return;
+            _filterByVisibleScaleRange = filterByVisibleScaleRange;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
+            if (Sublayers != null)
+            {
+                foreach (var item in Sublayers)
+                {
+                    item.UpdateLegendVisiblity(filterByVisibleScaleRange);
+                }
+            }
+        }
 
+        private double _currentScale = double.NaN;
         internal void UpdateScaleVisibility(double scale, bool isParentVisible)
         {
             IsInScaleRange = isParentVisible && LayerContent.IsVisibleAtScale(scale);
@@ -225,6 +250,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _isSublayersInitialized = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
         }
 
         private Viewpoint GetExtent()
@@ -256,6 +282,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
             }
             else if (e.PropertyName == nameof(ILoadable.LoadStatus))
             {
@@ -282,7 +309,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return _sublayers;
             }
         }
+        
+        public IEnumerable<LayerContentViewModel> FlatList
+        {
+            get
+            {
+                foreach (var item in Flatten(new LayerContentViewModel[] { this }))
+                {
+                    yield return item;
+                }
+            }
+        }
 
+        IEnumerable<LayerContentViewModel> Flatten(IEnumerable<LayerContentViewModel> enumerable)
+        {
+            if (enumerable != null)
+            {
+                foreach (var content in enumerable)
+                {
+                    if (LayerContent.Name != content.LayerContent.Name)
+                    {
+                        yield return content;
+                    }
+                    if (content.Sublayers != null)
+                    {
+                        foreach (var subLayer in Flatten(content.Sublayers))
+                        {
+                            yield return subLayer;
+                        }
+                    }
+                }
+            }
+        }
+        
         internal void UpdateLayerViewState(LayerViewState state)
         {
             UpdateLoadingStatus();
@@ -344,6 +403,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _reloadCommand?.RaiseCanExecuteChanged();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasError)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Error)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
             }
         }
 
@@ -361,36 +421,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public bool HasError { get; private set; }
 
-        private bool _filterByVisibleScaleRange = true;
-        public bool FilterByVisibleScaleRange
-        {
-            get => _filterByVisibleScaleRange;
-            set
-            {
-                if (_filterByVisibleScaleRange != value)
-                {
-                    UpdateFilterByVisibleScaleRange(this, value);
-                }
-            }
-        }
-
-        private void UpdateFilterByVisibleScaleRange(LayerContentViewModel content, bool filterByVisibleScaleRange)
-        {
-            if (_filterByVisibleScaleRange == filterByVisibleScaleRange || content == null)
-                return;
-            _filterByVisibleScaleRange = filterByVisibleScaleRange;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FilterByVisibleScaleRange)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
-            if (Sublayers != null)
-            {
-                foreach (var item in Sublayers)
-                {
-                    UpdateFilterByVisibleScaleRange(item, filterByVisibleScaleRange);
-                }
-            }
-        }
-
-        public bool DisplayLegend => !FilterByVisibleScaleRange || IsInScaleRange;
+        public bool DisplayLegend => !HasError && (!_filterByVisibleScaleRange || IsInScaleRange);
 
         public string Error { get; private set; }
 

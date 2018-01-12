@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <controls:BooleanVisibilityConverter x:Key="VisibilityConverter"/>
     <Style TargetType="{x:Type controls:Legend}">
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
@@ -15,24 +16,24 @@
         <Setter Property="LayerItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <StackPanel>
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding HasError, Mode=OneWay}" Value="True">
-                                        <Setter Property="Visibility"  Value="Collapsed" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsInScaleRange, Mode=OneWay}" Value="False">
-                                        <Setter Property="Opacity" Value=".5" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <TextBlock Text="{Binding LayerContent.Name}"
-                                   FontWeight="Bold" />
-                        <controls:LayerLegend LayerContent="{Binding LayerContent}"
-                                              ShowEntireTreeHiarchy="True"                                             
-                                              Margin="10,0" />
+                    <StackPanel Visibility="{Binding DisplayLegend, Converter={StaticResource VisibilityConverter}}">
+                        <TextBlock Text="{Binding LayerContent.Name}" 
+                                   FontWeight="Bold"/>
+                        <ItemsControl ItemsSource="{Binding FlatList}" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" 
+                                                Margin="10,0"
+                                                Visibility="{Binding DisplayLegend, Converter={StaticResource VisibilityConverter}}">
+                                        <controls:SymbolDisplay Symbol="{Binding Symbol}" 
+                                                                MaxHeight="40" 
+                                                                MaxWidth="40"/>
+                                        <TextBlock Text="{Binding LayerContent.Name}" 
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>

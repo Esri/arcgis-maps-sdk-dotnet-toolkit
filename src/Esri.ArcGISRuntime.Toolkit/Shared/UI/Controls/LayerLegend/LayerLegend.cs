@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var items = new ObservableCollection<LayerLegendInfo>();
             ctrl.ItemsSource = items;
-            LoadRecursive(items, LayerContent, ShowEntireTreeHiarchy);
+            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
         }
 
         private async void LoadRecursive(IList<LayerLegendInfo> itemsList, ILayerContent content, bool recursive)
@@ -106,14 +106,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                if(LayerContent.Name != content.Name)
+                if (LayerContent.Name != content.Name)
                     itemsList.Add(new LayerLegendInfo(content));
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 var legendInfo = await content.GetLegendInfosAsync();
 #pragma warning restore ESRI1800
-                foreach (var item in legendInfo)
+                if (legendInfo != null)
                 {
-                    itemsList.Add(new LayerLegendInfo(item));
+                    foreach (var item in legendInfo)
+                    {
+                        itemsList.Add(new LayerLegendInfo(item));
+                    }
                 }
             }
             catch
@@ -123,9 +126,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (recursive)
             {
-                foreach (var item in content.SublayerContents)
+                if (content.SublayerContents != null)
                 {
-                    LoadRecursive(itemsList, item, recursive);
+                    foreach (var item in content.SublayerContents)
+                    {
+                        LoadRecursive(itemsList, item, recursive);
+                    }
                 }
             }
         }
@@ -171,19 +177,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(ItemsPanel), typeof(ItemsPanelTemplate), typeof(LayerLegend), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hiarchy should be rendered
+        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
         /// </summary>
-        public bool ShowEntireTreeHiarchy
+        public bool ShowEntireTreeHierarchy
         {
-            get { return (bool)GetValue(ShowEntireTreeHiarchyProperty); }
-            set { SetValue(ShowEntireTreeHiarchyProperty, value); }
+            get { return (bool)GetValue(ShowEntireTreeHierarchyProperty); }
+            set { SetValue(ShowEntireTreeHierarchyProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="ShowEntireTreeHiarchy"/> dependency property.
+        /// Identifies the <see cref="ShowEntireTreeHierarchy"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowEntireTreeHiarchyProperty =
-            DependencyProperty.Register(nameof(ShowEntireTreeHiarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.UpdateLegend()));
+        public static readonly DependencyProperty ShowEntireTreeHierarchyProperty =
+            DependencyProperty.Register(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.UpdateLegend()));
+
     }
 }
 #endif

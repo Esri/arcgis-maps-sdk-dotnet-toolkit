@@ -15,8 +15,12 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
+#if NETFX_CORE
+using System.Collections.ObjectModel;
+#else
+using System.Collections;
+#endif
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -27,7 +31,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// This class manages the tree of layer contents, and tracks their state (loading, changing etc)
     /// </summary>
-    internal class ObservableLayerContentList : IReadOnlyList<LayerContentViewModel>, System.ComponentModel.INotifyPropertyChanged, System.Collections.Specialized.INotifyCollectionChanged
+    internal class ObservableLayerContentList :
+#if NETFX_CORE
+        Collection<LayerContentViewModel>,
+#else
+        IReadOnlyList<LayerContentViewModel>,
+#endif
+        System.ComponentModel.INotifyPropertyChanged, 
+        System.Collections.Specialized.INotifyCollectionChanged
     {
         private List<LayerContentViewModel> _activeLayers = new List<LayerContentViewModel>();
         private IReadOnlyList<Mapping.Layer> _allLayers;
@@ -79,33 +90,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 if (_reverseOrder != value)
-                {
+                {            
                     _reverseOrder = value;
-                    _activeLayers.Reverse();
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
-                }
-            }
-        }
-
-        private bool _filterByVisibleScaleRange = true;
-
-        public bool FilterByVisibleScaleRange
-        {
-            get
-            {
-                return _filterByVisibleScaleRange;
-            }
-
-            set
-            {
-                if (_filterByVisibleScaleRange != value)
-                {
-                    _filterByVisibleScaleRange = value;
-                    foreach(var layer in _activeLayers)
-                    {
-                        layer.FilterByVisibleScaleRange = _filterByVisibleScaleRange;
-                    }
+#if NETFX_CORE
+                    var activeLayers = this.ToArray();
+                    int i = 0;
+                    ClearItems();                   
+                    foreach (var item in activeLayers.Reverse())
+                        InsertItem(i++, item);
+#else
+                    _activeLayers.Reverse();                    
+#endif
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
                 }
@@ -182,8 +177,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var vm = new LayerContentViewModel(layer, _owningView, null, _showLegend, FilterByVisibleScaleRange);
+            var vm = new LayerContentViewModel(layer, _owningView, null, _showLegend);
             _activeLayers.Insert(idx, vm);
+#if NETFX_CORE
+            InsertItem(idx, vm);
+#endif
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changedItem: vm, index: idx));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
@@ -209,6 +207,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (idx >= 0)
                 {
                     _activeLayers.RemoveAt(idx);
+#if NETFX_CORE
+                    RemoveItem(idx);
+#endif
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, changedItem: vm, index: idx));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Items[]"));
@@ -232,7 +233,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-
+        
+#if !NETFX_CORE
         /// <inheritdoc cref="IReadOnlyList{T}.this"/>
         public LayerContentViewModel this[int index]
         {
@@ -254,12 +256,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 yield return _activeLayers[i];
             }
         }
-
+        
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<LayerContentViewModel>)this).GetEnumerator();
         }
+#endif
 
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
