@@ -124,7 +124,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _context.Post((o) =>
                {
                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
-                   PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
                }, null);
         }
 
@@ -143,18 +142,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _sublayers = new List<LayerContentViewModel>(LayerContent.SublayerContents.ToArray().Where(t => t.ShowInLegend).Select(t => new LayerContentViewModel(t, _view, null, _generateLegend))).ToArray();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
             }
             else
             {
                 _sublayers = null;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
                 if (_generateLegend)
                 {
                     IReadOnlyList<LayerLegendInfo> legend;
                     try
                     {
+                        if (LayerContent is LegendContentInfo)
+                            return;
                         var result = await LayerContent.GetLegendInfosAsync();
                         if (result == null)
                             return;
@@ -169,7 +168,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         _sublayers = new List<LayerContentViewModel>(legend.Select(l => new LayerContentViewModel(new LegendContentInfo(l, LayerContent.IsVisibleAtScale), _view, l.Symbol, _generateLegend)));
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
                     }
                 }
             }
@@ -221,10 +219,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             public LegendContentInfo(LayerLegendInfo legend, Func<double, bool> visibleAtScaleCalculation)
             {
+                LegendInfo = legend.LegendInfo;
                 Name = legend.Name;
                 _visibleAtScaleCalculation = visibleAtScaleCalculation;
             }
-
+            public LegendInfo LegendInfo { get; }
             public bool CanChangeVisibility { get; }
 
             public bool IsVisible { get; set; } = true;
@@ -237,6 +236,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             public Task<IReadOnlyList<LegendInfo>> GetLegendInfosAsync()
             {
+                if (LegendInfo?.Symbol != null)
+                {
+                    return Task.FromResult<IReadOnlyList<LegendInfo>>(new ReadOnlyCollection<LegendInfo>(new List<LegendInfo>(new LegendInfo[] { LegendInfo })));
+                }
                 return Task.FromResult<IReadOnlyList<LegendInfo>>(null);
             }
 
@@ -250,7 +253,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _isSublayersInitialized = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
         }
 
         private Viewpoint GetExtent()
@@ -282,7 +284,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FlatList)));
             }
             else if (e.PropertyName == nameof(ILoadable.LoadStatus))
             {
@@ -307,38 +308,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     BuildSublayerList();
                 }
                 return _sublayers;
-            }
-        }
-        
-        public IEnumerable<LayerContentViewModel> FlatList
-        {
-            get
-            {
-                foreach (var item in Flatten(new LayerContentViewModel[] { this }))
-                {
-                    yield return item;
-                }
-            }
-        }
-
-        IEnumerable<LayerContentViewModel> Flatten(IEnumerable<LayerContentViewModel> enumerable)
-        {
-            if (enumerable != null)
-            {
-                foreach (var content in enumerable)
-                {
-                    if (LayerContent.Name != content.LayerContent.Name)
-                    {
-                        yield return content;
-                    }
-                    if (content.Sublayers != null)
-                    {
-                        foreach (var subLayer in Flatten(content.Sublayers))
-                        {
-                            yield return subLayer;
-                        }
-                    }
-                }
             }
         }
         
@@ -422,6 +391,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool HasError { get; private set; }
 
         public bool DisplayLegend => !HasError && (!_filterByVisibleScaleRange || IsInScaleRange);
+
+        public bool IsSublayer => LayerContent is ArcGISSublayer;
 
         public string Error { get; private set; }
 

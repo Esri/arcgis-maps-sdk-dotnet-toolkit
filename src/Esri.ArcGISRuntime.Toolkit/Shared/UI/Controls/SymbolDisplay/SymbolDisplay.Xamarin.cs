@@ -14,28 +14,44 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Symbology;
+#if XAMARIN
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    internal class LayerLegendInfo
+    /// <summary>
+    /// A control that renders a <see cref="Symbology.Symbol"/>.
+    /// </summary>
+    public partial class SymbolDisplay 
     {
-        internal LayerLegendInfo(LegendInfo info)
+        private Symbology.Symbol _symbol;
+        /// <summary>
+        /// Gets or sets the symbol to render
+        /// </summary>
+        private Symbology.Symbol SymbolImpl
         {
-            LegendInfo = info;
-            Name = info?.Name;
-            Symbol = info?.Symbol ?? null;
+            get => _symbol;
+            set
+            {
+                if(_symbol != value)
+                {
+                    _symbol = value;
+                    RefreshSymbol();
+                }
+            }
         }
 
-        internal LayerLegendInfo(ILayerContent content)
+        private void RefreshSymbol()
         {
-            Name = content?.Name;
-            Symbol = null;
         }
 
-        public string Name { get; }
-        public Symbol Symbol { get; }
-        public LegendInfo LegendInfo { get; }
+        private double GetScaleFactor()
+        {
+            if (!DesignTime.IsDesignMode)
+            {
+            }
+
+            return 1;
+        }
     }
 }
+#endif
