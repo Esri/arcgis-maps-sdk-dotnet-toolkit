@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public Legend() : base()
         {
-            base.ShowLegendInternal = true;
+            ShowLegendInternal = true;
         }
     }
 }

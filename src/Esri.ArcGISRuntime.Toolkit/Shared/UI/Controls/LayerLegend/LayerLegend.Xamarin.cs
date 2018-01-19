@@ -16,25 +16,45 @@
 
 #if XAMARIN
 
+using Esri.ArcGISRuntime.Mapping;
+
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// A control that renders a <see cref="Symbology.Symbol"/>.
+    /// The Legend Control that generates a list of Legend Items for a Layer
     /// </summary>
-    public partial class SymbolDisplay 
+    public partial class LayerLegend
     {
-        private Symbology.Symbol _symbol;
+        private ILayerContent _layerContent;
+
         /// <summary>
-        /// Gets or sets the symbol to render
+        /// Gets or sets the layer to display the legend for.
         /// </summary>
-        private Symbology.Symbol SymbolImpl
+        private ILayerContent LayerContentImpl
         {
-            get => _symbol;
+            get => _layerContent;
             set
             {
-                if(_symbol != value)
+                if (_layerContent != value)
                 {
-                    _symbol = value;
+                    _layerContent = value;
+                    Refresh();
+                }
+            }
+        }
+
+        private bool _showEntireTreeHierarchy;
+        /// <summary>
+        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
+        /// </summary>
+        private bool ShowEntireTreeHierarchyImpl
+        {
+            get => _showEntireTreeHierarchy;
+            set
+            {
+                if (_showEntireTreeHierarchy != value)
+                {
+                    _showEntireTreeHierarchy = value;
                     Refresh();
                 }
             }

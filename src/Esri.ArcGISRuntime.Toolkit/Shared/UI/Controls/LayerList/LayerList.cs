@@ -21,17 +21,13 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 #elif __IOS__
 using Control = UIKit.UIView;
 #elif __ANDROID__
 using Control = Android.Views.ViewGroup;
 #else
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -39,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The base class for <see cref="Legend"/>
     /// and TableOfContents control is used to display symbology and description for a set of <see cref="Layer"/>s
-    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
+    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/>.
     /// </summary>
     public partial class LayerList : Control
     {
@@ -67,6 +63,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => GeoViewImpl;
             set => GeoViewImpl = value;
         }
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
+        /// are used to determine when legend for layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
+        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
+        /// </remarks>
+        public bool FilterByVisibleScaleRange
+        {
+            get => FilterByVisibleScaleRangeImpl;
+            set => FilterByVisibleScaleRangeImpl = value;
+        }
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layers is displayed from top to bottom order;
+        /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
+        /// </remarks>
+        public bool ReverseLayerOrder
+        {
+            get => ReverseLayerOrderImpl;
+            set => ReverseLayerOrderImpl = value;
+        }
 
         private void OnViewChanged(GeoView oldView, GeoView newView)
         {
@@ -85,23 +108,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isScaleSet = false;
             }
 
-            RebuildList();
+            Refresh();
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
-        /// are used to determine when legend for layer is displayed.
-        /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
-        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
-        /// </remarks>
-        public bool FilterByVisibleScaleRange
-        {
-            get => FilterByVisibleScaleRangeImpl;
-            set => FilterByVisibleScaleRangeImpl = value;
-        }
-        
         private void GeoView_ViewpointChanged(object sender, EventArgs e)
         {
             UpdateScaleVisiblity();
@@ -163,11 +172,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     incc.PropertyChanged += listener.OnEvent;
                 }
 
-                RebuildList();
+                Refresh();
             }
             else if (sender is SceneView && e.PropertyName == nameof(SceneView.Scene))
             {
-                RebuildList();
+                Refresh();
             }
             else if (e.PropertyName == nameof(MapView.MapScale))
             {
@@ -185,7 +194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (e.PropertyName == nameof(Map.AllLayers))
             {
-                RebuildList();
+                Refresh();
             }
         }
                 
@@ -207,22 +216,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_showLegendInternal != value)
                 {
                     _showLegendInternal = value;
-                    RebuildList();
+                    Refresh();
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
-        /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layers is displayed from top to bottom order;
-        /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
-        /// </remarks>
-        public bool ReverseLayerOrder
-        {
-            get => ReverseLayerOrderImpl;
-            set => ReverseLayerOrderImpl = value;
         }
     }
 }

@@ -33,9 +33,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
     /// </summary>
     [TemplatePart(Name = "List", Type = typeof(ItemsControl))]
-    public partial class Legend 
+    public partial class Legend
     {
-        internal override void InitializeInternal() => DefaultStyleKey = typeof(Legend);
+        private void Initialize() => DefaultStyleKey = typeof(Legend);
+
+        /// <inheritdoc />
+#if NETFX_CORE
+        protected override void OnApplyTemplate()
+#else
+        public override void OnApplyTemplate()
+#endif
+        {
+            base.OnApplyTemplate();
+            Refresh();
+        }
     }
 }
 #endif

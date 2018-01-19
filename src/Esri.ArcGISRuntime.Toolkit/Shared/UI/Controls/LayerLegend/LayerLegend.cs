@@ -14,18 +14,15 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Esri.ArcGISRuntime.Mapping;
-
+using System.Collections.Generic;
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+#elif __IOS__
+using Control = UIKit.UIView;
+#elif __ANDROID__
+using Control = Android.Views.ViewGroup;
 #else
-using System.Windows;
 using System.Windows.Controls;
 #endif
 
@@ -34,67 +31,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The Legend Control that generates a list of Legend Items for a Layer
     /// </summary>
-    public class LayerLegend : Control
+    public partial class LayerLegend : Control
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         public LayerLegend()
-        {
-            DefaultStyleKey = typeof(LayerLegend);
-        }
-
-        /// <inheritdoc/>
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
+#if __ANDROID__
+            : base(Android.App.Application.Context)
 #endif
-        {
-            base.OnApplyTemplate();
-            UpdateLegend();
-        }
-
+        { Initialize(); }
+               
         /// <summary>
         /// Gets or sets the layer to display the legend for.
         /// </summary>
         public ILayerContent LayerContent
         {
-            get { return (ILayerContent)GetValue(LayerProperty); }
-            set { SetValue(LayerProperty, value); }
+            get => LayerContentImpl;
+            set => LayerContentImpl = value;
         }
 
         /// <summary>
-        /// Identifies the <see cref="LayerContent"/> dependency property.
+        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
         /// </summary>
-        public static readonly DependencyProperty LayerProperty =
-            DependencyProperty.Register(nameof(LayerContent), typeof(ILayerContent), typeof(LayerLegend), new PropertyMetadata(null, (d, e) => (d as LayerLegend)?.UpdateLegend()));
-
-        private void UpdateLegend()
+        public bool ShowEntireTreeHierarchy
         {
-            var ctrl = GetTemplateChild("ItemsList") as ItemsControl;
-            if (ctrl == null || LayerContent == null)
-            {
-                if (ctrl != null)
-                {
-                    ctrl.ItemsSource = null;
-                }
-
-                return;
-            }
-
-            if (LayerContent is ILoadable)
-            {
-                if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
-                {
-                    (LayerContent as ILoadable).Loaded += Layer_Loaded;
-                    return;
-                }
-            }
-
-            var items = new ObservableCollection<LayerLegendInfo>();
-            ctrl.ItemsSource = items;
-            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
+            get => ShowEntireTreeHierarchyImpl;
+            set => ShowEntireTreeHierarchyImpl = value;
         }
 
         private async void LoadRecursive(IList<LayerLegendInfo> itemsList, ILayerContent content, bool recursive)
@@ -135,62 +98,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-
-        private void Layer_Loaded(object sender, EventArgs e)
-        {
-            (sender as Layer).Loaded -= Layer_Loaded;
-#if NETFX_CORE
-            var ignore_ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateLegend);
-#else
-            var ignore = Dispatcher.InvokeAsync(UpdateLegend);
-#endif
-        }
-
-        /// <summary>
-        /// Gets or sets the ItemsTemplate
-        /// </summary>
-        public DataTemplate ItemTemplate
-        {
-            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
-            set { SetValue(ItemTemplateProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ItemTemplate"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ItemTemplateProperty =
-            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(LayerLegend), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Gets or sets the Items Panel Template
-        /// </summary>
-        public ItemsPanelTemplate ItemsPanel
-        {
-            get { return (ItemsPanelTemplate)GetValue(ItemsPanelProperty); }
-            set { SetValue(ItemsPanelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ItemsPanel"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ItemsPanelProperty =
-            DependencyProperty.Register(nameof(ItemsPanel), typeof(ItemsPanelTemplate), typeof(LayerLegend), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
-        /// </summary>
-        public bool ShowEntireTreeHierarchy
-        {
-            get { return (bool)GetValue(ShowEntireTreeHierarchyProperty); }
-            set { SetValue(ShowEntireTreeHierarchyProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ShowEntireTreeHierarchy"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ShowEntireTreeHierarchyProperty =
-            DependencyProperty.Register(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.UpdateLegend()));
-
     }
 }
-#endif

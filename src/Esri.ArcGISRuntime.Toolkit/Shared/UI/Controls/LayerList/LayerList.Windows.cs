@@ -33,14 +33,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The base class for <see cref="Legend"/>
     /// and TableOfContents control is used to display symbology and description for a set of <see cref="Layer"/>s
-    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
+    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/>.
     /// </summary>
     [TemplatePart(Name ="List", Type = typeof(ItemsControl))]
     public partial class LayerList
     {
-        private void Initialize() { InitializeInternal(); }
-
-        internal virtual void InitializeInternal() { }
+        private void Initialize() => DefaultStyleKey = this.GetType();
 
         /// <inheritdoc/>
 #if NETFX_CORE
@@ -50,110 +48,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
-            RebuildList();
+            Refresh();
         }
-
-        /// <summary>
-        /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
-        /// </summary>
-        /// <seealso cref="MapView"/>
-        /// <seealso cref="SceneView"/>
-        private GeoView GeoViewImpl
-        {
-            get { return (GeoView)GetValue(GeoViewProperty); }
-            set { SetValue(GeoViewProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="GeoView"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty GeoViewProperty =
-            DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(LayerList), new PropertyMetadata(null, OnGeoViewPropertyChanged));
-
-        private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var contents = (LayerList)d;
-            contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
-        }
-        
-        /// <summary>
-        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
-        /// are used to determine when legend for layer is displayed.
-        /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
-        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
-        /// </remarks>
-        private bool FilterByVisibleScaleRangeImpl
-        {
-            get { return (bool)GetValue(FilterByVisibleScaleRangeProperty); }
-            set { SetValue(FilterByVisibleScaleRangeProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="FilterByVisibleScaleRange"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty FilterByVisibleScaleRangeProperty =
-            DependencyProperty.Register(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnFilterByVisibleScaleRangePropertyChanged));
-
-        private static void OnFilterByVisibleScaleRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayerList)d).UpdateLegendVisiblity();
-        }
-        
-        private static readonly DependencyProperty DocumentProperty =
-            DependencyProperty.Register("Document", typeof(object), typeof(LayerList), new PropertyMetadata(null, OnDocumentPropertyChanged));
-
-        private static void OnDocumentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayerList)d).RebuildList();
-        }
-
-        /// <summary>
-        /// Gets or sets the item template for each layer content entry
-        /// </summary>
-        public DataTemplate LayerItemTemplate
-        {
-            get { return (DataTemplate)GetValue(LayerItemTemplateProperty); }
-            set { SetValue(LayerItemTemplateProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="LayerItemTemplate"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LayerItemTemplateProperty =
-            DependencyProperty.Register(nameof(LayerItemTemplate), typeof(DataTemplate), typeof(LayerList), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
-        /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layers is displayed from top to bottom order;
-        /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
-        /// </remarks>
-        private bool ReverseLayerOrderImpl
-        {
-            get { return (bool)GetValue(ReverseLayerOrderProperty); }
-            set { SetValue(ReverseLayerOrderProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ReverseLayerOrder"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ReverseLayerOrderProperty =
-            DependencyProperty.Register(nameof(ReverseLayerOrder), typeof(bool), typeof(LayerList), new PropertyMetadata(false, OnReverseLayerOrderPropertyChanged));
-
-        private static void OnReverseLayerOrderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((LayerList)d)._layerContentList.ReverseOrder = !(bool)e.NewValue;
-        }
-
 
         /// <summary>
         /// Generates layer list for a set of <see cref="Layer"/>s in a <see cref="Map"/> or <see cref="Scene"/>
         /// contained in a <see cref="GeoView"/>
         /// </summary>
-        private void RebuildList()
+        internal virtual void Refresh()
         {
             var list = GetTemplateChild("List") as ItemsControl;
             if (list != null)
@@ -221,6 +123,101 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
+        /// </summary>
+        /// <seealso cref="MapView"/>
+        /// <seealso cref="SceneView"/>
+        private GeoView GeoViewImpl
+        {
+            get { return (GeoView)GetValue(GeoViewProperty); }
+            set { SetValue(GeoViewProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="GeoView"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty GeoViewProperty =
+            DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(LayerList), new PropertyMetadata(null, OnGeoViewPropertyChanged));
+
+        private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var contents = (LayerList)d;
+            contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
+        }
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
+        /// are used to determine when legend for layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
+        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
+        /// </remarks>
+        private bool FilterByVisibleScaleRangeImpl
+        {
+            get { return (bool)GetValue(FilterByVisibleScaleRangeProperty); }
+            set { SetValue(FilterByVisibleScaleRangeProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="FilterByVisibleScaleRange"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty FilterByVisibleScaleRangeProperty =
+            DependencyProperty.Register(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnFilterByVisibleScaleRangePropertyChanged));
+
+        private static void OnFilterByVisibleScaleRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayerList)d).UpdateLegendVisiblity();
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layers is displayed from top to bottom order;
+        /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
+        /// </remarks>
+        private bool ReverseLayerOrderImpl
+        {
+            get { return (bool)GetValue(ReverseLayerOrderProperty); }
+            set { SetValue(ReverseLayerOrderProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ReverseLayerOrder"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ReverseLayerOrderProperty =
+            DependencyProperty.Register(nameof(ReverseLayerOrder), typeof(bool), typeof(LayerList), new PropertyMetadata(false, OnReverseLayerOrderPropertyChanged));
+
+        private static void OnReverseLayerOrderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayerList)d)._layerContentList.ReverseOrder = !(bool)e.NewValue;
+        }
+
+        private static readonly DependencyProperty DocumentProperty =
+            DependencyProperty.Register("Document", typeof(object), typeof(LayerList), new PropertyMetadata(null, OnDocumentPropertyChanged));
+
+        private static void OnDocumentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayerList)d).Refresh();
+        }
+
+        /// <summary>
+        /// Gets or sets the item template for each layer content entry
+        /// </summary>
+        public DataTemplate LayerItemTemplate
+        {
+            get { return (DataTemplate)GetValue(LayerItemTemplateProperty); }
+            set { SetValue(LayerItemTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="LayerItemTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LayerItemTemplateProperty =
+            DependencyProperty.Register(nameof(LayerItemTemplate), typeof(DataTemplate), typeof(LayerList), new PropertyMetadata(null));
     }
 }
 #endif

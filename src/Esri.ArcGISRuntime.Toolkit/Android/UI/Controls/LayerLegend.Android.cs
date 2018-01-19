@@ -20,36 +20,38 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Esri.ArcGISRuntime.UI;
+using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay")]
-    public partial class SymbolDisplay
+    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend")]
+    public partial class LayerLegend
     {
         private static DisplayMetrics s_displayMetrics;
         private static IWindowManager s_windowManager;
         private LinearLayout _rootLayout;
-        private ImageView _imageView;
+        private ListView _listView;
+        private SynchronizationContext _syncContext;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+        /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public SymbolDisplay(Context context) : base(context) { Initialize(); }
+        public LayerLegend(Context context) : base(context) { Initialize(); }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+        /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public SymbolDisplay(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
+        public LayerLegend(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
 
         private void Initialize()
-        {       
+        {
             // TODO: Design time experience
             //if (DesignTime.IsDesignMode)
-
+            _syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
             _rootLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Vertical,
@@ -57,55 +59,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             _rootLayout.SetGravity(GravityFlags.Top);
 
-            _imageView = new ImageView(Context)
-            {
-                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent)
-            };
-            _imageView.SetMaxWidth(40);
-            _imageView.SetMaxHeight(40);
-            _imageView.SetScaleType(ImageView.ScaleType.CenterInside);
-            _rootLayout.AddView(_imageView);
-
+            _listView = new ListView(Context);
+            _rootLayout.AddView(_listView);
+            
             // Add root layout to view
             AddView(_rootLayout);
             _rootLayout.RequestLayout();
         }
 
-        private async void Refresh()
+        private void Refresh()
         {
-            if (_imageView == null)
-            {
+            if (_listView == null)
                 return;
+            if (LayerContent == null)
+                _listView.Adapter = null;
+           
+            if (LayerContent is ILoadable)
+            {
+                if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
+                {
+                    (LayerContent as ILoadable).Loaded += Layer_Loaded;
+                    return;
+                }
             }
 
-            if (SymbolImpl == null)
-            {
-                _imageView.SetImageResource(0);
-                _imageView.LayoutParameters.Width = 0;
-                _imageView.LayoutParameters.Height = 0;
-            }
-            else
-            {
-#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
-                try
-                {
-                    var scale = GetScaleFactor();
-                    var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                    _imageView.LayoutParameters.Width = (int)(imageData.Width / scale);
-                    _imageView.LayoutParameters.Height = (int)(imageData.Height / scale);
-                    _imageView.SetImageBitmap(await imageData.ToImageSourceAsync());
-                }
-                catch
-                {
-                    _imageView.SetImageResource(0);
-                }
-#pragma warning restore ESRI1800
-            }
+            var items = new ObservableCollection<LayerLegendInfo>();
+            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
+            _listView.Adapter = new LegendsAdapter(Context, items);
         }
 
-        private static double GetScaleFactor()
+        private void Layer_Loaded(object sender, System.EventArgs e)
         {
-            return GetDisplayMetrics()?.Density ?? 1;
+            (sender as ILoadable).Loaded -= Layer_Loaded;            
+            _syncContext?.Post(_ => Refresh(), null);
         }
 
         /// <inheritdoc />
@@ -159,6 +145,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return !DesignTime.IsDesignMode ?
                 TypedValue.ApplyDimension(screenUnitType, pixels, GetDisplayMetrics()) : pixels;
         }
-        
     }
 }

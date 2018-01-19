@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
-            RefreshSymbol();
+            Refresh();
         }
 
         /// <summary>
@@ -62,10 +62,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as SymbolDisplay)?.RefreshSymbol();
+            (d as SymbolDisplay)?.Refresh();
         }
 
-        private async void RefreshSymbol()
+        private async void Refresh()
         {
             var img = GetTemplateChild("image") as Image;
             if (img == null)
