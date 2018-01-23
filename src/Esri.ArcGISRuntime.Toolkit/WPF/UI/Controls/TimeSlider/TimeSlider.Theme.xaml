@@ -277,6 +277,7 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -287,10 +288,10 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- start time label -->
-                        <TextBlock x:Name="FullExtentStartTimeTextBlock"
+                        <TextBlock x:Name="FullExtentStartTimeLabel"
                                    Text="{Binding FullExtent.StartTime,
                                         RelativeSource={RelativeSource TemplatedParent},
-                                        StringFormat={}{0:MM/dd/yyyy}}"
+                                        StringFormat={}{0:M/d/yyyy}}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Bottom"
                                    Grid.Column="0"
@@ -376,11 +377,11 @@
                         </Grid>
 
                         <!-- end time label -->
-                        <TextBlock x:Name="FullExtentEndTimeTextBlock"
+                        <TextBlock x:Name="FullExtentEndTimeLabel"
                                    Text="{Binding FullExtent.EndTime,
                                         RelativeSource={RelativeSource TemplatedParent},
-                                        StringFormat={}{0:MM/dd/yyyy}}"
-                                   HorizontalAlignment="Center"
+                                        StringFormat={}{0:M/d/yyyy}}"
+                                   HorizontalAlignment="Right"
                                    VerticalAlignment="Bottom"
                                    Grid.Column="3"
                                    Grid.Row="0"
@@ -409,14 +410,12 @@
 
                         <!-- Slider -->
                         <Grid x:Name="HorizontalTrack"
-                              Margin="-6,-6,-6,0"
+                              Margin="0,0,0,1"
                               Grid.Row="2"
                               Grid.Column="1"
                               Grid.ColumnSpan="3"
-                              HorizontalAlignment="Stretch">
-
-                            <Grid VerticalAlignment="Center"
-                                  Margin="0,0,0,-4">
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Top">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -424,17 +423,31 @@
 
                                 <!--tick marks for snapping points-->
                                 <localPrimitives:TickBar x:Name="TickMarks"
-                                                         Margin="7,0,7,0"
-                                                         Height="4"
                                                          IsHitTestVisible="False"
                                                          Grid.Row="1"
                                                          TickFill="{TemplateBinding TimeStepIntervalTickFill}">
-                                    <localPrimitives:TickBar.TickMarkTemplate>
+                                    <localPrimitives:TickBar.MinorTickMarkTemplate>
                                         <DataTemplate>
-                                            <Rectangle Width="1.5" Height="{TemplateBinding Height}"
+                                            <Rectangle Width="1.5" Height="4"
                                                        Fill="{Binding TickFill, ElementName=TickMarks}" />
                                         </DataTemplate>
-                                    </localPrimitives:TickBar.TickMarkTemplate>
+                                    </localPrimitives:TickBar.MinorTickMarkTemplate>
+                                    <localPrimitives:TickBar.MajorTickMarkTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Rectangle Width="1.5" Height="7"
+                                                           Fill="{Binding TickFill, ElementName=TickMarks}" />
+                                                <TextBlock x:Name="TickLabel"
+                                                           Text="{Binding StringFormat={}{0:M/d}}"
+                                                           HorizontalAlignment="Center"
+                                                           Grid.Row="1" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </localPrimitives:TickBar.MajorTickMarkTemplate>
                                 </localPrimitives:TickBar>
 
                                 <!--left repeater button-->
@@ -447,10 +460,10 @@
                                 <Rectangle Grid.Column="1" x:Name="FocusVisualElement"
                                            Height="8"
                                            Stroke="{TemplateBinding FullExtentStroke}" StrokeThickness="1.5"
-                                           Margin="6,0,6,0" IsHitTestVisible="false" Opacity="0"/>
+                                           IsHitTestVisible="false" Opacity="0"/>
 
                                 <!-- Slider track border -->
-                                <Rectangle Grid.Column="1" Margin="6,0,6,0"
+                                <Rectangle Grid.Column="1"
                                            Height="8"
                                            Stroke="{TemplateBinding FullExtentStroke}"
                                            Fill="{TemplateBinding FullExtentFill}"
@@ -478,23 +491,6 @@
                                         Opacity="1"
                                         Visibility="Collapsed"
                                         HorizontalAlignment="Left"/>
-                            </Grid>
-                            <!--minimum thumb-->
-                            <Thumb x:Name="MinimumThumb"                           
-                                   Width="12"
-                                   Height="20"
-                                   Grid.RowSpan="2"
-                                   Style="{StaticResource TimeSliderThumbStyle}"
-                                   BorderBrush="{TemplateBinding ThumbStroke}"
-                                   Background="{TemplateBinding ThumbFill}"
-                                   Foreground="Black"
-                                   DataContext="{TemplateBinding CurrentExtent}"
-                                   ToolTipService.ToolTip="{Binding StartTime}" 
-                                   ToolTipService.Placement="Top"
-                                   Cursor="Hand"
-                                   IsTabStop="False"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"/>
 
                             <!--minimum thumb disabled state-->
                             <Rectangle x:Name="MinimumThumbDisabledOverlay"
@@ -505,23 +501,6 @@
                                        Opacity=".55"
                                        Visibility="Collapsed"
                                        HorizontalAlignment="Left"/>
-
-                            <!--maximum thumb-->
-                            <Thumb x:Name="MaximumThumb"
-                                   Width="12"
-                                   Height="20"
-                                   Grid.RowSpan="2"
-                                   Style="{StaticResource TimeSliderThumbStyle}"
-                                   BorderBrush="{TemplateBinding ThumbStroke}"
-                                   Background="{TemplateBinding ThumbFill}"
-                                   Foreground="Black"
-                                   DataContext="{TemplateBinding CurrentExtent}"
-                                   ToolTipService.ToolTip="{Binding EndTime}" 
-                                   ToolTipService.Placement="Top"
-                                   Cursor="Hand"
-                                   IsTabStop="False"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"/>
 
                             <!--maximum thumb disabled state-->
                             <Rectangle x:Name="MaximumThumbDisabledOverlay"
@@ -540,6 +519,66 @@
                                           HorizontalAlignment="Stretch"
                                           Opacity="0" />
                         </Grid>
+
+                        <!--minimum thumb-->
+                        <Thumb x:Name="MinimumThumb"
+                               Width="12"
+                               Height="20"
+                               Style="{StaticResource TimeSliderThumbStyle}"
+                               BorderBrush="{TemplateBinding ThumbStroke}"
+                               Background="{TemplateBinding ThumbFill}"
+                               Foreground="Black"
+                               DataContext="{TemplateBinding CurrentExtent}"
+                               ToolTipService.ToolTip="{Binding StartTime}" 
+                               ToolTipService.Placement="Top"
+                               Cursor="Hand"
+                               IsTabStop="False"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Grid.Row="1"
+                               Grid.RowSpan="2"
+                               Grid.Column="1"
+                               Grid.ColumnSpan="3"/>
+
+                        <!--maximum thumb-->
+                        <Thumb x:Name="MaximumThumb"
+                               Width="12"
+                               Height="20"
+                               Style="{StaticResource TimeSliderThumbStyle}"
+                               BorderBrush="{TemplateBinding ThumbStroke}"
+                               Background="{TemplateBinding ThumbFill}"
+                               Foreground="Black"
+                               DataContext="{TemplateBinding CurrentExtent}"
+                               ToolTipService.ToolTip="{Binding EndTime}"
+                               ToolTipService.Placement="Top"
+                               Cursor="Hand"
+                               IsTabStop="False"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               Grid.Row="1"
+                               Grid.Column="1"
+                               Grid.RowSpan="2"
+                               Grid.ColumnSpan="3"/>
+
+                        <TextBlock x:Name="MinimumThumbLabel"
+                                   Text="{Binding CurrentExtent.StartTime,
+                                        RelativeSource={RelativeSource TemplatedParent},
+                                        StringFormat={}{0:M/d/yyyy}}"
+                                   HorizontalAlignment="Center"
+                                   Grid.Row="3"
+                                   Grid.Column="1"
+                                   Grid.ColumnSpan="3"
+                                   Visibility="Collapsed"/>
+
+                        <TextBlock x:Name="MaximumThumbLabel"
+                                   Text="{Binding CurrentExtent.EndTime,
+                                        RelativeSource={RelativeSource TemplatedParent},
+                                        StringFormat={}{0:M/d/yyyy}}"
+                                   HorizontalAlignment="Center"
+                                   Grid.Row="3"
+                                   Grid.Column="1"
+                                   Grid.ColumnSpan="3"
+                                   Visibility="Collapsed"/>
 
                         <!--</Grid>-->
 
