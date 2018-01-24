@@ -409,7 +409,7 @@
                                    Grid.Row="1"/>
 
                         <!-- Slider -->
-                        <Grid x:Name="HorizontalTrack"
+                        <Grid x:Name="SliderTrack"
                               Margin="0,0,0,1"
                               Grid.Row="2"
                               Grid.Column="1"
@@ -422,17 +422,17 @@
                                 </Grid.RowDefinitions>
 
                                 <!--tick marks for snapping points-->
-                                <localPrimitives:TickBar x:Name="TickMarks"
+                                <localPrimitives:TickBar x:Name="Tickmarks"
                                                          IsHitTestVisible="False"
                                                          Grid.Row="1"
                                                          TickFill="{TemplateBinding TimeStepIntervalTickFill}">
-                                    <localPrimitives:TickBar.MinorTickMarkTemplate>
+                                    <localPrimitives:TickBar.MinorTickmarkTemplate>
                                         <DataTemplate>
                                             <Rectangle Width="1.5" Height="4"
-                                                       Fill="{Binding TickFill, ElementName=TickMarks}" />
+                                                       Fill="{Binding TickFill, ElementName=Tickmarks}" />
                                         </DataTemplate>
-                                    </localPrimitives:TickBar.MinorTickMarkTemplate>
-                                    <localPrimitives:TickBar.MajorTickMarkTemplate>
+                                    </localPrimitives:TickBar.MinorTickmarkTemplate>
+                                    <localPrimitives:TickBar.MajorTickmarkTemplate>
                                         <DataTemplate>
                                             <Grid>
                                                 <Grid.RowDefinitions>
@@ -440,18 +440,18 @@
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
                                                 <Rectangle Width="1.5" Height="7"
-                                                           Fill="{Binding TickFill, ElementName=TickMarks}" />
+                                                           Fill="{Binding TickFill, ElementName=Tickmarks}" />
                                                 <TextBlock x:Name="TickLabel"
                                                            Text="{Binding StringFormat={}{0:M/d}}"
                                                            HorizontalAlignment="Center"
                                                            Grid.Row="1" />
                                             </Grid>
                                         </DataTemplate>
-                                    </localPrimitives:TickBar.MajorTickMarkTemplate>
+                                    </localPrimitives:TickBar.MajorTickmarkTemplate>
                                 </localPrimitives:TickBar>
 
                                 <!--left repeater button-->
-                                <RepeatButton x:Name="HorizontalTrackLargeChangeDecreaseRepeatButton"
+                                <RepeatButton x:Name="SliderTrackStepBackRepeater"
                                               IsTabStop="False"
                                               HorizontalAlignment="Stretch"
                                               Opacity="0"/>
@@ -514,7 +514,7 @@
                                        HorizontalAlignment="Left" />
 
                             <!--right repeater button-->
-                            <RepeatButton x:Name="HorizontalTrackLargeChangeIncreaseRepeatButton"
+                            <RepeatButton x:Name="SliderTrackStepForwardRepeater"
                                           IsTabStop="False"
                                           HorizontalAlignment="Stretch"
                                           Opacity="0" />

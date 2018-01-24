@@ -1,25 +1,29 @@
-﻿// Copyright 2017 Esri.
-//
-// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an 
-// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific 
-// language governing permissions and limitations under the License.
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
 
 // Implementation ported from https://github.com/Esri/arcgis-toolkit-sl-wpf
 
-using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.Toolkit.Internal;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System;
-using System.Windows.Media;
-using System.Linq;
-using System.Collections.Generic;
 using System.Windows.Data;
-using System.Windows.Markup;
-using System.Text;
+using System.Windows.Media;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -31,11 +35,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public class TickBar : Panel
     {
         internal static readonly DependencyProperty PositionProperty = DependencyProperty.RegisterAttached("Position", typeof(double), typeof(TickBar), new PropertyMetadata(0.0));
-        internal static readonly DependencyProperty IsMajorTickMarkProperty = DependencyProperty.RegisterAttached("IsMajorTickMark", typeof(bool), typeof(TickBar), new PropertyMetadata(false));
+        internal static readonly DependencyProperty IsMajorTickmarkProperty = DependencyProperty.RegisterAttached("IsMajorTickmark", typeof(bool), typeof(TickBar), new PropertyMetadata(false));
         private const string template = "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"><TextBlock Text=\"|\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" /></DataTemplate>";
-        private static DataTemplate DefaultTickMarkTemplate;
-        private List<ContentPresenter> MajorTickMarks = new List<ContentPresenter>();
-        private List<ContentPresenter> MinorTickMarks = new List<ContentPresenter>();
+        private static DataTemplate DefaultTickmarkTemplate;
+        private List<ContentPresenter> MajorTickmarks = new List<ContentPresenter>();
+        private List<ContentPresenter> MinorTickmarks = new List<ContentPresenter>();
         private string OriginalTickLabelFormat;
 
         /// <summary>
@@ -43,11 +47,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public TickBar()
         {
-            if (DefaultTickMarkTemplate == null)
+            if (DefaultTickmarkTemplate == null)
             {
                 System.IO.MemoryStream stream = new System.IO.MemoryStream(
                     System.Text.UTF8Encoding.Default.GetBytes(template));
-                DefaultTickMarkTemplate = System.Windows.Markup.XamlReader.Load(stream) as DataTemplate;
+                DefaultTickmarkTemplate = System.Windows.Markup.XamlReader.Load(stream) as DataTemplate;
             }
         }
         
@@ -62,20 +66,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </returns>
         protected override Size ArrangeOverride(Size finalSize)
         {
-            if (TickMarkPositions == null || TickMarkPositions.Length < 2) return finalSize;
+            if (TickmarkPositions == null || TickmarkPositions.Count() < 2) return finalSize;
             Rect childBounds = new Rect(0, 0, finalSize.Width, finalSize.Height);
 
-            var majorTickMarksBounds = new List<Rect>();
-            var minorTickMarksBounds = new List<Rect>();
+            var majorTickmarksBounds = new List<Rect>();
+            var minorTickmarksBounds = new List<Rect>();
 
             foreach (UIElement child in Children)
             {
                 FrameworkElement c = (child as FrameworkElement);
                 if (c == null) continue;
                 double position = (double)c.GetValue(PositionProperty);
-                var isMajorTickMark = (bool)c.GetValue(IsMajorTickMarkProperty);
+                var isMajorTickmark = (bool)c.GetValue(IsMajorTickmarkProperty);
 
-                if (isMajorTickMark && !ShowTickLabels)
+                if (isMajorTickmark && !ShowTickLabels)
                     continue;
 
                 // Calculate the bounds of the tick mark
@@ -93,13 +97,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
-                if (isMajorTickMark)
+                if (isMajorTickmark)
                 {
-                    majorTickMarksBounds.Add(childBounds);
+                    majorTickmarksBounds.Add(childBounds);
                 }
                 else
                 {
-                    minorTickMarksBounds.Add(childBounds);
+                    minorTickmarksBounds.Add(childBounds);
                 }
             }
 
@@ -110,7 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var majorTickInterval = 2;
                 var doMajorTicksCollide = false;
                 var firstMajorTickIndex = 0;
-                var tickCount = MinorTickMarks.Count;
+                var tickCount = MinorTickmarks.Count;
 
                 // Calculate the largest number of ticks to allow between major ticks.  This prevents scenarios where
                 // there are two major ticks placed undesirably close to the end of the tick bar.
@@ -154,8 +158,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     for (var j = firstMajorTickIndex; j < tickCount - prospectiveInterval; j += i)
                     {
                         // Get the bounds of the major tick marks at index j and the one subsequent to that
-                        var currentBounds = majorTickMarksBounds[j];
-                        var nextBounds = majorTickMarksBounds[j + i];
+                        var currentBounds = majorTickmarksBounds[j];
+                        var nextBounds = majorTickmarksBounds[j + i];
 
                         if (currentBounds.Right + minimumLabelSpacing > nextBounds.Left)
                         {
@@ -195,24 +199,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // Arrange either the major or minor tick for the current index
                     if (isMajorTickIndex)
                     {
-                        MajorTickMarks[i].Arrange(majorTickMarksBounds[i]);
-                        MinorTickMarks[i].Arrange(new Rect(0, 0, 0, 0));
+                        MajorTickmarks[i].Arrange(majorTickmarksBounds[i]);
+                        MinorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
                     }
                     else
                     {
-                        MinorTickMarks[i].Arrange(minorTickMarksBounds[i]);
-                        MajorTickMarks[i].Arrange(new Rect(0, 0, 0, 0));
+                        MinorTickmarks[i].Arrange(minorTickmarksBounds[i]);
+                        MajorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
                     }
                 }
             }
             else // !ShowTickLabels
             {
-                for (var i = 0; i < MinorTickMarks.Count; i++)
+                for (var i = 0; i < MinorTickmarks.Count; i++)
                 {
-                    MinorTickMarks[i].Arrange(minorTickMarksBounds[i]);
+                    MinorTickmarks[i].Arrange(minorTickmarksBounds[i]);
                 }
 
-                foreach (var majorTick in MajorTickMarks)
+                foreach (var majorTick in MajorTickmarks)
                 {
                     majorTick.Arrange(new Rect(0, 0, 0, 0));
                 }
@@ -221,22 +225,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             return finalSize;
         }
 
-        /// <summary>
-        /// Provides the behavior for the Measure pass of Silverlight layout. 
-        /// Classes can override this method to define their own Measure pass behavior.
-        /// </summary>
-        /// <param name="availableSize">The available size that this object
-        /// can give to child objects. Infinity can be specified as a value
-        /// to indicate that the object will size to whatever content is available.</param>
-        /// <returns>
-        /// The size that this object determines it needs during layout,
-        /// based on its calculations of child object allotted sizes.
-        /// </returns>
+        /// <inheritdoc />
         protected override Size MeasureOverride(Size availableSize)
         {
-            double width = availableSize.Width == double.PositiveInfinity ? this.Width : availableSize.Width;
-            double height = availableSize.Height == double.PositiveInfinity ? this.Height : availableSize.Height;
-            var measuredChildren = ShowTickLabels ? Children.Cast<UIElement>() : Children.Cast<UIElement>().Where(el => !(bool)el.GetValue(IsMajorTickMarkProperty));
+            double width = availableSize.Width == double.PositiveInfinity ? Width : availableSize.Width;
+            double height = availableSize.Height == double.PositiveInfinity ? Height : availableSize.Height;
+            var measuredChildren = ShowTickLabels ? Children.Cast<UIElement>() : Children.Cast<UIElement>().Where(el => !(bool)el.GetValue(IsMajorTickmarkProperty));
             foreach (UIElement d in measuredChildren)
             {
                 d.Measure(availableSize);
@@ -271,49 +265,49 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <value>The tick mark positions.</value>
         /// <remarks>The tick mark position values should be between 0 and 1.  They represent proportional positions along the tick bar.</remarks>
-        public double[] TickMarkPositions
+        public IEnumerable<double> TickmarkPositions
         {
-            get { return (double[])GetValue(TickMarkPositionsProperty); }
-            set { SetValue(TickMarkPositionsProperty, value); }
+            get { return (IEnumerable<double>)GetValue(TickmarkPositionsProperty); }
+            set { SetValue(TickmarkPositionsProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="TickMarkPositions"/> dependency property.
+        /// Identifies the <see cref="TickmarkPositions"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty TickMarkPositionsProperty =
-            DependencyProperty.Register(nameof(TickMarkPositions), typeof(double[]), typeof(TickBar), new PropertyMetadata(OnTickMarkPositionsPropertyChanged));
+        public static readonly DependencyProperty TickmarkPositionsProperty =
+            DependencyProperty.Register(nameof(TickmarkPositions), typeof(IEnumerable<double>), typeof(TickBar), new PropertyMetadata(OnTickmarkPositionsPropertyChanged));
 
-        private static void OnTickMarkPositionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnTickmarkPositionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var bar = (TickBar)d;
 
-            if (bar.MinorTickMarkTemplate == null)
-                bar.MinorTickMarkTemplate = DefaultTickMarkTemplate;
+            if (bar.MinorTickmarkTemplate == null)
+                bar.MinorTickmarkTemplate = DefaultTickmarkTemplate;
 
-            var newTickPositions = (double[])e.NewValue;
-            var oldTickPositions = (double[])e.OldValue;
-            var newTickCount = newTickPositions == null ? 0 : newTickPositions.Length;
-            var oldTickCount = oldTickPositions == null ? 0 : oldTickPositions.Length;
+            var newTickPositions = (IEnumerable<double>)e.NewValue;
+            var oldTickPositions = (IEnumerable<double>)e.OldValue;
+            var newTickCount = newTickPositions == null ? 0 : newTickPositions.Count();
+            var oldTickCount = oldTickPositions == null ? 0 : oldTickPositions.Count();
 
             if (newTickCount < oldTickCount)
             {
                 // Reduce the number of ticks to the number of positions specified
                 for (var i = oldTickCount; i > newTickCount; i--)
                 {
-                    var tickToRemove = bar.MajorTickMarks[i - 1];
+                    var tickToRemove = bar.MajorTickmarks[i - 1];
                     bar.Children.Remove(tickToRemove);
-                    bar.MajorTickMarks.Remove(tickToRemove);
+                    bar.MajorTickmarks.Remove(tickToRemove);
 
-                    tickToRemove = bar.MinorTickMarks[i - 1];
+                    tickToRemove = bar.MinorTickmarks[i - 1];
                     bar.Children.Remove(tickToRemove);
-                    bar.MinorTickMarks.Remove(tickToRemove);
+                    bar.MinorTickmarks.Remove(tickToRemove);
                 }
 
                 // Update the positions of the remaining ticks
                 for (var i = 0; i < bar.Children.Count; i++)
                 {
-                    bar.MinorTickMarks[i].SetValue(PositionProperty, newTickPositions[i]);
-                    bar.MajorTickMarks[i].SetValue(PositionProperty, newTickPositions[i]);
+                    bar.MinorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                    bar.MajorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
                 }
             }
             else if (newTickPositions != null)
@@ -323,14 +317,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (i < oldTickCount)
                     {
                         // Update positions of existing ticks
-                        bar.MinorTickMarks[i].SetValue(PositionProperty, newTickPositions[i]);
-                        bar.MajorTickMarks[i].SetValue(PositionProperty, newTickPositions[i]);
+                        bar.MinorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                        bar.MajorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
                     }
                     else
                     {
                         // Add new ticks to bring the number of ticks up to the number of positions specified
-                        var tickDataSource = bar.TickMarkDataSources == null || i >= bar.TickMarkDataSources.Length ? null : bar.TickMarkDataSources[i];
-                        bar.AddTickmark(newTickPositions[i], tickDataSource);
+                        var tickDataSource = bar.TickmarkDataSources == null || i >= bar.TickmarkDataSources.Count() ? null : bar.TickmarkDataSources.ElementAt(i);
+                        bar.AddTickmark(newTickPositions.ElementAt(i), tickDataSource);
                     }
                 }
             }
@@ -341,26 +335,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Gets or sets the tick mark positions.
         /// </summary>
         /// <value>The tick mark positions.</value>
-        public object[] TickMarkDataSources
+        public IEnumerable<object> TickmarkDataSources
         {
-            get { return (object[])GetValue(TickMarkDataSourcesProperty); }
-            set { SetValue(TickMarkDataSourcesProperty, value); }
+            get { return (IEnumerable<object>)GetValue(TickmarkDataSourcesProperty); }
+            set { SetValue(TickmarkDataSourcesProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="TickMarkDataSources"/> dependency property.
+        /// Identifies the <see cref="TickmarkDataSources"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty TickMarkDataSourcesProperty =
-            DependencyProperty.Register(nameof(TickMarkDataSources), typeof(object[]), typeof(TickBar), new PropertyMetadata(OnTickMarkDataSourcesPropertyChanged));
+        public static readonly DependencyProperty TickmarkDataSourcesProperty =
+            DependencyProperty.Register(nameof(TickmarkDataSources), typeof(IEnumerable<object>), typeof(TickBar), new PropertyMetadata(OnTickMarkDataSourcesPropertyChanged));
 
         private static void OnTickMarkDataSourcesPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var bar = (TickBar)d;
-            var newDataSources = e.NewValue == null ? new object[0] : (object[])e.NewValue;
+            var newDataSources = e.NewValue == null ? new List<object>() : (IEnumerable<object>)e.NewValue;
 
-            for (var i = 0; i < bar.MajorTickMarks.Count; i++)
+            for (var i = 0; i < bar.MajorTickmarks.Count; i++)
             {
-                bar.MajorTickMarks[i].Content = i < newDataSources.Length ? newDataSources[i] : null;
+                bar.MajorTickmarks[i].Content = i < newDataSources.Count() ? newDataSources.ElementAt(i) : null;
             }
         }
 
@@ -377,10 +371,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 Source = this,
                 BindsDirectlyToSource = true,
-                Path = new PropertyPath(nameof(MinorTickMarkTemplate))
+                Path = new PropertyPath(nameof(MinorTickmarkTemplate))
             });
             Children.Add(c);
-            MinorTickMarks.Add(c);
+            MinorTickmarks.Add(c);
 
             c = new ContentPresenter()
             {
@@ -388,12 +382,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Content = dataSource
             };
             c.SetValue(PositionProperty, position);
-            c.SetValue(IsMajorTickMarkProperty, true);
+            c.SetValue(IsMajorTickmarkProperty, true);
             c.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding()
             {
                 Source = this,
                 BindsDirectlyToSource = true,
-                Path = new PropertyPath(nameof(MajorTickMarkTemplate))
+                Path = new PropertyPath(nameof(MajorTickmarkTemplate))
             });
 
             if (TickLabelFormat != null)
@@ -401,40 +395,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 ApplyTickLabelFormat(c, TickLabelFormat);
             }
             Children.Add(c);
-            MajorTickMarks.Add(c);
+            MajorTickmarks.Add(c);
         }
 
         /// <summary>
         /// Gets or sets the item template for each tick mark.
         /// </summary>
         /// <value>The item template.</value>
-        public DataTemplate MinorTickMarkTemplate
+        public DataTemplate MinorTickmarkTemplate
         {
-            get { return (DataTemplate)GetValue(MinorTickMarkTemplateProperty); }
-            set { SetValue(MinorTickMarkTemplateProperty, value); }
+            get { return (DataTemplate)GetValue(MinorTickmarkTemplateProperty); }
+            set { SetValue(MinorTickmarkTemplateProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="MinorTickMarkTemplate"/> dependency property.
+        /// Identifies the <see cref="MinorTickmarkTemplate"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty MinorTickMarkTemplateProperty =
-            DependencyProperty.Register(nameof(MinorTickMarkTemplate), typeof(DataTemplate), typeof(TickBar));
+        public static readonly DependencyProperty MinorTickmarkTemplateProperty =
+            DependencyProperty.Register(nameof(MinorTickmarkTemplate), typeof(DataTemplate), typeof(TickBar));
 
         /// <summary>
         /// Gets or sets the item template for each tick mark.
         /// </summary>
         /// <value>The item template.</value>
-        public DataTemplate MajorTickMarkTemplate
+        public DataTemplate MajorTickmarkTemplate
         {
-            get { return (DataTemplate)GetValue(MajorTickMarkTemplateProperty); }
-            set { SetValue(MajorTickMarkTemplateProperty, value); }
+            get { return (DataTemplate)GetValue(MajorTickmarkTemplateProperty); }
+            set { SetValue(MajorTickmarkTemplateProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="MajorTickMarkTemplate"/> dependency property.
+        /// Identifies the <see cref="MajorTickmarkTemplate"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty MajorTickMarkTemplateProperty =
-            DependencyProperty.Register(nameof(MajorTickMarkTemplate), typeof(DataTemplate), typeof(TickBar));
+        public static readonly DependencyProperty MajorTickmarkTemplateProperty =
+            DependencyProperty.Register(nameof(MajorTickmarkTemplate), typeof(DataTemplate), typeof(TickBar));
 
         /// <summary>
         /// Gets or sets the orientation.
@@ -518,7 +512,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var tickbar = (TickBar)d;
 
             // Update the label format string for each of the major ticks
-            foreach (var majorTick in tickbar.MajorTickMarks)
+            foreach (var majorTick in tickbar.MajorTickmarks)
             {
                 tickbar.ApplyTickLabelFormat(majorTick, e.NewValue as string);
             }
