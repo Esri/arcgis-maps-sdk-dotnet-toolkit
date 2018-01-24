@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -334,8 +335,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             double end = snapped.EndTime.DateTime.Ticks;
 
             // margins 
-            double left = 0;
-            double right = 0;
+            double left, right, thumbLeft, thumbRight = 0;
 
             bool hasIntervals = (TimeSteps == null) ? false : TimeSteps.GetEnumerator().MoveNext();
 
@@ -351,9 +351,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 //minimum thumb
                 left = Math.Min(sliderWidth, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.ActualWidth);
-                left -= MinimumThumb.ActualWidth / 2;
-                right -= MinimumThumb.ActualWidth / 2;
-                MinimumThumb.Margin = new Thickness(left, 0, right, 0);
+                thumbLeft = left - MinimumThumb.ActualWidth / 2;
+                thumbRight = right - MinimumThumb.ActualWidth / 2;
+                MinimumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
 
                 //middle thumb
                 left = Math.Min(sliderWidth, ((start - minimum) * rate));
@@ -382,6 +382,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var thumbLabelWidthAdjustment = 0d;
                 var minLabelLeftMargin = -1d;
                 var minLabelRightMargin = -1d;
+                var minThumbLabelWidth = 0d;
 
                 // Position minimum thumb
                 if (!IsCurrentExtentTimeInstant) // Check for two thumbs
@@ -389,17 +390,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     // There are two thumbs, so position minimum (max is used in both the one and two thumb case)
                     left = Math.Max(0, (start - minimum) * rate);
                     right = Math.Min(sliderWidth, ((maximum - start) * rate));
-                    left -= MinimumThumb.ActualWidth / 2;
-                    right -= MinimumThumb.ActualWidth / 2;
-                    MinimumThumb.Margin = new Thickness(left, 0, right, 0);
+                    thumbLeft = left - MinimumThumb.ActualWidth / 2;
+                    thumbRight = right - MinimumThumb.ActualWidth / 2;
+                    MinimumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
 
                     // TODO: Change visibility instead of opacity.  Doing so throws an exception that start time cannot be
                     // greater than end time when dragging minimum thumb.                    
                     MinimumThumbLabel.Opacity = (LabelMode == TimeSliderLabelMode.Thumbs) && start == minimum ? 0 : 1;
 
                     // Calculate thumb label position
-                    thumbLabelWidthAdjustment = MinimumThumbLabel.ActualWidth / 2;
-                    minLabelLeftMargin = Math.Max(0, left - thumbLabelWidthAdjustment);
+                    minThumbLabelWidth = CalculateTextSize(MinimumThumbLabel).Width;
+                    thumbLabelWidthAdjustment = minThumbLabelWidth / 2;
+                    minLabelLeftMargin = left - thumbLabelWidthAdjustment;
                     minLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
                 }
                 else
@@ -429,17 +431,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Position maximum thumb
                 left = Math.Min(sliderWidth, (end - minimum) * rate);
                 right = Math.Min(sliderWidth, ((maximum - end) * rate));
-                left -= MaximumThumb.ActualWidth / 2;
-                right -= MaximumThumb.ActualWidth / 2;
-                MaximumThumb.Margin = new Thickness(left, 0, right, 0);
+                thumbLeft = left - MaximumThumb.ActualWidth / 2;
+                thumbRight = right - MaximumThumb.ActualWidth / 2;
+                MaximumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
 
                 // Update maximum thumb label visibility
                 MaximumThumbLabel.Visibility = LabelMode != TimeSliderLabelMode.Thumbs || end == maximum || (IsCurrentExtentTimeInstant && start == minimum)
                     ? Visibility.Collapsed : Visibility.Visible;
 
                 // Position maximum thumb label
-                thumbLabelWidthAdjustment = MaximumThumbLabel.ActualWidth / 2;
-                var maxLabelLeftMargin = Math.Max(0, left - thumbLabelWidthAdjustment);
+                var maxThumbLabelWidth = CalculateTextSize(MaximumThumbLabel).Width;
+                thumbLabelWidthAdjustment = maxThumbLabelWidth / 2;
+                var maxLabelLeftMargin = left - thumbLabelWidthAdjustment;
                 var maxLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
 
                 // Handle possible thumb label collision and apply label positions
@@ -448,7 +451,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (MaximumThumbLabel.Visibility == Visibility.Visible)
                     {
                         // Slider has min and max thumbs with both labels visible - check for label collision
-                        var minLabelRight = minLabelLeftMargin + MinimumThumbLabel.ActualWidth;
+                        var minLabelRight = minLabelLeftMargin + minThumbLabelWidth;
                         var spaceBetweenLabels = 6;
 
                         if (minLabelRight + spaceBetweenLabels > maxLabelLeftMargin)
@@ -857,6 +860,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var newExtent = e.NewValue as TimeExtent;
 
             slider._currentValue = newExtent;
+
+            // Explicitly update the thumb labels' bindings to ensure that their text is updated prior to calculating layout
+            slider.MinimumThumbLabel?.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
+            slider.MaximumThumbLabel?.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
+
             slider.UpdateTrackLayout(slider.CurrentValidExtent);
 
             // If the new extent represents a time instant, enforce the pinning of start and end time being in sync
@@ -1681,6 +1689,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 targetProperty: TextBlock.TextProperty,
                 stringFormat: newLabelFormat,
                 fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
+            //slider.MaximumThumbLabel.Measure(slider.MaximumThumbLabel.DesiredSize);
+            //slider.MaximumThumbLabel.Margin = new Thickness(0, 0, 0, 0);
+            //slider.MaximumThumbLabel.Visibility = slider.MaximumThumbLabel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            //slider.MaximumThumbLabel.Visibility = slider.MaximumThumbLabel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            slider.UpdateTrackLayout(slider.CurrentExtent);
         }
 
         /// <summary>
@@ -1784,16 +1797,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         if (PlaybackDirection == PlaybackDirection.Forward)
                         {
-                            //StepBack(startTimeStepIndex);
                             timeStepsToMove = !IsStartTimePinned ? 0 - startTimeStepIndex : 0 - (endTimeStepIndex - startTimeStepIndex - 1);
-                            //MoveTimeStep(timeSteps, preserveSpan: false);
                         }
                         else
                         {
-                            //StepForward(timeStepsList.Count - (endTimeStepIndex - startTimeStepIndex));
                             timeStepsToMove = !IsEndTimePinned ? timeStepsList.Count - endTimeStepIndex - 1
                                 : endTimeStepIndex - startTimeStepIndex - 1;
-                            //MoveTimeStep(timeSteps, preserveSpan: false);
                         }
                     }
                     else if (PlaybackLoopMode == LoopMode.Reverse)
@@ -1870,5 +1879,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty TimeZoneProperty =
             DependencyProperty.Register(nameof(TimeZone), typeof(TimeZoneInfo), typeof(TimeSlider), null);
+
+        /// <summary>
+        /// Calculates the size of the specified TextBlock's text
+        /// </summary>
+        /// <param name="textBlock">The TextBlock to calculate size for</param>
+        /// <returns>The size of the text</returns>
+        /// <remarks>This method is useful in cases where a TextBlock's text has updated, but its layout has not.  In such cases,
+        /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
+        private Size CalculateTextSize(TextBlock textBlock)
+        {
+            var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
+            var formattedText = new FormattedText(textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
+                textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display);
+            return new Size(formattedText.Width, formattedText.Height);
+        }
     }
 }
