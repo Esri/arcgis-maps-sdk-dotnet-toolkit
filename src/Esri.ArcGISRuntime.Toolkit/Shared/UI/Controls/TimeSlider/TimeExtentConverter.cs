@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -94,3 +96,5 @@ namespace Esri.ArcGISRuntime.Toolkit
         }
     }
 }
+
+#endif
