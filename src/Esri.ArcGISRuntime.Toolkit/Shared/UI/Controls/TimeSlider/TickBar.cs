@@ -16,6 +16,8 @@
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
 
+#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -522,3 +524,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
+
+#endif
