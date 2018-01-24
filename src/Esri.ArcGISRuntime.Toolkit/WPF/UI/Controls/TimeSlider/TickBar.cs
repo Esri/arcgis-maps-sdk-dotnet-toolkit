@@ -43,20 +43,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
             "<TextBlock Text=\"|\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" />" +
             "</DataTemplate>";
-        private static DataTemplate DefaultTickmarkTemplate;
-        private List<ContentPresenter> MajorTickmarks = new List<ContentPresenter>();
-        private List<ContentPresenter> MinorTickmarks = new List<ContentPresenter>();
-        private string OriginalTickLabelFormat;
+        private static DataTemplate _defaultTickmarkTemplate;
+        private List<ContentPresenter> _majorTickmarks = new List<ContentPresenter>();
+        private List<ContentPresenter> _minorTickmarks = new List<ContentPresenter>();
+        private string _originalTickLabelFormat;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TickBar"/> class.
         /// </summary>
         public TickBar()
         {
-            if (DefaultTickmarkTemplate == null)
+            if (_defaultTickmarkTemplate == null)
             {
                 System.IO.MemoryStream stream = new System.IO.MemoryStream(UTF8Encoding.Default.GetBytes(_template));
-                DefaultTickmarkTemplate = System.Windows.Markup.XamlReader.Load(stream) as DataTemplate;
+                _defaultTickmarkTemplate = System.Windows.Markup.XamlReader.Load(stream) as DataTemplate;
             }
         }
         
@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var majorTickInterval = 2;
                 var doMajorTicksCollide = false;
                 var firstMajorTickIndex = 0;
-                var tickCount = MinorTickmarks.Count;
+                var tickCount = _minorTickmarks.Count;
 
                 // Calculate the largest number of ticks to allow between major ticks.  This prevents scenarios where
                 // there are two major ticks placed undesirably close to the end of the tick bar.
@@ -191,24 +191,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // Arrange either the major or minor tick for the current index
                     if (isMajorTickIndex)
                     {
-                        MajorTickmarks[i].Arrange(majorTickmarksBounds[i]);
-                        MinorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
+                        _majorTickmarks[i].Arrange(majorTickmarksBounds[i]);
+                        _minorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
                     }
                     else
                     {
-                        MinorTickmarks[i].Arrange(minorTickmarksBounds[i]);
-                        MajorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
+                        _minorTickmarks[i].Arrange(minorTickmarksBounds[i]);
+                        _majorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
                     }
                 }
             }
             else // !ShowTickLabels
             {
-                for (var i = 0; i < MinorTickmarks.Count; i++)
+                for (var i = 0; i < _minorTickmarks.Count; i++)
                 {
-                    MinorTickmarks[i].Arrange(minorTickmarksBounds[i]);
+                    _minorTickmarks[i].Arrange(minorTickmarksBounds[i]);
                 }
 
-                foreach (var majorTick in MajorTickmarks)
+                foreach (var majorTick in _majorTickmarks)
                 {
                     majorTick.Arrange(new Rect(0, 0, 0, 0));
                 }
@@ -266,7 +266,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var bar = (TickBar)d;
 
             if (bar.MinorTickmarkTemplate == null)
-                bar.MinorTickmarkTemplate = DefaultTickmarkTemplate;
+                bar.MinorTickmarkTemplate = _defaultTickmarkTemplate;
 
             var newTickPositions = (IEnumerable<double>)e.NewValue;
             var oldTickPositions = (IEnumerable<double>)e.OldValue;
@@ -278,20 +278,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // Reduce the number of ticks to the number of positions specified
                 for (var i = oldTickCount; i > newTickCount; i--)
                 {
-                    var tickToRemove = bar.MajorTickmarks[i - 1];
+                    var tickToRemove = bar._majorTickmarks[i - 1];
                     bar.Children.Remove(tickToRemove);
-                    bar.MajorTickmarks.Remove(tickToRemove);
+                    bar._majorTickmarks.Remove(tickToRemove);
 
-                    tickToRemove = bar.MinorTickmarks[i - 1];
+                    tickToRemove = bar._minorTickmarks[i - 1];
                     bar.Children.Remove(tickToRemove);
-                    bar.MinorTickmarks.Remove(tickToRemove);
+                    bar._minorTickmarks.Remove(tickToRemove);
                 }
 
                 // Update the positions of the remaining ticks
                 for (var i = 0; i < bar.Children.Count; i++)
                 {
-                    bar.MinorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
-                    bar.MajorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                    bar._minorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                    bar._majorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
                 }
             }
             else if (newTickPositions != null)
@@ -301,8 +301,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (i < oldTickCount)
                     {
                         // Update positions of existing ticks
-                        bar.MinorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
-                        bar.MajorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                        bar._minorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                        bar._majorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
                     }
                     else
                     {
@@ -336,9 +336,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var bar = (TickBar)d;
             var newDataSources = e.NewValue == null ? new List<object>() : (IEnumerable<object>)e.NewValue;
 
-            for (var i = 0; i < bar.MajorTickmarks.Count; i++)
+            for (var i = 0; i < bar._majorTickmarks.Count; i++)
             {
-                bar.MajorTickmarks[i].Content = i < newDataSources.Count() ? newDataSources.ElementAt(i) : null;
+                bar._majorTickmarks[i].Content = i < newDataSources.Count() ? newDataSources.ElementAt(i) : null;
             }
         }
 
@@ -366,7 +366,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Path = new PropertyPath(nameof(MinorTickmarkTemplate)),
             });
             Children.Add(c);
-            MinorTickmarks.Add(c);
+            _minorTickmarks.Add(c);
 
             // Create a major tickmark
             c = new ContentPresenter()
@@ -388,7 +388,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 ApplyTickLabelFormat(c, TickLabelFormat);
             }
             Children.Add(c);
-            MajorTickmarks.Add(c);
+            _majorTickmarks.Add(c);
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var tickbar = (TickBar)d;
 
             // Update the label format string for each of the major ticks
-            foreach (var majorTick in tickbar.MajorTickmarks)
+            foreach (var majorTick in tickbar._majorTickmarks)
             {
                 tickbar.ApplyTickLabelFormat(majorTick, e.NewValue as string);
             }
@@ -500,7 +500,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 labelTextBlock.UpdateStringFormat(
                     targetProperty: TextBlock.TextProperty,
                     stringFormat: tickLabelFormat,
-                    fallbackFormat: ref OriginalTickLabelFormat);
+                    fallbackFormat: ref _originalTickLabelFormat);
             }
             else // !tick.IsLoaded
             {
