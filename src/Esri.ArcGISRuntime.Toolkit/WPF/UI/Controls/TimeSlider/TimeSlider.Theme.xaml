@@ -75,6 +75,9 @@
         <Setter Property="TimeStepIntervalTickFill" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" />
         <Setter Property="PlaybackButtonsFill" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
         <Setter Property="PlaybackButtonsStroke" Value="Black" />
+        <Setter Property="CurrentExtentLabelColor" Value="Black" />
+        <Setter Property="FullExtentLabelColor" Value="Black" />
+        <Setter Property="TimeStepIntervalLabelColor" Value="Black" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:TimeSlider">
@@ -292,6 +295,7 @@
                                    Text="{Binding FullExtent.StartTime,
                                         RelativeSource={RelativeSource TemplatedParent},
                                         StringFormat={}{0:M/d/yyyy}}"
+                                   Foreground="{TemplateBinding FullExtentLabelColor}"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Bottom"
                                    Grid.Column="0"
@@ -381,6 +385,7 @@
                                    Text="{Binding FullExtent.EndTime,
                                         RelativeSource={RelativeSource TemplatedParent},
                                         StringFormat={}{0:M/d/yyyy}}"
+                                   Foreground="{TemplateBinding FullExtentLabelColor}"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Bottom"
                                    Grid.Column="3"
@@ -425,7 +430,8 @@
                                 <localPrimitives:Tickbar x:Name="Tickmarks"
                                                          IsHitTestVisible="False"
                                                          Grid.Row="1"
-                                                         TickFill="{TemplateBinding TimeStepIntervalTickFill}">
+                                                         TickFill="{TemplateBinding TimeStepIntervalTickFill}"
+                                                         TickLabelColor="{TemplateBinding TimeStepIntervalLabelColor}">
                                     <localPrimitives:Tickbar.MinorTickmarkTemplate>
                                         <DataTemplate>
                                             <Rectangle Width="1.5" Height="4"
@@ -443,6 +449,7 @@
                                                            Fill="{Binding TickFill, ElementName=Tickmarks}" />
                                                 <TextBlock x:Name="TickLabel"
                                                            Text="{Binding StringFormat={}{0:M/d}}"
+                                                           Foreground="{Binding TickLabelColor, ElementName=Tickmarks}"
                                                            HorizontalAlignment="Center"
                                                            Grid.Row="1" />
                                             </Grid>
@@ -564,6 +571,7 @@
                                    Text="{Binding CurrentExtent.StartTime,
                                         RelativeSource={RelativeSource TemplatedParent},
                                         StringFormat={}{0:M/d/yyyy}}"
+                                   Foreground="{TemplateBinding CurrentExtentLabelColor}"
                                    HorizontalAlignment="Center"
                                    Grid.Row="3"
                                    Grid.Column="1"
@@ -574,6 +582,7 @@
                                    Text="{Binding CurrentExtent.EndTime,
                                         RelativeSource={RelativeSource TemplatedParent},
                                         StringFormat={}{0:M/d/yyyy}}"
+                                   Foreground="{TemplateBinding CurrentExtentLabelColor}"
                                    HorizontalAlignment="Center"
                                    Grid.Row="3"
                                    Grid.Column="1"

@@ -439,6 +439,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DependencyProperty.Register(nameof(TickFill), typeof(Brush), typeof(Tickbar), null);
 
         /// <summary>
+        /// Gets or sets the fill color for each tick mark
+        /// </summary>
+        public Brush TickLabelColor
+        {
+            get { return (Brush)GetValue(TickLabelColorProperty); }
+            set { SetValue(TickLabelColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TickLabelColor"/> dependency property
+        /// </summary>
+        public static readonly DependencyProperty TickLabelColorProperty =
+            DependencyProperty.Register(nameof(TickLabelColor), typeof(Brush), typeof(Tickbar), null);
+
+        /// <summary>
         /// Gets or sets whether to display labels on the ticks
         /// </summary>
         /// <value>The item template.</value>

@@ -1221,6 +1221,51 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty PlaybackButtonsStrokeProperty =
             DependencyProperty.Register(nameof(PlaybackButtonsStroke), typeof(Brush), typeof(TimeSlider), null);
 
+        /// <summary>
+        /// Gets or sets the color of the full extent labels
+        /// </summary>
+		public Brush FullExtentLabelColor
+        {
+            get { return (Brush)GetValue(FullExtentLabelColorProperty); }
+            set { SetValue(FullExtentLabelColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="FullExtentLabelColor"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty FullExtentLabelColorProperty =
+            DependencyProperty.Register(nameof(FullExtentLabelColor), typeof(Brush), typeof(TimeSlider), null);
+
+        /// <summary>
+        /// Gets or sets the color of the current extent labels
+        /// </summary>
+		public Brush CurrentExtentLabelColor
+        {
+            get { return (Brush)GetValue(CurrentExtentLabelColorProperty); }
+            set { SetValue(CurrentExtentLabelColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="CurrentExtentLabelColor"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CurrentExtentLabelColorProperty =
+            DependencyProperty.Register(nameof(CurrentExtentLabelColor), typeof(Brush), typeof(TimeSlider), null);
+
+        /// <summary>
+        /// Gets or sets the color of the time step interval labels
+        /// </summary>
+		public Brush TimeStepIntervalLabelColor
+        {
+            get { return (Brush)GetValue(TimeStepIntervalLabelColorProperty); }
+            set { SetValue(TimeStepIntervalLabelColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TimeStepIntervalLabelColor"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TimeStepIntervalLabelColorProperty =
+            DependencyProperty.Register(nameof(TimeStepIntervalLabelColor), typeof(Brush), typeof(TimeSlider), null);
+
         #endregion // Appearance Properties
 
         #endregion // Properties
