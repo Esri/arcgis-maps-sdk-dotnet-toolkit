@@ -83,18 +83,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     continue;
 
                 // Calculate the bounds of the tick mark
-                if (Orientation == Orientation.Horizontal)
-                {
                     position = finalSize.Width * position;
                     childBounds.X = position - c.DesiredSize.Width * .5;
                     childBounds.Width = c.DesiredSize.Width;
-                }
-                else
-                {
-                    position = finalSize.Height * position;
-                    childBounds.Y = position - c.DesiredSize.Height * .5;
-                    childBounds.Height = c.DesiredSize.Height;
-                }
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
                 if (isMajorTickmark)
@@ -238,24 +229,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (double.IsNaN(height))
             {
                 height = 0;
-                if (Orientation == Orientation.Horizontal)
-                {
                     foreach (UIElement d in measuredChildren)
                     {
                         height = Math.Max(d.DesiredSize.Height, height);
                     }
                 }
-            }
             if (double.IsNaN(width))
             {
                 width = 0;
-                if (Orientation == Orientation.Vertical)
-                {
-                    foreach (UIElement d in measuredChildren)
-                    {
-                        width = Math.Max(d.DesiredSize.Width, width);
-                    }
-                }
             }
             return new Size(width, height);
         }
@@ -429,28 +410,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty MajorTickmarkTemplateProperty =
             DependencyProperty.Register(nameof(MajorTickmarkTemplate), typeof(DataTemplate), typeof(TickBar));
-
-        /// <summary>
-        /// Gets or sets the orientation.
-        /// </summary>
-        /// <value>The orientation.</value>
-        public Orientation Orientation
-        {
-            get { return (Orientation)GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Orientation"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty OrientationProperty =
-            DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TickBar), new PropertyMetadata(Orientation.Horizontal, OnOrientationPropertyChanged));
-
-        private static void OnOrientationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            // Invoke a layout pass to account for the orientation of ticks changing
-            ((TickBar)d).InvalidateMeasureAndArrange();
-        }
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark.
