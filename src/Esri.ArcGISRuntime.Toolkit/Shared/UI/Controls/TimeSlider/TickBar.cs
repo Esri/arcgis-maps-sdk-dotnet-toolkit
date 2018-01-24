@@ -31,16 +31,16 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     /// <summary>
-    /// *FOR INTERNAL USE ONLY* TickBar control used for placing a specified amount of tick marks evenly spread out.
+    /// *FOR INTERNAL USE ONLY* Tickbar control used for placing a specified amount of tick marks evenly spread out.
     /// </summary>
     /// <exclude/>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public class TickBar : Panel
+    public class Tickbar : Panel
     {
         internal static readonly DependencyProperty PositionProperty =
-            DependencyProperty.RegisterAttached("Position", typeof(double), typeof(TickBar), new PropertyMetadata(0.0));
+            DependencyProperty.RegisterAttached("Position", typeof(double), typeof(Tickbar), new PropertyMetadata(0.0));
         internal static readonly DependencyProperty IsMajorTickmarkProperty =
-            DependencyProperty.RegisterAttached("IsMajorTickmark", typeof(bool), typeof(TickBar), new PropertyMetadata(false));
+            DependencyProperty.RegisterAttached("IsMajorTickmark", typeof(bool), typeof(Tickbar), new PropertyMetadata(false));
         private const string _template =
             "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
             "<TextBlock Text=\"|\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" />" +
@@ -51,9 +51,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private string _originalTickLabelFormat;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TickBar"/> class.
+        /// Initializes a new instance of the <see cref="Tickbar"/> class.
         /// </summary>
-        public TickBar()
+        public Tickbar()
         {
             if (_defaultTickmarkTemplate == null)
             {
@@ -261,11 +261,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty TickmarkPositionsProperty =
             DependencyProperty.Register(nameof(TickmarkPositions), typeof(IEnumerable<double>),
-            typeof(TickBar), new PropertyMetadata(OnTickmarkPositionsPropertyChanged));
+            typeof(Tickbar), new PropertyMetadata(OnTickmarkPositionsPropertyChanged));
 
         private static void OnTickmarkPositionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var bar = (TickBar)d;
+            var bar = (Tickbar)d;
 
             if (bar.MinorTickmarkTemplate == null)
                 bar.MinorTickmarkTemplate = _defaultTickmarkTemplate;
@@ -331,11 +331,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="TickmarkDataSources"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TickmarkDataSourcesProperty =
-            DependencyProperty.Register(nameof(TickmarkDataSources), typeof(IEnumerable<object>), typeof(TickBar), new PropertyMetadata(OnTickMarkDataSourcesPropertyChanged));
+            DependencyProperty.Register(nameof(TickmarkDataSources), typeof(IEnumerable<object>), typeof(Tickbar), new PropertyMetadata(OnTickMarkDataSourcesPropertyChanged));
 
         private static void OnTickMarkDataSourcesPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var bar = (TickBar)d;
+            var bar = (Tickbar)d;
             var newDataSources = e.NewValue == null ? new List<object>() : (IEnumerable<object>)e.NewValue;
 
             for (var i = 0; i < bar._majorTickmarks.Count; i++)
@@ -406,7 +406,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="MinorTickmarkTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty MinorTickmarkTemplateProperty =
-            DependencyProperty.Register(nameof(MinorTickmarkTemplate), typeof(DataTemplate), typeof(TickBar));
+            DependencyProperty.Register(nameof(MinorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar));
 
         /// <summary>
         /// Gets or sets the item template for each major tick mark
@@ -421,7 +421,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="MajorTickmarkTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty MajorTickmarkTemplateProperty =
-            DependencyProperty.Register(nameof(MajorTickmarkTemplate), typeof(DataTemplate), typeof(TickBar));
+            DependencyProperty.Register(nameof(MajorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar));
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark
@@ -436,7 +436,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="TickFill"/> dependency property
         /// </summary>
         public static readonly DependencyProperty TickFillProperty =
-            DependencyProperty.Register(nameof(TickFill), typeof(Brush), typeof(TickBar), null);
+            DependencyProperty.Register(nameof(TickFill), typeof(Brush), typeof(Tickbar), null);
 
         /// <summary>
         /// Gets or sets whether to display labels on the ticks
@@ -452,12 +452,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="ShowTickLabels"/> dependency property
         /// </summary>
         public static readonly DependencyProperty ShowTickLabelsProperty =
-            DependencyProperty.Register(nameof(ShowTickLabels), typeof(bool), typeof(TickBar), new PropertyMetadata(OnShowTickLabelsPropertyChanged));
+            DependencyProperty.Register(nameof(ShowTickLabels), typeof(bool), typeof(Tickbar), new PropertyMetadata(OnShowTickLabelsPropertyChanged));
 
         private static void OnShowTickLabelsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // Invoke a layout pass to account for tick labels being shown or hidden
-            ((TickBar)d).InvalidateMeasureAndArrange();
+            ((Tickbar)d).InvalidateMeasureAndArrange();
         }
 
 
@@ -474,12 +474,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="TickLabelFormat"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TickLabelFormatProperty =
-            DependencyProperty.Register(nameof(TickLabelFormat), typeof(string), typeof(TickBar),
+            DependencyProperty.Register(nameof(TickLabelFormat), typeof(string), typeof(Tickbar),
                 new PropertyMetadata(OnTickLabelFormatPropertyChanged));
 
         private static void OnTickLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var tickbar = (TickBar)d;
+            var tickbar = (Tickbar)d;
 
             // Update the label format string for each of the major ticks
             foreach (var majorTick in tickbar._majorTickmarks)

@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "MinimumThumbLabel", Type = typeof(TextBlock))]
     [TemplatePart(Name = "MaximumThumb", Type = typeof(Thumb))]
     [TemplatePart(Name = "MaximumThumbLabel", Type = typeof(TextBlock))]
-    [TemplatePart(Name = "Tickmarks", Type = typeof(Primitives.TickBar))]
+    [TemplatePart(Name = "Tickmarks", Type = typeof(Primitives.Tickbar))]
     [TemplatePart(Name = "SliderTrackStepBackRepeater", Type = typeof(RepeatButton))]
     [TemplatePart(Name = "SliderTrackStepForwardRepeater", Type = typeof(RepeatButton))]
     [TemplatePart(Name = "PlayPauseButton", Type = typeof(ToggleButton))]
@@ -79,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ButtonBase PreviousButton;
         private TextBlock FullExtentStartTimeLabel;
         private TextBlock FullExtentEndTimeLabel;
-        private Primitives.TickBar Tickmarks;
+        private Primitives.Tickbar Tickmarks;
         private DispatcherTimer _playTimer;
         private TimeExtent _currentValue;
         private bool _isFocused;
@@ -141,7 +141,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             PlayPauseButton = GetTemplateChild(nameof(PlayPauseButton)) as ToggleButton;
             NextButton = GetTemplateChild(nameof(NextButton)) as ButtonBase;
             PreviousButton = GetTemplateChild(nameof(PreviousButton)) as ButtonBase;
-            Tickmarks = GetTemplateChild(nameof(Tickmarks)) as Primitives.TickBar;
+            Tickmarks = GetTemplateChild(nameof(Tickmarks)) as Primitives.Tickbar;
             FullExtentStartTimeLabel = GetTemplateChild(nameof(FullExtentStartTimeLabel)) as TextBlock;
             FullExtentEndTimeLabel = GetTemplateChild(nameof(FullExtentEndTimeLabel)) as TextBlock;
 

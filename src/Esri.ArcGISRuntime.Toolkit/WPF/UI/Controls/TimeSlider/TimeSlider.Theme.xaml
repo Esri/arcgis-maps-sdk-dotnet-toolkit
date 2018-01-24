@@ -422,17 +422,17 @@
                                 </Grid.RowDefinitions>
 
                                 <!--tick marks for snapping points-->
-                                <localPrimitives:TickBar x:Name="Tickmarks"
+                                <localPrimitives:Tickbar x:Name="Tickmarks"
                                                          IsHitTestVisible="False"
                                                          Grid.Row="1"
                                                          TickFill="{TemplateBinding TimeStepIntervalTickFill}">
-                                    <localPrimitives:TickBar.MinorTickmarkTemplate>
+                                    <localPrimitives:Tickbar.MinorTickmarkTemplate>
                                         <DataTemplate>
                                             <Rectangle Width="1.5" Height="4"
                                                        Fill="{Binding TickFill, ElementName=Tickmarks}" />
                                         </DataTemplate>
-                                    </localPrimitives:TickBar.MinorTickmarkTemplate>
-                                    <localPrimitives:TickBar.MajorTickmarkTemplate>
+                                    </localPrimitives:Tickbar.MinorTickmarkTemplate>
+                                    <localPrimitives:Tickbar.MajorTickmarkTemplate>
                                         <DataTemplate>
                                             <Grid>
                                                 <Grid.RowDefinitions>
@@ -447,8 +447,8 @@
                                                            Grid.Row="1" />
                                             </Grid>
                                         </DataTemplate>
-                                    </localPrimitives:TickBar.MajorTickmarkTemplate>
-                                </localPrimitives:TickBar>
+                                    </localPrimitives:Tickbar.MajorTickmarkTemplate>
+                                </localPrimitives:Tickbar>
 
                                 <!--left repeater button-->
                                 <RepeatButton x:Name="SliderTrackStepBackRepeater"
