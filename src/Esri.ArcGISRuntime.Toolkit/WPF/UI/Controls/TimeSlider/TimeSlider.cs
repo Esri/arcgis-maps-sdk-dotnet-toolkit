@@ -509,6 +509,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }            
         }
 
+        /// <summary>
+        /// Calculates the size of the specified TextBlock's text
+        /// </summary>
+        /// <param name="textBlock">The TextBlock to calculate size for</param>
+        /// <returns>The size of the text</returns>
+        /// <remarks>This method is useful in cases where a TextBlock's text has updated, but its layout has not.  In such cases,
+        /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
+        private Size CalculateTextSize(TextBlock textBlock)
+        {
+            var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
+            var formattedText = new FormattedText(textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
+                textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display);
+            return new Size(formattedText.Width, formattedText.Height);
+        }
+
         #region Drag event handlers
 
         private void HorizontalTrackThumb_DragDelta(object sender, DragDeltaEventArgs e)
@@ -1618,8 +1633,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or set as Boolean indicating whether the TimeSlider is playing through the 
-        /// <see cref="ESRI.ArcGIS.Client.Toolkit.TimeSlider.Intervals">Intervals</see> of the TickBar.
+        /// Gets or sets whether the time slider is animating playback
         /// </summary>
         public bool IsPlaying
         {
@@ -1657,7 +1671,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 targetProperty: TextBlock.TextProperty,
                 stringFormat: newLabelFormat,
                 fallbackFormat: ref slider._originalFullExtentLabelFormat);
-            //slider.UpdateTrackLayout(slider.CurrentExtent);
         }
 
         /// <summary>
@@ -1680,6 +1693,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var slider = (TimeSlider)d;
             var newLabelFormat = e.NewValue as string;
+
             // Apply the updated string format to the current extent label elements' bindings
             slider.MinimumThumbLabel?.UpdateStringFormat(
                 targetProperty: TextBlock.TextProperty,
@@ -1689,10 +1703,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 targetProperty: TextBlock.TextProperty,
                 stringFormat: newLabelFormat,
                 fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
-            //slider.MaximumThumbLabel.Measure(slider.MaximumThumbLabel.DesiredSize);
-            //slider.MaximumThumbLabel.Margin = new Thickness(0, 0, 0, 0);
-            //slider.MaximumThumbLabel.Visibility = slider.MaximumThumbLabel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            //slider.MaximumThumbLabel.Visibility = slider.MaximumThumbLabel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+
+            // Layout the slider to accommodate updated label text
             slider.UpdateTrackLayout(slider.CurrentExtent);
         }
 
@@ -1719,11 +1731,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 slider.Tickmarks.TickLabelFormat = e.NewValue as string;
             }
-            //slider.UpdateTrackLayout(slider.CurrentExtent);
         }
 
         /// <summary>
-        /// Gets or sets the TimeSliderLabelMode format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
+        /// Gets or sets the mode to use for labels along the time slider
         /// </summary>
         public TimeSliderLabelMode LabelMode
         {
@@ -1745,6 +1756,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             slider.ApplyLabelMode(labelMode);
         }
 
+        /// <summary>
+        /// Updates the slider for the specified label mode
+        /// </summary>
+        /// <param name="labelMode">The label mode to apply</param>
         private void ApplyLabelMode(TimeSliderLabelMode labelMode)
         {
             if (Tickmarks == null || MinimumThumbLabel == null || MaximumThumbLabel == null)
@@ -1770,21 +1785,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Moves the time slider's current extent upon expiration of the playback interval
+        /// </summary>
         private void PlayTimer_Tick(object sender, EventArgs e)
         {
             var isFinished = false;
+
+            // Try moving the current extent forward or back by one time step
             var timeStepsToMove = PlaybackDirection == PlaybackDirection.Forward ? 1 : -1;
             var preserveSpan = !IsStartTimePinned && !IsEndTimePinned;
             isFinished = !MoveTimeStep(timeStepsToMove, preserveSpan);
 
             if (isFinished)
             {
+                // The current extent could not be moved.  Check whether playback looping is enabled
                 if (PlaybackLoopMode == LoopMode.None)
                 {
                     IsPlaying = false;
                 }
                 else
                 {
+                    // Looping is enabled - calculate the number of time steps to move the current extent based on the loop mode.
+
                     // We want to rely on step indexes, so we use the known backing type here since that's most efficent.
                     // If the backing type changes, the implemetation here will need to be updated accordingly
                     var timeStepsList = (List<DateTimeOffset>)TimeSteps;
@@ -1795,6 +1818,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     if (PlaybackLoopMode == LoopMode.Repeat)
                     {
+                        // Playback is set to repeat, so the current extent should be moved to the beginning or end, depending on the playback
+                        // direction.  Note that this may be the beginning or end of the slider, or if the start or end time is pinned, it may
+                        // only be back to the pinned end.
                         if (PlaybackDirection == PlaybackDirection.Forward)
                         {
                             timeStepsToMove = !IsStartTimePinned ? 0 - startTimeStepIndex : 0 - (endTimeStepIndex - startTimeStepIndex - 1);
@@ -1807,6 +1833,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     else if (PlaybackLoopMode == LoopMode.Reverse)
                     {
+                        // Playback is set to reverse direction when the end is reached.  Simply flip the playback direction and move one time
+                        // step in the new direction.
                         if (PlaybackDirection == PlaybackDirection.Forward)
                         {
                             PlaybackDirection = PlaybackDirection.Backward;
@@ -1823,76 +1851,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-
-        private void Rewind()
-        {
-            if (CurrentValidExtent == null) return;
-            if (!IsStartTimePinned && !IsEndTimePinned)
-            {
-                IEnumerator<DateTimeOffset> enumerator = TimeSteps.GetEnumerator();
-                // Get the first valid time step
-                while (enumerator.MoveNext())
-                {
-                    if (IsCurrentExtentTimeInstant)
-                        break;
-                    if (enumerator.Current == CurrentValidExtent.StartTime)
-                        break;
-                }
-                if (IsCurrentExtentTimeInstant)
-                    CurrentExtent = new TimeExtent(enumerator.Current, enumerator.Current);
-                else
-                {
-                    int i = 0;
-                    while (enumerator.MoveNext())
-                    {
-                        if (enumerator.Current == CurrentValidExtent.EndTime)
-                            break;
-                        i++;
-                    }
-                    enumerator = TimeSteps.GetEnumerator();
-                    enumerator.MoveNext();
-                    DateTimeOffset start = enumerator.Current;
-                    for (int j = 0; j <= i; j++) enumerator.MoveNext();
-                    DateTimeOffset end = enumerator.Current;
-                    CurrentExtent = new TimeExtent(start, end);
-                }
-            }
-            else
-            {
-                // TODO: Implement rewind (i.e. returning to start) for cases where start/end time is pinned
-            }
-        }
         #endregion
-
-
-        /// <summary>
-        /// Gets or sets the time zone to use for the TimeSlider
-        /// </summary>
-		public TimeZoneInfo TimeZone
-        {
-            get { return (TimeZoneInfo)GetValue(TimeZoneProperty); }
-            set { SetValue(TimeZoneProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="TimeZone"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TimeZoneProperty =
-            DependencyProperty.Register(nameof(TimeZone), typeof(TimeZoneInfo), typeof(TimeSlider), null);
-
-        /// <summary>
-        /// Calculates the size of the specified TextBlock's text
-        /// </summary>
-        /// <param name="textBlock">The TextBlock to calculate size for</param>
-        /// <returns>The size of the text</returns>
-        /// <remarks>This method is useful in cases where a TextBlock's text has updated, but its layout has not.  In such cases,
-        /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
-        private Size CalculateTextSize(TextBlock textBlock)
-        {
-            var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
-            var formattedText = new FormattedText(textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
-                textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display);
-            return new Size(formattedText.Width, formattedText.Height);
-        }
     }
 }
