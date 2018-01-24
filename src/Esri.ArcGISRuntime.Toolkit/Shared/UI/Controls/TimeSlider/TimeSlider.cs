@@ -809,7 +809,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             slider.UpdateTrackLayout(slider.CurrentValidExtent);
 
             // If the new extent represents a time instant, enforce the pinning of start and end time being in sync
-            if (newExtent.StartTime == newExtent.EndTime && slider.IsStartTimePinned != slider.IsEndTimePinned)
+            if (newExtent.IsTimeInstant() && slider.IsStartTimePinned != slider.IsEndTimePinned)
             {
                 slider.IsStartTimePinned = false;
                 slider.IsEndTimePinned = false;

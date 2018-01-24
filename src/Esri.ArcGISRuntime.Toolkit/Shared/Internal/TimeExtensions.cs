@@ -1,12 +1,37 @@
-﻿using Esri.ArcGISRuntime.ArcGISServices;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Esri.ArcGISRuntime.ArcGISServices;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
-    internal static class DateTimeExtensions
+    /// <summary>
+    /// Provides utility extension methods related to time
+    /// </summary>
+    internal static class TimeExtensions
     {
+        /// <summary>
+        /// Adds the specified number of months to the DateTimeOffset object
+        /// </summary>
+        /// <param name="startDateTime">The date to add months to</param>
+        /// <param name="months">The number of months to add</param>
+        /// <returns>A DateTimeOffset object with the specified number of months added</returns>
         public static DateTimeOffset AddMonths(this DateTimeOffset startDateTime, double months)
         {
             // Get the number of whole and fractional months to add
@@ -35,6 +60,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             return newDateTime;
         }
 
+        /// <summary>
+        /// Adds the specified TimeValue to the DateTimeOffset object
+        /// </summary>
+        /// <param name="startTime">The date to add the time value to</param>
+        /// <param name="timeStep">The amount of time to add</param>
+        /// <returns>A DateTimeOffset object with the specified time added</returns>
         public static DateTimeOffset AddTimeValue(this DateTimeOffset startTime, TimeValue timeStep)
         {
             var timeValueAsTimeSpan = TimeSpan.FromMilliseconds(0);
@@ -84,6 +115,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
+        /// <summary>
+        /// Divides the specified TimeExtent by the specified number
+        /// </summary>
+        /// <param name="timeExtent">The extent to divide</param>
+        /// <param name="count">The amount to divide the extent by</param>
+        /// <returns>A TimeValue instance which, will fit evenly into the input TimeExtent the specified number of times</returns>
         public static TimeValue Divide(this TimeExtent timeExtent, int count)
         {
             if (timeExtent == null)
@@ -194,6 +231,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
+        /// <summary>
+        /// Determines whether a specified TimeValue is greater than another TimeValue instance
+        /// </summary>
+        /// <returns>A boolean indicating whether the first TimeValue is greater than the second</returns>
         public static bool IsGreaterThan(this TimeValue timeValue, TimeValue otherTimeValue)
         {
             if (timeValue.Unit == otherTimeValue.Unit)
@@ -206,7 +247,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        internal static double ToMilliseconds(this TimeValue timeValue)
+        /// <summary>
+        /// Converts a TimeValue instance to milliseconds
+        /// </summary>
+        /// <param name="timeValue">The TimeValue to convert</param>
+        /// <returns>The TimeValue's equivalent number of milliseconds</returns>
+        /// <remarks>If the time value's unit is months or greater, the return value cannot be determined exactly indepedent of
+        /// a known start or end date.  In these cases, a duration of one month is assumed to be (365 / 12) days, and the final
+        /// value is determined based on that assumption.</remarks>
+        public static double ToMilliseconds(this TimeValue timeValue)
         {
             switch (timeValue.Unit)
             {
@@ -235,7 +284,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        internal static TimeExtent Union(this TimeExtent timeExtent, TimeExtent otherTimeExtent)
+        /// <summary>
+        /// Merges two TimeExtents together to create one TimeExtent that will encompass both input extents
+        /// </summary>
+        /// <param name="timeExtent">The first extent to union</param>
+        /// <param name="otherTimeExtent">The second extent to union</param>
+        /// <returns>A TimeExtent instance with a start time that is the minimum of the that of the two input extents
+        /// and an end time that is the maximum of that of the two input extents</returns>
+        public static TimeExtent Union(this TimeExtent timeExtent, TimeExtent otherTimeExtent)
         {
             if (otherTimeExtent == null)
                 return timeExtent;
@@ -244,5 +300,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             var endTime = timeExtent.EndTime > otherTimeExtent.EndTime ? timeExtent.EndTime : otherTimeExtent.EndTime;
             return startTime == endTime ? new TimeExtent(startTime) : new TimeExtent(startTime, endTime);
         }
+
+        /// <summary>
+        /// Determines whether the input extent represents instantaneous time
+        /// </summary>
+        /// <param name="timeExtent">The time extent to interrogate</param>
+        /// <returns>A boolean indicating whether the extent represents an instant in time</returns>
+        public static bool IsTimeInstant(this TimeExtent timeExtent)
+        {
+            return timeExtent.StartTime == timeExtent.EndTime;
+        }
     }
 }
+
+#endif
