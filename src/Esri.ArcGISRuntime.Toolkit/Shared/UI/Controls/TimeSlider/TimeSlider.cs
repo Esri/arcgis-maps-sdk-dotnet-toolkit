@@ -366,7 +366,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 // TODO: Change visibility instead of opacity.  Doing so throws an exception that start time cannot be
                 // greater than end time when dragging minimum thumb.                    
-                MinimumThumbLabel.Opacity = (LabelMode == TimeSliderLabelMode.Thumbs) && start == minimum ? 0 : 1;
+                MinimumThumbLabel.Opacity = (LabelMode == TimeSliderLabelMode.CurrentExtent) && start == minimum ? 0 : 1;
 
                 // Calculate thumb label position
                 minThumbLabelWidth = CalculateTextSize(MinimumThumbLabel).Width;
@@ -406,7 +406,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MaximumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
 
             // Update maximum thumb label visibility
-            MaximumThumbLabel.Visibility = LabelMode != TimeSliderLabelMode.Thumbs || end == maximum || (IsCurrentExtentTimeInstant && start == minimum)
+            MaximumThumbLabel.Visibility = LabelMode != TimeSliderLabelMode.CurrentExtent || end == maximum || (IsCurrentExtentTimeInstant && start == minimum)
                 ? Visibility.Collapsed : Visibility.Visible;
 
             // Position maximum thumb label
@@ -744,7 +744,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 Tickmarks.TickmarkPositions = intervals;
                 Tickmarks.TickmarkDataSources = tickMarkDates.Cast<object>();
-                Tickmarks.ShowTickLabels = LabelMode == TimeSliderLabelMode.Ticks;
+                Tickmarks.ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval;
             }
         }
 
@@ -1698,12 +1698,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     MinimumThumbLabel.Visibility = Visibility.Collapsed;
                     MaximumThumbLabel.Visibility = Visibility.Collapsed;
                     break;
-                case TimeSliderLabelMode.Thumbs:
+                case TimeSliderLabelMode.CurrentExtent:
                     Tickmarks.ShowTickLabels = false;
                     MinimumThumbLabel.Visibility = Visibility.Visible;
                     MaximumThumbLabel.Visibility = Visibility.Visible;
                     break;
-                case TimeSliderLabelMode.Ticks:
+                case TimeSliderLabelMode.TimeStepInterval:
                     Tickmarks.ShowTickLabels = true;
                     MinimumThumbLabel.Visibility = Visibility.Collapsed;
                     MaximumThumbLabel.Visibility = Visibility.Collapsed;
