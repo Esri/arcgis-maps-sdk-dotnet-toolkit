@@ -320,193 +320,129 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void UpdateTrackLayout(TimeExtent extent)
         {
             if (extent == null || extent.StartTime < ValidFullExtent.StartTime || extent.EndTime > ValidFullExtent.EndTime ||
-            MinimumThumb == null || MaximumThumb == null || ValidFullExtent.EndTime <= ValidFullExtent.StartTime || SliderTrack == null)
+            MinimumThumb == null || MaximumThumb == null || ValidFullExtent.EndTime <= ValidFullExtent.StartTime || SliderTrack == null ||
+            TimeSteps == null || !TimeSteps.GetEnumerator().MoveNext())
                 return;
 
-            double sliderWidth = SliderTrack.ActualWidth;
-            double minimum = ValidFullExtent.StartTime.Ticks;
-            double maximum = ValidFullExtent.EndTime.Ticks;
+            var sliderWidth = SliderTrack.ActualWidth;
+            var minimum = ValidFullExtent.StartTime.Ticks;
+            var maximum = ValidFullExtent.EndTime.Ticks;
 
             // Snap the passed-in extent to valid time step intervals
             TimeExtent snapped = Snap(extent);
 
             // Convert the start and end time to ticks
-            double start = snapped.StartTime.DateTime.Ticks;
-            double end = snapped.EndTime.DateTime.Ticks;
+            var start = snapped.StartTime.DateTime.Ticks;
+            var end = snapped.EndTime.DateTime.Ticks;
 
             // margins 
             double left, right, thumbLeft, thumbRight = 0;
 
-            bool hasIntervals = (TimeSteps == null) ? false : TimeSteps.GetEnumerator().MoveNext();
-
             // rate = (distance) / (time)				
-            double rate = GetTrackWidth() / (maximum - minimum);
+            var rate = SliderTrack.ActualWidth / (maximum - minimum);
 
-            if (!IsCurrentExtentTimeInstant && !hasIntervals)
+
+            // Position left repeater							
+            right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.ActualWidth);
+            SliderTrackStepBackRepeater.Margin = new Thickness(0, 0, right, 0);
+
+            // Margin adjustment for the minimum thumb label
+            var thumbLabelWidthAdjustment = 0d;
+            var minLabelLeftMargin = -1d;
+            var minLabelRightMargin = -1d;
+            var minThumbLabelWidth = 0d;
+
+            // Position minimum thumb
+            if (!IsCurrentExtentTimeInstant) // Check for two thumbs
             {
-                //left repeater	
-                right = Math.Min(sliderWidth, ((maximum - start) * rate) + MinimumThumb.ActualWidth + MaximumThumb.ActualWidth);
-                SliderTrackStepBackRepeater.Margin = new Thickness(0, 0, right, 0);
-
-                //minimum thumb
-                left = Math.Min(sliderWidth, (start - minimum) * rate);
-                right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.ActualWidth);
+                // There are two thumbs, so position minimum (max is used in both the one and two thumb case)
+                left = Math.Max(0, (start - minimum) * rate);
+                right = Math.Min(sliderWidth, ((maximum - start) * rate));
                 thumbLeft = left - MinimumThumb.ActualWidth / 2;
                 thumbRight = right - MinimumThumb.ActualWidth / 2;
                 MinimumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
 
-                //middle thumb
+                // TODO: Change visibility instead of opacity.  Doing so throws an exception that start time cannot be
+                // greater than end time when dragging minimum thumb.                    
+                MinimumThumbLabel.Opacity = (LabelMode == TimeSliderLabelMode.Thumbs) && start == minimum ? 0 : 1;
+
+                // Calculate thumb label position
+                minThumbLabelWidth = CalculateTextSize(MinimumThumbLabel).Width;
+                thumbLabelWidthAdjustment = minThumbLabelWidth / 2;
+                minLabelLeftMargin = left - thumbLabelWidthAdjustment;
+                minLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
+            }
+            else
+            {
+                // There's only one thumb, so hide the min thumb
+                MinimumThumb.Margin = new Thickness(0, 0, sliderWidth, 0);
+                MinimumThumbLabel.Opacity = 0;
+            }
+
+            // Position middle thumb (filled area between min and max thumbs is actually a thumb and can be dragged)
+            if (IsCurrentExtentTimeInstant) // One thumb
+            {
+                // Hide the middle thumb
+                HorizontalTrackThumb.Margin = new Thickness(0, 0, sliderWidth, 0);
+                HorizontalTrackThumb.Width = 0;
+            }
+            else // !IsCurrentExtentTimeInstant
+            {
+                // Position the middle thumb
                 left = Math.Min(sliderWidth, ((start - minimum) * rate));
                 right = Math.Min(sliderWidth, (maximum - end) * rate);
                 HorizontalTrackThumb.Margin = new Thickness(left, 0, right, 0);
                 HorizontalTrackThumb.Width = Math.Max(0, (sliderWidth - right - left));
-
-                //maximum thumb
-                left = Math.Min(sliderWidth, (end - minimum) * rate + MinimumThumb.ActualWidth);
-                right = Math.Min(sliderWidth, ((maximum - end) * rate));
-                left -= MaximumThumb.ActualWidth / 2;
-                right -= MaximumThumb.ActualWidth / 2;
-                MaximumThumb.Margin = new Thickness(left, 0, right, 0);
-
-                //right repeater
-                left = Math.Min(sliderWidth, ((end - minimum) * rate) + MinimumThumb.ActualWidth + MaximumThumb.ActualWidth);
-                SliderTrackStepForwardRepeater.Margin = new Thickness(left, 0, 0, 0);
+                HorizontalTrackThumb.HorizontalAlignment = HorizontalAlignment.Left;
             }
-            else if (hasIntervals) //one or two thumbs
+
+            // Position maximum thumb
+            left = Math.Min(sliderWidth, (end - minimum) * rate);
+            right = Math.Min(sliderWidth, ((maximum - end) * rate));
+            thumbLeft = left - MaximumThumb.ActualWidth / 2;
+            thumbRight = right - MaximumThumb.ActualWidth / 2;
+            MaximumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
+
+            // Update maximum thumb label visibility
+            MaximumThumbLabel.Visibility = LabelMode != TimeSliderLabelMode.Thumbs || end == maximum || (IsCurrentExtentTimeInstant && start == minimum)
+                ? Visibility.Collapsed : Visibility.Visible;
+
+            // Position maximum thumb label
+            var maxThumbLabelWidth = CalculateTextSize(MaximumThumbLabel).Width;
+            thumbLabelWidthAdjustment = maxThumbLabelWidth / 2;
+            var maxLabelLeftMargin = left - thumbLabelWidthAdjustment;
+            var maxLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
+
+            // Handle possible thumb label collision and apply label positions
+            if (!IsCurrentExtentTimeInstant && MinimumThumbLabel.Opacity == 1)
             {
-                // Position left repeater							
-                right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.ActualWidth);
-                SliderTrackStepBackRepeater.Margin = new Thickness(0, 0, right, 0);
-
-                // Margin adjustment for the minimum thumb label
-                var thumbLabelWidthAdjustment = 0d;
-                var minLabelLeftMargin = -1d;
-                var minLabelRightMargin = -1d;
-                var minThumbLabelWidth = 0d;
-
-                // Position minimum thumb
-                if (!IsCurrentExtentTimeInstant) // Check for two thumbs
+                if (MaximumThumbLabel.Visibility == Visibility.Visible)
                 {
-                    // There are two thumbs, so position minimum (max is used in both the one and two thumb case)
-                    left = Math.Max(0, (start - minimum) * rate);
-                    right = Math.Min(sliderWidth, ((maximum - start) * rate));
-                    thumbLeft = left - MinimumThumb.ActualWidth / 2;
-                    thumbRight = right - MinimumThumb.ActualWidth / 2;
-                    MinimumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
+                    // Slider has min and max thumbs with both labels visible - check for label collision
+                    var minLabelRight = minLabelLeftMargin + minThumbLabelWidth;
+                    var spaceBetweenLabels = 6;
 
-                    // TODO: Change visibility instead of opacity.  Doing so throws an exception that start time cannot be
-                    // greater than end time when dragging minimum thumb.                    
-                    MinimumThumbLabel.Opacity = (LabelMode == TimeSliderLabelMode.Thumbs) && start == minimum ? 0 : 1;
-
-                    // Calculate thumb label position
-                    minThumbLabelWidth = CalculateTextSize(MinimumThumbLabel).Width;
-                    thumbLabelWidthAdjustment = minThumbLabelWidth / 2;
-                    minLabelLeftMargin = left - thumbLabelWidthAdjustment;
-                    minLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
-                }
-                else
-                {
-                    // There's only one thumb, so hide the min thumb
-                    MinimumThumb.Margin = new Thickness(0, 0, sliderWidth, 0);
-                    MinimumThumbLabel.Opacity = 0;
-                }
-
-                // Position middle thumb (filled area between min and max thumbs is actually a thumb and can be dragged)
-                if (IsCurrentExtentTimeInstant) // One thumb
-                {
-                    // Hide the middle thumb
-                    HorizontalTrackThumb.Margin = new Thickness(0, 0, sliderWidth, 0);
-                    HorizontalTrackThumb.Width = 0;
-                }
-                else // !IsCurrentExtentTimeInstant
-                {
-                    // Position the middle thumb
-                    left = Math.Min(sliderWidth, ((start - minimum) * rate));
-                    right = Math.Min(sliderWidth, (maximum - end) * rate);
-                    HorizontalTrackThumb.Margin = new Thickness(left, 0, right, 0);
-                    HorizontalTrackThumb.Width = Math.Max(0, (sliderWidth - right - left));
-                    HorizontalTrackThumb.HorizontalAlignment = HorizontalAlignment.Left;
-                }
-
-                // Position maximum thumb
-                left = Math.Min(sliderWidth, (end - minimum) * rate);
-                right = Math.Min(sliderWidth, ((maximum - end) * rate));
-                thumbLeft = left - MaximumThumb.ActualWidth / 2;
-                thumbRight = right - MaximumThumb.ActualWidth / 2;
-                MaximumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
-
-                // Update maximum thumb label visibility
-                MaximumThumbLabel.Visibility = LabelMode != TimeSliderLabelMode.Thumbs || end == maximum || (IsCurrentExtentTimeInstant && start == minimum)
-                    ? Visibility.Collapsed : Visibility.Visible;
-
-                // Position maximum thumb label
-                var maxThumbLabelWidth = CalculateTextSize(MaximumThumbLabel).Width;
-                thumbLabelWidthAdjustment = maxThumbLabelWidth / 2;
-                var maxLabelLeftMargin = left - thumbLabelWidthAdjustment;
-                var maxLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
-
-                // Handle possible thumb label collision and apply label positions
-                if (!IsCurrentExtentTimeInstant && MinimumThumbLabel.Opacity == 1)
-                {
-                    if (MaximumThumbLabel.Visibility == Visibility.Visible)
+                    if (minLabelRight + spaceBetweenLabels > maxLabelLeftMargin)
                     {
-                        // Slider has min and max thumbs with both labels visible - check for label collision
-                        var minLabelRight = minLabelLeftMargin + minThumbLabelWidth;
-                        var spaceBetweenLabels = 6;
-
-                        if (minLabelRight + spaceBetweenLabels > maxLabelLeftMargin)
-                        {
-                            // Labels will collide if centered on thumbs.  Adjust the position of each.
-                            var overlap = minLabelRight + spaceBetweenLabels - maxLabelLeftMargin;
-                            var collisionAdjustment = overlap / 2;
-                            minLabelLeftMargin -= collisionAdjustment;
-                            minLabelRightMargin += collisionAdjustment;
-                            maxLabelLeftMargin += collisionAdjustment;
-                            maxLabelRightMargin -= collisionAdjustment;
-                        }
+                        // Labels will collide if centered on thumbs.  Adjust the position of each.
+                        var overlap = minLabelRight + spaceBetweenLabels - maxLabelLeftMargin;
+                        var collisionAdjustment = overlap / 2;
+                        minLabelLeftMargin -= collisionAdjustment;
+                        minLabelRightMargin += collisionAdjustment;
+                        maxLabelLeftMargin += collisionAdjustment;
+                        maxLabelRightMargin -= collisionAdjustment;
                     }
-
-                    // Apply position to min label
-                    MinimumThumbLabel.Margin = new Thickness(minLabelLeftMargin, 0, minLabelRightMargin, 0);
                 }
 
-                MaximumThumbLabel.Margin = new Thickness(maxLabelLeftMargin, 0, maxLabelRightMargin, 0);
-
-                // Position right repeater
-                left = Math.Min(sliderWidth, ((end - minimum) * rate) + MaximumThumb.ActualWidth);
-                SliderTrackStepForwardRepeater.Margin = new Thickness(left, 0, 0, 0);
+                // Apply position to min label
+                MinimumThumbLabel.Margin = new Thickness(minLabelLeftMargin, 0, minLabelRightMargin, 0);
             }
-            else //no intervals, one thumb or two thumbs where start==end
-            {
-                //left repeater				
-                right = Math.Min(sliderWidth, ((maximum - end) * rate) + MaximumThumb.ActualWidth);
-                SliderTrackStepBackRepeater.Margin = new Thickness(0, 0, right, 0);
 
-                //minimum thumb
-                MinimumThumb.Margin = new Thickness(0, 0, sliderWidth, 0);
+            MaximumThumbLabel.Margin = new Thickness(maxLabelLeftMargin, 0, maxLabelRightMargin, 0);
 
-                //middle thumb
-                if (IsCurrentExtentTimeInstant)
-                {
-                    HorizontalTrackThumb.Margin = new Thickness(0, 0, sliderWidth, 0);
-                    HorizontalTrackThumb.Width = 0;
-                }
-                else
-                {
-                    HorizontalTrackThumb.Margin = new Thickness(0, 0, right, 0);
-                    HorizontalTrackThumb.Width = (sliderWidth - right);
-                    HorizontalTrackThumb.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                }
-
-                //maximum thumb
-                left = Math.Min(sliderWidth, (end - minimum) * rate);
-                right = Math.Min(sliderWidth, ((maximum - end) * rate));
-                MaximumThumb.Margin = new Thickness(left, 0, right, 0);
-
-                //right repeater
-                left = Math.Min(sliderWidth, ((end - minimum) * rate) + MaximumThumb.ActualWidth);
-                SliderTrackStepForwardRepeater.Margin = new Thickness(left, 0, 0, 0);
-            }            
+            // Position right repeater
+            left = Math.Min(sliderWidth, ((end - minimum) * rate) + MaximumThumb.ActualWidth);
+            SliderTrackStepForwardRepeater.Margin = new Thickness(left, 0, 0, 0);
         }
 
         /// <summary>
@@ -541,7 +477,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
 
             // time ratio 
-            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)GetTrackWidth();
+            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
 
             // time change
             long TimeChange = (long)(TimeRate * _totalHorizontalChange);
@@ -586,7 +522,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _totalHorizontalChange = e.HorizontalChange;
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
             // time ratio 
-            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)GetTrackWidth();
+            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
 
             // time change
             long TimeChange = (long)(TimeRate * _totalHorizontalChange);
@@ -629,7 +565,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
 
             // time ratio 
-            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)GetTrackWidth();
+            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
 
             // time change
             long TimeChange = (long)(TimeRate * _totalHorizontalChange);
@@ -697,19 +633,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 UpdateCurrentExtent();
         }
 
-        private double GetTrackWidth()
-        {
-            if (SliderTrack == null) return 0;
-            bool hasIntervals = (TimeSteps == null) ? false : TimeSteps.GetEnumerator().MoveNext();
-            double trackWidth;
-            if (!IsCurrentExtentTimeInstant && !hasIntervals)
-                trackWidth = SliderTrack.ActualWidth - (MinimumThumb == null ? 0 : MinimumThumb.ActualWidth) - (MaximumThumb == null ? 0 : MaximumThumb.ActualWidth);
-            else
-                trackWidth = SliderTrack.ActualWidth;
-            return trackWidth;
-        }
-
-        private void DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
             if (_currentValue == null)
                 return;
