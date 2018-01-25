@@ -318,9 +318,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Gets or sets the tick mark positions
+        /// Gets or sets the data sources for the tick marks.  These can be bound to in the tick bar's tick templates.
         /// </summary>
-        /// <value>The tick mark positions.</value>
+        /// <value>The data source objects</value>
         public IEnumerable<object> TickmarkDataSources
         {
             get { return (IEnumerable<object>)GetValue(TickmarkDataSourcesProperty); }
