@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (SymbolImpl == null)
+            if (Symbol == null)
             {
                 img.Source = null;
                 img.Width = 0;

@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// and TableOfContents control is used to display symbology and description for a set of <see cref="Layer"/>s
     /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/>.
     /// </summary>
-    [TemplatePart(Name ="List", Type = typeof(ItemsControl))]
+    [TemplatePart(Name = "List", Type = typeof(ItemsControl))]
     public partial class LayerList
     {
         private void Initialize() => DefaultStyleKey = this.GetType();
@@ -55,73 +55,65 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Generates layer list for a set of <see cref="Layer"/>s in a <see cref="Map"/> or <see cref="Scene"/>
         /// contained in a <see cref="GeoView"/>
         /// </summary>
-        internal virtual void Refresh()
+        internal void Refresh()
         {
             var list = GetTemplateChild("List") as ItemsControl;
-            if (list != null)
+            if (list == null)
             {
-                if (GeoView != null)
+                return;
+            }
+
+            if ((GeoView as MapView)?.Map == null && (GeoView as SceneView)?.Scene == null)
+            {
+                return;
+            }
+
+            ObservableLayerContentList layers = null;
+            if (GeoView is MapView)
+            {
+                layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal)
                 {
-                    ObservableLayerContentList layers = null;
-                    if (GeoView is MapView)
-                    {
-                        var map = (GeoView as MapView).Map;
-                        if (map != null)
-                        {
-                            layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal)
-                            {
-                                ReverseOrder = !ReverseLayerOrder,
-                            };
-                        }
+                    ReverseOrder = !ReverseLayerOrder,
+                };
 
-                        Binding b = new Binding();
-                        b.Source = GeoView;
-                        b.Path = new PropertyPath(nameof(MapView.Map));
-                        b.Mode = BindingMode.OneWay;
-                        SetBinding(DocumentProperty, b);
-                    }
-                    else if (GeoView is SceneView)
-                    {
-                        var scene = (GeoView as SceneView).Scene;
-                        if (scene != null)
-                        {
-                            layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal)
-                            {
-                                ReverseOrder = !ReverseLayerOrder,
-                            };
-                        }
-
-                        Binding b = new Binding();
-                        b.Source = GeoView;
-                        b.Path = new PropertyPath(nameof(SceneView.Scene));
-                        b.Mode = BindingMode.OneWay;
-                        SetBinding(DocumentProperty, b);
-                    }
-
-                    if (layers != null && GeoView != null)
-                    {
-                        foreach (var l in layers)
-                        {
-                            if (!(l.LayerContent is Layer))
-                                continue;
-                            var layer = l.LayerContent as Layer;
-                            if (layer.LoadStatus == LoadStatus.Loaded)
-                            {
-                                l.UpdateLayerViewState(GeoView.GetLayerViewState(layer));
-                            }
-                        }
-
-                        _scaleChanged = true;
-                        UpdateScaleVisiblity();
-                    }
-
-                    list.ItemsSource = _layerContentList = layers;
-                }
-                else
+                Binding b = new Binding();
+                b.Source = GeoView;
+                b.Path = new PropertyPath(nameof(MapView.Map));
+                b.Mode = BindingMode.OneWay;
+                SetBinding(DocumentProperty, b);
+            }
+            else if (GeoView is SceneView)
+            {
+                layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal)
                 {
-                    list.ItemsSource = null;
+                    ReverseOrder = !ReverseLayerOrder,
+                };
+
+                Binding b = new Binding();
+                b.Source = GeoView;
+                b.Path = new PropertyPath(nameof(SceneView.Scene));
+                b.Mode = BindingMode.OneWay;
+                SetBinding(DocumentProperty, b);
+            }
+
+            if (layers == null)
+            {
+                return;
+            }
+            foreach (var l in layers)
+            {
+                if (!(l.LayerContent is Layer))
+                    continue;
+                var layer = l.LayerContent as Layer;
+                if (layer.LoadStatus == LoadStatus.Loaded)
+                {
+                    l.UpdateLayerViewState(GeoView.GetLayerViewState(layer));
                 }
             }
+
+            ScaleChanged();
+            SetLayerContentList(layers);
+            list.ItemsSource = layers;
         }
 
         /// <summary>

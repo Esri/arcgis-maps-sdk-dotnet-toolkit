@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <seealso cref="MapView"/>
         /// <seealso cref="SceneView"/>
-        public GeoView GeoViewImpl
+        private GeoView GeoViewImpl
         {
             get => _geoView;
             set
@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private bool _filterByVisibleScaleRange;
+        private bool _filterByVisibleScaleRange = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private bool _reverseLayerOrder;
+        private bool _reverseLayerOrder = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
@@ -90,13 +90,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _reverseLayerOrder = value;
                     _layerContentList.ReverseOrder = !value;
+                    ReverseListOrder();
                 }
-
             }
-        }
-
-        internal virtual void Refresh()
-        {
         }
     }
 }

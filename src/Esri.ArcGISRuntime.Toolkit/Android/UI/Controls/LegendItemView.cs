@@ -14,36 +14,22 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+
 using Android.Content;
 using Android.Views;
 using Android.Widget;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    internal class LegendView : LinearLayout
+    internal abstract class LegendItemView : LinearLayout
     {
-        private SymbolDisplay _symbolDisplay;
-        private TextView _textView;
-
-        internal LegendView(Context context) : base(context)
+        protected LegendItemView(Context context) : base(context)
         {
-            Orientation = Orientation.Horizontal;
-            LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
+            Orientation = Orientation.Vertical;
+            LayoutParameters = new LayoutParams(LayoutParams.MatchParent, 300);
             SetGravity(GravityFlags.Top);
-
-            _symbolDisplay = new SymbolDisplay(context);
-            AddView(_symbolDisplay);
-            _textView = new TextView(context)
-            {
-                TextAlignment = Android.Views.TextAlignment.Center
-            };
-            AddView(_textView);
         }
 
-        internal void Update(LayerLegendInfo info)
-        {
-            _symbolDisplay.Symbol = info?.Symbol;
-            _textView.Text = info?.Name;
-        }
+        internal abstract void Update(LayerContentViewModel layerContent);
     }
 }

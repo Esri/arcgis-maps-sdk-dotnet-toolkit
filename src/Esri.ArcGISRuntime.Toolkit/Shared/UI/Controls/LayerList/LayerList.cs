@@ -52,6 +52,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Initialize();
         }
+        
+        internal void ScaleChanged()
+        {
+            _scaleChanged = true;
+            // First time map is loaded and scale is established
+            if (!_isScaleSet)
+            {
+                UpdateScaleVisiblity();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
@@ -146,7 +156,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void GeoView_LayerViewStateChanged(object sender, Esri.ArcGISRuntime.Mapping.LayerViewStateChangedEventArgs e)
+        private void GeoView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e)
         {
             if (_layerContentList != null)
             {
@@ -180,13 +190,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (e.PropertyName == nameof(MapView.MapScale))
             {
-                _scaleChanged = true;
-
-                // First time map is loaded and scale is established
-                if (!_isScaleSet)
-                {
-                    UpdateScaleVisiblity();
-                }
+                ScaleChanged();
             }
         }
 
@@ -199,6 +203,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
                 
         private ObservableLayerContentList _layerContentList;
+
+        private void SetLayerContentList(ObservableLayerContentList layerContentList)
+        {
+            _layerContentList = layerContentList;
+        }
 
         private bool _showLegendInternal;
 

@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Android.App;
 using Android.Content;
 using Android.Runtime;
 using Android.Util;
@@ -28,8 +27,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend")]
     public partial class LayerLegend
     {
-        private static DisplayMetrics s_displayMetrics;
-        private static IWindowManager s_windowManager;
         private LinearLayout _rootLayout;
         private ListView _listView;
         private SynchronizationContext _syncContext;
@@ -49,8 +46,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Initialize()
         {
-            // TODO: Design time experience
-            //if (DesignTime.IsDesignMode)
             _syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
             _rootLayout = new LinearLayout(Context)
             {
@@ -59,10 +54,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             _rootLayout.SetGravity(GravityFlags.Top);
 
-            _listView = new ListView(Context);
+            _listView = new ListView(Context)
+            {
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+            };
             _rootLayout.AddView(_listView);
             
-            // Add root layout to view
             AddView(_rootLayout);
             _rootLayout.RequestLayout();
         }
@@ -70,10 +67,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Refresh()
         {
             if (_listView == null)
+            {
                 return;
+            }
+
             if (LayerContent == null)
+            {
                 _listView.Adapter = null;
-           
+                return;
+            }
+
             if (LayerContent is ILoadable)
             {
                 if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
@@ -85,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var items = new ObservableCollection<LayerLegendInfo>();
             LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
-            _listView.Adapter = new LegendsAdapter(Context, items);
+            _listView.Adapter = new LayerLegendAdapter(Context, items);
         }
 
         private void Layer_Loaded(object sender, System.EventArgs e)
@@ -117,33 +120,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             // Forward layout call to the root layout
             _rootLayout.Layout(PaddingLeft, PaddingTop, _rootLayout.MeasuredWidth + PaddingLeft, _rootLayout.MeasuredHeight + PaddingBottom);
-        }
-
-        // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics GetDisplayMetrics()
-        {
-            if (s_displayMetrics == null)
-            {
-                if (s_windowManager == null)
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
-                if (s_windowManager == null)
-                {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
-                }
-                else
-                {
-                    s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
-                }
-            }
-            return s_displayMetrics;
-        }
-
-        // Calculates a screen dimension given a specified dimension in raw pixels
-        private float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip)
-        {
-            return !DesignTime.IsDesignMode ?
-                TypedValue.ApplyDimension(screenUnitType, pixels, GetDisplayMetrics()) : pixels;
         }
     }
 }

@@ -52,13 +52,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Refresh()
         {
             var ctrl = GetTemplateChild("ItemsList") as ItemsControl;
-            if (ctrl == null || LayerContent == null)
-            {
-                if (ctrl != null)
-                {
-                    ctrl.ItemsSource = null;
-                }
 
+            if (ctrl == null)
+            {
+                return;
+            }
+
+            if (LayerContent == null)
+            {
+                ctrl.ItemsSource = null;
                 return;
             }
 

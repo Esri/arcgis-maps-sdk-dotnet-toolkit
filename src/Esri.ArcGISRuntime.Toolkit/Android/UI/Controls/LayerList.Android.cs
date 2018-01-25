@@ -14,38 +14,34 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Android.App;
 using Android.Content;
-using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay")]
-    public partial class SymbolDisplay
+    public partial class LayerList
     {
-        private static DisplayMetrics s_displayMetrics;
-        private static IWindowManager s_windowManager;
         private LinearLayout _rootLayout;
-        private ImageView _imageView;
+        private ListView _listView;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+        /// Initializes a new instance of the <see cref="LayerList"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public SymbolDisplay(Context context) : base(context) { Initialize(); }
+        public LayerList(Context context) : base(context) { Initialize(); }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+        /// Initializes a new instance of the <see cref="LayerList"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public SymbolDisplay(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
+        public LayerList(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
 
-        private void Initialize()
+        internal void Initialize()
         {
             _rootLayout = new LinearLayout(Context)
             {
@@ -54,53 +50,72 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             _rootLayout.SetGravity(GravityFlags.Top);
 
-            _imageView = new ImageView(Context)
+            _listView = new ListView(Context)
             {
                 LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
             };
-            _imageView.SetMaxWidth(40);
-            _imageView.SetMaxHeight(40);
-            _imageView.SetScaleType(ImageView.ScaleType.CenterInside);
-            _rootLayout.AddView(_imageView);
+            _rootLayout.AddView(_listView);
             
             AddView(_rootLayout);
             _rootLayout.RequestLayout();
         }
 
-        private async void Refresh()
+        private void Refresh()
         {
-            if (_imageView == null)
+            if (_listView == null)
+            {
+                return;
+            }
+            
+            if ((GeoView as MapView)?.Map == null && (GeoView as SceneView)?.Scene == null)
             {
                 return;
             }
 
-            if (Symbol == null)
+            ObservableLayerContentList layers = null;
+
+            if (GeoView is MapView)
             {
-                _imageView.SetImageResource(0);
-                _imageView.LayoutParameters.Width = 0;
-                _imageView.LayoutParameters.Height = 0;
+                layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal)
+                {
+                    ReverseOrder = !ReverseLayerOrder,
+                };
+            }
+            else if (GeoView is SceneView)
+            {
+                layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal)
+                {
+                    ReverseOrder = !ReverseLayerOrder,
+                };
+            }
+
+            if (layers == null)
+            {
                 return;
             }
 
-#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
-            try
+            foreach (var l in layers)
             {
-                var scale = GetScaleFactor();
-                var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                _imageView.LayoutParameters.Width = (int)(imageData.Width / scale);
-                _imageView.LayoutParameters.Height = (int)(imageData.Height / scale);
-                _imageView.SetImageBitmap(await imageData.ToImageSourceAsync());
+                if (!(l.LayerContent is Layer))
+                {
+                    continue;
+                }
+
+                var layer = l.LayerContent as Layer;
+                if (layer.LoadStatus == LoadStatus.Loaded)
+                {
+                    l.UpdateLayerViewState(GeoView.GetLayerViewState(layer));
+                }
             }
-            catch
-            {
-                _imageView.SetImageResource(0);
-            }
-#pragma warning restore ESRI1800
+
+            ScaleChanged();
+            SetLayerContentList(layers);
+            _listView.Adapter = new LegendAdapter(Context, layers, typeof(LegendTrunkItemView));
         }
 
-        private static double GetScaleFactor()
+        private void ReverseListOrder()
         {
-            return GetDisplayMetrics()?.Density ?? 1;
+            _listView.Adapter = new LegendAdapter(Context, _layerContentList, typeof(LegendTrunkItemView));
         }
 
         /// <inheritdoc />
@@ -127,25 +142,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Forward layout call to the root layout
             _rootLayout.Layout(PaddingLeft, PaddingTop, _rootLayout.MeasuredWidth + PaddingLeft, _rootLayout.MeasuredHeight + PaddingBottom);
         }
-
-        // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics GetDisplayMetrics()
-        {
-            if (s_displayMetrics == null)
-            {
-                if (s_windowManager == null)
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
-                if (s_windowManager == null)
-                {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
-                }
-                else
-                {
-                    s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
-                }
-            }
-            return s_displayMetrics;
-        }        
     }
 }
