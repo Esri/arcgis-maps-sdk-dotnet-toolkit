@@ -88,6 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent _horizontalChangeExtent;
         private string _originalFullExtentLabelFormat;
         private string _originalCurrentExtentLabelFormat;
+        private string _originalCurrentExtentTooltipFormat;
         private ThrottleAwaiter _calculateTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
 
@@ -1659,6 +1660,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 targetProperty: TextBlock.TextProperty,
                 stringFormat: newLabelFormat,
                 fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
+
+            // Apply the updated string format to the thumb tooltips
+            if (slider.MinimumThumb?.ToolTip is ToolTip minTooltip)
+            {
+                if (slider._originalCurrentExtentTooltipFormat == null)
+                    slider._originalCurrentExtentTooltipFormat = minTooltip.ContentStringFormat;
+                minTooltip.ContentStringFormat = !string.IsNullOrEmpty(newLabelFormat) ? 
+                    newLabelFormat : slider._originalCurrentExtentTooltipFormat;
+                minTooltip.GetBindingExpression(ContentControl.ContentProperty)?.UpdateTarget();
+            }
+            if (slider.MaximumThumb?.ToolTip is ToolTip maxTooltip)
+            {
+                if (slider._originalCurrentExtentTooltipFormat == null)
+                    slider._originalCurrentExtentTooltipFormat = maxTooltip.ContentStringFormat;
+                maxTooltip.ContentStringFormat = !string.IsNullOrEmpty(newLabelFormat) ?
+                    newLabelFormat : slider._originalCurrentExtentTooltipFormat;
+                maxTooltip.GetBindingExpression(ContentControl.ContentProperty)?.UpdateTarget();
+            }
 
             // Layout the slider to accommodate updated label text
             slider.UpdateTrackLayout(slider.CurrentExtent);

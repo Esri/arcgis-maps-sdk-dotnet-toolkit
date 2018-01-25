@@ -84,7 +84,6 @@
 
                     <Grid>
                         <Grid.Resources>
-
                             <Style x:Key="PlayPauseToggleButtonStyle" TargetType="ToggleButton">
                                 <Setter Property="Background" Value="Gray"/>
                                 <Setter Property="Foreground" Value="Transparent"/>
@@ -536,8 +535,6 @@
                                Background="{TemplateBinding ThumbFill}"
                                Foreground="Black"
                                DataContext="{TemplateBinding CurrentExtent}"
-                               ToolTipService.ToolTip="{Binding StartTime}" 
-                               ToolTipService.Placement="Top"
                                Cursor="Hand"
                                IsTabStop="False"
                                HorizontalAlignment="Left"
@@ -545,7 +542,13 @@
                                Grid.Row="1"
                                Grid.RowSpan="2"
                                Grid.Column="1"
-                               Grid.ColumnSpan="3"/>
+                               Grid.ColumnSpan="3">
+                            <Thumb.ToolTip>
+                                <ToolTip Content="{Binding StartTime}"
+                                         ContentStringFormat="{}{0:M/d/yyyy}"
+                                         Placement="Top"/>
+                            </Thumb.ToolTip>
+                        </Thumb>
 
                         <!--maximum thumb-->
                         <Thumb x:Name="MaximumThumb"
@@ -556,8 +559,6 @@
                                Background="{TemplateBinding ThumbFill}"
                                Foreground="Black"
                                DataContext="{TemplateBinding CurrentExtent}"
-                               ToolTipService.ToolTip="{Binding EndTime}"
-                               ToolTipService.Placement="Top"
                                Cursor="Hand"
                                IsTabStop="False"
                                HorizontalAlignment="Left"
@@ -565,7 +566,13 @@
                                Grid.Row="1"
                                Grid.Column="1"
                                Grid.RowSpan="2"
-                               Grid.ColumnSpan="3"/>
+                               Grid.ColumnSpan="3">
+                            <Thumb.ToolTip>
+                                <ToolTip Content="{Binding EndTime}"
+                                         ContentStringFormat="{}{0:M/d/yyyy}"
+                                         Placement="Top"/>
+                            </Thumb.ToolTip>
+                        </Thumb>
 
                         <TextBlock x:Name="MinimumThumbLabel"
                                    Text="{Binding CurrentExtent.StartTime,
