@@ -14,40 +14,28 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
-#else
-using System.Windows.Controls;
-#endif
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
-    /// </summary>
-    public partial class SymbolDisplay : Control
+    internal class LayerLegendInfo
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
-        /// </summary>
-        public SymbolDisplay()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
-        { Initialize(); }
-        
-
-        /// <summary>
-        /// Gets or sets the symbol to render
-        /// </summary>
-        public Symbology.Symbol Symbol
+        internal LayerLegendInfo(LegendInfo info)
         {
-            get => SymbolImpl;
-            set => SymbolImpl = value;
+            LegendInfo = info;
+            Name = info?.Name;
+            Symbol = info?.Symbol ?? null;
         }
+
+        internal LayerLegendInfo(ILayerContent content)
+        {
+            Name = content?.Name;
+            Symbol = null;
+        }
+
+        public string Name { get; }
+        public Symbol Symbol { get; }
+        public LegendInfo LegendInfo { get; }
     }
 }

@@ -14,40 +14,36 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !XAMARIN
+using System;
+using System.Globalization;
 #if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
 #else
-using System.Windows.Controls;
+using System.Windows;
+using System.Windows.Data;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
-    /// </summary>
-    public partial class SymbolDisplay : Control
+    internal class BooleanVisibilityConverter : IValueConverter
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
-        /// </summary>
-        public SymbolDisplay()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
+        public object Convert(object value, Type targetType, object parameter,
+#if NETFX_CORE
+            string language
+#else
+            CultureInfo culture
 #endif
-        { Initialize(); }
-        
+            ) => (value is bool ? (bool)value : false)  ? Visibility.Visible : Visibility.Collapsed;
 
-        /// <summary>
-        /// Gets or sets the symbol to render
-        /// </summary>
-        public Symbology.Symbol Symbol
-        {
-            get => SymbolImpl;
-            set => SymbolImpl = value;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter,
+#if NETFX_CORE
+            string language
+#else
+            CultureInfo culture
+#endif
+            ) => throw new NotSupportedException();
     }
 }
+#endif

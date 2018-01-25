@@ -1,36 +1,36 @@
-﻿<Page
-    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Legend.LegendSample"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
-    xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    mc:Ignorable="d">
-
+﻿<Page x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Legend.LegendSample"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+      mc:Ignorable="d">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
         <Grid>
-            <ScrollViewer>
-                <ItemsControl ItemsSource="{x:Bind mapView.Map.OperationalLayers, Mode=OneWay}" Margin="10">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                                <esriToolkit:LayerLegend LayerContent="{Binding}" ShowEntireTreeHiarchy="True" Margin="10,0" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <esriToolkit:Legend Grid.Row="0"
+                                x:Name="legend"
+                                GeoView="{Binding ElementName=mapView}"
+                                ReverseLayerOrder="False"
+                                FilterByVisibleScaleRange="True" />
+            <CheckBox Content="Filter By Visible Scale Range"
+                      IsChecked="{Binding FilterByVisibleScaleRange, ElementName=legend, Mode=TwoWay}"
+                      Grid.Row="1" />
+            <CheckBox Content="Reverse Layer Order"
+                      IsChecked="{Binding ReverseLayerOrder, ElementName=legend, Mode=TwoWay}"
+                      Grid.Row="2" />
         </Grid>
-
-
-        <esri:MapView Map="{x:Bind Map}" x:Name="mapView" Grid.Column="1" />
+        <esri:MapView Map="{x:Bind Map}"
+                      x:Name="mapView"
+                      Grid.Column="1" />
     </Grid>
 </Page>

@@ -165,7 +165,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (SelectedLinearUnit == null)
             {
-                SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ? 
+                SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ?
                     Geometry.LinearUnits.Meters :
                     LinearUnits.FirstOrDefault();
             }

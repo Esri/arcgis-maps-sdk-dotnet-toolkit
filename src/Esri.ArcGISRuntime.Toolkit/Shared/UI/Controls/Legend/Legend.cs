@@ -14,40 +14,23 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
-#else
-using System.Windows.Controls;
-#endif
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
+    /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
+    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
     /// </summary>
-    public partial class SymbolDisplay : Control
+    public partial class Legend : LayerList
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+        /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
-        public SymbolDisplay()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
-        { Initialize(); }
-        
-
-        /// <summary>
-        /// Gets or sets the symbol to render
-        /// </summary>
-        public Symbology.Symbol Symbol
+        public Legend() : base()
         {
-            get => SymbolImpl;
-            set => SymbolImpl = value;
+            ShowLegendInternal = true;
         }
     }
 }

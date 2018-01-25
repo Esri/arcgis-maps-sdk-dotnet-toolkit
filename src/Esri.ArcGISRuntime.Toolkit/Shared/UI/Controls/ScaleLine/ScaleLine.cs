@@ -262,6 +262,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             double distanceInInches = result.Distance;
             return distanceInInches * 96;
         }
-
     }
 }
