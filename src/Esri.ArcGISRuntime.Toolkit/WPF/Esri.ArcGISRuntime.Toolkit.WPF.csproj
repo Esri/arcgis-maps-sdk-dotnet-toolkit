@@ -22,7 +22,6 @@
       <IncludeAssets>compile</IncludeAssets>
       <PrivateAssets></PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />

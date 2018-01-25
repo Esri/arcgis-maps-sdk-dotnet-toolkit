@@ -1315,10 +1315,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // for filtering.
             foreach (var layer in temporallyActiveLayers)
             {
-                var timeProperties = await GetTimePropertiesAsync(layer);
-                fullExtent = fullExtent == null ? timeProperties.fullExtent : fullExtent.Union(timeProperties.fullExtent);
-                timeStepInterval = timeStepInterval == null ? timeProperties.timeStepInterval :
-                    timeProperties.timeStepInterval.IsGreaterThan(timeStepInterval) ? timeProperties.timeStepInterval : timeStepInterval;
+                fullExtent = fullExtent == null ? layer.FullTimeExtent : fullExtent.Union(layer.FullTimeExtent);
+                var layerTimeStepInterval = await GetTimeStepIntervalAsync(layer);
+                timeStepInterval = timeStepInterval == null ? layerTimeStepInterval :
+                    layerTimeStepInterval.IsGreaterThan(timeStepInterval) ? layerTimeStepInterval : timeStepInterval;
 
                 // Only check whether a time instant can be used for filtering if the GeoView doesn't have a defined temporal extent and all
                 // the layers checked so far allow instantaneous filtration.
@@ -1343,29 +1343,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="timeAwareLayer">The layer to use to initialize the time slider</param>
         public async Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer)
         {
-            var (fullExtent, timeStepInterval, currentExtent) = await GetTimePropertiesAsync(timeAwareLayer);
-            FullExtent = fullExtent;
-            TimeStepInterval = timeStepInterval;
-            CurrentExtent = currentExtent;
-
-            // TODO: Initialize time-zone (will require converting time zone string to strong type)
-        }
-
-        /// <summary>
-        /// Gets the full time extent, time step interval, and a valid time extent for the specified time-aware layer
-        /// </summary>
-        /// <param name="timeAwareLayer">The time-aware layer to retrieve temporal properties for</param>
-        /// <returns>A tuple that contains the full extent, interval, and valid extent</returns>
-        private async Task<(TimeExtent fullExtent, TimeValue timeStepInterval, TimeExtent validExtent)> GetTimePropertiesAsync(ITimeAware timeAwareLayer)
-        {
-            var timeStepInterval = await GetTimeStepIntervalAsync(timeAwareLayer);
-
+            FullExtent = timeAwareLayer.FullTimeExtent;
+            TimeStepInterval = await GetTimeStepIntervalAsync(timeAwareLayer);
             // TODO: Double-check whether we can choose a better default for current extent - does not seem to be exposed
             // at all in service metadata
-            var validExtent = await CanUseInstantaneousTimeAsync(timeAwareLayer) ?
+            CurrentExtent = await CanUseInstantaneousTimeAsync(timeAwareLayer) ?
                 new TimeExtent(FullExtent.StartTime) : new TimeExtent(FullExtent.StartTime, TimeSteps.ElementAt(1));
 
-            return (timeAwareLayer.FullTimeExtent, timeStepInterval, validExtent);
+            // TODO: Initialize time-zone (will require converting time zone string to strong type)
         }
 
         /// <summary>
