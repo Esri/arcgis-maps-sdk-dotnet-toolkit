@@ -534,7 +534,6 @@
                                BorderBrush="{TemplateBinding ThumbStroke}"
                                Background="{TemplateBinding ThumbFill}"
                                Foreground="Black"
-                               DataContext="{TemplateBinding CurrentExtent}"
                                Cursor="Hand"
                                IsTabStop="False"
                                HorizontalAlignment="Left"
@@ -542,13 +541,7 @@
                                Grid.Row="1"
                                Grid.RowSpan="2"
                                Grid.Column="1"
-                               Grid.ColumnSpan="3">
-                            <Thumb.ToolTip>
-                                <ToolTip Content="{Binding StartTime}"
-                                         ContentStringFormat="{}{0:M/d/yyyy}"
-                                         Placement="Top"/>
-                            </Thumb.ToolTip>
-                        </Thumb>
+                               Grid.ColumnSpan="3" />
 
                         <!--maximum thumb-->
                         <Thumb x:Name="MaximumThumb"
@@ -558,7 +551,6 @@
                                BorderBrush="{TemplateBinding ThumbStroke}"
                                Background="{TemplateBinding ThumbFill}"
                                Foreground="Black"
-                               DataContext="{TemplateBinding CurrentExtent}"
                                Cursor="Hand"
                                IsTabStop="False"
                                HorizontalAlignment="Left"
@@ -566,13 +558,7 @@
                                Grid.Row="1"
                                Grid.Column="1"
                                Grid.RowSpan="2"
-                               Grid.ColumnSpan="3">
-                            <Thumb.ToolTip>
-                                <ToolTip Content="{Binding EndTime}"
-                                         ContentStringFormat="{}{0:M/d/yyyy}"
-                                         Placement="Top"/>
-                            </Thumb.ToolTip>
-                        </Thumb>
+                               Grid.ColumnSpan="3" />
 
                         <TextBlock x:Name="MinimumThumbLabel"
                                    Text="{Binding CurrentExtent.StartTime,
