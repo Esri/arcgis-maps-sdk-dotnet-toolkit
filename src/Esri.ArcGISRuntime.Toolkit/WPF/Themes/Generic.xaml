@@ -11,6 +11,7 @@
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/TableOfContents/TableOfContents.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
    
