@@ -28,6 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Orientation = Orientation.Vertical;
             LayoutParameters = new LayoutParams(LayoutParams.MatchParent, 300);
             SetGravity(GravityFlags.Top);
+            SetChildrenDrawingCacheEnabled(false);
         }
 
         internal abstract void Update(LayerContentViewModel layerContent);

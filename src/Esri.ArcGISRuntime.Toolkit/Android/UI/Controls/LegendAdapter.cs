@@ -20,7 +20,6 @@ using Android.Widget;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -29,7 +28,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly IReadOnlyList<LayerContentViewModel> _allLayers;
         private readonly Context _context;
         private readonly Type _legendItemView;
-        private List<LayerContentViewModel> _activeLayers = new List<LayerContentViewModel>();
 
         internal LegendAdapter(Context context, IReadOnlyList<LayerContentViewModel> allLayers, Type legendItemView)
         {
@@ -40,7 +38,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var incc = _allLayers as INotifyCollectionChanged;
                 var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc);
-                listener.OnEventAction = (instance, source, eventArgs) => { NotifyDataSetChanged(); };
+                listener.OnEventAction = (instance, source, eventArgs) => 
+                {                    
+                    NotifyDataSetChanged();
+                };
                 listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
                 incc.CollectionChanged += listener.OnEvent;
             }
@@ -57,33 +58,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var view = convertView as LegendItemView;
-            if (view == null)
+            var legend = _allLayers[position];
+            if (convertView == null)
             {
-                var legend = _allLayers[position];
 
                 switch (_legendItemView?.Name)
                 {
                     case nameof(LegendTrunkItemView):
                         {
-                            view = new LegendTrunkItemView(_context);
+                            convertView = new LegendTrunkItemView(_context);
                             break;
                         }
                     case nameof(LegendBranchItemView):
                         {
-                            view = new LegendBranchItemView(_context);
+                            convertView = new LegendBranchItemView(_context);
                             break;
                         }
                     case nameof(LegendLeafItemView):
                         {
-                            view = new LegendLeafItemView(_context);
+                            convertView = new LegendLeafItemView(_context);
                             break;
                         }
                 }
-
-                view?.Update(legend);
             }
-            return view;
+            (convertView as LegendItemView)?.Update(legend);
+            return convertView;
         }
     }
 }

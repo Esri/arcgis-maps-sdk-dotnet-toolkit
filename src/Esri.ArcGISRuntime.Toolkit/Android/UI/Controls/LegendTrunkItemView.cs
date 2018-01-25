@@ -43,16 +43,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
                 ShowEntireTreeHierarchy = false
-            };
+            };            
             _layerLegend.SetPadding(10, 0, 0, 0);
             AddView(_layerLegend);
 
             _listView = new ListView(context)
             {
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
-            };
+                ScrollingCacheEnabled = false
+            };            
             AddView(_listView);
             RequestLayout();
+        }
+
+        private void Refresh(LayerContentViewModel layerContent, string propertyName)
+        {
+            if (propertyName == nameof(LayerContentViewModel.Sublayers))
+            {
+                var subLayers = layerContent?.Sublayers;
+                if (subLayers == null)
+                {
+                    return;
+                }
+                if (_listView.Adapter == null)
+                {
+                    _listView.Adapter = new LegendAdapter(Context, new List<LayerContentViewModel>(subLayers), typeof(LegendBranchItemView));
+                }
+                else
+                {
+                    (_listView.Adapter as LegendAdapter)?.NotifyDataSetChanged();
+                }
+            }
+            else if (propertyName == nameof(LayerContentViewModel.DisplayLegend))
+            {
+                Visibility = (layerContent?.DisplayLegend ?? false) ? ViewStates.Visible : ViewStates.Invisible;
+            }
+            else if (propertyName == nameof(LayerContentViewModel.IsSublayer))
+            {
+                _textView.Visibility = (layerContent?.IsSublayer ?? false) ? ViewStates.Visible : ViewStates.Invisible;
+            }
         }
 
         internal override void Update(LayerContentViewModel layerContent)
@@ -69,30 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc);
                 listener.OnEventAction = (instance, source, eventArgs) =>
                 {
-                    if (eventArgs.PropertyName == nameof(LayerContentViewModel.Sublayers))
-                    {
-                        var subLayers = (instance as LayerContentViewModel)?.Sublayers;
-                        if (subLayers == null)
-                        {
-                            return;
-                        }                    
-                        if (_listView.Adapter == null)
-                        {
-                            _listView.Adapter = new LegendAdapter(Context, new List<LayerContentViewModel>(subLayers), typeof(LegendBranchItemView));
-                        }
-                        else
-                        {
-                            (_listView.Adapter as LegendAdapter)?.NotifyDataSetChanged();
-                        }
-                    }
-                    else if (eventArgs.PropertyName == nameof(LayerContentViewModel.DisplayLegend))
-                    {
-                        Visibility = ((instance as LayerContentViewModel)?.DisplayLegend ?? false) ? ViewStates.Visible : ViewStates.Invisible;
-                    }
-                    else if (eventArgs.PropertyName == nameof(LayerContentViewModel.IsSublayer))
-                    {
-                        _textView.Visibility = ((instance as LayerContentViewModel)?.IsSublayer ?? false) ? ViewStates.Visible : ViewStates.Invisible;
-                    }
+                    Refresh(instance as LayerContentViewModel, eventArgs.PropertyName);
                 };
                 listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
                 inpc.PropertyChanged += listener.OnEvent;

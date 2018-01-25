@@ -35,8 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var incc = _layerLegends as INotifyCollectionChanged;
                 var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc);
-                listener.OnEventAction = (instance, source, eventArgs) => 
-                {   
+                listener.OnEventAction = (instance, source, eventArgs) =>
+                {
                     NotifyDataSetChanged();
                 };
                 listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
@@ -55,14 +55,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var view = convertView as LayerLegendItemView;
-            if (view == null)
+            var layerLegend = _layerLegends[position];
+            if (convertView == null)
             {
-                view = new LayerLegendItemView(_context);
-                var layerLegend = _layerLegends[position];
-                view.Update(layerLegend);
+                convertView = new LayerLegendItemView(_context);
             }
-            return view;
+            (convertView as LayerLegendItemView)?.Update(layerLegend);
+            return convertView;
         }
     }
 }

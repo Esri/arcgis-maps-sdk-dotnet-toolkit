@@ -35,6 +35,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AddView(_layerLegend);
             RequestLayout();
         }
+        private void Refresh(LayerContentViewModel layerContent, string propertyName)
+        {
+            if (propertyName == nameof(LayerContentViewModel.DisplayLegend))
+            {
+                Visibility = (layerContent?.DisplayLegend ?? false) ? ViewStates.Visible : ViewStates.Invisible;
+            }
+        }
 
         internal override void Update(LayerContentViewModel layerContent)
         {
@@ -45,10 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc);
                 listener.OnEventAction = (instance, source, eventArgs) =>
                 {
-                    if (eventArgs.PropertyName == nameof(LayerContentViewModel.DisplayLegend))
-                    {
-                        Visibility = ((instance as LayerContentViewModel)?.DisplayLegend ?? false) ? ViewStates.Visible : ViewStates.Invisible;
-                    }
+                    Refresh(instance as LayerContentViewModel, eventArgs.PropertyName);
                 };
                 listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
                 inpc.PropertyChanged += listener.OnEvent;

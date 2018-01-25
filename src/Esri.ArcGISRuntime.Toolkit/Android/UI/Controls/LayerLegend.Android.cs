@@ -50,13 +50,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _rootLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Vertical,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
             };
             _rootLayout.SetGravity(GravityFlags.Top);
 
             _listView = new ListView(Context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
+                ScrollingCacheEnabled = false
             };
             _rootLayout.AddView(_listView);
             
