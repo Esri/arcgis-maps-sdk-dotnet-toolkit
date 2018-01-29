@@ -14,10 +14,15 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+#if !__IOS__ && !__ANDROID__
 
+#if NETFX_CORE
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+#else
 using System.Windows;
 using System.Windows.Data;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -35,26 +40,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         {
             var copy = new Binding
             {
+                Converter = source.Converter,
+                ConverterParameter = source.ConverterParameter,
+                FallbackValue = source.FallbackValue,
+                Mode = source.Mode,
+                Path = source.Path,
+                TargetNullValue = source.TargetNullValue,
+                UpdateSourceTrigger = source.UpdateSourceTrigger,
+#if NETFX_CORE
+                ConverterLanguage = source.ConverterLanguage
+#else
                 AsyncState = source.AsyncState,
                 BindingGroupName = source.BindingGroupName,
                 BindsDirectlyToSource = source.BindsDirectlyToSource,
-                Converter = source.Converter,
                 ConverterCulture = source.ConverterCulture,
-                ConverterParameter = source.ConverterParameter,
-                FallbackValue = source.FallbackValue,
                 IsAsync = source.IsAsync,
-                Mode = source.Mode,
                 NotifyOnSourceUpdated = source.NotifyOnSourceUpdated,
                 NotifyOnTargetUpdated = source.NotifyOnTargetUpdated,
                 NotifyOnValidationError = source.NotifyOnValidationError,
-                Path = source.Path,
                 StringFormat = source.StringFormat,
-                TargetNullValue = source.TargetNullValue,
                 UpdateSourceExceptionFilter = source.UpdateSourceExceptionFilter,
-                UpdateSourceTrigger = source.UpdateSourceTrigger,
                 ValidatesOnDataErrors = source.ValidatesOnDataErrors,
                 ValidatesOnExceptions = source.ValidatesOnExceptions,
                 XPath = source.XPath,
+#endif
             };
             if (source.Source != null)
             {
@@ -91,15 +100,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 return; // Or should we create a new binding in this case?
 
             // If the fallback hasn't been populated already, store the current string format as specified by the binding
+#if NETFX_CORE
+            // TODO: rely on string format value converter
+#else
             if (fallbackFormat == null)
                 fallbackFormat = binding.StringFormat;
-
+#endif
             // Create a new binding to apply the format string.  Necessary because bindings that are already in use cannot be updated,
             // but we want to preserve how users may have setup the binding otherwise
             var newBinding = binding.Clone();
 
             // If the format string is null or empty, use the fall back format.  Otherwise, apply the new format.
+#if NETFX_CORE
+            // TODO: rely on string format value converter
+#else
             newBinding.StringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;
+#endif
             bindingTarget.SetBinding(targetProperty, newBinding);
         }
     }
