@@ -100,7 +100,7 @@
         <Setter Property="CurrentExtentFill" Value="{ThemeResource SliderHighBrush}" />
         <Setter Property="FullExtentFill" Value="Transparent" />
         <Setter Property="FullExtentStroke" Value="Black" />
-        <Setter Property="TimeStepIntervalTickFill" Value="{ThemeResource SliderMediumLowBrush}" />
+        <Setter Property="TimeStepIntervalTickFill" Value="{ThemeResource SliderHighBrush}" />
         <Setter Property="PlaybackButtonsFill" Value="{ThemeResource SliderLowBrush}" />
         <Setter Property="PlaybackButtonsStroke" Value="Black" />
         <Setter Property="CurrentExtentLabelColor" Value="Black" />
@@ -459,7 +459,7 @@
                                     <localPrimitives:Tickbar.MinorTickmarkTemplate>
                                         <DataTemplate>
                                             <Rectangle Width="1.5" Height="4"
-                                                       Fill="{Binding TickFill, ElementName=Tickmarks}" />
+                                                       Fill="{Binding Parent.TickFill, RelativeSource={RelativeSource TemplatedParent}}" />
                                         </DataTemplate>
                                     </localPrimitives:Tickbar.MinorTickmarkTemplate>
                                     <localPrimitives:Tickbar.MajorTickmarkTemplate>
@@ -470,11 +470,11 @@
                                                     <RowDefinition Height="Auto" />
                                                 </Grid.RowDefinitions>
                                             <Rectangle Width="1.5" Height="7"
-                                                           Fill="{Binding TickFill, ElementName=Tickmarks}" />
+                                                           Fill="{Binding Parent.TickFill, RelativeSource={RelativeSource TemplatedParent}}" />
                                             <TextBlock x:Name="TickLabel"
                                                            Text="{Binding Converter={StaticResource StringFormatConverter},
                                                                     ConverterParameter='{}{0:M/d}'}"
-                                                           Foreground="{Binding TickLabelColor, ElementName=Tickmarks}"
+                                                           Foreground="{Binding Parent.TickLabelColor, RelativeSource={RelativeSource TemplatedParent}}"
                                                            HorizontalAlignment="Center"
                                                            Grid.Row="1" />
                                             </Grid>
