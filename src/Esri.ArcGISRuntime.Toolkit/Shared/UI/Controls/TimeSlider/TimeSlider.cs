@@ -159,7 +159,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
                     var translateX = e.Position.X - (MinimumThumb.ActualWidth / 2);
-                    System.Diagnostics.Debug.WriteLine($"X position: {e.Position.X}");
                     OnMinimumThumbDrag(translateX);
                 };
 #else
@@ -507,8 +506,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Size CalculateTextSize(TextBlock textBlock)
         {
 #if NETFX_CORE
-            textBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            return textBlock.DesiredSize;
+            // Create a dummy TextBlock to calculate the size of the text.  Note that only a limited number of properties
+            // are copied here.  This may yield an incorrect size if additional properties are specified in the slider's
+            // style that affect the text size,
+            var tb = new TextBlock()
+            {
+                FontFamily = textBlock.FontFamily,
+                FontSize = textBlock.FontSize,
+                FontStyle = textBlock.FontStyle,
+                FontWeight = textBlock.FontWeight,
+                Text = textBlock.Text
+            };
+            tb.Measure(new Size(0, 0));
+            tb.Arrange(new Rect(0, 0, 0, 0));
+            return new Size(tb.ActualWidth, tb.ActualHeight);
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
             var formattedText = new FormattedText(textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
@@ -686,8 +697,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else
                     _currentValue = Snap(new TimeExtent(_currentValue.StartTime, tempChange.EndTime));
             }
-
-            System.Diagnostics.Debug.WriteLine($"_currentValue.EndTime: {_currentValue.EndTime}");
 
             UpdateTrackLayout(_currentValue);
             if (_currentValue.EndTime != CurrentExtent.EndTime)
