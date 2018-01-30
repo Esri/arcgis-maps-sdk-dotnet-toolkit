@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control 
     /// to enhance the viewing of geographic features that have attributes based upon Date/Time information.
     /// </summary>
-    [TemplatePart(Name = "HorizontalTrack", Type = typeof(FrameworkElement))]
+    [TemplatePart(Name = "SliderTrack", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "HorizontalTrackThumb", Type = typeof(Thumb))]
     [TemplatePart(Name = "MinimumThumb", Type = typeof(Thumb))]
     [TemplatePart(Name = "MinimumThumbLabel", Type = typeof(TextBlock))]
