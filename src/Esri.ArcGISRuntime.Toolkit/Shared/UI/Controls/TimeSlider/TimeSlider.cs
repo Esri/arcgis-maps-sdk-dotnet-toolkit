@@ -410,6 +410,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // There are two thumbs, so position minimum (max is used in both the one and two thumb case)
                 left = Math.Max(0, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, ((maximum - start) * rate));
+#if NETFX_CORE
+                // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
+                left -= 0.5;
+                right -= 0.5;
+#endif
                 thumbLeft = left - MinimumThumb.ActualWidth / 2;
                 thumbRight = right - MinimumThumb.ActualWidth / 2;
                 MinimumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
@@ -451,6 +456,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position maximum thumb
             left = Math.Min(sliderWidth, (end - minimum) * rate);
             right = Math.Min(sliderWidth, ((maximum - end) * rate));
+#if NETFX_CORE
+            // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
+            left -= 0.5;
+            right -= 0.5;
+#endif
             thumbLeft = left - MaximumThumb.ActualWidth / 2;
             thumbRight = right - MaximumThumb.ActualWidth / 2;
             MaximumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
