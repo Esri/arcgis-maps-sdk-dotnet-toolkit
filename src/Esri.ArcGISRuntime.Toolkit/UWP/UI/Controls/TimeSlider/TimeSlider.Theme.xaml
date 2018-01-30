@@ -210,7 +210,7 @@
                                                       VerticalAlignment="Center" >
                                                     <Grid FlowDirection="LeftToRight"
                                                           Height="26"
-                                                          Width="22">
+                                                          Width="23">
                                                         <Grid x:Name="PlayContent">
                                                             <Path Data="M0,0 L0,26 22,13 0,0"
                                                                   Fill="{TemplateBinding Background}"
@@ -341,22 +341,23 @@
                             <!-- Back button -->
                             <Button x:Name="PreviousButton"
                                     Grid.Column="0"
-                                    VerticalAlignment="Bottom"
+                                    VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
                                     BorderBrush="Transparent"
                                     Background="Transparent"
-                                    Template="{StaticResource StatelessButtonTemplate}">
+                                    Template="{StaticResource StatelessButtonTemplate}"
+                                    Padding="0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Rectangle Width="1" 
-                                               StrokeThickness="1"
+                                               StrokeThickness="0"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Stretch"
-                                               Fill="{Binding PlaybackButtonsFill, RelativeSource={RelativeSource TemplatedParent}}"
-                                               Stroke="{Binding PlaybackButtonsStroke, RelativeSource={RelativeSource TemplatedParent}}" />
+                                               Margin="0,0,1,1"
+                                               Fill="{Binding PlaybackButtonsStroke, RelativeSource={RelativeSource TemplatedParent}}" />
                                     <Path Data="M12,0L12,14 0,7 12,0"
                                           Fill="{Binding PlaybackButtonsFill, RelativeSource={RelativeSource TemplatedParent}}"
                                           Stroke="{Binding PlaybackButtonsStroke, RelativeSource={RelativeSource TemplatedParent}}"
@@ -377,11 +378,12 @@
                             <!-- Forward button -->
                             <Button x:Name="NextButton"
                                     Grid.Column="2" 
-                                    VerticalAlignment="Bottom"
+                                    VerticalAlignment="Center"
                                     HorizontalAlignment="Left"
                                     BorderBrush="Transparent"
                                     Background="Transparent"
                                     Margin="5,0,0,0"
+                                    Padding="0"
                                     Template="{StaticResource StatelessButtonTemplate}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -393,11 +395,11 @@
                                           Stroke="{Binding PlaybackButtonsStroke, RelativeSource={RelativeSource TemplatedParent}}"
                                           StrokeThickness="1"/>
                                     <Rectangle Width="1" 
-                                               StrokeThickness="1"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Stretch"
-                                               Fill="{Binding PlaybackButtonsFill, RelativeSource={RelativeSource TemplatedParent}}"
-                                               Stroke="{Binding PlaybackButtonsStroke, RelativeSource={RelativeSource TemplatedParent}}"
+                                               StrokeThickness="0"
+                                               Fill="{Binding PlaybackButtonsStroke, RelativeSource={RelativeSource TemplatedParent}}"
+                                               Margin="1,0,0,1"
                                                Grid.Column="1"/>
                                 </Grid>
                             </Button>
@@ -484,8 +486,10 @@
 
                                 <!--left repeater button-->
                                 <RepeatButton x:Name="SliderTrackStepBackRepeater"
+                                              Height="{Binding Height, ElementName=SliderTrackBorder}"
                                               IsTabStop="False"
                                               HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Center"
                                               Opacity="0"/>
 
                                 <!-- Slider track focus element -->
@@ -495,7 +499,8 @@
                                            IsHitTestVisible="false" Opacity="0"/>
 
                                 <!-- Slider track border -->
-                                <Rectangle Grid.Column="1"
+                                <Rectangle x:Name="SliderTrackBorder"
+                                           Grid.Column="1"
                                            Height="8"
                                            Stroke="{TemplateBinding FullExtentStroke}"
                                            Fill="{TemplateBinding FullExtentFill}"
@@ -506,11 +511,15 @@
                                 <Thumb x:Name="HorizontalTrackThumb"
                                        Height="8"
                                        Foreground="{TemplateBinding CurrentExtentFill}"
+                                       BorderBrush="{TemplateBinding FullExtentStroke}"
+                                       BorderThickness="1"
                                        IsTabStop="False"
                                        HorizontalAlignment="Left">
                                     <Thumb.Template>
                                         <ControlTemplate>
-                                            <Rectangle Fill="{TemplateBinding Foreground}" />
+                                            <Rectangle Fill="{TemplateBinding Foreground}"
+                                                       Stroke="{TemplateBinding BorderBrush}"
+                                                       StrokeThickness="{TemplateBinding BorderThickness}"/>
                                         </ControlTemplate>
                                     </Thumb.Template>
                                 </Thumb>
@@ -546,8 +555,10 @@
 
                             <!--right repeater button-->
                             <RepeatButton x:Name="SliderTrackStepForwardRepeater"
+                                          Height="{Binding Height, ElementName=SliderTrackBorder}"
                                           IsTabStop="False"
                                           HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Center"
                                           Opacity="0" />
                         </Grid>
 
