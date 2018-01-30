@@ -132,7 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     var prospectiveInterval = i;
                     var allowsEqualNumberOfTicksOnEnds = false;
-                    doMajorTicksCollide = false;
 
                     // Check that the prospective interval between major ticks results in an equal number of minor
                     // ticks on both ends of the tick bar
@@ -160,6 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // The index is calculated such that there will be an equal number of minor ticks before and
                     // after the first and last major tick mark.
                     firstMajorTickIndex = (int)Math.Truncate(((tickCount - 1) % prospectiveInterval) / 2d);
+                    doMajorTicksCollide = false;
 
                     // With the given positioning of major tick marks, check whether they (i.e. their labels) will overlap
                     for (var j = firstMajorTickIndex; j < tickCount - prospectiveInterval; j += i)
