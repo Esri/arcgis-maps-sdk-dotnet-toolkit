@@ -2,9 +2,9 @@
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.Legend
 {
-    public partial class LegendSample : UserControl
+    public partial class LayerLegendSample : UserControl
     {
-        public LegendSample()
+        public LayerLegendSample()
         {
             InitializeComponent();
         }

@@ -1,11 +1,29 @@
-﻿using System;
-using System.Collections;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2016 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using System;
 using System.Collections.Generic;
+#if NETFX_CORE
+using System.Collections.ObjectModel;
+#else
+using System.Collections;
+#endif
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -13,7 +31,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// This class manages the tree of layer contents, and tracks their state (loading, changing etc)
     /// </summary>
-    internal class ObservableLayerContentList : IReadOnlyList<LayerContentViewModel>, System.ComponentModel.INotifyPropertyChanged, System.Collections.Specialized.INotifyCollectionChanged
+    internal class ObservableLayerContentList :
+#if NETFX_CORE
+        Collection<LayerContentViewModel>,
+#else
+        IReadOnlyList<LayerContentViewModel>,
+#endif
+        System.ComponentModel.INotifyPropertyChanged, 
+        System.Collections.Specialized.INotifyCollectionChanged
     {
         private List<LayerContentViewModel> _activeLayers = new List<LayerContentViewModel>();
         private IReadOnlyList<Mapping.Layer> _allLayers;
@@ -23,10 +48,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ObservableLayerContentList(WeakReference<ArcGISRuntime.UI.Controls.GeoView> owningView, IReadOnlyList<Layer> allLayers, bool showLegend)
         {
             (allLayers as INotifyCollectionChanged).CollectionChanged += Layers_CollectionChanged;
-            this._allLayers = allLayers;
-            this._showLegend = showLegend;
-            this._owningView = owningView;
-
+            _allLayers = allLayers;
+            _showLegend = showLegend;
+            _owningView = owningView;
             foreach (var item in allLayers.Where(l => IncludeLayer(l)))
             {
                 LayerAdded(item);
@@ -34,20 +58,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Initializes a new instance of the <seealso cref="ObservableLayerContentList"/>
+        /// Initializes a new instance of the <see cref="ObservableLayerContentList"/> class.
         /// </summary>
         /// <param name="mapView">MapView and its Map to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend) : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend)
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.MapView mapView, bool showLegend)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(mapView), mapView.Map.AllLayers, showLegend)
         {
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableLayerContentList"/> class.
         /// Initializes a new instance of the <seealso cref="ObservableLayerContentList"/>
         /// </summary>
         /// <param name="sceneView">SceneView and its Scene to monitor</param>
         /// <param name="showLegend">Also generate the legend for the layer contents</param>
-        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend) : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend)
+        public ObservableLayerContentList(ArcGISRuntime.UI.Controls.SceneView sceneView, bool showLegend)
+            : this(new WeakReference<ArcGISRuntime.UI.Controls.GeoView>(sceneView), sceneView.Scene.AllLayers, showLegend)
         {
         }
 
@@ -55,23 +82,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public bool ReverseOrder
         {
-            get { return _reverseOrder; }
+            get
+            {
+                return _reverseOrder;
+            }
+
             set
             {
                 if (_reverseOrder != value)
-                {
+                {            
                     _reverseOrder = value;
-                    _activeLayers.Reverse();
+#if NETFX_CORE
+                    var activeLayers = this.ToArray();
+                    int i = 0;
+                    ClearItems();                   
+                    foreach (var item in activeLayers.Reverse())
+                        InsertItem(i++, item);
+#else
+                    _activeLayers.Reverse();                    
+#endif
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
                 }
             }
         }
-        
+
         private bool IncludeLayer(Mapping.Layer layer)
         {
             if (layer.ShowInLegend)
+            {
                 return true;
+            }
 
             return false;
         }
@@ -79,15 +120,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private int GetIndexOfLayer(Mapping.Layer layer)
         {
             int i = 0;
-            foreach (var item in (ReverseOrder ? _allLayers.Reverse() : _allLayers))
+            foreach (var item in ReverseOrder ? _allLayers.Reverse() : _allLayers)
             {
                 if (item == layer)
+                {
                     return i;
-                if (IncludeLayer(item) && _activeLayers.Any(l=>l.LayerContent == item))
+                }
+
+                if (IncludeLayer(item) && _activeLayers.Any(l => l.LayerContent == item))
                 {
                     i++;
                 }
             }
+
             return -1;
         }
 
@@ -100,9 +145,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     LayerRemoved(item);
                 }
             }
+
             if (e.NewItems != null)
             {
-                foreach (var item in e.NewItems.OfType<Mapping.Layer>().Where(l=>IncludeLayer(l)))
+                foreach (var item in e.NewItems.OfType<Mapping.Layer>().Where(l => IncludeLayer(l)))
                 {
                     LayerAdded(item);
                 }
@@ -121,7 +167,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 AddToActiveLayers(layer);
             }
         }
-        
+
         private void AddToActiveLayers(Layer layer)
         {
             var idx = GetIndexOfLayer(layer);
@@ -130,8 +176,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Shouldn't really happen
                 return;
             }
+
             var vm = new LayerContentViewModel(layer, _owningView, null, _showLegend);
             _activeLayers.Insert(idx, vm);
+#if NETFX_CORE
+            InsertItem(idx, vm);
+#endif
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, changedItem: vm, index: idx));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
@@ -141,12 +191,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             layer.PropertyChanged -= Layer_PropertyChanged;
             if (!IncludeLayer(layer))
+            {
                 return;
+            }
+
             RemoveFromActiveLayers(layer);
         }
 
         private void RemoveFromActiveLayers(Mapping.Layer layer)
-        { 
+        {
             var vm = _activeLayers.Where(l => l.LayerContent == layer).FirstOrDefault();
             if (vm != null)
             {
@@ -154,6 +207,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (idx >= 0)
                 {
                     _activeLayers.RemoveAt(idx);
+#if NETFX_CORE
+                    RemoveItem(idx);
+#endif
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, changedItem: vm, index: idx));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Count)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Items[]"));
@@ -167,23 +223,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (e.PropertyName == nameof(Mapping.Layer.ShowInLegend))
             {
                 bool include = IncludeLayer(layer);
-                if(include && !_activeLayers.Where(vm=>vm.LayerContent == layer).Any())
+                if (include && !_activeLayers.Where(vm => vm.LayerContent == layer).Any())
                 {
                     AddToActiveLayers(layer);
                 }
-                else if(!include && _activeLayers.Where(vm => vm.LayerContent == layer).Any())
+                else if (!include && _activeLayers.Where(vm => vm.LayerContent == layer).Any())
                 {
                     RemoveFromActiveLayers(layer);
                 }
             }
         }
-
-        #region IReadOnlyList<T> Implementation
-
+        
+#if !NETFX_CORE
         /// <inheritdoc cref="IReadOnlyList{T}.this"/>
         public LayerContentViewModel this[int index]
         {
-            get { return _activeLayers [index]; }
+            get { return _activeLayers[index]; }
             set { throw new InvalidOperationException("ReadOnly"); }
         }
 
@@ -201,14 +256,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 yield return _activeLayers[i];
             }
         }
-
+        
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<LayerContentViewModel>)this).GetEnumerator();
         }
-
-        #endregion
+#endif
 
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
         public event PropertyChangedEventHandler PropertyChanged;
