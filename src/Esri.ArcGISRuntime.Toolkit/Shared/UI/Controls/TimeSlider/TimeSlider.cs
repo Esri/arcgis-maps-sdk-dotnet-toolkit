@@ -396,6 +396,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position left repeater							
             right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.ActualWidth);
             SliderTrackStepBackRepeater.Margin = new Thickness(0, 0, right, 0);
+            SliderTrackStepBackRepeater.Width = Math.Max(0, sliderWidth - right);
 
             // Margin adjustment for the minimum thumb label
             var thumbLabelWidthAdjustment = 0d;
@@ -494,6 +495,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position right repeater
             left = Math.Min(sliderWidth, ((end - minimum) * rate) + MaximumThumb.ActualWidth);
             SliderTrackStepForwardRepeater.Margin = new Thickness(left, 0, 0, 0);
+            SliderTrackStepForwardRepeater.Width = Math.Max(0, sliderWidth - left);
         }
 
         /// <summary>
