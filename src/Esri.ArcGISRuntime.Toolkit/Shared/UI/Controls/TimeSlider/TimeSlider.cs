@@ -482,7 +482,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     // Slider has min and max thumbs with both labels visible - check for label collision
                     var minLabelRight = minLabelLeftMargin + minThumbLabelWidth;
-                    var spaceBetweenLabels = 6;
+
+                    // Calculate the width of two characters and use that as the space to preserve between the min and max labels
+                    var spaceBetweenLabels = CalculateTextSize(MinimumThumbLabel, text: "88").Width;
 
                     if (minLabelRight + spaceBetweenLabels > maxLabelLeftMargin)
                     {
@@ -509,13 +511,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Calculates the size of the specified TextBlock's text
+        /// Calculates the size of the specified text using the specified TextBlock's font properites
         /// </summary>
-        /// <param name="textBlock">The TextBlock to calculate size for</param>
+        /// <param name="textBlock">The TextBlock to use in the size calculation</param>
+        /// <param name="text">The text to calculate the size for.  If unspecified, the size of the TextBlock's text will be calculated.</param>
         /// <returns>The size of the text</returns>
         /// <remarks>This method is useful in cases where a TextBlock's text has updated, but its layout has not.  In such cases,
         /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
-        private Size CalculateTextSize(TextBlock textBlock)
+        private Size CalculateTextSize(TextBlock textBlock, string text = null)
         {
 #if NETFX_CORE
             // Create a dummy TextBlock to calculate the size of the text.  Note that only a limited number of properties
@@ -527,14 +530,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 FontSize = textBlock.FontSize,
                 FontStyle = textBlock.FontStyle,
                 FontWeight = textBlock.FontWeight,
-                Text = textBlock.Text
+                Text = text ?? textBlock.Text
             };
             tb.Measure(new Size(0, 0));
             tb.Arrange(new Rect(0, 0, 0, 0));
             return new Size(tb.ActualWidth, tb.ActualHeight);
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
-            var formattedText = new FormattedText(textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
+            var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
                 textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display);
             return new Size(formattedText.Width, formattedText.Height);
 #endif
