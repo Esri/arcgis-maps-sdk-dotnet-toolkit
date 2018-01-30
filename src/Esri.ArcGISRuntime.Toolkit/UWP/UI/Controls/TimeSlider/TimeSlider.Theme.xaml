@@ -127,7 +127,6 @@
                                             <Grid>
                                                 <VisualStateManager.VisualStateGroups>
                                                     <VisualStateGroup x:Name="CommonStates">
-                                                        <VisualState x:Name="Normal"/>
                                                         <VisualState x:Name="MouseOver" />
                                                         <VisualState x:Name="Pressed" />
                                                         <VisualState x:Name="Disabled">
@@ -157,7 +156,7 @@
                                                                 </ObjectAnimationUsingKeyFrames>
                                                             </Storyboard>
                                                         </VisualState>
-                                                        <VisualState x:Name="Unchecked">
+                                                        <VisualState x:Name="Normal">
                                                             <Storyboard>
                                                                 <ObjectAnimationUsingKeyFrames Duration="0" Storyboard.TargetName="PlayContent" Storyboard.TargetProperty="Visibility">
                                                                     <DiscreteObjectKeyFrame KeyTime="0">
