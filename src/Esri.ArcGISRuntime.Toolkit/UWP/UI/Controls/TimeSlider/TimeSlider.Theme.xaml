@@ -6,22 +6,28 @@
     xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="SliderHighBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="SliderMediumBrush" Color="{ThemeResource SystemChromeMediumColor}" />
-            <SolidColorBrush x:Key="SliderMediumLowBrush" Color="{ThemeResource SystemChromeMediumLowColor}" />
-            <SolidColorBrush x:Key="SliderLowBrush" Color="{ThemeResource SystemChromeLowColor}" />
+            <SolidColorBrush x:Key="TimeSliderWhiteBrush" Color="White" />
+            <SolidColorBrush x:Key="TimeSliderLightBrush" Color="#FFF0F0F0" />
+            <SolidColorBrush x:Key="TimeSliderMediumBrush" Color="#FFE3E3E3" />
+            <SolidColorBrush x:Key="TimeSliderMediumDarkBrush" Color="#FFA0A0A0" />
+            <SolidColorBrush x:Key="TimeSliderDarkBrush" Color="#FF696969" />
+            <SolidColorBrush x:Key="TimeSliderBlackBrush" Color="Black" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="SliderHighBrush" Color="{ThemeResource SystemChromeLowColor}" />
-            <SolidColorBrush x:Key="SliderMediumBrush" Color="{ThemeResource SystemChromeMediumLowColor}" />
-            <SolidColorBrush x:Key="SliderMediumLowBrush" Color="{ThemeResource SystemChromeMediumColor}" />
-            <SolidColorBrush x:Key="SliderLowBrush" Color="{ThemeResource SystemChromeHighColor}" />
+            <SolidColorBrush x:Key="TimeSliderWhiteBrush" Color="Black" />
+            <SolidColorBrush x:Key="TimeSliderLightBrush" Color="#FF696969" />
+            <SolidColorBrush x:Key="TimeSliderMediumBrush" Color="#FFA0A0A0" />
+            <SolidColorBrush x:Key="TimeSliderMediumDarkBrush" Color="#FFE3E3E3" />
+            <SolidColorBrush x:Key="TimeSliderDarkBrush" Color="#FFF0F0F0" />
+            <SolidColorBrush x:Key="TimeSliderBlackBrush" Color="White" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
-            <SolidColorBrush x:Key="SliderHighBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="SliderMediumBrush" Color="{ThemeResource SystemChromeMediumColor}" />
-            <SolidColorBrush x:Key="SliderMediumLowBrush" Color="{ThemeResource SystemChromeMediumLowColor}" />
-            <SolidColorBrush x:Key="SliderLowBrush" Color="{ThemeResource SystemChromeLowColor}" />
+            <SolidColorBrush x:Key="TimeSliderWhiteBrush" Color="White" />
+            <SolidColorBrush x:Key="TimeSliderLightBrush" Color="#FFF0F0F0" />
+            <SolidColorBrush x:Key="TimeSliderMediumBrush" Color="#FFE3E3E3" />
+            <SolidColorBrush x:Key="TimeSliderMediumDarkBrush" Color="#FFA0A0A0" />
+            <SolidColorBrush x:Key="TimeSliderDarkBrush" Color="#FF696969" />
+            <SolidColorBrush x:Key="TimeSliderBlackBrush" Color="Black" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
     
@@ -39,8 +45,8 @@
     </ControlTemplate>
 
     <Style x:Key="TimeSliderThumbStyle" TargetType="Thumb">
-        <Setter Property="Background" Value="{ThemeResource SliderMediumBrush}"/>
-        <Setter Property="BorderBrush" Value="{ThemeResource SliderLowBrush}" />
+        <Setter Property="Background" Value="{ThemeResource TimeSliderLightBrush}"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource TimeSliderBlackBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
@@ -91,21 +97,21 @@
     
     <Style TargetType="local:TimeSlider">
         <Setter Property="IsTabStop" Value="True" />
-        <Setter Property="Foreground" Value="Black" />
-        <Setter Property="Background" Value="White" />
-        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Foreground" Value="{ThemeResource TimeSliderBlackBrush}" />
+        <Setter Property="Background" Value="{ThemeResource TimeSliderWhiteBrush}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource TimeSliderBlackBrush}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="ThumbFill" Value="{ThemeResource SliderMediumBrush}"/>
-        <Setter Property="ThumbStroke" Value="Black" />
-        <Setter Property="CurrentExtentFill" Value="{ThemeResource SliderHighBrush}" />
+        <Setter Property="ThumbFill" Value="{ThemeResource TimeSliderLightBrush}"/>
+        <Setter Property="ThumbStroke" Value="{ThemeResource TimeSliderBlackBrush}" />
+        <Setter Property="CurrentExtentFill" Value="{ThemeResource TimeSliderDarkBrush}" />
         <Setter Property="FullExtentFill" Value="Transparent" />
-        <Setter Property="FullExtentStroke" Value="Black" />
-        <Setter Property="TimeStepIntervalTickFill" Value="{ThemeResource SliderHighBrush}" />
-        <Setter Property="PlaybackButtonsFill" Value="{ThemeResource SliderLowBrush}" />
-        <Setter Property="PlaybackButtonsStroke" Value="Black" />
-        <Setter Property="CurrentExtentLabelColor" Value="Black" />
-        <Setter Property="FullExtentLabelColor" Value="Black" />
-        <Setter Property="TimeStepIntervalLabelColor" Value="Black" />
+        <Setter Property="FullExtentStroke" Value="{ThemeResource TimeSliderBlackBrush}" />
+        <Setter Property="TimeStepIntervalTickFill" Value="{ThemeResource TimeSliderMediumDarkBrush}" />
+        <Setter Property="PlaybackButtonsFill" Value="{ThemeResource TimeSliderMediumBrush}" />
+        <Setter Property="PlaybackButtonsStroke" Value="{ThemeResource TimeSliderBlackBrush}" />
+        <Setter Property="CurrentExtentLabelColor" Value="{ThemeResource TimeSliderBlackBrush}" />
+        <Setter Property="FullExtentLabelColor" Value="{ThemeResource TimeSliderBlackBrush}" />
+        <Setter Property="TimeStepIntervalLabelColor" Value="{ThemeResource TimeSliderBlackBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:TimeSlider">
@@ -115,9 +121,6 @@
                             <internal:StringFormatConverter x:Key="StringFormatConverter" />
 
                             <Style x:Key="PlayPauseToggleButtonStyle" TargetType="ToggleButton">
-                                <Setter Property="Background" Value="Gray"/>
-                                <Setter Property="Foreground" Value="Transparent"/>
-                                <Setter Property="BorderBrush" Value="Black" />
                                 <Setter Property="Padding" Value="0"/>
                                 <Setter Property="BorderThickness" Value="0"/>
 
@@ -186,24 +189,6 @@
                                                         <VisualState x:Name="Unfocused"/>
                                                     </VisualStateGroup>
                                                 </VisualStateManager.VisualStateGroups>
-                                                <Border x:Name="Background"
-                                                        Background="Transparent"
-                                                        BorderBrush="Transparent" 
-                                                        BorderThickness="0">
-                                                    <Grid Margin="1" Background="Transparent">
-                                                        <Border x:Name="BackgroundAnimation" Opacity="0" Background="#FF448DCA"/>
-                                                        <Rectangle x:Name="BackgroundGradient">
-                                                            <Rectangle.Fill>
-                                                                <LinearGradientBrush EndPoint=".7,1" StartPoint=".7,0">
-                                                                    <GradientStop Color="#FFFFFFFF" Offset="0"/>
-                                                                    <GradientStop Color="#F9FFFFFF" Offset="0.375"/>
-                                                                    <GradientStop Color="#E5FFFFFF" Offset="0.625"/>
-                                                                    <GradientStop Color="#C6FFFFFF" Offset="1"/>
-                                                                </LinearGradientBrush>
-                                                            </Rectangle.Fill>
-                                                        </Rectangle>
-                                                    </Grid>
-                                                </Border>
                                                 <Grid HorizontalAlignment="Center"
                                                       Margin="{TemplateBinding Padding}"
                                                       VerticalAlignment="Center" >
@@ -508,7 +493,7 @@
                             <!-- Minimum thumb disabled state -->
                             <Rectangle x:Name="MinimumThumbDisabledOverlay"
                                        Width="10"
-                                       Fill="White"
+                                       Fill="{ThemeResource TimeSliderWhiteBrush}"
                                        RadiusX="2"
                                        RadiusY="2"
                                        Opacity=".55"
@@ -520,7 +505,7 @@
                             <Rectangle x:Name="MaximumThumbDisabledOverlay"
                                        Width="10"
                                        Height="Auto"
-                                       Fill="White"
+                                       Fill="{ThemeResource TimeSliderWhiteBrush}"
                                        RadiusX="2"
                                        RadiusY="2"
                                        Opacity=".55"
@@ -571,7 +556,6 @@
                                    Style="{StaticResource TimeSliderThumbStyle}"
                                    BorderBrush="{TemplateBinding ThumbStroke}"
                                    Background="{TemplateBinding ThumbFill}"
-                                   Foreground="Black"
                                    IsTabStop="False"
                                    RelativePanel.AlignVerticalCenterWith="SliderTrackBorder" />
 
@@ -582,7 +566,6 @@
                                    Style="{StaticResource TimeSliderThumbStyle}"
                                    BorderBrush="{TemplateBinding ThumbStroke}"
                                    Background="{TemplateBinding ThumbFill}"
-                                   Foreground="Black"
                                    IsTabStop="False"
                                    RelativePanel.AlignVerticalCenterWith="SliderTrackBorder" />
 
