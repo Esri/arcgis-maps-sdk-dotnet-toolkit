@@ -35,13 +35,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// Creates a copy of the specified binding
         /// </summary>
         /// <param name="source">The binding to copy</param>
+        /// <param name="newConverterParameter">The object to use as a converter parameter</param>
         /// <returns>The copy of the binding</returns>
-        public static Binding Clone(this Binding source)
+        public static Binding Clone(this Binding source, object newConverterParameter = null)
         {
             var copy = new Binding
             {
                 Converter = source.Converter,
-                ConverterParameter = source.ConverterParameter,
+                // Can't change the ConverterParameter after instantation on UWP, so set it here
+                ConverterParameter = newConverterParameter == null ? source.ConverterParameter : newConverterParameter,
                 FallbackValue = source.FallbackValue,
                 Mode = source.Mode,
                 Path = source.Path,
@@ -69,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 copy.Source = source.Source;
             }
-            else if (source.ElementName != null)
+            else if (!string.IsNullOrEmpty(source.ElementName))
             {
                 copy.ElementName = source.ElementName;
             }
@@ -101,21 +103,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
             // If the fallback hasn't been populated already, store the current string format as specified by the binding
 #if NETFX_CORE
-            // TODO: rely on string format value converter
+            if (fallbackFormat == null)
+                fallbackFormat = binding.Converter is StringFormatConverter ? binding.ConverterParameter as string : null;
 #else
             if (fallbackFormat == null)
                 fallbackFormat = binding.StringFormat;
 #endif
             // Create a new binding to apply the format string.  Necessary because bindings that are already in use cannot be updated,
             // but we want to preserve how users may have setup the binding otherwise
-            var newBinding = binding.Clone();
-
+            var newStringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;
+            var newBinding = binding.Clone(newStringFormat);
             // If the format string is null or empty, use the fall back format.  Otherwise, apply the new format.
-#if NETFX_CORE
-            // TODO: rely on string format value converter
-#else
-            newBinding.StringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;
-#endif
             bindingTarget.SetBinding(targetProperty, newBinding);
         }
     }
