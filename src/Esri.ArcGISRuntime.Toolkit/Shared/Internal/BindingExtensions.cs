@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 Converter = source.Converter,
                 // Can't change the ConverterParameter after instantation on UWP, so set it here
-                ConverterParameter = newConverterParameter == null ? source.ConverterParameter : newConverterParameter,
+                ConverterParameter = newConverterParameter ?? source.ConverterParameter,
                 FallbackValue = source.FallbackValue,
                 Mode = source.Mode,
                 Path = source.Path,
@@ -112,7 +112,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // Create a new binding to apply the format string.  Necessary because bindings that are already in use cannot be updated,
             // but we want to preserve how users may have setup the binding otherwise
             var newStringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;
+#if NETFX_CORE
             var newBinding = binding.Clone(newStringFormat);
+#else
+            var newBinding = binding.Clone();
+            newBinding.StringFormat = newStringFormat;
+#endif
+
             // If the format string is null or empty, use the fall back format.  Otherwise, apply the new format.
             bindingTarget.SetBinding(targetProperty, newBinding);
         }
