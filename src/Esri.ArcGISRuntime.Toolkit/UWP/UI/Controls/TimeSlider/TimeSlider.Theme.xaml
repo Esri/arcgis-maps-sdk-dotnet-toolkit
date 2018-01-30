@@ -301,7 +301,6 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -330,7 +329,8 @@
                               Grid.Column="2"
                               Grid.RowSpan="2"
                               HorizontalAlignment="Center"
-                              Margin="0,0,0,7">
+                              VerticalAlignment="Top"
+                              Margin="0,0,0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
@@ -418,120 +418,94 @@
                                    Grid.ColumnSpan="2"
                                    Margin="0,0,0,1"/>
 
-                        <!-- start time tick mark -->
-                        <Rectangle Width="1"
-                                   Height="6"
-                                   Margin="0,0,0,0"
-                                   Fill="{TemplateBinding FullExtentStroke}"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Bottom"
-                                   Grid.Column="1"
-                                   Grid.Row="1"/>
-
-                        <!-- end time tick mark -->
-                        <Rectangle Width="1"
-                                   Height="6"
-                                   Margin="0,0,0,0"
-                                   Fill="{TemplateBinding FullExtentStroke}"
-                                   VerticalAlignment="Bottom"
-                                   HorizontalAlignment="Right"
-                                   Grid.Column="3"
-                                   Grid.Row="1"/>
-
-                        <!-- Slider -->
-                        <Grid x:Name="SliderTrack"
-                              Margin="0,0,0,1"
+                        <!-- Slider track - controls to display manipulate current time extent -->
+                        <RelativePanel x:Name="SliderTrack"
                               Grid.Row="2"
                               Grid.Column="1"
                               Grid.ColumnSpan="3"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Top">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                            
+                            <!-- Start time tick mark -->
+                            <Rectangle x:Name="StartTimeTickmark"
+                                       Width="1"
+                                       Height="6"
+                                       Margin="0,0,0,0"
+                                       Fill="{TemplateBinding FullExtentStroke}"/>
 
-                                <!--tick marks for snapping points-->
-                                <localPrimitives:Tickbar x:Name="Tickmarks"
-                                                         IsHitTestVisible="False"
-                                                         Grid.Row="1"
-                                                         TickFill="{TemplateBinding TimeStepIntervalTickFill}"
-                                                         TickLabelColor="{TemplateBinding TimeStepIntervalLabelColor}">
-                                    <localPrimitives:Tickbar.MinorTickmarkTemplate>
-                                        <DataTemplate>
-                                            <Rectangle Width="1.5" Height="4"
-                                                       Fill="{Binding Parent.TickFill, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        </DataTemplate>
-                                    </localPrimitives:Tickbar.MinorTickmarkTemplate>
-                                    <localPrimitives:Tickbar.MajorTickmarkTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="Auto" />
-                                                </Grid.RowDefinitions>
-                                            <Rectangle Width="1.5" Height="7"
-                                                           Fill="{Binding Parent.TickFill, RelativeSource={RelativeSource TemplatedParent}}" />
-                                            <TextBlock x:Name="TickLabel"
-                                                           Text="{Binding Converter={StaticResource StringFormatConverter},
-                                                                    ConverterParameter='{}{0:M/d}'}"
-                                                           Foreground="{Binding Parent.TickLabelColor, RelativeSource={RelativeSource TemplatedParent}}"
-                                                           HorizontalAlignment="Center"
-                                                           Grid.Row="1" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </localPrimitives:Tickbar.MajorTickmarkTemplate>
-                                </localPrimitives:Tickbar>
+                            <!-- End time tick mark -->
+                            <Rectangle x:Name="EndTimeTickmark"
+                                       Width="1"
+                                       Height="6"
+                                       Margin="0,0,0,0"
+                                       Fill="{TemplateBinding FullExtentStroke}"
+                                       RelativePanel.AlignRightWithPanel="True"/>
 
-                                <!--left repeater button-->
-                                <RepeatButton x:Name="SliderTrackStepBackRepeater"
-                                              Height="{Binding Height, ElementName=SliderTrackBorder}"
-                                              IsTabStop="False"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Center"
-                                              Opacity="0"/>
-
-                                <!-- Slider track focus element -->
-                                <Rectangle Grid.Column="1" x:Name="FocusVisualElement"
-                                           Height="8"
-                                           Stroke="{TemplateBinding FullExtentStroke}" StrokeThickness="1.5"
-                                           IsHitTestVisible="false" Opacity="0"/>
-
-                                <!-- Slider track border -->
-                                <Rectangle x:Name="SliderTrackBorder"
-                                           Grid.Column="1"
-                                           Height="8"
-                                           Stroke="{TemplateBinding FullExtentStroke}"
-                                           Fill="{TemplateBinding FullExtentFill}"
-                                           StrokeThickness="1"
-                                           IsHitTestVisible="False"/>
-
-                                <!--middle thumb-->
-                                <Thumb x:Name="HorizontalTrackThumb"
+                            <!-- Slider track focus element -->
+                            <Rectangle x:Name="FocusVisualElement"
                                        Height="8"
-                                       Foreground="{TemplateBinding CurrentExtentFill}"
-                                       BorderBrush="{TemplateBinding FullExtentStroke}"
-                                       BorderThickness="1"
-                                       IsTabStop="False"
-                                       HorizontalAlignment="Left">
-                                    <Thumb.Template>
-                                        <ControlTemplate>
-                                            <Rectangle Fill="{TemplateBinding Foreground}"
+                                       Stroke="{TemplateBinding FullExtentStroke}"
+                                       StrokeThickness="1.5"
+                                       IsHitTestVisible="false"
+                                       Opacity="0"
+                                       RelativePanel.Below="StartTimeTickmark"
+                                       RelativePanel.AlignLeftWith="StartTimeTickmark"
+                                       RelativePanel.AlignRightWith="EndTimeTickmark"/>
+
+                            <!-- Slider track border -->
+                            <Rectangle x:Name="SliderTrackBorder"
+                                       Height="8"
+                                       Stroke="{TemplateBinding FullExtentStroke}"
+                                       Fill="{TemplateBinding FullExtentFill}"
+                                       StrokeThickness="1"
+                                       IsHitTestVisible="False"
+                                       RelativePanel.Below="StartTimeTickmark"
+                                       RelativePanel.AlignLeftWith="StartTimeTickmark"
+                                       RelativePanel.AlignRightWith="EndTimeTickmark"/>
+
+                            <!-- Repeater button to move time extent backward -->
+                            <RepeatButton x:Name="SliderTrackStepBackRepeater"
+                                          Height="{Binding Height, ElementName=SliderTrackBorder}"
+                                          IsTabStop="False"
+                                          Opacity="0"
+                                          HorizontalAlignment="Stretch"
+                                          RelativePanel.Below="StartTimeTickmark"/>
+
+                            <!-- Repeater button to advance time extent forward -->
+                            <RepeatButton x:Name="SliderTrackStepForwardRepeater"
+                                          Height="{Binding Height, ElementName=SliderTrackBorder}"
+                                          IsTabStop="False"
+                                          Opacity="0"
+                                          HorizontalAlignment="Stretch"
+                                          RelativePanel.Below="StartTimeTickmark"/>
+
+                            <!-- Middle thumb to drag time exten forward or backward -->
+                            <Thumb x:Name="HorizontalTrackThumb"
+                                   Height="{Binding Height, ElementName=SliderTrackBorder}"
+                                   Foreground="{TemplateBinding CurrentExtentFill}"
+                                   BorderBrush="{TemplateBinding FullExtentStroke}"
+                                   BorderThickness="1"
+                                   IsTabStop="False"
+                                   RelativePanel.Below="StartTimeTickmark">
+                                <Thumb.Template>
+                                    <ControlTemplate>
+                                        <Rectangle Fill="{TemplateBinding Foreground}"
                                                        Stroke="{TemplateBinding BorderBrush}"
                                                        StrokeThickness="{TemplateBinding BorderThickness}"/>
-                                        </ControlTemplate>
-                                    </Thumb.Template>
-                                </Thumb>
+                                    </ControlTemplate>
+                                </Thumb.Template>
+                            </Thumb>
 
-                                <!--middle thumb disabled state-->
-                                <Border x:Name="HorizontalTrackRectangleDisabledOverlay"
-                                        Background="Red"
-                                        CornerRadius="5"
-                                        Opacity="1"
-                                        Visibility="Collapsed"
-                                        HorizontalAlignment="Left"/>
+                            <!-- Middle thumb disabled state -->
+                            <Border x:Name="HorizontalTrackRectangleDisabledOverlay"
+                                    Height="{Binding Height, ElementName=SliderTrackBorder}"
+                                    Background="Red"
+                                    CornerRadius="5"
+                                    Opacity="1"
+                                    Visibility="Collapsed"
+                                    HorizontalAlignment="Left"/>
 
-                            <!--minimum thumb disabled state-->
+                            <!-- Minimum thumb disabled state -->
                             <Rectangle x:Name="MinimumThumbDisabledOverlay"
                                        Width="10"
                                        Fill="White"
@@ -539,9 +513,10 @@
                                        RadiusY="2"
                                        Opacity=".55"
                                        Visibility="Collapsed"
-                                       HorizontalAlignment="Left"/>
+                                       RelativePanel.AlignHorizontalCenterWith="MinimumThumb"
+                                       RelativePanel.AlignVerticalCenterWith="MinimumThumb"/>
 
-                            <!--maximum thumb disabled state-->
+                            <!-- Maximum thumb disabled state -->
                             <Rectangle x:Name="MaximumThumbDisabledOverlay"
                                        Width="10"
                                        Height="Auto"
@@ -550,74 +525,86 @@
                                        RadiusY="2"
                                        Opacity=".55"
                                        Visibility="Collapsed"
-                                       HorizontalAlignment="Left" />
+                                       RelativePanel.AlignHorizontalCenterWith="MaximumThumb"
+                                       RelativePanel.AlignVerticalCenterWith="MaximumThumb" />
 
-                            <!--right repeater button-->
-                            <RepeatButton x:Name="SliderTrackStepForwardRepeater"
-                                          Height="{Binding Height, ElementName=SliderTrackBorder}"
-                                          IsTabStop="False"
-                                          HorizontalAlignment="Stretch"
-                                          VerticalAlignment="Center"
-                                          Opacity="0" />
-                        </Grid>
+                            <!-- Tick marks for displaying time step intervals -->
+                            <localPrimitives:Tickbar x:Name="Tickmarks"
+                                                     IsHitTestVisible="False"
+                                                     TickFill="{TemplateBinding TimeStepIntervalTickFill}"
+                                                     TickLabelColor="{TemplateBinding TimeStepIntervalLabelColor}"
+                                                     RelativePanel.Below="SliderTrackBorder"
+                                                     RelativePanel.AlignLeftWith="StartTimeTickmark"
+                                                     RelativePanel.AlignRightWith="EndTimeTickmark">
+                                <localPrimitives:Tickbar.MinorTickmarkTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Width="1.5"
+                                                   Height="4"
+                                                   Fill="{Binding Parent.TickFill, RelativeSource={RelativeSource TemplatedParent}}" />
+                                    </DataTemplate>
+                                </localPrimitives:Tickbar.MinorTickmarkTemplate>
+                                <localPrimitives:Tickbar.MajorTickmarkTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Rectangle Width="1.5"
+                                                       Height="7"
+                                                       Fill="{Binding Parent.TickFill, RelativeSource={RelativeSource TemplatedParent}}" />
+                                            <TextBlock x:Name="TickLabel"
+                                                       Text="{Binding Converter={StaticResource StringFormatConverter},
+                                                                ConverterParameter='{}{0:M/d}'}"
+                                                       Foreground="{Binding Parent.TickLabelColor, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       HorizontalAlignment="Center"
+                                                       Grid.Row="1" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </localPrimitives:Tickbar.MajorTickmarkTemplate>
+                            </localPrimitives:Tickbar>
 
-                        <!--minimum thumb-->
-                        <Thumb x:Name="MinimumThumb"
-                               Width="12"
-                               Height="20"
-                               Style="{StaticResource TimeSliderThumbStyle}"
-                               BorderBrush="{TemplateBinding ThumbStroke}"
-                               Background="{TemplateBinding ThumbFill}"
-                               Foreground="Black"
-                               IsTabStop="False"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
-                               Grid.Row="1"
-                               Grid.RowSpan="2"
-                               Grid.Column="1"
-                               Grid.ColumnSpan="3" />
+                            <!-- Minimum thumb to control the start time -->
+                            <Thumb x:Name="MinimumThumb"
+                                   Width="12"
+                                   Height="20"
+                                   Style="{StaticResource TimeSliderThumbStyle}"
+                                   BorderBrush="{TemplateBinding ThumbStroke}"
+                                   Background="{TemplateBinding ThumbFill}"
+                                   Foreground="Black"
+                                   IsTabStop="False"
+                                   RelativePanel.AlignVerticalCenterWith="SliderTrackBorder" />
 
-                        <!--maximum thumb-->
-                        <Thumb x:Name="MaximumThumb"
-                               Width="12"
-                               Height="20"
-                               Style="{StaticResource TimeSliderThumbStyle}"
-                               BorderBrush="{TemplateBinding ThumbStroke}"
-                               Background="{TemplateBinding ThumbFill}"
-                               Foreground="Black"
-                               IsTabStop="False"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
-                               Grid.Row="1"
-                               Grid.Column="1"
-                               Grid.RowSpan="2"
-                               Grid.ColumnSpan="3" />
+                            <!--Mmaximum thumb to control the end time -->
+                            <Thumb x:Name="MaximumThumb"
+                                   Width="12"
+                                   Height="20"
+                                   Style="{StaticResource TimeSliderThumbStyle}"
+                                   BorderBrush="{TemplateBinding ThumbStroke}"
+                                   Background="{TemplateBinding ThumbFill}"
+                                   Foreground="Black"
+                                   IsTabStop="False"
+                                   RelativePanel.AlignVerticalCenterWith="SliderTrackBorder" />
 
-                        
-                        <TextBlock x:Name="MinimumThumbLabel"
-                                   Text="{Binding CurrentExtent.StartTime,
-                                            RelativeSource={RelativeSource TemplatedParent},
-                                            Converter={StaticResource StringFormatConverter},
-                                            ConverterParameter='{}{0:M/d/yyyy}'}"
-                                   Foreground="{TemplateBinding CurrentExtentLabelColor}"
-                                   HorizontalAlignment="Center"
-                                   Grid.Row="3"
-                                   Grid.Column="1"
-                                   Grid.ColumnSpan="3"
-                                   Visibility="Collapsed"/>
+                            <!-- Start time label -->
+                            <TextBlock x:Name="MinimumThumbLabel"
+                                       Text="{Binding CurrentExtent.StartTime,
+                                                RelativeSource={RelativeSource TemplatedParent},
+                                                Converter={StaticResource StringFormatConverter},
+                                                ConverterParameter='{}{0:M/d/yyyy}'}"
+                                       Foreground="{TemplateBinding CurrentExtentLabelColor}"
+                                       Visibility="Collapsed"
+                                       RelativePanel.Below="MinimumThumb"/>
 
-                        <TextBlock x:Name="MaximumThumbLabel"
-                                   Text="{Binding CurrentExtent.EndTime,
-                                            RelativeSource={RelativeSource TemplatedParent},
-                                            Converter={StaticResource StringFormatConverter},
-                                            ConverterParameter='{}{0:M/d/yyyy}'}"
-                                   Foreground="{TemplateBinding CurrentExtentLabelColor}"
-                                   HorizontalAlignment="Center"
-                                   Grid.Row="3"
-                                   Grid.Column="1"
-                                   Grid.ColumnSpan="3"
-                                   Visibility="Collapsed"/>
-
+                            <TextBlock x:Name="MaximumThumbLabel"
+                                       Text="{Binding CurrentExtent.EndTime,
+                                                RelativeSource={RelativeSource TemplatedParent},
+                                                Converter={StaticResource StringFormatConverter},
+                                                ConverterParameter='{}{0:M/d/yyyy}'}"
+                                       Foreground="{TemplateBinding CurrentExtentLabelColor}"
+                                       Visibility="Collapsed"
+                                       RelativePanel.Below="MaximumThumb"/>
+                        </RelativePanel>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
