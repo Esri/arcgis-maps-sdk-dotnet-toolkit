@@ -890,12 +890,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             slider._currentValue = newExtent;
 
             // Explicitly update the thumb labels' bindings to ensure that their text is updated prior to calculating layout
-#if !NETFX_CORE
-            slider.MinimumThumbLabel?.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
-            slider.MaximumThumbLabel?.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
-#else
-            // UWP TODO: Do we need this on UWP?  If so, what's the equivalent?
-#endif
+            slider.MinimumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
+            slider.MaximumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
 
             slider.UpdateTrackLayout(slider.CurrentValidExtent);
 

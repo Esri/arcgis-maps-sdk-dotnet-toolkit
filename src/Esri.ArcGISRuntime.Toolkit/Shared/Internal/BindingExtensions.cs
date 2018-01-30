@@ -116,6 +116,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // If the format string is null or empty, use the fall back format.  Otherwise, apply the new format.
             bindingTarget.SetBinding(targetProperty, newBinding);
         }
+
+        /// <summary>
+        /// Forces the specified property to update on the specified element
+        /// </summary>
+        /// <param name="element">The element to update the property for</param>
+        /// <param name="property">The property to update</param>
+        public static void RefreshBinding(this FrameworkElement element, DependencyProperty property)
+        {
+#if NETFX_CORE
+            // Get the property binding
+            var binding = element?.GetBindingExpression(property)?.ParentBinding;
+            if (binding != null)
+            {
+                // Re-apply the binding
+                element.SetBinding(property, binding.Clone());
+            }
+#else
+            element?.GetBindingExpression(property)?.UpdateTarget();
+#endif
+        }
     }
 }
 
