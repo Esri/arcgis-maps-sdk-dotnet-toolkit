@@ -175,7 +175,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
                     var translateX = e.Position.X - (MaximumThumb.ActualWidth / 2);
-                    System.Diagnostics.Debug.WriteLine($"X position: {e.Position.X}");
                     OnMaximumThumbDrag(translateX);
                 };
 #else
@@ -186,7 +185,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (HorizontalTrackThumb != null)
             {
-                HorizontalTrackThumb.DragDelta += HorizontalTrackThumb_DragDelta;
+#if NETFX_CORE
+                HorizontalTrackThumb.ManipulationMode = ManipulationModes.TranslateX;
+                HorizontalTrackThumb.ManipulationDelta += (s, e) =>
+                {
+                    // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
+                    var translateX = e.Position.X - (HorizontalTrackThumb.ActualWidth / 2);
+                    OnCurrentExtentThumbDrag(translateX);
+                };
+#else
+                HorizontalTrackThumb.DragDelta += (s, e) => OnCurrentExtentThumbDrag(e.HorizontalChange);
+#endif
                 HorizontalTrackThumb.DragCompleted += DragCompleted;
                 HorizontalTrackThumb.DragStarted += (s, e) => SetFocus();
             }
@@ -544,18 +553,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #region Drag event handlers
-
-        private void HorizontalTrackThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        private void OnCurrentExtentThumbDrag(double translateX)
         {
             IsPlaying = false;
 
-            if (e.HorizontalChange == 0 || IsStartTimePinned || IsEndTimePinned)
+            if (translateX == 0 || IsStartTimePinned || IsEndTimePinned)
                 return;
 
             if (_currentValue == null)
                 _currentValue = CurrentValidExtent;
 
-            _totalHorizontalChange = e.HorizontalChange;
+            _totalHorizontalChange = translateX;
 
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
 
