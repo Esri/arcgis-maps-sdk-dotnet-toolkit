@@ -698,7 +698,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
 
-            var oldValue = _currentValue;
             // validate change
             if (IsCurrentExtentTimeInstant)
             {
