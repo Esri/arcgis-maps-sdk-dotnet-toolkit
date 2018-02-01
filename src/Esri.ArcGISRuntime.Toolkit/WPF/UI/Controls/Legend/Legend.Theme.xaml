@@ -25,8 +25,6 @@
             <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplate="{StaticResource BranchItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
-    <DataTemplate x:Key="RootItemTemplate">
-    </DataTemplate>
     <Style TargetType="{x:Type controls:Legend}">
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />

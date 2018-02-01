@@ -65,6 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if ((GeoView as MapView)?.Map == null && (GeoView as SceneView)?.Scene == null)
             {
+                list.ItemsSource = null;
                 return;
             }
 
@@ -98,6 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (layers == null)
             {
+                list.ItemsSource = null;
                 return;
             }
             foreach (var l in layers)

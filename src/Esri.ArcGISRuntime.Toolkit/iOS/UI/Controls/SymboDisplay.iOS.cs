@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 using CoreGraphics;
-using Esri.ArcGISRuntime.UI;
 using System;
 using System.ComponentModel;
 using UIKit;
@@ -28,7 +27,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class SymbolDisplay : IComponent
     {
         private UIStackView _rootStackView;
-        private UIImageView _imageView;
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
         /// <summary>
@@ -70,13 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Spacing = 0
             };
 
-            _imageView = new UIImageView()
-            {
-                ClipsToBounds= true,
-                Frame = new CGRect(new CGPoint(0,0), new CGSize(40,40)),
-                ContentMode = UIViewContentMode.ScaleAspectFit
-            };
-            _rootStackView.AddSubview(_imageView);
+            // TODO
 
             AddSubview(_rootStackView);
 
@@ -88,39 +80,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private async void Refresh()
-        {
-            if (_imageView == null)
-            {
-                return;
-            }
-
-            if (Symbol == null)
-            {
-                _imageView.Image = null;
-                _imageView.Frame = new CGRect(_imageView.Bounds.Location, new CGSize(0, 0));
-                return;
-            }
-
-#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
-            try
-            {
-                var scale = GetScaleFactor();
-                var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                var width = (int)(imageData.Width / scale);
-                var height = (int)(imageData.Height / scale);
-                _imageView.Frame = new CGRect(_imageView.Bounds.Location, new CGSize(Math.Min(width, 40), Math.Min(height, 40)));
-                _imageView.Image = await imageData.ToImageSourceAsync();
-            }
-            catch
-            {
-                _imageView.Image = null;
-            }
-#pragma warning restore ESRI1800
-        }
-
-        private static double GetScaleFactor()
-        {
-            return UIScreen.MainScreen.Scale;
+        { 
+            // TODO
         }
 
         private bool _isSizeValid = false;
