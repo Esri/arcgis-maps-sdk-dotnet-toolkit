@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !__IOS__ && !__ANDROID__
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -390,7 +392,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private IEnumerable<DateTimeOffset> TimeStepsImpl
         {
             get { return (IEnumerable<DateTimeOffset>)GetValue(TimeStepsProperty); }
-            private set { SetValue(TimeStepsProperty, value); }
+            set { SetValue(TimeStepsProperty, value); }
         }
 
         /// <summary>
@@ -756,3 +758,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         #endregion // Properties
     }
 }
+
+#endif
