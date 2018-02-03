@@ -25,14 +25,12 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using Esri.ArcGISRuntime.ArcGISServices;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
-using Windows.Foundation;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -53,26 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control 
     /// to enhance the viewing of geographic features that have attributes based upon Date/Time information.
     /// </summary>
-    [TemplatePart(Name = "SliderTrack", Type = typeof(FrameworkElement))]
-    [TemplatePart(Name = "HorizontalTrackThumb", Type = typeof(Thumb))]
-    [TemplatePart(Name = "MinimumThumb", Type = typeof(Thumb))]
-    [TemplatePart(Name = "MinimumThumbLabel", Type = typeof(TextBlock))]
-    [TemplatePart(Name = "MaximumThumb", Type = typeof(Thumb))]
-    [TemplatePart(Name = "MaximumThumbLabel", Type = typeof(TextBlock))]
-    [TemplatePart(Name = "Tickmarks", Type = typeof(Primitives.Tickbar))]
-    [TemplatePart(Name = "SliderTrackStepBackRepeater", Type = typeof(RepeatButton))]
-    [TemplatePart(Name = "SliderTrackStepForwardRepeater", Type = typeof(RepeatButton))]
-    [TemplatePart(Name = "PlayPauseButton", Type = typeof(ToggleButton))]
-    [TemplatePart(Name = "NextButton", Type = typeof(ButtonBase))]
-    [TemplatePart(Name = "PreviousButton", Type = typeof(ButtonBase))]
-    [TemplatePart(Name = "FullExtentStartTimeLabel", Type = typeof(TextBlock))]
-    [TemplatePart(Name = "FullExtentEndTimeLabel", Type = typeof(TextBlock))]
-    [TemplateVisualState(GroupName = "CommonStates", Name = "Normal")]
-    [TemplateVisualState(GroupName = "CommonStates", Name = "MouseOver")]
-    [TemplateVisualState(GroupName = "CommonStates", Name = "Disabled")]
-    [TemplateVisualState(GroupName = "FocusStates", Name = "Focused")]
-    [TemplateVisualState(GroupName = "FocusStates", Name = "Unfocused")]
-    public class TimeSlider : Control
+    public partial class TimeSlider : Control
     {
 #region Fields
 
@@ -107,270 +86,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
         public TimeSlider()
-        {
-            DefaultStyleKey = typeof(TimeSlider);
+        {            
             _playTimer = new DispatcherTimer() { Interval = PlaybackInterval };
             _playTimer.Tick += PlayTimer_Tick;
-            SizeChanged += TimeSlider_SizeChanged;
-        }
-
-        private void TimeSlider_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            UpdateTrackLayout(CurrentValidExtent);
-        }
-
-        #region Overrides
-
-        /// <summary>
-        /// When overridden in a derived class, is invoked whenever application
-        /// code or internal processes (such as a rebuilding layout pass) call
-        /// <see cref="M:System.Windows.Controls.Control.ApplyTemplate"/>.
-        /// </summary>
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
-#endif
-        {
-            base.OnApplyTemplate();
-
-            SliderTrack = GetTemplateChild(nameof(SliderTrack)) as FrameworkElement;
-            if (SliderTrack != null)
-                SliderTrack.SizeChanged += TimeSlider_SizeChanged;
-            HorizontalTrackThumb = GetTemplateChild(nameof(HorizontalTrackThumb)) as Thumb;
-            MinimumThumb = GetTemplateChild(nameof(MinimumThumb)) as Thumb;
-            MinimumThumbLabel = GetTemplateChild(nameof(MinimumThumbLabel)) as TextBlock;
-            MaximumThumb = GetTemplateChild(nameof(MaximumThumb)) as Thumb;
-            MaximumThumbLabel = GetTemplateChild(nameof(MaximumThumbLabel)) as TextBlock;
-            SliderTrackStepBackRepeater = GetTemplateChild(nameof(SliderTrackStepBackRepeater)) as RepeatButton;
-            SliderTrackStepForwardRepeater = GetTemplateChild(nameof(SliderTrackStepForwardRepeater)) as RepeatButton;
-            PlayPauseButton = GetTemplateChild(nameof(PlayPauseButton)) as ToggleButton;
-            NextButton = GetTemplateChild(nameof(NextButton)) as ButtonBase;
-            PreviousButton = GetTemplateChild(nameof(PreviousButton)) as ButtonBase;
-            Tickmarks = GetTemplateChild(nameof(Tickmarks)) as Primitives.Tickbar;
-            FullExtentStartTimeLabel = GetTemplateChild(nameof(FullExtentStartTimeLabel)) as TextBlock;
-            FullExtentEndTimeLabel = GetTemplateChild(nameof(FullExtentEndTimeLabel)) as TextBlock;
-
-            if (MinimumThumb != null)
-            {
-#if NETFX_CORE
-                MinimumThumb.ManipulationMode = ManipulationModes.TranslateX;
-                MinimumThumb.ManipulationDelta += (s, e) =>
-                {
-                    // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
-                    var translateX = e.Position.X - (MinimumThumb.ActualWidth / 2);
-                    OnMinimumThumbDrag(translateX);
-                };
-#else
-                MinimumThumb.DragDelta += (s, e) => OnMinimumThumbDrag(e.HorizontalChange);
-#endif
-                MinimumThumb.DragCompleted += DragCompleted;
-                MinimumThumb.DragStarted += (s, e) => SetFocus();
-            }
-            if (MaximumThumb != null)
-            {
-#if NETFX_CORE
-                MaximumThumb.ManipulationMode = ManipulationModes.TranslateX;
-                MaximumThumb.ManipulationDelta += (s, e) =>
-                {
-                    // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
-                    var translateX = e.Position.X - (MaximumThumb.ActualWidth / 2);
-                    OnMaximumThumbDrag(translateX);
-                };
-#else
-                MaximumThumb.DragDelta += (s, e) => OnMaximumThumbDrag(e.HorizontalChange);
-#endif
-                MaximumThumb.DragCompleted += DragCompleted;
-                MaximumThumb.DragStarted += (s, e) => SetFocus();
-            }
-            if (HorizontalTrackThumb != null)
-            {
-#if NETFX_CORE
-                HorizontalTrackThumb.ManipulationMode = ManipulationModes.TranslateX;
-                HorizontalTrackThumb.ManipulationDelta += (s, e) =>
-                {
-                    // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
-                    var translateX = e.Position.X - (HorizontalTrackThumb.ActualWidth / 2);
-                    OnCurrentExtentThumbDrag(translateX);
-                };
-#else
-                HorizontalTrackThumb.DragDelta += (s, e) => OnCurrentExtentThumbDrag(e.HorizontalChange);
-#endif
-                HorizontalTrackThumb.DragCompleted += DragCompleted;
-                HorizontalTrackThumb.DragStarted += (s, e) => SetFocus();
-            }
-            if (SliderTrackStepBackRepeater != null)
-            {
-                SliderTrackStepBackRepeater.Click += (s, e) =>
-                {
-                    SetFocus();
-                    IsPlaying = false;
-                    StepBack();
-                };
-            }
-            if (SliderTrackStepForwardRepeater != null)
-            {
-                SliderTrackStepForwardRepeater.Click += (s, e) =>
-                {
-                    SetFocus();
-                    IsPlaying = false;
-                    StepForward();
-                };
-            }
-            if (PlayPauseButton != null)
-            {
-                IsPlaying = PlayPauseButton.IsChecked.Value;
-                PlayPauseButton.Checked += (s, e) => IsPlaying = true;
-                PlayPauseButton.Unchecked += (s, e) => IsPlaying = false;
-            }
-            if (NextButton != null)
-            {
-                NextButton.Click += (s, e) => MoveTimeStep(1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
-            }
-            if (PreviousButton != null)
-            {
-                PreviousButton.Click += (s, e) => MoveTimeStep(-1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
-            }
-            PositionTickmarks();
-            SetButtonVisibility();
-            ApplyLabelMode(LabelMode);
-        }
-
-        private void SetFocus()
-        {
-#if NETFX_CORE
-            Focus(FocusState.Pointer);
-#else
-            Focus();
-#endif
-        }
-
-        /// <summary>
-        /// Called before the <see cref="E:System.Windows.UIElement.LostFocus"/> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            base.OnLostFocus(e);
-            _isFocused = false;
-            ChangeVisualState(true);
-        }
-
-        /// <summary>
-        /// Called before the <see cref="E:System.Windows.UIElement.GotFocus"/> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
-        protected override void OnGotFocus(RoutedEventArgs e)
-        {
-            base.OnGotFocus(e);
-            _isFocused = true;
-            ChangeVisualState(true);
-        }
-
-        /// <inheritdoc />
-#if NETFX_CORE
-        protected override void OnPointerEntered(PointerRoutedEventArgs e)
-        {
-            base.OnPointerEntered(e);
-#else
-        protected override void OnMouseEnter(MouseEventArgs e)
-        {
-            base.OnMouseEnter(e);
-#endif
-            _isMouseOver = true;
-            if (MinimumThumb != null && !MinimumThumb.IsDragging ||
-                MaximumThumb != null && !MaximumThumb.IsDragging ||
-                MinimumThumb == null && MaximumThumb == null)
-            {
-                ChangeVisualState(true);
-            }
-        }
-
-        /// <inheritdoc />
-#if NETFX_CORE
-        protected override void OnPointerExited(PointerRoutedEventArgs e)
-        {
-            base.OnPointerExited(e);
-#else
-        protected override void OnMouseLeave(MouseEventArgs e)
-        {
-            base.OnMouseLeave(e);
-#endif
-            _isMouseOver = false;
-            if (MinimumThumb != null && !MinimumThumb.IsDragging ||
-                MaximumThumb != null && !MaximumThumb.IsDragging ||
-                MinimumThumb == null && MaximumThumb == null)
-            {
-                ChangeVisualState(true);
-            }
-        }
-
-        /// <inheritdoc />
-#if NETFX_CORE
-        protected override void OnPointerPressed(PointerRoutedEventArgs e)
-        {
-            base.OnPointerPressed(e);
-#else
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-#endif
-            if (!e.Handled && IsEnabled)
-            {
-                SetFocus();
-            }
-        }
-
-        /// <summary>
-        /// Called before the <see cref="E:System.Windows.UIElement.KeyDown"/> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
-#if NETFX_CORE
-        protected override void OnKeyDown(KeyRoutedEventArgs e)
-#else
-        protected override void OnKeyDown(KeyEventArgs e)
-#endif
-        {
-            base.OnKeyDown(e);
-            if (!e.Handled && IsEnabled)
-            {
-                if ((e.Key == Key.Left))
-                {
-                    StepBack();
-                }
-                else if ((e.Key == Key.Right))
-                {
-                    StepForward();
-                }
-            }
-        }
-
-#endregion // Overrides
-
-        private void ChangeVisualState(bool useTransitions)
-        {
-            //CommonStates
-            if (!IsEnabled)
-            {
-                VisualStateManager.GoToState(this, "Disabled", useTransitions);
-            }
-            else if (_isMouseOver)
-            {
-                VisualStateManager.GoToState(this, "MouseOver", useTransitions);
-            }
-            else
-            {
-                VisualStateManager.GoToState(this, "Normal", useTransitions);
-            }
-            //FocusStates
-            if (_isFocused && IsEnabled)
-            {
-                VisualStateManager.GoToState(this, "Focused", useTransitions);
-            }
-            else
-            {
-                VisualStateManager.GoToState(this, "Unfocused", useTransitions);
-            }
         }
 
         /// <summary>
@@ -553,6 +271,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #region Drag event handlers
+
         private void OnCurrentExtentThumbDrag(double translateX)
         {
             IsPlaying = false;
@@ -727,7 +446,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void DragCompleted(object sender, DragCompletedEventArgs e)
+        private void OnDragCompleted()
         {
             if (_currentValue == null)
                 return;
@@ -881,38 +600,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         public TimeExtent CurrentExtent
         {
-            get { return (TimeExtent)GetValue(CurrentExtentProperty); }
-            set { SetValue(CurrentExtentProperty, value); }
+            get => CurrentExtentImpl;
+            set => CurrentExtentImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="CurrentExtent"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty CurrentExtentProperty =
-            DependencyProperty.Register(nameof(CurrentExtent), typeof(TimeExtent), typeof(TimeSlider),
-                new PropertyMetadata(default(TimeExtent), OnCurrentExtentPropertyChanged));
-
-        private static void OnCurrentExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void OnCurrentExtentPropertyChanged(TimeExtent newExtent, TimeExtent oldExtent)
         {
-            var slider = (TimeSlider)d;
-            var newExtent = e.NewValue as TimeExtent;
-
-            slider._currentValue = newExtent;
+            _currentValue = newExtent;
 
             // Explicitly update the thumb labels' bindings to ensure that their text is updated prior to calculating layout
-            slider.MinimumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
-            slider.MaximumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
+            MinimumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
+            MaximumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
 
-            slider.UpdateTrackLayout(slider.CurrentValidExtent);
+            UpdateTrackLayout(CurrentValidExtent);
 
             // If the new extent represents a time instant, enforce the pinning of start and end time being in sync
-            if (newExtent.IsTimeInstant() && slider.IsStartTimePinned != slider.IsEndTimePinned)
+            if (newExtent.IsTimeInstant() && IsStartTimePinned != IsEndTimePinned)
             {
-                slider.IsStartTimePinned = false;
-                slider.IsEndTimePinned = false;
+                IsStartTimePinned = false;
+                IsEndTimePinned = false;
             }
 
-            slider.CurrentExtentChanged?.Invoke(slider, new CurrentExtentChangedEventArgs(newExtent, e.OldValue as TimeExtent));
+            CurrentExtentChanged?.Invoke(this, new CurrentExtentChangedEventArgs(newExtent, oldExtent));
         }
 
         /// <summary>
@@ -923,26 +632,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         public TimeExtent FullExtent
         {
-            get { return (TimeExtent)GetValue(FullExtentProperty); }
-            set { SetValue(FullExtentProperty, value); }
+            get => FullExtentImpl;
+            set => FullExtentImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="FullExtent"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty FullExtentProperty =
-            DependencyProperty.Register(nameof(FullExtent), typeof(TimeExtent), typeof(TimeSlider),
-                new PropertyMetadata(default(TimeExtent), OnFullExtentPropertyChanged));
-
-        private async static void OnFullExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private async void OnFullExtentPropertyChanged()
         {
             // TODO: For consideration - should FullExtent be snapped to a multiple of the specified time step?  E.g. if the time step interval
             // is 1 week and the full extent is 3 months (suppose 92 days in this case), should the full extent be snapped to 91 or 98 days?
 
-            var slider = (TimeSlider)d;
-            await slider.CalculateTimeStepsAsync();
-            slider.PositionTickmarks();
-            slider.UpdateTrackLayout(slider.CurrentValidExtent);
+            await CalculateTimeStepsAsync();
+            PositionTickmarks();
+            UpdateTrackLayout(CurrentValidExtent);
         }
 
         /// <summary>
@@ -950,22 +651,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public TimeValue TimeStepInterval
         {
-            get { return (TimeValue)GetValue(TimeStepIntervalProperty); }
-            set { SetValue(TimeStepIntervalProperty, value); }
+            get => TimeStepIntervalImpl;
+            set => TimeStepIntervalImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="TimeStepInterval"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TimeStepIntervalProperty =
-            DependencyProperty.Register(nameof(TimeStepInterval), typeof(TimeValue), typeof(TimeSlider),
-                new PropertyMetadata(default(TimeValue), OnTimeStepIntervalPropertyChanged));
-
-        private static async void OnTimeStepIntervalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OnTimeStepIntervalPropertyChanged(TimeSlider slider)
         {
             try
             {
-                await ((TimeSlider)d).CalculateTimeStepsAsync();
+                await slider.CalculateTimeStepsAsync();
             }
             catch
             {
@@ -1010,25 +704,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public IEnumerable<DateTimeOffset> TimeSteps
         {
-            get { return (IEnumerable<DateTimeOffset>)GetValue(TimeStepsProperty); }
-            private set { SetValue(TimeStepsProperty, value); }
+            get => TimeStepsImpl;
+            private set => TimeStepsImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="TimeSteps"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TimeStepsProperty =
-            DependencyProperty.Register(nameof(TimeSteps), typeof(IEnumerable<DateTimeOffset>), typeof(TimeSlider),
-                new PropertyMetadata(default(IEnumerable<DateTimeOffset>), OnTimeStepsPropertyChanged));
-
-        private static void OnTimeStepsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void OnTimeStepsPropertyChanged()
         {
-            var slider = (TimeSlider)d;
-
             // Update the slider UI to reflect the new time steps
-            slider.PositionTickmarks();
-            slider.SetButtonVisibility();
-            slider.UpdateTrackLayout(slider.CurrentValidExtent);
+            PositionTickmarks();
+            SetButtonVisibility();
+            UpdateTrackLayout(CurrentValidExtent);
         }
 
         /// <summary>
@@ -1036,53 +721,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
 		public TimeSpan PlaybackInterval
         {
-            get { return (TimeSpan)GetValue(PlaybackIntervalProperty); }
-            set { SetValue(PlaybackIntervalProperty, value); }
+            get => PlaybackIntervalImpl;
+            set => PlaybackIntervalImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="PlaybackInterval"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty PlaybackIntervalProperty =
-            DependencyProperty.Register(nameof(PlaybackInterval), typeof(TimeSpan), typeof(TimeSlider),
-                new PropertyMetadata(TimeSpan.FromSeconds(1), OnPlaybackIntervalPropertyChanged));
-
-        private static void OnPlaybackIntervalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var slider = (TimeSlider)d;
-            slider._playTimer.Interval = (TimeSpan)e.NewValue;
-        }
+        private void OnPlaybackIntervalPropertyChanged(TimeSpan interval) => _playTimer.Interval = interval;
 
         /// <summary>
         /// Gets or sets whether the current extent will move to the next or the previous time step during playback
         /// </summary>
 		public PlaybackDirection PlaybackDirection
         {
-            get { return (PlaybackDirection)GetValue(PlaybackDirectionProperty); }
-            set { SetValue(PlaybackDirectionProperty, value); }
+            get => PlaybackDirectionImpl;
+            set => PlaybackDirectionImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="PlaybackDirection"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty PlaybackDirectionProperty =
-            DependencyProperty.Register(nameof(PlaybackDirection), typeof(PlaybackDirection), typeof(TimeSlider),
-                new PropertyMetadata(PlaybackDirection.Forward));
 
         /// <summary>
         /// Gets or sets the behavior when the current extent reaches the end of the slider during playback
         /// </summary>
 		public LoopMode PlaybackLoopMode
         {
-            get { return (LoopMode)GetValue(LoopModeProperty); }
-            set { SetValue(LoopModeProperty, value); }
+            get => PlaybackLoopModeImpl;
+            set => PlaybackLoopModeImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="PlaybackLoopMode"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LoopModeProperty =
-            DependencyProperty.Register(nameof(PlaybackLoopMode), typeof(LoopMode), typeof(TimeSlider), new PropertyMetadata(LoopMode.None));
 
         private void SetButtonVisibility()
         {
@@ -1106,31 +767,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
 		public bool IsStartTimePinned
         {
-            get { return (bool)GetValue(IsStartTimePinnedProperty); }
-            set { SetValue(IsStartTimePinnedProperty, value); }
+            get => IsStartTimePinnedImpl;
+            set => IsStartTimePinnedImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="IsStartTimePinned"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty IsStartTimePinnedProperty =
-            DependencyProperty.Register(nameof(IsStartTimePinned), typeof(bool), typeof(TimeSlider),
-                new PropertyMetadata(default(bool), OnIsStartTimePinnedChanged));
-
-        private static void OnIsStartTimePinnedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void OnIsStartTimePinnedChanged(bool isStartTimePinned)
         {
-            var slider = (TimeSlider)d;
-
             // Enable or disable the start time thumb 
-            var isStartTimePinned = (bool)e.NewValue;
-            slider.MinimumThumb.IsEnabled = !isStartTimePinned;
+            MinimumThumb.IsEnabled = !isStartTimePinned;
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
-            if (slider.IsCurrentExtentTimeInstant && slider.IsEndTimePinned != isStartTimePinned)
-                slider.IsEndTimePinned = isStartTimePinned;
+            if (IsCurrentExtentTimeInstant && IsEndTimePinned != isStartTimePinned)
+                IsEndTimePinned = isStartTimePinned;
 
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
-            slider.HorizontalTrackThumb.IsEnabled = slider.MaximumThumb.IsEnabled && slider.MinimumThumb.IsEnabled;
+            HorizontalTrackThumb.IsEnabled = MaximumThumb.IsEnabled && MinimumThumb.IsEnabled;
         }
 
         /// <summary>
@@ -1138,45 +789,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public bool IsEndTimePinned
         {
-            get { return (bool)GetValue(IsEndTimePinnedProperty); }
-            set { SetValue(IsEndTimePinnedProperty, value); }
+            get => IsEndTimePinnedImpl;
+            set => IsEndTimePinnedImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="IsEndTimePinned"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty IsEndTimePinnedProperty =
-            DependencyProperty.Register(nameof(IsEndTimePinned), typeof(bool), typeof(TimeSlider),
-                new PropertyMetadata(default(bool), OnIsEndTimePinnedChanged));
-
-        private static void OnIsEndTimePinnedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void OnIsEndTimePinnedChanged(bool isEndTimePinned)
         {
-            var slider = (TimeSlider)d;
-
             // Enable or disable the end time thumb 
-            var isEndTimePinned = (bool)e.NewValue;
-            slider.MaximumThumb.IsEnabled = !isEndTimePinned;
+            MaximumThumb.IsEnabled = !isEndTimePinned;
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
-            if (slider.IsCurrentExtentTimeInstant && slider.IsStartTimePinned != isEndTimePinned)
-                slider.IsStartTimePinned = isEndTimePinned;
+            if (IsCurrentExtentTimeInstant && IsStartTimePinned != isEndTimePinned)
+                IsStartTimePinned = isEndTimePinned;
 
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
-            slider.HorizontalTrackThumb.IsEnabled = slider.MaximumThumb.IsEnabled && slider.MinimumThumb.IsEnabled;
+            HorizontalTrackThumb.IsEnabled = MaximumThumb.IsEnabled && MinimumThumb.IsEnabled;
         }
 
         /// <summary>
-        /// Identifies the <see cref="IsPlaying"/> dependency property.
+        /// Gets or sets whether the time slider is animating playback
         /// </summary>
-        public static readonly DependencyProperty IsPlayingProperty =
-            DependencyProperty.Register(nameof(IsPlaying), typeof(bool), typeof(TimeSlider), new PropertyMetadata(false, OnIsPlayingPropertyChanged));
-
-        private static void OnIsPlayingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public bool IsPlaying
         {
-            var slider = (TimeSlider)d;
-            var isPlaying = (bool)e.NewValue;
+            get => IsPlayingImpl;
+            set => IsPlayingImpl = value;
+        }
 
-
+        private static void OnIsPlayingPropertyChanged(TimeSlider slider, bool isPlaying)
+        {
             // Start or stop playback
             if (isPlaying && slider.TimeSteps != null && slider.TimeSteps.GetEnumerator().MoveNext())
             {
@@ -1202,172 +842,210 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 slider.PlayPauseButton.IsChecked = isPlaying;
         }
 
-#region Appearance Properties
+        #region Appearance Properties
+
+        /// <summary>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>
+        /// </summary>
+        public string FullExtentLabelFormat
+        {
+            get => FullExtentLabelFormatImpl;
+            set => FullExtentLabelFormatImpl = value;
+        }
+
+        private void OnFullExtentLabelFormatPropertyChanged(string labelFormat)
+        {
+            // Apply the updated string format to the full extent label elements' bindings
+            FullExtentStartTimeLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref _originalFullExtentLabelFormat);
+            FullExtentEndTimeLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref _originalFullExtentLabelFormat);
+        }
+
+        /// <summary>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
+        /// </summary>
+        public string CurrentExtentLabelFormat
+        {
+            get => CurrentExtentLabelFormatImpl;
+            set => CurrentExtentLabelFormatImpl = value;
+        }
+
+        private void OnCurrentExtentLabelFormatPropertyChanged(string labelFormat)
+        {
+            // Apply the updated string format to the current extent label elements' bindings
+            MinimumThumbLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref _originalCurrentExtentLabelFormat);
+            MaximumThumbLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref _originalCurrentExtentLabelFormat);
+
+            // Layout the slider to accommodate updated label text
+            UpdateTrackLayout(CurrentExtent);
+        }
+
+        /// <summary>
+        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval
+        /// </summary>
+        public string TimeStepIntervalLabelFormat
+        {
+            get => TimeStepIntervalLabelFormatImpl;
+            set => TimeStepIntervalLabelFormatImpl = value;
+        }
+
+        private void OnTimeStepIntervalLabelFormatPropertyChanged(string tickLabelFormat)
+        {
+            if (Tickmarks != null)
+            {
+                Tickmarks.TickLabelFormat = tickLabelFormat;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the mode to use for labels along the time slider
+        /// </summary>
+        public TimeSliderLabelMode LabelMode
+        {
+            get => LabelModeImpl;
+            set => LabelModeImpl = value;
+        }
+
+        private void OnLabelModePropertyChanged(TimeSliderLabelMode labelMode) => ApplyLabelMode(labelMode);
+
+        /// <summary>
+        /// Updates the slider for the specified label mode
+        /// </summary>
+        /// <param name="labelMode">The label mode to apply</param>
+        private void ApplyLabelMode(TimeSliderLabelMode labelMode)
+        {
+            if (Tickmarks == null || MinimumThumbLabel == null || MaximumThumbLabel == null)
+                return;
+
+            switch (labelMode)
+            {
+                case TimeSliderLabelMode.None:
+                    Tickmarks.ShowTickLabels = false;
+                    MinimumThumbLabel.Visibility = Visibility.Collapsed;
+                    MaximumThumbLabel.Visibility = Visibility.Collapsed;
+                    break;
+                case TimeSliderLabelMode.CurrentExtent:
+                    Tickmarks.ShowTickLabels = false;
+                    MinimumThumbLabel.Visibility = Visibility.Visible;
+                    MaximumThumbLabel.Visibility = Visibility.Visible;
+                    break;
+                case TimeSliderLabelMode.TimeStepInterval:
+                    Tickmarks.ShowTickLabels = true;
+                    MinimumThumbLabel.Visibility = Visibility.Collapsed;
+                    MaximumThumbLabel.Visibility = Visibility.Collapsed;
+                    break;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the border color of the thumbs
         /// </summary>
 		public Brush ThumbStroke
         {
-            get { return (Brush)GetValue(ThumbStrokeProperty); }
-            set { SetValue(ThumbStrokeProperty, value); }
+            get => ThumbStrokeImpl;
+            set => ThumbStrokeImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="ThumbStroke"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ThumbStrokeProperty =
-            DependencyProperty.Register(nameof(ThumbStroke), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the fill color of the thumbs
         /// </summary>
 		public Brush ThumbFill
         {
-            get { return (Brush)GetValue(ThumbFillProperty); }
-            set { SetValue(ThumbFillProperty, value); }
+            get => ThumbFillImpl;
+            set => ThumbFillImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="ThumbFill"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ThumbFillProperty =
-            DependencyProperty.Register(nameof(ThumbFill), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
         /// </summary>
 		public Brush CurrentExtentFill
         {
-            get { return (Brush)GetValue(CurrentExtentFillProperty); }
-            set { SetValue(CurrentExtentFillProperty, value); }
+            get => CurrentExtentFillImpl;
+            set => CurrentExtentFillImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="CurrentExtentFill"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty CurrentExtentFillProperty =
-            DependencyProperty.Register(nameof(CurrentExtentFill), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
 		public Brush FullExtentFill
         {
-            get { return (Brush)GetValue(FullExtentFillProperty); }
-            set { SetValue(FullExtentFillProperty, value); }
+            get => FullExtentFillImpl;
+            set => FullExtentFillImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="FullExtentFill"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty FullExtentFillProperty =
-            DependencyProperty.Register(nameof(FullExtentFill), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
 		public Brush FullExtentStroke
         {
-            get { return (Brush)GetValue(FullExtentStrokeProperty); }
-            set { SetValue(FullExtentStrokeProperty, value); }
+            get => FullExtentStrokeImpl;
+            set => FullExtentStrokeImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="FullExtentStroke"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty FullExtentStrokeProperty =
-            DependencyProperty.Register(nameof(FullExtentStroke), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the color of the slider's tickmarks
         /// </summary>
 		public Brush TimeStepIntervalTickFill
         {
-            get { return (Brush)GetValue(TimeStepIntervalTickFillProperty); }
-            set { SetValue(TimeStepIntervalTickFillProperty, value); }
+            get => TimeStepIntervalTickFillImpl;
+            set => TimeStepIntervalTickFillImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="TimeStepIntervalTickFill"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TimeStepIntervalTickFillProperty =
-            DependencyProperty.Register(nameof(TimeStepIntervalTickFill), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the fill color of the playback buttons
         /// </summary>
 		public Brush PlaybackButtonsFill
         {
-            get { return (Brush)GetValue(PlaybackButtonsFillProperty); }
-            set { SetValue(PlaybackButtonsFillProperty, value); }
+            get => PlaybackButtonsFillImpl;
+            set => PlaybackButtonsFillImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="PlaybackButtonsFill"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty PlaybackButtonsFillProperty =
-            DependencyProperty.Register(nameof(PlaybackButtonsFill), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the border color of the playback buttons
         /// </summary>
 		public Brush PlaybackButtonsStroke
         {
-            get { return (Brush)GetValue(PlaybackButtonsStrokeProperty); }
-            set { SetValue(PlaybackButtonsStrokeProperty, value); }
+            get => PlaybackButtonsStrokeImpl;
+            set => PlaybackButtonsStrokeImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="PlaybackButtonsStroke"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty PlaybackButtonsStrokeProperty =
-            DependencyProperty.Register(nameof(PlaybackButtonsStroke), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the color of the full extent labels
         /// </summary>
 		public Brush FullExtentLabelColor
         {
-            get { return (Brush)GetValue(FullExtentLabelColorProperty); }
-            set { SetValue(FullExtentLabelColorProperty, value); }
+            get => FullExtentLabelColorImpl;
+            set => FullExtentLabelColorImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="FullExtentLabelColor"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty FullExtentLabelColorProperty =
-            DependencyProperty.Register(nameof(FullExtentLabelColor), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the color of the current extent labels
         /// </summary>
 		public Brush CurrentExtentLabelColor
         {
-            get { return (Brush)GetValue(CurrentExtentLabelColorProperty); }
-            set { SetValue(CurrentExtentLabelColorProperty, value); }
+            get => CurrentExtentLabelColorImpl;
+            set => CurrentExtentLabelColorImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="CurrentExtentLabelColor"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty CurrentExtentLabelColorProperty =
-            DependencyProperty.Register(nameof(CurrentExtentLabelColor), typeof(Brush), typeof(TimeSlider), null);
 
         /// <summary>
         /// Gets or sets the color of the time step interval labels
         /// </summary>
 		public Brush TimeStepIntervalLabelColor
         {
-            get { return (Brush)GetValue(TimeStepIntervalLabelColorProperty); }
-            set { SetValue(TimeStepIntervalLabelColorProperty, value); }
+            get => TimeStepIntervalLabelColorImpl;
+            set => TimeStepIntervalLabelColorImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="TimeStepIntervalLabelColor"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TimeStepIntervalLabelColorProperty =
-            DependencyProperty.Register(nameof(TimeStepIntervalLabelColor), typeof(Brush), typeof(TimeSlider), null);
 
 #endregion // Appearance Properties
 
@@ -1691,158 +1369,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return isRequestedMoveValid; 
         }
 
-        /// <summary>
-        /// Gets or sets whether the time slider is animating playback
-        /// </summary>
-        public bool IsPlaying
-        {
-            get { return (bool)GetValue(IsPlayingProperty); }
-            set { SetValue(IsPlayingProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>
-        /// </summary>
-        public string FullExtentLabelFormat
-        {
-            get { return (string)GetValue(FullExtentLabelFormatProperty); }
-            set { SetValue(FullExtentLabelFormatProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="FullExtentLabelFormat"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty FullExtentLabelFormatProperty =
-            DependencyProperty.Register(nameof(FullExtentLabelFormat), typeof(string), typeof(TimeSlider),
-                new PropertyMetadata(default(string), OnFullExtentLabelFormatPropertyChanged));
-
-        private static void OnFullExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var slider = (TimeSlider)d;
-            var newLabelFormat = e.NewValue as string;
-
-            // Apply the updated string format to the full extent label elements' bindings
-            slider.FullExtentStartTimeLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: newLabelFormat,
-                fallbackFormat: ref slider._originalFullExtentLabelFormat);
-            slider.FullExtentEndTimeLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: newLabelFormat,
-                fallbackFormat: ref slider._originalFullExtentLabelFormat);
-        }
-
-        /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
-        /// </summary>
-        public string CurrentExtentLabelFormat
-        {
-            get { return (string)GetValue(CurrentExtentLabelFormatProperty); }
-            set { SetValue(CurrentExtentLabelFormatProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="CurrentExtentLabelFormat"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty CurrentExtentLabelFormatProperty =
-            DependencyProperty.Register(nameof(CurrentExtentLabelFormat), typeof(string), typeof(TimeSlider),
-                new PropertyMetadata(default(string), OnCurrentExtentLabelFormatPropertyChanged));
-
-        private static void OnCurrentExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var slider = (TimeSlider)d;
-            var newLabelFormat = e.NewValue as string;
-
-            // Apply the updated string format to the current extent label elements' bindings
-            slider.MinimumThumbLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: newLabelFormat,
-                fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
-            slider.MaximumThumbLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: newLabelFormat,
-                fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
-
-            // Layout the slider to accommodate updated label text
-            slider.UpdateTrackLayout(slider.CurrentExtent);
-        }
-
-        /// <summary>
-        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval
-        /// </summary>
-        public string TimeStepIntervalLabelFormat
-        {
-            get { return (string)GetValue(TimeStepIntervalLabelFormatProperty); }
-            set { SetValue(TimeStepIntervalLabelFormatProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="TimeStepIntervalLabelFormat"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TimeStepIntervalLabelFormatProperty =
-            DependencyProperty.Register(nameof(TimeStepIntervalLabelFormat), typeof(string), typeof(TimeSlider),
-                new PropertyMetadata(default(string), OnTimeStepIntervalLabelFormatPropertyChanged));
-
-        private static void OnTimeStepIntervalLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var slider = (TimeSlider)d;
-            if (slider.Tickmarks != null)
-            {
-                slider.Tickmarks.TickLabelFormat = e.NewValue as string;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the mode to use for labels along the time slider
-        /// </summary>
-        public TimeSliderLabelMode LabelMode
-        {
-            get { return (TimeSliderLabelMode)GetValue(LabelModeProperty); }
-            set { SetValue(LabelModeProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="LabelMode"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LabelModeProperty =
-            DependencyProperty.Register(nameof(LabelMode), typeof(TimeSliderLabelMode), typeof(TimeSlider),
-                new PropertyMetadata(default(TimeSliderLabelMode), OnLabelModePropertyChanged));
-
-        private static void OnLabelModePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var slider = (TimeSlider)d;
-            var labelMode = (TimeSliderLabelMode)e.NewValue;
-            slider.ApplyLabelMode(labelMode);
-        }
-
-        /// <summary>
-        /// Updates the slider for the specified label mode
-        /// </summary>
-        /// <param name="labelMode">The label mode to apply</param>
-        private void ApplyLabelMode(TimeSliderLabelMode labelMode)
-        {
-            if (Tickmarks == null || MinimumThumbLabel == null || MaximumThumbLabel == null)
-                return;
-
-            switch (labelMode)
-            {
-                case TimeSliderLabelMode.None:
-                    Tickmarks.ShowTickLabels = false;
-                    MinimumThumbLabel.Visibility = Visibility.Collapsed;
-                    MaximumThumbLabel.Visibility = Visibility.Collapsed;
-                    break;
-                case TimeSliderLabelMode.CurrentExtent:
-                    Tickmarks.ShowTickLabels = false;
-                    MinimumThumbLabel.Visibility = Visibility.Visible;
-                    MaximumThumbLabel.Visibility = Visibility.Visible;
-                    break;
-                case TimeSliderLabelMode.TimeStepInterval:
-                    Tickmarks.ShowTickLabels = true;
-                    MinimumThumbLabel.Visibility = Visibility.Collapsed;
-                    MaximumThumbLabel.Visibility = Visibility.Collapsed;
-                    break;
-            }
-        }
 
         /// <summary>
         /// Moves the time slider's current extent upon expiration of the playback interval
