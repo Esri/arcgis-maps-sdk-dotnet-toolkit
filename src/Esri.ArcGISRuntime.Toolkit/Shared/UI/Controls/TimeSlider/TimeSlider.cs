@@ -32,12 +32,20 @@ using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Key = Windows.System.VirtualKey;
+#elif __IOS__
+using Control = UIKit.UIView;
+using FrameworkElement = UIKit.UIView;
+using TextBlock = UIKit.UILabel;
+using Thumb = UIKit.UIView;
+using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
+using System.Drawing;
 #else
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -262,6 +270,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             tb.Measure(new Size(0, 0));
             tb.Arrange(new Rect(0, 0, 0, 0));
             return new Size(tb.ActualWidth, tb.ActualHeight);
+#elif __IOS__
+            return Size.Empty;
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
             var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
