@@ -149,15 +149,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
                 if (_generateLegend)
                 {
-                    IReadOnlyList<LayerLegendInfo> legend;
+                    IReadOnlyList<LegendInfo> legend;
                     try
                     {
-                        if (LayerContent is LegendContentInfo)
-                            return;
-                        var result = await LayerContent.GetLegendInfosAsync();
-                        if (result == null)
-                            return;
-                        legend = new ReadOnlyCollection<LayerLegendInfo>(new List<LayerLegendInfo>(from r in result select new LayerLegendInfo(r)));
+                        legend = await LayerContent.GetLegendInfosAsync();
                     }
                     catch
                     {
@@ -217,13 +212,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             private Func<double, bool> _visibleAtScaleCalculation;
 
-            public LegendContentInfo(LayerLegendInfo legend, Func<double, bool> visibleAtScaleCalculation)
+            public LegendContentInfo(LegendInfo legend, Func<double, bool> visibleAtScaleCalculation)
             {
-                LegendInfo = legend.LegendInfo;
                 Name = legend.Name;
                 _visibleAtScaleCalculation = visibleAtScaleCalculation;
             }
-            public LegendInfo LegendInfo { get; }
             public bool CanChangeVisibility { get; }
 
             public bool IsVisible { get; set; } = true;
@@ -236,10 +229,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             public Task<IReadOnlyList<LegendInfo>> GetLegendInfosAsync()
             {
-                if (LegendInfo?.Symbol != null)
-                {
-                    return Task.FromResult<IReadOnlyList<LegendInfo>>(new ReadOnlyCollection<LegendInfo>(new List<LegendInfo>(new LegendInfo[] { LegendInfo })));
-                }
                 return Task.FromResult<IReadOnlyList<LegendInfo>>(null);
             }
 

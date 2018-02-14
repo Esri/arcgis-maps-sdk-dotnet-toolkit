@@ -1,27 +1,39 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-    <controls:BooleanVisibilityConverter x:Key="VisibilityConverter"/>
-    <DataTemplate x:Key="LeafItemTemplate">        
-            <controls:LayerLegend LayerContent="{Binding LayerContent}" 
-                                  ShowEntireTreeHierarchy="False" 
-                                  Margin="10,0" 
-                                  Visibility="{Binding DisplayLegend, Converter={StaticResource VisibilityConverter}}"/>
+    <Style x:Key="DisplayLegendStyle" TargetType="FrameworkElement">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding DisplayLegend}" Value="False">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="DisplayTitleStyle" TargetType="FrameworkElement">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSublayer}" Value="True">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <DataTemplate x:Key="LeafItemTemplate">
+        <controls:LayerLegend LayerContent="{Binding LayerContent}" 
+                              ShowEntireTreeHierarchy="False" 
+                              Margin="10,0" />
     </DataTemplate>
     <DataTemplate x:Key="BranchItemTemplate">
-        <StackPanel Visibility="{Binding DisplayLegend, Converter={StaticResource VisibilityConverter}}">
+        <StackPanel Style="{StaticResource DisplayLegendStyle}">
             <TextBlock Text="{Binding LayerContent.Name}" 
                        Margin="10,0" 
-                       Visibility="{Binding IsSublayer, Converter={StaticResource VisibilityConverter}}"/>
+                       Style="{StaticResource DisplayTitleStyle}"/>
             <ItemsControl ItemsSource="{Binding Sublayers}" 
                           ItemTemplate="{StaticResource LeafItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="TrunkItemTemplate">
-        <StackPanel Visibility="{Binding DisplayLegend, Converter={StaticResource VisibilityConverter}}">
+        <StackPanel Style="{StaticResource DisplayLegendStyle}">
             <TextBlock Text="{Binding LayerContent.Name}"
                        Margin="10,0" 
-                       Visibility="{Binding IsSublayer, Converter={StaticResource VisibilityConverter}}"/>
+                       Style="{StaticResource DisplayTitleStyle}"/>
             <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplate="{StaticResource BranchItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
@@ -39,7 +51,7 @@
         <Setter Property="LayerItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <StackPanel Visibility="{Binding DisplayLegend, Converter={StaticResource VisibilityConverter}}">
+                    <StackPanel Style="{StaticResource DisplayLegendStyle}">
                         <TextBlock Text="{Binding LayerContent.Name}" FontWeight="Bold"/>
                         <controls:LayerLegend LayerContent="{Binding LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0" />
                         <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplate="{StaticResource TrunkItemTemplate}"/>

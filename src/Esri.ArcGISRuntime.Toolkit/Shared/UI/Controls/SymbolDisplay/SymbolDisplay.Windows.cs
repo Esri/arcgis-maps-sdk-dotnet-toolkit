@@ -76,8 +76,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (Symbol == null)
             {
                 img.Source = null;
-                img.Width = 0;
-                img.Height = 0;
+                img.MaxWidth = 0;
+                img.MaxHeight = 0;
             }
             else
             {
@@ -86,13 +86,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     var scale = GetScaleFactor();
                     var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                    img.Width = imageData.Width / scale;
-                    img.Height = imageData.Height / scale;
+                    img.MaxWidth = imageData.Width / scale;
+                    img.MaxHeight = imageData.Height / scale;
                     img.Source = await imageData.ToImageSourceAsync();
                 }
                 catch
                 {
                     img.Source = null;
+                    img.MaxWidth = 0;
+                    img.MaxHeight = 0;
                 }
 #pragma warning restore ESRI1800
             }

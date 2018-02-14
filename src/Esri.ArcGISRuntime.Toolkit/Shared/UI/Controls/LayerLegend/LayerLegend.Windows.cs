@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
 
-            var items = new ObservableCollection<LayerLegendInfo>();
+            var items = new ObservableCollection<LegendInfo>();
             ctrl.ItemsSource = items;
             LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
         }

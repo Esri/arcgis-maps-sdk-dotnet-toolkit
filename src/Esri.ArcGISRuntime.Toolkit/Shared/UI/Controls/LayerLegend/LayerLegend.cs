@@ -13,7 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
+#if !XAMARIN
 using Esri.ArcGISRuntime.Mapping;
 using System.Collections.Generic;
 #if NETFX_CORE
@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => ShowEntireTreeHierarchyImpl = value;
         }
 
-        private async void LoadRecursive(IList<LayerLegendInfo> itemsList, ILayerContent content, bool recursive)
+        private async void LoadRecursive(IList<LegendInfo> itemsList, ILayerContent content, bool recursive)
         {
             if (content == null)
             {
@@ -69,8 +69,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                if (LayerContent.Name != content.Name)
-                    itemsList.Add(new LayerLegendInfo(content));
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 var legendInfo = await content.GetLegendInfosAsync();
 #pragma warning restore ESRI1800
@@ -78,7 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     foreach (var item in legendInfo)
                     {
-                        itemsList.Add(new LayerLegendInfo(item));
+                        itemsList.Add(item);
                     }
                 }
             }
@@ -100,3 +98,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#endif

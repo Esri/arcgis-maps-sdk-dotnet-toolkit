@@ -13,7 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
+#if !XAMARIN
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 
@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public Legend() : base()
         {
-            ShowLegendInternal = true;
         }
     }
 }
+#endif
