@@ -65,13 +65,11 @@
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}">
-                        <ScrollViewer>
                             <ItemsControl x:Name="List"
                                           ItemTemplate="{TemplateBinding LayerItemTemplate}"
                                           Margin="{TemplateBinding Padding}"
                                           BorderThickness="0"
                                           Padding="0" />
-                        </ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
