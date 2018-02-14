@@ -10,7 +10,7 @@
     </Style>
     <Style x:Key="DisplayTitleStyle" TargetType="FrameworkElement">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsSublayer}" Value="True">
+            <DataTrigger Binding="{Binding IsSublayer}" Value="False">
                 <Setter Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
         </Style.Triggers>
