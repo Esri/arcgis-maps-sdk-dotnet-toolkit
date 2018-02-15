@@ -15,7 +15,7 @@
 //  ******************************************************************************/
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
-#if !__IOS__ && !__ANDROID__
+#if !__ANDROID__
 
 using System;
 using System.Collections.Generic;
@@ -28,6 +28,15 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
+#elif __IOS__
+using System.Drawing;
+using Panel = UIKit.UIView;
+using Rect = CoreGraphics.CGRect;
+using ContentPresenter = UIKit.UIView;
+using FrameworkElement = UIKit.UIView;
+using UIElement = UIKit.UIView;
+using Brush = UIKit.UIColor;
+using Size = CoreGraphics.CGSize;
 #else
 using System.Text;
 using System.Windows;
@@ -47,6 +56,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class Tickbar : Panel
     {
         private string _originalTickLabelFormat;
+        private List<ContentPresenter> _majorTickmarks = new List<ContentPresenter>();
+        private List<ContentPresenter> _minorTickmarks = new List<ContentPresenter>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tickbar"/> class.
@@ -70,16 +81,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (c == null)
                     continue;
 
-                double position = (double)c.GetValue(PositionProperty);
-                var isMajorTickmark = (bool)c.GetValue(IsMajorTickmarkProperty);
+                double position = GetPosition(c);
+                var isMajorTickmark = GetIsMajorTickmark(c);
 
                 if (isMajorTickmark && !ShowTickLabels)
                     continue; // Don't worry about calculating bounds for major ticks if labels are hidden
 
                 // Calculate the bounds of the tick mark
                 position = finalSize.Width * position;
-                childBounds.X = position - c.DesiredSize.Width * .5;
-                childBounds.Width = c.DesiredSize.Width;
+                var x = position - GetDesiredSize(c).Width * .5;
+#if __IOS__
+                childBounds.X = (nfloat)x;
+#else
+                childBounds.X = x;
+#endif
+                childBounds.Width = GetDesiredSize(c).Width;
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
                 if (isMajorTickmark)
@@ -217,22 +233,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             double height = availableSize.Height == double.PositiveInfinity ? Height : availableSize.Height;
 
             // Get the set of ticks that we want to measure.  This could either be all ticks or only minor ticks
-            var measuredChildren = ShowTickLabels ? Children.Cast<UIElement>() : Children.Cast<UIElement>().Where(el => !(bool)el.GetValue(IsMajorTickmarkProperty));
+            var measuredChildren = ShowTickLabels ? Children.Cast<UIElement>() : Children.Cast<UIElement>().Where(el => !GetIsMajorTickmark(el));
+#if !__IOS__
             foreach (UIElement d in measuredChildren)
             {
                 d.Measure(availableSize);
             }
+#endif
 
             if (double.IsNaN(height))
             {
                 height = 0;
                 foreach (UIElement d in measuredChildren)
                 {
-                    height = Math.Max(d.DesiredSize.Height, height);
+                    height = Math.Max(GetDesiredSize(d).Height, height);
                 }
             }
             width = double.IsNaN(width) ? 0 : width;
 
+            
             return new Size(width, height);
         }
 
@@ -249,8 +268,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnTickmarkPositionsPropertyChanged(IEnumerable<double> newTickPositions, IEnumerable<double> oldTickPositions)
         {
+#if !__IOS__ && !__ANDROID__
             if (MinorTickmarkTemplate == null)
                 MinorTickmarkTemplate = _defaultTickmarkTemplate;
+#endif
 
             var newTickCount = newTickPositions == null ? 0 : newTickPositions.Count();
             var oldTickCount = oldTickPositions == null ? 0 : oldTickPositions.Count();
@@ -261,19 +282,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 for (var i = oldTickCount; i > newTickCount; i--)
                 {
                     var tickToRemove = _majorTickmarks[i - 1];
-                    Children.Remove(tickToRemove);
+                    RemoveChild(this, tickToRemove);
                     _majorTickmarks.Remove(tickToRemove);
 
                     tickToRemove = _minorTickmarks[i - 1];
-                    Children.Remove(tickToRemove);
+                    RemoveChild(this, tickToRemove);
                     _minorTickmarks.Remove(tickToRemove);
                 }
 
                 // Update the positions of the remaining ticks
-                for (var i = 0; i < Children.Count; i++)
+                for (var i = 0; i < ChildCount; i++)
                 {
-                    _minorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
-                    _majorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                    SetPosition(_minorTickmarks[i], newTickPositions.ElementAt(i));
+                    SetPosition(_majorTickmarks[i], newTickPositions.ElementAt(i));
                 }
             }
             else if (newTickPositions != null)
@@ -283,8 +304,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (i < oldTickCount)
                     {
                         // Update positions of existing ticks
-                        _minorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
-                        _majorTickmarks[i].SetValue(PositionProperty, newTickPositions.ElementAt(i));
+                        SetPosition(_minorTickmarks[i], newTickPositions.ElementAt(i));
+                        SetPosition(_majorTickmarks[i], newTickPositions.ElementAt(i));
                     }
                     else
                     {
@@ -311,10 +332,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             var newDataSources = dataSources ?? new List<object>();
 
+#if !__IOS__
             for (var i = 0; i < _majorTickmarks.Count; i++)
             {
                 _majorTickmarks[i].Content = i < newDataSources.Count() ? newDataSources.ElementAt(i) : null;
             }
+#endif
         }
 
         /// <summary>

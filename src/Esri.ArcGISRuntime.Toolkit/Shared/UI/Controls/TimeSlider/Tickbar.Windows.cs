@@ -47,8 +47,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             "<TextBlock Text=\"|\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" />" +
             "</DataTemplate>";
         private static DataTemplate _defaultTickmarkTemplate;
-        private List<ContentPresenter> _majorTickmarks = new List<ContentPresenter>();
-        private List<ContentPresenter> _minorTickmarks = new List<ContentPresenter>();
 
         private void Initialize()
         {
@@ -158,6 +156,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             Children.Add(c);
             _majorTickmarks.Add(c);
         }
+
+        private bool GetIsMajorTickmark(DependencyObject view) => (bool)view.GetValue(IsMajorTickmarkProperty);
+
+        private void SetIsMajorTickmark(DependencyObject view, bool isMajorTickmark) =>
+            view.SetValue(IsMajorTickmarkProperty, isMajorTickmark);
+
+        private double GetPosition(DependencyObject view) => (double)view.GetValue(PositionProperty);
+
+        private void SetPosition(DependencyObject view, double position) => view.SetValue(PositionProperty, position);
+
 
         /// <summary>
         /// Gets or sets the item template for each minor tick mark
@@ -290,6 +298,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             InvalidateMeasure();
             InvalidateArrange();
         }
+
+        private Size GetDesiredSize(UIElement el) => el.DesiredSize;
+
+        private void RemoveChild(Panel parent, UIElement child) => parent.Children.Remove(child);
+
+        private int ChildCount => Children.Count;
     }
 }
 
