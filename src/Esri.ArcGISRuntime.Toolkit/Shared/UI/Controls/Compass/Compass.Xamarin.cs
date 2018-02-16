@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private bool _autoHide;
+        private bool _autoHide = true;
 
         private bool AutoHideImpl
         {
@@ -42,6 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _autoHide = value;
+                SetVisibility(!(value && _heading == 0));
             }
         }
     }

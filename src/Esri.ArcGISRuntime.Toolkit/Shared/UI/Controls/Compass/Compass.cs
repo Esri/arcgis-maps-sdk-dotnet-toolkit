@@ -31,6 +31,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class Compass : Control
     {
+        private const double DefaultSize = 30;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
@@ -38,7 +40,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
-            { Initialize(); }
+            {
+#if __IOS__
+#endif
+            Initialize();
+        }
 
         /// <summary>
         /// Gets or sets the Heading for the compass.

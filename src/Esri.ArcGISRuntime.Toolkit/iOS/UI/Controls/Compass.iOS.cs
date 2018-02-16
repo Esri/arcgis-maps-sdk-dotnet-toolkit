@@ -25,42 +25,10 @@ using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    [Register("Compass")]
     [DisplayName("Compass")]
     [Category("ArcGIS Runtime Controls")]
     public partial class Compass : IComponent
     {
-        private class NorthArrowShape : UIView
-        {
-            public NorthArrowShape() : base() { }
-
-            public override void Draw(CGRect rect)
-            {
-                base.Draw(rect);
-                using (CGContext g = UIGraphics.GetCurrentContext())
-                {
-                    //set up drawing attributes
-                    g.SetLineWidth(10);
-                    UIColor.Blue.SetFill();
-                    UIColor.Red.SetStroke();
-
-                    //create geometry
-                    var path = new CGPath();
-
-                    path.AddLines(new CGPoint[]{
-                        new CGPoint (100, 200),
-                        new CGPoint (160, 100),
-                        new CGPoint (220, 200)});
-
-                    path.CloseSubpath();
-
-                    //add geometry to graphics context and draw it
-                    g.AddPath(path);
-                    g.DrawPath(CGPathDrawingMode.FillStroke);
-                }
-            }
-        }
-
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
         /// <summary>
         /// Internal use only.  Invoked by the Xamarin iOS designer.
@@ -69,6 +37,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Compass(IntPtr handle) : base(handle)
+        {
+        }
+
+        /// <summary>
+        ///  Initializes a new instance of the <see cref="Compass"/> class with the specified frame.
+        /// </summary>
+        /// <param name="frame">Frame used by the view, expressed in iOS points.</param>
+        public Compass(CGRect frame) : base(frame)
         {
             Initialize();
         }
@@ -83,41 +59,85 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             base.AwakeFromNib();
         }
-        NorthArrowShape _arrow;
         private void Initialize()
         {
             BackgroundColor = UIColor.Clear;
 
-            // At run-time, don't display the sub-views until their dimensions have been calculated
-            if (!DesignTime.IsDesignMode)
-                Hidden = true;
-
-            _arrow = new NorthArrowShape();
-            AddSubview(_arrow);
-
-            InvalidateIntrinsicContentSize();
+            if (Heading == 0 && AutoHide && !DesignTime.IsDesignMode)
+                Alpha = 0;
+            
+           InvalidateIntrinsicContentSize();
         }
+        
+        /// <inheritdoc />
+        public override CGSize IntrinsicContentSize { get; } = new CGSize(DefaultSize, DefaultSize);
+
+        /// <inheritdoc />
+        public override void Draw(CGRect rect)
+        {
+            base.Draw(rect);
+
+            nfloat size = rect.Width > rect.Height ? rect.Height : rect.Width;
+            double c = size * .5;
+            var l = (rect.Width - size) * .5;
+            var t = (rect.Height - size) * .5;
+            CGRect r = new CGRect(l, t, size, size);
+            var context = UIGraphics.GetCurrentContext();
+            context.SetFillColor(UIColor.FromRGB(51, 51, 51).CGColor);
+            context.FillEllipseInRect(r);
+            context.SetStrokeColor(UIColor.White.CGColor);
+            context.StrokeEllipseInRect(r);
+
+            var path = new CGPath();
+            //create geometry
+            path.AddLines(new CGPoint[]{
+                        new CGPoint (c - size * .14 + l, c + t ),
+                        new CGPoint (c + size * .14 + l, c + t),
+                        new CGPoint (c + l, c - size * .34 + t),
+                    });
+            path.CloseSubpath();
+
+            //add geometry to graphics context and draw it
+            context.SetFillColor(UIColor.FromRGB(199, 85, 46).CGColor);
+            context.AddPath(path);
+            context.DrawPath(CGPathDrawingMode.Fill);
+
+            path = new CGPath();
+            //create geometry
+            path.AddLines(new CGPoint[]{
+                        new CGPoint (c - size * .14 + l, c + t ),
+                        new CGPoint (c + size * .14 + l, c + t),
+                        new CGPoint (c + l, c + size * .34 + t),
+                    });
+            path.CloseSubpath();
+            //add geometry to graphics context and draw it
+            context.SetFillColor(UIColor.White.CGColor);
+            context.AddPath(path);
+            context.DrawPath(CGPathDrawingMode.Fill);
+        }
+
+
         private void UpdateCompassRotation(bool transition)
         {
-            SetVisibility(Heading != 0);
-            _arrow.Transform = CGAffineTransform.MakeRotation((float)(Math.PI * Heading / 180d));
+            if (AutoHide) SetVisibility(Heading != 0);
+            this.Transform = CGAffineTransform.MakeRotation((float)(Math.PI * -Heading / 180d));
         }
 
         private void SetVisibility(bool isVisible)
         {
-            Hidden = !isVisible;
+            nfloat alpha = new nfloat(isVisible || DesignTime.IsDesignMode ? 1.0 : 0.0);
+            if (alpha != this.Alpha)
+            {
+                UIView.Animate(0.25, () => this.Alpha = alpha);
+            }
         }
 
-        /// <summary>
-        /// Internal use only.  Invoked by the Xamarin iOS designer.
-        /// </summary>
+        /// <inheritdoc cref="IComponent.Site" />
         ISite IComponent.Site { get; set; }
 
         private EventHandler _disposed;
 
-        /// <summary>
-        /// Internal use only
-        /// </summary>
+        /// <inheritdoc cref="IComponent.Disposed" />
         event EventHandler IComponent.Disposed
         {
             add { _disposed += value; }
