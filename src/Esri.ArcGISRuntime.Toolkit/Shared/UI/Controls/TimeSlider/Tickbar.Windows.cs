@@ -36,7 +36,7 @@ using System.Windows.Media;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    public partial class Tickbar
+    public partial class Tickbar : Panel
     {
         internal static readonly DependencyProperty PositionProperty =
             DependencyProperty.RegisterAttached("Position", typeof(double), typeof(Tickbar), new PropertyMetadata(0.0));

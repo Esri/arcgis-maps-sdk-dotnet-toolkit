@@ -26,7 +26,7 @@ using ContentPresenter = UIKit.UIView;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    public partial class Tickbar
+    public partial class Tickbar : UIView
     {
         private const string _template =
             "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +

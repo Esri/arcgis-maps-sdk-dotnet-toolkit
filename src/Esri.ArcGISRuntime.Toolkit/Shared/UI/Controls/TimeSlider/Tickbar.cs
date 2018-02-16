@@ -30,7 +30,6 @@ using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 #elif __IOS__
 using System.Drawing;
-using Panel = UIKit.UIView;
 using Rect = CoreGraphics.CGRect;
 using ContentPresenter = UIKit.UIView;
 using FrameworkElement = UIKit.UIView;
@@ -53,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     /// <exclude/>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public partial class Tickbar : Panel
+    public partial class Tickbar
     {
         private string _originalTickLabelFormat;
         private List<ContentPresenter> _majorTickmarks = new List<ContentPresenter>();

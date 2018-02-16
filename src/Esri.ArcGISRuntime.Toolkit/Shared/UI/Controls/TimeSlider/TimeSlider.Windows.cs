@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
+#if !XAMARIN
 
 using System;
 using System.Collections.Generic;
@@ -55,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplateVisualState(GroupName = "CommonStates", Name = "Disabled")]
     [TemplateVisualState(GroupName = "FocusStates", Name = "Focused")]
     [TemplateVisualState(GroupName = "FocusStates", Name = "Unfocused")]
-    public partial class TimeSlider
+    public partial class TimeSlider : Control
     {
         private void Initialize()
         {
@@ -384,7 +384,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(TimeStepInterval), typeof(TimeValue), typeof(TimeSlider),
                 new PropertyMetadata(default(TimeValue), OnTimeStepIntervalPropertyChanged));
 
-        private static void OnTimeStepIntervalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => OnTimeStepIntervalPropertyChanged((TimeSlider)d);
+        private static void OnTimeStepIntervalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((TimeSlider)d).OnTimeStepIntervalPropertyChanged();
 
         /// <summary>
         /// Gets the time steps that can be used to set the slider instance's current extent
@@ -509,7 +509,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(IsPlaying), typeof(bool), typeof(TimeSlider), new PropertyMetadata(false, OnIsPlayingPropertyChanged));
 
         private static void OnIsPlayingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
-            OnIsPlayingPropertyChanged((TimeSlider)d, (bool)e.NewValue);
+            ((TimeSlider)d).OnIsPlayingPropertyChanged((bool)e.NewValue);
 
         #region Appearance Properties
         /// <summary>
