@@ -14,13 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __IOS__ || __ANDROID__
+#if __IOS__
 
 using System.Collections.Generic;
 using System.Text;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if __IOS__
-using Brush = UIKit.UIColor;
+using Color = UIKit.UIColor;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -57,12 +57,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Brush _tickFill;
+        private Color _tickFill;
         
         /// <summary>
         /// Gets or sets the fill color for each tick mark
         /// </summary>
-        private Brush TickFillImpl
+        private Color TickFillImpl
         {
             get => _tickFill;
             set
@@ -73,12 +73,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Brush _tickLabelColor;
+        private Color _tickLabelColor;
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark
         /// </summary>
-        private Brush TickLabelColorImpl
+        private Color TickLabelColorImpl
         {
             get => _tickLabelColor;
             set
