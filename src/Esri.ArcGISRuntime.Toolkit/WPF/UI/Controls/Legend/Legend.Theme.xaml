@@ -8,35 +8,40 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="DisplayTitleStyle" TargetType="FrameworkElement">
+    <Style x:Key="DisplayTitleStyle" TargetType="TextBlock">
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsSublayer}" Value="False">
+                <Setter Property="FontWeight" Value="Normal"/>
                 <Setter Property="Visibility" Value="Collapsed"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
     <DataTemplate x:Key="LeafItemTemplate">
-        <controls:LayerLegend LayerContent="{Binding LayerContent}" 
-                              ShowEntireTreeHierarchy="False" 
-                              Margin="10,0" />
+        <StackPanel Style="{StaticResource DisplayLegendStyle}">
+            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+        </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="BranchItemTemplate">
         <StackPanel Style="{StaticResource DisplayLegendStyle}">
-            <TextBlock Text="{Binding LayerContent.Name}" 
-                       Margin="10,0" 
-                       Style="{StaticResource DisplayTitleStyle}"/>
-            <ItemsControl ItemsSource="{Binding Sublayers}" 
-                          ItemTemplate="{StaticResource LeafItemTemplate}"/>
+            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
-    <DataTemplate x:Key="TrunkItemTemplate">
+    <controls:ItemTemplateSelector x:Key="ItemTemplateSelector" 
+                                   BranchItemTemplate="{StaticResource BranchItemTemplate}" 
+                                   LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
+    <DataTemplate x:Key="SublayerItemTemplate">
         <StackPanel Style="{StaticResource DisplayLegendStyle}">
-            <TextBlock Text="{Binding LayerContent.Name}"
-                       Margin="10,0" 
-                       Style="{StaticResource DisplayTitleStyle}"/>
-            <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplate="{StaticResource BranchItemTemplate}"/>
+            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
         </StackPanel>
     </DataTemplate>
+    <controls:ItemTemplateSelector x:Key="SublayerItemTemplateSelector" 
+                                   BranchItemTemplate="{StaticResource SublayerItemTemplate}" 
+                                   LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
     <Style TargetType="{x:Type controls:Legend}">
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
@@ -52,9 +57,9 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel Style="{StaticResource DisplayLegendStyle}">
-                        <TextBlock Text="{Binding LayerContent.Name}" FontWeight="Bold"/>
-                        <controls:LayerLegend LayerContent="{Binding LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0" />
-                        <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplate="{StaticResource TrunkItemTemplate}"/>
+                        <TextBlock Text="{Binding  LayerContent.Name}" FontWeight="Bold" Style="{StaticResource DisplayTitleStyle}"/>
+                        <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+                        <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -65,7 +70,7 @@
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}">
-                            <ItemsControl x:Name="List"
+                        <ItemsControl x:Name="List"
                                           ItemTemplate="{TemplateBinding LayerItemTemplate}"
                                           Margin="{TemplateBinding Padding}"
                                           BorderThickness="0"

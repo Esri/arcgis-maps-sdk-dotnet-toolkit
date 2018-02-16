@@ -69,6 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
                 {
                     (LayerContent as ILoadable).Loaded += Layer_Loaded;
+                    (LayerContent as ILoadable).LoadAsync();
                     return;
                 }
             }
@@ -110,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Layer_Loaded(object sender, EventArgs e)
         {
-            (sender as Layer).Loaded -= Layer_Loaded;
+            (sender as ILoadable).Loaded -= Layer_Loaded;
 #if NETFX_CORE
             var ignore_ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, Refresh);
 #else

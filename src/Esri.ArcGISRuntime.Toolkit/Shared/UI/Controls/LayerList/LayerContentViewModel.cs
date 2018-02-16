@@ -195,6 +195,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private double _currentScale = double.NaN;
         internal void UpdateScaleVisibility(double scale, bool isParentVisible)
         {
+            if (double.IsNaN(scale))
+            {
+                return;
+            }
             IsInScaleRange = isParentVisible && LayerContent.IsVisibleAtScale(scale);
             _currentScale = scale;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInScaleRange)));
