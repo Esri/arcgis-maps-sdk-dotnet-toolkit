@@ -26,7 +26,7 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    public class ItemTemplateSelector : DataTemplateSelector
+    internal class ItemTemplateSelector : DataTemplateSelector
     {
         public DataTemplate LeafItemTemplate { get; set; }
         public DataTemplate BranchItemTemplate { get; set; }
