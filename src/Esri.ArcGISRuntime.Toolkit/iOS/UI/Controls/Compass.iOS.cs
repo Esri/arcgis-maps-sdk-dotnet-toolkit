@@ -65,10 +65,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (Heading == 0 && AutoHide && !DesignTime.IsDesignMode)
                 Alpha = 0;
-            
-           InvalidateIntrinsicContentSize();
+
+            UITapGestureRecognizer tapGesture = new UITapGestureRecognizer(OnTapped);
+            this.AddGestureRecognizer(tapGesture);
+
+            InvalidateIntrinsicContentSize();
         }
-        
+
+        private void OnTapped()
+        {
+            ResetRotation();
+        }
+
         /// <inheritdoc />
         public override CGSize IntrinsicContentSize { get; } = new CGSize(DefaultSize, DefaultSize);
 

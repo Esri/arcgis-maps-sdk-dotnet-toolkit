@@ -119,6 +119,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _northArrow = new NorthArrowShape(this.Context) { Size = size };
             AddView(_northArrow);
             UpdateCompassRotation(false);
+            _northArrow.Click += NorthArrow_Click;
+        }
+
+        private void NorthArrow_Click(object sender, EventArgs e)
+        {
+            ResetRotation();
         }
 
         private void UpdateCompassRotation(bool transition)
