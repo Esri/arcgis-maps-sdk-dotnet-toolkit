@@ -34,40 +34,58 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private class NorthArrowShape : View
         {
-            public NorthArrowShape(Context context) : base(context) { }
-
-
+            internal NorthArrowShape(Context context) : base(context)
+            {
+            }
+            
             /// <inheritdoc />
             protected override void OnDraw(Canvas canvas)
             {
-                // RectF space = new RectF(this.Left, this.Top, this.Right, this.Bottom);
+                float size = MeasuredWidth > MeasuredHeight ? MeasuredHeight : MeasuredWidth;
+                var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip);
+                float c = size * .5f;
+                float l = (this.MeasuredWidth - size) * .5f;
+                float t = (this.MeasuredHeight - size) * .5f;
+
                 Paint paint = new Paint(PaintFlags.AntiAlias);
-                paint.SetShader(new LinearGradient(0, 0, ArrowWidth, 0, Color.DarkRed, Color.Red, Shader.TileMode.Mirror));
+                paint.SetStyle(Paint.Style.Fill);
+                paint.SetARGB(255, 51, 51, 51);
+                canvas.DrawCircle(c + l, c + t, size * .5f, paint);
+                paint.SetStyle(Paint.Style.Stroke);
+                paint.StrokeWidth = strokeWidth;
+                paint.SetARGB(255, 255, 255, 255);
+                canvas.DrawCircle(c + l, c + t, size * .5f - strokeWidth / 2f, paint);
+
+                // Draw north arrow
+                paint.SetStyle(Paint.Style.Fill);
+                paint.SetARGB(255, 199, 85, 46);
                 var path = new Path();
-                path.MoveTo(ArrowWidth / 2, 0);
-                path.LineTo(ArrowWidth / 4 * 3, ArrowHeight / 2);
-                path.LineTo(ArrowWidth / 4, ArrowHeight / 2);
+                path.MoveTo(c - size * .14f + l, c + t);
+                path.LineTo(c + size * .14f + l, c + t);
+                path.LineTo(c + l, c - size * .34f + t);
                 path.Close();
                 canvas.DrawPath(path, paint);
 
-                paint.SetShader(new LinearGradient(0, 0, ArrowWidth, 0, Color.Gray, Color.LightGray, Shader.TileMode.Mirror));
+                // Draw south arrow
+                paint.SetARGB(255, 255, 255, 255);
                 path = new Path();
-                path.MoveTo(ArrowWidth / 4, ArrowHeight / 2);
-                path.LineTo(ArrowWidth / 4 * 3, ArrowHeight / 2);
-                path.LineTo(ArrowWidth / 2, ArrowHeight);
+                path.MoveTo(c - size * .14f + l, c + t);
+                path.LineTo(c + size * .14f + l, c + t);
+                path.LineTo(c + l, c + size * .34f + t);
                 path.Close();
                 canvas.DrawPath(path, paint);
 
                 base.OnDraw(canvas);
-            }
 
-            public int ArrowWidth { get; set; } = 40;
-            public int ArrowHeight { get; set; } = 40;
+                PivotX = size / 2 + l;
+                PivotY = size / 2 + t;
+            }
+            
+            public float Size { get; set; } = (float)DefaultSize;
         }
 
         private static DisplayMetrics s_displayMetrics;
         private static IWindowManager s_windowManager;
-        private RelativeLayout _rootLayout;
         private NorthArrowShape _northArrow;
 
         /// <summary>
@@ -81,40 +99,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public Compass(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
+        public Compass(Context context, IAttributeSet attr) : base(context, attr)
+        {
+            Initialize();
+        }
+        
+        /// <inheritdoc />
+        protected override LayoutParams GenerateDefaultLayoutParams()
+        {
+            var size = (int)CalculateScreenDimension((float)DefaultSize);
+            return new LayoutParams(size, size);
+        }
 
         private void Initialize()
         {
-            // Vertically-oriented layout for containing all scalebar components
-            _rootLayout = new RelativeLayout(Context)
-            {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
-            };
-            _rootLayout.SetGravity(GravityFlags.Top);
-            // TODO
-            Android.Graphics.Drawables.GradientDrawable drawable = new Android.Graphics.Drawables.GradientDrawable();
-            drawable.SetColor(new Color(255,255,255,128));
-            drawable.SetShape(Android.Graphics.Drawables.ShapeType.Oval);
-            drawable.SetStroke((int)CalculateScreenDimension(2), Color.Gray);
-            var size = (int)CalculateScreenDimension(40);
-            drawable.SetSize(size, size);
-            ImageView iv = new ImageView(this.Context);
-            iv.SetImageDrawable(drawable);
-            _rootLayout.AddView(iv);
-
-            _northArrow = new NorthArrowShape(this.Context) { ArrowHeight = size, ArrowWidth = size, PivotX = size / 2, PivotY = size / 2 };
-            _rootLayout.AddView(_northArrow);
-
-            // Add root layout to view
-            AddView(_rootLayout);
-            _rootLayout.RequestLayout();
+            var size = (int)CalculateScreenDimension((float)DefaultSize);
+            _northArrow = new NorthArrowShape(this.Context) { Size = size };
+            AddView(_northArrow);
+            UpdateCompassRotation(false);
         }
 
         private void UpdateCompassRotation(bool transition)
         {
-            //SetVisibility(!AutoHide || Heading != 0);
+            SetVisibility(!AutoHide || Heading != 0, transition);
             _northArrow.Rotation = -(float)this.Heading;
-            _rootLayout.RequestLayout();
         }
 
         /// <inheritdoc />
@@ -123,12 +131,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
 
             // Initialize dimensions of root layout
-            //MeasureChild(_rootLayout, widthMeasureSpec, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
-            MeasureChild(_rootLayout, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(widthMeasureSpec), MeasureSpecMode.AtMost), MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
+            MeasureChild(_northArrow, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(widthMeasureSpec), MeasureSpecMode.AtMost), MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
 
             // Calculate the ideal width and height for the view
-            var desiredWidth = PaddingLeft + PaddingRight + _rootLayout.MeasuredWidth;
-            var desiredHeight = PaddingTop + PaddingBottom + _rootLayout.MeasuredHeight;
+            var desiredWidth = PaddingLeft + PaddingRight + _northArrow.MeasuredWidth;
+            var desiredHeight = PaddingTop + PaddingBottom + _northArrow.MeasuredHeight;
 
             // Get the width and height of the view given any width and height constraints indicated by the width and height spec values
             var width = ResolveSize(desiredWidth, widthMeasureSpec);
@@ -140,12 +147,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             // Forward layout call to the root layout
-            _rootLayout.Layout(PaddingLeft, PaddingTop, _rootLayout.MeasuredWidth + PaddingLeft, _rootLayout.MeasuredHeight + PaddingBottom);
+            _northArrow.Layout(PaddingLeft, PaddingTop, _northArrow.MeasuredWidth + PaddingLeft, _northArrow.MeasuredHeight + PaddingBottom);
         }
 
-        private void SetVisibility(bool isVisible)
+        private void SetVisibility(bool isVisible, bool animate = true)
         {
-            Visibility = isVisible ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Gone;
+            if (animate)
+            {
+                _northArrow.Animate().Alpha(isVisible ? 1f : .0f).SetDuration(200);
+            }
+            else
+            {
+                _northArrow.Alpha = isVisible ? 1f : .0f;
+            }
         }
 
         // Gets a display metrics object for calculating display dimensions
@@ -167,8 +181,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             return s_displayMetrics;
         }
+
         // Calculates a screen dimension given a specified dimension in raw pixels
-        private float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip)
+        internal static float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip)
         {
             return !DesignTime.IsDesignMode ?
                 TypedValue.ApplyDimension(screenUnitType, pixels, GetDisplayMetrics()) : pixels;
