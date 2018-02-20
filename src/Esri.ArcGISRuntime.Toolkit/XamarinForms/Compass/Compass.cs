@@ -43,7 +43,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 _action = action;
             }
 
+#pragma warning disable CS0067 // Event never used because it never changes, but is required by the interface
             public event EventHandler CanExecuteChanged;
+#pragma warning restore CS0067
 
             public bool CanExecute(object parameter)
             {
@@ -58,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void ResetRotation()
         {
-            var view = GetGeoView(this);
+            var view = GeoView;
             if (view is MapView)
             {
                 ((MapView)view).SetViewpointRotationAsync(0);
@@ -67,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var sv = (SceneView)view;
                 var c = sv.Camera;
-                sv.SetViewpointCamera(c.RotateTo(0, c.Pitch, c.Roll));
+                sv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
             }
         }
 
@@ -106,7 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         /// <summary>
         /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
-        // </summary>
+        /// </summary>
         public bool AutoHide
         {
             get { return (bool)GetValue(AutoHideProperty); }
