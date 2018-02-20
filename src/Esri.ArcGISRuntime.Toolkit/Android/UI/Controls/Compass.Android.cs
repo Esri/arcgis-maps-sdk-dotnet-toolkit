@@ -87,6 +87,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static DisplayMetrics s_displayMetrics;
         private static IWindowManager s_windowManager;
         private NorthArrowShape _northArrow;
+        private ViewPropertyAnimator _fadeInAnimation;
+        private ViewPropertyAnimator _fadeOutAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
@@ -154,7 +156,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (animate)
             {
-                _northArrow.Animate().Alpha(isVisible ? 1f : .0f).SetDuration(200);
+                if(isVisible)
+                {
+                    if (_fadeInAnimation != null)
+                        return; //Already fading in
+                    if (_fadeOutAnimation != null)
+                    {
+                        _fadeOutAnimation.Cancel();
+                        _fadeOutAnimation = null;
+                    }
+                    _fadeInAnimation = _northArrow.Animate().Alpha(1f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeInAnimation = null; })); ;
+                }
+                else
+                {
+                    if (_fadeOutAnimation != null)
+                        return; //Already fading out
+                    if (_fadeInAnimation != null)
+                    {
+                        _fadeInAnimation.Cancel();
+                        _fadeInAnimation = null;
+                    }
+                    _fadeOutAnimation = _northArrow.Animate().Alpha(0f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeOutAnimation = null; }));
+                }
             }
             else
             {
