@@ -14,41 +14,30 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__
-#if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
-#else
-using System.Windows.Controls;
-#endif
+#if XAMARIN && !__IOS__
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
+    /// A control that renders a <see cref="Symbology.Symbol"/>.
     /// </summary>
-    public partial class SymbolDisplay : Control
+    public partial class SymbolDisplay 
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
-        /// </summary>
-        public SymbolDisplay()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
-        { Initialize(); }
-        
-
+        private Symbology.Symbol _symbol;
         /// <summary>
         /// Gets or sets the symbol to render
         /// </summary>
-        public Symbology.Symbol Symbol
+        private Symbology.Symbol SymbolImpl
         {
-            get => SymbolImpl;
-            set => SymbolImpl = value;
+            get => _symbol;
+            set
+            {
+                if(_symbol != value)
+                {
+                    _symbol = value;
+                    Refresh();
+                }
+            }
         }
     }
 }
