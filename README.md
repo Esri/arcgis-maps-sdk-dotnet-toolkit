@@ -31,7 +31,7 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
-|Compass   |*   |*   |   |   |   |
+|Compass   |*   |*   | * | * | * |
 |FeatureDataField   |*   |*   |   |   |   |
 |Legend   |*   |*   |   |   |   |
 |MeasureToolbar   |*   |*   |   |   |   |
