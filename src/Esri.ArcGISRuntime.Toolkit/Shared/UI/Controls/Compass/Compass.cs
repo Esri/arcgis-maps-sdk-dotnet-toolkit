@@ -14,9 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Esri.ArcGISRuntime.UI.Controls;
+using System.ComponentModel;
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 #elif __IOS__
+using System.ComponentModel;
 using Control = UIKit.UIView;
 #elif __ANDROID__
 using Control = Android.Views.ViewGroup;
@@ -32,6 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class Compass : Control
     {
         private const double DefaultSize = 30;
+        private bool _headingSetByGeoView;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
@@ -40,15 +44,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
-            {
-#if __IOS__
-#endif
+        {
             Initialize();
         }
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
         /// </summary>
+        /// <remarks>
+        /// This property is read-only if the <see cref="GeoView"/> property is assigned.
+        /// </remarks>
         public double Heading
         {
             get { return HeadingImpl; }
@@ -62,6 +67,52 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get { return AutoHideImpl; }
             set { AutoHideImpl = value; }
+        }
+
+        private void WireGeoViewPropertyChanged(GeoView oldGeoView, GeoView newGeoView)
+        {
+            var inpc = oldGeoView as INotifyPropertyChanged;
+            if (inpc != null)
+            {
+                inpc.PropertyChanged -= GeoView_PropertyChanged;
+            }
+
+            inpc = newGeoView as INotifyPropertyChanged;
+            if (inpc != null)
+            {
+                inpc.PropertyChanged += GeoView_PropertyChanged;
+            }
+            UpdateCompassFromGeoView(newGeoView);
+        }
+
+        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var view = GeoView;
+            if (view is MapView && e.PropertyName == nameof(MapView.MapRotation) ||
+                view is SceneView && e.PropertyName == nameof(SceneView.Camera))
+                UpdateCompassFromGeoView(GeoView);
+        }
+
+        private void UpdateCompassFromGeoView(GeoView view)
+        {
+            _headingSetByGeoView = true;
+            Heading = (view is MapView) ? ((MapView)view).MapRotation : (view is SceneView ? ((SceneView)view).Camera.Heading : 0);
+            _headingSetByGeoView = false;
+        }
+
+        private void ResetRotation()
+        {
+            var view = GeoView;
+            if (view is MapView)
+            {
+                ((MapView)view).SetViewpointRotationAsync(0);
+            }
+            else if (view is SceneView)
+            {
+                var sv = (SceneView)view;
+                var c = sv.Camera;
+                sv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
+            }
         }
     }
 }

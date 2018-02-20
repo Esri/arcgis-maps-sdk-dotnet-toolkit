@@ -23,20 +23,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 
             mapView = FindViewById<MapView>(Resource.Id.mapView);
             mapView.Map = new Map(Basemap.CreateStreets());
-            mapView.ViewpointChanged += MapView_ViewpointChanged;
 
             scaleLine = FindViewById<UI.Controls.ScaleLine>(Resource.Id.scaleLine);
+            scaleLine.MapView = mapView;
             compass = FindViewById<UI.Controls.Compass>(Resource.Id.compass);
-        }
-
-        private void MapView_ViewpointChanged(object sender, System.EventArgs e)
-        {
-            compass.Heading = mapView.MapRotation;
-            RunOnUiThread(() =>
-            {
-                scaleLine.MapScale = mapView.MapScale;
-                compass.Heading = mapView.MapRotation;
-            });
+            compass.GeoView = mapView;
         }
     }
 }

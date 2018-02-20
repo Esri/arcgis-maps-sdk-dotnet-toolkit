@@ -33,6 +33,19 @@
     <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
     <Resource Include="**\*.png" Exclude="**\bin\**\*.png;**\obj\**\*.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="LocalizedStrings\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="LocalizedStrings\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="..\Shared\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

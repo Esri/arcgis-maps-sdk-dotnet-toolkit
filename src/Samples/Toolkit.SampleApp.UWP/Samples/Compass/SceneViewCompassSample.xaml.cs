@@ -31,13 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Compass
         }
 
         public Scene Scene { get; }
-
-        private void Compass_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            // When tapping the compass, reset the rotation
-            RotateToHeadingAsync(0);
-        }
-
+        
         private void RotateLeft_Click(object sender, RoutedEventArgs e)
         {
             RotateToHeadingAsync(-30, true);

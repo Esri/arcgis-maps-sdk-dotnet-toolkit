@@ -24,12 +24,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Compass
             sceneView.Scene = new Scene(BasemapType.Imagery);
         }
         
-        private void Compass_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            // When tapping the compass, reset the rotation
-            RotateToHeadingAsync(0);
-        }
-
         private void RotateLeft_Click(object sender, RoutedEventArgs e)
         {
             RotateToHeadingAsync(-30, true);

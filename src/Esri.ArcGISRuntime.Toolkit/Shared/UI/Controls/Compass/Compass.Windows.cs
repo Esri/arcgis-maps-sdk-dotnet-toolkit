@@ -16,15 +16,18 @@
 
 #if !XAMARIN
 
+using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.ComponentModel;
 using System.Windows;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 #else
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 #endif
@@ -48,6 +51,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _isVisible = false;
             UpdateCompassRotation(false);
         }
+
+#if NETFX_CORE
+        /// <inheritdoc />
+        protected override void OnTapped(TappedRoutedEventArgs e)
+        {
+            base.OnTapped(e);
+            ResetRotation();
+        }
+#else
+        /// <inheritdoc />
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            ResetRotation();
+        }
+#endif
 
         /// <summary>
         /// Gets or sets the platform-specific implementation of the <see cref="HeadingProperty"/> property
@@ -73,6 +92,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnHeadingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var compass = (Compass)d;
+            if (compass.GeoView != null && !compass._headingSetByGeoView)
+                throw new InvalidOperationException("The Heading Property is read-only when the GeoView property has been assigned");
             compass.UpdateCompassRotation(true);
         }
 
@@ -125,6 +146,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isVisible = true;
                 VisualStateManager.GoToState(this, "ShowCompass", useTransitions);
             }
+        }
+        
+        /// <summary>
+        /// Gets or sets the GeoView property that can be attached to a Compass control to accurately set the heading, instead of
+        /// setting the <see cref="Compass.Heading"/> property directly.
+        /// </summary>
+        public GeoView GeoView
+        {
+            get { return GetValue(GeoViewProperty) as GeoView; }
+            set { SetValue(GeoViewProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="GeoView"/> Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty GeoViewProperty =
+            DependencyProperty.Register(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), new PropertyMetadata(null, OnGeoViewPropertyChanged));
+
+        private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var compass = (Compass)d;
+            compass.WireGeoViewPropertyChanged(e.OldValue as GeoView, e.NewValue as GeoView);
+        }
+
+        private void SetVisibility(bool isVisible)
+        {
+            Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }
