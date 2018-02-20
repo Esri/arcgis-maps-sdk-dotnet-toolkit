@@ -11,7 +11,7 @@
     <PackageReleaseNotes>v100.2-beta3: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.2-beta3 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType></RepositoryType>
-    <Copyright>Copyright © 2014-2017 Esri.</Copyright>
+    <Copyright>Copyright © 2014-2018 Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
 
@@ -51,7 +51,7 @@
         <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\Output\intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
       </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" PrivateAssets="all" />
+        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.2.1" PrivateAssets="all" />
       </ItemGroup>
       <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
