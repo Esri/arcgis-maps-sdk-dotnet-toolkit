@@ -14,7 +14,7 @@
             <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
-    <controls:ItemTemplateSelector x:Key="ItemTemplateSelector" 
+    <controls:LegendItemTemplateSelector x:Key="ItemTemplateSelector" 
                                    BranchItemTemplate="{StaticResource BranchItemTemplate}" 
                                    LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
     <DataTemplate x:Key="SublayerItemTemplate">
@@ -24,7 +24,7 @@
             <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
         </StackPanel>
     </DataTemplate>
-    <controls:ItemTemplateSelector x:Key="SublayerItemTemplateSelector" 
+    <controls:LegendItemTemplateSelector x:Key="SublayerItemTemplateSelector" 
                                    BranchItemTemplate="{StaticResource SublayerItemTemplate}" 
                                    LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
     <Style TargetType="controls:Legend">

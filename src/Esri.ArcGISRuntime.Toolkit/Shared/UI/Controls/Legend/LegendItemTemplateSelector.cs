@@ -26,7 +26,10 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    internal class ItemTemplateSelector : DataTemplateSelector
+    /// <summary>
+    /// Determines which DataTemplate to use for a given layer content item in a Legend control.
+    /// </summary>
+    internal class LegendItemTemplateSelector : DataTemplateSelector
     {
         public DataTemplate LeafItemTemplate { get; set; }
         public DataTemplate BranchItemTemplate { get; set; }
