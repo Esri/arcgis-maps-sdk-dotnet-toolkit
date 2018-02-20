@@ -1,0 +1,82 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <Style x:Key="DisplayLegendStyle" TargetType="FrameworkElement">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding DisplayLegend}" Value="False">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="DisplayTitleStyle" TargetType="TextBlock">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSublayer}" Value="False">
+                <Setter Property="FontWeight" Value="Normal"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <DataTemplate x:Key="LeafItemTemplate">
+        <StackPanel Style="{StaticResource DisplayLegendStyle}">
+            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="BranchItemTemplate">
+        <StackPanel Style="{StaticResource DisplayLegendStyle}">
+            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
+        </StackPanel>
+    </DataTemplate>
+    <controls:LegendItemTemplateSelector x:Key="ItemTemplateSelector" 
+                                   BranchItemTemplate="{StaticResource BranchItemTemplate}" 
+                                   LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
+    <DataTemplate x:Key="SublayerItemTemplate">
+        <StackPanel Style="{StaticResource DisplayLegendStyle}">
+            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
+        </StackPanel>
+    </DataTemplate>
+    <controls:LegendItemTemplateSelector x:Key="SublayerItemTemplateSelector" 
+                                   BranchItemTemplate="{StaticResource SublayerItemTemplate}" 
+                                   LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
+    <Style TargetType="{x:Type controls:Legend}">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="BorderBrush"
+                Value="{x:Null}" />
+        <Setter Property="Background"
+                Value="{x:Null}" />
+        <Setter Property="LayerItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Style="{StaticResource DisplayLegendStyle}">
+                        <TextBlock Text="{Binding  LayerContent.Name}" FontWeight="Bold" Style="{StaticResource DisplayTitleStyle}"/>
+                        <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+                        <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:Legend}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}">
+                        <ItemsControl x:Name="List"
+                                          ItemTemplate="{TemplateBinding LayerItemTemplate}"
+                                          Margin="{TemplateBinding Padding}"
+                                          BorderThickness="0"
+                                          Padding="0" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

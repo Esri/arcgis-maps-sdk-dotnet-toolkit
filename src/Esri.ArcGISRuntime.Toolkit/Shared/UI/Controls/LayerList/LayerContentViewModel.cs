@@ -1,26 +1,29 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2016 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Esri.ArcGISRuntime.UI;
-using System.ComponentModel;
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-#else
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
-using System.Windows.Media;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -30,9 +33,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private DelegateCommand _zoomToCommand;
         private WeakReference<GeoView> _view;
         private bool _generateLegend;
-
+        private SynchronizationContext _context;
         public LayerContentViewModel(ILayerContent layerContent, WeakReference<GeoView> view, Symbology.Symbol symbol = null, bool generateLegend = true)
         {
+            _context = SynchronizationContext.Current ?? new SynchronizationContext();
             LayerContent = layerContent;
             _view = view;
             Symbol = symbol;
@@ -41,6 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 (LayerContent as INotifyPropertyChanged).PropertyChanged += LayerContentViewModel_PropertyChanged;
             }
+
             if (LayerContent.SublayerContents is INotifyCollectionChanged)
             {
                 var incc = LayerContent.SublayerContents as INotifyCollectionChanged;
@@ -52,9 +57,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (layerContent is Esri.ArcGISRuntime.ILoadable)
             {
-                var l = (layerContent as Esri.ArcGISRuntime.ILoadable);
+                var l = layerContent as Esri.ArcGISRuntime.ILoadable;
                 ReloadCommand = _reloadCommand = new DelegateCommand(
-                    (s) => { l.RetryLoadAsync(); UpdateLoadingStatus(); }, (s) => { return l.LoadStatus == Esri.ArcGISRuntime.LoadStatus.FailedToLoad; });
+                    (s) =>
+                    {
+                        l.RetryLoadAsync();
+                        UpdateLoadingStatus();
+                    },
+                    (s) =>
+                    {
+                        return l.LoadStatus == Esri.ArcGISRuntime.LoadStatus.FailedToLoad;
+                    });
                 UpdateLoadingStatus();
             }
             else
@@ -64,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (LayerContent is Layer)
             {
-                Layer layer = (LayerContent as Layer);
+                Layer layer = LayerContent as Layer;
                 GeoView gview;
                 if (layer.LoadStatus != LoadStatus.NotLoaded && _view.TryGetTarget(out gview))
                 {
@@ -73,35 +86,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var viewState = gview.GetLayerViewState(layer);
                         UpdateLayerViewState(viewState);
                     }
-                    catch(ArgumentException)
-                    { }
+                    catch (ArgumentException)
+                    {
+                    }
                 }
                 else
+                {
                     UpdateLayerViewState(null);
+                }
             }
 
-            ZoomToCommand = _zoomToCommand = new DelegateCommand((s) =>
-            {
-                GeoView gview;
-                bool hasView = _view.TryGetTarget(out gview);
-                if (hasView)
+            ZoomToCommand = _zoomToCommand = new DelegateCommand(
+                (s) =>
                 {
-                    var vp = GetExtent();
-                    if (vp != null)
-                        gview.SetViewpointAsync(vp);
-                }
-            }, (s) =>
-            {
-                GeoView gview;
-                return _view.TryGetTarget(out gview) && GetExtent() != null;
-            });
+                    GeoView gview;
+                    bool hasView = _view.TryGetTarget(out gview);
+                    if (hasView)
+                    {
+                        var vp = GetExtent();
+                        if (vp != null)
+                        {
+                            gview.SetViewpointAsync(vp);
+                        }
+                    }
+                }, (s) =>
+                {
+                    GeoView gview;
+                    return _view.TryGetTarget(out gview) && GetExtent() != null;
+                });
         }
+
         public Symbology.Symbol Symbol { get; }
 
         private void OnLayerContentLoaded(object sender, EventArgs e)
         {
             _isSublayersInitialized = false;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+            _context.Post((o) =>
+               {
+                   PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
+               }, null);
         }
 
         private async void BuildSublayerList()
@@ -114,9 +137,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     loadable.Loaded += OnLayerContentLoaded;
                 }
             }
+
             if (LayerContent.SublayerContents != null && LayerContent.SublayerContents.Count > 0)
             {
-                _sublayers = new List<LayerContentViewModel>(LayerContent.SublayerContents.Where(t => t.ShowInLegend).Select(t => new LayerContentViewModel(t, _view, null, _generateLegend))).ToArray();
+                _sublayers = new List<LayerContentViewModel>(LayerContent.SublayerContents.ToArray().Where(t => t.ShowInLegend).Select(t => new LayerContentViewModel(t, _view, null, _generateLegend))).ToArray();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
             }
             else
@@ -134,6 +158,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         return;
                     }
+
                     if (legend != null && legend.Count > 0)
                     {
                         _sublayers = new List<LayerContentViewModel>(legend.Select(l => new LayerContentViewModel(new LegendContentInfo(l, LayerContent.IsVisibleAtScale), _view, l.Symbol, _generateLegend)));
@@ -141,6 +166,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                 }
             }
+
             if (_sublayers != null && !double.IsNaN(_currentScale))
             {
                 foreach (var item in _sublayers)
@@ -150,13 +176,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private double _currentScale = double.NaN;
+        private bool _filterByVisibleScaleRange = true;
+        internal void UpdateLegendVisiblity(bool filterByVisibleScaleRange)
+        {
+            if (_filterByVisibleScaleRange == filterByVisibleScaleRange)
+                return;
+            _filterByVisibleScaleRange = filterByVisibleScaleRange;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
+            if (Sublayers != null)
+            {
+                foreach (var item in Sublayers)
+                {
+                    item.UpdateLegendVisiblity(filterByVisibleScaleRange);
+                }
+            }
+        }
 
+        private double _currentScale = double.NaN;
         internal void UpdateScaleVisibility(double scale, bool isParentVisible)
         {
+            if (double.IsNaN(scale))
+            {
+                return;
+            }
             IsInScaleRange = isParentVisible && LayerContent.IsVisibleAtScale(scale);
             _currentScale = scale;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInScaleRange)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
             if (Sublayers != null)
             {
                 foreach (var item in Sublayers)
@@ -165,11 +211,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-    
 
         private class LegendContentInfo : ILayerContent
         {
-            Func<double, bool> _visibleAtScaleCalculation;
+            private Func<double, bool> _visibleAtScaleCalculation;
+
             public LegendContentInfo(LegendInfo legend, Func<double, bool> visibleAtScaleCalculation)
             {
                 Name = legend.Name;
@@ -207,8 +253,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (LayerContent is Layer)
             {
                 var ext = ((Layer)LayerContent).FullExtent;
-                if (ext != null) return new Viewpoint(ext);
+                if (ext != null)
+                {
+                    return new Viewpoint(ext);
+                }
             }
+
             return null;
         }
 
@@ -225,6 +275,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
                     incc.CollectionChanged += listener.OnEvent;
                 }
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Sublayers)));
             }
             else if (e.PropertyName == nameof(ILoadable.LoadStatus))
@@ -242,7 +293,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get
             {
-                if(!_isSublayersInitialized) //Lazy initalization of sublayers
+
+                // Lazy initalization of sublayers
+                if (!_isSublayersInitialized)
                 {
                     _isSublayersInitialized = true;
                     BuildSublayerList();
@@ -250,7 +303,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return _sublayers;
             }
         }
-
+        
         internal void UpdateLayerViewState(LayerViewState state)
         {
             UpdateLoadingStatus();
@@ -285,6 +338,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 UpdateError((LayerContent as ILoadable).LoadError?.Message);
                 UpdateIsActive(false);
             }
+
             if (IsLoading != isLoading)
             {
                 IsLoading = isLoading;
@@ -304,10 +358,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     UpdateIsActive(false);
                 }
                 else
+                {
                     Error = null;
+                }
+
                 _reloadCommand?.RaiseCanExecuteChanged();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasError)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Error)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
             }
         }
 
@@ -317,12 +375,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 IsInScaleRange = isInRange;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInScaleRange)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
             }
         }
 
         public bool IsInScaleRange { get; private set; } = true;
 
         public bool HasError { get; private set; }
+
+        public bool DisplayLegend => !HasError && (!_filterByVisibleScaleRange || IsInScaleRange);
+
+        public bool IsSublayer => LayerContent is ArcGISSublayer;
 
         public string Error { get; private set; }
 
@@ -338,16 +401,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private class DelegateCommand : System.Windows.Input.ICommand
         {
-            Action<object> _execute;
-            Func<object, bool> _canExecute;
-            public DelegateCommand(Action execute) : this((o) => { execute(); }, null)
+            private Action<object> _execute;
+            private Func<object, bool> _canExecute;
+
+            public DelegateCommand(Action execute)
+                : this((o) => { execute(); }, null)
             {
             }
+
             public DelegateCommand(Action<object> execute, Func<object, bool> canExecute)
             {
                 _execute = execute;
                 _canExecute = canExecute;
             }
+
             public event EventHandler CanExecuteChanged;
 
             internal void RaiseCanExecuteChanged()

@@ -24,7 +24,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:LayerLegend}">
-                    <ItemsControl x:Name="ItemsList" 
+                        <ItemsControl x:Name="ItemsList" 
                               ItemTemplate="{TemplateBinding ItemTemplate}" 
                               ItemsPanel="{TemplateBinding ItemsPanel}" />
                 </ControlTemplate>

@@ -13,42 +13,39 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
+
 #if !XAMARIN
+using System.Linq;
 #if NETFX_CORE
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-#elif __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
 #else
+using System.Windows;
 using System.Windows.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
+    /// Determines which DataTemplate to use for a given layer content item in a Legend control.
     /// </summary>
-    public partial class SymbolDisplay : Control
+    internal class LegendItemTemplateSelector : DataTemplateSelector
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
-        /// </summary>
-        public SymbolDisplay()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
-        { Initialize(); }
-        
+        public DataTemplate LeafItemTemplate { get; set; }
+        public DataTemplate BranchItemTemplate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the symbol to render
-        /// </summary>
-        public Symbology.Symbol Symbol
+#if NETFX_CORE
+            protected override DataTemplate SelectTemplateCore
+#else
+            public override DataTemplate SelectTemplate
+#endif
+            (object item, DependencyObject container)
         {
-            get => SymbolImpl;
-            set => SymbolImpl = value;
+            if ((item as LayerContentViewModel)?.Sublayers?.Any() ?? false)
+                return BranchItemTemplate;
+            return LeafItemTemplate;
         }
+
     }
 }
 #endif

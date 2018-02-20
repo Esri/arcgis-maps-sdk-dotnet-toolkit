@@ -9,9 +9,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Legend
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LegendSample : Page
+    public sealed partial class LayerLegendSample : Page
     {
-        public LegendSample()
+        public LayerLegendSample()
         {
             this.InitializeComponent();
         }

@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:SymbolDisplay">
-                    <Image x:Name="image" />
+                    <Image x:Name="image" Stretch="Fill"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

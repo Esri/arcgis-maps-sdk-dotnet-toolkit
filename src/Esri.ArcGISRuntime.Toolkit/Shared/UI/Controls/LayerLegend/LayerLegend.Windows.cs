@@ -19,14 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
-using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #else
+using System.Windows;
 using System.Windows.Controls;
 #endif
 
@@ -35,15 +34,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The Legend Control that generates a list of Legend Items for a Layer
     /// </summary>
-    public class LayerLegend : Control
+    public partial class LayerLegend
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LayerLegend"/> class.
-        /// </summary>
-        public LayerLegend()
-        {
-            DefaultStyleKey = typeof(LayerLegend);
-        }
+        private void Initialize() => DefaultStyleKey = typeof(LayerLegend);
 
         /// <inheritdoc/>
 #if NETFX_CORE
@@ -53,13 +46,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
-            UpdateLegend();
+            Refresh();
+        }
+                
+        private void Refresh()
+        {
+            var ctrl = GetTemplateChild("ItemsList") as ItemsControl;
+
+            if (ctrl == null)
+            {
+                return;
+            }
+
+            if (LayerContent == null)
+            {
+                ctrl.ItemsSource = null;
+                return;
+            }
+
+            if (LayerContent is ILoadable)
+            {
+                if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
+                {
+                    (LayerContent as ILoadable).Loaded += Layer_Loaded;
+                    (LayerContent as ILoadable).LoadAsync();
+                    return;
+                }
+            }
+
+            var items = new ObservableCollection<LegendInfo>();
+            ctrl.ItemsSource = items;
+            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
         }
 
         /// <summary>
         /// Gets or sets the layer to display the legend for.
         /// </summary>
-        public ILayerContent LayerContent
+        private ILayerContent LayerContentImpl
         {
             get { return (ILayerContent)GetValue(LayerProperty); }
             set { SetValue(LayerProperty, value); }
@@ -69,73 +92,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="LayerContent"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty LayerProperty =
-            DependencyProperty.Register(nameof(LayerContent), typeof(ILayerContent), typeof(LayerLegend), new PropertyMetadata(null, (d, e) => (d as LayerLegend)?.UpdateLegend()));
+            DependencyProperty.Register(nameof(LayerContent), typeof(ILayerContent), typeof(LayerLegend), new PropertyMetadata(null, (d, e) => (d as LayerLegend)?.Refresh()));
 
-        private void UpdateLegend()
+        /// <summary>
+        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
+        /// </summary>
+        private bool ShowEntireTreeHierarchyImpl
         {
-            var ctrl = GetTemplateChild("ItemsList") as ItemsControl;
-            if (ctrl == null || LayerContent == null)
-            {
-                if (ctrl != null)
-                {
-                    ctrl.ItemsSource = null;
-                }
-
-                return;
-            }
-
-            if (LayerContent is ILoadable)
-            {
-                if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
-                {
-                    (LayerContent as ILoadable).Loaded += Layer_Loaded;
-                    return;
-                }
-            }
-
-            var items = new ObservableCollection<LegendInfo>();
-            ctrl.ItemsSource = items;
-            LoadRecursive(items, LayerContent, ShowEntireTreeHiarchy);
+            get { return (bool)GetValue(ShowEntireTreeHierarchyProperty); }
+            set { SetValue(ShowEntireTreeHierarchyProperty, value); }
         }
 
-        private async void LoadRecursive(IList<LegendInfo> itemsList, ILayerContent content, bool recursive)
-        {
-            if (content == null)
-            {
-                return;
-            }
-
-            try
-            {
-#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
-                var legendInfo = await content.GetLegendInfosAsync();
-#pragma warning restore ESRI1800
-                foreach (var item in legendInfo)
-                {
-                    itemsList.Add(item);
-                }
-            }
-            catch
-            {
-                return;
-            }
-
-            if (recursive)
-            {
-                foreach (var item in content.SublayerContents)
-                {
-                    LoadRecursive(itemsList, item, recursive);
-                }
-            }
-        }
+        /// <summary>
+        /// Identifies the <see cref="ShowEntireTreeHierarchy"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowEntireTreeHierarchyProperty =
+            DependencyProperty.Register(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.Refresh()));
 
         private void Layer_Loaded(object sender, EventArgs e)
         {
-            (sender as Layer).Loaded -= Layer_Loaded;
+            (sender as ILoadable).Loaded -= Layer_Loaded;
 #if NETFX_CORE
-            var ignore_ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, UpdateLegend);
+            var ignore_ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, Refresh);
 #else
-            var ignore = Dispatcher.InvokeAsync(UpdateLegend);
+            var ignore = Dispatcher.InvokeAsync(Refresh);
 #endif
         }
 
@@ -168,21 +148,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty ItemsPanelProperty =
             DependencyProperty.Register(nameof(ItemsPanel), typeof(ItemsPanelTemplate), typeof(LayerLegend), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hiarchy should be rendered
-        /// </summary>
-        public bool ShowEntireTreeHiarchy
-        {
-            get { return (bool)GetValue(ShowEntireTreeHiarchyProperty); }
-            set { SetValue(ShowEntireTreeHiarchyProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ShowEntireTreeHiarchy"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ShowEntireTreeHiarchyProperty =
-            DependencyProperty.Register(nameof(ShowEntireTreeHiarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.UpdateLegend()));
     }
 }
 #endif
