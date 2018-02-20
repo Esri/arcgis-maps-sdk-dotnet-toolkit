@@ -17,7 +17,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
-    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.2.0" />
+    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.2.1" />
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="LocalizedStrings\en-US\Resources.resw" />

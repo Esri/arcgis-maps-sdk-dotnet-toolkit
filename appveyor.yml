@@ -10,6 +10,7 @@ nuget:
 before_build:
 - cmd: >-
     msbuild /t:restore src/Esri.ArcGISRuntime.Toolkit.sln
+    
     msbuild /t:restore src/Esri.ArcGISRuntime.Toolkit.sln
 build:
   project: src/Esri.ArcGISRuntime.Toolkit.sln

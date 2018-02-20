@@ -17,7 +17,7 @@
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.2.0">
+    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.2.1">
       <ExcludeAssets>contentFiles;build</ExcludeAssets>
       <IncludeAssets>compile</IncludeAssets>
       <PrivateAssets></PrivateAssets>
