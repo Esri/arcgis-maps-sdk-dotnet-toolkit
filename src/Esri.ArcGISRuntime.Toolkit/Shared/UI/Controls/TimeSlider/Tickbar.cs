@@ -15,18 +15,27 @@
 //  ******************************************************************************/
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
-
-#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+#if !__IOS__ && !__ANDROID__
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+#if NETFX_CORE
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Markup;
+using Windows.UI.Xaml.Media;
+#else
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Markup;
 using System.Windows.Media;
-using Esri.ArcGISRuntime.Toolkit.Internal;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -57,8 +66,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (_defaultTickmarkTemplate == null)
             {
+#if NETFX_CORE
+                _defaultTickmarkTemplate = XamlReader.Load(_template) as DataTemplate;
+#else
                 System.IO.MemoryStream stream = new System.IO.MemoryStream(UTF8Encoding.Default.GetBytes(_template));
-                _defaultTickmarkTemplate = System.Windows.Markup.XamlReader.Load(stream) as DataTemplate;
+                _defaultTickmarkTemplate = XamlReader.Load(stream) as DataTemplate;
+#endif
             }
         }
         
@@ -119,7 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     var prospectiveInterval = i;
                     var allowsEqualNumberOfTicksOnEnds = false;
-                    doMajorTicksCollide = false;
 
                     // Check that the prospective interval between major ticks results in an equal number of minor
                     // ticks on both ends of the tick bar
@@ -147,6 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // The index is calculated such that there will be an equal number of minor ticks before and
                     // after the first and last major tick mark.
                     firstMajorTickIndex = (int)Math.Truncate(((tickCount - 1) % prospectiveInterval) / 2d);
+                    doMajorTicksCollide = false;
 
                     // With the given positioning of major tick marks, check whether they (i.e. their labels) will overlap
                     for (var j = firstMajorTickIndex; j < tickCount - prospectiveInterval; j += i)
@@ -261,7 +274,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty TickmarkPositionsProperty =
             DependencyProperty.Register(nameof(TickmarkPositions), typeof(IEnumerable<double>),
-            typeof(Tickbar), new PropertyMetadata(OnTickmarkPositionsPropertyChanged));
+            typeof(Tickbar), new PropertyMetadata(default(IEnumerable<double>), OnTickmarkPositionsPropertyChanged));
 
         private static void OnTickmarkPositionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -331,7 +344,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="TickmarkDataSources"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TickmarkDataSourcesProperty =
-            DependencyProperty.Register(nameof(TickmarkDataSources), typeof(IEnumerable<object>), typeof(Tickbar), new PropertyMetadata(OnTickMarkDataSourcesPropertyChanged));
+            DependencyProperty.Register(nameof(TickmarkDataSources), typeof(IEnumerable<object>), typeof(Tickbar),
+            new PropertyMetadata(default(IEnumerable<object>), OnTickMarkDataSourcesPropertyChanged));
 
         private static void OnTickMarkDataSourcesPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -364,7 +378,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             c.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding()
             {
                 Source = this,
-                BindsDirectlyToSource = true,
                 Path = new PropertyPath(nameof(MinorTickmarkTemplate)),
             });
             Children.Add(c);
@@ -381,7 +394,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             c.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding()
             {
                 Source = this,
-                BindsDirectlyToSource = true,
                 Path = new PropertyPath(nameof(MajorTickmarkTemplate))
             });
 
@@ -406,7 +418,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="MinorTickmarkTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty MinorTickmarkTemplateProperty =
-            DependencyProperty.Register(nameof(MinorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar));
+            DependencyProperty.Register(nameof(MinorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar), null);
 
         /// <summary>
         /// Gets or sets the item template for each major tick mark
@@ -421,7 +433,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="MajorTickmarkTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty MajorTickmarkTemplateProperty =
-            DependencyProperty.Register(nameof(MajorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar));
+            DependencyProperty.Register(nameof(MajorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar), null);
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark
@@ -467,7 +479,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="ShowTickLabels"/> dependency property
         /// </summary>
         public static readonly DependencyProperty ShowTickLabelsProperty =
-            DependencyProperty.Register(nameof(ShowTickLabels), typeof(bool), typeof(Tickbar), new PropertyMetadata(OnShowTickLabelsPropertyChanged));
+            DependencyProperty.Register(nameof(ShowTickLabels), typeof(bool), typeof(Tickbar),
+            new PropertyMetadata(default(bool), OnShowTickLabelsPropertyChanged));
 
         private static void OnShowTickLabelsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -490,7 +503,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty TickLabelFormatProperty =
             DependencyProperty.Register(nameof(TickLabelFormat), typeof(string), typeof(Tickbar),
-                new PropertyMetadata(OnTickLabelFormatPropertyChanged));
+                new PropertyMetadata(default(string), OnTickLabelFormatPropertyChanged));
 
         private static void OnTickLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -508,18 +521,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void ApplyTickLabelFormat(ContentPresenter tick, string tickLabelFormat)
         {
-            // The tick element must be loaded to access its visual tree
-            if (tick.IsLoaded)
+            // Check whether the tick element has its children populated
+            if (VisualTreeHelper.GetChildrenCount(tick) > 0)
             {
                 // Find the tick label in the visual tree
-                var tickTemplate = tick.ContentTemplate;
-                var labelTextBlock = tickTemplate.FindName("TickLabel", tick) as TextBlock;
-                labelTextBlock.UpdateStringFormat(
+                var contentRoot = VisualTreeHelper.GetChild(tick, 0) as FrameworkElement;
+                var labelTextBlock = contentRoot.FindName("TickLabel") as TextBlock;
+                labelTextBlock?.UpdateStringFormat(
                     targetProperty: TextBlock.TextProperty,
                     stringFormat: tickLabelFormat,
                     fallbackFormat: ref _originalTickLabelFormat);
             }
-            else // !tick.IsLoaded
+            else // Children are not populated yet.  Wait for tick to load.
             {
                 // Defer the method call until the tick element is loaded
                 void tickLoadedHandler(object o, RoutedEventArgs e)

@@ -14,10 +14,10 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !NETFX_CORE
 
 using System.Threading.Tasks;
-using System.Timers;
+using System.Threading;
+
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -28,8 +28,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     internal class ThrottleAwaiter
     {
-        Timer _throttleTimer;
-        TaskCompletionSource<bool> _throttleTcs = new TaskCompletionSource<bool>();
+        private Timer _throttleTimer;
+        private int _interval;
+        private TaskCompletionSource<bool> _throttleTcs = new TaskCompletionSource<bool>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThrottleAwaiter"/> class.
@@ -37,11 +38,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="milliseconds">Milliseconds to throttle.</param>
         public ThrottleAwaiter(int milliseconds)
         {
-            _throttleTimer = new Timer(milliseconds) { AutoReset = false };
-            _throttleTimer.Elapsed += (s, e) =>
-            {
-                _throttleTcs.TrySetResult(true);
-            };
+            _throttleTimer = new Timer((o) => _throttleTcs.TrySetResult(true),
+                null, Timeout.Infinite, Timeout.Infinite);
+            _interval = milliseconds;
         }
 
         /// <summary>
@@ -52,8 +51,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             if (_throttleTcs == null || _throttleTcs.Task.IsCompleted || _throttleTcs.Task.IsFaulted)
                 _throttleTcs = new TaskCompletionSource<bool>();
 
-            _throttleTimer.Stop();
-            _throttleTimer.Start();
+            _throttleTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            _throttleTimer.Change(_interval, Timeout.Infinite);
 
             return _throttleTcs.Task;
         }
@@ -63,11 +62,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         internal void Cancel()
         {
-            _throttleTimer.Stop();
-
+            _throttleTimer.Change(Timeout.Infinite, Timeout.Infinite);
             _throttleTcs.TrySetCanceled();
         }
     }
 }
-
-#endif

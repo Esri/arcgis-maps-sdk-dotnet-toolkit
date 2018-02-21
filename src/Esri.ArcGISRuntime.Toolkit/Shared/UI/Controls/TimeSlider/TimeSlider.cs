@@ -16,7 +16,7 @@
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
 
-#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+#if !__IOS__ && !__ANDROID__
 
 using System;
 using System.Collections.Generic;
@@ -25,17 +25,27 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 using Esri.ArcGISRuntime.ArcGISServices;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
+using Windows.Foundation;
+#if NETFX_CORE
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Key = Windows.System.VirtualKey;
+#else
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Threading;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -43,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control 
     /// to enhance the viewing of geographic features that have attributes based upon Date/Time information.
     /// </summary>
-    [TemplatePart(Name = "HorizontalTrack", Type = typeof(FrameworkElement))]
+    [TemplatePart(Name = "SliderTrack", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "HorizontalTrackThumb", Type = typeof(Thumb))]
     [TemplatePart(Name = "MinimumThumb", Type = typeof(Thumb))]
     [TemplatePart(Name = "MinimumThumbLabel", Type = typeof(TextBlock))]
@@ -64,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplateVisualState(GroupName = "FocusStates", Name = "Unfocused")]
     public class TimeSlider : Control
     {
-        #region Fields
+#region Fields
 
         private FrameworkElement SliderTrack;
         private Thumb MinimumThumb;
@@ -91,22 +101,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ThrottleAwaiter _calculateTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
 
-        #endregion // Fields
-
-        /// <summary>
-        /// Static initialization for the <see cref="TimeSlider"/> control.
-        /// </summary>
-        static TimeSlider()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TimeSlider),
-                new FrameworkPropertyMetadata(typeof(TimeSlider)));
-        }
+#endregion // Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
         public TimeSlider()
         {
+            DefaultStyleKey = typeof(TimeSlider);
             _playTimer = new DispatcherTimer() { Interval = PlaybackInterval };
             _playTimer.Tick += PlayTimer_Tick;
             SizeChanged += TimeSlider_SizeChanged;
@@ -124,7 +126,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// code or internal processes (such as a rebuilding layout pass) call
         /// <see cref="M:System.Windows.Controls.Control.ApplyTemplate"/>.
         /// </summary>
+#if NETFX_CORE
+        protected override void OnApplyTemplate()
+#else
         public override void OnApplyTemplate()
+#endif
         {
             base.OnApplyTemplate();
 
@@ -147,27 +153,57 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (MinimumThumb != null)
             {
-                MinimumThumb.DragDelta += MinimumThumb_DragDelta;
+#if NETFX_CORE
+                MinimumThumb.ManipulationMode = ManipulationModes.TranslateX;
+                MinimumThumb.ManipulationDelta += (s, e) =>
+                {
+                    // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
+                    var translateX = e.Position.X - (MinimumThumb.ActualWidth / 2);
+                    OnMinimumThumbDrag(translateX);
+                };
+#else
+                MinimumThumb.DragDelta += (s, e) => OnMinimumThumbDrag(e.HorizontalChange);
+#endif
                 MinimumThumb.DragCompleted += DragCompleted;
-                MinimumThumb.DragStarted += (s, e) => Focus();
+                MinimumThumb.DragStarted += (s, e) => SetFocus();
             }
             if (MaximumThumb != null)
             {
-                MaximumThumb.DragDelta += MaximumThumb_DragDelta;
+#if NETFX_CORE
+                MaximumThumb.ManipulationMode = ManipulationModes.TranslateX;
+                MaximumThumb.ManipulationDelta += (s, e) =>
+                {
+                    // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
+                    var translateX = e.Position.X - (MaximumThumb.ActualWidth / 2);
+                    OnMaximumThumbDrag(translateX);
+                };
+#else
+                MaximumThumb.DragDelta += (s, e) => OnMaximumThumbDrag(e.HorizontalChange);
+#endif
                 MaximumThumb.DragCompleted += DragCompleted;
-                MaximumThumb.DragStarted += (s, e) => Focus();
+                MaximumThumb.DragStarted += (s, e) => SetFocus();
             }
             if (HorizontalTrackThumb != null)
             {
-                HorizontalTrackThumb.DragDelta += HorizontalTrackThumb_DragDelta;
+#if NETFX_CORE
+                HorizontalTrackThumb.ManipulationMode = ManipulationModes.TranslateX;
+                HorizontalTrackThumb.ManipulationDelta += (s, e) =>
+                {
+                    // Position is reported relative to the left edge of the thumb.  Adjust it so it is relative to the thumb's center.
+                    var translateX = e.Position.X - (HorizontalTrackThumb.ActualWidth / 2);
+                    OnCurrentExtentThumbDrag(translateX);
+                };
+#else
+                HorizontalTrackThumb.DragDelta += (s, e) => OnCurrentExtentThumbDrag(e.HorizontalChange);
+#endif
                 HorizontalTrackThumb.DragCompleted += DragCompleted;
-                HorizontalTrackThumb.DragStarted += (s, e) => Focus();
+                HorizontalTrackThumb.DragStarted += (s, e) => SetFocus();
             }
             if (SliderTrackStepBackRepeater != null)
             {
                 SliderTrackStepBackRepeater.Click += (s, e) =>
                 {
-                    Focus();
+                    SetFocus();
                     IsPlaying = false;
                     StepBack();
                 };
@@ -176,7 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 SliderTrackStepForwardRepeater.Click += (s, e) =>
                 {
-                    Focus();
+                    SetFocus();
                     IsPlaying = false;
                     StepForward();
                 };
@@ -198,6 +234,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             PositionTickmarks();
             SetButtonVisibility();
             ApplyLabelMode(LabelMode);
+        }
+
+        private void SetFocus()
+        {
+#if NETFX_CORE
+            Focus(FocusState.Pointer);
+#else
+            Focus();
+#endif
         }
 
         /// <summary>
@@ -222,13 +267,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ChangeVisualState(true);
         }
 
-        /// <summary>
-        /// Called before the <see cref="E:System.Windows.UIElement.MouseEnter"/> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
+        /// <inheritdoc />
+#if NETFX_CORE
+        protected override void OnPointerEntered(PointerRoutedEventArgs e)
+        {
+            base.OnPointerEntered(e);
+#else
         protected override void OnMouseEnter(MouseEventArgs e)
         {
             base.OnMouseEnter(e);
+#endif
             _isMouseOver = true;
             if (MinimumThumb != null && !MinimumThumb.IsDragging ||
                 MaximumThumb != null && !MaximumThumb.IsDragging ||
@@ -238,13 +286,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        /// <summary>
-        /// Called before the <see cref="E:System.Windows.UIElement.MouseLeave"/> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
+        /// <inheritdoc />
+#if NETFX_CORE
+        protected override void OnPointerExited(PointerRoutedEventArgs e)
+        {
+            base.OnPointerExited(e);
+#else
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
+#endif
             _isMouseOver = false;
             if (MinimumThumb != null && !MinimumThumb.IsDragging ||
                 MaximumThumb != null && !MaximumThumb.IsDragging ||
@@ -254,16 +305,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        /// <summary>
-        /// Called before the <see cref="E:System.Windows.UIElement.MouseLeftButtonDown"/> event occurs.
-        /// </summary>
-        /// <param name="e">The data for the event.</param>
+        /// <inheritdoc />
+#if NETFX_CORE
+        protected override void OnPointerPressed(PointerRoutedEventArgs e)
+        {
+            base.OnPointerPressed(e);
+#else
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
+#endif
             if (!e.Handled && IsEnabled)
             {
-                Focus();
+                SetFocus();
             }
         }
 
@@ -271,7 +325,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Called before the <see cref="E:System.Windows.UIElement.KeyDown"/> event occurs.
         /// </summary>
         /// <param name="e">The data for the event.</param>
+#if NETFX_CORE
+        protected override void OnKeyDown(KeyRoutedEventArgs e)
+#else
         protected override void OnKeyDown(KeyEventArgs e)
+#endif
         {
             base.OnKeyDown(e);
             if (!e.Handled && IsEnabled)
@@ -287,7 +345,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #endregion // Overrides
+#endregion // Overrides
 
         private void ChangeVisualState(bool useTransitions)
         {
@@ -347,6 +405,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position left repeater							
             right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.ActualWidth);
             SliderTrackStepBackRepeater.Margin = new Thickness(0, 0, right, 0);
+            SliderTrackStepBackRepeater.Width = Math.Max(0, sliderWidth - right);
 
             // Margin adjustment for the minimum thumb label
             var thumbLabelWidthAdjustment = 0d;
@@ -360,6 +419,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // There are two thumbs, so position minimum (max is used in both the one and two thumb case)
                 left = Math.Max(0, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, ((maximum - start) * rate));
+#if NETFX_CORE
+                // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
+                left -= 0.5;
+                right -= 0.5;
+#endif
                 thumbLeft = left - MinimumThumb.ActualWidth / 2;
                 thumbRight = right - MinimumThumb.ActualWidth / 2;
                 MinimumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
@@ -401,6 +465,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position maximum thumb
             left = Math.Min(sliderWidth, (end - minimum) * rate);
             right = Math.Min(sliderWidth, ((maximum - end) * rate));
+#if NETFX_CORE
+            // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
+            left -= 0.5;
+            right -= 0.5;
+#endif
             thumbLeft = left - MaximumThumb.ActualWidth / 2;
             thumbRight = right - MaximumThumb.ActualWidth / 2;
             MaximumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
@@ -422,7 +491,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     // Slider has min and max thumbs with both labels visible - check for label collision
                     var minLabelRight = minLabelLeftMargin + minThumbLabelWidth;
-                    var spaceBetweenLabels = 6;
+
+                    // Calculate the width of two characters and use that as the space to preserve between the min and max labels
+                    var spaceBetweenLabels = CalculateTextSize(MinimumThumbLabel, text: "88").Width;
 
                     if (minLabelRight + spaceBetweenLabels > maxLabelLeftMargin)
                     {
@@ -445,36 +516,54 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position right repeater
             left = Math.Min(sliderWidth, ((end - minimum) * rate) + MaximumThumb.ActualWidth);
             SliderTrackStepForwardRepeater.Margin = new Thickness(left, 0, 0, 0);
+            SliderTrackStepForwardRepeater.Width = Math.Max(0, sliderWidth - left);
         }
 
         /// <summary>
-        /// Calculates the size of the specified TextBlock's text
+        /// Calculates the size of the specified text using the specified TextBlock's font properites
         /// </summary>
-        /// <param name="textBlock">The TextBlock to calculate size for</param>
+        /// <param name="textBlock">The TextBlock to use in the size calculation</param>
+        /// <param name="text">The text to calculate the size for.  If unspecified, the size of the TextBlock's text will be calculated.</param>
         /// <returns>The size of the text</returns>
         /// <remarks>This method is useful in cases where a TextBlock's text has updated, but its layout has not.  In such cases,
         /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
-        private Size CalculateTextSize(TextBlock textBlock)
+        private Size CalculateTextSize(TextBlock textBlock, string text = null)
         {
+#if NETFX_CORE
+            // Create a dummy TextBlock to calculate the size of the text.  Note that only a limited number of properties
+            // are copied here.  This may yield an incorrect size if additional properties are specified in the slider's
+            // style that affect the text size,
+            var tb = new TextBlock()
+            {
+                FontFamily = textBlock.FontFamily,
+                FontSize = textBlock.FontSize,
+                FontStyle = textBlock.FontStyle,
+                FontWeight = textBlock.FontWeight,
+                Text = text ?? textBlock.Text
+            };
+            tb.Measure(new Size(0, 0));
+            tb.Arrange(new Rect(0, 0, 0, 0));
+            return new Size(tb.ActualWidth, tb.ActualHeight);
+#else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
-            var formattedText = new FormattedText(textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
+            var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
                 textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display);
             return new Size(formattedText.Width, formattedText.Height);
+#endif
         }
 
-        #region Drag event handlers
-
-        private void HorizontalTrackThumb_DragDelta(object sender, DragDeltaEventArgs e)
+#region Drag event handlers
+        private void OnCurrentExtentThumbDrag(double translateX)
         {
             IsPlaying = false;
 
-            if (e.HorizontalChange == 0 || IsStartTimePinned || IsEndTimePinned)
+            if (translateX == 0 || IsStartTimePinned || IsEndTimePinned)
                 return;
 
             if (_currentValue == null)
                 _currentValue = CurrentValidExtent;
 
-            _totalHorizontalChange = e.HorizontalChange;
+            _totalHorizontalChange = translateX;
 
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
 
@@ -512,16 +601,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 UpdateCurrentExtent();
         }
 
-        private void MinimumThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        private void OnMinimumThumbDrag(double translateX)
         {
             IsPlaying = false;
-            if (e.HorizontalChange == 0)
+            if (translateX == 0)
                 return;
 
             if (_currentValue == null)
                 _currentValue = CurrentValidExtent;
 
-            _totalHorizontalChange = e.HorizontalChange;
+            _totalHorizontalChange = translateX;
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
             // time ratio 
             long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
@@ -554,16 +643,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 UpdateCurrentExtent();
         }
 
-        private void MaximumThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        private void OnMaximumThumbDrag(double translateX)
         {
-             IsPlaying = false;
-            if (e.HorizontalChange == 0)
+
+            IsPlaying = false;
+            if (translateX == 0)
                 return;
 
             if (_currentValue == null)
                 _currentValue = CurrentValidExtent;
 
-            _totalHorizontalChange = e.HorizontalChange;
+            _totalHorizontalChange = translateX;
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
 
             // time ratio 
@@ -632,7 +722,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             UpdateTrackLayout(_currentValue);
             if (_currentValue.EndTime != CurrentExtent.EndTime)
+            {
                 UpdateCurrentExtent();
+            }
         }
 
         private void DragCompleted(object sender, DragCompletedEventArgs e)
@@ -646,11 +738,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var newStartTime = IsStartTimePinned ? CurrentValidExtent.StartTime : _currentValue.StartTime;
             var newEndTime = IsEndTimePinned ? CurrentValidExtent.EndTime : _currentValue.EndTime;
-            var newTimeExtent = Snap(new TimeExtent(newStartTime, newEndTime));
-            CurrentExtent = newTimeExtent;
+            if (newStartTime != CurrentExtent.StartTime || newEndTime != CurrentExtent.EndTime)
+            {
+                var newTimeExtent = Snap(new TimeExtent(newStartTime, newEndTime));
+                CurrentExtent = newTimeExtent;
+            }
         }
 
-        #endregion // Drag event handlers
+#endregion // Drag event handlers
 
         /// <summary>
         /// Adjusts the specified time extent so that it starts and ends at a valid time step interval
@@ -748,7 +843,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Gets whether or not the current extent represents a time instant
@@ -781,7 +876,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider. 
         /// </summary>
-		[TypeConverter(typeof(TimeExtentConverter))]
+#if !NETFX_CORE
+        [TypeConverter(typeof(TimeExtentConverter))]
+#endif
         public TimeExtent CurrentExtent
         {
             get { return (TimeExtent)GetValue(CurrentExtentProperty); }
@@ -793,7 +890,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty CurrentExtentProperty =
             DependencyProperty.Register(nameof(CurrentExtent), typeof(TimeExtent), typeof(TimeSlider),
-                new PropertyMetadata(OnCurrentExtentPropertyChanged));
+                new PropertyMetadata(default(TimeExtent), OnCurrentExtentPropertyChanged));
 
         private static void OnCurrentExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -803,8 +900,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             slider._currentValue = newExtent;
 
             // Explicitly update the thumb labels' bindings to ensure that their text is updated prior to calculating layout
-            slider.MinimumThumbLabel?.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
-            slider.MaximumThumbLabel?.GetBindingExpression(TextBlock.TextProperty)?.UpdateTarget();
+            slider.MinimumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
+            slider.MaximumThumbLabel?.RefreshBinding(TextBlock.TextProperty);
 
             slider.UpdateTrackLayout(slider.CurrentValidExtent);
 
@@ -821,7 +918,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance
         /// </summary>
+#if !NETFX_CORE
 		[TypeConverter(typeof(TimeExtentConverter))]
+#endif
         public TimeExtent FullExtent
         {
             get { return (TimeExtent)GetValue(FullExtentProperty); }
@@ -833,7 +932,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty FullExtentProperty =
             DependencyProperty.Register(nameof(FullExtent), typeof(TimeExtent), typeof(TimeSlider),
-                new PropertyMetadata(OnFullExtentPropertyChanged));
+                new PropertyMetadata(default(TimeExtent), OnFullExtentPropertyChanged));
 
         private async static void OnFullExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -859,7 +958,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="TimeStepInterval"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TimeStepIntervalProperty =
-            DependencyProperty.Register(nameof(TimeStepInterval), typeof(TimeValue), typeof(TimeSlider), new PropertyMetadata(OnTimeStepIntervalPropertyChanged));
+            DependencyProperty.Register(nameof(TimeStepInterval), typeof(TimeValue), typeof(TimeSlider),
+                new PropertyMetadata(default(TimeValue), OnTimeStepIntervalPropertyChanged));
 
         private static async void OnTimeStepIntervalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -918,7 +1018,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="TimeSteps"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TimeStepsProperty =
-            DependencyProperty.Register(nameof(TimeSteps), typeof(IEnumerable<DateTimeOffset>), typeof(TimeSlider), new PropertyMetadata(OnTimeStepsPropertyChanged));
+            DependencyProperty.Register(nameof(TimeSteps), typeof(IEnumerable<DateTimeOffset>), typeof(TimeSlider),
+                new PropertyMetadata(default(IEnumerable<DateTimeOffset>), OnTimeStepsPropertyChanged));
 
         private static void OnTimeStepsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -1013,7 +1114,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="IsStartTimePinned"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty IsStartTimePinnedProperty =
-            DependencyProperty.Register(nameof(IsStartTimePinned), typeof(bool), typeof(TimeSlider), new PropertyMetadata(OnIsStartTimePinnedChanged));
+            DependencyProperty.Register(nameof(IsStartTimePinned), typeof(bool), typeof(TimeSlider),
+                new PropertyMetadata(default(bool), OnIsStartTimePinnedChanged));
 
         private static void OnIsStartTimePinnedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -1044,7 +1146,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="IsEndTimePinned"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty IsEndTimePinnedProperty =
-            DependencyProperty.Register(nameof(IsEndTimePinned), typeof(bool), typeof(TimeSlider), new PropertyMetadata(OnIsEndTimePinnedChanged));
+            DependencyProperty.Register(nameof(IsEndTimePinned), typeof(bool), typeof(TimeSlider),
+                new PropertyMetadata(default(bool), OnIsEndTimePinnedChanged));
 
         private static void OnIsEndTimePinnedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -1099,7 +1202,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 slider.PlayPauseButton.IsChecked = isPlaying;
         }
 
-        #region Appearance Properties
+#region Appearance Properties
 
         /// <summary>
         /// Gets or sets the border color of the thumbs
@@ -1266,11 +1369,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty TimeStepIntervalLabelColorProperty =
             DependencyProperty.Register(nameof(TimeStepIntervalLabelColor), typeof(Brush), typeof(TimeSlider), null);
 
-        #endregion // Appearance Properties
+#endregion // Appearance Properties
 
-        #endregion // Properties
+#endregion // Properties
 
-        #region Initialization Helper Methods
+#region Initialization Helper Methods
 
         /// <summary>
         /// Updates the time slider to have the specified number of time steps
@@ -1456,18 +1559,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #endregion
+#endregion
 
-        #region Events
+#region Events
 
         /// <summary>
         /// Occurs when the selected time extent has changed.
         /// </summary>
         public event EventHandler<CurrentExtentChangedEventArgs> CurrentExtentChanged;
 
-        #endregion
+#endregion
 
-        #region Playback Methods
+#region Playback Methods
 
         /// <summary>
         /// Moves the slider position forward by the specified number of time steps.
@@ -1611,7 +1714,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty FullExtentLabelFormatProperty =
             DependencyProperty.Register(nameof(FullExtentLabelFormat), typeof(string), typeof(TimeSlider),
-                new PropertyMetadata(OnFullExtentLabelFormatPropertyChanged));
+                new PropertyMetadata(default(string), OnFullExtentLabelFormatPropertyChanged));
 
         private static void OnFullExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -1643,7 +1746,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty CurrentExtentLabelFormatProperty =
             DependencyProperty.Register(nameof(CurrentExtentLabelFormat), typeof(string), typeof(TimeSlider),
-                new PropertyMetadata(OnCurrentExtentLabelFormatPropertyChanged));
+                new PropertyMetadata(default(string), OnCurrentExtentLabelFormatPropertyChanged));
 
         private static void OnCurrentExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -1678,7 +1781,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty TimeStepIntervalLabelFormatProperty =
             DependencyProperty.Register(nameof(TimeStepIntervalLabelFormat), typeof(string), typeof(TimeSlider),
-                new PropertyMetadata(OnTimeStepIntervalLabelFormatPropertyChanged));
+                new PropertyMetadata(default(string), OnTimeStepIntervalLabelFormatPropertyChanged));
 
         private static void OnTimeStepIntervalLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -1703,7 +1806,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty LabelModeProperty =
             DependencyProperty.Register(nameof(LabelMode), typeof(TimeSliderLabelMode), typeof(TimeSlider),
-                new PropertyMetadata(OnLabelModePropertyChanged));
+                new PropertyMetadata(default(TimeSliderLabelMode), OnLabelModePropertyChanged));
 
         private static void OnLabelModePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -1744,7 +1847,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Moves the time slider's current extent upon expiration of the playback interval
         /// </summary>
-        private void PlayTimer_Tick(object sender, EventArgs e)
+        private void PlayTimer_Tick(object sender, object e)
         {
             var isFinished = false;
 
@@ -1807,7 +1910,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-        #endregion
+#endregion
     }
 }
 

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+#if !__IOS__ && !__ANDROID__
 
 using System;
 using Esri.ArcGISRuntime.ArcGISServices;

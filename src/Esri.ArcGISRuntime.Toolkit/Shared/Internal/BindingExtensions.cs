@@ -14,10 +14,15 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+#if !__IOS__ && !__ANDROID__
 
+#if NETFX_CORE
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+#else
 using System.Windows;
 using System.Windows.Data;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -30,37 +35,43 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// Creates a copy of the specified binding
         /// </summary>
         /// <param name="source">The binding to copy</param>
+        /// <param name="newConverterParameter">The object to use as a converter parameter</param>
         /// <returns>The copy of the binding</returns>
-        public static Binding Clone(this Binding source)
+        public static Binding Clone(this Binding source, object newConverterParameter = null)
         {
             var copy = new Binding
             {
+                Converter = source.Converter,
+                // Can't change the ConverterParameter after instantation on UWP, so set it here
+                ConverterParameter = newConverterParameter ?? source.ConverterParameter,
+                FallbackValue = source.FallbackValue,
+                Mode = source.Mode,
+                Path = source.Path,
+                TargetNullValue = source.TargetNullValue,
+                UpdateSourceTrigger = source.UpdateSourceTrigger,
+#if NETFX_CORE
+                ConverterLanguage = source.ConverterLanguage
+#else
                 AsyncState = source.AsyncState,
                 BindingGroupName = source.BindingGroupName,
                 BindsDirectlyToSource = source.BindsDirectlyToSource,
-                Converter = source.Converter,
                 ConverterCulture = source.ConverterCulture,
-                ConverterParameter = source.ConverterParameter,
-                FallbackValue = source.FallbackValue,
                 IsAsync = source.IsAsync,
-                Mode = source.Mode,
                 NotifyOnSourceUpdated = source.NotifyOnSourceUpdated,
                 NotifyOnTargetUpdated = source.NotifyOnTargetUpdated,
                 NotifyOnValidationError = source.NotifyOnValidationError,
-                Path = source.Path,
                 StringFormat = source.StringFormat,
-                TargetNullValue = source.TargetNullValue,
                 UpdateSourceExceptionFilter = source.UpdateSourceExceptionFilter,
-                UpdateSourceTrigger = source.UpdateSourceTrigger,
                 ValidatesOnDataErrors = source.ValidatesOnDataErrors,
                 ValidatesOnExceptions = source.ValidatesOnExceptions,
                 XPath = source.XPath,
+#endif
             };
             if (source.Source != null)
             {
                 copy.Source = source.Source;
             }
-            else if (source.ElementName != null)
+            else if (!string.IsNullOrEmpty(source.ElementName))
             {
                 copy.ElementName = source.ElementName;
             }
@@ -91,16 +102,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 return; // Or should we create a new binding in this case?
 
             // If the fallback hasn't been populated already, store the current string format as specified by the binding
+#if NETFX_CORE
+            if (fallbackFormat == null)
+                fallbackFormat = binding.Converter is StringFormatConverter ? binding.ConverterParameter as string : null;
+#else
             if (fallbackFormat == null)
                 fallbackFormat = binding.StringFormat;
-
+#endif
             // Create a new binding to apply the format string.  Necessary because bindings that are already in use cannot be updated,
             // but we want to preserve how users may have setup the binding otherwise
+            var newStringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;
+#if NETFX_CORE
+            var newBinding = binding.Clone(newStringFormat);
+#else
             var newBinding = binding.Clone();
+            newBinding.StringFormat = newStringFormat;
+#endif
 
             // If the format string is null or empty, use the fall back format.  Otherwise, apply the new format.
-            newBinding.StringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;
             bindingTarget.SetBinding(targetProperty, newBinding);
+        }
+
+        /// <summary>
+        /// Forces the specified property to update on the specified element
+        /// </summary>
+        /// <param name="element">The element to update the property for</param>
+        /// <param name="property">The property to update</param>
+        public static void RefreshBinding(this FrameworkElement element, DependencyProperty property)
+        {
+#if NETFX_CORE
+            // Get the property binding
+            var binding = element?.GetBindingExpression(property)?.ParentBinding;
+            if (binding != null)
+            {
+                // Re-apply the binding
+                element.SetBinding(property, binding.Clone());
+            }
+#else
+            element?.GetBindingExpression(property)?.UpdateTarget();
+#endif
         }
     }
 }
