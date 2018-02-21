@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private double HeadingImpl
         {
-            get { return _heading; }
+            get => _heading;
             set
             {
                 _heading = value;
@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private bool AutoHideImpl
         {
-            get { return _autoHide; }
+            get => _autoHide;
             set
             {
                 _autoHide = value;
@@ -50,11 +50,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeoView _geoView;
 
         /// <summary>
-        /// Gets or sets the MapView for which the scale is displayed. This will accurately reflect the scale at the center of the MapView
+        /// Gets or sets the GeoView for which the heading is displayed. This will accurately reflect the heading at the center of the GeoView
         /// </summary>
+        /// <seealso cref="Heading"/>
         public GeoView GeoView
         {
-            get { return _geoView; }
+            get => _geoView;
             set
             {
                 var oldView = _geoView;

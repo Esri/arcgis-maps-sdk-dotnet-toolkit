@@ -66,8 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (Heading == 0 && AutoHide && !DesignTime.IsDesignMode)
                 Alpha = 0;
 
-            UITapGestureRecognizer tapGesture = new UITapGestureRecognizer(OnTapped);
-            this.AddGestureRecognizer(tapGesture);
+            AddGestureRecognizer(new UITapGestureRecognizer(OnTapped));
 
             InvalidateIntrinsicContentSize();
         }
@@ -128,7 +127,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void UpdateCompassRotation(bool transition)
         {
             if (AutoHide) SetVisibility(Heading != 0);
-            this.Transform = CGAffineTransform.MakeRotation((float)(Math.PI * -Heading / 180d));
+            Transform = CGAffineTransform.MakeRotation((float)(Math.PI * -Heading / 180d));
         }
 
         private void SetVisibility(bool isVisible)

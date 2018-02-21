@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2017-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -84,11 +84,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(Heading), typeof(double), typeof(Compass), new PropertyMetadata(0d, OnHeadingPropertyChanged));
         
         /// <summary>
-        /// The property changed event that is raised when
-        /// the value of Scale property changes.
+        /// The property changed event that is raised when the value of Heading property changes.
         /// </summary>
-        /// <param name="d">ScaleLine</param>
-        /// <param name="e">Contains information related to the change to the Scale property.</param>
+        /// <param name="d">Compass</param>
+        /// <param name="e">Contains information related to the change to the Heading property.</param>
         private static void OnHeadingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var compass = (Compass)d;

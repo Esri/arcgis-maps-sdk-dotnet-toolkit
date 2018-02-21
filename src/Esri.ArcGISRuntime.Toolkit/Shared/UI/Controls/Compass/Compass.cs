@@ -56,8 +56,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         public double Heading
         {
-            get { return HeadingImpl; }
-            set { HeadingImpl = value; }
+            get => HeadingImpl;
+            set => HeadingImpl = value;
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public bool AutoHide
         {
-            get { return AutoHideImpl; }
-            set { AutoHideImpl = value; }
+            get => AutoHideImpl;
+            set => AutoHideImpl = value;
         }
 
         private void WireGeoViewPropertyChanged(GeoView oldGeoView, GeoView newGeoView)

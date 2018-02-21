@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2017-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -32,58 +32,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass")]
     public partial class Compass
     {
-        private class NorthArrowShape : View
-        {
-            internal NorthArrowShape(Context context) : base(context)
-            {
-            }
-            
-            /// <inheritdoc />
-            protected override void OnDraw(Canvas canvas)
-            {
-                float size = MeasuredWidth > MeasuredHeight ? MeasuredHeight : MeasuredWidth;
-                var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip);
-                float c = size * .5f;
-                float l = (this.MeasuredWidth - size) * .5f;
-                float t = (this.MeasuredHeight - size) * .5f;
-
-                Paint paint = new Paint(PaintFlags.AntiAlias);
-                paint.SetStyle(Paint.Style.Fill);
-                paint.SetARGB(255, 51, 51, 51);
-                canvas.DrawCircle(c + l, c + t, size * .5f, paint);
-                paint.SetStyle(Paint.Style.Stroke);
-                paint.StrokeWidth = strokeWidth;
-                paint.SetARGB(255, 255, 255, 255);
-                canvas.DrawCircle(c + l, c + t, size * .5f - strokeWidth / 2f, paint);
-
-                // Draw north arrow
-                paint.SetStyle(Paint.Style.Fill);
-                paint.SetARGB(255, 199, 85, 46);
-                var path = new Path();
-                path.MoveTo(c - size * .14f + l, c + t);
-                path.LineTo(c + size * .14f + l, c + t);
-                path.LineTo(c + l, c - size * .34f + t);
-                path.Close();
-                canvas.DrawPath(path, paint);
-
-                // Draw south arrow
-                paint.SetARGB(255, 255, 255, 255);
-                path = new Path();
-                path.MoveTo(c - size * .14f + l, c + t);
-                path.LineTo(c + size * .14f + l, c + t);
-                path.LineTo(c + l, c + size * .34f + t);
-                path.Close();
-                canvas.DrawPath(path, paint);
-
-                base.OnDraw(canvas);
-
-                PivotX = size / 2 + l;
-                PivotY = size / 2 + t;
-            }
-            
-            public float Size { get; set; } = (float)DefaultSize;
-        }
-
         private static DisplayMetrics s_displayMetrics;
         private static IWindowManager s_windowManager;
         private NorthArrowShape _northArrow;
@@ -94,17 +42,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public Compass(Context context) : base(context) { Initialize(); }
+        public Compass(Context context) : base(context) => Initialize();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public Compass(Context context, IAttributeSet attr) : base(context, attr)
-        {
-            Initialize();
-        }
+        public Compass(Context context, IAttributeSet attr) : base(context, attr) => Initialize();
         
         /// <inheritdoc />
         protected override LayoutParams GenerateDefaultLayoutParams()
@@ -116,21 +61,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize()
         {
             var size = (int)CalculateScreenDimension((float)DefaultSize);
-            _northArrow = new NorthArrowShape(this.Context) { Size = size };
+            _northArrow = new NorthArrowShape(Context) { Size = size };
             AddView(_northArrow);
             UpdateCompassRotation(false);
-            _northArrow.Click += NorthArrow_Click;
-        }
-
-        private void NorthArrow_Click(object sender, EventArgs e)
-        {
-            ResetRotation();
+            _northArrow.Click += (s,e) => ResetRotation();
         }
 
         private void UpdateCompassRotation(bool transition)
         {
             SetVisibility(!AutoHide || Heading != 0, transition);
-            _northArrow.Rotation = -(float)this.Heading;
+            _northArrow.Rotation = -(float)Heading;
         }
 
         /// <inheritdoc />
@@ -216,6 +156,58 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             return !DesignTime.IsDesignMode ?
                 TypedValue.ApplyDimension(screenUnitType, pixels, GetDisplayMetrics()) : pixels;
+        }
+
+        private class NorthArrowShape : View
+        {
+            internal NorthArrowShape(Context context) : base(context)
+            {
+            }
+
+            /// <inheritdoc />
+            protected override void OnDraw(Canvas canvas)
+            {
+                float size = MeasuredWidth > MeasuredHeight ? MeasuredHeight : MeasuredWidth;
+                var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip);
+                float c = size * .5f;
+                float l = (this.MeasuredWidth - size) * .5f;
+                float t = (this.MeasuredHeight - size) * .5f;
+
+                Paint paint = new Paint(PaintFlags.AntiAlias);
+                paint.SetStyle(Paint.Style.Fill);
+                paint.SetARGB(255, 51, 51, 51);
+                canvas.DrawCircle(c + l, c + t, size * .5f, paint);
+                paint.SetStyle(Paint.Style.Stroke);
+                paint.StrokeWidth = strokeWidth;
+                paint.SetARGB(255, 255, 255, 255);
+                canvas.DrawCircle(c + l, c + t, size * .5f - strokeWidth / 2f, paint);
+
+                // Draw north arrow
+                paint.SetStyle(Paint.Style.Fill);
+                paint.SetARGB(255, 199, 85, 46);
+                var path = new Path();
+                path.MoveTo(c - size * .14f + l, c + t);
+                path.LineTo(c + size * .14f + l, c + t);
+                path.LineTo(c + l, c - size * .34f + t);
+                path.Close();
+                canvas.DrawPath(path, paint);
+
+                // Draw south arrow
+                paint.SetARGB(255, 255, 255, 255);
+                path = new Path();
+                path.MoveTo(c - size * .14f + l, c + t);
+                path.LineTo(c + size * .14f + l, c + t);
+                path.LineTo(c + l, c + size * .34f + t);
+                path.Close();
+                canvas.DrawPath(path, paint);
+
+                base.OnDraw(canvas);
+
+                PivotX = size / 2 + l;
+                PivotY = size / 2 + t;
+            }
+
+            public float Size { get; set; } = (float)DefaultSize;
         }
     }
 }

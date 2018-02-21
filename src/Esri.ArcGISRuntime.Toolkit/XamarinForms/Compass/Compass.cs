@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             var tapRecognizer = new TapGestureRecognizer();
             tapRecognizer.Command = new TapCommand(ResetRotation);
-            this.GestureRecognizers.Add(tapRecognizer);
+            GestureRecognizers.Add(tapRecognizer);
         }
 
         private class TapCommand : System.Windows.Input.ICommand
