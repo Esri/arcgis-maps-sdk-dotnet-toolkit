@@ -38,7 +38,7 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |MeasureToolbar   |*   |*   |   |   |   |
 |ScaleLine   |*   |*   |*   |*   |*   |
 |SignInForm   |   |*   |   |   |   |
-|SymbolDisplay   |*   |*   |*   |*   |   |
+|SymbolDisplay   |*   |*   |*   |*   |*   |
 |TableOfContents   |   |*   |   |   |   |
 
 ## Instructions for Building
