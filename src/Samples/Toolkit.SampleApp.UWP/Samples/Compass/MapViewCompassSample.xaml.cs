@@ -30,11 +30,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Compass
 
         public Map Map { get; } = new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=c50de463235e4161b206d000587af18b"));
 
-        private async void Compass_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            // When tapping the compass, reset the rotation
-            await mapView.SetViewpointRotationAsync(0);
-        }
 
         private async void RotateLeft_Click(object sender, RoutedEventArgs e)
         {

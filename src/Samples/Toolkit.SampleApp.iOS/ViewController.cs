@@ -14,12 +14,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         {
             base.ViewDidLoad();
             mapView.Map = new Mapping.Map(Mapping.Basemap.CreateLightGrayCanvasVector());
-            mapView.ViewpointChanged += MapView_ViewpointChanged;
-        }
-
-        private void MapView_ViewpointChanged(object sender, EventArgs e)
-        {
-            scaleLine.MapScale = mapView.MapScale;
+            scaleLine.MapView = mapView;
+            compass.GeoView = mapView;
+            compass.AutoHide = false;
         }
 
         public override void ViewDidAppear(bool animated)

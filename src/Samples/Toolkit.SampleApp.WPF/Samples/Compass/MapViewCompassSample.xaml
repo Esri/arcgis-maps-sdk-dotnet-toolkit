@@ -11,8 +11,8 @@
 
         <esri:MapView Map="http://www.arcgis.com/home/webmap/viewer.html?webmap=c50de463235e4161b206d000587af18b" x:Name="mapView"/>
 
-        <esri:Compass x:Name="compass"  Heading="{Binding MapRotation, ElementName=mapView, Mode=OneWay}" 
-                               Margin="20" MouseDown="Compass_MouseDown" AutoHide="False" />
+        <esri:Compass x:Name="compass" GeoView="{Binding ElementName=mapView, Mode=OneWay}"
+                               Margin="20" AutoHide="False" />
 
         <Border Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" BorderBrush="Black" Background="#AAFFFFFF">
             <StackPanel>

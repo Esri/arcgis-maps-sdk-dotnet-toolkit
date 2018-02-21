@@ -7,6 +7,14 @@
         android:layout_width="fill_parent"
         android:id="@+id/mapView"
         android:layout_marginBottom="0.0dp" />
+    <Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/compass" />
     <Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
