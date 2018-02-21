@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2017 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,42 +14,26 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__
-#if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
-#else
-using System.Windows.Controls;
-#endif
+using Android.Content;
+using Android.Runtime;
+using Android.Util;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
-    /// </summary>
-    public partial class SymbolDisplay : Control
+    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend")]
+    public partial class Legend
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+        /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
-        public SymbolDisplay()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
-        { Initialize(); }
-        
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        public Legend(Context context) : base(context) { Initialize(); }
 
         /// <summary>
-        /// Gets or sets the symbol to render
+        /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
-        public Symbology.Symbol Symbol
-        {
-            get => SymbolImpl;
-            set => SymbolImpl = value;
-        }
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        public Legend(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }        
     }
 }
-#endif
