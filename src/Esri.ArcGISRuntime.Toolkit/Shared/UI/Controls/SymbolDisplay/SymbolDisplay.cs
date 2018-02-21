@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 #elif __IOS__
@@ -52,4 +51,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
-#endif
