@@ -21,8 +21,8 @@ using System.Collections.Generic;
 using System.Text;
 using CoreGraphics;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using UIKit;
-using ContentPresenter = UIKit.UIView;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -44,70 +44,78 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <param name="dataSource">The data to pass to the tick's template</param>
         private void AddTickmark(double position, object dataSource)
         {
-            //// Create both a minor and major tick mark at the specified position.  Layout logic will determine which
-            //// one to actually show at the position.
+            // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
+            // one to actually show at the position.
 
-            //// Create a minor tickmark
-            //ContentPresenter c = new ContentPresenter()
-            //{
-            //    VerticalAlignment = VerticalAlignment.Top,
-            //    Content = dataSource
-            //};
-            //c.SetValue(PositionProperty, position);
-            //c.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding()
-            //{
-            //    Source = this,
-            //    Path = new PropertyPath(nameof(MinorTickmarkTemplate)),
-            //});
-            //Children.Add(c);
-            //_minorTickmarks.Add(c);
+            // Create a minor tickmark
+            var tick = new RectangleView()
+            {
+                BackgroundColor = TickFill,
+                Width = 1,
+                Height = 4
+            };
+            SetIsMajorTickmark(tick, false);
+            SetPosition(tick, position);
 
-            //// Create a major tickmark
-            //c = new ContentPresenter()
-            //{
-            //    VerticalAlignment = VerticalAlignment.Top,
-            //    Content = dataSource
-            //};
-            //c.SetValue(PositionProperty, position);
-            //c.SetValue(IsMajorTickmarkProperty, true);
-            //c.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding()
-            //{
-            //    Source = this,
-            //    Path = new PropertyPath(nameof(MajorTickmarkTemplate))
-            //});
+            AddSubview(tick);
+            _minorTickmarks.Add(tick);
 
-            //if (TickLabelFormat != null)
-            //{
-            //    ApplyTickLabelFormat(c, TickLabelFormat);
-            //}
-            //Children.Add(c);
-            //_majorTickmarks.Add(c);
+
+            // Create a major tickmark
+            tick = new RectangleView()
+            {
+                BackgroundColor = TickFill,
+                Width = 1,
+                Height = 7
+            };
+
+            var majorTickContainer = new UIView();
+            if (dataSource is DateTimeOffset dateTime)
+            {
+                // Create label for major tickmark
+                var timeStepIntervalDateFormat = string.IsNullOrEmpty(TickLabelFormat)
+                    ? _defaultTickLabelFormat : TickLabelFormat;
+                var label = new UILabel()
+                {
+                    Text = dateTime.ToString(timeStepIntervalDateFormat),
+                    Font = UIFont.SystemFontOfSize(11),
+                    TextColor = TickLabelColor,
+                    Tag = (nint)dateTime.ToUnixTimeMilliseconds()
+                };
+
+                var labelSize = label.SizeThatFits(Frame.Size);
+                var tickLeft = (labelSize.Width - tick.Width) / 2;
+                tick.Frame = new CGRect(tickLeft, 0, tick.Width, tick.Height);
+
+                label.Frame = new CGRect(0, tick.Height + 1, labelSize.Width, labelSize.Height);
+
+                majorTickContainer.AddSubviews(tick, label);
+                majorTickContainer.Frame = new CGRect(0, 0, labelSize.Width, label.Frame.Bottom);
+
+                SetIsMajorTickmark(majorTickContainer, true);
+                SetPosition(majorTickContainer, position);
+
+                AddSubview(majorTickContainer);
+                _majorTickmarks.Add(majorTickContainer);
+            }
+            else
+            {
+                SetIsMajorTickmark(tick, true);
+                SetPosition(tick, position);
+
+                AddSubview(tick);
+                _majorTickmarks.Add(tick);
+            }
         }
 
-        private void ApplyTickLabelFormat(ContentPresenter tick, string tickLabelFormat)
+        private void ApplyTickLabelFormat(UIView tick, string tickLabelFormat)
         {
-            //// Check whether the tick element has its children populated
-            //if (VisualTreeHelper.GetChildrenCount(tick) > 0)
-            //{
-            //    // Find the tick label in the visual tree
-            //    var contentRoot = VisualTreeHelper.GetChild(tick, 0) as FrameworkElement;
-            //    var labelTextBlock = contentRoot.FindName("TickLabel") as TextBlock;
-            //    labelTextBlock?.UpdateStringFormat(
-            //        targetProperty: TextBlock.TextProperty,
-            //        stringFormat: tickLabelFormat,
-            //        fallbackFormat: ref _originalTickLabelFormat);
-            //}
-            //else // Children are not populated yet.  Wait for tick to load.
-            //{
-            //    // Defer the method call until the tick element is loaded
-            //    void tickLoadedHandler(object o, RoutedEventArgs e)
-            //    {
-            //        ApplyTickLabelFormat(tick, tickLabelFormat);
-            //        tick.Loaded -= tickLoadedHandler;
-            //    }
-
-            //    tick.Loaded += tickLoadedHandler;
-            //}
+            if (tick.Subviews.Length > 1 && tick.Subviews[1] is UILabel label)
+            {
+                var labelFormat = string.IsNullOrEmpty(tickLabelFormat) ? _defaultTickLabelFormat : tickLabelFormat;
+                var labelDate = DateTimeOffset.FromUnixTimeMilliseconds(label.Tag);
+                label.Text = labelDate.ToString(labelFormat);
+            }
         }
 
         private UIView[] Children => Subviews;
@@ -132,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var positionDigits = Math.Truncate((double)view.Tag / 10);
 
             // Convert remaining digits to decimal value between 0 and 1
-            return (double)view.Tag / 10000000;
+            return positionDigits / 10000000;
         }
 
         private void SetPosition(UIView view, double position)
@@ -143,12 +151,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdatePositionAndIsMajorTickmark(UIView view, double position, bool isMajorTickmark)
         {
             var storedPosition = Math.Truncate(position * 100000000);
+            storedPosition -= storedPosition % 10;
             var tickmarkFlagInt = isMajorTickmark ? 1 : 0;
             var positionAndTickmarkFlag = storedPosition + tickmarkFlagInt;
             view.Tag = (nint)positionAndTickmarkFlag;
         }
 
-        private CGSize GetDesiredSize(UIView view) => view.SizeThatFits(new CGSize(Frame.Width, Frame.Height));
+        private CGSize GetDesiredSize(UIView view) => view.SizeThatFits(Frame.Size);
 
         private void RemoveChild(UIView parent, UIView child) => child.RemoveFromSuperview();
 
@@ -156,14 +165,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void InvalidateMeasureAndArrange()
         {
-            // TODO
-            throw new NotImplementedException("TODO");
+            try
+            {
+                // TODO
+                //throw new NotImplementedException("TODO");
+                OnArrange(Frame.Size);
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+            }
         }
-    }
-
-    internal static class UIViewExtensions
-    {
-        public static void Arrange(this UIView view, CGRect bounds) => view.Bounds = bounds;
     }
 }
 

@@ -191,34 +191,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
 
                 // Apply the ticks' layouts
-                for (int i = 0; i < tickCount; i++)
+                for (var i = 0; i < tickCount; i++)
                 {
                     // Check whether the current tick index refers to a major or minor tick
                     var isMajorTickIndex = (i - firstMajorTickIndex) % majorTickInterval == 0;
 
+                    // Set the visibilities of the major and minor tick for the current index
+                    _majorTickmarks[i].SetIsVisible(isMajorTickIndex);
+                    _minorTickmarks[i].SetIsVisible(!isMajorTickIndex);
+
                     // Arrange either the major or minor tick for the current index
                     if (isMajorTickIndex)
-                    {
                         _majorTickmarks[i].Arrange(majorTickmarksBounds[i]);
-                        _minorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
-                    }
                     else
-                    {
                         _minorTickmarks[i].Arrange(minorTickmarksBounds[i]);
-                        _majorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
-                    }
                 }
             }
             else // !ShowTickLabels
             {
                 for (var i = 0; i < _minorTickmarks.Count; i++)
                 {
+                    _minorTickmarks[i].SetIsVisible(true);
                     _minorTickmarks[i].Arrange(minorTickmarksBounds[i]);
                 }
 
                 foreach (var majorTick in _majorTickmarks)
                 {
-                    majorTick.Arrange(new Rect(0, 0, 0, 0));
+                    majorTick.SetIsVisible(false);
                 }
             }
 
@@ -261,13 +260,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <remarks>The tick mark position values should be between 0 and 1.  They represent proportional positions along the tick bar.</remarks>
         public IEnumerable<double> TickmarkPositions
         {
-            get => TickmarkPositions;
+            get => TickmarkPositionsImpl;
             set => TickmarkPositionsImpl = value;
         }
 
         private void OnTickmarkPositionsPropertyChanged(IEnumerable<double> newTickPositions, IEnumerable<double> oldTickPositions)
         {
-#if !__IOS__ && !__ANDROID__
+#if !XAMARIN
             if (MinorTickmarkTemplate == null)
                 MinorTickmarkTemplate = _defaultTickmarkTemplate;
 #endif

@@ -31,9 +31,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
     internal class RectangleView : UIView, INotifyPropertyChanged
     {
-        public RectangleView() { }
+        private UIView _childView;
 
-        public RectangleView(double width, double height)
+        public RectangleView()
+        {
+            _childView = new UIView();
+            AddSubview(_childView);
+        }
+
+        public RectangleView(double width, double height) : this()
         {
             Width = width;
             Height = height;
@@ -48,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             set
             {
                 _size.Width = (nfloat)value;
+                _childView.Frame = new CGRect(CGPoint.Empty, _size);
                 InvalidateIntrinsicContentSize();
                 OnPropertyChanged();
             }
@@ -62,9 +69,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             set
             {
                 _size.Height = (nfloat)value;
+                _childView.Frame = new CGRect(CGPoint.Empty, _size);
                 InvalidateIntrinsicContentSize();
                 OnPropertyChanged();
             }
+        }
+
+        public override UIColor BackgroundColor
+        {
+            get => _childView.BackgroundColor;
+            set => _childView.BackgroundColor = value;
+        }
+
+        public double BorderWidth
+        {
+            get => Layer.BorderWidth;
+            set => Layer.BorderWidth = (nfloat)value;
+        }
+
+        public CGColor BorderColor
+        {
+            get => Layer.BorderColor;
+            set => Layer.BorderColor = value;
         }
 
         private CGSize _size = CGSize.Empty;

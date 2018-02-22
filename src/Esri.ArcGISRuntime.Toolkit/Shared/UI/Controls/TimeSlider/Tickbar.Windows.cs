@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
+#if !XAMARIN
 
 using System.Collections.Generic;
 using System.Text;

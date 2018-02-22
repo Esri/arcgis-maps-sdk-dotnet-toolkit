@@ -57,6 +57,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplateVisualState(GroupName = "FocusStates", Name = "Unfocused")]
     public partial class TimeSlider : Control
     {
+        private FrameworkElement SliderTrack;
+
         private void Initialize()
         {
             DefaultStyleKey = typeof(TimeSlider);
@@ -68,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateTrackLayout(CurrentValidExtent);
         }
 
-        #region Overrides
+#region Overrides
 
         /// <summary>
         /// When overridden in a derived class, is invoked whenever application
@@ -294,7 +296,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #endregion // Overrides
+#endregion // Overrides
 
         private void ChangeVisualState(bool useTransitions)
         {
@@ -322,7 +324,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #region Properties
+#region Properties
 
 
         /// <summary>
@@ -511,7 +513,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnIsPlayingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((TimeSlider)d).OnIsPlayingPropertyChanged((bool)e.NewValue);
 
-        #region Appearance Properties
+#region Appearance Properties
         /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>
         /// </summary>
@@ -753,9 +755,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty TimeStepIntervalLabelColorProperty =
             DependencyProperty.Register(nameof(TimeStepIntervalLabelColor), typeof(Brush), typeof(TimeSlider), null);
 
-        #endregion // Appearance Properties
+#endregion // Appearance Properties
 
-        #endregion // Properties
+#endregion // Properties
     }
 }
 

@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using UIKit;
 #if __IOS__
 using Color = UIKit.UIColor;
 #endif
@@ -27,6 +28,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class TimeSlider
     {
+        private string _defaultFullExtentLabelFormat = "M/d/yyyy";
+        private string _defaultCurrentExtentLabelFormat = "M/d/yyyy";
+
         #region Properties
 
         private TimeExtent _currentExtent;
@@ -55,6 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _fullExtent = value;
+                UpdateFullExtentLabels();
                 OnFullExtentPropertyChanged();
             }
         }
@@ -87,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private TimeSpan _playbackInterval;
+        private TimeSpan _playbackInterval = TimeSpan.FromSeconds(1);
         /// <summary>
         /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step
         /// </summary>
@@ -207,7 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private TimeSliderLabelMode _labelMode;
+        private TimeSliderLabelMode _labelMode = TimeSliderLabelMode.CurrentExtent;
         /// <summary>
         /// Gets or sets the mode to use for labels along the time slider
         /// </summary>
@@ -263,7 +268,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _fullExtentFill;
+        private Color _fullExtentFill = Color.White;
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
@@ -277,7 +282,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _fullExtentStroke;
+        private Color _fullExtentStroke = Color.Black;
         /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
@@ -291,7 +296,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _timeStepIntervalTickFill;
+        private Color _timeStepIntervalTickFill = Color.Black;
         /// <summary>
         /// Gets or sets the color of the slider's tickmarks
         /// </summary>

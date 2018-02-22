@@ -27,7 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class Tickbar
     {
-        IEnumerable<double> _tickmarkPositions;
+        private IEnumerable<double> _tickmarkPositions;
+        private string _defaultTickLabelFormat = "M/d/yyyy";
 
         /// <summary>
         /// Gets or sets the tick mark positions.
@@ -41,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 var oldValue = _tickmarkPositions;
                 _tickmarkPositions = value;
-                OnTickmarkPositionsPropertyChanged(oldValue, _tickmarkPositions);
+                OnTickmarkPositionsPropertyChanged(_tickmarkPositions, oldValue);
             }
         }
 
@@ -57,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Color _tickFill;
+        private Color _tickFill = Color.Black;
         
         /// <summary>
         /// Gets or sets the fill color for each tick mark
@@ -73,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Color _tickLabelColor;
+        private Color _tickLabelColor = Color.Black;
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark

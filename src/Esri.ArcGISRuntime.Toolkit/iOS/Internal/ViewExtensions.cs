@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using CoreGraphics;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,20 +27,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         public static void SetMargin(this UIView view, double left, double top, double right, double bottom)
         {
-
+            view.LayoutMargins = new UIEdgeInsets((nfloat)top, (nfloat)left, (nfloat)bottom, (nfloat)right);
         }
 
-        public static double GetActualWidth(this UIView view)
-        {
-            return default(double);
-        }
+        public static double GetActualWidth(this UIView view) => !view.IntrinsicContentSize.IsEmpty ? view.IntrinsicContentSize.Width : view.Bounds.Width;
 
         public static void SetWidth(this UIView view, double width)
-        {
-
-        }
-
-        public static void SetHeight(this UIView view, double height)
         {
 
         }
@@ -56,5 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static void SetIsEnabled(this UIControl control, bool enabled) => control.Enabled = enabled;
 
         public static void SetIsChecked(this UISwitch toggleButton, bool isChecked) => toggleButton.On = isChecked;
+
+        public static void Arrange(this UIView view, CGRect bounds) => view.Frame = bounds;
     }
 }

@@ -66,7 +66,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
 #region Fields
 
-        private FrameworkElement SliderTrack;
         private Thumb MinimumThumb;
         private TextBlock MinimumThumbLabel;
         private Thumb MaximumThumb;
@@ -97,7 +96,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
         public TimeSlider()
-        {            
+        {
+            Initialize();
             _playTimer = new DispatcherTimer() { Interval = PlaybackInterval };
             _playTimer.Tick += PlayTimer_Tick;
         }
