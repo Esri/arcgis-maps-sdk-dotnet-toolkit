@@ -11,8 +11,8 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <esri:SceneView Scene="{x:Bind Scene}" x:Name="sceneView"/>
 
-        <esriToolkit:Compass x:Name="compass"  Heading="{x:Bind sceneView.Camera.Heading, Mode=OneWay}" 
-                             Margin="20" Tapped="Compass_Tapped" AutoHide="{x:Bind autohide.IsChecked.Value, Mode=OneWay}" />
+        <esriToolkit:Compass x:Name="compass" GeoView="{x:Bind sceneView, Mode=OneWay}" 
+                             Margin="20" AutoHide="{x:Bind autohide.IsChecked.Value, Mode=OneWay}" />
 
         <Border Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" BorderBrush="Black" Background="#AAFFFFFF">
             <StackPanel>

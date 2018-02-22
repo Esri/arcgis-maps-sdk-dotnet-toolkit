@@ -22,12 +22,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Compass
             InitializeComponent();
         }
         
-        private async void Compass_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            // When tapping the compass, reset the rotation
-            await mapView.SetViewpointRotationAsync(0);
-        }
-
         private async void RotateLeft_Click(object sender, RoutedEventArgs e)
         {
             await mapView.SetViewpointRotationAsync(mapView.MapRotation - 30);

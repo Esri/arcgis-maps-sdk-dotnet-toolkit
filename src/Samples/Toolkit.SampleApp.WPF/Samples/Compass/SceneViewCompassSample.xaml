@@ -11,8 +11,8 @@
 
         <esri:SceneView x:Name="sceneView"/>
 
-        <esri:Compass x:Name="compass" Heading="{Binding Camera.Heading, ElementName=sceneView, Mode=OneWay}" 
-                               Margin="20" MouseDown="Compass_MouseDown" AutoHide="False" />
+        <esri:Compass x:Name="compass" GeoView="{Binding ElementName=sceneView, Mode=OneWay}" 
+                               Margin="20" AutoHide="False" />
 
         <Border Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" BorderBrush="Black" Background="#AAFFFFFF">
             <StackPanel>

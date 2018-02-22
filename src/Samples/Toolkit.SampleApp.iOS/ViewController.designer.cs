@@ -15,6 +15,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass compass { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         Esri.ArcGISRuntime.UI.Controls.MapView mapView { get; set; }
 
         [Outlet]
@@ -23,6 +27,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 
         void ReleaseDesignerOutlets ()
         {
+            if (compass != null) {
+                compass.Dispose ();
+                compass = null;
+            }
+
             if (mapView != null) {
                 mapView.Dispose ();
                 mapView = null;

@@ -61,7 +61,7 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <controls:SymbolDisplay Symbol="{Binding Symbol, Mode=OneTime}" Margin="0,0,5,0" >
+                        <controls:SymbolDisplay Symbol="{Binding Symbol, Mode=OneTime}" Margin="0,0,5,0" MaxHeight="40" MaxWidth="40">
                             <controls:SymbolDisplay.Style>
                                 <Style TargetType="controls:SymbolDisplay">
                                     <Style.Triggers>

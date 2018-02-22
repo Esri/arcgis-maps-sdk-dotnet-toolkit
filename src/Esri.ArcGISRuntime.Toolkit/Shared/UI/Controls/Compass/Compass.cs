@@ -14,19 +14,17 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-
-using System;
+using Esri.ArcGISRuntime.UI.Controls;
 using System.ComponentModel;
-using System.Windows;
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+#elif __IOS__
+using System.ComponentModel;
+using Control = UIKit.UIView;
+#elif __ANDROID__
+using Control = Android.Views.ViewGroup;
 #else
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -34,107 +32,87 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The Compass Control showing the heading on the map when the rotation is not North up / 0.
     /// </summary>
-    public class Compass : Control
+    public partial class Compass : Control
     {
-        private bool _isVisible;
+        private const double DefaultSize = 30;
+        private bool _headingSetByGeoView;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         public Compass()
-        {
-            DefaultStyleKey = typeof(Compass);
-        }
-
-        /// <inheritdoc/>
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
+#if __ANDROID__
+            : base(Android.App.Application.Context)
 #endif
         {
-            base.OnApplyTemplate();
-            _isVisible = false;
-            UpdateCompassRotation(false);
+            Initialize();
         }
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
         /// </summary>
+        /// <remarks>
+        /// This property is read-only if the <see cref="GeoView"/> property is assigned.
+        /// </remarks>
         public double Heading
         {
-            get { return (double)GetValue(HeadingProperty); }
-            set { SetValue(HeadingProperty, value); }
+            get => HeadingImpl;
+            set => HeadingImpl = value;
         }
-
-        /// <summary>
-        /// Identifies the <see cref="Heading"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty HeadingProperty =
-            DependencyProperty.Register(nameof(Heading), typeof(double), typeof(Compass), new PropertyMetadata(0d, OnHeadingPropertyChanged));
 
         /// <summary>
         /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
         /// </summary>
         public bool AutoHide
         {
-            get { return (bool)GetValue(AutoHideProperty); }
-            set { SetValue(AutoHideProperty, value); }
+            get => AutoHideImpl;
+            set => AutoHideImpl = value;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="AutoHide"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty AutoHideProperty =
-            DependencyProperty.Register(nameof(AutoHide), typeof(bool), typeof(Compass), new PropertyMetadata(true, OnAutoHidePropertyChanged));
-
-        private static void OnAutoHidePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void WireGeoViewPropertyChanged(GeoView oldGeoView, GeoView newGeoView)
         {
-            var compass = (Compass)d;
-            compass.UpdateCompassRotation(false);
+            var inpc = oldGeoView as INotifyPropertyChanged;
+            if (inpc != null)
+            {
+                inpc.PropertyChanged -= GeoView_PropertyChanged;
+            }
+
+            inpc = newGeoView as INotifyPropertyChanged;
+            if (inpc != null)
+            {
+                inpc.PropertyChanged += GeoView_PropertyChanged;
+            }
+            UpdateCompassFromGeoView(newGeoView);
         }
 
-        /// <summary>
-        /// The property changed event that is raised when
-        /// the value of Scale property changes.
-        /// </summary>
-        /// <param name="d">ScaleLine</param>
-        /// <param name="e">Contains information related to the change to the Scale property.</param>
-        private static void OnHeadingPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var compass = (Compass)d;
-            compass.UpdateCompassRotation(true);
+            var view = GeoView;
+            if (view is MapView && e.PropertyName == nameof(MapView.MapRotation) ||
+                view is SceneView && e.PropertyName == nameof(SceneView.Camera))
+                UpdateCompassFromGeoView(GeoView);
         }
 
-        private void UpdateCompassRotation(bool useTransitions)
+        private void UpdateCompassFromGeoView(GeoView view)
         {
-            double heading = Heading;
-            if (double.IsNaN(heading))
-            {
-                heading = 0;
-            }
+            _headingSetByGeoView = true;
+            Heading = (view is MapView) ? ((MapView)view).MapRotation : (view is SceneView ? ((SceneView)view).Camera.Heading : 0);
+            _headingSetByGeoView = false;
+        }
 
-            var transform = GetTemplateChild("RotateTransform") as RotateTransform;
-            if (transform != null)
+        private void ResetRotation()
+        {
+            var view = GeoView;
+            if (view is MapView)
             {
-                transform.Angle = -heading;
+                ((MapView)view).SetViewpointRotationAsync(0);
             }
-
-            bool autoHide = AutoHide && !DesignTime.IsDesignMode;
-            if (Math.Round(heading % 360) == 0 && autoHide)
+            else if (view is SceneView)
             {
-                if (_isVisible)
-                {
-                    _isVisible = false;
-                    VisualStateManager.GoToState(this, "HideCompass", useTransitions);
-                }
-            }
-            else if (!_isVisible)
-            {
-                _isVisible = true;
-                VisualStateManager.GoToState(this, "ShowCompass", useTransitions);
+                var sv = (SceneView)view;
+                var c = sv.Camera;
+                sv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
             }
         }
     }
 }
-#endif

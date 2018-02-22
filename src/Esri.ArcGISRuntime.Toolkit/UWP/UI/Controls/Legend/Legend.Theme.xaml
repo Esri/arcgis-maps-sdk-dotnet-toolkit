@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <DataTemplate x:Key="LeafItemTemplate">
+        <StackPanel Visibility="{Binding DisplayLegend}">
+            <TextBlock Text="{Binding  LayerContent.Name}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="BranchItemTemplate">
+        <StackPanel Visibility="{Binding DisplayLegend}">
+            <TextBlock Text="{Binding  LayerContent.Name}" />
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
+        </StackPanel>
+    </DataTemplate>
+    <controls:LegendItemTemplateSelector x:Key="ItemTemplateSelector" 
+                                   BranchItemTemplate="{StaticResource BranchItemTemplate}" 
+                                   LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
+    <DataTemplate x:Key="SublayerItemTemplate">
+        <StackPanel Visibility="{Binding DisplayLegend}">
+            <TextBlock Text="{Binding  LayerContent.Name}" />
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
+        </StackPanel>
+    </DataTemplate>
+    <controls:LegendItemTemplateSelector x:Key="SublayerItemTemplateSelector" 
+                                   BranchItemTemplate="{StaticResource SublayerItemTemplate}" 
+                                   LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
+    <Style TargetType="controls:Legend">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+        <Setter Property="VerticalAlignment"
+                Value="Stretch" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="BorderBrush"
+                Value="{ThemeResource ComboBoxBorderBrush}" />
+        <Setter Property="Background"
+                Value="{ThemeResource ComboBoxBackground}" />
+        <Setter Property="Foreground"
+                Value="{ThemeResource ComboBoxForeground}" />
+        <Setter Property="LayerItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Visibility="{Binding DisplayLegend}">
+                        <TextBlock Text="{Binding  LayerContent.Name}" FontWeight="Bold" />
+                        <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+                        <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:Legend">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}">
+                        <ItemsControl x:Name="List"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          ItemTemplate="{TemplateBinding LayerItemTemplate}"
+                                          Margin="{TemplateBinding Padding}"
+                                          BorderThickness="0"
+                                          Padding="0" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

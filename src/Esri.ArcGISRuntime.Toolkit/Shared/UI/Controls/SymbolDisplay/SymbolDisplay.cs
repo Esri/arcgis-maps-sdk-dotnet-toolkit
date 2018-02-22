@@ -14,16 +14,14 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-
-using System.Threading.Tasks;
-using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.UI;
+#if !__IOS__
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+#elif __IOS__
+using Control = UIKit.UIView;
+#elif __ANDROID__
+using Control = Android.Views.ViewGroup;
 #else
-using System.Windows;
 using System.Windows.Controls;
 #endif
 
@@ -32,94 +30,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
     /// </summary>
-    public class SymbolDisplay : Control
+    public partial class SymbolDisplay : Control
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
         /// </summary>
         public SymbolDisplay()
-        {
-            DefaultStyleKey = typeof(SymbolDisplay);
-        }
-
-        /// <inheritdoc />
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
+#if __ANDROID__
+            : base(Android.App.Application.Context)
 #endif
-        {
-            base.OnApplyTemplate();
-            RefreshSymbol();
-        }
+        { Initialize(); }
+        
 
         /// <summary>
         /// Gets or sets the symbol to render
         /// </summary>
-        public Esri.ArcGISRuntime.Symbology.Symbol Symbol
+        public Symbology.Symbol Symbol
         {
-            get { return (Esri.ArcGISRuntime.Symbology.Symbol)GetValue(SymbolProperty); }
-            set { SetValue(SymbolProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Symbol"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register(nameof(Symbol), typeof(Symbology.Symbol), typeof(SymbolDisplay), new PropertyMetadata(null, OnSymbolPropertyChanged));
-
-        private static void OnSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            (d as SymbolDisplay)?.RefreshSymbol();
-        }
-
-        private async void RefreshSymbol()
-        {
-            var img = GetTemplateChild("image") as Image;
-            if (img == null)
-            {
-                return;
-            }
-
-            if (Symbol == null)
-            {
-                img.Source = null;
-                img.Width = 0;
-                img.Height = 0;
-            }
-            else
-            {
-#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
-                try
-                {
-                    var scale = GetScaleFactor();
-                    var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                    img.Width = imageData.Width / scale;
-                    img.Height = imageData.Height / scale;
-                    img.Source = await imageData.ToImageSourceAsync();
-                }
-                catch
-                {
-                    img.Source = null;
-                }
-#pragma warning restore ESRI1800
-            }
-        }
-
-        private double GetScaleFactor()
-        {
-            if (!DesignTime.IsDesignMode)
-            {
-#if NETFX_CORE
-                return Windows.Graphics.Display.DisplayInformation.GetForCurrentView()?.RawPixelsPerViewPixel ?? 1;
-#else
-                var visual = PresentationSource.FromVisual(this);
-                if (visual != null)
-                    return visual.CompositionTarget.TransformToDevice.M11;
-#endif
-            }
-
-            return 1;
+            get => SymbolImpl;
+            set => SymbolImpl = value;
         }
     }
 }
