@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if XAMARIN
+#if XAMARIN && !__IOS__
 
 using Esri.ArcGISRuntime.Mapping;
 

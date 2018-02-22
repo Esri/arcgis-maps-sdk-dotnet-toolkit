@@ -34,7 +34,7 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |Compass   |*   |*   | * | * | * |
 |FeatureDataField   |*   |*   |   |   |   |
 |Legend   |*   |*   |*   |   |   |
-|LayerLegend   |*   |*   |*   |*   |*   |
+|LayerLegend   |*   |*   |*   |   |   |
 |MeasureToolbar   |*   |*   |   |   |   |
 |ScaleLine   |*   |*   |*   |*   |*   |
 |SignInForm   |   |*   |   |   |   |

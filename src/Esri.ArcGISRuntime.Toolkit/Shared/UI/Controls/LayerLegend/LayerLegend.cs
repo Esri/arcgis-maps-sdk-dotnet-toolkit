@@ -13,7 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
+#if !__IOS__
 using Esri.ArcGISRuntime.Mapping;
 using System.Collections.Generic;
 #if NETFX_CORE
@@ -98,3 +98,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#endif
