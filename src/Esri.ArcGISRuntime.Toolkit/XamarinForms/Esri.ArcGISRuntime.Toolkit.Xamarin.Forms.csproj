@@ -20,20 +20,15 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
-    <ProjectReference Include="..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <ProjectReference Include="..\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <ProjectReference Include="..\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.2.1" />
     <PackageReference Include="Xamarin.Forms" Version="2.4.0.74863" />
+    <ProjectReference Include="..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj" />
   </ItemGroup>
   
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />

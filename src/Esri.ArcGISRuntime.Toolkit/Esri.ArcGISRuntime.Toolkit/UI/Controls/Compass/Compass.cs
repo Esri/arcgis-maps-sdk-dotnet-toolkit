@@ -19,7 +19,6 @@ using System.ComponentModel;
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 #elif __IOS__
-using System.ComponentModel;
 using Control = UIKit.UIView;
 #elif __ANDROID__
 using Control = Android.Views.ViewGroup;

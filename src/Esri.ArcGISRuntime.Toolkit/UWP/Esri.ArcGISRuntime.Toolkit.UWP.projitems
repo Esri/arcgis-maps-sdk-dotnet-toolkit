@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>e8657c80-a1ab-4d77-9f75-c923ab330afb</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit.UI</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)**\*.rd.xml" />
+    <Page Include="$(MSBuildThisFileDirectory)**\*.xaml" Exclude="$(MSBuildThisFileDirectory)**\bin\**\*.xaml;$(MSBuildThisFileDirectory)**\obj\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Compile Update="$(MSBuildThisFileDirectory)**\*.xaml.cs" DependentUpon="%(Filename)" />
+    <Content Include="$(MSBuildThisFileDirectory)**\*.png" Exclude="$(MSBuildThisFileDirectory)**\bin\**\*.png;$(MSBuildThisFileDirectory)**\obj\**\*.png" />
+	<PRIResource Include="$(MSBuildThisFileDirectory)**\*.resw" />
+  </ItemGroup>
+  <Target Name="CopyResources" BeforeTargets="Build;Rebuild">
+   <ItemGroup>  
+        <WPFResourceFiles Include="$(MSBuildThisFileDirectory)..\WPF\LocalizedStrings\*.resx"/>  
+		<UWPResourceFiles Include="$(MSBuildThisFileDirectory)LocalizedStrings\en-US\*.resw"/>  
+    </ItemGroup>  
+    <Copy
+      SourceFiles="@(WPFResourceFiles)"
+      DestinationFiles="@(UWPResourceFiles)" SkipUnchangedFiles="True" />
+  </Target>
+</Project>
