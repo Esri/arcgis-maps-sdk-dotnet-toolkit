@@ -21,6 +21,7 @@ using Android.Views;
 using Android.Widget;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {

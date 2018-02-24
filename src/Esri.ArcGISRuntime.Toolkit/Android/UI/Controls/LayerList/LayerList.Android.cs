@@ -20,6 +20,7 @@ using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using static Android.Widget.AbsListView;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

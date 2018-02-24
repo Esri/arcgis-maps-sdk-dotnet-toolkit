@@ -17,7 +17,7 @@
 using Android.Views;
 using Android.Widget;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     internal static class ListViewExtensions
     {
