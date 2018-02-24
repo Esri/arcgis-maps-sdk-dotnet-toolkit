@@ -36,7 +36,7 @@
   
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
-	<PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.2.1" />
+	  <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.2.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
@@ -60,13 +60,33 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
- 
+   
   <!--<ItemGroup> 
      <PackageReference Include="StyleCop.Analyzers">
 	  <PrivateAssets>all</PrivateAssets>
       <Version>1.0.2</Version>
     </PackageReference>
   </ItemGroup>-->
+  
+  <ItemGroup>
+    <_ResxFiles Remove="**\*.resx" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+  	<Compile Remove="LocalizedStrings\Resources.Designer.cs" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0'">
+    <!-- <Compile Include="LocalizedStrings\*.cs" /> -->
+    <EmbeddedResource Update="LocalizedStrings\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+	<Compile Update="LocalizedStrings\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
  
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />

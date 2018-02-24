@@ -13,12 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
     <Page Include="$(MSBuildThisFileDirectory)Themes\Generic.xaml" SubType="Designer" Generator="XamlIntelliSenseFileGenerator" />
     <Page Include="$(MSBuildThisFileDirectory)**\*.xaml" Exclude="$(MSBuildThisFileDirectory)Themes\Generic.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Compile Update="$(MSBuildThisFileDirectory)**\*.xaml.cs" DependentUpon="%(Filename)" />
-    <Resource Include="$(MSBuildThisFileDirectory)**\*.png" />
+    <Compile Update="$(MSBuildThisFileDirectory)**\*.xaml.cs" DependentUpon="%(Filename).xaml" />
+    <Resource Include="$(MSBuildThisFileDirectory)**\Assets\*.png" Link="Assets\%(Filename).png" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)LocalizedStrings\Resources.resx">
-    </EmbeddedResource>
-  </ItemGroup>
-  
 </Project>
