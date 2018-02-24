@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);uap10.0;$(AndroidTargetFramework);net452</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework)</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit</Title>
     <Description>ArcGIS Runtime controls and utilities for WPF, Universal Windows, iOS and Android apps.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D iOS Android UWP Xamarin WPF toolkit</PackageTags>
@@ -12,11 +12,11 @@
 	  <!-- Work around MSBuild bug when building from comandline: https://github.com/Microsoft/msbuild/issues/2274 -->
     <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
 
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
@@ -30,25 +30,25 @@
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
    <DefineConstants>$(DefineConstants);NETFRAMEWORK</DefineConstants>
   </PropertyGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="5.3.4" />
 	  <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.2.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-	<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.2.1" />
+	<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.2.1" ExcludeAssets="contentFiles;build" IncludeAssets="compile" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.2.1" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.2.1" ExcludeAssets="contentFiles;build" IncludeAssets="compile" />
     <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
      <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.2.1">
       <ExcludeAssets>contentFiles;build</ExcludeAssets>
       <IncludeAssets>compile</IncludeAssets>
@@ -71,11 +71,11 @@
   <ItemGroup>
     <_ResxFiles Remove="**\*.resx" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
   	<Compile Remove="LocalizedStrings\Resources.Designer.cs" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0'">
+  <ItemGroup Condition="'$(TargetFramework)' != '$(UWPTargetFramework)'">
     <!-- <Compile Include="LocalizedStrings\*.cs" /> -->
     <EmbeddedResource Update="LocalizedStrings\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -94,22 +94,9 @@
 
   <Import Project="$(MSBuildThisFileDirectory)..\Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == 'uap10.0'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == 'net452'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
   
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
-  <!--
-  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
-    <Compile Update="$(MSBuildThisFileDirectory)..\WPF\LocalizedStrings\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="$(MSBuildThisFileDirectory)..\WPF\LocalizedStrings\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>-->
+  
 </Project>
-
-
