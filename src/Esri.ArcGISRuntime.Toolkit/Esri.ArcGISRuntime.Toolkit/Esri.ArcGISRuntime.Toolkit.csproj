@@ -40,11 +40,11 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-	<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.2.1" ExcludeAssets="contentFiles;build" IncludeAssets="compile" />
+	<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.2.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.2.1" ExcludeAssets="contentFiles;build" IncludeAssets="compile" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.2.1" />
     <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
   </ItemGroup>
   
