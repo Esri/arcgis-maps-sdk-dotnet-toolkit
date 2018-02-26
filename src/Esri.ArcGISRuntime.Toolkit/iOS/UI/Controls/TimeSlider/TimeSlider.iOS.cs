@@ -29,27 +29,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private RectangleView SliderTrack;
         private RectangleView MinimumThumb;
         private RectangleView MaximumThumb;
+        private RectangleView HorizontalTrackThumb;
         private RectangleView _startTimeTickmark;
         private RectangleView _endTimeTickmark;
+        private bool _elementsArranged = false;
+        private bool _isSizeValid = false;
+        private bool _isHorizontalThumbFocused = false;
+        private CGPoint _lastTouchLocation;
 
         private void Initialize()
         {
-            //_rootStackView = new UIStackView()
-            //{
-            //    Axis = UILayoutConstraintAxis.Horizontal,
-            //    Alignment = UIStackViewAlignment.Leading,
-            //    Distribution = UIStackViewDistribution.Fill,
-            //    TranslatesAutoresizingMaskIntoConstraints = false,
-            //    Spacing = 0
-            //};
-
-
-            //someUIView = new UIView()
-            //{
-            //    BackgroundColor = UIColor.Purple
-            //};
-            //AddSubview(someUIView);
-
             var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
             FullExtentStartTimeLabel = new UILabel()
             {
@@ -75,27 +64,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 BackgroundColor = FullExtentStroke
             };
             AddSubview(_startTimeTickmark);
-            //_rootStackView.AddArrangedSubview(_startTimeTickmark);
 
             _endTimeTickmark = new RectangleView(endTickWidth, endTickHeight) { BackgroundColor = FullExtentStroke };
             AddSubview(_endTimeTickmark);
-            //_endTimeTickmarkContainer = new UIView();
-            //_endTimeTickmarkContainer.AddSubview(_endTimeTickmark);
-            //_rootStackView.AddArrangedSubview(_endTimeTickmarkContainer);
-
-            //AddSubview(_rootStackView);
-
-            // Anchor the root stack view to the bottom left of the view
-            //_rootStackView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
-            //_rootStackView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
-
-            //InvalidateIntrinsicContentSize();
-
-            //SliderTrack = new UIView
-            //{
-            //    UserInteractionEnabled = false
-            //};
-            //AddSubview(SliderTrack);
 
             SliderTrack = new RectangleView(100, 7)
             {
@@ -106,6 +77,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 UseShadow = false
             };
             AddSubview(SliderTrack);
+
+            HorizontalTrackThumb = new RectangleView(100, 7)
+            {
+                BackgroundColor = CurrentExtentFill,
+                BorderColor = FullExtentStroke,
+                BorderWidth = SliderTrack.BorderWidth
+            };
+            HorizontalTrackThumb.PropertyChanged += (o, e) =>
+            {
+                if (e.PropertyName == nameof(RectangleView.Frame))
+                {
+                    HorizontalTrackThumb.Width = HorizontalTrackThumb.Frame.Width;
+                }
+            };
+
+            SliderTrack.AddSubview(HorizontalTrackThumb);
 
             Tickmarks = new Primitives.Tickbar()
             {
@@ -169,29 +156,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ApplyLabelMode(LabelMode);
         }
 
-        private bool _isSizeValid = false;
-
         /// <inheritdoc />
         public override bool BeginTracking(UITouch uitouch, UIEvent uievent)
         {
             var location = uitouch.LocationInView(SliderTrack);
-            //UIView trackedView;
-            //if (MinimumThumb.Frame.Contains(location))
-            //{
-            //    var loc = uitouch.LocationInView(MinimumThumb);
-            //    _lastTouchLocation = new CGPoint(loc.X - MinimumThumb.Width / 2, loc.Y - MinimumThumb.Height / 2);
-            //    MinimumThumb.IsFocused = true;
-            //}
-            //else if (MaximumThumb.Frame.Contains(location))
-            //{
-            //    var loc = uitouch.LocationInView(MaximumThumb);
-            //    _lastTouchLocation = new CGPoint(loc.X - MaximumThumb.Width / 2, loc.Y - MaximumThumb.Height / 2);
-            //    MaximumThumb.IsFocused = true;
-            //}
-            MinimumThumb.IsFocused = MinimumThumb.Frame.Contains(location);
-            MaximumThumb.IsFocused = MaximumThumb.Frame.Contains(location);
-
-            //_lastTouchLocation = location;
+            if (MinimumThumb.Frame.Contains(location))
+            {
+                MinimumThumb.IsFocused = true;
+                _lastTouchLocation = uitouch.LocationInView(MinimumThumb);
+            }
+            else if (MaximumThumb.Frame.Contains(location))
+            {
+                MaximumThumb.IsFocused = true;
+                _lastTouchLocation = uitouch.LocationInView(MaximumThumb);
+            }
+            // TODO: Allow dragging middle thumb
+            // else if (HorizontalTrackThumb.Frame.Contains(location))
+            // {
+            //    _isHorizontalThumbFocused = true;
+            //    _lastTouchLocation = uitouch.LocationInView(HorizontalTrackThumb);
+            // }
 
             return true;
         }
@@ -199,17 +183,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override bool ContinueTracking(UITouch uitouch, UIEvent uievent)
         {
-            if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused)
+            if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused && !_isHorizontalThumbFocused)
                 return true;
 
-            var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb;
+            var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb.IsFocused ? MaximumThumb : HorizontalTrackThumb;
 
             var current = uitouch.LocationInView(trackedView);
-            var translateX = current.X - trackedView.Width / 2;
+            //var translateX = current.X - trackedView.Frame.Width / 2;
+            var translateX = current.X - _lastTouchLocation.X;
             if (MinimumThumb.IsFocused)
                 OnMinimumThumbDrag(translateX);
             if (MaximumThumb.IsFocused)
                 OnMaximumThumbDrag(translateX);
+            // TODO: Allow dragging middle thumb
+            // if (_isHorizontalThumbFocused)
+                // OnCurrentExtentThumbDrag(translateX);
 
             return true;
         }
@@ -217,9 +205,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override void EndTracking(UITouch uitouch, UIEvent uievent)
         {
-            //_lastTouchLocation = null;
             MinimumThumb.IsFocused = false;
             MaximumThumb.IsFocused = false;
+            _isHorizontalThumbFocused = false;
             OnDragCompleted();
         }
 
@@ -251,9 +239,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.LayoutSubviews();
 
             ArrangeTrackElements();
-
-            //someUIView.Frame = Bounds;
-            //_endTimeTickmarkContainer.Frame = new CGRect(0, 0, Bounds.Width - 1, 6);
         }
 
         private CGSize MeasureSize()
@@ -263,6 +248,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void ArrangeTrackElements()
         {
+            if (_elementsArranged) // Ensure this is only done once per instance
+                return;
+            
+            _elementsArranged = true;
+
             var availableWidth = Bounds.Width;
 
             var fullExtentStartLabelSize = FullExtentStartTimeLabel.SizeThatFits(Bounds.Size);
@@ -285,6 +275,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SliderTrack.Width = sliderTrackWidth;
             SliderTrack.Frame = new CGRect(sliderTrackLeft, sliderTrackTop, sliderTrackWidth, SliderTrack.Height);
 
+            HorizontalTrackThumb.Frame = new CGRect(0, 0, sliderTrackWidth, SliderTrack.Height);
+            //HorizontalTrackThumb.FrameUpdated += (o, e) =>
+            //{
+            //    var l = HorizontalTrackThumb.Frame.Left;
+            //    var r = HorizontalTrackThumb.Frame.Right;
+            //};
+
             //Tickmarks.BackgroundColor = UIColor.Red;
             Tickmarks.Frame = new CGRect(0, SliderTrack.Height, sliderTrackWidth, 50);
 
@@ -292,7 +289,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var thumbLeft = 0 - (MinimumThumb.Width / 2);
             MinimumThumb.Frame = new CGRect(thumbLeft, thumbTop, MinimumThumb.Width, MinimumThumb.Height);
             MaximumThumb.Frame = new CGRect(thumbLeft, thumbTop, MaximumThumb.Width, MaximumThumb.Height);
-
             var thumbLabelTop = MinimumThumb.Frame.Bottom + 1;
             var minLabelSize = CalculateTextSize(MinimumThumbLabel);
             var maxLabelSize = CalculateTextSize(MaximumThumbLabel);
@@ -313,6 +309,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? "";
             MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? "";
         }
+
+        private void ApplyCurrentExtentFill() => HorizontalTrackThumb.BackgroundColor = CurrentExtentFill;
     }
 }
 

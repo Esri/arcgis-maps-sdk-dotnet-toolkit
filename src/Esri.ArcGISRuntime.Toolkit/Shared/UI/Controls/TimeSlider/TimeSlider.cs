@@ -68,7 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private TextBlock MinimumThumbLabel;
         private TextBlock MaximumThumbLabel;
-        private Thumb HorizontalTrackThumb;
         private RepeatButton SliderTrackStepBackRepeater;
         private RepeatButton SliderTrackStepForwardRepeater;
         private ToggleButton PlayPauseButton;

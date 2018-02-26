@@ -19,7 +19,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using UIKit;
 #if __IOS__
 using Color = UIKit.UIColor;
 #endif
@@ -228,7 +227,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbStroke = UIColor.LightGray;
+        private Color _thumbStroke = Color.LightGray;
         /// <summary>
         /// Gets or sets the border color of the thumbs
         /// </summary>
@@ -242,7 +241,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbFill = UIColor.White;
+        private Color _thumbFill = Color.White;
         /// <summary>
         /// Gets or sets the fill color of the thumbs
         /// </summary>
@@ -256,7 +255,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _currentExtentFill;
+        private Color _currentExtentFill = Color.DarkGray;
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
         /// </summary>
@@ -266,7 +265,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _currentExtentFill = value;
-                // TODO: Apply new color
+                ApplyCurrentExtentFill();
             }
         }
 

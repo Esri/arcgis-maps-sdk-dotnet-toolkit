@@ -35,8 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             var width = frameRight - left;
             var height = frameBottom - top;
 
-            if ((nfloat)left != view.Frame.Left)
-                view.Frame = new CGRect(left, view.Frame.Top, view.Frame.Width, view.Frame.Height);
+            if ((nfloat)left != view.Frame.Left || (nfloat)right != view.Frame.Right)
+                view.Frame = new CGRect(left, view.Frame.Top, width, view.Frame.Height);
         }
 
         public static double GetActualWidth(this UIView view) => !view.IntrinsicContentSize.IsEmpty ? view.IntrinsicContentSize.Width : view.Bounds.Width;
