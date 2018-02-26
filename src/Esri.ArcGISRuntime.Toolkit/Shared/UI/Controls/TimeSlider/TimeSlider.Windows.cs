@@ -58,6 +58,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class TimeSlider : Control
     {
         private FrameworkElement SliderTrack;
+        private Thumb MinimumThumb;
+        private Thumb MaximumThumb;
 
         private void Initialize()
         {

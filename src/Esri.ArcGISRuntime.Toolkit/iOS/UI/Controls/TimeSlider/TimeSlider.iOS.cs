@@ -27,11 +27,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class TimeSlider : UIControl
     {
         private RectangleView SliderTrack;
+        private RectangleView MinimumThumb;
+        private RectangleView MaximumThumb;
         private RectangleView _startTimeTickmark;
         private RectangleView _endTimeTickmark;
-        private UIView _endTimeTickmarkContainer;
-        private UIStackView _rootStackView;
-        private UIView someUIView;
 
         private void Initialize()
         {
@@ -92,11 +91,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             //InvalidateIntrinsicContentSize();
 
+            //SliderTrack = new UIView
+            //{
+            //    UserInteractionEnabled = false
+            //};
+            //AddSubview(SliderTrack);
+
             SliderTrack = new RectangleView(100, 7)
             {
                 BackgroundColor = FullExtentFill,
-                BorderColor = FullExtentStroke.CGColor,
-                BorderWidth = 1
+                BorderColor = FullExtentStroke,
+                BorderWidth = 1.5,
+                UserInteractionEnabled = false,
+                UseShadow = false
             };
             AddSubview(SliderTrack);
 
@@ -106,7 +113,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 TickLabelColor = TimeStepIntervalLabelColor,
                 ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval
             };
-            AddSubview(Tickmarks);
+            SliderTrack.AddSubview(Tickmarks);
+
+            var thumbSize = 23;
+            MinimumThumb = new RectangleView()
+            {
+                BackgroundColor = ThumbFill,
+                BorderColor = ThumbStroke,
+                Width = thumbSize,
+                Height = thumbSize,
+                CornerRadius = thumbSize / 2d,
+                BorderWidth = 0.5,
+                UseShadow = true,
+                UserInteractionEnabled = false
+            };
+            SliderTrack.AddSubview(MinimumThumb);
+
+            MaximumThumb = new RectangleView()
+            {
+                BackgroundColor = ThumbFill,
+                BorderColor = ThumbStroke,
+                Width = thumbSize,
+                Height = thumbSize,
+                CornerRadius = thumbSize / 2d,
+                BorderWidth = 0.5,
+                UseShadow = true,
+                UserInteractionEnabled = false
+            };
+            SliderTrack.AddSubview(MaximumThumb);
 
             var currentExtentLabelFormat = string.IsNullOrEmpty(CurrentExtentLabelFormat) ?
                 _defaultCurrentExtentLabelFormat : CurrentExtentLabelFormat;
@@ -114,21 +148,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? string.Empty,
                 Font = UIFont.SystemFontOfSize(11),
-                TextColor = CurrentExtentLabelColor
+                TextColor = CurrentExtentLabelColor,
+                Hidden = LabelMode != TimeSliderLabelMode.CurrentExtent,
+                LineBreakMode = UILineBreakMode.Clip
             };
-            AddSubview(MinimumThumbLabel);
+            SliderTrack.AddSubview(MinimumThumbLabel);
 
             MaximumThumbLabel = new UILabel()
             {
                 Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? string.Empty,
                 Font = UIFont.SystemFontOfSize(11),
-                TextColor = CurrentExtentLabelColor
+                TextColor = CurrentExtentLabelColor,
+                Hidden = LabelMode != TimeSliderLabelMode.CurrentExtent,
+                LineBreakMode = UILineBreakMode.Clip
             };
-            AddSubview(MaximumThumbLabel);
+            SliderTrack.AddSubview(MaximumThumbLabel);
 
             PositionTickmarks();
             //SetButtonVisibility();
-            //ApplyLabelMode(LabelMode);
+            ApplyLabelMode(LabelMode);
         }
 
         private bool _isSizeValid = false;
@@ -136,13 +174,53 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override bool BeginTracking(UITouch uitouch, UIEvent uievent)
         {
-            return base.BeginTracking(uitouch, uievent);
+            var location = uitouch.LocationInView(SliderTrack);
+            //UIView trackedView;
+            //if (MinimumThumb.Frame.Contains(location))
+            //{
+            //    var loc = uitouch.LocationInView(MinimumThumb);
+            //    _lastTouchLocation = new CGPoint(loc.X - MinimumThumb.Width / 2, loc.Y - MinimumThumb.Height / 2);
+            //    MinimumThumb.IsFocused = true;
+            //}
+            //else if (MaximumThumb.Frame.Contains(location))
+            //{
+            //    var loc = uitouch.LocationInView(MaximumThumb);
+            //    _lastTouchLocation = new CGPoint(loc.X - MaximumThumb.Width / 2, loc.Y - MaximumThumb.Height / 2);
+            //    MaximumThumb.IsFocused = true;
+            //}
+            MinimumThumb.IsFocused = MinimumThumb.Frame.Contains(location);
+            MaximumThumb.IsFocused = MaximumThumb.Frame.Contains(location);
+
+            //_lastTouchLocation = location;
+
+            return true;
         }
 
         /// <inheritdoc />
         public override bool ContinueTracking(UITouch uitouch, UIEvent uievent)
         {
-            return base.ContinueTracking(uitouch, uievent);
+            if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused)
+                return true;
+
+            var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb;
+
+            var current = uitouch.LocationInView(trackedView);
+            var translateX = current.X - trackedView.Width / 2;
+            if (MinimumThumb.IsFocused)
+                OnMinimumThumbDrag(translateX);
+            if (MaximumThumb.IsFocused)
+                OnMaximumThumbDrag(translateX);
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override void EndTracking(UITouch uitouch, UIEvent uievent)
+        {
+            //_lastTouchLocation = null;
+            MinimumThumb.IsFocused = false;
+            MaximumThumb.IsFocused = false;
+            OnDragCompleted();
         }
 
         /// <inheritdoc />
@@ -207,7 +285,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SliderTrack.Width = sliderTrackWidth;
             SliderTrack.Frame = new CGRect(sliderTrackLeft, sliderTrackTop, sliderTrackWidth, SliderTrack.Height);
 
-            Tickmarks.Frame = new CGRect(sliderTrackLeft, SliderTrack.Frame.Bottom, sliderTrackWidth, SliderTrack.Frame.Height);
+            //Tickmarks.BackgroundColor = UIColor.Red;
+            Tickmarks.Frame = new CGRect(0, SliderTrack.Height, sliderTrackWidth, 50);
+
+            var thumbTop = (SliderTrack.Frame.Height - MinimumThumb.Height) / 2; // (SliderTrack.Frame.Top + SliderTrack.Frame.Height / 2) - (MinimumThumb.Height / 2);
+            var thumbLeft = 0 - (MinimumThumb.Width / 2);
+            MinimumThumb.Frame = new CGRect(thumbLeft, thumbTop, MinimumThumb.Width, MinimumThumb.Height);
+            MaximumThumb.Frame = new CGRect(thumbLeft, thumbTop, MaximumThumb.Width, MaximumThumb.Height);
+
+            var thumbLabelTop = MinimumThumb.Frame.Bottom + 1;
+            var minLabelSize = CalculateTextSize(MinimumThumbLabel);
+            var maxLabelSize = CalculateTextSize(MaximumThumbLabel);
+            MinimumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, minLabelSize.Height);
+            MaximumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, maxLabelSize.Height);
         }
 
         private void UpdateFullExtentLabels()
@@ -215,6 +305,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
             FullExtentStartTimeLabel.Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? "";
             FullExtentEndTimeLabel.Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? "";
+        }
+
+        private void UpdateCurrentExtentLabels()
+        {
+            var currentExtentLabelFormat = string.IsNullOrEmpty(CurrentExtentLabelFormat) ? _defaultCurrentExtentLabelFormat : CurrentExtentLabelFormat;
+            MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? "";
+            MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? "";
         }
     }
 }

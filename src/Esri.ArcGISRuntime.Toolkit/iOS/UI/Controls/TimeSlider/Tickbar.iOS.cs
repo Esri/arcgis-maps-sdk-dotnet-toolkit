@@ -52,7 +52,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 BackgroundColor = TickFill,
                 Width = 1,
-                Height = 4
+                Height = 4,
+                BorderWidth = 0
             };
             SetIsMajorTickmark(tick, false);
             SetPosition(tick, position);
@@ -66,7 +67,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 BackgroundColor = TickFill,
                 Width = 1,
-                Height = 7
+                Height = 7,
+                BorderWidth = 0
             };
 
             var majorTickContainer = new UIView();

@@ -29,14 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     /// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size.
     /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
-    internal class RectangleView : UIView, INotifyPropertyChanged
+    internal class RectangleView : UIControl, INotifyPropertyChanged
     {
         private UIView _childView;
 
         public RectangleView()
         {
-            _childView = new UIView();
-            AddSubview(_childView);
+            base.BackgroundColor = UIColor.Clear;
         }
 
         public RectangleView(double width, double height) : this()
@@ -54,7 +53,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             set
             {
                 _size.Width = (nfloat)value;
-                _childView.Frame = new CGRect(CGPoint.Empty, _size);
                 InvalidateIntrinsicContentSize();
                 OnPropertyChanged();
             }
@@ -69,28 +67,89 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             set
             {
                 _size.Height = (nfloat)value;
-                _childView.Frame = new CGRect(CGPoint.Empty, _size);
                 InvalidateIntrinsicContentSize();
                 OnPropertyChanged();
             }
         }
 
+        private UIColor _backgroundColor = UIColor.Clear;
         public override UIColor BackgroundColor
         {
-            get => _childView.BackgroundColor;
-            set => _childView.BackgroundColor = value;
+            get => _backgroundColor;
+            set
+            {
+                _backgroundColor = value;
+                SetNeedsDisplay();
+            }
         }
 
+        private double _borderWidth;
         public double BorderWidth
         {
-            get => Layer.BorderWidth;
-            set => Layer.BorderWidth = (nfloat)value;
+            get => _borderWidth;
+            set
+            {
+                _borderWidth = value;
+                SetNeedsDisplay();
+            }
         }
 
-        public CGColor BorderColor
+        private UIColor _borderColor = UIColor.Clear;
+        public UIColor BorderColor
         {
-            get => Layer.BorderColor;
-            set => Layer.BorderColor = value;
+            get => _borderColor;
+            set
+            {
+                _borderColor = value;
+                SetNeedsDisplay();
+            }
+        }
+
+        private double _cornerRadius;
+        public double CornerRadius
+        {
+            get => _cornerRadius;
+            set
+            {
+                _cornerRadius = value;
+                SetNeedsDisplay();
+            }
+        }
+
+        private bool _useShadow;
+        public bool UseShadow
+        {
+            get => _useShadow;
+            set
+            {
+                _useShadow = value;
+                SetNeedsDisplay();
+            }
+        }
+
+        public bool IsFocused { get; set; }
+
+        public override void Draw(CGRect rect)
+        {
+            base.Draw(rect);
+
+            CGRect renderTarget = CornerRadius > 0 ? rect.Inset(2, 2) : new CGRect(rect.Location, _size);
+            CGContext ctx = UIGraphics.GetCurrentContext();
+
+            if (UseShadow)
+            {
+                var shadowColor = BorderColor.ColorWithAlpha((nfloat)0.4);
+                ctx.SetShadow(offset: new CGSize(width: 0.0, height: 1.0), blur: (nfloat)1.0, color: shadowColor.CGColor);
+            }
+            ctx.SetFillColor(BackgroundColor.CGColor);
+            ctx.SetStrokeColor(BorderColor.CGColor);
+
+            var path = CornerRadius > 0 ? UIBezierPath.FromRoundedRect(renderTarget, (nfloat)CornerRadius) : UIBezierPath.FromRect(renderTarget);
+            ctx.AddPath(path.CGPath);
+            ctx.FillPath();
+            ctx.SetLineWidth((nfloat)BorderWidth);
+            ctx.AddPath(path.CGPath);
+            ctx.StrokePath();
         }
 
         private CGSize _size = CGSize.Empty;

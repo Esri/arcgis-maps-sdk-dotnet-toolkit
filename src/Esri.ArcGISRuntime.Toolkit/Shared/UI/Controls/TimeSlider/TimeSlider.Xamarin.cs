@@ -45,6 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var oldValue = value;
                 _currentExtent = value;
+                UpdateCurrentExtentLabels();
                 OnCurrentExtentPropertyChanged(oldValue, _currentExtent);
             }
         }
@@ -194,6 +195,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _currentExtentLabelFormat = value;
+                UpdateCurrentExtentLabels();
                 OnCurrentExtentLabelFormatPropertyChanged(_currentExtentLabelFormat);
             }
         }
@@ -226,7 +228,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbStroke;
+        private Color _thumbStroke = UIColor.LightGray;
         /// <summary>
         /// Gets or sets the border color of the thumbs
         /// </summary>
@@ -240,7 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbFill;
+        private Color _thumbFill = UIColor.White;
         /// <summary>
         /// Gets or sets the fill color of the thumbs
         /// </summary>

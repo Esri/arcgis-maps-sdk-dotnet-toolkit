@@ -66,9 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
 #region Fields
 
-        private Thumb MinimumThumb;
         private TextBlock MinimumThumbLabel;
-        private Thumb MaximumThumb;
         private TextBlock MaximumThumbLabel;
         private Thumb HorizontalTrackThumb;
         private RepeatButton SliderTrackStepBackRepeater;
@@ -157,7 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 thumbRight = right - MinimumThumb.GetActualWidth() / 2;
                 MinimumThumb.SetMargin(thumbLeft, 0, thumbRight, 0);
 
-                var isVisible = (LabelMode != TimeSliderLabelMode.CurrentExtent) || start == minimum;
+                var isVisible = LabelMode == TimeSliderLabelMode.CurrentExtent && start != minimum;
                 // TODO: Change visibility instead of opacity.  Doing so throws an exception that start time cannot be
                 // greater than end time when dragging minimum thumb.       
                 MinimumThumbLabel.SetOpacity(isVisible ? 1 : 0);
@@ -276,7 +274,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             tb.Arrange(new Rect(0, 0, 0, 0));
             return new Size(tb.ActualWidth, tb.ActualHeight);
 #elif __IOS__
-            return Size.Empty;
+            var label = new UIKit.UILabel()
+            {
+                Text = text ?? textBlock.Text,
+                Font = textBlock.Font,
+                LineBreakMode = textBlock.LineBreakMode
+            };
+            return (Size)label.SizeThatFits(new CoreGraphics.CGSize(double.MaxValue, double.MaxValue));
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
             var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
@@ -338,7 +342,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnMinimumThumbDrag(double translateX)
         {
             IsPlaying = false;
-            if (translateX == 0)
+            if (translateX == 0 || CurrentExtent == null)
                 return;
 
             if (_currentValue == null)
@@ -381,7 +385,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
 
             IsPlaying = false;
-            if (translateX == 0)
+            if (translateX == 0d || CurrentExtent == null)
                 return;
 
             if (_currentValue == null)

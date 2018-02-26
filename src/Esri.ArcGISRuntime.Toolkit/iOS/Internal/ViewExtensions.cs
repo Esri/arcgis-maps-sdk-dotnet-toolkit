@@ -27,7 +27,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         public static void SetMargin(this UIView view, double left, double top, double right, double bottom)
         {
-            view.LayoutMargins = new UIEdgeInsets((nfloat)top, (nfloat)left, (nfloat)bottom, (nfloat)right);
+            if (view?.Superview?.Frame == null)
+                return;
+            
+            var frameRight = view.Superview.Frame.Width - right;
+            var frameBottom = view.Superview.Frame.Height - bottom;
+            var width = frameRight - left;
+            var height = frameBottom - top;
+
+            if ((nfloat)left != view.Frame.Left)
+                view.Frame = new CGRect(left, view.Frame.Top, view.Frame.Width, view.Frame.Height);
         }
 
         public static double GetActualWidth(this UIView view) => !view.IntrinsicContentSize.IsEmpty ? view.IntrinsicContentSize.Width : view.Bounds.Width;
