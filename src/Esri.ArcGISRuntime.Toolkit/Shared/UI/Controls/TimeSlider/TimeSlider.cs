@@ -341,7 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnMinimumThumbDrag(double translateX)
         {
             IsPlaying = false;
-            if (translateX == 0 || CurrentExtent == null)
+            if (translateX == 0d || CurrentExtent == null)
                 return;
 
             if (_currentValue == null)
@@ -358,7 +358,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             TimeExtent tempChange = null;
             try
             {
-                tempChange = new TimeExtent(_horizontalChangeExtent.StartTime.DateTime.AddTicks(TimeChange), _horizontalChangeExtent.EndTime);
+                var newStart = _horizontalChangeExtent.StartTime.DateTime.AddTicks(TimeChange);
+                if (newStart >= _horizontalChangeExtent.EndTime)
+                    return; // Don't allow moving thumb so that min would be equal or greater than max
+                tempChange = new TimeExtent(newStart, _horizontalChangeExtent.EndTime);
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -421,10 +424,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 try
                 {
+                    var newEnd = _horizontalChangeExtent.EndTime.DateTime.AddTicks(TimeChange);
+                    if (newEnd <= _horizontalChangeExtent.StartTime)
+                        return; // Don't allow moving thumb so that max would be equal or less than min
                     // If the mouse drag creates a date thats year is before 
                     // 1/1/0001 or after 12/31/9999 then an out of range 
                     // exception will be trown.
-                    tempChange = new TimeExtent(_horizontalChangeExtent.StartTime, _horizontalChangeExtent.EndTime.DateTime.AddTicks(TimeChange));
+                    tempChange = new TimeExtent(_horizontalChangeExtent.StartTime, newEnd);
                 }
                 catch (ArgumentOutOfRangeException)
                 {
