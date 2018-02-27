@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private bool _showEntireTreeHierarchy = true;
+
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
         /// </summary>

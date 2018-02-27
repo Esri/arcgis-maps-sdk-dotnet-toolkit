@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Android.Content;
-using Android.Graphics;
-using Android.Views;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Android.Content;
+using Android.Graphics;
+using Android.Views;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
@@ -30,23 +30,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// specified width and height will be applied to the width and height of the view's layout parameters.</remarks>
     internal class RectangleView : View, INotifyPropertyChanged
     {
-        public RectangleView(Context context) : base(context)
+        public RectangleView(Context context)
+            : base(context)
         {
         }
 
-        public RectangleView(Context context, double width, double height) : this(context)
+        public RectangleView(Context context, double width, double height)
+            : this(context)
         {
             Width = width;
             Height = height;
         }
 
         private double _width;
+
         /// <summary>
         /// Gets or sets the rectangle's width
         /// </summary>
         public new double Width
         {
-            get { return _width; }
+            get => _width;
             set
             {
                 _width = value;
@@ -65,6 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     ViewGroup.LayoutParams.WrapContent,
                     ViewGroup.LayoutParams.WrapContent);
             }
+
             return LayoutParameters;
         }
 
@@ -75,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public new double Height
         {
-            get { return _height; }
+            get => _height;
             set
             {
                 _height = value;
@@ -93,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public Color BackgroundColor
         {
-            get { return _backgroundColor; }
+            get => _backgroundColor;
             set
             {
                 SetBackgroundColor(value);

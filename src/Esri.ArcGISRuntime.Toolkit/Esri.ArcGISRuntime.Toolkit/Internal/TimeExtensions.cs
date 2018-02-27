@@ -101,16 +101,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                     break;
                 case TimeUnit.Centuries:
                     timeValueAsMonths = timeStep.Duration * 1200;
+
                     // Use DateTime.AddMonths for these
                     break;
             }
 
-            if (timeValueAsTimeSpan.Ticks > 0) // Time value maps to a definitive timespan
+            if (timeValueAsTimeSpan.Ticks > 0)
             {
+                // Time value maps to a definitive timespan
                 return startTime + timeValueAsTimeSpan;
             }
-            else // Time value is months-based, so can equate to different timespans depending on the particular calendar month(s)
+            else
             {
+                // Time value is months-based, so can equate to different timespans depending on the particular calendar month(s)
                 return startTime.AddMonths(timeValueAsMonths);
             }
         }
@@ -141,29 +144,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 {
                     // Time steps can be represented as whole months.  Check whether they could also be represented as whole
                     // centuries, decades, or years.
-
                     var monthsPerTimeStep = fullExtentSpanInMonths / count;
-                    if (monthsPerTimeStep % 1200 == 0) // 1200 months in a century
+                    if (monthsPerTimeStep % 1200 == 0)
                     {
+                        // 1200 months in a century
                         return new TimeValue(monthsPerTimeStep / 1200, TimeUnit.Centuries);
                     }
-                    else if (monthsPerTimeStep % 120 == 0) // 120 months in a decade
+                    else if (monthsPerTimeStep % 120 == 0)
                     {
+                        // 120 months in a decade
                         return new TimeValue(monthsPerTimeStep / 120, TimeUnit.Decades);
                     }
-                    else if (monthsPerTimeStep % 12 == 0) // 12 months in a year
+                    else if (monthsPerTimeStep % 12 == 0)
                     {
+                        // 12 months in a year
                         return new TimeValue(monthsPerTimeStep / 12, TimeUnit.Years);
                     }
-                    else // largest whole unit the time step interval can be represented in is months
+                    else
                     {
+                        // largest whole unit the time step interval can be represented in is months
                         return new TimeValue(monthsPerTimeStep, TimeUnit.Months);
                     }
                 }
             }
 
             // The time step interval couldn't be represented as a whole number of months, decades, or centuries.  Check for smaller units.
-
             const int millisecondsPerSecond = 1000;
             const int millisecondsPerMinute = millisecondsPerSecond * 60;
             const int millisecondsPerHour = millisecondsPerMinute * 60;
@@ -174,11 +179,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             var fullExtentTimeSpan = timeExtent.EndTime - timeExtent.StartTime;
             var millisecondsPerTimeStep = fullExtentTimeSpan.TotalMilliseconds / count;
 
-            if (millisecondsPerTimeStep - Math.Truncate(millisecondsPerTimeStep) == 0) // Check whether milliseconds per time step is a whole number
+            // Check whether milliseconds per time step is a whole number
+            if (millisecondsPerTimeStep - Math.Truncate(millisecondsPerTimeStep) == 0)
             {
                 // Time steps can be represented as whole milliseconds.  Check whether they could also be represented as
                 // whole weeks, days, hours, minutes or seconds.
-
                 if (millisecondsPerTimeStep % millisecondsPerWeek == 0)
                 {
                     return new TimeValue(millisecondsPerTimeStep / millisecondsPerWeek, TimeUnit.Weeks);
@@ -209,7 +214,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 // The full time extent cannot be divided into a non-fractional time step interval.  Fall back to the smallest fractional
                 // time step interval with a unit of days or less that is greater than one.  Avoid units of months or greater since the
                 // temporal value of a fractional month is dependent on when in the calendar year the value is applied.
-
                 if (millisecondsPerTimeStep / millisecondsPerDay > 1)
                 {
                     return new TimeValue(millisecondsPerTimeStep / millisecondsPerDay, TimeUnit.Days);

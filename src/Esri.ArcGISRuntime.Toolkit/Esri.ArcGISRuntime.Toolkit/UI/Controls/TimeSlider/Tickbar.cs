@@ -46,14 +46,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public class Tickbar : Panel
     {
-        internal static readonly DependencyProperty PositionProperty =
-            DependencyProperty.RegisterAttached("Position", typeof(double), typeof(Tickbar), new PropertyMetadata(0.0));
-        internal static readonly DependencyProperty IsMajorTickmarkProperty =
-            DependencyProperty.RegisterAttached("IsMajorTickmark", typeof(bool), typeof(Tickbar), new PropertyMetadata(false));
         private const string _template =
             "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
             "<TextBlock Text=\"|\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" />" +
             "</DataTemplate>";
+
+        internal static readonly DependencyProperty PositionProperty =
+            DependencyProperty.RegisterAttached("Position", typeof(double), typeof(Tickbar), new PropertyMetadata(0.0));
+
+        internal static readonly DependencyProperty IsMajorTickmarkProperty =
+            DependencyProperty.RegisterAttached("IsMajorTickmark", typeof(bool), typeof(Tickbar), new PropertyMetadata(false));
+
         private static DataTemplate _defaultTickmarkTemplate;
         private List<ContentPresenter> _majorTickmarks = new List<ContentPresenter>();
         private List<ContentPresenter> _minorTickmarks = new List<ContentPresenter>();
@@ -74,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
             }
         }
-        
+
         /// <inheritdoc />
         protected override Size ArrangeOverride(Size finalSize)
         {
@@ -90,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             // Iterate all child ticks and calculate bounds for each
             foreach (UIElement child in Children)
             {
-                FrameworkElement c = (child as FrameworkElement);
+                FrameworkElement c = child as FrameworkElement;
                 if (c == null)
                 {
                     continue;
@@ -106,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                 // Calculate the bounds of the tick mark
                 position = finalSize.Width * position;
-                childBounds.X = position - c.DesiredSize.Width * .5;
+                childBounds.X = position - (c.DesiredSize.Width * .5);
                 childBounds.Width = c.DesiredSize.Width;
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
@@ -120,8 +123,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
 
-            if (ShowTickLabels) // Calculate positioning of tick labels and major/minor ticks
+            if (ShowTickLabels)
             {
+                // Calculate positioning of tick labels and major/minor ticks
                 var minimumLabelSpacing = 6;
 
                 var majorTickInterval = 2;
@@ -228,8 +232,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                 }
             }
-            else // !ShowTickLabels
+            else
             {
+                // !ShowTickLabels
                 for (var i = 0; i < _minorTickmarks.Count; i++)
                 {
                     _minorTickmarks[i].Arrange(minorTickmarksBounds[i]);
@@ -265,6 +270,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     height = Math.Max(d.DesiredSize.Height, height);
                 }
             }
+
             width = double.IsNaN(width) ? 0 : width;
 
             return new Size(width, height);
@@ -341,6 +347,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     }
                 }
             }
+
             bar.InvalidateMeasureAndArrange();
         }
 
@@ -415,6 +422,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 ApplyTickLabelFormat(c, TickLabelFormat);
             }
+
             Children.Add(c);
             _majorTickmarks.Add(c);
         }
@@ -480,7 +488,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DependencyProperty.Register(nameof(TickLabelColor), typeof(Brush), typeof(Tickbar), null);
 
         /// <summary>
-        /// Gets or sets whether to display labels on the ticks
+        /// Gets or sets a value indicating whether to display labels on the ticks
         /// </summary>
         /// <value>The item template.</value>
         public bool ShowTickLabels
@@ -501,7 +509,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             // Invoke a layout pass to account for tick labels being shown or hidden
             ((Tickbar)d).InvalidateMeasureAndArrange();
         }
-
 
         /// <summary>
         /// Gets or sets the string format to use for displaying the tick labels
@@ -546,8 +553,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     stringFormat: tickLabelFormat,
                     fallbackFormat: ref _originalTickLabelFormat);
             }
-            else // Children are not populated yet.  Wait for tick to load.
+            else
             {
+                // Children are not populated yet.  Wait for tick to load.
                 // Defer the method call until the tick element is loaded
                 void tickLoadedHandler(object o, RoutedEventArgs e)
                 {

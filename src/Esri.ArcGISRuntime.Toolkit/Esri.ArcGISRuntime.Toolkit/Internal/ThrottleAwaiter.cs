@@ -14,10 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
-using System.Threading.Tasks;
 using System.Threading;
-
+using System.Threading.Tasks;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -38,14 +36,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="milliseconds">Milliseconds to throttle.</param>
         public ThrottleAwaiter(int milliseconds)
         {
-            _throttleTimer = new Timer((o) => _throttleTcs.TrySetResult(true),
-                null, Timeout.Infinite, Timeout.Infinite);
+            _throttleTimer = new Timer((o) => _throttleTcs.TrySetResult(true), null, Timeout.Infinite, Timeout.Infinite);
             _interval = milliseconds;
         }
 
         /// <summary>
         /// Invokes the throttled delay
         /// </summary>
+        /// <returns>Task</returns>
         public Task ThrottleDelay()
         {
             if (_throttleTcs == null || _throttleTcs.Task.IsCompleted || _throttleTcs.Task.IsFaulted)

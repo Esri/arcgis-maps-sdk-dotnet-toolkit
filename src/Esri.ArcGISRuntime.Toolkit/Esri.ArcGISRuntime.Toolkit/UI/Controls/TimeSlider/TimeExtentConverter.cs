@@ -54,10 +54,12 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
+
             if (destinationType == typeof(string) && value is TimeExtent)
             {
                 return Convert((TimeExtent)value);
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 

@@ -28,9 +28,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\Esri.ArcGISRuntime.Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.2.1" />
     <PackageReference Include="Xamarin.Forms" Version="2.4.0.74863" />
     <ProjectReference Include="..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj" />
+    <PackageReference Include="StyleCop.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <Version>1.0.2</Version>
+    </PackageReference>
   </ItemGroup>
   
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />

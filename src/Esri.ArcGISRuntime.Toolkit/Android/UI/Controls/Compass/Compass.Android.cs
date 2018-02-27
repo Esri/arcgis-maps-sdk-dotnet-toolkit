@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017-2018 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -20,12 +20,6 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
-using Android.Widget;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -42,15 +36,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public Compass(Context context) : base(context) => Initialize();
+        public Compass(Context context)
+            : base(context) => Initialize();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public Compass(Context context, IAttributeSet attr) : base(context, attr) => Initialize();
-        
+        public Compass(Context context, IAttributeSet attr)
+            : base(context, attr) => Initialize();
+
         /// <inheritdoc />
         protected override LayoutParams GenerateDefaultLayoutParams()
         {
@@ -64,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _northArrow = new NorthArrowShape(Context) { Size = size };
             AddView(_northArrow);
             UpdateCompassRotation(false);
-            _northArrow.Click += (s,e) => ResetRotation();
+            _northArrow.Click += (s, e) => ResetRotation();
         }
 
         private void UpdateCompassRotation(bool transition)
@@ -102,26 +98,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (animate)
             {
-                if(isVisible)
+                if (isVisible)
                 {
                     if (_fadeInAnimation != null)
-                        return; //Already fading in
+                    {
+                        return; // Already fading in
+                    }
+
                     if (_fadeOutAnimation != null)
                     {
                         _fadeOutAnimation.Cancel();
                         _fadeOutAnimation = null;
                     }
-                    _fadeInAnimation = _northArrow.Animate().Alpha(1f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeInAnimation = null; })); ;
+
+                    _fadeInAnimation = _northArrow.Animate().Alpha(1f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeInAnimation = null; }));
                 }
                 else
                 {
                     if (_fadeOutAnimation != null)
-                        return; //Already fading out
+                    {
+                        return; // Already fading out
+                    }
+
                     if (_fadeInAnimation != null)
                     {
                         _fadeInAnimation.Cancel();
                         _fadeInAnimation = null;
                     }
+
                     _fadeOutAnimation = _northArrow.Animate().Alpha(0f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeOutAnimation = null; }));
                 }
             }
@@ -137,7 +141,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (s_displayMetrics == null)
             {
                 if (s_windowManager == null)
+                {
                     s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                }
+
                 if (s_windowManager == null)
                 {
                     s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
@@ -148,6 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
                 }
             }
+
             return s_displayMetrics;
         }
 
@@ -160,7 +168,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private class NorthArrowShape : View
         {
-            internal NorthArrowShape(Context context) : base(context)
+            internal NorthArrowShape(Context context)
+                : base(context)
             {
             }
 
@@ -170,8 +179,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 float size = MeasuredWidth > MeasuredHeight ? MeasuredHeight : MeasuredWidth;
                 var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip);
                 float c = size * .5f;
-                float l = (this.MeasuredWidth - size) * .5f;
-                float t = (this.MeasuredHeight - size) * .5f;
+                float l = (MeasuredWidth - size) * .5f;
+                float t = (MeasuredHeight - size) * .5f;
 
                 Paint paint = new Paint(PaintFlags.AntiAlias);
                 paint.SetStyle(Paint.Style.Fill);
@@ -180,31 +189,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 paint.SetStyle(Paint.Style.Stroke);
                 paint.StrokeWidth = strokeWidth;
                 paint.SetARGB(255, 255, 255, 255);
-                canvas.DrawCircle(c + l, c + t, size * .5f - strokeWidth / 2f, paint);
+                canvas.DrawCircle(c + l, c + t, (size * .5f) - (strokeWidth / 2f), paint);
 
                 // Draw north arrow
                 paint.SetStyle(Paint.Style.Fill);
                 paint.SetARGB(255, 199, 85, 46);
                 var path = new Path();
-                path.MoveTo(c - size * .14f + l, c + t);
-                path.LineTo(c + size * .14f + l, c + t);
-                path.LineTo(c + l, c - size * .34f + t);
+                path.MoveTo(c - (size * .14f) + l, c + t);
+                path.LineTo(c + (size * .14f) + l, c + t);
+                path.LineTo(c + l, c - (size * .34f) + t);
                 path.Close();
                 canvas.DrawPath(path, paint);
 
                 // Draw south arrow
                 paint.SetARGB(255, 255, 255, 255);
                 path = new Path();
-                path.MoveTo(c - size * .14f + l, c + t);
-                path.LineTo(c + size * .14f + l, c + t);
-                path.LineTo(c + l, c + size * .34f + t);
+                path.MoveTo(c - (size * .14f) + l, c + t);
+                path.LineTo(c + (size * .14f) + l, c + t);
+                path.LineTo(c + l, c + (size * .34f) + t);
                 path.Close();
                 canvas.DrawPath(path, paint);
 
                 base.OnDraw(canvas);
 
-                PivotX = size / 2 + l;
-                PivotY = size / 2 + t;
+                PivotX = (size / 2) + l;
+                PivotY = (size / 2) + t;
             }
 
             public float Size { get; set; } = (float)DefaultSize;

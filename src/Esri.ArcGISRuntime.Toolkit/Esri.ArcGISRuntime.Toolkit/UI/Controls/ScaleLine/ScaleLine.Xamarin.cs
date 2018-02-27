@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private double MapScaleImpl
         {
-            get { return _mapScale; }
+            get => _mapScale;
             set
             {
                 _mapScale = value;
@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private double TargetWidthImpl
         {
-            get { return _targetWidth; }
+            get => _targetWidth;
             set
             {
                 _targetWidth = value;
@@ -58,7 +58,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public MapView MapView
         {
-            get { return _mapView; }
+            get => _mapView;
+
             set
             {
                 var oldView = _mapView;

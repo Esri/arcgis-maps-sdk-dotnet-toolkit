@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -15,12 +15,8 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using CoreGraphics;
-using Foundation;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -44,7 +40,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
 #pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public ScaleLine(IntPtr handle) : base(handle)
+        public ScaleLine(IntPtr handle)
+            : base(handle)
         {
             Initialize();
         }
@@ -66,7 +63,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // At run-time, don't display the sub-views until their dimensions have been calculated
             if (!DesignTime.IsDesignMode)
+            {
                 Hidden = true;
+            }
 
             // Vertically-oriented stack view for containing all scalebar components
             _rootStackView = new UIStackView()
@@ -231,13 +230,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public UIColor ForegroundColor
         {
-            get { return _foregroundColor; }
+            get => _foregroundColor;
             set
             {
                 _foregroundColor = value;
 
                 if (_metricScaleLine == null)
+                {
                     return;
+                }
 
                 _combinedScaleLine.BackgroundColor = value;
                 _metricUnit.TextColor = value;
@@ -253,6 +254,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private CGSize _intrinsicContentSize;
+
         /// <inheritdoc />
         public override CGSize IntrinsicContentSize
         {
@@ -263,6 +265,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _isSizeValid = true;
                     _intrinsicContentSize = MeasureSize();
                 }
+
                 return _intrinsicContentSize;
             }
         }
@@ -275,9 +278,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new CGSize(widthThatFits, heightThatFits);
         }
 
-        /// <summary>
-        /// Internal use only.  Invoked by the Xamarin iOS designer.
-        /// </summary>
+        /// <inheritdoc cref="IComponent.Site" />
         ISite IComponent.Site { get; set; }
 
         private EventHandler _disposed;
@@ -315,12 +316,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         rowHeight = elementSize.Height;
                     }
+
                     rowWidth += elementSize.Width;
                 }
+
                 if (rowWidth > totalWidth)
                 {
                     totalWidth = rowWidth;
                 }
+
                 totalHeight += rowHeight;
             }
 

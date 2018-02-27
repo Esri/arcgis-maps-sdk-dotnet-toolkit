@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -165,7 +165,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (SelectedLinearUnit == null)
             {
-                SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ? 
+                SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ?
                     Geometry.LinearUnits.Meters :
                     LinearUnits.FirstOrDefault();
             }

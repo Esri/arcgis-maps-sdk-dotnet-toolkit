@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -32,14 +32,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class LegendItemTemplateSelector : DataTemplateSelector
     {
         public DataTemplate LeafItemTemplate { get; set; }
+
         public DataTemplate BranchItemTemplate { get; set; }
 
 #if NETFX_CORE
-            protected override DataTemplate SelectTemplateCore
+            protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
 #else
-            public override DataTemplate SelectTemplate
+            public override DataTemplate SelectTemplate(object item, DependencyObject container)
 #endif
-            (object item, DependencyObject container)
         {
             if ((item as LayerContentViewModel)?.Sublayers?.Any() ?? false)
             {

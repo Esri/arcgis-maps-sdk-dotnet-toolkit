@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
+using System.ComponentModel;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -21,11 +23,6 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -48,7 +45,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public ScaleLine(Context context) : base(context)
+        public ScaleLine(Context context)
+            : base(context)
         {
             Initialize();
         }
@@ -58,7 +56,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public ScaleLine(Context context, IAttributeSet attr) : base(context, attr)
+        public ScaleLine(Context context, IAttributeSet attr)
+            : base(context, attr)
         {
             Initialize();
         }
@@ -66,7 +65,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize()
         {
             if (!DesignTime.IsDesignMode)
+            {
                 TargetWidth = CalculateScreenDimension(200);
+            }
 
             // Vertically-oriented layout for containing all scalebar components
             _rootLayout = new LinearLayout(Context)
@@ -198,13 +199,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public Color ForegroundColor
         {
-            get { return _foregroundColor; }
+            get => _foregroundColor;
             set
             {
                 _foregroundColor = value;
 
                 if (_metricScaleLine == null)
+                {
                     return;
+                }
 
                 // Apply specified color to scalebar elements
                 _combinedScaleLine.BackgroundColor = value;
@@ -234,7 +237,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Visibility = isVisible ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Gone;
         }
-        
+
         /// <inheritdoc />
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
@@ -266,7 +269,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (s_displayMetrics == null)
             {
                 if (s_windowManager == null)
+                {
                     s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                }
+
                 if (s_windowManager == null)
                 {
                     s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
@@ -277,6 +283,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
                 }
             }
+
             return s_displayMetrics;
         }
 

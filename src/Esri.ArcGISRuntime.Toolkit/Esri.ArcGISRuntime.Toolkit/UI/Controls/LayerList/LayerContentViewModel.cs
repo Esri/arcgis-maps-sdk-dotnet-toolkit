@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -34,6 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private WeakReference<GeoView> _view;
         private bool _generateLegend;
         private SynchronizationContext _context;
+
         public LayerContentViewModel(ILayerContent layerContent, WeakReference<GeoView> view, Symbology.Symbol symbol = null, bool generateLegend = true)
         {
             _context = SynchronizationContext.Current ?? new SynchronizationContext();
@@ -177,6 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private bool _filterByVisibleScaleRange = true;
+
         internal void UpdateLegendVisiblity(bool filterByVisibleScaleRange)
         {
             if (_filterByVisibleScaleRange == filterByVisibleScaleRange)
@@ -196,12 +197,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private double _currentScale = double.NaN;
+
         internal void UpdateScaleVisibility(double scale, bool isParentVisible)
         {
             if (double.IsNaN(scale))
             {
                 return;
             }
+
             IsInScaleRange = isParentVisible && LayerContent.IsVisibleAtScale(scale);
             _currentScale = scale;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsInScaleRange)));
@@ -224,6 +227,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Name = legend.Name;
                 _visibleAtScaleCalculation = visibleAtScaleCalculation;
             }
+
             public bool CanChangeVisibility { get; }
 
             public bool IsVisible { get; set; } = true;
@@ -296,17 +300,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get
             {
-
                 // Lazy initalization of sublayers
                 if (!_isSublayersInitialized)
                 {
                     _isSublayersInitialized = true;
                     BuildSublayerList();
                 }
+
                 return _sublayers;
             }
         }
-        
+
         internal void UpdateLayerViewState(LayerViewState state)
         {
             UpdateLoadingStatus();

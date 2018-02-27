@@ -15,10 +15,6 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
@@ -28,15 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     public class StringFormatConverter : IValueConverter
     {
-        /// <summary>
-        /// Converts the bound object into its string representation and formats it according to the format
-        /// string specified by the converter parameter
-        /// </summary>
-        /// <param name="value">The object to convert</param>
-        /// <param name="targetType">The type of the target property</param>
-        /// <param name="parameter">The format string to use when formatting the bound object</param>
-        /// <param name="language">The language of the conversion</param>
-        /// <returns>The formatted string if the conversion is successful, otherwise, the bound object</returns>
+        /// <inheritdoc cref="IValueConverter.Convert(object, Type, object, string)" />
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (value != null && parameter is string formatString)
@@ -49,10 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        /// <summary>
-        /// Not supported.  Will throw an exception if called.
-        /// </summary>
-        /// <exception cref="NotSupportedException" />
+        /// <inheritdoc cref="IValueConverter.ConvertBack(object, Type, object, string)" />
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotSupportedException();

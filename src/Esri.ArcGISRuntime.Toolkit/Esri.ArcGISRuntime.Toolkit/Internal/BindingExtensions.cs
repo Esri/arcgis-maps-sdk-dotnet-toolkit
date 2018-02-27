@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Provides utility extension methods related to data-bindings
     /// </summary>
-    static internal class BindingExtensions
+    internal static class BindingExtensions
     {
         /// <summary>
         /// Creates a copy of the specified binding
@@ -42,6 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             var copy = new Binding
             {
                 Converter = source.Converter,
+
                 // Can't change the ConverterParameter after instantation on UWP, so set it here
                 ConverterParameter = newConverterParameter ?? source.ConverterParameter,
                 FallbackValue = source.FallbackValue,
@@ -106,13 +107,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
 
             // If the fallback hasn't been populated already, store the current string format as specified by the binding
-#if NETFX_CORE
             if (fallbackFormat == null)
+            {
+#if NETFX_CORE
                 fallbackFormat = binding.Converter is StringFormatConverter ? binding.ConverterParameter as string : null;
 #else
-            if (fallbackFormat == null)
                 fallbackFormat = binding.StringFormat;
 #endif
+            }
+
             // Create a new binding to apply the format string.  Necessary because bindings that are already in use cannot be updated,
             // but we want to preserve how users may have setup the binding otherwise
             var newStringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;

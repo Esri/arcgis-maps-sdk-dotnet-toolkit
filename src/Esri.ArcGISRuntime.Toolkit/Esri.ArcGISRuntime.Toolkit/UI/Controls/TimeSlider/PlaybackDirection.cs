@@ -25,6 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Specifies that playback advances forward in time
         /// </summary>
         Forward,
+
         /// <summary>
         /// Specifies that playback moves backward in time
         /// </summary>

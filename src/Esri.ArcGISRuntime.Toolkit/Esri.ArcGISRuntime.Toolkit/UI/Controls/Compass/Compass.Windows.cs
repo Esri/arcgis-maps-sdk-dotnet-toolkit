@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017-2018 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
 //  ******************************************************************************/
 
 #if !XAMARIN
-
-using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.ComponentModel;
 using System.Windows;
+using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -82,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty HeadingProperty =
             DependencyProperty.Register(nameof(Heading), typeof(double), typeof(Compass), new PropertyMetadata(0d, OnHeadingPropertyChanged));
-        
+
         /// <summary>
         /// The property changed event that is raised when the value of Heading property changes.
         /// </summary>
@@ -149,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 VisualStateManager.GoToState(this, "ShowCompass", useTransitions);
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the GeoView property that can be attached to a Compass control to accurately set the heading, instead of
         /// setting the <see cref="Compass.Heading"/> property directly.

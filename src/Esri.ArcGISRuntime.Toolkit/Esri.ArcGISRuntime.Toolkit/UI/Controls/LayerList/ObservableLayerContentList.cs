@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
         IReadOnlyList<LayerContentViewModel>,
 #endif
-        System.ComponentModel.INotifyPropertyChanged, 
+        System.ComponentModel.INotifyPropertyChanged,
         System.Collections.Specialized.INotifyCollectionChanged
     {
         private List<LayerContentViewModel> _activeLayers = new List<LayerContentViewModel>();
@@ -90,16 +90,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 if (_reverseOrder != value)
-                {            
+                {
                     _reverseOrder = value;
 #if NETFX_CORE
                     var activeLayers = this.ToArray();
                     int i = 0;
-                    ClearItems();                   
+                    ClearItems();
                     foreach (var item in activeLayers.Reverse())
+                    {
                         InsertItem(i++, item);
+                    }
 #else
-                    _activeLayers.Reverse();                    
+                    _activeLayers.Reverse();
 #endif
                     CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Item[]"));
@@ -233,7 +235,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-        
+
 #if !NETFX_CORE
         /// <inheritdoc cref="IReadOnlyList{T}.this"/>
         public LayerContentViewModel this[int index]
@@ -256,7 +258,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 yield return _activeLayers[i];
             }
         }
-        
+
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
         IEnumerator IEnumerable.GetEnumerator()
         {

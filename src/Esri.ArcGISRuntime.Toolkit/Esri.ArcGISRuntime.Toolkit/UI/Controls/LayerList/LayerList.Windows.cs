@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "List", Type = typeof(ItemsControl))]
     public partial class LayerList
     {
-        private void Initialize() => DefaultStyleKey = this.GetType();
+        private void Initialize() => DefaultStyleKey = GetType();
 
         /// <inheritdoc/>
 #if NETFX_CORE
@@ -102,6 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 list.ItemsSource = null;
                 return;
             }
+
             foreach (var l in layers)
             {
                 if (!(l.LayerContent is Layer))
@@ -143,7 +144,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var contents = (LayerList)d;
             contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
         /// are used to determine when legend for layer is displayed.

@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Collections.ObjectModel;
+using System.Threading;
 using Android.Content;
 using Android.Runtime;
 using Android.Util;
@@ -21,8 +23,6 @@ using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using System.Collections.ObjectModel;
-using System.Threading;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -36,7 +36,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public LayerLegend(Context context) : base(context)
+        public LayerLegend(Context context)
+            : base(context)
         {
             Initialize();
         }
@@ -46,7 +47,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public LayerLegend(Context context, IAttributeSet attr) : base(context, attr)
+        public LayerLegend(Context context, IAttributeSet attr)
+            : base(context, attr)
         {
             Initialize();
         }
@@ -54,14 +56,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize()
         {
             _syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
-            
+
             _listView = new ListView(Context)
             {
                 LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
                 ScrollingCacheEnabled = false,
                 PersistentDrawingCache = PersistentDrawingCaches.NoCache,
             };
-            
+
             AddView(_listView);
         }
 
@@ -96,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Layer_Loaded(object sender, System.EventArgs e)
         {
-            (sender as ILoadable).Loaded -= Layer_Loaded;            
+            (sender as ILoadable).Loaded -= Layer_Loaded;
             _syncContext?.Post(_ => Refresh(), null);
         }
 
@@ -107,10 +109,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Initialize dimensions of root layout
             MeasureChild(_listView, widthMeasureSpec, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
-            
+
             // Calculate the ideal width and height for the view
             var desiredWidth = PaddingLeft + PaddingRight + _listView.MeasuredWidth;
-            var desiredHeight = PaddingTop + PaddingBottom +_listView.MeasuredHeight;
+            var desiredHeight = PaddingTop + PaddingBottom + _listView.MeasuredHeight;
 
             // Get the width and height of the view given any width and height constraints indicated by the width and height spec values
             var width = ResolveSize(desiredWidth, widthMeasureSpec);

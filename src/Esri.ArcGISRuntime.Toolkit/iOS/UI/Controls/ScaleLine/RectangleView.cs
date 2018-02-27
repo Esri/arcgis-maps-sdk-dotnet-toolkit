@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,12 +14,10 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using CoreGraphics;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
+using CoreGraphics;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
@@ -31,7 +29,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
     internal class RectangleView : UIView, INotifyPropertyChanged
     {
-        public RectangleView() { }
+        public RectangleView()
+        {
+        }
 
         public RectangleView(double width, double height)
         {
@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public double Width
         {
-            get { return _size.Width; }
+            get => _size.Width;
             set
             {
                 _size.Width = (nfloat)value;
@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public double Height
         {
-            get { return _size.Height; }
+            get => _size.Height;
             set
             {
                 _size.Height = (nfloat)value;
