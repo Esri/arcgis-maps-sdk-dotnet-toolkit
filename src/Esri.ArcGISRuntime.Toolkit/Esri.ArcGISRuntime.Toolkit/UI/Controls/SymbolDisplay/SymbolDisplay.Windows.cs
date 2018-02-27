@@ -109,7 +109,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
                 var visual = PresentationSource.FromVisual(this);
                 if (visual != null)
+                {
                     return visual.CompositionTarget.TransformToDevice.M11;
+                }
 #endif
             }
 

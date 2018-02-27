@@ -92,7 +92,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var compass = (Compass)d;
             if (compass.GeoView != null && !compass._headingSetByGeoView)
+            {
                 throw new InvalidOperationException("The Heading Property is read-only when the GeoView property has been assigned");
+            }
+
             compass.UpdateCompassRotation(true);
         }
 

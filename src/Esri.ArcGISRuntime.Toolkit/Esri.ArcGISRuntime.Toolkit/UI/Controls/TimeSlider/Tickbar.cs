@@ -79,7 +79,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         protected override Size ArrangeOverride(Size finalSize)
         {
             if (TickmarkPositions == null || TickmarkPositions.Count() < 2)
+            {
                 return finalSize;
+            }
 
             Rect childBounds = new Rect(0, 0, finalSize.Width, finalSize.Height);
             var majorTickmarksBounds = new List<Rect>();
@@ -90,13 +92,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 FrameworkElement c = (child as FrameworkElement);
                 if (c == null)
+                {
                     continue;
+                }
 
                 double position = (double)c.GetValue(PositionProperty);
                 var isMajorTickmark = (bool)c.GetValue(IsMajorTickmarkProperty);
 
                 if (isMajorTickmark && !ShowTickLabels)
+                {
                     continue; // Don't worry about calculating bounds for major ticks if labels are hidden
+                }
 
                 // Calculate the bounds of the tick mark
                 position = finalSize.Width * position;
@@ -153,7 +159,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                     // Only consider intervals that leave an equal number of ticks on the ends
                     if (!allowsEqualNumberOfTicksOnEnds)
+                    {
                         continue;
+                    }
 
                     // Calculate the tick index of the first major tick if we were to use the prospective interval.
                     // The index is calculated such that there will be an equal number of minor ticks before and
@@ -192,9 +200,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // Calculate the index of the middle tick.  Note that, if there are an even number of ticks, there
                     // is not one perfectly centered.  This logic takes the one before the true center of the tick bar.
                     if (tickCount % 2 == 0)
+                    {
                         firstMajorTickIndex = (int)Math.Truncate(tickCount / 2d) - 1;
+                    }
                     else
+                    {
                         firstMajorTickIndex = (int)Math.Truncate(tickCount / 2d);
+                    }
                 }
 
                 // Apply the ticks' layouts
@@ -281,7 +293,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var bar = (Tickbar)d;
 
             if (bar.MinorTickmarkTemplate == null)
+            {
                 bar.MinorTickmarkTemplate = _defaultTickmarkTemplate;
+            }
 
             var newTickPositions = (IEnumerable<double>)e.NewValue;
             var oldTickPositions = (IEnumerable<double>)e.OldValue;

@@ -49,7 +49,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public Task ThrottleDelay()
         {
             if (_throttleTcs == null || _throttleTcs.Task.IsCompleted || _throttleTcs.Task.IsFaulted)
+            {
                 _throttleTcs = new TaskCompletionSource<bool>();
+            }
 
             _throttleTimer.Change(Timeout.Infinite, Timeout.Infinite);
             _throttleTimer.Change(_interval, Timeout.Infinite);

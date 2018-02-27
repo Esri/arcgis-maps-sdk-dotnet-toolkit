@@ -180,7 +180,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal void UpdateLegendVisiblity(bool filterByVisibleScaleRange)
         {
             if (_filterByVisibleScaleRange == filterByVisibleScaleRange)
+            {
                 return;
+            }
+
             _filterByVisibleScaleRange = filterByVisibleScaleRange;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
             if (Sublayers != null)

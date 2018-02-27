@@ -89,7 +89,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var view = GeoView;
             if (view is MapView && e.PropertyName == nameof(MapView.MapRotation) ||
                 view is SceneView && e.PropertyName == nameof(SceneView.Camera))
+            {
                 UpdateCompassFromGeoView(GeoView);
+            }
         }
 
         private void UpdateCompassFromGeoView(GeoView view)

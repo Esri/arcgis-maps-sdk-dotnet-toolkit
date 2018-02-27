@@ -124,7 +124,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static TimeValue Divide(this TimeExtent timeExtent, int count)
         {
             if (timeExtent == null)
+            {
                 return null;
+            }
 
             if (timeExtent.StartTime.TimeOfDay == timeExtent.EndTime.TimeOfDay
                 && timeExtent.StartTime.Day == timeExtent.EndTime.Day
@@ -294,7 +296,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static TimeExtent Union(this TimeExtent timeExtent, TimeExtent otherTimeExtent)
         {
             if (otherTimeExtent == null)
+            {
                 return timeExtent;
+            }
 
             var startTime = timeExtent.StartTime < otherTimeExtent.StartTime ? timeExtent.StartTime : otherTimeExtent.StartTime;
             var endTime = timeExtent.EndTime > otherTimeExtent.EndTime ? timeExtent.EndTime : otherTimeExtent.EndTime;

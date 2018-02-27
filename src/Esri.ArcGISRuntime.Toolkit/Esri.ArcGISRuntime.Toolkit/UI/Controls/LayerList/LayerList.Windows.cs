@@ -105,7 +105,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             foreach (var l in layers)
             {
                 if (!(l.LayerContent is Layer))
+                {
                     continue;
+                }
+
                 var layer = l.LayerContent as Layer;
                 if (layer.LoadStatus == LoadStatus.Loaded)
                 {

@@ -103,11 +103,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void PopulateFields()
         {
             if (rememberCredentialsButton != null)
+            {
                 rememberCredentialsButton.IsChecked = false;
+            }
+
             if (username != null)
+            {
                 username.Text = string.Empty;
+            }
+
             if (password != null)
+            {
                 password.Password = string.Empty;
+            }
 
             if (ServerHost != null && EnableCredentialCache)
             {
@@ -115,11 +123,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (credential != null)
                 {
                     if (username != null)
+                    {
                         username.Text = credential.Item1;
+                    }
+
                     if (password != null)
+                    {
                         password.Password = ConvertToUnsecureString(credential.Item2);
+                    }
+
                     if (rememberCredentialsButton != null)
+                    {
                         rememberCredentialsButton.IsChecked = true;
+                    }
                 }
             }
         }
@@ -147,7 +163,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static string ConvertToUnsecureString(SecureString securePassword)
         {
             if (securePassword == null)
+            {
                 return string.Empty;
+            }
 
             IntPtr unmanagedString = IntPtr.Zero;
             try

@@ -42,7 +42,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             (object item, DependencyObject container)
         {
             if ((item as LayerContentViewModel)?.Sublayers?.Any() ?? false)
+            {
                 return BranchItemTemplate;
+            }
+
             return LeafItemTemplate;
         }
     }

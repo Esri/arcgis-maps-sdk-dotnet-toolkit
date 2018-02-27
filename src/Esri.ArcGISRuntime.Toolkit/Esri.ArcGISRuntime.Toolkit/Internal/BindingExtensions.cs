@@ -94,12 +94,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static void UpdateStringFormat(this FrameworkElement bindingTarget, DependencyProperty targetProperty, string stringFormat, ref string fallbackFormat)
         {
             if (bindingTarget == null)
+            {
                 return;
+            }
 
             // Get the binding for the target property
             var binding = bindingTarget.GetBindingExpression(targetProperty)?.ParentBinding;
             if (binding == null)
+            {
                 return; // Or should we create a new binding in this case?
+            }
 
             // If the fallback hasn't been populated already, store the current string format as specified by the binding
 #if NETFX_CORE

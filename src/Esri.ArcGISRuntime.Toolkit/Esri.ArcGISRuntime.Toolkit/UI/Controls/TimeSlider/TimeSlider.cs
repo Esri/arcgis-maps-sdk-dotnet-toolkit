@@ -136,7 +136,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             SliderTrack = GetTemplateChild(nameof(SliderTrack)) as FrameworkElement;
             if (SliderTrack != null)
+            {
                 SliderTrack.SizeChanged += TimeSlider_SizeChanged;
+            }
+
             HorizontalTrackThumb = GetTemplateChild(nameof(HorizontalTrackThumb)) as Thumb;
             MinimumThumb = GetTemplateChild(nameof(MinimumThumb)) as Thumb;
             MinimumThumbLabel = GetTemplateChild(nameof(MinimumThumbLabel)) as TextBlock;
@@ -382,7 +385,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (extent == null || extent.StartTime < ValidFullExtent.StartTime || extent.EndTime > ValidFullExtent.EndTime ||
             MinimumThumb == null || MaximumThumb == null || ValidFullExtent.EndTime <= ValidFullExtent.StartTime || SliderTrack == null ||
             TimeSteps == null || !TimeSteps.GetEnumerator().MoveNext())
+            {
                 return;
+            }
 
             var sliderWidth = SliderTrack.ActualWidth;
             var minimum = ValidFullExtent.StartTime.Ticks;
@@ -558,10 +563,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             IsPlaying = false;
 
             if (translateX == 0 || IsStartTimePinned || IsEndTimePinned)
+            {
                 return;
+            }
 
             if (_currentValue == null)
+            {
                 _currentValue = CurrentValidExtent;
+            }
 
             _totalHorizontalChange = translateX;
 
@@ -584,31 +593,47 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             catch (ArgumentOutOfRangeException)
             {
                 if (_totalHorizontalChange < 0)
+                {
                     tempChange = new TimeExtent(ValidFullExtent.StartTime, ValidFullExtent.StartTime.Add(difference));
+                }
                 else if (_totalHorizontalChange > 0)
+                {
                     tempChange = new TimeExtent(ValidFullExtent.EndTime.Subtract(difference), ValidFullExtent.EndTime);
+                }
             }
 
             if (tempChange.StartTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks)
+            {
                 _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime, ValidFullExtent.StartTime.Add(difference)));
+            }
             else if (tempChange.EndTime.DateTime.Ticks > ValidFullExtent.EndTime.Ticks)
+            {
                 _currentValue = Snap(new TimeExtent(ValidFullExtent.EndTime.Subtract(difference), ValidFullExtent.EndTime));
+            }
             else
+            {
                 _currentValue = Snap(new TimeExtent(tempChange.StartTime, tempChange.EndTime));
+            }
 
             UpdateTrackLayout(_currentValue);
             if (_currentValue.StartTime != CurrentExtent.StartTime || _currentValue.EndTime != CurrentExtent.EndTime)
+            {
                 UpdateCurrentExtent();
+            }
         }
 
         private void OnMinimumThumbDrag(double translateX)
         {
             IsPlaying = false;
             if (translateX == 0)
+            {
                 return;
+            }
 
             if (_currentValue == null)
+            {
                 _currentValue = CurrentValidExtent;
+            }
 
             _totalHorizontalChange = translateX;
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
@@ -626,21 +651,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             catch (ArgumentOutOfRangeException)
             {
                 if (_totalHorizontalChange < 0)
+                {
                     tempChange = new TimeExtent(ValidFullExtent.StartTime, _currentValue.EndTime);
+                }
                 else if (_totalHorizontalChange > 0)
+                {
                     tempChange = new TimeExtent(_currentValue.EndTime);
+                }
             }
 
             if (tempChange.StartTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks)
+            {
                 _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime, _currentValue.EndTime));
+            }
             else if (tempChange.StartTime >= _currentValue.EndTime)
+            {
                 _currentValue = Snap(new TimeExtent(_currentValue.EndTime));
+            }
             else
+            {
                 _currentValue = Snap(new TimeExtent(tempChange.StartTime, tempChange.EndTime));
+            }
 
             UpdateTrackLayout(_currentValue);
             if (_currentValue.StartTime != CurrentExtent.StartTime)
+            {
                 UpdateCurrentExtent();
+            }
         }
 
         private void OnMaximumThumbDrag(double translateX)
@@ -648,10 +685,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             IsPlaying = false;
             if (translateX == 0)
+            {
                 return;
+            }
 
             if (_currentValue == null)
+            {
                 _currentValue = CurrentValidExtent;
+            }
 
             _totalHorizontalChange = translateX;
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
@@ -675,9 +716,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 catch (ArgumentOutOfRangeException)
                 {
                     if (_totalHorizontalChange > 0) // date is after 12/31/9999
+                    {
                         tempChange = new TimeExtent(ValidFullExtent.EndTime);
+                    }
                     else if (_totalHorizontalChange < 0) // date is before 1/1/0001
+                    {
                         tempChange = new TimeExtent(ValidFullExtent.StartTime);
+                    }
                 }
             }
             else
@@ -692,9 +737,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 catch (ArgumentOutOfRangeException)
                 {
                     if (_totalHorizontalChange > 0) // date is after 12/31/9999
+                    {
                         tempChange = new TimeExtent(_currentValue.StartTime, ValidFullExtent.EndTime);
+                    }
                     else if (_totalHorizontalChange < 0) // date is before 1/1/0001
+                    {
                         tempChange = new TimeExtent(_currentValue.StartTime);
+                    }
                 }
             }
 
@@ -702,22 +751,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (IsCurrentExtentTimeInstant)
             {
                 if (tempChange.EndTime.DateTime.Ticks > ValidFullExtent.EndTime.Ticks)
+                {
                     _currentValue = Snap(new TimeExtent(ValidFullExtent.EndTime));
+                }
                 else if (tempChange.EndTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks)
+                {
                     _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime));
+                }
                 else
+                {
                     _currentValue = Snap(new TimeExtent(tempChange.EndTime));
+                }
             }
             else
             {
                 if (tempChange.EndTime.DateTime.Ticks > ValidFullExtent.EndTime.Ticks)
+                {
                     _currentValue = Snap(new TimeExtent(_currentValue.StartTime, ValidFullExtent.EndTime));
+                }
                 else if (tempChange.EndTime <= _currentValue.StartTime && !IsCurrentExtentTimeInstant) // TODO: Preserve one time step between min and max thumbs
+                {
                     _currentValue = Snap(new TimeExtent(_currentValue.StartTime, _currentValue.StartTime.DateTime.AddMilliseconds(1)));
+                }
                 else if (tempChange.EndTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks) // TODO: Preserve one time step between min and max thumbs
+                {
                     _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime));
+                }
                 else
+                {
                     _currentValue = Snap(new TimeExtent(_currentValue.StartTime, tempChange.EndTime));
+                }
             }
 
             UpdateTrackLayout(_currentValue);
@@ -730,7 +793,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
             if (_currentValue == null)
+            {
                 return;
+            }
+
             UpdateCurrentExtent();
         }
 
@@ -755,12 +821,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent Snap(TimeExtent extent)
         {
             if (extent == null)
+            {
                 return null;
+            }
 
             if (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext())
             {
                 if (TimeSteps.Contains(extent.StartTime) && TimeSteps.Contains(extent.EndTime))
+                {
                     return extent; // Extent already starts and ends at valid time steps
+                }
 
                 var start = extent.StartTime < ValidFullExtent.StartTime ? ValidFullExtent.StartTime : extent.StartTime;
                 var end = extent.EndTime > ValidFullExtent.EndTime ? ValidFullExtent.EndTime : extent.EndTime;
@@ -820,7 +890,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void PositionTickmarks()
         {
             if (Tickmarks == null || ValidFullExtent.StartTime >= ValidFullExtent.EndTime)
+            {
                 return;
+            }
 
             Tickmarks.TickmarkPositions = null;
             if (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext())
@@ -990,7 +1062,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             await _calculateTimeStepsThrottler.ThrottleDelay();
 
             if (TimeStepInterval == null || FullExtent == null)
+            {
                 return;
+            }
 
             var timeStep = TimeStepInterval;
             var startTime = FullExtent.StartTime;
@@ -999,7 +1073,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var steps = new List<DateTimeOffset> { startTime };
 
             for (var nextStep = startTime.AddTimeValue(timeStep); nextStep <= endTime; nextStep = nextStep.AddTimeValue(timeStep))
+            {
                 steps.Add(nextStep);
+            }
 
             TimeSteps = steps;
             _calculateTimeStepsTcs.TrySetResult(true);
@@ -1090,15 +1166,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Play Button
             if (PlayPauseButton != null)
+            {
                 PlayPauseButton.Visibility = viz;
+            }
 
             // Next Button
             if (NextButton != null)
+            {
                 NextButton.Visibility = viz;
+            }
 
             // Previous Button
             if (PreviousButton != null)
+            {
                 PreviousButton.Visibility = viz;
+            }
         }
 
         /// <summary>
@@ -1127,7 +1209,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
             if (slider.IsCurrentExtentTimeInstant && slider.IsEndTimePinned != isStartTimePinned)
+            {
                 slider.IsEndTimePinned = isStartTimePinned;
+            }
 
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             slider.HorizontalTrackThumb.IsEnabled = slider.MaximumThumb.IsEnabled && slider.MinimumThumb.IsEnabled;
@@ -1159,7 +1243,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
             if (slider.IsCurrentExtentTimeInstant && slider.IsStartTimePinned != isEndTimePinned)
+            {
                 slider.IsStartTimePinned = isEndTimePinned;
+            }
 
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             slider.HorizontalTrackThumb.IsEnabled = slider.MaximumThumb.IsEnabled && slider.MinimumThumb.IsEnabled;
@@ -1199,7 +1285,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Update the state of the play/pause button
             if (slider.PlayPauseButton != null)
+            {
                 slider.PlayPauseButton.IsChecked = isPlaying;
+            }
         }
 
 #region Appearance Properties
@@ -1390,7 +1478,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public void InitializeTimeSteps(int count)
         {
             if (FullExtent == null)
+            {
                 return;
+            }
 
             TimeStepInterval = FullExtent.Divide(count);
         }
@@ -1426,7 +1516,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Only check whether a time instant can be used for filtering if the GeoView doesn't have a defined temporal extent and all
                 // the layers checked so far allow instantaneous filtration.
                 if (geoView.TimeExtent == null && canUseInstantaneousTime && !(await CanUseInstantaneousTimeAsync(layer)))
+                {
                     canUseInstantaneousTime = false;
+                }
             }
 
             // Apply the calculated full extent, time step interval, and current extent
@@ -1476,10 +1568,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         var timeInfo = await GetTimeInfoAsync(sublayer);
                         if (timeInfo == null)
+                        {
                             continue;
+                        }
 
                         if (timeInfo != null && (timeStepInterval == null || timeInfo.Interval.IsGreaterThan(timeStepInterval)))
+                        {
                             timeStepInterval = timeInfo.Interval;
+                        }
                     }
                 }
             }
@@ -1507,7 +1603,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         var timeInfo = await GetTimeInfoAsync(sublayer);
                         if (timeInfo == null)
+                        {
                             continue;
+                        }
 
                         if (string.IsNullOrEmpty(timeInfo.StartTimeField) || string.IsNullOrEmpty(timeInfo.EndTimeField))
                         {
@@ -1532,13 +1630,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static async Task<LayerTimeInfo> GetTimeInfoAsync(ILoadable layer) // Can't be of type Layer since ArcGISSublayer doesn't inherit from that
         {
             if (!(layer is ArcGISSublayer) && !(layer is FeatureLayer) && !(layer is RasterLayer))
+            {
                 return null;
+            }
 
             try
             {
                 await layer.LoadAsync();
                 if (layer.LoadStatus != LoadStatus.Loaded)
+                {
                     return null;
+                }
             }
             catch
             {
@@ -1589,7 +1691,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // TODO: design question - should users be allowed to specify whether to preserve the time window?
 
             if (timeSteps < 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSteps), $"{nameof(timeSteps)} must be greater than zero");
+            }
 
             var preserveSpan = !IsStartTimePinned && !IsEndTimePinned;
             return MoveTimeStep(timeSteps, preserveSpan);
@@ -1610,7 +1714,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool StepBack(int timeSteps = 1)
         {
             if (timeSteps < 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSteps), $"{nameof(timeSteps)} must be greater than zero");
+            }
 
             var preserveSpan = !IsStartTimePinned && !IsEndTimePinned;
             return MoveTimeStep(0 - timeSteps, preserveSpan);
@@ -1626,7 +1732,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool MoveTimeStep(int timeSteps, bool preserveSpan)
         {
             if (TimeSteps == null || CurrentValidExtent == null || (IsStartTimePinned && IsEndTimePinned))
+            {
                 return false;
+            }
 
             // Always preserve the number of intervals between start and end when the current time is a time instant
             preserveSpan = IsCurrentExtentTimeInstant ? true : preserveSpan;
@@ -1649,9 +1757,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // beyond the valid range, clamp the number of steps to the maximum number that the extent can move in the specified direction.
             var validTimeStepDelta = 0;
             if (timeSteps > 0)
+            {
                 validTimeStepDelta = startTimeStepIndex + timeSteps <= maxTimeStepIndex ? timeSteps : maxTimeStepIndex - startTimeStepIndex;
+            }
             else
+            {
                 validTimeStepDelta = endTimeStepIndex + timeSteps >= minTimeStepIndex ? timeSteps : minTimeStepIndex - endTimeStepIndex;
+            }
 
             // Get the new start and end time step indexes
             var newStartTimeStepIndex = !IsStartTimePinned && (validTimeStepDelta > 0 || startTimeStepIndex + validTimeStepDelta >= minTimeStepIndex) ?
@@ -1662,9 +1774,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Adjust the new index in the event that it's coincident with the max or min and the current time extent is a time range (i.e. not a
             // time instant.  In that case, we need to preserve at least one time step between the start and end times.
             if (newStartTimeStepIndex == maxTimeStepIndex && !IsCurrentExtentTimeInstant)
+            {
                 newStartTimeStepIndex--;
+            }
+
             if (newEndTimeStepIndex == minTimeStepIndex && !IsCurrentExtentTimeInstant)
+            {
                 newEndTimeStepIndex++;
+            }
 
             // Evaluate how many time steps the start and end were moved by and whether they were able to be moved by the requested number of steps
             var startDelta = newStartTimeStepIndex - startTimeStepIndex;
@@ -1682,9 +1799,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 // Update the current time extent
                 if (newStartTimeStepIndex == newEndTimeStepIndex)
+                {
                     CurrentExtent = new TimeExtent(newStartTime);
+                }
                 else
+                {
                     CurrentExtent = new TimeExtent(newStartTime, newEndTime);
+                }
             }
 
             // Return whether or not the time extent was moved by the specified number of steps
@@ -1822,7 +1943,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ApplyLabelMode(TimeSliderLabelMode labelMode)
         {
             if (Tickmarks == null || MinimumThumbLabel == null || MaximumThumbLabel == null)
+            {
                 return;
+            }
 
             switch (labelMode)
             {

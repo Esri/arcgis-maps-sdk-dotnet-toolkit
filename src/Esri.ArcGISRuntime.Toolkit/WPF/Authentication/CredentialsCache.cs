@@ -63,7 +63,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             foreach (var item in CredentialManager.EnumerateCredentials())
             {
                 if (item.ApplicationName.StartsWith(prefix))
+                {
                     CredentialManager.DeleteCredential(item.ApplicationName);
+                }
             }
         }
 
@@ -72,7 +74,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             private static string ConvertToUnsecureString(SecureString securePassword)
             {
                 if (securePassword == null)
+                {
                     throw new ArgumentNullException("securePassword");
+                }
 
                 IntPtr unmanagedString = IntPtr.Zero;
                 try
@@ -120,7 +124,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 bool deleted = CredDelete(applicationName, CredentialType.Generic, 0);
                 int lastError = Marshal.GetLastWin32Error();
                 if (deleted)
+                {
                     return 0;
+                }
+
                 return lastError;
             }
 
@@ -129,7 +136,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 var secret = ConvertToUnsecureString(password);
                 byte[] byteArray = Encoding.Unicode.GetBytes(secret);
                 if (byteArray.Length > 512)
+                {
                     throw new ArgumentOutOfRangeException("secret", "The secret message has exceeded 512 bytes.");
+                }
 
                 CREDENTIAL credential = new CREDENTIAL();
                 credential.AttributeCount = 0;
@@ -151,7 +160,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 Marshal.FreeCoTaskMem(credential.UserName);
 
                 if (written)
+                {
                     return 0;
+                }
 
                 throw new Exception(string.Format("CredWrite failed with the error code {0}.", lastError));
             }
@@ -294,7 +305,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                     _userName = userName;
                     _password = new SecureString();
                     foreach (char c in password)
+                    {
                         _password.AppendChar(c);
+                    }
+
                     _credentialType = credentialType;
                 }
 

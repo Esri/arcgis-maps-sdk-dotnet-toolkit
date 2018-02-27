@@ -39,7 +39,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties
             get
             {
                 if (s_resourceManager == null)
+                {
                     s_resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.LocalizedStrings.Resources", typeof(Resources).Assembly);
+                }
+
                 return s_resourceManager;
             }
         }

@@ -73,7 +73,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             };
 
             if (SignInFormStyle != null)
+            {
                 contentDialog.Style = SignInFormStyle;
+            }
 
             contentDialog.Completed += (s, e) =>
             {
@@ -89,9 +91,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 MessageBox.Show("Sign in failed. Check your username and password", e.Message);
             };
             if (info.AuthenticationType == AuthenticationType.NetworkCredential)
+            {
                 contentDialog.MessageText = "Network Credentials required for ";
+            }
             else if (info.AuthenticationType == AuthenticationType.Token)
+            {
                 contentDialog.MessageText = "ArcGIS Credentials required for ";
+            }
 
             window.Content = contentDialog;
             window.Title = contentDialog.HeaderText;
