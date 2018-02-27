@@ -36,14 +36,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public LayerLegend(Context context) : base(context) { Initialize(); }
+        public LayerLegend(Context context) : base(context)
+        {
+            Initialize();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public LayerLegend(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
+        public LayerLegend(Context context, IAttributeSet attr) : base(context, attr)
+        {
+            Initialize();
+        }
 
         private void Initialize()
         {

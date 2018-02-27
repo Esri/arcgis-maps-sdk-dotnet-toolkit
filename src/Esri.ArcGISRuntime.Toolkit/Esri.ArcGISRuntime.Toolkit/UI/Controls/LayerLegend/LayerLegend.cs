@@ -40,7 +40,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
-        { Initialize(); }
+        {
+            Initialize();
+        }
                
         /// <summary>
         /// Gets or sets the layer to display the legend for.

@@ -57,7 +57,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
-            { Initialize(); }
+        {
+            Initialize();
+        }
 
 #pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>

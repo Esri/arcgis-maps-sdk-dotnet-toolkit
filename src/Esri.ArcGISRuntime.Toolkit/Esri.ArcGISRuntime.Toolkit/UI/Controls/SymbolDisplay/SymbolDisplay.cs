@@ -38,7 +38,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
-        { Initialize(); }
+        {
+            Initialize();
+        }
         
 
         /// <summary>

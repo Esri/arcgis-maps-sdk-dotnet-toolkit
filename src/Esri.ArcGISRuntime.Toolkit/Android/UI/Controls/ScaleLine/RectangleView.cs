@@ -30,7 +30,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// specified width and height will be applied to the width and height of the view's layout parameters.</remarks>
     internal class RectangleView : View, INotifyPropertyChanged
     {
-        public RectangleView(Context context) : base(context) { }
+        public RectangleView(Context context) : base(context)
+        {
+        }
 
         public RectangleView(Context context, double width, double height) : this(context)
         {
