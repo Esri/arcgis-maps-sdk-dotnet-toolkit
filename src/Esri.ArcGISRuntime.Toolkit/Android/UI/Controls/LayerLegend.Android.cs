@@ -20,6 +20,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Collections.ObjectModel;
 using System.Threading;
 

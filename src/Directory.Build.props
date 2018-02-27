@@ -16,11 +16,6 @@
     <DefaultLanguage>en-US</DefaultLanguage>
 
     <!--Project type identifiers-->
-    <IsUwpProject>$(MSBuildProjectName.Contains('.UWP'))</IsUwpProject>
-    <IsiOSProject>$(MSBuildProjectName.Contains('.iOS'))</IsiOSProject>
-    <IsAndroidProject>$(MSBuildProjectName.Contains('.Android'))</IsAndroidProject>
-    <IsWPFProject>$(MSBuildProjectName.Contains('.WPF'))</IsWPFProject>
-    <IsXamarinFormsProject>$(MSBuildProjectName.Contains('.Xamarin.Forms'))</IsXamarinFormsProject>
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
     <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true'">false</IsToolkitLibrary>
@@ -31,14 +26,12 @@
     <UWPTargetPlatformMinVersion>10.0.14393.0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid60</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
+	<DotNetTargetFramework>net452</DotNetTargetFramework>
+	<UWPTargetFramework>uap10.0</UWPTargetFramework>
   
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
 
   <Choose>

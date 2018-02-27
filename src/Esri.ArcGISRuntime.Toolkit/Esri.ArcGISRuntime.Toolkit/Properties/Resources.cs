@@ -22,8 +22,16 @@ using System.Resources;
 
 namespace Esri.ArcGISRuntime.Toolkit.Properties
 {
-    internal static class Resources
+     internal static class Resources
     {
+#if NETFX_CORE
+        private static readonly Windows.ApplicationModel.Resources.ResourceLoader s_resource = Windows.ApplicationModel.Resources.ResourceLoader.GetForViewIndependentUse("Esri.ArcGISRuntime.Toolkit/Resources");
+
+        public static string GetString(string name)
+        {
+            return s_resource.GetString(name);
+        }
+#else
         private static ResourceManager s_resourceManager;
 
         private static ResourceManager ResourceManager
@@ -40,5 +48,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties
         {
             return ResourceManager.GetString(name);
         }
+#endif
     }
 }
