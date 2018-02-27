@@ -61,12 +61,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
    
-  <!--<ItemGroup> 
+  <ItemGroup> 
      <PackageReference Include="StyleCop.Analyzers">
 	  <PrivateAssets>all</PrivateAssets>
       <Version>1.0.2</Version>
     </PackageReference>
-  </ItemGroup>-->
+  </ItemGroup>
   
   <ItemGroup>
     <_ResxFiles Remove="**\*.resx" />
