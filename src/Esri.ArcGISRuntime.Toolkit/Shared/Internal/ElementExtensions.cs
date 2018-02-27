@@ -52,8 +52,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static bool GetIsEnabled(this Control control) => control.IsEnabled;
 
         public static void SetIsEnabled(this Control control, bool enabled) => control.IsEnabled = enabled;
-
-        public static void SetIsChecked(this ToggleButton toggleButton, bool isChecked) => toggleButton.IsChecked = isChecked;
     }
 }
 #endif

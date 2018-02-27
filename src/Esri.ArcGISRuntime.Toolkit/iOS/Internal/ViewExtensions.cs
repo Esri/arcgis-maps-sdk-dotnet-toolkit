@@ -58,8 +58,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static void SetIsEnabled(this UIControl control, bool enabled) => control.Enabled = enabled;
 
-        public static void SetIsChecked(this UISwitch toggleButton, bool isChecked) => toggleButton.On = isChecked;
-
         public static void Arrange(this UIView view, CGRect bounds) => view.Frame = bounds;
     }
 }

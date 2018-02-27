@@ -311,7 +311,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _playbackButtonsFill;
+        private Color _playbackButtonsFill = Color.FromRGBA(200, 200, 200, 255);
         /// <summary>
         /// Gets or sets the fill color of the playback buttons
         /// </summary>
@@ -325,7 +325,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _playbackButtonsStroke;
+        private Color _playbackButtonsStroke = Color.Black;
         /// <summary>
         /// Gets or sets the border color of the playback buttons
         /// </summary>

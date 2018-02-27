@@ -28,13 +28,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class Tickbar : UIView
     {
-        private const string _template =
-            "<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\">" +
-            "<TextBlock Text=\"|\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" />" +
-            "</DataTemplate>";
-
         private void Initialize()
         {
+        }
+
+        private CGSize _majorTickSize = new CGSize(1, 9);
+        public CGSize MajorTickSize
+        {
+            get => _majorTickSize;
+            set
+            {
+                if (value.Width == _majorTickSize.Width && value.Height == _majorTickSize.Height)
+                    return;
+                
+                _majorTickSize = value;
+                foreach (RectangleView tick in _majorTickmarks)
+                {
+                    tick.Width = _majorTickSize.Width;
+                    tick.Height = _majorTickSize.Height;
+                }
+                InvalidateMeasureAndArrange();
+            }
+        }
+
+        private CGSize _minorTickSize = new CGSize(1, 5);
+        public CGSize MinorTickSize
+        {
+            get => _minorTickSize;
+            set
+            {
+                if (value.Width == _minorTickSize.Width && value.Height == _minorTickSize.Height)
+                    return;
+
+                _minorTickSize = value;
+                foreach (RectangleView tick in _minorTickmarks)
+                {
+                    tick.Width = _minorTickSize.Width;
+                    tick.Height = _minorTickSize.Height;
+                }
+                InvalidateMeasureAndArrange();
+            }
         }
 
         /// <summary>
@@ -51,8 +84,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var tick = new RectangleView()
             {
                 BackgroundColor = TickFill,
-                Width = 1,
-                Height = 4,
+                Width = MinorTickSize.Width,
+                Height = MinorTickSize.Height,
                 BorderWidth = 0
             };
             SetIsMajorTickmark(tick, false);
@@ -61,13 +94,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             AddSubview(tick);
             _minorTickmarks.Add(tick);
 
-
             // Create a major tickmark
             tick = new RectangleView()
             {
                 BackgroundColor = TickFill,
-                Width = 1,
-                Height = 7,
+                Width = MajorTickSize.Width,
+                Height = MajorTickSize.Height,
                 BorderWidth = 0
             };
 

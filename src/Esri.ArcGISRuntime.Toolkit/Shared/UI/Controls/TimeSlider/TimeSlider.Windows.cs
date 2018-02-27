@@ -61,6 +61,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Thumb MinimumThumb;
         private Thumb MaximumThumb;
         private Thumb HorizontalTrackThumb;
+        private ButtonBase NextButton;
+        private ButtonBase PreviousButton;
+        private ToggleButton PlayPauseButton;
 
         private void Initialize()
         {
@@ -179,11 +182,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             if (NextButton != null)
             {
-                NextButton.Click += (s, e) => MoveTimeStep(1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
+                NextButton.Click += (s, e) => OnNextButtonClick();
             }
             if (PreviousButton != null)
             {
-                PreviousButton.Click += (s, e) => MoveTimeStep(-1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
+                PreviousButton.Click += (s, e) => OnPreviousButtonClick();
             }
             PositionTickmarks();
             SetButtonVisibility();

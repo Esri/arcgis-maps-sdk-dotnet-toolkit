@@ -30,9 +30,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private RectangleView MinimumThumb;
         private RectangleView MaximumThumb;
         private RectangleView HorizontalTrackThumb;
+        private DrawActionButton NextButton;
+        private DrawActionButton PreviousButton;
+        private DrawActionToggleButton PlayPauseButton;
         private RectangleView _startTimeTickmark;
         private RectangleView _endTimeTickmark;
-        private bool _elementsArranged = false;
+        private bool _thumbsArranged = false;
         private bool _isSizeValid = false;
         private bool _isHorizontalThumbFocused = false;
         private CGPoint _lastTouchLocation;
@@ -56,8 +59,76 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             AddSubview(FullExtentEndTimeLabel);
 
+            PreviousButton = new DrawActionButton()
+            {
+                BackgroundColor = PlaybackButtonsFill,
+                BorderColor = PlaybackButtonsStroke,
+                BorderWidth = 0.5,
+                DrawContentAction = (context, button) =>
+                {
+                    var spacing = 3 + button.BorderWidth;
+                    var barWidth = 3;
+                    var triangleWidth = button.Bounds.Width - spacing - barWidth;
+                    var triangleHeight = button.Bounds.Height - (button.BorderWidth * 2);
+                    DrawTriangle(context, triangleWidth, triangleHeight, button.BackgroundColor.CGColor, button.BorderWidth,
+                                 button.BorderColor.CGColor, pointOnRight: false, left: 0, top: button.BorderWidth);
+
+                    var barLeft = triangleWidth + spacing - button.BorderWidth;
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor,
+                                  button.BorderWidth, button.BorderColor.CGColor, left: barLeft);
+                }
+            };
+            PreviousButton.TouchUpInside += (o, e) => OnPreviousButtonClick();
+            AddSubview(PreviousButton);
+
+            NextButton = new DrawActionButton()
+            {
+                BackgroundColor = PlaybackButtonsFill,
+                BorderColor = PlaybackButtonsStroke,
+                BorderWidth = 0.5,
+                DrawContentAction = (context, button) =>
+                {
+                    var spacing = 3 + button.BorderWidth;
+                    var barWidth = 3;
+                    var triangleWidth = button.Bounds.Width - spacing - barWidth;
+                    var triangleHeight = button.Bounds.Height - (button.BorderWidth * 2);
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor,
+                                  button.BorderWidth, button.BorderColor.CGColor, left: button.BorderWidth);
+
+                    DrawTriangle(context, triangleWidth, triangleHeight, button.BackgroundColor.CGColor, button.BorderWidth,
+                                 button.BorderColor.CGColor, pointOnRight: true, left: barWidth + spacing, top: button.BorderWidth);
+                }
+            };
+            NextButton.TouchUpInside += (o, e) => OnNextButtonClick();
+            AddSubview(NextButton);
+
+            PlayPauseButton = new DrawActionToggleButton()
+            {
+                BackgroundColor = PlaybackButtonsFill,
+                BorderColor = PlaybackButtonsStroke,
+                BorderWidth = 0.5,
+                DrawCheckedContentAction = (context, button) =>
+                {
+                    var spacing = 4d;
+                    var barWidth = 7d;
+                    var left = button.Bounds.GetMidX() - (spacing / 2) - barWidth - 2;
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor, button.BorderWidth, button.BorderColor.CGColor, left);
+
+                    left = button.Bounds.GetMidX() + (spacing / 2);
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor, button.BorderWidth, button.BorderColor.CGColor, left);
+                },
+                DrawUncheckedContentAction = (context, button) =>
+                {
+                    var triangleWidth = button.Bounds.Width - button.BorderWidth;
+                    DrawTriangle(context, triangleWidth, button.Bounds.Height, button.BackgroundColor.CGColor, button.BorderWidth,
+                                 button.BorderColor.CGColor, pointOnRight: true, left: button.BorderWidth);
+                }
+            };
+            PlayPauseButton.CheckedChanged += (o, e) => IsPlaying = PlayPauseButton.IsChecked;
+            AddSubview(PlayPauseButton);
+
             var endTickWidth = 1;
-            var endTickHeight = 6;
+            var endTickHeight = 9;
 
             _startTimeTickmark = new RectangleView(endTickWidth, endTickHeight)
             {
@@ -102,7 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             SliderTrack.AddSubview(Tickmarks);
 
-            var thumbSize = 23;
+            var thumbSize = 30;
             MinimumThumb = new RectangleView()
             {
                 BackgroundColor = ThumbFill,
@@ -238,7 +309,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.LayoutSubviews();
 
-            ArrangeTrackElements();
+            ArrangeElements();
         }
 
         private CGSize MeasureSize()
@@ -246,44 +317,63 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new CGSize(Bounds.Width, 6);
         }
 
-        private void ArrangeTrackElements()
+        private void ArrangeElements()
         {
-            if (_elementsArranged) // Ensure this is only done once per instance
-                return;
-            
-            _elementsArranged = true;
+            //var availableWidth = Bounds.Width;
+            //var majorTickHeight = 7;
+            //var endTickHeight = _startTimeTickmark.Height;
+            //var currentExtentLabelHeight = LabelMode == TimeSliderLabelMode.CurrentExtent ? CalculateTextSize(MinimumThumbLabel).Height : 0;
+            var verticalSpacing = 4;
+            var playButtonSpacing = 12;
 
-            var availableWidth = Bounds.Width;
+            var playPauseButtonWidth = 26;
+            var playPauseButtonHeight = 34;
+            var playPauseButtonLeft = Bounds.GetMidX() - playPauseButtonWidth / 2;
+            PlayPauseButton.Frame = new CGRect(playPauseButtonLeft, 0, playPauseButtonWidth, playPauseButtonHeight);
+
+            var previousNextButtonWidth = 24;
+            var previousNextButtonHeight = 24;
+            var previousNextButtonTop = (playPauseButtonHeight - previousNextButtonHeight) / 2;
+            var previousButtonLeft = playPauseButtonLeft - playButtonSpacing - previousNextButtonWidth - 2;
+            PreviousButton.Frame = new CGRect(previousButtonLeft, previousNextButtonTop, previousNextButtonWidth, previousNextButtonHeight);
+
+            var nextButtonLeft = playPauseButtonLeft + playPauseButtonWidth + playButtonSpacing;
+            NextButton.Frame = new CGRect(nextButtonLeft, previousNextButtonTop, previousNextButtonWidth, previousNextButtonHeight);
+
+            var playbackButtonsBottom = playPauseButtonHeight;
 
             var fullExtentStartLabelSize = FullExtentStartTimeLabel.SizeThatFits(Bounds.Size);
-            FullExtentStartTimeLabel.Frame = new CGRect(CGPoint.Empty, fullExtentStartLabelSize);
-
             var fullExtentEndLabelSize = FullExtentEndTimeLabel.SizeThatFits(Bounds.Size);
-            FullExtentEndTimeLabel.Frame = new CGRect(new CGPoint(Bounds.Right - fullExtentEndLabelSize.Width, 0), fullExtentEndLabelSize);
-            var fullExtentLabelBottom = Math.Max(FullExtentStartTimeLabel.Bounds.Bottom, FullExtentStartTimeLabel.Bounds.Bottom);
 
-            var endTickTop = fullExtentLabelBottom + 2;
+            var maxThumbHeight = Math.Max(MinimumThumb.Height, MaximumThumb.Height);
+            var thumbOverhang = (maxThumbHeight - SliderTrack.Height) / 2;
+            var sliderTrackTop = playbackButtonsBottom + thumbOverhang;
+
+            var endTickTop = sliderTrackTop - _startTimeTickmark.Height;
             var startTickLeft = (fullExtentStartLabelSize.Width - _startTimeTickmark.Width) / 2;
             _startTimeTickmark.Frame = new CGRect(startTickLeft, endTickTop, _startTimeTickmark.Width, _startTimeTickmark.Height);
 
             var endTickLeft = Bounds.Width - ((fullExtentEndLabelSize.Width - _endTimeTickmark.Width) / 2);
             _endTimeTickmark.Frame = new CGRect(endTickLeft, endTickTop, _endTimeTickmark.Width, _endTimeTickmark.Height);
 
+            var fullExtentStartLabelTop = endTickTop - verticalSpacing - fullExtentStartLabelSize.Height;
+            FullExtentStartTimeLabel.Frame = new CGRect(Bounds.Right - fullExtentEndLabelSize.Width, fullExtentStartLabelTop,
+                fullExtentStartLabelSize.Width, fullExtentStartLabelSize.Height);
+
+            var fullExtentEndLabelTop = endTickTop - verticalSpacing - fullExtentEndLabelSize.Height;
+            FullExtentEndTimeLabel.Frame = new CGRect(0, fullExtentEndLabelTop, fullExtentEndLabelSize.Width, fullExtentEndLabelSize.Height);
+
             var sliderTrackLeft = startTickLeft;
             var sliderTrackWidth = _endTimeTickmark.Frame.Right - sliderTrackLeft;
-            var sliderTrackTop = _startTimeTickmark.Frame.Bottom;
             SliderTrack.Width = sliderTrackWidth;
             SliderTrack.Frame = new CGRect(sliderTrackLeft, sliderTrackTop, sliderTrackWidth, SliderTrack.Height);
+            Tickmarks.Frame = new CGRect(0, SliderTrack.Height, sliderTrackWidth, 50);
 
             HorizontalTrackThumb.Frame = new CGRect(0, 0, sliderTrackWidth, SliderTrack.Height);
-            //HorizontalTrackThumb.FrameUpdated += (o, e) =>
-            //{
-            //    var l = HorizontalTrackThumb.Frame.Left;
-            //    var r = HorizontalTrackThumb.Frame.Right;
-            //};
 
-            //Tickmarks.BackgroundColor = UIColor.Red;
-            Tickmarks.Frame = new CGRect(0, SliderTrack.Height, sliderTrackWidth, 50);
+            if (_thumbsArranged) // Ensure initial arrangement of thumbs is only done once per instance
+                return;
+            _thumbsArranged = true;
 
             var thumbTop = (SliderTrack.Frame.Height - MinimumThumb.Height) / 2; // (SliderTrack.Frame.Top + SliderTrack.Frame.Height / 2) - (MinimumThumb.Height / 2);
             var thumbLeft = 0 - (MinimumThumb.Width / 2);
@@ -311,6 +401,57 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private void ApplyCurrentExtentFill() => HorizontalTrackThumb.BackgroundColor = CurrentExtentFill;
+
+        private void DrawTriangle(CGContext context, double width, double height, CGColor fillColor, double strokeWidth,
+                                  CGColor strokeColor, bool pointOnRight, double left = 0, double top = 0)
+        {
+            var trianglePath = new CGPath();
+            var right = left + width;
+            var pointedSideX = pointOnRight ? right : left;
+            var flatSideX = pointOnRight ? left : right;
+            var bottom = top + height;
+            trianglePath.AddLines(new CGPoint[]
+            {
+                new CGPoint(pointedSideX, bottom / 2d),
+                new CGPoint(flatSideX, 0),
+                new CGPoint(flatSideX, bottom)
+            });
+            trianglePath.CloseSubpath();
+
+            DrawPath(context, trianglePath, fillColor, strokeWidth, strokeColor);
+        }
+
+        private void DrawRectangle(CGContext context, double width, double height, CGColor fillColor, double strokeWidth,
+                                   CGColor strokeColor, double left = 0, double top = 0)
+        {
+            var bottom = top + height;
+            var right = left + width;
+            var rectPath = new CGPath();
+            rectPath.AddLines(new CGPoint[]
+            {
+                new CGPoint(left, top),
+                new CGPoint(right, top),
+                new CGPoint(right, bottom),
+                new CGPoint(left, bottom)
+            });
+            rectPath.CloseSubpath();
+            DrawPath(context, rectPath, fillColor, strokeWidth, strokeColor);
+        }
+
+        private void DrawPath(CGContext context, CGPath path, CGColor fillColor, double strokeWidth, CGColor strokeColor)
+        {
+            context.SetFillColor(fillColor);
+            context.AddPath(path);
+            context.FillPath();
+
+            if (strokeWidth > 0)
+            {
+                context.SetLineWidth((nfloat)strokeWidth);
+                context.SetStrokeColor(strokeColor);
+                context.AddPath(path);
+                context.StrokePath();
+            }
+        }
     }
 }
 

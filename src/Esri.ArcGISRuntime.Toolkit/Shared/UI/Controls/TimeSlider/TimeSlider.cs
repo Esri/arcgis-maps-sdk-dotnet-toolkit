@@ -70,9 +70,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TextBlock MaximumThumbLabel;
         private RepeatButton SliderTrackStepBackRepeater;
         private RepeatButton SliderTrackStepForwardRepeater;
-        private ToggleButton PlayPauseButton;
-        private ButtonBase NextButton;
-        private ButtonBase PreviousButton;
         private TextBlock FullExtentStartTimeLabel;
         private TextBlock FullExtentEndTimeLabel;
         private Primitives.Tickbar Tickmarks;
@@ -858,7 +855,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Update the state of the play/pause button
             if (PlayPauseButton != null)
-                PlayPauseButton.SetIsChecked(isPlaying);
+                PlayPauseButton.IsChecked = isPlaying;
         }
 
 #region Appearance Properties
@@ -1459,6 +1456,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
+
+        private void OnNextButtonClick() => MoveTimeStep(1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
+
+        private void OnPreviousButtonClick() => MoveTimeStep(-1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
 #endregion
     }
 }
