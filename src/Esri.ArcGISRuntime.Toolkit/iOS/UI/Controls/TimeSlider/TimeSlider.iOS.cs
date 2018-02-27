@@ -144,7 +144,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 BackgroundColor = FullExtentFill,
                 BorderColor = FullExtentStroke,
                 BorderWidth = 1.5,
-                UserInteractionEnabled = false,
                 UseShadow = false
             };
             AddSubview(SliderTrack);
@@ -182,8 +181,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Height = thumbSize,
                 CornerRadius = thumbSize / 2d,
                 BorderWidth = 0.5,
-                UseShadow = true,
-                UserInteractionEnabled = false
+                UseShadow = true
             };
             SliderTrack.AddSubview(MinimumThumb);
 
@@ -195,8 +193,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Height = thumbSize,
                 CornerRadius = thumbSize / 2d,
                 BorderWidth = 0.5,
-                UseShadow = true,
-                UserInteractionEnabled = false
+                UseShadow = true
             };
             SliderTrack.AddSubview(MaximumThumb);
 
@@ -222,64 +219,68 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             SliderTrack.AddSubview(MaximumThumbLabel);
 
+            // Add pan gesture recognizer to handle thumb manipulation
+            var panRecognizer = new UIPanGestureRecognizer() { CancelsTouchesInView = false };
+            panRecognizer.AddTarget(() =>
+            {
+                switch (panRecognizer.State)
+                {
+                    case UIGestureRecognizerState.Began:
+                        // Check whether gesture started on one of the thumbs.
+                        // Use a minimum target size of 44 x 44 for hit testing.
+                        var minTargetSize = 44;
+                        var minThumbHitTestFrame = ExpandFrame(MinimumThumb.Frame, minTargetSize);
+                        var maxThumbHitTestFrame = ExpandFrame(MaximumThumb.Frame, minTargetSize);
+                        var location = panRecognizer.LocationInView(SliderTrack);
+                        if (minThumbHitTestFrame.Contains(location))                            
+                        {
+                            MinimumThumb.IsFocused = true;
+                            _lastTouchLocation = panRecognizer.LocationInView(MinimumThumb);
+                        }
+                        else if (maxThumbHitTestFrame.Contains(location))
+                        {
+                            MaximumThumb.IsFocused = true;
+                            _lastTouchLocation = panRecognizer.LocationInView(MaximumThumb);
+                        }
+                        // TODO: Allow dragging middle thumb?
+                        //else if (HorizontalTrackThumb.Frame.Contains(location))
+                        //{
+                        //   _isHorizontalThumbFocused = true;
+                        //   _lastTouchLocation = panRecognizer.LocationInView(HorizontalTrackThumb);
+                        //}
+                        break;
+                    case UIGestureRecognizerState.Changed:
+                        if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused && !_isHorizontalThumbFocused)
+                            return;
+
+                        var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb.IsFocused ? MaximumThumb : HorizontalTrackThumb;
+
+                        var currentLocation = panRecognizer.LocationInView(trackedView);
+                        var translateX = currentLocation.X - _lastTouchLocation.X;
+
+                        if (MinimumThumb.IsFocused)
+                            OnMinimumThumbDrag(translateX);
+                        if (MaximumThumb.IsFocused)
+                            OnMaximumThumbDrag(translateX);
+                        // TODO: Allow dragging middle thumb?
+                        //if (_isHorizontalThumbFocused)
+                            //OnCurrentExtentThumbDrag(translateX);
+                        break;
+                    case UIGestureRecognizerState.Ended:
+                    case UIGestureRecognizerState.Cancelled:
+                    case UIGestureRecognizerState.Failed:
+                        MinimumThumb.IsFocused = false;
+                        MaximumThumb.IsFocused = false;
+                        _isHorizontalThumbFocused = false;
+                        OnDragCompleted();
+                        break;
+                }
+            });
+            AddGestureRecognizer(panRecognizer);
+
             PositionTickmarks();
             //SetButtonVisibility();
             ApplyLabelMode(LabelMode);
-        }
-
-        /// <inheritdoc />
-        public override bool BeginTracking(UITouch uitouch, UIEvent uievent)
-        {
-            var location = uitouch.LocationInView(SliderTrack);
-            if (MinimumThumb.Frame.Contains(location))
-            {
-                MinimumThumb.IsFocused = true;
-                _lastTouchLocation = uitouch.LocationInView(MinimumThumb);
-            }
-            else if (MaximumThumb.Frame.Contains(location))
-            {
-                MaximumThumb.IsFocused = true;
-                _lastTouchLocation = uitouch.LocationInView(MaximumThumb);
-            }
-            // TODO: Allow dragging middle thumb
-            // else if (HorizontalTrackThumb.Frame.Contains(location))
-            // {
-            //    _isHorizontalThumbFocused = true;
-            //    _lastTouchLocation = uitouch.LocationInView(HorizontalTrackThumb);
-            // }
-
-            return true;
-        }
-
-        /// <inheritdoc />
-        public override bool ContinueTracking(UITouch uitouch, UIEvent uievent)
-        {
-            if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused && !_isHorizontalThumbFocused)
-                return true;
-
-            var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb.IsFocused ? MaximumThumb : HorizontalTrackThumb;
-
-            var current = uitouch.LocationInView(trackedView);
-            //var translateX = current.X - trackedView.Frame.Width / 2;
-            var translateX = current.X - _lastTouchLocation.X;
-            if (MinimumThumb.IsFocused)
-                OnMinimumThumbDrag(translateX);
-            if (MaximumThumb.IsFocused)
-                OnMaximumThumbDrag(translateX);
-            // TODO: Allow dragging middle thumb
-            // if (_isHorizontalThumbFocused)
-                // OnCurrentExtentThumbDrag(translateX);
-
-            return true;
-        }
-
-        /// <inheritdoc />
-        public override void EndTracking(UITouch uitouch, UIEvent uievent)
-        {
-            MinimumThumb.IsFocused = false;
-            MaximumThumb.IsFocused = false;
-            _isHorizontalThumbFocused = false;
-            OnDragCompleted();
         }
 
         /// <inheritdoc />
@@ -319,10 +320,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void ArrangeElements()
         {
-            //var availableWidth = Bounds.Width;
-            //var majorTickHeight = 7;
-            //var endTickHeight = _startTimeTickmark.Height;
-            //var currentExtentLabelHeight = LabelMode == TimeSliderLabelMode.CurrentExtent ? CalculateTextSize(MinimumThumbLabel).Height : 0;
             var verticalSpacing = 4;
             var playButtonSpacing = 12;
 
@@ -451,6 +448,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 context.AddPath(path);
                 context.StrokePath();
             }
+        }
+
+        private CGRect ExpandFrame(CGRect frame, double minTargetSize)
+        {
+            var minWidthAdjustment = minTargetSize > frame.Width ? (minTargetSize - frame.Width) / 2 : 0;
+            var minHeightAdjustment = minTargetSize > frame.Height ? (minTargetSize - frame.Height) / 2 : 0;
+            var expandedFrame = new CGRect(frame.Left - minWidthAdjustment, frame.Top - minHeightAdjustment,
+                                           frame.Width + (minWidthAdjustment * 2), frame.Height + (minHeightAdjustment * 2));
+            return expandedFrame;
         }
     }
 }
