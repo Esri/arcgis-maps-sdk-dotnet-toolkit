@@ -320,6 +320,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty HeaderTextProperty =
             DependencyProperty.Register(nameof(HeaderText), typeof(string), typeof(SignInForm), new PropertyMetadata("Login required"));
-
     }
 }

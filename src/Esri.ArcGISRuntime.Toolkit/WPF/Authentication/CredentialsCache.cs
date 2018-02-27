@@ -304,6 +304,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 }
             }
         }
-
     }
 }

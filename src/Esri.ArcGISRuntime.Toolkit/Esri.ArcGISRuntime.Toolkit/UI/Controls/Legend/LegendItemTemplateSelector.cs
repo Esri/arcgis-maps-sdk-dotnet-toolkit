@@ -45,7 +45,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return BranchItemTemplate;
             return LeafItemTemplate;
         }
-
     }
 }
 #endif
