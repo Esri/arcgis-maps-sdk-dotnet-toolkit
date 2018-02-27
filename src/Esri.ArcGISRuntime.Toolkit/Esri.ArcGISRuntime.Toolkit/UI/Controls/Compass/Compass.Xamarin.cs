@@ -30,6 +30,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _heading;
             set
             {
+                if (GeoView != null && !_headingSetByGeoView)
+                {
+                    throw new InvalidOperationException("The Heading Property is read-only when the GeoView property has been assigned");
+                }
+
                 _heading = value;
                 UpdateCompassRotation(true);
             }

@@ -69,4 +69,58 @@
           BeforeTargets="_GenerateRestoreProjectSpec"
           DependsOnTargets="GetBuildVersion"
           Condition=" '$(NerdbankGitVersioningTasksPath)' != '' " />
+		  
+		  
+	<!--
+    // This task disable doc warnings in the auto-generated XamlTypeInfo.g.cs file,
+    // and also hides the public class from intellisense.
+    -->
+
+	<UsingTask TaskName="XamlTypeInfoBuildTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <InputFilename ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Reference Include="System.Core" />
+            <Using Namespace="System" />
+            <Using Namespace="Microsoft.Build.Framework" />
+            <Using Namespace="Microsoft.Build.Utilities" />
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+				//Note: If this task returns 'false' it will break the shared project manager project picker and intellisense.
+				//so we always return true.
+                try {
+                    if (!System.IO.File.Exists(InputFilename)) 
+					{
+						return true; 
+					}
+					string code = System.IO.File.ReadAllText(InputFilename);
+
+					if (code.StartsWith("#pragma warning disable 1591")) //Already modified 
+						return true; 
+					int idx = code.IndexOf("[System.CodeDom.Compiler.GeneratedCodeAttribute"); 
+					if (idx < 0) 
+					{
+						return true; 
+					}
+					string insert = "[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]\n    "; 
+					code = "#pragma warning disable 1591\n" + code.Substring(0, idx) + insert + code.Substring(idx) + 
+						"#pragma warning restore 1591\n"; 
+					System.IO.File.WriteAllText(InputFilename, code); 
+					return true; 
+                }
+                catch (Exception ex) {
+					ex = new Exception("XamlTypeInfoBuildTask: " + ex.Message, ex);
+                    Log.LogErrorFromException(ex);
+                    return false;
+                }
+            ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+	<Target Name="XamlTypeInfoBuildTask" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)' AND '$(DesignTimeBuild)' != 'true'"
+					AfterTargets="MarkupCompilePass2"
+					BeforeTargets="CoreCompile">
+		<XamlTypeInfoBuildTask InputFilename="$(IntermediateOutputPath)\XamlTypeInfo.g.cs" />
+	</Target>
 </Project>
