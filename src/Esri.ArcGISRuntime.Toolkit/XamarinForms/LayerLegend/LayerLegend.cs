@@ -4,7 +4,7 @@ using Xamarin.Forms;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
-    /// A control that renders a <see cref="Symbology.Symbol"/>.
+    /// The Legend Control that generates a list of Legend Items for a Layer
     /// </summary>
     public class LayerLegend : View
     {
@@ -44,9 +44,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (bindable is LayerLegend)
             {
-                var LayerLegend = (LayerLegend)bindable;
-                LayerLegend.NativeLayerLegend.LayerContent = newValue as ILayerContent;
-                LayerLegend.InvalidateMeasure();
+                var layerLegend = (LayerLegend)bindable;
+                layerLegend.NativeLayerLegend.LayerContent = newValue as ILayerContent;
+                layerLegend.InvalidateMeasure();
             }
         }
 
@@ -70,9 +70,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (bindable is LayerLegend && newValue is bool)
             {
-                var LayerLegend = (LayerLegend)bindable;
-                LayerLegend.NativeLayerLegend.ShowEntireTreeHierarchy = (bool)newValue;
-                LayerLegend.InvalidateMeasure();
+                var layerLegend = (LayerLegend)bindable;
+                layerLegend.NativeLayerLegend.ShowEntireTreeHierarchy = !(bool)newValue;
+                layerLegend.InvalidateMeasure();
             }
         }
     }

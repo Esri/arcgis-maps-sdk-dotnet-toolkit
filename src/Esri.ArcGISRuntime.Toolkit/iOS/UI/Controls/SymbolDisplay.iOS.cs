@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private UIStackView _rootStackView;
         private UIImageView _imageView;
-        private static readonly nfloat MaxSize = 40;
+        internal static readonly nfloat MaxSize = 40;
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
         /// <summary>
