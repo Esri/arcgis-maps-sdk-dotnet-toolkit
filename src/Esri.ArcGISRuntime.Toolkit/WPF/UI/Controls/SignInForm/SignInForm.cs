@@ -1,14 +1,26 @@
-﻿using Esri.ArcGISRuntime.Security;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using Esri.ArcGISRuntime.Security;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -17,14 +29,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class SignInForm : Control
     {
-        private ServerInfo serverInfo;
-        private ToggleButton rememberCredentialsButton;
-        private PasswordBox password;
-        private TextBox username;
-        private TextBlock messageText;
+        private ServerInfo _serverInfo;
+        private ToggleButton _rememberCredentialsButton;
+        private PasswordBox _password;
+        private TextBox _username;
+        private TextBlock _messageText;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SignInForm"/> control.
+        /// Initializes a new instance of the <see cref="SignInForm"/> class.
         /// </summary>
         public SignInForm()
         {
@@ -37,15 +49,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnApplyTemplate();
             ButtonBase okButton = GetTemplateChild("OkButton") as ButtonBase;
             ButtonBase cancelButton = GetTemplateChild("CancelButton") as ButtonBase;
-            rememberCredentialsButton = GetTemplateChild("RememberCredentials") as ToggleButton;
-            if (rememberCredentialsButton != null)
+            _rememberCredentialsButton = GetTemplateChild("RememberCredentials") as ToggleButton;
+            if (_rememberCredentialsButton != null)
             {
-                rememberCredentialsButton.Visibility = EnableCredentialCache ? Visibility.Visible : Visibility.Collapsed;
+                _rememberCredentialsButton.Visibility = EnableCredentialCache ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            username = GetTemplateChild("Username") as TextBox;
-            password = GetTemplateChild("Password") as PasswordBox;
-            messageText = GetTemplateChild("MessageText") as TextBlock;
+            _username = GetTemplateChild("Username") as TextBox;
+            _password = GetTemplateChild("Password") as PasswordBox;
+            _messageText = GetTemplateChild("MessageText") as TextBlock;
 
             okButton.Click += OkButton_Click;
             cancelButton.Click += CancelButton_Click;
@@ -56,15 +68,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private async void OkButton_Click(object sender, RoutedEventArgs e)
         {
             var info = CredentialRequestInfo;
-            if(info == null)
+            if (info == null)
             {
                 return;
             }
+
             if (info.AuthenticationType == AuthenticationType.Token)
             {
                 try
                 {
-                    Credential = await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, username.Text, ConvertToUnsecureString(password.SecurePassword), info.GenerateTokenOptions);
+                    Credential = await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, _username.Text, ConvertToUnsecureString(_password.SecurePassword), info.GenerateTokenOptions);
                 }
                 catch (System.Exception ex)
                 {
@@ -74,24 +87,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (info.AuthenticationType == AuthenticationType.NetworkCredential)
             {
-                Credential = new ArcGISNetworkCredential() { Credentials = new System.Net.NetworkCredential(username.Text, password.SecurePassword) };
+                Credential = new ArcGISNetworkCredential() { Credentials = new System.Net.NetworkCredential(_username.Text, _password.SecurePassword) };
             }
             else
             {
                 CreateCredentialError?.Invoke(this, new NotSupportedException("Authentication type not supported"));
             }
+
             if (EnableCredentialCache)
             {
-                var host = serverInfo == null ? info.ServiceUri : serverInfo.ServerUri;
-                if (rememberCredentialsButton != null && rememberCredentialsButton.IsChecked.Value)
+                var host = _serverInfo == null ? info.ServiceUri : _serverInfo.ServerUri;
+                if (_rememberCredentialsButton != null && _rememberCredentialsButton.IsChecked.Value)
                 {
-                    Authentication.CredentialsCache.SaveCredential(username.Text, password.SecurePassword, host);
+                    Authentication.CredentialsCache.SaveCredential(_username.Text, _password.SecurePassword, host);
                 }
                 else
                 {
                     Authentication.CredentialsCache.DeleteCredential(host);
                 }
             }
+
             Completed?.Invoke(this, Credential);
         }
 
@@ -102,24 +117,40 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void PopulateFields()
         {
-            if (rememberCredentialsButton != null)
-                rememberCredentialsButton.IsChecked = false;
-            if (username != null)
-                username.Text = string.Empty;
-            if (password != null)
-                password.Password = string.Empty;
+            if (_rememberCredentialsButton != null)
+            {
+                _rememberCredentialsButton.IsChecked = false;
+            }
+
+            if (_username != null)
+            {
+                _username.Text = string.Empty;
+            }
+
+            if (_password != null)
+            {
+                _password.Password = string.Empty;
+            }
 
             if (ServerHost != null && EnableCredentialCache)
             {
                 var credential = Authentication.CredentialsCache.ReadCredential(ServerHost);
                 if (credential != null)
                 {
-                    if (username != null)
-                        username.Text = credential.Item1;
-                    if (password != null)
-                        password.Password = ConvertToUnsecureString(credential.Item2);
-                    if (rememberCredentialsButton != null)
-                        rememberCredentialsButton.IsChecked = true;
+                    if (_username != null)
+                    {
+                        _username.Text = credential.Item1;
+                    }
+
+                    if (_password != null)
+                    {
+                        _password.Password = ConvertToUnsecureString(credential.Item2);
+                    }
+
+                    if (_rememberCredentialsButton != null)
+                    {
+                        _rememberCredentialsButton.IsChecked = true;
+                    }
                 }
             }
         }
@@ -147,7 +178,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static string ConvertToUnsecureString(SecureString securePassword)
         {
             if (securePassword == null)
+            {
                 return string.Empty;
+            }
 
             IntPtr unmanagedString = IntPtr.Zero;
             try
@@ -193,7 +226,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty MessageTextProperty =
             DependencyProperty.Register(nameof(MessageText), typeof(string), typeof(SignInForm), new PropertyMetadata("Please enter credentials for"));
-        
+
         /// <summary>
         /// Gets or sets the credential info used to generated a credential from.
         /// </summary>
@@ -220,16 +253,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var info = CredentialRequestInfo;
             if (info.AuthenticationType == AuthenticationType.Certificate)
             {
-                //Use Authentication.CertificateHelper.SelectCertificate instead
+                // Use Authentication.CertificateHelper.SelectCertificate instead
                 throw new NotSupportedException("Certificate Authentication not supported by this control");
             }
+
             Uri serverHost = null;
-            serverInfo = null;
+            _serverInfo = null;
             if (info != null)
             {
-                serverInfo = AuthenticationManager.Current.FindServerInfo(info.ServiceUri);
-                serverHost = serverInfo == null ? info.ServiceUri : serverInfo.ServerUri;
+                _serverInfo = AuthenticationManager.Current.FindServerInfo(info.ServiceUri);
+                serverHost = _serverInfo == null ? info.ServiceUri : _serverInfo.ServerUri;
             }
+
             SetValue(ServerHostPropertyKey, serverHost);
             PopulateFields();
         }
@@ -254,9 +289,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnEnableCredentialCachePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ctrl = (SignInForm)d;
-            if(ctrl.rememberCredentialsButton  != null)
+            if (ctrl._rememberCredentialsButton != null)
             {
-                ctrl.rememberCredentialsButton.Visibility = ctrl.EnableCredentialCache ? Visibility.Visible : Visibility.Collapsed;
+                ctrl._rememberCredentialsButton.Visibility = ctrl.EnableCredentialCache ? Visibility.Visible : Visibility.Collapsed;
                 ctrl.PopulateFields();
             }
         }
@@ -320,6 +355,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty HeaderTextProperty =
             DependencyProperty.Register(nameof(HeaderText), typeof(string), typeof(SignInForm), new PropertyMetadata("Login required"));
-
     }
 }

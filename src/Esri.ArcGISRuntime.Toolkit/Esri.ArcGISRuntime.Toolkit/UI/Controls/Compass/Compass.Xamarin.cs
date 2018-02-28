@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -30,6 +30,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _heading;
             set
             {
+                if (GeoView != null && !_headingSetByGeoView)
+                {
+                    throw new InvalidOperationException("The Heading Property is read-only when the GeoView property has been assigned");
+                }
+
                 _heading = value;
                 UpdateCompassRotation(true);
             }

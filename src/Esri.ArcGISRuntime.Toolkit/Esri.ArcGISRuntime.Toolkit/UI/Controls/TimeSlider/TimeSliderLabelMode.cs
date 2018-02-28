@@ -25,10 +25,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Display no labels along the time slider
         /// </summary>
         None,
+
         /// <summary>
         /// Display labels for the time slider's current extent (i.e. on the slider's thumbs)
         /// </summary>
         CurrentExtent,
+
         /// <summary>
         /// Display labels for the time slider's time step intervals (i.e. on the slider's tick marks)
         /// </summary>

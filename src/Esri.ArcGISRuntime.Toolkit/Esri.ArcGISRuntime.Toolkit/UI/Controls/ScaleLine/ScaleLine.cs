@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -18,21 +18,20 @@ using System.ComponentModel;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Shapes;
 #elif __IOS__
 using Control = UIKit.UIView;
-using TextBlock = UIKit.UILabel;
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
+using TextBlock = UIKit.UILabel;
 #elif __ANDROID__
 using Control = Android.Views.ViewGroup;
-using TextBlock = Android.Widget.TextView;
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
+using TextBlock = Android.Widget.TextView;
 #else
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-using System.Windows;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -57,7 +56,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __ANDROID__
             : base(Android.App.Application.Context)
 #endif
-            { Initialize(); }
+        {
+            Initialize();
+        }
 
 #pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>
@@ -262,6 +263,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             double distanceInInches = result.Distance;
             return distanceInInches * 96;
         }
-
     }
 }

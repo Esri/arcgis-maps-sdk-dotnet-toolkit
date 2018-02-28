@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -35,14 +35,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public SymbolDisplay(Context context) : base(context) { Initialize(); }
+        public SymbolDisplay(Context context)
+            : base(context)
+        {
+            Initialize();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public SymbolDisplay(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
+        public SymbolDisplay(Context context, IAttributeSet attr)
+            : base(context, attr)
+        {
+            Initialize();
+        }
 
         private void Initialize()
         {
@@ -124,7 +132,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (s_displayMetrics == null)
             {
                 if (s_windowManager == null)
+                {
                     s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                }
+
                 if (s_windowManager == null)
                 {
                     s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
@@ -135,6 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
                 }
             }
+
             return s_displayMetrics;
         }
     }

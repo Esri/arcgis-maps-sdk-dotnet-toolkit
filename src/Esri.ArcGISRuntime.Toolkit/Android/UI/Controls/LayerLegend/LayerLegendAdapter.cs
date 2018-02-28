@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -63,6 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 convertView = new LayerLegendItemView(_context);
             }
+
             (convertView as LayerLegendItemView)?.Update(layerLegend);
             return convertView;
         }

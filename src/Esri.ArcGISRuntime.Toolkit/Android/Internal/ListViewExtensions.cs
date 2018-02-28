@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -34,12 +34,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 var item = listView.Adapter.GetView(i, null, listView);
                 if (item.Visibility == ViewStates.Gone)
+                {
                     continue;
+                }
+
                 item.Measure(View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified), View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
                 totalHeight += item.MeasuredHeight;
             }
 
-            listView.LayoutParameters.Height = totalHeight + (listView.DividerHeight * totalItems - 1);
+            listView.LayoutParameters.Height = totalHeight + ((listView.DividerHeight * totalItems) - 1);
             listView.RequestLayout();
         }
     }

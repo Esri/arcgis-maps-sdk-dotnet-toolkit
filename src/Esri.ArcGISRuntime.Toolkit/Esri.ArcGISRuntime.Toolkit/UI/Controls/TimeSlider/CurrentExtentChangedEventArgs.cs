@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !__ANDROID__ && !__IOS__
 using System;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -34,6 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             NewExtent = newExtent;
             OldExtent = oldExtent;
         }
+
         /// <summary>
         /// Gets the new <see cref="TimeExtent"/> value.
         /// </summary>
@@ -45,3 +47,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public TimeExtent OldExtent { get; private set; }
     }
 }
+#endif

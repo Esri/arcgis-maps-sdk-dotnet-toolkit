@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -15,12 +15,8 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using CoreGraphics;
-using Foundation;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -36,7 +32,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
 #pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public Compass(IntPtr handle) : base(handle)
+        public Compass(IntPtr handle)
+            : base(handle)
         {
         }
 
@@ -44,7 +41,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         ///  Initializes a new instance of the <see cref="Compass"/> class with the specified frame.
         /// </summary>
         /// <param name="frame">Frame used by the view, expressed in iOS points.</param>
-        public Compass(CGRect frame) : base(frame)
+        public Compass(CGRect frame)
+            : base(frame)
         {
             Initialize();
         }
@@ -59,12 +57,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             base.AwakeFromNib();
         }
+
         private void Initialize()
         {
             BackgroundColor = UIColor.Clear;
 
             if (Heading == 0 && AutoHide && !DesignTime.IsDesignMode)
+            {
                 Alpha = 0;
+            }
 
             AddGestureRecognizer(new UITapGestureRecognizer(OnTapped));
 
@@ -96,46 +97,54 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             context.StrokeEllipseInRect(r);
 
             var path = new CGPath();
-            //create geometry
-            path.AddLines(new CGPoint[]{
-                        new CGPoint (c - size * .14 + l, c + t ),
-                        new CGPoint (c + size * .14 + l, c + t),
-                        new CGPoint (c + l, c - size * .34 + t),
-                    });
+
+            // create geometry
+            path.AddLines(new CGPoint[]
+            {
+                        new CGPoint(c - (size * .14) + l, c + t),
+                        new CGPoint(c + (size * .14) + l, c + t),
+                        new CGPoint(c + l, c - (size * .34) + t),
+            });
             path.CloseSubpath();
 
-            //add geometry to graphics context and draw it
+            // add geometry to graphics context and draw it
             context.SetFillColor(UIColor.FromRGB(199, 85, 46).CGColor);
             context.AddPath(path);
             context.DrawPath(CGPathDrawingMode.Fill);
 
             path = new CGPath();
-            //create geometry
-            path.AddLines(new CGPoint[]{
-                        new CGPoint (c - size * .14 + l, c + t ),
-                        new CGPoint (c + size * .14 + l, c + t),
-                        new CGPoint (c + l, c + size * .34 + t),
-                    });
+
+            // create geometry
+            path.AddLines(new CGPoint[]
+            {
+                        new CGPoint(c - (size * .14) + l, c + t),
+                        new CGPoint(c + (size * .14) + l, c + t),
+                        new CGPoint(c + l, c + (size * .34) + t),
+            });
             path.CloseSubpath();
-            //add geometry to graphics context and draw it
+
+            // add geometry to graphics context and draw it
             context.SetFillColor(UIColor.White.CGColor);
             context.AddPath(path);
             context.DrawPath(CGPathDrawingMode.Fill);
         }
 
-
         private void UpdateCompassRotation(bool transition)
         {
-            if (AutoHide) SetVisibility(Heading != 0);
+            if (AutoHide)
+            {
+                SetVisibility(Heading != 0);
+            }
+
             Transform = CGAffineTransform.MakeRotation((float)(Math.PI * -Heading / 180d));
         }
 
         private void SetVisibility(bool isVisible)
         {
             nfloat alpha = new nfloat(isVisible || DesignTime.IsDesignMode ? 1.0 : 0.0);
-            if (alpha != this.Alpha)
+            if (alpha != Alpha)
             {
-                UIView.Animate(0.25, () => this.Alpha = alpha);
+                UIView.Animate(0.25, () => Alpha = alpha);
             }
         }
 

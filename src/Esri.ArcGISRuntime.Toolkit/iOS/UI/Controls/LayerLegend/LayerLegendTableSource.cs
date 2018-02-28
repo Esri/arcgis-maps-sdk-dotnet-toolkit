@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public LayerLegendTableSource(IReadOnlyList<LegendInfo> layerLegends) : base()
+        public LayerLegendTableSource(IReadOnlyList<LegendInfo> layerLegends)
+            : base()
         {
             _layerLegends = layerLegends;
             if (_layerLegends is INotifyCollectionChanged)

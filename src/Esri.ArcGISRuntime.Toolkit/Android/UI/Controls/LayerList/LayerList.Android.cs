@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -19,9 +19,8 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI.Controls;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using static Android.Widget.AbsListView;
+using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -33,14 +32,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="LayerList"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public LayerList(Context context) : base(context) { Initialize(); }
+        public LayerList(Context context)
+            : base(context)
+        {
+            Initialize();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerList"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public LayerList(Context context, IAttributeSet attr) : base(context, attr) { Initialize(); }
+        public LayerList(Context context, IAttributeSet attr)
+            : base(context, attr)
+        {
+            Initialize();
+        }
 
         internal void Initialize()
         {
@@ -88,10 +95,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _listView.Adapter = null;
                 return;
             }
+
             foreach (var l in layers)
             {
                 if (!(l.LayerContent is Layer))
+                {
                     continue;
+                }
+
                 var layer = l.LayerContent as Layer;
                 if (layer.LoadStatus == LoadStatus.Loaded)
                 {
@@ -104,7 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _listView.Adapter = new LegendAdapter(Context, layers);
             _listView.SetHeightBasedOnChildren();
         }
-        
+
         /// <inheritdoc />
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {

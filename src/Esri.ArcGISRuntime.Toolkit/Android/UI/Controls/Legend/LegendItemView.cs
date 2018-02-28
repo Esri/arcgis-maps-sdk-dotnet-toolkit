@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-
+using System.Collections.Generic;
+using System.ComponentModel;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
 using Android.Widget;
-using System.Collections.Generic;
-using System.ComponentModel;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -31,7 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly LayerLegend _layerLegend;
         private readonly ListView _listView;
 
-        internal LegendItemView(Context context) : base(context)
+        internal LegendItemView(Context context)
+            : base(context)
         {
             Orientation = Orientation.Vertical;
             LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
@@ -69,6 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     return;
                 }
+
                 if (_listView.Adapter == null)
                 {
                     _listView.Adapter = new LegendAdapter(Context, new List<LayerContentViewModel>(subLayers));
@@ -87,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void Update(LayerContentViewModel layerContent)
         {
-            if(layerContent == null)
+            if (layerContent == null)
             {
                 return;
             }
@@ -110,6 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _listView.Adapter = new LegendAdapter(Context, new List<LayerContentViewModel>(layerContent.Sublayers));
                 _listView.SetHeightBasedOnChildren();
             }
+
             if (layerContent is INotifyPropertyChanged)
             {
                 var inpc = layerContent as INotifyPropertyChanged;

@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
-
 #if !__IOS__ && !__ANDROID__
 
 using System;
@@ -50,7 +49,7 @@ using System.Windows.Threading;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control 
+    /// The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control
     /// to enhance the viewing of geographic features that have attributes based upon Date/Time information.
     /// </summary>
     [TemplatePart(Name = "SliderTrack", Type = typeof(FrameworkElement))]
@@ -74,8 +73,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplateVisualState(GroupName = "FocusStates", Name = "Unfocused")]
     public class TimeSlider : Control
     {
-#region Fields
+        #region Fields
 
+#pragma warning disable SA1306 // Field names must begin with lower-case letter (names are made to match template names)
+#pragma warning disable SX1309 // Field names must begin with underscore (names are made to match template names)
         private FrameworkElement SliderTrack;
         private Thumb MinimumThumb;
         private TextBlock MinimumThumbLabel;
@@ -90,6 +91,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TextBlock FullExtentStartTimeLabel;
         private TextBlock FullExtentEndTimeLabel;
         private Primitives.Tickbar Tickmarks;
+#pragma warning restore SX1309 // Field names must begin with underscore
+#pragma warning restore SA1306 // Field names must begin with lower-case letter
         private DispatcherTimer _playTimer;
         private TimeExtent _currentValue;
         private bool _isFocused;
@@ -136,7 +139,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             SliderTrack = GetTemplateChild(nameof(SliderTrack)) as FrameworkElement;
             if (SliderTrack != null)
+            {
                 SliderTrack.SizeChanged += TimeSlider_SizeChanged;
+            }
+
             HorizontalTrackThumb = GetTemplateChild(nameof(HorizontalTrackThumb)) as Thumb;
             MinimumThumb = GetTemplateChild(nameof(MinimumThumb)) as Thumb;
             MinimumThumbLabel = GetTemplateChild(nameof(MinimumThumbLabel)) as TextBlock;
@@ -167,6 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 MinimumThumb.DragCompleted += DragCompleted;
                 MinimumThumb.DragStarted += (s, e) => SetFocus();
             }
+
             if (MaximumThumb != null)
             {
 #if NETFX_CORE
@@ -183,6 +190,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 MaximumThumb.DragCompleted += DragCompleted;
                 MaximumThumb.DragStarted += (s, e) => SetFocus();
             }
+
             if (HorizontalTrackThumb != null)
             {
 #if NETFX_CORE
@@ -199,6 +207,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 HorizontalTrackThumb.DragCompleted += DragCompleted;
                 HorizontalTrackThumb.DragStarted += (s, e) => SetFocus();
             }
+
             if (SliderTrackStepBackRepeater != null)
             {
                 SliderTrackStepBackRepeater.Click += (s, e) =>
@@ -208,6 +217,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     StepBack();
                 };
             }
+
             if (SliderTrackStepForwardRepeater != null)
             {
                 SliderTrackStepForwardRepeater.Click += (s, e) =>
@@ -217,20 +227,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     StepForward();
                 };
             }
+
             if (PlayPauseButton != null)
             {
                 IsPlaying = PlayPauseButton.IsChecked.Value;
                 PlayPauseButton.Checked += (s, e) => IsPlaying = true;
                 PlayPauseButton.Unchecked += (s, e) => IsPlaying = false;
             }
+
             if (NextButton != null)
             {
                 NextButton.Click += (s, e) => MoveTimeStep(1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
             }
+
             if (PreviousButton != null)
             {
                 PreviousButton.Click += (s, e) => MoveTimeStep(-1, preserveSpan: !IsStartTimePinned && !IsEndTimePinned);
             }
+
             PositionTickmarks();
             SetButtonVisibility();
             ApplyLabelMode(LabelMode);
@@ -278,9 +292,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnMouseEnter(e);
 #endif
             _isMouseOver = true;
-            if (MinimumThumb != null && !MinimumThumb.IsDragging ||
-                MaximumThumb != null && !MaximumThumb.IsDragging ||
-                MinimumThumb == null && MaximumThumb == null)
+            if ((MinimumThumb != null && !MinimumThumb.IsDragging) ||
+                (MaximumThumb != null && !MaximumThumb.IsDragging) ||
+                (MinimumThumb == null && MaximumThumb == null))
             {
                 ChangeVisualState(true);
             }
@@ -297,9 +311,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnMouseLeave(e);
 #endif
             _isMouseOver = false;
-            if (MinimumThumb != null && !MinimumThumb.IsDragging ||
-                MaximumThumb != null && !MaximumThumb.IsDragging ||
-                MinimumThumb == null && MaximumThumb == null)
+            if ((MinimumThumb != null && !MinimumThumb.IsDragging) ||
+                (MaximumThumb != null && !MaximumThumb.IsDragging) ||
+                (MinimumThumb == null && MaximumThumb == null))
             {
                 ChangeVisualState(true);
             }
@@ -334,11 +348,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnKeyDown(e);
             if (!e.Handled && IsEnabled)
             {
-                if ((e.Key == Key.Left))
+                if (e.Key == Key.Left)
                 {
                     StepBack();
                 }
-                else if ((e.Key == Key.Right))
+                else if (e.Key == Key.Right)
                 {
                     StepForward();
                 }
@@ -349,7 +363,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void ChangeVisualState(bool useTransitions)
         {
-            //CommonStates
+            // CommonStates
             if (!IsEnabled)
             {
                 VisualStateManager.GoToState(this, "Disabled", useTransitions);
@@ -362,7 +376,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 VisualStateManager.GoToState(this, "Normal", useTransitions);
             }
-            //FocusStates
+
+            // FocusStates
             if (_isFocused && IsEnabled)
             {
                 VisualStateManager.GoToState(this, "Focused", useTransitions);
@@ -382,7 +397,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (extent == null || extent.StartTime < ValidFullExtent.StartTime || extent.EndTime > ValidFullExtent.EndTime ||
             MinimumThumb == null || MaximumThumb == null || ValidFullExtent.EndTime <= ValidFullExtent.StartTime || SliderTrack == null ||
             TimeSteps == null || !TimeSteps.GetEnumerator().MoveNext())
+            {
                 return;
+            }
 
             var sliderWidth = SliderTrack.ActualWidth;
             var minimum = ValidFullExtent.StartTime.Ticks;
@@ -395,14 +412,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var start = snapped.StartTime.DateTime.Ticks;
             var end = snapped.EndTime.DateTime.Ticks;
 
-            // margins 
+            // margins
             double left, right, thumbLeft, thumbRight = 0;
 
-            // rate = (distance) / (time)				
+            // rate = (distance) / (time)
             var rate = SliderTrack.ActualWidth / (maximum - minimum);
 
-
-            // Position left repeater							
+            // Position left repeater
             right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.ActualWidth);
             SliderTrackStepBackRepeater.Margin = new Thickness(0, 0, right, 0);
             SliderTrackStepBackRepeater.Width = Math.Max(0, sliderWidth - right);
@@ -414,22 +430,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var minThumbLabelWidth = 0d;
 
             // Position minimum thumb
-            if (!IsCurrentExtentTimeInstant) // Check for two thumbs
+            if (!IsCurrentExtentTimeInstant)
             {
+                // Check for two thumbs
                 // There are two thumbs, so position minimum (max is used in both the one and two thumb case)
                 left = Math.Max(0, (start - minimum) * rate);
-                right = Math.Min(sliderWidth, ((maximum - start) * rate));
+                right = Math.Min(sliderWidth, (maximum - start) * rate);
 #if NETFX_CORE
                 // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
                 left -= 0.5;
                 right -= 0.5;
 #endif
-                thumbLeft = left - MinimumThumb.ActualWidth / 2;
-                thumbRight = right - MinimumThumb.ActualWidth / 2;
+                thumbLeft = left - (MinimumThumb.ActualWidth / 2);
+                thumbRight = right - (MinimumThumb.ActualWidth / 2);
                 MinimumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
 
                 // TODO: Change visibility instead of opacity.  Doing so throws an exception that start time cannot be
-                // greater than end time when dragging minimum thumb.                    
+                // greater than end time when dragging minimum thumb.
                 MinimumThumbLabel.Opacity = (LabelMode == TimeSliderLabelMode.CurrentExtent) && start == minimum ? 0 : 1;
 
                 // Calculate thumb label position
@@ -446,32 +463,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             // Position middle thumb (filled area between min and max thumbs is actually a thumb and can be dragged)
-            if (IsCurrentExtentTimeInstant) // One thumb
+            if (IsCurrentExtentTimeInstant)
             {
+                // One thumb
                 // Hide the middle thumb
                 HorizontalTrackThumb.Margin = new Thickness(0, 0, sliderWidth, 0);
                 HorizontalTrackThumb.Width = 0;
             }
-            else // !IsCurrentExtentTimeInstant
+            else
             {
+                // !IsCurrentExtentTimeInstant
                 // Position the middle thumb
-                left = Math.Min(sliderWidth, ((start - minimum) * rate));
+                left = Math.Min(sliderWidth, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, (maximum - end) * rate);
                 HorizontalTrackThumb.Margin = new Thickness(left, 0, right, 0);
-                HorizontalTrackThumb.Width = Math.Max(0, (sliderWidth - right - left));
+                HorizontalTrackThumb.Width = Math.Max(0, sliderWidth - right - left);
                 HorizontalTrackThumb.HorizontalAlignment = HorizontalAlignment.Left;
             }
 
             // Position maximum thumb
             left = Math.Min(sliderWidth, (end - minimum) * rate);
-            right = Math.Min(sliderWidth, ((maximum - end) * rate));
+            right = Math.Min(sliderWidth, (maximum - end) * rate);
 #if NETFX_CORE
             // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
             left -= 0.5;
             right -= 0.5;
 #endif
-            thumbLeft = left - MaximumThumb.ActualWidth / 2;
-            thumbRight = right - MaximumThumb.ActualWidth / 2;
+            thumbLeft = left - (MaximumThumb.ActualWidth / 2);
+            thumbRight = right - (MaximumThumb.ActualWidth / 2);
             MaximumThumb.Margin = new Thickness(thumbLeft, 0, thumbRight, 0);
 
             // Update maximum thumb label visibility
@@ -558,143 +577,191 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             IsPlaying = false;
 
             if (translateX == 0 || IsStartTimePinned || IsEndTimePinned)
+            {
                 return;
+            }
 
             if (_currentValue == null)
+            {
                 _currentValue = CurrentValidExtent;
+            }
 
             _totalHorizontalChange = translateX;
 
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
 
-            // time ratio 
-            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
+            // time ratio
+            long timeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
 
             // time change
-            long TimeChange = (long)(TimeRate * _totalHorizontalChange);
+            long timeChange = (long)(timeRate * _totalHorizontalChange);
 
             TimeSpan difference = new TimeSpan(_currentValue.EndTime.DateTime.Ticks - _currentValue.StartTime.DateTime.Ticks);
 
             TimeExtent tempChange = null;
             try
             {
-                tempChange = new TimeExtent(_horizontalChangeExtent.StartTime.DateTime.AddTicks(TimeChange),
-                    _horizontalChangeExtent.EndTime.DateTime.AddTicks(TimeChange));
+                tempChange = new TimeExtent(_horizontalChangeExtent.StartTime.DateTime.AddTicks(timeChange),
+                    _horizontalChangeExtent.EndTime.DateTime.AddTicks(timeChange));
             }
             catch (ArgumentOutOfRangeException)
             {
                 if (_totalHorizontalChange < 0)
+                {
                     tempChange = new TimeExtent(ValidFullExtent.StartTime, ValidFullExtent.StartTime.Add(difference));
+                }
                 else if (_totalHorizontalChange > 0)
+                {
                     tempChange = new TimeExtent(ValidFullExtent.EndTime.Subtract(difference), ValidFullExtent.EndTime);
+                }
             }
 
             if (tempChange.StartTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks)
+            {
                 _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime, ValidFullExtent.StartTime.Add(difference)));
+            }
             else if (tempChange.EndTime.DateTime.Ticks > ValidFullExtent.EndTime.Ticks)
+            {
                 _currentValue = Snap(new TimeExtent(ValidFullExtent.EndTime.Subtract(difference), ValidFullExtent.EndTime));
+            }
             else
+            {
                 _currentValue = Snap(new TimeExtent(tempChange.StartTime, tempChange.EndTime));
+            }
 
             UpdateTrackLayout(_currentValue);
             if (_currentValue.StartTime != CurrentExtent.StartTime || _currentValue.EndTime != CurrentExtent.EndTime)
+            {
                 UpdateCurrentExtent();
+            }
         }
 
         private void OnMinimumThumbDrag(double translateX)
         {
             IsPlaying = false;
             if (translateX == 0)
+            {
                 return;
+            }
 
             if (_currentValue == null)
+            {
                 _currentValue = CurrentValidExtent;
+            }
 
             _totalHorizontalChange = translateX;
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
-            // time ratio 
-            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
+
+            // time ratio
+            long timeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
 
             // time change
-            long TimeChange = (long)(TimeRate * _totalHorizontalChange);
+            long timeChange = (long)(timeRate * _totalHorizontalChange);
 
             TimeExtent tempChange = null;
             try
             {
-                tempChange = new TimeExtent(_horizontalChangeExtent.StartTime.DateTime.AddTicks(TimeChange), _horizontalChangeExtent.EndTime);
+                tempChange = new TimeExtent(_horizontalChangeExtent.StartTime.DateTime.AddTicks(timeChange), _horizontalChangeExtent.EndTime);
             }
             catch (ArgumentOutOfRangeException)
             {
                 if (_totalHorizontalChange < 0)
+                {
                     tempChange = new TimeExtent(ValidFullExtent.StartTime, _currentValue.EndTime);
+                }
                 else if (_totalHorizontalChange > 0)
+                {
                     tempChange = new TimeExtent(_currentValue.EndTime);
+                }
             }
 
             if (tempChange.StartTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks)
+            {
                 _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime, _currentValue.EndTime));
+            }
             else if (tempChange.StartTime >= _currentValue.EndTime)
+            {
                 _currentValue = Snap(new TimeExtent(_currentValue.EndTime));
+            }
             else
+            {
                 _currentValue = Snap(new TimeExtent(tempChange.StartTime, tempChange.EndTime));
+            }
 
             UpdateTrackLayout(_currentValue);
             if (_currentValue.StartTime != CurrentExtent.StartTime)
+            {
                 UpdateCurrentExtent();
+            }
         }
 
         private void OnMaximumThumbDrag(double translateX)
         {
-
             IsPlaying = false;
             if (translateX == 0)
+            {
                 return;
+            }
 
             if (_currentValue == null)
+            {
                 _currentValue = CurrentValidExtent;
+            }
 
             _totalHorizontalChange = translateX;
             _horizontalChangeExtent = new TimeExtent(_currentValue.StartTime, _currentValue.EndTime);
 
-            // time ratio 
-            long TimeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
+            // time ratio
+            long timeRate = (ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks) / (long)SliderTrack.ActualWidth;
 
             // time change
-            long TimeChange = (long)(TimeRate * _totalHorizontalChange);
+            long timeChange = (long)(timeRate * _totalHorizontalChange);
 
             TimeExtent tempChange = null;
             if (IsCurrentExtentTimeInstant)
             {
                 try
                 {
-                    // If the mouse drag creates a date thats year is before 
-                    // 1/1/0001 or after 12/31/9999 then an out of renge 
+                    // If the mouse drag creates a date thats year is before
+                    // 1/1/0001 or after 12/31/9999 then an out of renge
                     // exception will be trown.
-                    tempChange = new TimeExtent(_horizontalChangeExtent.EndTime.DateTime.AddTicks(TimeChange));
+                    tempChange = new TimeExtent(_horizontalChangeExtent.EndTime.DateTime.AddTicks(timeChange));
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    if (_totalHorizontalChange > 0) // date is after 12/31/9999
+                    if (_totalHorizontalChange > 0)
+                    {
+                        // date is after 12/31/9999
                         tempChange = new TimeExtent(ValidFullExtent.EndTime);
-                    else if (_totalHorizontalChange < 0) // date is before 1/1/0001
+                    }
+                    else if (_totalHorizontalChange < 0)
+                    {
+                        // date is before 1/1/0001
                         tempChange = new TimeExtent(ValidFullExtent.StartTime);
+                    }
                 }
             }
             else
             {
                 try
                 {
-                    // If the mouse drag creates a date thats year is before 
-                    // 1/1/0001 or after 12/31/9999 then an out of range 
+                    // If the mouse drag creates a date thats year is before
+                    // 1/1/0001 or after 12/31/9999 then an out of range
                     // exception will be trown.
-                    tempChange = new TimeExtent(_horizontalChangeExtent.StartTime, _horizontalChangeExtent.EndTime.DateTime.AddTicks(TimeChange));
+                    tempChange = new TimeExtent(_horizontalChangeExtent.StartTime, _horizontalChangeExtent.EndTime.DateTime.AddTicks(timeChange));
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    if (_totalHorizontalChange > 0) // date is after 12/31/9999
+                    if (_totalHorizontalChange > 0)
+                    {
+                        // date is after 12/31/9999
                         tempChange = new TimeExtent(_currentValue.StartTime, ValidFullExtent.EndTime);
-                    else if (_totalHorizontalChange < 0) // date is before 1/1/0001
+                    }
+                    else if (_totalHorizontalChange < 0)
+                    {
+                        // date is before 1/1/0001
                         tempChange = new TimeExtent(_currentValue.StartTime);
+                    }
                 }
             }
 
@@ -702,22 +769,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (IsCurrentExtentTimeInstant)
             {
                 if (tempChange.EndTime.DateTime.Ticks > ValidFullExtent.EndTime.Ticks)
+                {
                     _currentValue = Snap(new TimeExtent(ValidFullExtent.EndTime));
+                }
                 else if (tempChange.EndTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks)
+                {
                     _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime));
+                }
                 else
+                {
                     _currentValue = Snap(new TimeExtent(tempChange.EndTime));
+                }
             }
             else
             {
                 if (tempChange.EndTime.DateTime.Ticks > ValidFullExtent.EndTime.Ticks)
+                {
                     _currentValue = Snap(new TimeExtent(_currentValue.StartTime, ValidFullExtent.EndTime));
-                else if (tempChange.EndTime <= _currentValue.StartTime && !IsCurrentExtentTimeInstant) // TODO: Preserve one time step between min and max thumbs
+                }
+                else if (tempChange.EndTime <= _currentValue.StartTime && !IsCurrentExtentTimeInstant)
+                {
+                    // TODO: Preserve one time step between min and max thumbs
                     _currentValue = Snap(new TimeExtent(_currentValue.StartTime, _currentValue.StartTime.DateTime.AddMilliseconds(1)));
-                else if (tempChange.EndTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks) // TODO: Preserve one time step between min and max thumbs
+                }
+                else if (tempChange.EndTime.DateTime.Ticks < ValidFullExtent.StartTime.Ticks)
+                {
+                    // TODO: Preserve one time step between min and max thumbs
                     _currentValue = Snap(new TimeExtent(ValidFullExtent.StartTime));
+                }
                 else
+                {
                     _currentValue = Snap(new TimeExtent(_currentValue.StartTime, tempChange.EndTime));
+                }
             }
 
             UpdateTrackLayout(_currentValue);
@@ -730,7 +813,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void DragCompleted(object sender, DragCompletedEventArgs e)
         {
             if (_currentValue == null)
+            {
                 return;
+            }
+
             UpdateCurrentExtent();
         }
 
@@ -755,18 +841,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent Snap(TimeExtent extent)
         {
             if (extent == null)
+            {
                 return null;
+            }
 
             if (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext())
             {
                 if (TimeSteps.Contains(extent.StartTime) && TimeSteps.Contains(extent.EndTime))
+                {
                     return extent; // Extent already starts and ends at valid time steps
+                }
 
                 var start = extent.StartTime < ValidFullExtent.StartTime ? ValidFullExtent.StartTime : extent.StartTime;
                 var end = extent.EndTime > ValidFullExtent.EndTime ? ValidFullExtent.EndTime : extent.EndTime;
                 var result = new TimeExtent(start, end);
 
-                // snap min thumb.								
+                // snap min thumb.
                 var d0 = long.MaxValue;
                 foreach (DateTimeOffset step in TimeSteps)
                 {
@@ -820,7 +910,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void PositionTickmarks()
         {
             if (Tickmarks == null || ValidFullExtent.StartTime >= ValidFullExtent.EndTime)
+            {
                 return;
+            }
 
             Tickmarks.TickmarkPositions = null;
             if (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext())
@@ -837,16 +929,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     intervals.Add((d.Ticks - ValidFullExtent.StartTime.Ticks) / (double)span);
                     tickMarkDates.Add(d);
                 }
+
                 Tickmarks.TickmarkPositions = intervals;
                 Tickmarks.TickmarkDataSources = tickMarkDates.Cast<object>();
                 Tickmarks.ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval;
             }
         }
 
-#region Properties
+        #region Properties
 
         /// <summary>
-        /// Gets whether or not the current extent represents a time instant
+        /// Gets a value indicating whether or not the current extent represents a time instant
         /// </summary>
         private bool IsCurrentExtentTimeInstant => CurrentValidExtent?.IsTimeInstant() ?? false;
 
@@ -874,7 +967,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider. 
+        /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
 #if !NETFX_CORE
         [TypeConverter(typeof(TimeExtentConverter))]
@@ -919,7 +1012,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance
         /// </summary>
 #if !NETFX_CORE
-		[TypeConverter(typeof(TimeExtentConverter))]
+        [TypeConverter(typeof(TimeExtentConverter))]
 #endif
         public TimeExtent FullExtent
         {
@@ -934,11 +1027,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(FullExtent), typeof(TimeExtent), typeof(TimeSlider),
                 new PropertyMetadata(default(TimeExtent), OnFullExtentPropertyChanged));
 
-        private async static void OnFullExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OnFullExtentPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: For consideration - should FullExtent be snapped to a multiple of the specified time step?  E.g. if the time step interval
             // is 1 week and the full extent is 3 months (suppose 92 days in this case), should the full extent be snapped to 91 or 98 days?
-
             var slider = (TimeSlider)d;
             await slider.CalculateTimeStepsAsync();
             slider.PositionTickmarks();
@@ -978,6 +1070,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Updates time steps based on the current TimeStepInterval and FullExtent.  Executes asynchronously to ensure that pending updates to
         /// both TimeStepInterval and FullExtent are taken into account before intervals and subsequent layout updates are calculated.
         /// </summary>
+        /// <returns>Task</returns>
         private async Task CalculateTimeStepsAsync()
         {
             // Time step calculation is throttled because FullExtent and TimeStepInterval are often changed in concert, and immediately responding to
@@ -990,7 +1083,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             await _calculateTimeStepsThrottler.ThrottleDelay();
 
             if (TimeStepInterval == null || FullExtent == null)
+            {
                 return;
+            }
 
             var timeStep = TimeStepInterval;
             var startTime = FullExtent.StartTime;
@@ -999,7 +1094,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var steps = new List<DateTimeOffset> { startTime };
 
             for (var nextStep = startTime.AddTimeValue(timeStep); nextStep <= endTime; nextStep = nextStep.AddTimeValue(timeStep))
+            {
                 steps.Add(nextStep);
+            }
 
             TimeSteps = steps;
             _calculateTimeStepsTcs.TrySetResult(true);
@@ -1034,7 +1131,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step
         /// </summary>
-		public TimeSpan PlaybackInterval
+        public TimeSpan PlaybackInterval
         {
             get { return (TimeSpan)GetValue(PlaybackIntervalProperty); }
             set { SetValue(PlaybackIntervalProperty, value); }
@@ -1056,7 +1153,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets whether the current extent will move to the next or the previous time step during playback
         /// </summary>
-		public PlaybackDirection PlaybackDirection
+        public PlaybackDirection PlaybackDirection
         {
             get { return (PlaybackDirection)GetValue(PlaybackDirectionProperty); }
             set { SetValue(PlaybackDirectionProperty, value); }
@@ -1072,7 +1169,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the behavior when the current extent reaches the end of the slider during playback
         /// </summary>
-		public LoopMode PlaybackLoopMode
+        public LoopMode PlaybackLoopMode
         {
             get { return (LoopMode)GetValue(LoopModeProperty); }
             set { SetValue(LoopModeProperty, value); }
@@ -1090,21 +1187,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Play Button
             if (PlayPauseButton != null)
+            {
                 PlayPauseButton.Visibility = viz;
+            }
 
             // Next Button
             if (NextButton != null)
+            {
                 NextButton.Visibility = viz;
+            }
 
             // Previous Button
             if (PreviousButton != null)
+            {
                 PreviousButton.Visibility = viz;
+            }
         }
 
         /// <summary>
-        /// Gets or sets whether the start time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the start time of the <see cref="CurrentExtent"/> is locked into place
         /// </summary>
-		public bool IsStartTimePinned
+        public bool IsStartTimePinned
         {
             get { return (bool)GetValue(IsStartTimePinnedProperty); }
             set { SetValue(IsStartTimePinnedProperty, value); }
@@ -1121,20 +1224,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var slider = (TimeSlider)d;
 
-            // Enable or disable the start time thumb 
+            // Enable or disable the start time thumb
             var isStartTimePinned = (bool)e.NewValue;
             slider.MinimumThumb.IsEnabled = !isStartTimePinned;
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
             if (slider.IsCurrentExtentTimeInstant && slider.IsEndTimePinned != isStartTimePinned)
+            {
                 slider.IsEndTimePinned = isStartTimePinned;
+            }
 
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             slider.HorizontalTrackThumb.IsEnabled = slider.MaximumThumb.IsEnabled && slider.MinimumThumb.IsEnabled;
         }
 
         /// <summary>
-        /// Gets or sets whether the end time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the end time of the <see cref="CurrentExtent"/> is locked into place
         /// </summary>
         public bool IsEndTimePinned
         {
@@ -1153,13 +1258,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var slider = (TimeSlider)d;
 
-            // Enable or disable the end time thumb 
+            // Enable or disable the end time thumb
             var isEndTimePinned = (bool)e.NewValue;
             slider.MaximumThumb.IsEnabled = !isEndTimePinned;
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
             if (slider.IsCurrentExtentTimeInstant && slider.IsStartTimePinned != isEndTimePinned)
+            {
                 slider.IsStartTimePinned = isEndTimePinned;
+            }
 
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             slider.HorizontalTrackThumb.IsEnabled = slider.MaximumThumb.IsEnabled && slider.MinimumThumb.IsEnabled;
@@ -1175,7 +1282,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var slider = (TimeSlider)d;
             var isPlaying = (bool)e.NewValue;
-
 
             // Start or stop playback
             if (isPlaying && slider.TimeSteps != null && slider.TimeSteps.GetEnumerator().MoveNext())
@@ -1199,7 +1305,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Update the state of the play/pause button
             if (slider.PlayPauseButton != null)
+            {
                 slider.PlayPauseButton.IsChecked = isPlaying;
+            }
         }
 
 #region Appearance Properties
@@ -1207,7 +1315,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the border color of the thumbs
         /// </summary>
-		public Brush ThumbStroke
+        public Brush ThumbStroke
         {
             get { return (Brush)GetValue(ThumbStrokeProperty); }
             set { SetValue(ThumbStrokeProperty, value); }
@@ -1222,7 +1330,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the fill color of the thumbs
         /// </summary>
-		public Brush ThumbFill
+        public Brush ThumbFill
         {
             get { return (Brush)GetValue(ThumbFillProperty); }
             set { SetValue(ThumbFillProperty, value); }
@@ -1237,7 +1345,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
         /// </summary>
-		public Brush CurrentExtentFill
+        public Brush CurrentExtentFill
         {
             get { return (Brush)GetValue(CurrentExtentFillProperty); }
             set { SetValue(CurrentExtentFillProperty, value); }
@@ -1252,7 +1360,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
-		public Brush FullExtentFill
+        public Brush FullExtentFill
         {
             get { return (Brush)GetValue(FullExtentFillProperty); }
             set { SetValue(FullExtentFillProperty, value); }
@@ -1267,7 +1375,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
-		public Brush FullExtentStroke
+        public Brush FullExtentStroke
         {
             get { return (Brush)GetValue(FullExtentStrokeProperty); }
             set { SetValue(FullExtentStrokeProperty, value); }
@@ -1282,7 +1390,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the slider's tickmarks
         /// </summary>
-		public Brush TimeStepIntervalTickFill
+        public Brush TimeStepIntervalTickFill
         {
             get { return (Brush)GetValue(TimeStepIntervalTickFillProperty); }
             set { SetValue(TimeStepIntervalTickFillProperty, value); }
@@ -1297,7 +1405,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the fill color of the playback buttons
         /// </summary>
-		public Brush PlaybackButtonsFill
+        public Brush PlaybackButtonsFill
         {
             get { return (Brush)GetValue(PlaybackButtonsFillProperty); }
             set { SetValue(PlaybackButtonsFillProperty, value); }
@@ -1312,7 +1420,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the border color of the playback buttons
         /// </summary>
-		public Brush PlaybackButtonsStroke
+        public Brush PlaybackButtonsStroke
         {
             get { return (Brush)GetValue(PlaybackButtonsStrokeProperty); }
             set { SetValue(PlaybackButtonsStrokeProperty, value); }
@@ -1327,7 +1435,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the full extent labels
         /// </summary>
-		public Brush FullExtentLabelColor
+        public Brush FullExtentLabelColor
         {
             get { return (Brush)GetValue(FullExtentLabelColorProperty); }
             set { SetValue(FullExtentLabelColorProperty, value); }
@@ -1342,7 +1450,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the current extent labels
         /// </summary>
-		public Brush CurrentExtentLabelColor
+        public Brush CurrentExtentLabelColor
         {
             get { return (Brush)GetValue(CurrentExtentLabelColorProperty); }
             set { SetValue(CurrentExtentLabelColorProperty, value); }
@@ -1357,7 +1465,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the time step interval labels
         /// </summary>
-		public Brush TimeStepIntervalLabelColor
+        public Brush TimeStepIntervalLabelColor
         {
             get { return (Brush)GetValue(TimeStepIntervalLabelColorProperty); }
             set { SetValue(TimeStepIntervalLabelColorProperty, value); }
@@ -1385,12 +1493,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// fractional duration values) into the TimeSlider's full extent.  If there is no TimeValue that will fit evenly, then
         /// the interval will be initialized to the smallest possible fractional duration that is greater than one with a time
         /// unit of days or smaller.
-        /// 
+        ///
         /// Note that, if the TimeSlider instance's FullExtent property is not set, invoking this method will have no effect.</remarks>
         public void InitializeTimeSteps(int count)
         {
             if (FullExtent == null)
+            {
                 return;
+            }
 
             TimeStepInterval = FullExtent.Divide(count);
         }
@@ -1400,6 +1510,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>
         /// </summary>
         /// <param name="geoView">The GeoView to use to initialize the time-slider's properties</param>
+        /// <returns>Task</returns>
         public async Task InitializeTimePropertiesAsync(GeoView geoView)
         {
             // Get all the layers from the geoview
@@ -1426,7 +1537,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Only check whether a time instant can be used for filtering if the GeoView doesn't have a defined temporal extent and all
                 // the layers checked so far allow instantaneous filtration.
                 if (geoView.TimeExtent == null && canUseInstantaneousTime && !(await CanUseInstantaneousTimeAsync(layer)))
+                {
                     canUseInstantaneousTime = false;
+                }
             }
 
             // Apply the calculated full extent, time step interval, and current extent
@@ -1444,10 +1557,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>.
         /// </summary>
         /// <param name="timeAwareLayer">The layer to use to initialize the time slider</param>
+        /// <returns>Task</returns>
         public async Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer)
         {
             FullExtent = timeAwareLayer.FullTimeExtent;
             TimeStepInterval = await GetTimeStepIntervalAsync(timeAwareLayer);
+
             // TODO: Double-check whether we can choose a better default for current extent - does not seem to be exposed
             // at all in service metadata
             CurrentExtent = await CanUseInstantaneousTimeAsync(timeAwareLayer) ?
@@ -1472,14 +1587,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Get the largest time-step interval defined by the service's sub-layers
                 foreach (var sublayer in mapImageLayer.Sublayers)
                 {
-                    if (sublayer.IsVisible) // Only use visible sub-layers
+                    if (sublayer.IsVisible)
                     {
+                        // Only use visible sub-layers
                         var timeInfo = await GetTimeInfoAsync(sublayer);
                         if (timeInfo == null)
+                        {
                             continue;
+                        }
 
                         if (timeInfo != null && (timeStepInterval == null || timeInfo.Interval.IsGreaterThan(timeStepInterval)))
+                        {
                             timeStepInterval = timeInfo.Interval;
+                        }
                     }
                 }
             }
@@ -1488,7 +1608,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets whether an instantaneous time filter can be applied to the specified time-aware layer 
+        /// Gets whether an instantaneous time filter can be applied to the specified time-aware layer
         /// </summary>
         /// <param name="timeAwareLayer">The time-aware layer to check</param>
         /// <returns><c>true</c> if the layer can be filtered based on a time instant, otherwise <c>false</c></returns>
@@ -1507,7 +1627,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         var timeInfo = await GetTimeInfoAsync(sublayer);
                         if (timeInfo == null)
+                        {
                             continue;
+                        }
 
                         if (string.IsNullOrEmpty(timeInfo.StartTimeField) || string.IsNullOrEmpty(timeInfo.EndTimeField))
                         {
@@ -1517,8 +1639,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                 }
             }
-            else // !(timeAwareLayer is ArcGISMapImageLayer)
+            else
             {
+                // !(timeAwareLayer is ArcGISMapImageLayer)
                 var timeInfo = await GetTimeInfoAsync(timeAwareLayer as ILoadable);
                 canUseInstantaneousTime = !string.IsNullOrEmpty(timeInfo?.StartTimeField) && !string.IsNullOrEmpty(timeInfo?.EndTimeField);
             }
@@ -1529,16 +1652,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Returns the layer's time-info, if applicable
         /// </summary>
+        /// <returns>Task</returns>
         private static async Task<LayerTimeInfo> GetTimeInfoAsync(ILoadable layer) // Can't be of type Layer since ArcGISSublayer doesn't inherit from that
         {
             if (!(layer is ArcGISSublayer) && !(layer is FeatureLayer) && !(layer is RasterLayer))
+            {
                 return null;
+            }
 
             try
             {
                 await layer.LoadAsync();
                 if (layer.LoadStatus != LoadStatus.Loaded)
+                {
                     return null;
+                }
             }
             catch
             {
@@ -1587,9 +1715,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool StepForward(int timeSteps = 1)
         {
             // TODO: design question - should users be allowed to specify whether to preserve the time window?
-
             if (timeSteps < 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSteps), $"{nameof(timeSteps)} must be greater than zero");
+            }
 
             var preserveSpan = !IsStartTimePinned && !IsEndTimePinned;
             return MoveTimeStep(timeSteps, preserveSpan);
@@ -1610,7 +1739,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool StepBack(int timeSteps = 1)
         {
             if (timeSteps < 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(timeSteps), $"{nameof(timeSteps)} must be greater than zero");
+            }
 
             var preserveSpan = !IsStartTimePinned && !IsEndTimePinned;
             return MoveTimeStep(0 - timeSteps, preserveSpan);
@@ -1626,7 +1757,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool MoveTimeStep(int timeSteps, bool preserveSpan)
         {
             if (TimeSteps == null || CurrentValidExtent == null || (IsStartTimePinned && IsEndTimePinned))
+            {
                 return false;
+            }
 
             // Always preserve the number of intervals between start and end when the current time is a time instant
             preserveSpan = IsCurrentExtentTimeInstant ? true : preserveSpan;
@@ -1649,9 +1782,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // beyond the valid range, clamp the number of steps to the maximum number that the extent can move in the specified direction.
             var validTimeStepDelta = 0;
             if (timeSteps > 0)
+            {
                 validTimeStepDelta = startTimeStepIndex + timeSteps <= maxTimeStepIndex ? timeSteps : maxTimeStepIndex - startTimeStepIndex;
+            }
             else
+            {
                 validTimeStepDelta = endTimeStepIndex + timeSteps >= minTimeStepIndex ? timeSteps : minTimeStepIndex - endTimeStepIndex;
+            }
 
             // Get the new start and end time step indexes
             var newStartTimeStepIndex = !IsStartTimePinned && (validTimeStepDelta > 0 || startTimeStepIndex + validTimeStepDelta >= minTimeStepIndex) ?
@@ -1662,9 +1799,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Adjust the new index in the event that it's coincident with the max or min and the current time extent is a time range (i.e. not a
             // time instant.  In that case, we need to preserve at least one time step between the start and end times.
             if (newStartTimeStepIndex == maxTimeStepIndex && !IsCurrentExtentTimeInstant)
+            {
                 newStartTimeStepIndex--;
+            }
+
             if (newEndTimeStepIndex == minTimeStepIndex && !IsCurrentExtentTimeInstant)
+            {
                 newEndTimeStepIndex++;
+            }
 
             // Evaluate how many time steps the start and end were moved by and whether they were able to be moved by the requested number of steps
             var startDelta = newStartTimeStepIndex - startTimeStepIndex;
@@ -1682,17 +1824,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 // Update the current time extent
                 if (newStartTimeStepIndex == newEndTimeStepIndex)
+                {
                     CurrentExtent = new TimeExtent(newStartTime);
+                }
                 else
+                {
                     CurrentExtent = new TimeExtent(newStartTime, newEndTime);
+                }
             }
 
             // Return whether or not the time extent was moved by the specified number of steps
-            return isRequestedMoveValid; 
+            return isRequestedMoveValid;
         }
 
         /// <summary>
-        /// Gets or sets whether the time slider is animating playback
+        /// Gets or sets a value indicating whether the time slider is animating playback
         /// </summary>
         public bool IsPlaying
         {
@@ -1822,7 +1968,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ApplyLabelMode(TimeSliderLabelMode labelMode)
         {
             if (Tickmarks == null || MinimumThumbLabel == null || MaximumThumbLabel == null)
+            {
                 return;
+            }
 
             switch (labelMode)
             {

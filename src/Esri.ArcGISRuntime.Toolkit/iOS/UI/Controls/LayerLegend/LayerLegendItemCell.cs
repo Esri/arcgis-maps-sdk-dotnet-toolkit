@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Mapping;
 using System;
+using Esri.ArcGISRuntime.Mapping;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -25,7 +25,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly SymbolDisplay _symbolDisplay;
         private readonly UILabel _textLabel;
 
-        public LayerLegendItemCell(IntPtr handle) : base(handle)
+        public LayerLegendItemCell(IntPtr handle)
+            : base(handle)
         {
             SelectionStyle = UITableViewCellSelectionStyle.None;
             TranslatesAutoresizingMaskIntoConstraints = false;
@@ -65,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _textLabel.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
             _textLabel.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
 
-            if(_constraintsUpdated)
+            if (_constraintsUpdated)
             {
                 return;
             }
@@ -76,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _symbolDisplay.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
             _symbolDisplay.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
 
-            _textLabel.LeadingAnchor.ConstraintEqualTo(_symbolDisplay.TrailingAnchor,(nfloat)40).Active = true;
+            _textLabel.LeadingAnchor.ConstraintEqualTo(_symbolDisplay.TrailingAnchor, (nfloat)40).Active = true;
             _textLabel.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
         }
     }

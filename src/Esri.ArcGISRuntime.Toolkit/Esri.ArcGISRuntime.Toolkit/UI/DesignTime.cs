@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -23,11 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private static bool? s_isInDesignMode;
 
-        /// <summary>
-        /// Gets a value indicating whether the process is in design mode (running in Blend
-        /// or Visual Studio).
-        /// </summary>
-        public static bool IsDesignMode
+        internal static bool IsDesignMode
         {
             get
             {
@@ -51,6 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 return s_isInDesignMode.Value;
             }
+
 #if __IOS__
             set
             {

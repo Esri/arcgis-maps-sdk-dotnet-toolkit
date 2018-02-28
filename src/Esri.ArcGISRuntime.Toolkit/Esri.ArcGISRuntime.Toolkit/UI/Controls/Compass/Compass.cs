@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,8 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.UI.Controls;
 using System.ComponentModel;
+using Esri.ArcGISRuntime.UI.Controls;
+
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 #elif __IOS__
@@ -81,15 +82,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 inpc.PropertyChanged += GeoView_PropertyChanged;
             }
+
             UpdateCompassFromGeoView(newGeoView);
         }
 
         private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var view = GeoView;
-            if (view is MapView && e.PropertyName == nameof(MapView.MapRotation) ||
-                view is SceneView && e.PropertyName == nameof(SceneView.Camera))
+            if ((view is MapView && e.PropertyName == nameof(MapView.MapRotation)) ||
+                (view is SceneView && e.PropertyName == nameof(SceneView.Camera)))
+            {
                 UpdateCompassFromGeoView(GeoView);
+            }
         }
 
         private void UpdateCompassFromGeoView(GeoView view)

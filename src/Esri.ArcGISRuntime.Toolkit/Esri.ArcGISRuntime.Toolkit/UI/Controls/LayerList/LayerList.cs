@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2016 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
+
 #if !__IOS__
 using System;
 using System.ComponentModel;
@@ -52,10 +53,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Initialize();
         }
-        
+
         internal void ScaleChanged()
         {
             _scaleChanged = true;
+
             // First time map is loaded and scale is established
             if (!_isScaleSet)
             {
@@ -73,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => GeoViewImpl;
             set => GeoViewImpl = value;
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
         /// are used to determine when legend for layer is displayed.
@@ -87,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => FilterByVisibleScaleRangeImpl;
             set => FilterByVisibleScaleRangeImpl = value;
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
         /// </summary>
@@ -201,7 +203,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Refresh();
             }
         }
-                
+
         private ObservableLayerContentList _layerContentList;
 
         private void SetLayerContentList(ObservableLayerContentList layerContentList)
@@ -220,6 +222,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return _showLegendInternal;
             }
+
             set
             {
                 if (_showLegendInternal != value)

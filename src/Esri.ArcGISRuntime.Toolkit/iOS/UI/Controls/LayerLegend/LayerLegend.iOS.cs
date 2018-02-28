@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using CoreGraphics;
-using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using CoreGraphics;
+using Esri.ArcGISRuntime.Mapping;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -37,7 +37,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
 #pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public LayerLegend(IntPtr handle) : base(handle)
+        public LayerLegend(IntPtr handle)
+            : base(handle)
         {
             Initialize();
         }
@@ -59,7 +60,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // At run-time, don't display the sub-views until their dimensions have been calculated
             if (!DesignTime.IsDesignMode)
+            {
                 Hidden = true;
+            }
 
             _rootStackView = new UIStackView()
             {
@@ -72,7 +75,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
             {
-
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
@@ -102,9 +104,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new CGSize(widthThatFits, heightThatFits);
         }
 
-        /// <summary>
-        /// Internal use only.  Invoked by the Xamarin iOS designer.
-        /// </summary>
+        /// <inheritdoc cref="IComponent.Site" />
         ISite IComponent.Site { get; set; }
 
         private EventHandler _disposed;
@@ -117,7 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             add { _disposed += value; }
             remove { _disposed -= value; }
         }
-        
+
         private void Refresh()
         {
             if (_listView == null)

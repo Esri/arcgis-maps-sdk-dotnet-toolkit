@@ -54,32 +54,44 @@ namespace Esri.ArcGISRuntime.Toolkit
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
+
             if (destinationType == typeof(string) && value is TimeExtent)
             {
                 return Convert((TimeExtent)value);
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
         private TimeExtent Convert(string timeExtentString)
         {
             if (string.IsNullOrEmpty(timeExtentString))
+            {
                 return null;
+            }
 
             TimeExtent timeExtent = null;
             var timeExtentParts = timeExtentString.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
             if (timeExtentParts.Length == 0 || timeExtentParts.Length > 2)
+            {
                 return null;
+            }
 
             DateTimeOffset startTime;
             if (!DateTimeOffset.TryParse(timeExtentParts[0], out startTime))
+            {
                 return null;
+            }
 
             DateTimeOffset endTime;
             if (timeExtentParts.Length == 2 && DateTimeOffset.TryParse(timeExtentParts[1], out endTime))
+            {
                 timeExtent = new TimeExtent(startTime, endTime);
+            }
             else
+            {
                 timeExtent = new TimeExtent(startTime);
+            }
 
             return timeExtent;
         }
@@ -87,12 +99,18 @@ namespace Esri.ArcGISRuntime.Toolkit
         private string Convert(TimeExtent timeExtent)
         {
             if (timeExtent == null)
+            {
                 return null;
+            }
 
             if (timeExtent.StartTime == timeExtent.EndTime)
+            {
                 return timeExtent.StartTime.ToString();
+            }
             else
+            {
                 return $"{timeExtent.StartTime.ToString()} - {timeExtent.EndTime.ToString()}";
+            }
         }
     }
 }
