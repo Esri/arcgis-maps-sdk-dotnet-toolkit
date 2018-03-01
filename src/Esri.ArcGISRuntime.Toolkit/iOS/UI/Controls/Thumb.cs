@@ -29,11 +29,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     /// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size.
     /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
-    internal class RectangleView : UIView, INotifyPropertyChanged
+    internal class Thumb : UIControl, INotifyPropertyChanged
     {
-        private UIView _childView;
-
-        public RectangleView()
+        public Thumb()
         {
             base.BackgroundColor = UIColor.Clear;
         }
@@ -48,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public RectangleView(double width, double height) : this()
+        public Thumb(double width, double height) : this()
         {
             Width = width;
             Height = height;
@@ -104,6 +102,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
+        private CGSize _disabledSize;
+        public CGSize DisabledSize
+        {
+            get => _disabledSize;
+            set
+            {
+                _disabledSize = value;
+                SetNeedsDisplay();
+            }
+        }
+
         private UIColor _borderColor = UIColor.Clear;
         public UIColor BorderColor
         {
@@ -115,18 +124,90 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
+        private UIColor _disabledColor = UIColor.Black;
+        public UIColor DisabledColor
+        {
+            get => _disabledColor;
+            set
+            {
+                _disabledColor = value;
+                SetNeedsDisplay();
+            }
+        }
+
+        private double _cornerRadius;
+        public double CornerRadius
+        {
+            get => _cornerRadius;
+            set
+            {
+                _cornerRadius = value;
+                SetNeedsDisplay();
+            }
+        }
+
+        private bool _useShadow;
+        public bool UseShadow
+        {
+            get => _useShadow;
+            set
+            {
+                _useShadow = value;
+                SetNeedsDisplay();
+            }
+        }
+
+        public bool IsFocused { get; set; }
+
+        private bool _enabled = true;
+        public override bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                _enabled = value;
+                SetNeedsDisplay();
+            }
+        }
+
         public override void Draw(CGRect rect)
         {
             base.Draw(rect);
 
-            CGRect renderTarget = new CGRect(rect.Location, _size);
             CGContext ctx = UIGraphics.GetCurrentContext();
+            if (Enabled)
+            {
+                CGRect renderTarget = CornerRadius > 0 ? rect.Inset(2, 2) : new CGRect(rect.Location, _size);
 
-            ctx.SetFillColor(BackgroundColor.CGColor);
-            ctx.SetStrokeColor(BorderColor.CGColor);
-            ctx.FillRect(renderTarget);
-			ctx.SetLineWidth((nfloat)BorderWidth);
-            ctx.StrokeRect(renderTarget);
+                if (UseShadow)
+                {
+                    var shadowColor = BorderColor.ColorWithAlpha((nfloat)0.4);
+                    ctx.SetShadow(offset: new CGSize(width: 0.0, height: 1.0), blur: (nfloat)1.0, color: shadowColor.CGColor);
+                }
+                ctx.SetFillColor(BackgroundColor.CGColor);
+                ctx.SetStrokeColor(BorderColor.CGColor);
+
+                var path = CornerRadius > 0 ? UIBezierPath.FromRoundedRect(renderTarget, (nfloat)CornerRadius) : UIBezierPath.FromRect(renderTarget);
+                ctx.AddPath(path.CGPath);
+                ctx.FillPath();
+                ctx.SetLineWidth((nfloat)BorderWidth);
+                ctx.AddPath(path.CGPath);
+                ctx.StrokePath();
+            }
+            else
+            {
+                var left = rect.Left + 1 + Math.Max((Width - DisabledSize.Width) / 2d, 0);
+                var top = rect.Top + Math.Max((Height - DisabledSize.Height) / 2d, 0);
+                var width = Math.Min(Math.Min(rect.Width, Width), DisabledSize.Width);
+                var height = Math.Min(Math.Min(rect.Height, Height), DisabledSize.Height);
+
+                CGRect disabledRenderTarget = new CGRect(left, top, width, height);
+                var disabledPath = UIBezierPath.FromRect(disabledRenderTarget);
+                ctx.SetFillColor(DisabledColor.CGColor);
+                ctx.FillRect(disabledRenderTarget);
+                //ctx.AddPath(disabledPath.CGPath);
+                //ctx.FillPath();
+            }
         }
 
         private CGSize _size = CGSize.Empty;

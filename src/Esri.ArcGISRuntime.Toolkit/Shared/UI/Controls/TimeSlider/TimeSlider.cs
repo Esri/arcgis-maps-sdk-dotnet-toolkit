@@ -794,9 +794,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (IsCurrentExtentTimeInstant && IsEndTimePinned != isStartTimePinned)
                 IsEndTimePinned = isStartTimePinned;
 
+#if !__IOS__
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             var enableHorizontalTrackThumb = MaximumThumb.GetIsEnabled() && MinimumThumb.GetIsEnabled();
             HorizontalTrackThumb.SetIsEnabled(enableHorizontalTrackThumb);
+#endif
         }
 
         /// <summary>
@@ -817,9 +819,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (IsCurrentExtentTimeInstant && IsStartTimePinned != isEndTimePinned)
                 IsStartTimePinned = isEndTimePinned;
 
+#if !__IOS__
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             var enableHorizontalTrackThumb = MaximumThumb.GetIsEnabled() && MinimumThumb.GetIsEnabled();
             HorizontalTrackThumb.SetIsEnabled(enableHorizontalTrackThumb);
+#endif
         }
 
         /// <summary>

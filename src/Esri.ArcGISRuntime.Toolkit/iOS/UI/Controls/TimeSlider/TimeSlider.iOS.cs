@@ -27,8 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class TimeSlider : UIControl
     {
         private RectangleView SliderTrack;
-        private RectangleView MinimumThumb;
-        private RectangleView MaximumThumb;
+        private Thumb MinimumThumb;
+        private Thumb MaximumThumb;
         private RectangleView HorizontalTrackThumb;
         private DrawActionButton NextButton;
         private DrawActionButton PreviousButton;
@@ -143,8 +143,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 BackgroundColor = FullExtentFill,
                 BorderColor = FullExtentStroke,
-                BorderWidth = 1.5,
-                UseShadow = false
+                BorderWidth = 1.5
             };
             AddSubview(SliderTrack);
 
@@ -173,27 +172,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SliderTrack.AddSubview(Tickmarks);
 
             var thumbSize = 30;
-            MinimumThumb = new RectangleView()
+            var disabledSize = new CGSize(7, 16);
+            MinimumThumb = new Thumb()
             {
                 BackgroundColor = ThumbFill,
                 BorderColor = ThumbStroke,
                 Width = thumbSize,
                 Height = thumbSize,
+                DisabledSize = disabledSize,
                 CornerRadius = thumbSize / 2d,
                 BorderWidth = 0.5,
-                UseShadow = true
+                UseShadow = true,
+                Enabled = !IsStartTimePinned
             };
             SliderTrack.AddSubview(MinimumThumb);
 
-            MaximumThumb = new RectangleView()
+            MaximumThumb = new Thumb()
             {
                 BackgroundColor = ThumbFill,
                 BorderColor = ThumbStroke,
                 Width = thumbSize,
                 Height = thumbSize,
+                DisabledSize = disabledSize,
                 CornerRadius = thumbSize / 2d,
                 BorderWidth = 0.5,
-                UseShadow = true
+                UseShadow = true,
+                Enabled = !IsEndTimePinned
             };
             SliderTrack.AddSubview(MaximumThumb);
 
@@ -232,12 +236,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var minThumbHitTestFrame = ExpandFrame(MinimumThumb.Frame, minTargetSize);
                         var maxThumbHitTestFrame = ExpandFrame(MaximumThumb.Frame, minTargetSize);
                         var location = panRecognizer.LocationInView(SliderTrack);
-                        if (minThumbHitTestFrame.Contains(location))                            
+                        if (minThumbHitTestFrame.Contains(location) && !IsStartTimePinned)                            
                         {
                             MinimumThumb.IsFocused = true;
                             _lastTouchLocation = panRecognizer.LocationInView(MinimumThumb);
                         }
-                        else if (maxThumbHitTestFrame.Contains(location))
+                        else if (maxThumbHitTestFrame.Contains(location) && !IsEndTimePinned)
                         {
                             MaximumThumb.IsFocused = true;
                             _lastTouchLocation = panRecognizer.LocationInView(MaximumThumb);
@@ -250,10 +254,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         //}
                         break;
                     case UIGestureRecognizerState.Changed:
-                        if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused && !_isHorizontalThumbFocused)
+                        if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused && !(MinimumThumb.IsFocused && IsStartTimePinned) && !(MaximumThumb.IsFocused && IsEndTimePinned)) // && !_isHorizontalThumbFocused)
                             return;
 
-                        var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb.IsFocused ? MaximumThumb : HorizontalTrackThumb;
+                        var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb;
 
                         var currentLocation = panRecognizer.LocationInView(trackedView);
                         var translateX = currentLocation.X - _lastTouchLocation.X;
