@@ -64,6 +64,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ButtonBase NextButton;
         private ButtonBase PreviousButton;
         private ToggleButton PlayPauseButton;
+        private RepeatButton SliderTrackStepBackRepeater;
+        private RepeatButton SliderTrackStepForwardRepeater;
 
         private void Initialize()
         {

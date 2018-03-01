@@ -30,6 +30,9 @@ using System.Windows.Controls.Primitives;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
+    /// <summary>
+    /// Helper class for providing common cross-platform names for iOS UI component manipulation
+    /// </summary>
     internal static class ElementExtensions
     {
         public static void SetMargin(this FrameworkElement element, double left, double top, double right, double bottom) 

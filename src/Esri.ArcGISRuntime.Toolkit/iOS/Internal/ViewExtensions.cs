@@ -15,14 +15,16 @@
 //  ******************************************************************************/
 
 using CoreGraphics;
-using Esri.ArcGISRuntime.Toolkit.UI;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using UIKit;
+using Esri.ArcGISRuntime.Toolkit.UI;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
+    /// <summary>
+    /// Helper class for providing common cross-platform names for iOS UI component manipulation
+    /// </summary>
     internal static class ViewExtensions
     {
         public static void SetMargin(this UIView view, double left, double top, double right, double bottom)
@@ -41,9 +43,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static double GetActualWidth(this UIView view) => !view.IntrinsicContentSize.IsEmpty ? view.IntrinsicContentSize.Width : view.Bounds.Width;
 
-        public static void SetWidth(this UIView view, double width)
+        public static void SetWidth(this RectangleView view, double width)
         {
-
+            if (view == null)
+                return;
+            
+            view.Width = width;
         }
 
         public static bool GetIsVisible(this UIView view) => !view.Hidden;
@@ -54,10 +59,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static void SetOpacity(this UIView view, double opacity) => view.Alpha = (nfloat)opacity;
 
-        public static bool GetIsEnabled(this UIControl control) => control.Enabled;
-
         public static void SetIsEnabled(this UIControl control, bool enabled) => control.Enabled = enabled;
 
         public static void Arrange(this UIView view, CGRect bounds) => view.Frame = bounds;
+
+        public static void SetBackgroundColor(this UIView view, UIColor color) => view.BackgroundColor = color;
+
+        public static void SetBorderColor(this Thumb view, UIColor color) => view.BorderColor = color;
+
+        public static void SetBorderColor(this RectangleView view, UIColor color) => view.BorderColor = color;
+
+        public static void SetBorderColor(this DrawActionButton view, UIColor color) => view.BorderColor = color;
+
+        public static void SetBorderColor(this DrawActionToggleButton view, UIColor color) => view.BorderColor = color;
+
+        public static void SetBorderWidth(this RectangleView view, double width) => view.BorderWidth = width;
+
+        public static void SetTextColor(this UILabel label, UIColor color) => label.TextColor = color;
     }
 }

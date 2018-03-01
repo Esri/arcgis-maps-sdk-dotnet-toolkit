@@ -167,6 +167,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+        private void ApplyTickLabelColor(UIView tick, UIColor color)
+        {
+            if (tick.Subviews.Length > 1 && tick.Subviews[1] is UILabel label)
+            {
+                label.TextColor = color;
+            }
+        }
+
         private UIView[] Children => Subviews;
 
         private nfloat Width => Frame.Width;

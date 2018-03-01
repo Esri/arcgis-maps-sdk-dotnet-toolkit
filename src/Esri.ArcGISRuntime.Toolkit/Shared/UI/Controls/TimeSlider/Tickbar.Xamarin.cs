@@ -70,7 +70,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _tickFill = value;
 
-                // TODO - apply fill to ticks
+                if (_majorTickmarks != null)
+                {
+                    foreach (var tick in _majorTickmarks)
+                    {
+                        tick.SetBackgroundColor(value);
+                    }
+                }
+
+                if (_minorTickmarks != null)
+                {
+                    foreach (var tick in _minorTickmarks)
+                    {
+                        tick.SetBackgroundColor(value);
+                    }
+                }
             }
         }
 
@@ -86,7 +100,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _tickLabelColor = value;
 
-                // TODO - apply color to tick labels
+                if (_majorTickmarks == null)
+                    return;
+                
+                foreach (var tick in _majorTickmarks)
+                {
+                    ApplyTickLabelColor(tick, value);
+                }
             }
         }
 

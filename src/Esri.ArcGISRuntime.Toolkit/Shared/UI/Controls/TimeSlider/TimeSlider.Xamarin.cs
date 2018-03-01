@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 #if __IOS__
 using Color = UIKit.UIColor;
 #endif
@@ -44,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var oldValue = value;
                 _currentExtent = value;
-                UpdateCurrentExtentLabels();
+                ApplyCurrentExtentLabelFormat();
                 OnCurrentExtentPropertyChanged(oldValue, _currentExtent);
             }
         }
@@ -59,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _fullExtent = value;
-                UpdateFullExtentLabels();
+                ApplyFullExtentLabelFormat();
                 OnFullExtentPropertyChanged();
             }
         }
@@ -180,6 +181,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _fullExtentLabelFormat = value;
+                ApplyFullExtentLabelFormat();
                 OnFullExtentLabelFormatPropertyChanged(_fullExtentLabelFormat);
             }
         }
@@ -194,7 +196,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _currentExtentLabelFormat = value;
-                UpdateCurrentExtentLabels();
+                ApplyCurrentExtentLabelFormat();
                 OnCurrentExtentLabelFormatPropertyChanged(_currentExtentLabelFormat);
             }
         }
@@ -237,7 +239,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _thumbStroke = value;
-                // TODO: Apply new color
+                MinimumThumb?.SetBorderColor(value);
+                MaximumThumb?.SetBorderColor(value);
             }
         }
 
@@ -251,7 +254,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _thumbFill = value;
-                // TODO: Apply new color
+                MinimumThumb?.SetBackgroundColor(value);
+                MaximumThumb?.SetBackgroundColor(value);                
             }
         }
 
@@ -265,7 +269,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _currentExtentFill = value;
-                ApplyCurrentExtentFill();
+                HorizontalTrackThumb?.SetBackgroundColor(value);
             }
         }
 
@@ -279,7 +283,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _fullExtentFill = value;
-                // TODO: Apply new color
+                SliderTrack?.SetBackgroundColor(value);
             }
         }
 
@@ -293,7 +297,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _fullExtentStroke = value;
-                // TODO: Apply new color
+                SliderTrack?.SetBorderColor(value);
             }
         }
 
@@ -308,8 +312,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _fullExtentBorderWidth = value;
-                if (SliderTrack != null)
-                    SliderTrack.BorderWidth = _fullExtentBorderWidth;
+                SliderTrack?.SetBorderWidth(value);
             }
         }
 
@@ -323,7 +326,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _timeStepIntervalTickFill = value;
-                // TODO: Apply new color
+                if (Tickmarks != null)
+                    Tickmarks.TickFill = value;
             }
         }
 
@@ -337,7 +341,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _playbackButtonsFill = value;
-                // TODO: Apply new color
+                PreviousButton?.SetBackgroundColor(value);
+                NextButton?.SetBackgroundColor(value);
+                PlayPauseButton.SetBackgroundColor(value);
             }
         }
 
@@ -351,7 +357,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _playbackButtonsStroke = value;
-                // TODO: Apply new color
+                PreviousButton?.SetBorderColor(value);
+                NextButton?.SetBorderColor(value);
+                PlayPauseButton.SetBorderColor(value);
             }
         }
 
@@ -365,7 +373,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _fullExtentLabelColor = value;
-                // TODO: Apply new color
+                FullExtentStartTimeLabel?.SetTextColor(value);
             }
         }
 
@@ -379,7 +387,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _currentExtentLabelColor = value;
-                // TODO: Apply new color
+                MinimumThumbLabel?.SetTextColor(value);
+                MaximumThumbLabel?.SetTextColor(value);
             }
         }
 
@@ -393,13 +402,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _timeStepIntervalLabelColor = value;
-                // TODO: Apply new color
+                if (Tickmarks != null)
+                {
+                    Tickmarks.TickLabelColor = value;
+                }
             }
         }
 
         #endregion // Appearance Properties
 
         #endregion // Properties
+
+
+        private void ApplyFullExtentLabelFormat()
+        {
+            var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
+            FullExtentStartTimeLabel.Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? "";
+            FullExtentEndTimeLabel.Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? "";
+        }
+
+        private void ApplyCurrentExtentLabelFormat()
+        {
+            var currentExtentLabelFormat = string.IsNullOrEmpty(CurrentExtentLabelFormat) ? _defaultCurrentExtentLabelFormat : CurrentExtentLabelFormat;
+            MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? "";
+            MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? "";
+        }
     }
 }
 

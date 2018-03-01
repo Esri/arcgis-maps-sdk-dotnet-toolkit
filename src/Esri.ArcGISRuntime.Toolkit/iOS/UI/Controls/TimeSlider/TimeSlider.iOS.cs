@@ -33,6 +33,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private DrawActionButton NextButton;
         private DrawActionButton PreviousButton;
         private DrawActionToggleButton PlayPauseButton;
+        private RectangleView SliderTrackStepBackRepeater;
+        private RectangleView SliderTrackStepForwardRepeater;
         private RectangleView _startTimeTickmark;
         private RectangleView _endTimeTickmark;
         private bool _thumbsArranged = false;
@@ -381,22 +383,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MinimumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, minLabelSize.Height);
             MaximumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, maxLabelSize.Height);
         }
-
-        private void UpdateFullExtentLabels()
-        {
-            var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
-            FullExtentStartTimeLabel.Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? "";
-            FullExtentEndTimeLabel.Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? "";
-        }
-
-        private void UpdateCurrentExtentLabels()
-        {
-            var currentExtentLabelFormat = string.IsNullOrEmpty(CurrentExtentLabelFormat) ? _defaultCurrentExtentLabelFormat : CurrentExtentLabelFormat;
-            MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? "";
-            MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? "";
-        }
-
-        private void ApplyCurrentExtentFill() => HorizontalTrackThumb.BackgroundColor = CurrentExtentFill;
 
         private void DrawTriangle(CGContext context, double width, double height, CGColor fillColor, double strokeWidth,
                                   CGColor strokeColor, bool pointOnRight, double left = 0, double top = 0)

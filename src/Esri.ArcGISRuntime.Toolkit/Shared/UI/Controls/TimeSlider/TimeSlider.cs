@@ -68,8 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private TextBlock MinimumThumbLabel;
         private TextBlock MaximumThumbLabel;
-        private RepeatButton SliderTrackStepBackRepeater;
-        private RepeatButton SliderTrackStepForwardRepeater;
         private TextBlock FullExtentStartTimeLabel;
         private TextBlock FullExtentEndTimeLabel;
         private Primitives.Tickbar Tickmarks;
