@@ -379,6 +379,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnTickLabelFormatPropertyChanged(string labelFormat)
         {
+            if (_majorTickmarks == null)
+                return;
+            
             // Update the label format string for each of the major ticks
             foreach (var majorTick in _majorTickmarks)
             {

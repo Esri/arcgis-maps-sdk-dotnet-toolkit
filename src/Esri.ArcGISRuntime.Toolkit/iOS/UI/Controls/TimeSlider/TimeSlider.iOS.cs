@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AddSubview(PlayPauseButton);
 
             var endTickWidth = 1;
-            var endTickHeight = 12;
+            var endTickHeight = 10;
 
             _startTimeTickmark = new RectangleView(endTickWidth, endTickHeight)
             {
@@ -321,7 +321,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void ArrangeElements()
         {
-            var verticalSpacing = 4;
+            var verticalSpacing = 5;
             var playButtonSpacing = 12;
 
             var playPauseButtonWidth = 26;
@@ -373,7 +373,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             _thumbsArranged = true;
 
-            var thumbTop = (SliderTrack.Frame.Height - MinimumThumb.Height) / 2; // (SliderTrack.Frame.Top + SliderTrack.Frame.Height / 2) - (MinimumThumb.Height / 2);
+            var thumbTop = (SliderTrack.Frame.Height - MinimumThumb.Height - 4) / 2; // (SliderTrack.Frame.Top + SliderTrack.Frame.Height / 2) - (MinimumThumb.Height / 2);
             var thumbLeft = 0 - (MinimumThumb.Width / 2);
             MinimumThumb.Frame = new CGRect(thumbLeft, thumbTop, MinimumThumb.Width, MinimumThumb.Height);
             MaximumThumb.Frame = new CGRect(thumbLeft, thumbTop, MaximumThumb.Width, MaximumThumb.Height);
