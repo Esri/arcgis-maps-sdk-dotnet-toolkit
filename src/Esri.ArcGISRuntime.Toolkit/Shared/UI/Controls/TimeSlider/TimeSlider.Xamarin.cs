@@ -255,7 +255,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _currentExtentFill = Color.DarkGray;
+        private Color _currentExtentFill = Color.FromRGBA(0, 111, 255, 255);
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
         /// </summary>
@@ -269,7 +269,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _fullExtentFill = Color.White;
+        private Color _fullExtentFill = Color.FromRGBA(170, 169, 170, 255);
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
@@ -283,7 +283,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _fullExtentStroke = Color.Black;
+        private Color _fullExtentStroke = Color.FromRGBA(170, 169, 170, 255);
         /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
@@ -297,7 +297,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _timeStepIntervalTickFill = Color.Black;
+        private double _fullExtentBorderWidth = 0;
+        /// <summary>
+        /// Gets or sets the border width of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// </summary>
+        /// <value>The full width of the extent border.</value>
+        public double FullExtentBorderWidth
+        {
+            get => _fullExtentBorderWidth;
+            set
+            {
+                _fullExtentBorderWidth = value;
+                if (SliderTrack != null)
+                    SliderTrack.BorderWidth = _fullExtentBorderWidth;
+            }
+        }
+
+        private Color _timeStepIntervalTickFill = Color.FromRGBA(170, 169, 170, 255);
         /// <summary>
         /// Gets or sets the color of the slider's tickmarks
         /// </summary>
@@ -311,7 +327,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _playbackButtonsFill = Color.FromRGBA(200, 200, 200, 255);
+        private Color _playbackButtonsFill = Color.FromRGBA(230, 230, 230, 255);
         /// <summary>
         /// Gets or sets the fill color of the playback buttons
         /// </summary>
@@ -325,7 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _playbackButtonsStroke = Color.Black;
+        private Color _playbackButtonsStroke = Color.FromRGBA(170, 169, 170, 255);
         /// <summary>
         /// Gets or sets the border color of the playback buttons
         /// </summary>

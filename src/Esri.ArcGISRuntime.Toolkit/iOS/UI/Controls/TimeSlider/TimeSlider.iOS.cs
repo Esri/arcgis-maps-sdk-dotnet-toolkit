@@ -128,7 +128,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AddSubview(PlayPauseButton);
 
             var endTickWidth = 1;
-            var endTickHeight = 9;
+            var endTickHeight = 12;
 
             _startTimeTickmark = new RectangleView(endTickWidth, endTickHeight)
             {
@@ -139,15 +139,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _endTimeTickmark = new RectangleView(endTickWidth, endTickHeight) { BackgroundColor = FullExtentStroke };
             AddSubview(_endTimeTickmark);
 
-            SliderTrack = new RectangleView(100, 7)
+            var sliderTrackHeight = 2;
+            SliderTrack = new RectangleView(100, sliderTrackHeight)
             {
                 BackgroundColor = FullExtentFill,
                 BorderColor = FullExtentStroke,
-                BorderWidth = 1.5
+                BorderWidth = FullExtentBorderWidth
             };
             AddSubview(SliderTrack);
 
-            HorizontalTrackThumb = new RectangleView(100, 7)
+            HorizontalTrackThumb = new RectangleView(100, sliderTrackHeight)
             {
                 BackgroundColor = CurrentExtentFill,
                 BorderColor = FullExtentStroke,
@@ -171,17 +172,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             SliderTrack.AddSubview(Tickmarks);
 
-            var thumbSize = 30;
+            var thumbSize = 36;
             var disabledSize = new CGSize(7, 16);
             MinimumThumb = new Thumb()
             {
-                BackgroundColor = ThumbFill,
-                BorderColor = ThumbStroke,
                 Width = thumbSize,
                 Height = thumbSize,
                 DisabledSize = disabledSize,
                 CornerRadius = thumbSize / 2d,
-                BorderWidth = 0.5,
                 UseShadow = true,
                 Enabled = !IsStartTimePinned
             };
@@ -189,13 +187,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             MaximumThumb = new Thumb()
             {
-                BackgroundColor = ThumbFill,
-                BorderColor = ThumbStroke,
                 Width = thumbSize,
                 Height = thumbSize,
                 DisabledSize = disabledSize,
                 CornerRadius = thumbSize / 2d,
-                BorderWidth = 0.5,
                 UseShadow = true,
                 Enabled = !IsEndTimePinned
             };

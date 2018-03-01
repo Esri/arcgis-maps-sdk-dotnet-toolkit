@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017 Esri
+//  * Copyright 2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private UIColor _backgroundColor = UIColor.Clear;
+        private UIColor _backgroundColor = UIColor.White;
         public override UIColor BackgroundColor
         {
             get => _backgroundColor;
@@ -91,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private double _borderWidth;
+        private double _borderWidth = 0.1;
         public double BorderWidth
         {
             get => _borderWidth;
@@ -113,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private UIColor _borderColor = UIColor.Clear;
+        private UIColor _borderColor = UIColor.FromRGBA(80, 80, 80, 255);
         public UIColor BorderColor
         {
             get => _borderColor;
@@ -177,12 +177,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             CGContext ctx = UIGraphics.GetCurrentContext();
             if (Enabled)
             {
-                CGRect renderTarget = CornerRadius > 0 ? rect.Inset(2, 2) : new CGRect(rect.Location, _size);
+                CGRect renderTarget = rect.Inset(4, 4);
 
                 if (UseShadow)
                 {
                     var shadowColor = BorderColor.ColorWithAlpha((nfloat)0.4);
-                    ctx.SetShadow(offset: new CGSize(width: 0.0, height: 1.0), blur: (nfloat)1.0, color: shadowColor.CGColor);
+                    ctx.SetShadow(offset: new CGSize(width: 0.0, height: 3.0), blur: (nfloat)4.0, color: shadowColor.CGColor);
                 }
                 ctx.SetFillColor(BackgroundColor.CGColor);
                 ctx.SetStrokeColor(BorderColor.CGColor);

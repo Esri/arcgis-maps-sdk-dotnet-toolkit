@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
         }
 
-        private CGSize _majorTickSize = new CGSize(1, 9);
+        private CGSize _majorTickSize = new CGSize(1, 11);
         public CGSize MajorTickSize
         {
             get => _majorTickSize;
@@ -66,6 +66,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     tick.Width = _minorTickSize.Width;
                     tick.Height = _minorTickSize.Height;
                 }
+                InvalidateMeasureAndArrange();
+            }
+        }
+
+
+        private double _labelOffset = 4;
+        public double LabelOffset
+        {
+            get => _labelOffset;
+            set
+            {
+                if (_labelOffset == value)
+                    return;
+
+                _labelOffset = value;
                 InvalidateMeasureAndArrange();
             }
         }
@@ -121,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var tickLeft = (labelSize.Width - tick.Width) / 2;
                 tick.Frame = new CGRect(tickLeft, 0, tick.Width, tick.Height);
 
-                label.Frame = new CGRect(0, tick.Height + 1, labelSize.Width, labelSize.Height);
+                label.Frame = new CGRect(0, tick.Height + LabelOffset, labelSize.Width, labelSize.Height);
 
                 majorTickContainer.AddSubviews(tick, label);
                 majorTickContainer.Frame = new CGRect(0, 0, labelSize.Width, label.Frame.Bottom);
