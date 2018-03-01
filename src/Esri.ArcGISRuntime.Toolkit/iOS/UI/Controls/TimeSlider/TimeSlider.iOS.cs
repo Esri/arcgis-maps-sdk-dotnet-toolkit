@@ -353,11 +353,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _endTimeTickmark.Frame = new CGRect(endTickLeft, endTickTop, _endTimeTickmark.Width, _endTimeTickmark.Height);
 
             var fullExtentStartLabelTop = endTickTop - verticalSpacing - fullExtentStartLabelSize.Height;
-            FullExtentStartTimeLabel.Frame = new CGRect(Bounds.Right - fullExtentEndLabelSize.Width, fullExtentStartLabelTop,
+            FullExtentStartTimeLabel.Frame = new CGRect(0, fullExtentStartLabelTop,
                 fullExtentStartLabelSize.Width, fullExtentStartLabelSize.Height);
 
             var fullExtentEndLabelTop = endTickTop - verticalSpacing - fullExtentEndLabelSize.Height;
-            FullExtentEndTimeLabel.Frame = new CGRect(0, fullExtentEndLabelTop, fullExtentEndLabelSize.Width, fullExtentEndLabelSize.Height);
+            FullExtentEndTimeLabel.Frame = new CGRect(Bounds.Right - fullExtentEndLabelSize.Width, fullExtentEndLabelTop, fullExtentEndLabelSize.Width, fullExtentEndLabelSize.Height);
 
             var sliderTrackLeft = startTickLeft;
             var sliderTrackWidth = _endTimeTickmark.Frame.Right - sliderTrackLeft;
