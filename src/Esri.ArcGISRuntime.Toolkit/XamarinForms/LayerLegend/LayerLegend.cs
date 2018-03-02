@@ -1,4 +1,20 @@
-﻿using Esri.ArcGISRuntime.Mapping;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using Esri.ArcGISRuntime.Mapping;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -11,7 +27,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerLegend"/> class
         /// </summary>
-        public LayerLegend() : this(new UI.Controls.LayerLegend()) { }
+        public LayerLegend()
+            : this(new UI.Controls.LayerLegend())
+        {
+        }
 
         internal LayerLegend(UI.Controls.LayerLegend nativeLayerLegend)
         {
@@ -22,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
         }
 
-        internal readonly UI.Controls.LayerLegend NativeLayerLegend;
+        internal UI.Controls.LayerLegend NativeLayerLegend { get; }
 
         /// <summary>
         /// Identifies the <see cref="LayerContent"/> bindable property.
@@ -42,9 +61,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnLayerContentPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is LayerLegend)
+            var layerLegend = bindable as LayerLegend;
+            if (layerLegend?.NativeLayerLegend != null)
             {
-                var layerLegend = (LayerLegend)bindable;
                 layerLegend.NativeLayerLegend.LayerContent = newValue as ILayerContent;
                 layerLegend.InvalidateMeasure();
             }
@@ -54,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="ShowEntireTreeHierarchy"/> bindable property.
         /// </summary>
         public static readonly BindableProperty ShowEntireTreeHierarchyProperty =
-            BindableProperty.Create(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), null, BindingMode.OneWay, null, OnShowEntireTreeHierarchyPropertyChanged);
+            BindableProperty.Create(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), true, BindingMode.OneWay, null, OnShowEntireTreeHierarchyPropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
@@ -68,10 +87,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnShowEntireTreeHierarchyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is LayerLegend && newValue is bool)
+            var layerLegend = bindable as LayerLegend;
+            if (layerLegend?.NativeLayerLegend != null && newValue is bool)
             {
-                var layerLegend = (LayerLegend)bindable;
-                layerLegend.NativeLayerLegend.ShowEntireTreeHierarchy = !(bool)newValue;
+                layerLegend.NativeLayerLegend.ShowEntireTreeHierarchy = (bool)newValue;
                 layerLegend.InvalidateMeasure();
             }
         }

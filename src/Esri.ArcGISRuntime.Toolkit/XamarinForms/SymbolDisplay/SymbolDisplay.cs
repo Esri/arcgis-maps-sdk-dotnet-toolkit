@@ -1,4 +1,20 @@
-﻿using Esri.ArcGISRuntime.Symbology;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using Esri.ArcGISRuntime.Symbology;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -11,7 +27,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class
         /// </summary>
-        public SymbolDisplay() : this(new UI.Controls.SymbolDisplay()) { }
+        public SymbolDisplay()
+            : this(new UI.Controls.SymbolDisplay())
+        {
+        }
 
         internal SymbolDisplay(UI.Controls.SymbolDisplay nativeSymbolDisplay)
         {
@@ -22,8 +41,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
         }
 
-        internal readonly UI.Controls.SymbolDisplay NativeSymbolDisplay;
-        
+        internal UI.Controls.SymbolDisplay NativeSymbolDisplay { get; }
+
         /// <summary>
         /// Identifies the <see cref="Symbol"/> bindable property.
         /// </summary>
@@ -42,12 +61,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnSymbolPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is SymbolDisplay)
+            var symbolDisplay = bindable as SymbolDisplay;
+            if (symbolDisplay?.NativeSymbolDisplay != null)
             {
-                var symbolDisplay = (SymbolDisplay)bindable;
                 symbolDisplay.NativeSymbolDisplay.Symbol = newValue as Symbol;
                 symbolDisplay.InvalidateMeasure();
             }
-        }        
+        }
     }
 }

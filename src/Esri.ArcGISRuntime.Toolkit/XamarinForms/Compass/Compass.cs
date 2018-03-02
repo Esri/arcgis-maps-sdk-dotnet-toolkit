@@ -1,11 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Xamarin.Forms;
-using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
-using Esri.ArcGISRuntime.Xamarin.Forms;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using System;
 using System.ComponentModel;
+using Esri.ArcGISRuntime.Xamarin.Forms;
+using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
@@ -14,13 +26,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// </summary>
     public class Compass : View
     {
-        internal readonly UI.Controls.Compass NativeCompass;
+        internal UI.Controls.Compass NativeCompass { get; }
+
         private bool _headingSetByGeoView;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class
         /// </summary>
-        public Compass() : this(new UI.Controls.Compass()) { }
+        public Compass()
+            : this(new UI.Controls.Compass())
+        {
+        }
 
         internal Compass(UI.Controls.Compass nativeCompass)
         {
@@ -38,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private class TapCommand : System.Windows.Input.ICommand
         {
             private Action _action;
+
             public TapCommand(Action action)
             {
                 _action = action;
@@ -77,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="Heading"/> bindable property.
         /// </summary>
         public static readonly BindableProperty HeadingProperty =
-            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0, BindingMode.OneWay, null, OnHeadingPropertyChanged);
+            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0d, BindingMode.OneWay, null, OnHeadingPropertyChanged);
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
@@ -94,8 +111,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var compass = (Compass)bindable;
                 if (compass.GeoView != null && !compass._headingSetByGeoView)
+                {
                     throw new InvalidOperationException("The Heading Property is read-only when the GeoView property has been assigned");
-                 compass.NativeCompass.Heading = (double)newValue;
+                }
+
+                compass.NativeCompass.Heading = (double)newValue;
                  compass.InvalidateMeasure();
             }
         }
@@ -119,12 +139,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (newValue != null)
             {
-                var Compass = (Compass)bindable;
-                Compass.NativeCompass.AutoHide = (bool)newValue;
-                Compass.InvalidateMeasure();
+                var compass = (Compass)bindable;
+                compass.NativeCompass.AutoHide = (bool)newValue;
+                compass.InvalidateMeasure();
             }
         }
-        
+
         /// <summary>
         /// Gets or sets the GeoView property that can be attached to a Compass control to accurately set the heading, instead of
         /// setting the <see cref="Compass.Heading"/> property directly.
@@ -141,7 +161,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, null, OnGeoViewPropertyChanged);
 
-
         private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var compass = (Compass)bindable;
@@ -156,15 +175,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 inpc.PropertyChanged += compass.GeoView_PropertyChanged;
             }
+
             compass.UpdateCompassFromGeoView(newValue as GeoView);
         }
 
         private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var view = GeoView;
-            if (view is MapView && e.PropertyName == nameof(MapView.MapRotation) ||
-                view is SceneView && e.PropertyName == nameof(SceneView.Camera))
+            if ((view is MapView && e.PropertyName == nameof(MapView.MapRotation)) ||
+                (view is SceneView && e.PropertyName == nameof(SceneView.Camera)))
+            {
                 UpdateCompassFromGeoView(GeoView);
+            }
         }
 
         private void UpdateCompassFromGeoView(GeoView view)

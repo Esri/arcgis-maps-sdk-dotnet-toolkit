@@ -81,9 +81,9 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Android\Esri.ArcGISRuntime.Toolkit.Android.csproj">
-      <Project>{6c686f0f-9586-453f-8769-5ac0e7772f4d}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.Android</Name>
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+      <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

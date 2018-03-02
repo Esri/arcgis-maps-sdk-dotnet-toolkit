@@ -190,9 +190,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj">
-      <Project>{837f6b24-e37e-410b-a71b-b0bff42002e3}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.UWP</Name>
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+      <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

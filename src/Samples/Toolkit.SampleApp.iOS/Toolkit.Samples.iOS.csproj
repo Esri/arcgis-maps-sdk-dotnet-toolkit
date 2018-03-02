@@ -78,9 +78,9 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.csproj">
-      <Project>{b8713b42-baa5-4d62-86c2-1585ef2df0ec}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.iOS</Name>
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+      <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
