@@ -78,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
-                EstimatedRowHeight = 40,
+                EstimatedRowHeight = SymbolDisplay.MaxSize,
             };
             _listView.RegisterClassForCellReuse(typeof(LayerLegendItemCell), LayerLegendTableSource.CellId);
             _rootStackView.AddSubview(_listView);

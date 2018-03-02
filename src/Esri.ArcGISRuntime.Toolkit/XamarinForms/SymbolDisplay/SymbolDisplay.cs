@@ -61,10 +61,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnSymbolPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is SymbolDisplay && newValue is Symbol)
+            var symbolDisplay = bindable as SymbolDisplay;
+            if (symbolDisplay?.NativeSymbolDisplay != null)
             {
-                var symbolDisplay = (SymbolDisplay)bindable;
-                symbolDisplay.NativeSymbolDisplay.Symbol = (Symbol)newValue;
+                symbolDisplay.NativeSymbolDisplay.Symbol = newValue as Symbol;
                 symbolDisplay.InvalidateMeasure();
             }
         }

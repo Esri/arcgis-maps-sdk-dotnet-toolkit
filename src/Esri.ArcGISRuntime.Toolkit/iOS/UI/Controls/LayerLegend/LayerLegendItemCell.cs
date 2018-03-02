@@ -33,12 +33,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _symbolDisplay = new SymbolDisplay()
             {
-                TranslatesAutoresizingMaskIntoConstraints = true
+                TranslatesAutoresizingMaskIntoConstraints = false
             };
 
             _textLabel = new UILabel()
             {
-                Font = UIFont.SystemFontOfSize(20),
+                Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.Center,
@@ -61,10 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.UpdateConstraints();
 
-            _symbolDisplay.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
             _symbolDisplay.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
-            _textLabel.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
-            _textLabel.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
 
             if (_constraintsUpdated)
             {
@@ -77,8 +74,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _symbolDisplay.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
             _symbolDisplay.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
 
-            _textLabel.LeadingAnchor.ConstraintEqualTo(_symbolDisplay.TrailingAnchor, (nfloat)40).Active = true;
-            _textLabel.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
+            _textLabel.LeadingAnchor.ConstraintGreaterThanOrEqualTo(_symbolDisplay.TrailingAnchor, 15).Active = true;
+            _textLabel.CenterYAnchor.ConstraintEqualTo(margin.CenterYAnchor).Active = true;
         }
     }
 }
