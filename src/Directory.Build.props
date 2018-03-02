@@ -41,7 +41,6 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
-        <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\Output\intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
       </PropertyGroup>
       <ItemGroup>
         <PackageReference Include="MSBuild.Sdk.Extras" Version="1.2.1" PrivateAssets="all" />
