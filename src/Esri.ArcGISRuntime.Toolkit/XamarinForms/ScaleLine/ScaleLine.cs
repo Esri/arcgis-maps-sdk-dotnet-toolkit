@@ -27,6 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// </summary>
     public class ScaleLine : View
     {
+        private bool _scaleSetByMapView;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class
         /// </summary>
@@ -72,47 +74,52 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="MapView"/> bindable property.
+        /// Gets or sets the MapView property that can be attached to a ScaleLine control to accurately set the scale, instead of
+        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
+        /// </summary>
+        public MapView MapView
+        {
+            get { return GetValue(MapViewProperty) as MapView; }
+            set { SetValue(MapViewProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="GeoView"/> Dependency Property
         /// </summary>
         public static readonly BindableProperty MapViewProperty =
-            BindableProperty.CreateAttached(nameof(MapView), typeof(MapView), typeof(ScaleLine), null, BindingMode.OneWay, null, OnMapViewChanged);
+            BindableProperty.Create(nameof(ScaleLine.MapView), typeof(MapView), typeof(ScaleLine), null, BindingMode.OneWay, null, OnMapViewPropertyChanged);
 
-        /// <summary>
-        /// Sets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
-        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
-        /// </summary>
-        /// <param name="scaleLine">The scaleline control this would be attached to</param>
-        /// <param name="mapView">The mapview to calculate the scale for</param>
-        public static void SetMapView(BindableObject scaleLine, MapView mapView)
+        private static void OnMapViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            scaleLine.SetValue(MapViewProperty, mapView);
-        }
-
-        /// <summary>
-        /// Gets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
-        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
-        /// </summary>
-        /// <param name="scaleLine">The scaleline control this would be attached to</param>
-        /// <returns>The MapView the scaleline is associated with.</returns>
-        public static MapView GetMapView(BindableObject scaleLine)
-        {
-            return scaleLine.GetValue(MapViewProperty) as MapView;
-        }
-
-        private static void OnMapViewChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var scaleline = (ScaleLine)bindable;
+            var scaleLine = (ScaleLine)bindable;
             var inpc = oldValue as INotifyPropertyChanged;
             if (inpc != null)
             {
-                inpc.PropertyChanged -= scaleline.MapView_PropertyChanged;
+                inpc.PropertyChanged -= scaleLine.MapView_PropertyChanged;
             }
 
             inpc = newValue as INotifyPropertyChanged;
             if (inpc != null)
             {
-                inpc.PropertyChanged += scaleline.MapView_PropertyChanged;
+                inpc.PropertyChanged += scaleLine.MapView_PropertyChanged;
             }
+
+            scaleLine.UpdateScaleFromMapView(newValue as MapView);
+        }
+
+        private void UpdateScaleFromMapView(MapView view)
+        {
+            _scaleSetByMapView = true;
+            if (view == null)
+            {
+                MapScale = 0d;
+            }
+            else
+            {
+                MapScale = CalculateScale(view.VisibleArea, view.UnitsPerPixel);
+            }
+
+            _scaleSetByMapView = false;
         }
 
         /// <summary>
@@ -125,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Gets or sets the scale that the ScaleLine will
         /// use to calculate scale in metric and imperial units.
         /// </summary>
-        /// <seealso cref="SetMapView"/>
+        /// <seealso cref="MapView"/>
         /// <seealso cref="MapViewProperty"/>
         public double MapScale
         {
@@ -138,6 +145,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (newValue != null)
             {
                 var scaleline = (ScaleLine)bindable;
+                if (scaleline.MapView != null && !scaleline._scaleSetByMapView)
+                {
+                    throw new System.InvalidOperationException("The MapScale Property is read-only when the MapView property has been assigned");
+                }
+
                 scaleline.NativeScaleLine.MapScale = (double)newValue;
                 scaleline.InvalidateMeasure();
             }
@@ -169,15 +181,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void MapView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            var view = MapView;
             if (e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating))
             {
-                var mapView = GetMapView(this);
+                var mapView = (MapView)sender;
                 if (mapView.IsNavigating)
                 {
                     return;
                 }
-
-                MapScale = CalculateScale(mapView.VisibleArea, mapView.UnitsPerPixel);
+                UpdateScaleFromMapView(view);
             }
         }
 
