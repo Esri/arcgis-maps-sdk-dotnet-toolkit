@@ -1,4 +1,20 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -31,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
         /// <summary>
         /// Removes a credential from the cache
         /// </summary>
-        /// <param name="serviceUri"></param>
+        /// <param name="serviceUri">Service Uri</param>
         public static void DeleteCredential(Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
@@ -51,6 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             {
                 return new Tuple<string, SecureString>(credential.UserName, credential.Password);
             }
+
             return null;
         }
 
@@ -63,7 +80,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             foreach (var item in CredentialManager.EnumerateCredentials())
             {
                 if (item.ApplicationName.StartsWith(prefix))
+                {
                     CredentialManager.DeleteCredential(item.ApplicationName);
+                }
             }
         }
 
@@ -72,7 +91,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             private static string ConvertToUnsecureString(SecureString securePassword)
             {
                 if (securePassword == null)
+                {
                     throw new ArgumentNullException("securePassword");
+                }
 
                 IntPtr unmanagedString = IntPtr.Zero;
                 try
@@ -120,7 +141,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 bool deleted = CredDelete(applicationName, CredentialType.Generic, 0);
                 int lastError = Marshal.GetLastWin32Error();
                 if (deleted)
+                {
                     return 0;
+                }
+
                 return lastError;
             }
 
@@ -129,19 +153,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 var secret = ConvertToUnsecureString(password);
                 byte[] byteArray = Encoding.Unicode.GetBytes(secret);
                 if (byteArray.Length > 512)
+                {
                     throw new ArgumentOutOfRangeException("secret", "The secret message has exceeded 512 bytes.");
+                }
 
-                CREDENTIAL credential = new CREDENTIAL();
-                credential.AttributeCount = 0;
-                credential.Attributes = IntPtr.Zero;
-                credential.Comment = IntPtr.Zero;
-                credential.TargetAlias = IntPtr.Zero;
-                credential.Type = CredentialType.Generic;
-                credential.Persist = (UInt32)CredentialPersistence.Session;
-                credential.CredentialBlobSize = (UInt32)Encoding.Unicode.GetBytes(secret).Length;
-                credential.TargetName = Marshal.StringToCoTaskMemUni(applicationName);
-                credential.CredentialBlob = Marshal.StringToCoTaskMemUni(secret);
-                credential.UserName = Marshal.StringToCoTaskMemUni(userName ?? Environment.UserName);
+                CREDENTIAL credential = new CREDENTIAL
+                {
+                    AttributeCount = 0,
+                    Attributes = IntPtr.Zero,
+                    Comment = IntPtr.Zero,
+                    TargetAlias = IntPtr.Zero,
+                    Type = CredentialType.Generic,
+                    Persist = (uint)CredentialPersistence.Session,
+                    CredentialBlobSize = (uint)Encoding.Unicode.GetBytes(secret).Length,
+                    TargetName = Marshal.StringToCoTaskMemUni(applicationName),
+                    CredentialBlob = Marshal.StringToCoTaskMemUni(secret),
+                    UserName = Marshal.StringToCoTaskMemUni(userName ?? Environment.UserName)
+                };
 
                 bool written = CredWrite(ref credential, 0);
                 int lastError = Marshal.GetLastWin32Error();
@@ -151,7 +179,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 Marshal.FreeCoTaskMem(credential.UserName);
 
                 if (written)
+                {
                     return 0;
+                }
 
                 throw new Exception(string.Format("CredWrite failed with the error code {0}.", lastError));
             }
@@ -179,20 +209,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
 
                 return result;
             }
+
             [DllImport("Advapi32.dll", EntryPoint = "CredDelete", CharSet = CharSet.Unicode, SetLastError = true)]
-            static extern bool CredDelete(string target, CredentialType type, int reservedFlag);
+            private static extern bool CredDelete(string target, CredentialType type, int reservedFlag);
 
             [DllImport("Advapi32.dll", EntryPoint = "CredReadW", CharSet = CharSet.Unicode, SetLastError = true)]
-            static extern bool CredRead(string target, CredentialType type, int reservedFlag, out IntPtr credentialPtr);
+            private static extern bool CredRead(string target, CredentialType type, int reservedFlag, out IntPtr credentialPtr);
 
             [DllImport("Advapi32.dll", EntryPoint = "CredWriteW", CharSet = CharSet.Unicode, SetLastError = true)]
-            static extern bool CredWrite([In] ref CREDENTIAL userCredential, [In] UInt32 flags);
+            private static extern bool CredWrite([In] ref CREDENTIAL userCredential, [In] uint flags);
 
             [DllImport("advapi32", SetLastError = true, CharSet = CharSet.Unicode)]
-            static extern bool CredEnumerate(string filter, int flag, out int count, out IntPtr pCredentials);
+            private static extern bool CredEnumerate(string filter, int flag, out int count, out IntPtr pCredentials);
 
             [DllImport("Advapi32.dll", EntryPoint = "CredFree", SetLastError = true)]
-            static extern bool CredFree([In] IntPtr cred);
+            private static extern bool CredFree([In] IntPtr cred);
 
             private enum CredentialPersistence : uint
             {
@@ -204,21 +235,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
             private struct CREDENTIAL
             {
-                public UInt32 Flags;
+                public uint Flags;
                 public CredentialType Type;
                 public IntPtr TargetName;
                 public IntPtr Comment;
                 public System.Runtime.InteropServices.ComTypes.FILETIME LastWritten;
-                public UInt32 CredentialBlobSize;
+                public uint CredentialBlobSize;
                 public IntPtr CredentialBlob;
-                public UInt32 Persist;
-                public UInt32 AttributeCount;
+                public uint Persist;
+                public uint AttributeCount;
                 public IntPtr Attributes;
                 public IntPtr TargetAlias;
                 public IntPtr UserName;
             }
 
-            sealed class CriticalCredentialHandle : Microsoft.Win32.SafeHandles.CriticalHandleZeroOrMinusOneIsInvalid
+            private sealed class CriticalCredentialHandle : Microsoft.Win32.SafeHandles.CriticalHandleZeroOrMinusOneIsInvalid
             {
                 public CriticalCredentialHandle(IntPtr preexistingHandle)
                 {
@@ -294,7 +325,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                     _userName = userName;
                     _password = new SecureString();
                     foreach (char c in password)
+                    {
                         _password.AppendChar(c);
+                    }
+
                     _credentialType = credentialType;
                 }
 
@@ -304,6 +338,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 }
             }
         }
-
     }
 }

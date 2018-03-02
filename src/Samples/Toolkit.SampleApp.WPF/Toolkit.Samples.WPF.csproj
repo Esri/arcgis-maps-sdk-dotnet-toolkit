@@ -164,15 +164,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj">
-      <Project>{552428bc-a0a9-4a03-832f-cd3ea9dcee31}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.WPF</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.WPF">
       <Version>100.2.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+      <Name>Esri.ArcGISRuntime.Toolkit</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
