@@ -124,7 +124,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="AutoHide"/> bindable property.
         /// </summary>
         public static readonly BindableProperty AutoHideProperty =
-            BindableProperty.Create(nameof(AutoHide), typeof(bool), typeof(Compass), false, BindingMode.OneWay, null, OnAutoHidePropertyChanged);
+            BindableProperty.Create(nameof(AutoHide), typeof(bool), typeof(Compass), true, BindingMode.OneWay, null, OnAutoHidePropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
