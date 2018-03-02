@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="Heading"/> bindable property.
         /// </summary>
         public static readonly BindableProperty HeadingProperty =
-            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0, BindingMode.OneWay, null, OnHeadingPropertyChanged);
+            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0d, BindingMode.OneWay, null, OnHeadingPropertyChanged);
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
