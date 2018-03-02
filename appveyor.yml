@@ -1,4 +1,4 @@
-version: 100.2.0-beta3.{build}
+version: 100.2.1-beta3.{build}
 branches:
   only:
   - master
