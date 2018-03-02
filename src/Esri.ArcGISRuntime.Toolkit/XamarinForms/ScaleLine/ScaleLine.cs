@@ -189,6 +189,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 {
                     return;
                 }
+
                 UpdateScaleFromMapView(view);
             }
         }
