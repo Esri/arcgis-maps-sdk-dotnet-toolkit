@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -65,11 +66,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is Legend)
+            var legend = bindable as Legend;
+            if (legend?.NativeLegend != null)
             {
-                var legend = (Legend)bindable;
-
-                // legend.NativeLegend.GeoView = (newValue as GeoView)?; //TODO!
+                legend.NativeLegend.GeoView = (newValue as GeoView)?.GetNativeGeoView();
                 legend.InvalidateMeasure();
             }
         }
@@ -78,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="FilterByVisibleScaleRange"/> bindable property.
         /// </summary>
         public static readonly BindableProperty FilterByVisibleScaleRangeProperty =
-            BindableProperty.Create(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), null, BindingMode.OneWay, null, OnFilterByVisibleScaleRangePropertyChanged);
+            BindableProperty.Create(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null, OnFilterByVisibleScaleRangePropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
@@ -97,9 +97,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnFilterByVisibleScaleRangePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is Legend && newValue is bool)
+            var legend = bindable as Legend;
+            if (legend?.NativeLegend != null && newValue is bool)
             {
-                var legend = (Legend)bindable;
                 legend.NativeLegend.FilterByVisibleScaleRange = (bool)newValue;
                 legend.InvalidateMeasure();
             }
@@ -109,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="ReverseLayerOrder"/> bindable property.
         /// </summary>
         public static readonly BindableProperty ReverseLayerOrderProperty =
-            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), null, BindingMode.OneWay, null, OnFilterByVisibleScaleRangePropertyChanged);
+            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null, OnFilterByVisibleScaleRangePropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
@@ -127,10 +127,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnReverseLayerOrderPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is Legend && newValue is bool)
+            var legend = bindable as Legend;
+            if (legend?.NativeLegend != null && newValue is bool)
             {
-                var legend = (Legend)bindable;
-                legend.NativeLegend.ReverseLayerOrder = (bool)newValue;
+                legend.NativeLegend.ReverseLayerOrder = !(bool)newValue;
                 legend.InvalidateMeasure();
             }
         }

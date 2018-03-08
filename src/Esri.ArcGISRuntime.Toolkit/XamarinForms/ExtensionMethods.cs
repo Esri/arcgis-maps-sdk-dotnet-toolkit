@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Reflection;
 using Xamarin.Forms;
 #if __ANDROID__
 using NativeColor = Android.Graphics.Color;
@@ -50,6 +51,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
 #else
             scaleline.ForegroundColor = color;
 #endif
+        }
+
+        internal static Esri.ArcGISRuntime.UI.Controls.GeoView GetNativeGeoView(this Esri.ArcGISRuntime.Xamarin.Forms.GeoView geoView)
+        {
+            var property = typeof(Esri.ArcGISRuntime.Xamarin.Forms.GeoView).GetProperty("NativeGeoView", BindingFlags.Instance | BindingFlags.NonPublic);
+            return property?.GetValue(geoView) as Esri.ArcGISRuntime.UI.Controls.GeoView;
         }
     }
 }
