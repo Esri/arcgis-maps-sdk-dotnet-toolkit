@@ -52,6 +52,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _listView = new ListView(context)
             {
+                ClipToOutline = true,
+                Clickable = false,
+                ChoiceMode = ChoiceMode.None,
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
                 ScrollingCacheEnabled = false,
                 PersistentDrawingCache = PersistentDrawingCaches.NoCache,

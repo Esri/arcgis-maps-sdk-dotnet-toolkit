@@ -73,6 +73,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
             {
+                ClipsToBounds = true,
+                ContentMode = UIViewContentMode.ScaleAspectFill,
+                SeparatorStyle = UITableViewCellSeparatorStyle.None,
+                AllowsSelection = false,
+                Bounces = true,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
@@ -86,13 +91,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _listView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
             _listView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
             _listView.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
-            _listView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
+            _listView.HeightAnchor.ConstraintEqualTo(HeightAnchor).Active = true;
 
             InvalidateIntrinsicContentSize();
         }
 
+        private CGSize _intrinsicContentSize = CGSize.Empty;
+
         /// <inheritdoc />
-        public override CGSize IntrinsicContentSize => Bounds.Size;
+        public override CGSize IntrinsicContentSize => _intrinsicContentSize.IsEmpty ? _listView.Frame.Size : _intrinsicContentSize;
 
         /// <inheritdoc />
         public override CGSize SizeThatFits(CGSize size)
@@ -169,10 +176,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SetLayerContentList(layers);
             var source = new LegendTableSource(layers);
             _listView.Source = source;
+            _intrinsicContentSize = new CGSize(_listView.Frame.Width, _listView.ContentSize.Height);
+            source.CollectionChanged += (a, b) => InvokeOnMainThread(() =>
+            {
+                _listView.ReloadData();
+                _intrinsicContentSize = new CGSize(_listView.Frame.Width, _listView.ContentSize.Height);
+                InvalidateIntrinsicContentSize();
+            });
             _listView.ReloadData();
-            source.CollectionChanged += (a, b) => InvokeOnMainThread(() => _listView.ReloadData());
-            Hidden = false;
             InvalidateIntrinsicContentSize();
+            Hidden = false;
         }
     }
 }

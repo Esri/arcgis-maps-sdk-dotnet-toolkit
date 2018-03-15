@@ -46,15 +46,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _layerLegend = new LayerLegend()
             {
-                TranslatesAutoresizingMaskIntoConstraints = false
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                ShowEntireTreeHierarchy = false
             };
 
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
             {
+                ClipsToBounds = true,
+                ContentMode = UIViewContentMode.ScaleAspectFill,
+                SeparatorStyle = UITableViewCellSeparatorStyle.None,
+                AllowsSelection = false,
+                Bounces = true,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
-                EstimatedRowHeight = UIFont.LabelFontSize,
+                EstimatedRowHeight = SymbolDisplay.MaxSize,
             };
             _listView.RegisterClassForCellReuse(typeof(LegendItemCell), LegendTableSource.CellId);
 
@@ -65,19 +71,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (propertyName == nameof(LayerContentViewModel.Sublayers))
             {
-                var subLayers = layerContent?.Sublayers;
-                if (subLayers == null)
-                {
-                    return;
-                }
-
-                _listView.Source = new LegendTableSource(new List<LayerContentViewModel>(subLayers));
-                _listView.ReloadData();
+                UpdateSublayers(layerContent);
             }
             else if (propertyName == nameof(LayerContentViewModel.DisplayLegend))
             {
                 Hidden = layerContent?.DisplayLegend ?? false;
             }
+        }
+
+        private void UpdateSublayers(LayerContentViewModel layerContent)
+        {
+            var subLayers = layerContent?.Sublayers;
+            if (subLayers == null)
+            {
+                return;
+            }
+
+            _listView.Source = new LegendTableSource(new List<LayerContentViewModel>(subLayers));
         }
 
         internal void Update(LayerContentViewModel layerContent)
@@ -94,11 +104,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _textLabel.Text = layerContent.LayerContent?.Name;
             _layerLegend.LayerContent = layerContent.LayerContent;
-            if (layerContent.Sublayers != null)
-            {
-                _listView.Source = new LegendTableSource(new List<LayerContentViewModel>(layerContent.Sublayers));
-                _listView.ReloadData();
-            }
+            UpdateSublayers(layerContent);
 
             if (layerContent is INotifyPropertyChanged)
             {
@@ -121,9 +127,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.UpdateConstraints();
 
-            _textLabel.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
             _layerLegend.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
-            _listView.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
 
             if (_constraintsUpdated)
             {
@@ -136,9 +140,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _textLabel.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
             _textLabel.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
             _layerLegend.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-            _layerLegend.TopAnchor.ConstraintGreaterThanOrEqualTo(_textLabel.BottomAnchor, 2).Active = true;
+            _layerLegend.TopAnchor.ConstraintEqualTo(_textLabel.BottomAnchor).Active = true;
+            _layerLegend.BottomAnchor.ConstraintEqualTo(_listView.TopAnchor).Active = true;
             _listView.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-            _listView.TopAnchor.ConstraintGreaterThanOrEqualTo(_layerLegend.BottomAnchor, 2).Active = true;
+            _listView.BottomAnchor.ConstraintEqualTo(margin.BottomAnchor).Active = true;
         }
     }
 }

@@ -84,16 +84,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _rootStackView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
             _rootStackView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
 
-            _imageView.HeightAnchor.ConstraintLessThanOrEqualTo(MaxSize).Active = true;
-            _imageView.WidthAnchor.ConstraintLessThanOrEqualTo(MaxSize).Active = true;
+            _imageView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
+            _imageView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
+            _imageView.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
+            _imageView.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
 
             InvalidateIntrinsicContentSize();
         }
 
-        private CGSize _intrinsicContentSize;
+        private CGSize _intrinsicContentSize = CGSize.Empty;
 
         /// <inheritdoc />
-        public override CGSize IntrinsicContentSize => _intrinsicContentSize;
+        public override CGSize IntrinsicContentSize => _intrinsicContentSize.IsEmpty ? new CGSize(MaxSize, MaxSize) : _intrinsicContentSize;
 
         /// <inheritdoc />
         public override CGSize SizeThatFits(CGSize size)

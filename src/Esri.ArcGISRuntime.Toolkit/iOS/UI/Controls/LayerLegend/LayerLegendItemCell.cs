@@ -28,7 +28,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public LayerLegendItemCell(IntPtr handle)
             : base(handle)
         {
+            ClipsToBounds = true;
+            MultipleTouchEnabled = true;
             SelectionStyle = UITableViewCellSelectionStyle.None;
+            IndentationWidth = 10;
             TranslatesAutoresizingMaskIntoConstraints = false;
 
             _symbolDisplay = new SymbolDisplay()
@@ -72,9 +75,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var margin = ContentView.LayoutMarginsGuide;
 
             _symbolDisplay.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-            _symbolDisplay.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
+            _symbolDisplay.CenterYAnchor.ConstraintEqualTo(margin.CenterYAnchor).Active = true;
 
-            _textLabel.LeadingAnchor.ConstraintGreaterThanOrEqualTo(_symbolDisplay.TrailingAnchor, 15).Active = true;
+            _textLabel.LeadingAnchor.ConstraintEqualTo(_symbolDisplay.TrailingAnchor).Active = true;
             _textLabel.CenterYAnchor.ConstraintEqualTo(margin.CenterYAnchor).Active = true;
         }
     }
