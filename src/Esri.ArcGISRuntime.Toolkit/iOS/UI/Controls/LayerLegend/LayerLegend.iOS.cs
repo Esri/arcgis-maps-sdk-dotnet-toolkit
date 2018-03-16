@@ -98,10 +98,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidateIntrinsicContentSize();
         }
 
-        private CGSize _intrinsicContentSize = CGSize.Empty;
-
         /// <inheritdoc />
-        public override CGSize IntrinsicContentSize => _intrinsicContentSize.IsEmpty ? _listView.Frame.Size : _intrinsicContentSize;
+        public override CGSize IntrinsicContentSize => _listView.ContentSize;
 
         /// <inheritdoc />
         public override CGSize SizeThatFits(CGSize size)
@@ -135,6 +133,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (LayerContent == null)
             {
                 _listView.Source = null;
+                _listView.ReloadData();
+                InvalidateIntrinsicContentSize();
                 return;
             }
 
@@ -152,15 +152,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
             var source = new LayerLegendTableSource(items);
             _listView.Source = source;
-            _intrinsicContentSize = new CGSize(_listView.Frame.Width, _listView.ContentSize.Height);
             source.CollectionChanged += (a, b) => InvokeOnMainThread(() =>
             {
                 _listView.ReloadData();
-                _intrinsicContentSize = new CGSize(_listView.Frame.Width, _listView.ContentSize.Height);
                 InvalidateIntrinsicContentSize();
+                SetNeedsUpdateConstraints();
+                UpdateConstraints();
             });
             _listView.ReloadData();
             InvalidateIntrinsicContentSize();
+            SetNeedsUpdateConstraints();
+            UpdateConstraints();
             Hidden = false;
         }
 

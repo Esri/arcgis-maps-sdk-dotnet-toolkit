@@ -46,7 +46,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.Center,
                 TextAlignment = UITextAlignment.Left,
-                TranslatesAutoresizingMaskIntoConstraints = false
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                LineBreakMode = UILineBreakMode.TailTruncation
             };
 
             ContentView.AddSubviews(_symbolDisplay, _textLabel);
@@ -60,6 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private bool _constraintsUpdated = false;
 
+        /// <inheritdoc />
         public override void UpdateConstraints()
         {
             base.UpdateConstraints();
