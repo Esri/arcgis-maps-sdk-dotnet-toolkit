@@ -17,12 +17,17 @@
 #if __IOS__
 
 using System;
+using System.ComponentModel;
 using CoreGraphics;
+using Foundation;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    public partial class TimeSlider : UIControl
+    [Register("TimeSlider")]
+    [DisplayName("Time Slider")]
+    [Category("ArcGIS Runtime Controls")]
+    public partial class TimeSlider : UIView, IComponent
     {
 #pragma warning disable SX1309 // Names match elements in template
 #pragma warning disable SA1306 // Names match elements in template
@@ -43,8 +48,53 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isSizeValid = false;
         private CGPoint _lastTouchLocation;
 
+#pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
+        /// <summary>
+        /// Internal use only.  Invoked by the Xamarin iOS designer.
+        /// </summary>
+        /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
+#pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public TimeSlider(IntPtr handle)
+            : base(handle)
+        {
+            Initialize();
+        }
+
+        /// <inheritdoc />
+        public override void AwakeFromNib()
+        {
+            var component = (IComponent)this;
+            DesignTime.IsDesignMode = component.Site != null && component.Site.DesignMode;
+
+            Initialize();
+
+            base.AwakeFromNib();
+        }
+
         private void Initialize()
         {
+            if (DesignTime.IsDesignMode)
+            {
+                // Add placeholder for design-time
+                // Set background to light gray
+                Layer.BackgroundColor = UIColor.FromRGBA(230, 230, 230, 255).CGColor;
+
+                // Add "Time Slider" label
+                var label = new UILabel()
+                {
+                    Text = "Time Slider",
+                    Font = UIFont.SystemFontOfSize(11),
+                    TranslatesAutoresizingMaskIntoConstraints = false
+                };
+                AddSubview(label);
+
+                // Center the "Time Slider" label
+                label.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
+                label.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
+                return;
+            }
+
             var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
             FullExtentStartTimeLabel = new UILabel()
             {
@@ -321,6 +371,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.LayoutSubviews();
 
+            if (DesignTime.IsDesignMode)
+            {
+                return;
+            }
+
             ArrangeElements();
         }
 
@@ -457,6 +512,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                                            frame.Width + (minWidthAdjustment * 2), frame.Height + (minHeightAdjustment * 2));
             return expandedFrame;
         }
+
+        #region IComponent
+
+        /// <inheritdoc cref="IComponent.Site" />
+        ISite IComponent.Site { get; set; }
+
+        private EventHandler _disposed;
+
+        /// <summary>
+        /// Internal use only
+        /// </summary>
+        event EventHandler IComponent.Disposed
+        {
+            add { _disposed += value; }
+            remove { _disposed -= value; }
+        }
+        #endregion
     }
 }
 
