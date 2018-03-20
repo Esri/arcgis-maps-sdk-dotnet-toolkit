@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         private Color _tickFill = Color.Black;
-        
+
         /// <summary>
         /// Gets or sets the fill color for each tick mark
         /// </summary>
@@ -101,8 +101,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _tickLabelColor = value;
 
                 if (_majorTickmarks == null)
+                {
                     return;
-                
+                }
+
                 foreach (var tick in _majorTickmarks)
                 {
                     ApplyTickLabelColor(tick, value);
@@ -113,7 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private bool _showTicklabels;
 
         /// <summary>
-        /// Gets or sets whether to display labels on the ticks
+        /// Gets or sets a value indicating whether to display labels on the ticks
         /// </summary>
         /// <value>The item template.</value>
         private bool ShowTickLabelsImpl

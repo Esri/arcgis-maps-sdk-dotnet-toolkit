@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2018 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     internal class DrawActionButton : UIButton
     {
-        public DrawActionButton() : base()
+        public DrawActionButton()
+            : base()
         {
             Layer.BackgroundColor = UIColor.Clear.CGColor;
             Layer.BorderColor = UIColor.Clear.CGColor;
@@ -37,15 +38,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public double BorderWidth { get; set; }
 
-		/// <summary>
-		/// Gets or sets the action to be executed during the control's rendering pass.  This action is responsible for rendering the control's UI.
-		/// </summary>
-		/// <value>The on draw action.</value>
-		public Action<CGContext, DrawActionButton> DrawContentAction { get; set; }
+        /// <summary>
+        /// Gets or sets the action to be executed during the control's rendering pass.  This action is responsible for rendering the control's UI.
+        /// </summary>
+        /// <value>The on draw action.</value>
+        public Action<CGContext, DrawActionButton> DrawContentAction { get; set; }
 
-		public override void Draw(CGRect rect)
-		{
+        public override void Draw(CGRect rect)
+        {
             DrawContentAction?.Invoke(UIGraphics.GetCurrentContext(), this);
-		}
-	}
+        }
+    }
 }

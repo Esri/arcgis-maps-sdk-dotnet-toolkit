@@ -14,11 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using CoreGraphics;
 using System;
-using UIKit;
+using CoreGraphics;
 using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -30,15 +30,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static void SetMargin(this UIView view, double left, double top, double right, double bottom)
         {
             if (view?.Superview?.Frame == null)
+            {
                 return;
-            
+            }
+
             var frameRight = view.Superview.Frame.Width - right;
             var frameBottom = view.Superview.Frame.Height - bottom;
             var width = frameRight - left;
             var height = frameBottom - top;
 
             if ((nfloat)left != view.Frame.Left || (nfloat)right != view.Frame.Right)
+            {
                 view.Frame = new CGRect(left, view.Frame.Top, width, view.Frame.Height);
+            }
         }
 
         public static double GetActualWidth(this UIView view) => !view.IntrinsicContentSize.IsEmpty ? view.IntrinsicContentSize.Width : view.Bounds.Width;
@@ -46,8 +50,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static void SetWidth(this RectangleView view, double width)
         {
             if (view == null)
+            {
                 return;
-            
+            }
+
             view.Width = width;
         }
 

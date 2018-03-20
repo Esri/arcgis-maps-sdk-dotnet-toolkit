@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
-
 #if !__ANDROID__
 
 using System;
@@ -40,15 +39,15 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Key = Windows.System.VirtualKey;
 #elif __IOS__
+using System.Drawing;
+using Brush = UIKit.UIColor;
+using ButtonBase = UIKit.UIButton;
 using FrameworkElement = UIKit.UIView;
+using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
+using RepeatButton = UIKit.UIButton;
 using TextBlock = UIKit.UILabel;
 using Thumb = UIKit.UIControl;
-using RepeatButton = UIKit.UIButton;
-using ButtonBase = UIKit.UIButton;
 using ToggleButton = UIKit.UISwitch;
-using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
-using Brush = UIKit.UIColor;
-using System.Drawing;
 #else
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -77,12 +76,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning restore SA1306 // Field names must begin with lower-case letter
         private DispatcherTimer _playTimer;
         private TimeExtent _currentValue;
-        private bool _isFocused;
-        private bool _isMouseOver;
         private double _totalHorizontalChange;
         private TimeExtent _horizontalChangeExtent;
-        private string _originalFullExtentLabelFormat;
-        private string _originalCurrentExtentLabelFormat;
         private ThrottleAwaiter _calculateTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
 
@@ -125,11 +120,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // margins
             double left, right, thumbLeft, thumbRight = 0;
 
-            // rate = (distance) / (time)				
+            // rate = (distance) / (time)
             var rate = SliderTrack.GetActualWidth() / (maximum - minimum);
 
-
-            // Position left repeater							
+            // Position left repeater
             right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.GetActualWidth());
             SliderTrackStepBackRepeater.SetMargin(0, 0, right, 0);
             SliderTrackStepBackRepeater.SetWidth(Math.Max(0, sliderWidth - right));
@@ -152,13 +146,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 left -= 0.5;
                 right -= 0.5;
 #endif
-                thumbLeft = left - MinimumThumb.GetActualWidth() / 2;
-                thumbRight = right - MinimumThumb.GetActualWidth() / 2;
+                thumbLeft = left - (MinimumThumb.GetActualWidth() / 2);
+                thumbRight = right - (MinimumThumb.GetActualWidth() / 2);
                 MinimumThumb.SetMargin(thumbLeft, 0, thumbRight, 0);
 
                 var isVisible = LabelMode == TimeSliderLabelMode.CurrentExtent && start != minimum;
+
                 // TODO: Change visibility instead of opacity.  Doing so throws an exception that start time cannot be
-                // greater than end time when dragging minimum thumb.       
+                // greater than end time when dragging minimum thumb.
                 MinimumThumbLabel.SetOpacity(isVisible ? 1 : 0);
 
                 // Calculate thumb label position
@@ -189,7 +184,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 left = Math.Min(sliderWidth, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, (maximum - end) * rate);
                 HorizontalTrackThumb.SetMargin(left, 0, right, 0);
-                HorizontalTrackThumb.SetWidth(Math.Max(0, (sliderWidth - right - left)));
+                HorizontalTrackThumb.SetWidth(Math.Max(0, sliderWidth - right - left));
 #if !XAMARIN
                 HorizontalTrackThumb.HorizontalAlignment = HorizontalAlignment.Left;
 #endif
@@ -203,8 +198,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             left -= 0.5;
             right -= 0.5;
 #endif
-            thumbLeft = left - MaximumThumb.GetActualWidth() / 2;
-            thumbRight = right - MaximumThumb.GetActualWidth() / 2;
+            thumbLeft = left - (MaximumThumb.GetActualWidth() / 2);
+            thumbRight = right - (MaximumThumb.GetActualWidth() / 2);
             MaximumThumb.SetMargin(thumbLeft, 0, thumbRight, 0);
 
             // Update maximum thumb label visibility
@@ -385,7 +380,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var newStart = _horizontalChangeExtent.StartTime.DateTime.AddTicks(timeChange);
                 if (newStart >= _horizontalChangeExtent.EndTime)
+                {
                     return; // Don't allow moving thumb so that min would be equal or greater than max
+                }
+
                 tempChange = new TimeExtent(newStart, _horizontalChangeExtent.EndTime);
             }
             catch (ArgumentOutOfRangeException)
@@ -472,9 +470,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     var newEnd = _horizontalChangeExtent.EndTime.DateTime.AddTicks(timeChange);
                     if (newEnd <= _horizontalChangeExtent.StartTime)
+                    {
                         return; // Don't allow moving thumb so that max would be equal or less than min
-                    // If the mouse drag creates a date thats year is before 
-                    // 1/1/0001 or after 12/31/9999 then an out of range 
+                    }
+
+                    // If the mouse drag creates a date thats year is before
+                    // 1/1/0001 or after 12/31/9999 then an out of range
                     // exception will be trown.
                     tempChange = new TimeExtent(_horizontalChangeExtent.StartTime, newEnd);
                 }
@@ -744,7 +745,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             // TODO: For consideration - should FullExtent be snapped to a multiple of the specified time step?  E.g. if the time step interval
             // is 1 week and the full extent is 3 months (suppose 92 days in this case), should the full extent be snapped to 91 or 98 days?
-
             await CalculateTimeStepsAsync();
             PositionTickmarks();
             UpdateTrackLayout(CurrentValidExtent);
@@ -856,7 +856,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SetButtonVisibility()
         {
-            var viz = (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext());
+            var viz = TimeSteps != null && TimeSteps.GetEnumerator().MoveNext();
             PlayPauseButton?.SetIsVisible(viz);
             NextButton?.SetIsVisible(viz);
             PreviousButton?.SetIsVisible(viz);
@@ -873,7 +873,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnIsStartTimePinnedChanged(bool isStartTimePinned)
         {
-            // Enable or disable the start time thumb 
+            // Enable or disable the start time thumb
             MinimumThumb.SetIsEnabled(!isStartTimePinned);
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
@@ -900,7 +900,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnIsEndTimePinnedChanged(bool isEndTimePinned)
         {
-            // Enable or disable the end time thumb 
+            // Enable or disable the end time thumb
             MaximumThumb.SetIsEnabled(!isEndTimePinned);
 
             // If the slider extent is a time instant, keep whether start time and end time are pinned in sync
@@ -917,7 +917,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets whether the time slider is animating playback
+        /// Gets or sets a value indicating whether the time slider is animating playback
         /// </summary>
         public bool IsPlaying
         {
@@ -965,21 +965,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => FullExtentLabelFormatImpl = value;
         }
 
-        private void OnFullExtentLabelFormatPropertyChanged(string labelFormat)
-        {
-#if !XAMARIN
-            // Apply the updated string format to the full extent label elements' bindings
-            FullExtentStartTimeLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: labelFormat,
-                fallbackFormat: ref _originalFullExtentLabelFormat);
-            FullExtentEndTimeLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: labelFormat,
-                fallbackFormat: ref _originalFullExtentLabelFormat);
-#endif
-        }
-
         /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
         /// </summary>
@@ -991,18 +976,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnCurrentExtentLabelFormatPropertyChanged(string labelFormat)
         {
-#if !XAMARIN
-            // Apply the updated string format to the current extent label elements' bindings
-            MinimumThumbLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: labelFormat,
-                fallbackFormat: ref _originalCurrentExtentLabelFormat);
-            MaximumThumbLabel?.UpdateStringFormat(
-                targetProperty: TextBlock.TextProperty,
-                stringFormat: labelFormat,
-                fallbackFormat: ref _originalCurrentExtentLabelFormat);
-#endif
-
             // Layout the slider to accommodate updated label text
             UpdateTrackLayout(CurrentExtent);
         }
@@ -1042,7 +1015,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ApplyLabelMode(TimeSliderLabelMode labelMode)
         {
             if (Tickmarks == null || MinimumThumbLabel == null || MaximumThumbLabel == null)
+            {
                 return;
+            }
 
             switch (labelMode)
             {
@@ -1067,7 +1042,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the border color of the thumbs
         /// </summary>
-		public Brush ThumbStroke
+        public Brush ThumbStroke
         {
             get => ThumbStrokeImpl;
             set => ThumbStrokeImpl = value;
@@ -1076,7 +1051,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the fill color of the thumbs
         /// </summary>
-		public Brush ThumbFill
+        public Brush ThumbFill
         {
             get => ThumbFillImpl;
             set => ThumbFillImpl = value;
@@ -1085,7 +1060,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
         /// </summary>
-		public Brush CurrentExtentFill
+        public Brush CurrentExtentFill
         {
             get => CurrentExtentFillImpl;
             set => CurrentExtentFillImpl = value;
@@ -1094,7 +1069,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
-		public Brush FullExtentFill
+        public Brush FullExtentFill
         {
             get => FullExtentFillImpl;
             set => FullExtentFillImpl = value;
@@ -1103,7 +1078,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
-		public Brush FullExtentStroke
+        public Brush FullExtentStroke
         {
             get => FullExtentStrokeImpl;
             set => FullExtentStrokeImpl = value;
@@ -1522,7 +1497,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Return whether or not the time extent was moved by the specified number of steps
             return isRequestedMoveValid;
         }
-
 
         /// <summary>
         /// Moves the time slider's current extent upon expiration of the playback interval

@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2017-2018 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -29,15 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
     internal class RectangleView : UIView, INotifyPropertyChanged
     {
-        private UIView _childView;
-
         public RectangleView()
         {
             base.BackgroundColor = UIColor.Clear;
         }
 
         public override CGRect Frame
-        { 
+        {
             get => base.Frame;
             set
             {
@@ -46,7 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public RectangleView(double width, double height) : this()
+        public RectangleView(double width, double height)
+            : this()
         {
             Width = width;
             Height = height;
@@ -81,6 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private UIColor _backgroundColor = UIColor.Clear;
+
         public override UIColor BackgroundColor
         {
             get => _backgroundColor;
@@ -92,6 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private double _borderWidth;
+
         public double BorderWidth
         {
             get => _borderWidth;
@@ -103,6 +104,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private UIColor _borderColor = UIColor.Clear;
+
         public UIColor BorderColor
         {
             get => _borderColor;
@@ -123,7 +125,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             ctx.SetFillColor(BackgroundColor.CGColor);
             ctx.SetStrokeColor(BorderColor.CGColor);
             ctx.FillRect(renderTarget);
-			ctx.SetLineWidth((nfloat)BorderWidth);
+            ctx.SetLineWidth((nfloat)BorderWidth);
             ctx.StrokeRect(renderTarget);
         }
 

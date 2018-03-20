@@ -57,8 +57,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
+        private bool _isInitialized = false;
+
         private void Initialize()
         {
+            if (_isInitialized)
+            {
+                return;
+            }
+
+            _isInitialized = true;
+
             BackgroundColor = UIColor.Clear;
 
             // At run-time, don't display the sub-views until their dimensions have been calculated

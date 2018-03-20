@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2018 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     internal class DrawActionToggleButton : UIButton
     {
-        public DrawActionToggleButton() : base()
+        public DrawActionToggleButton()
+            : base()
         {
             Layer.BackgroundColor = UIColor.Clear.CGColor;
             Layer.BorderColor = UIColor.Clear.CGColor;
@@ -48,8 +49,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 if (_isChecked == value)
+                {
                     return;
-                
+                }
+
                 _isChecked = value;
                 SetNeedsDisplay();
                 CheckedChanged?.Invoke(this, EventArgs.Empty);
@@ -68,14 +71,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <value>The on draw action.</value>
         public Action<CGContext, DrawActionToggleButton> DrawUncheckedContentAction { get; set; }
 
-		public override void Draw(CGRect rect)
-		{
+        public override void Draw(CGRect rect)
+        {
             if (IsChecked)
+            {
                 DrawCheckedContentAction?.Invoke(UIGraphics.GetCurrentContext(), this);
+            }
             else
+            {
                 DrawUncheckedContentAction?.Invoke(UIGraphics.GetCurrentContext(), this);
-		}
+            }
+        }
 
         public event EventHandler CheckedChanged;
-	}
+    }
 }

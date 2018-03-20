@@ -18,7 +18,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -70,6 +70,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private RepeatButton SliderTrackStepForwardRepeater;
 #pragma warning restore SX1309
 #pragma warning restore SA1306
+        private string _originalFullExtentLabelFormat;
+        private string _originalCurrentExtentLabelFormat;
+        private bool _isFocused;
+        private bool _isMouseOver;
 
         private void Initialize()
         {
@@ -553,8 +557,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(FullExtentLabelFormat), typeof(string), typeof(TimeSlider),
                 new PropertyMetadata(default(string), OnFullExtentLabelFormatPropertyChanged));
 
-        private static void OnFullExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
-            ((TimeSlider)d).OnFullExtentLabelFormatPropertyChanged(e.NewValue as string);
+        private static void OnFullExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var labelFormat = e.NewValue as string;
+            var slider = (TimeSlider)d;
+            // Apply the updated string format to the full extent label elements' bindings
+            slider.FullExtentStartTimeLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref slider._originalFullExtentLabelFormat);
+            slider.FullExtentEndTimeLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref slider._originalFullExtentLabelFormat);
+        }
 
         /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
@@ -572,9 +588,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(CurrentExtentLabelFormat), typeof(string), typeof(TimeSlider),
                 new PropertyMetadata(default(string), OnCurrentExtentLabelFormatPropertyChanged));
 
-        private static void OnCurrentExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
-            ((TimeSlider)d).OnCurrentExtentLabelFormatPropertyChanged(e.NewValue as string);
-
+        private static void OnCurrentExtentLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var labelFormat = e.NewValue as string;
+            var slider = (TimeSlider)d;
+            // Apply the updated string format to the current extent label elements' bindings
+            slider.MinimumThumbLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
+            slider.MaximumThumbLabel?.UpdateStringFormat(
+                targetProperty: TextBlock.TextProperty,
+                stringFormat: labelFormat,
+                fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
+            slider.OnCurrentExtentLabelFormatPropertyChanged(labelFormat);
+        }
         /// <summary>
         /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval
         /// </summary>

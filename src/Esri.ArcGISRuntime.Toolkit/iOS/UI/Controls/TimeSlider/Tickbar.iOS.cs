@@ -33,32 +33,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         private CGSize _majorTickSize = new CGSize(1, 11);
+
+        /// <summary>
+        /// Gets or sets the size of major tickmarks
+        /// </summary>
         public CGSize MajorTickSize
         {
             get => _majorTickSize;
             set
             {
                 if (value.Width == _majorTickSize.Width && value.Height == _majorTickSize.Height)
+                {
                     return;
-                
+                }
+
                 _majorTickSize = value;
                 foreach (RectangleView tick in _majorTickmarks)
                 {
                     tick.Width = _majorTickSize.Width;
                     tick.Height = _majorTickSize.Height;
                 }
+
                 InvalidateMeasureAndArrange();
             }
         }
 
         private CGSize _minorTickSize = new CGSize(1, 5);
+
+        /// <summary>
+        /// Gets or sets the size of minor tickmarks
+        /// </summary>
         public CGSize MinorTickSize
         {
             get => _minorTickSize;
             set
             {
                 if (value.Width == _minorTickSize.Width && value.Height == _minorTickSize.Height)
+                {
                     return;
+                }
 
                 _minorTickSize = value;
                 foreach (RectangleView tick in _minorTickmarks)
@@ -66,19 +79,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     tick.Width = _minorTickSize.Width;
                     tick.Height = _minorTickSize.Height;
                 }
+
                 InvalidateMeasureAndArrange();
             }
         }
 
-
         private double _labelOffset = 4;
+
+        /// <summary>
+        /// Gets or sets the spacing between ticks and tick labels
+        /// </summary>
         public double LabelOffset
         {
             get => _labelOffset;
             set
             {
                 if (_labelOffset == value)
+                {
                     return;
+                }
 
                 _labelOffset = value;
                 InvalidateMeasureAndArrange();
@@ -202,7 +221,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void SetPosition(UIView view, double position)
         {
-            UpdatePositionAndIsMajorTickmark(view, position, GetIsMajorTickmark(view));            
+            UpdatePositionAndIsMajorTickmark(view, position, GetIsMajorTickmark(view));
         }
 
         private void UpdatePositionAndIsMajorTickmark(UIView view, double position, bool isMajorTickmark)
@@ -222,16 +241,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void InvalidateMeasureAndArrange()
         {
-            try
-            {
-                // TODO
-                //throw new NotImplementedException("TODO");
-                OnArrange(Frame.Size);
-            }
-            catch (Exception ex)
-            {
-                var m = ex.Message;
-            }
+            OnArrange(Frame.Size);
         }
     }
 }

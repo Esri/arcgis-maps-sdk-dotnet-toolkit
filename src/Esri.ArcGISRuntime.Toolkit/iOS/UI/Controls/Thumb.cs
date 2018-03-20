@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2018 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -14,21 +14,17 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using CoreGraphics;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
+using CoreGraphics;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Draws a rectangle on the screen
+    /// Represents a control that can be dragged by the user
     /// </summary>
-    /// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size.
-    /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
     internal class Thumb : UIControl, INotifyPropertyChanged
     {
         public Thumb()
@@ -37,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         public override CGRect Frame
-        { 
+        {
             get => base.Frame;
             set
             {
@@ -46,7 +42,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public Thumb(double width, double height) : this()
+        public Thumb(double width, double height)
+            : this()
         {
             Width = width;
             Height = height;
@@ -57,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public double Width
         {
-            get { return _size.Width; }
+            get => _size.Width;
             set
             {
                 _size.Width = (nfloat)value;
@@ -71,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public double Height
         {
-            get { return _size.Height; }
+            get => _size.Height;
             set
             {
                 _size.Height = (nfloat)value;
@@ -81,6 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private UIColor _backgroundColor = UIColor.White;
+
         public override UIColor BackgroundColor
         {
             get => _backgroundColor;
@@ -92,6 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private double _borderWidth = 0.1;
+
         public double BorderWidth
         {
             get => _borderWidth;
@@ -103,6 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private CGSize _disabledSize;
+
         public CGSize DisabledSize
         {
             get => _disabledSize;
@@ -114,6 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private UIColor _borderColor = UIColor.FromRGBA(80, 80, 80, 255);
+
         public UIColor BorderColor
         {
             get => _borderColor;
@@ -125,6 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private UIColor _disabledColor = UIColor.Black;
+
         public UIColor DisabledColor
         {
             get => _disabledColor;
@@ -136,6 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private double _cornerRadius;
+
         public double CornerRadius
         {
             get => _cornerRadius;
@@ -147,6 +150,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         private bool _useShadow;
+
         public bool UseShadow
         {
             get => _useShadow;
@@ -160,6 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public bool IsFocused { get; set; }
 
         private bool _enabled = true;
+
         public override bool Enabled
         {
             get => _enabled;
@@ -184,6 +189,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     var shadowColor = BorderColor.ColorWithAlpha((nfloat)0.4);
                     ctx.SetShadow(offset: new CGSize(width: 0.0, height: 3.0), blur: (nfloat)4.0, color: shadowColor.CGColor);
                 }
+
                 ctx.SetFillColor(BackgroundColor.CGColor);
                 ctx.SetStrokeColor(BorderColor.CGColor);
 
@@ -205,8 +211,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 var disabledPath = UIBezierPath.FromRect(disabledRenderTarget);
                 ctx.SetFillColor(DisabledColor.CGColor);
                 ctx.FillRect(disabledRenderTarget);
-                //ctx.AddPath(disabledPath.CGPath);
-                //ctx.FillPath();
             }
         }
 

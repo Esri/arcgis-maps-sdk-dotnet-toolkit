@@ -16,16 +16,16 @@
 
 #if __IOS__
 
-using CoreGraphics;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using CoreGraphics;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class TimeSlider : UIControl
     {
+#pragma warning disable SX1309 // Names match elements in template
+#pragma warning disable SA1306 // Names match elements in template
         private RectangleView SliderTrack;
         private Thumb MinimumThumb;
         private Thumb MaximumThumb;
@@ -33,13 +33,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private DrawActionButton NextButton;
         private DrawActionButton PreviousButton;
         private DrawActionToggleButton PlayPauseButton;
-        private RectangleView SliderTrackStepBackRepeater;
-        private RectangleView SliderTrackStepForwardRepeater;
+        private RectangleView SliderTrackStepBackRepeater = null;
+        private RectangleView SliderTrackStepForwardRepeater = null;
+#pragma warning restore SX1309
+#pragma warning restore SA1306
         private RectangleView _startTimeTickmark;
         private RectangleView _endTimeTickmark;
         private bool _thumbsArranged = false;
         private bool _isSizeValid = false;
-        private bool _isHorizontalThumbFocused = false;
         private CGPoint _lastTouchLocation;
 
         private void Initialize()
@@ -47,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
             FullExtentStartTimeLabel = new UILabel()
             {
-                Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? "",
+                Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? string.Empty,
                 Font = UIFont.SystemFontOfSize(11),
                 TextColor = FullExtentLabelColor
             };
@@ -55,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             FullExtentEndTimeLabel = new UILabel()
             {
-                Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? "",
+                Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? string.Empty,
                 Font = UIFont.SystemFontOfSize(11),
                 TextColor = FullExtentLabelColor
             };
@@ -233,7 +234,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var minThumbHitTestFrame = ExpandFrame(MinimumThumb.Frame, minTargetSize);
                         var maxThumbHitTestFrame = ExpandFrame(MaximumThumb.Frame, minTargetSize);
                         var location = panRecognizer.LocationInView(SliderTrack);
-                        if (minThumbHitTestFrame.Contains(location) && !IsStartTimePinned)                            
+                        if (minThumbHitTestFrame.Contains(location) && !IsStartTimePinned)
                         {
                             MinimumThumb.IsFocused = true;
                             _lastTouchLocation = panRecognizer.LocationInView(MinimumThumb);
@@ -243,16 +244,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             MaximumThumb.IsFocused = true;
                             _lastTouchLocation = panRecognizer.LocationInView(MaximumThumb);
                         }
+
                         // TODO: Allow dragging middle thumb?
-                        //else if (HorizontalTrackThumb.Frame.Contains(location))
-                        //{
+                        // else if (HorizontalTrackThumb.Frame.Contains(location))
+                        // {
                         //   _isHorizontalThumbFocused = true;
                         //   _lastTouchLocation = panRecognizer.LocationInView(HorizontalTrackThumb);
-                        //}
+                        // }
                         break;
                     case UIGestureRecognizerState.Changed:
-                        if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused && !(MinimumThumb.IsFocused && IsStartTimePinned) && !(MaximumThumb.IsFocused && IsEndTimePinned)) // && !_isHorizontalThumbFocused)
+                        if (!MinimumThumb.IsFocused && !MaximumThumb.IsFocused && !(MinimumThumb.IsFocused && IsStartTimePinned) && !(MaximumThumb.IsFocused && IsEndTimePinned))
+                        {
                             return;
+                        }
 
                         var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb;
 
@@ -260,19 +264,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var translateX = currentLocation.X - _lastTouchLocation.X;
 
                         if (MinimumThumb.IsFocused)
+                        {
                             OnMinimumThumbDrag(translateX);
+                        }
+
                         if (MaximumThumb.IsFocused)
+                        {
                             OnMaximumThumbDrag(translateX);
+                        }
+
                         // TODO: Allow dragging middle thumb?
-                        //if (_isHorizontalThumbFocused)
-                            //OnCurrentExtentThumbDrag(translateX);
+                        // if (_isHorizontalThumbFocused)
+                        // OnCurrentExtentThumbDrag(translateX);
                         break;
                     case UIGestureRecognizerState.Ended:
                     case UIGestureRecognizerState.Cancelled:
                     case UIGestureRecognizerState.Failed:
                         MinimumThumb.IsFocused = false;
                         MaximumThumb.IsFocused = false;
-                        _isHorizontalThumbFocused = false;
                         OnDragCompleted();
                         break;
                 }
@@ -280,7 +289,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AddGestureRecognizer(panRecognizer);
 
             PositionTickmarks();
-            //SetButtonVisibility();
             ApplyLabelMode(LabelMode);
         }
 
@@ -292,6 +300,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private CGSize _intrinsicContentSize;
+
         /// <inheritdoc />
         public override CGSize IntrinsicContentSize
         {
@@ -302,6 +311,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _isSizeValid = true;
                     _intrinsicContentSize = MeasureSize();
                 }
+
                 return _intrinsicContentSize;
             }
         }
@@ -326,7 +336,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var playPauseButtonWidth = 26;
             var playPauseButtonHeight = 34;
-            var playPauseButtonLeft = Bounds.GetMidX() - playPauseButtonWidth / 2;
+            var playPauseButtonLeft = Bounds.GetMidX() - (playPauseButtonWidth / 2);
             PlayPauseButton.Frame = new CGRect(playPauseButtonLeft, 0, playPauseButtonWidth, playPauseButtonHeight);
 
             var previousNextButtonWidth = 24;
@@ -369,11 +379,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             HorizontalTrackThumb.Frame = new CGRect(0, 0, sliderTrackWidth, SliderTrack.Height);
 
-            if (_thumbsArranged) // Ensure initial arrangement of thumbs is only done once per instance
+            if (_thumbsArranged)
+            {
+                // Ensure initial arrangement of thumbs is only done once per instance
                 return;
+            }
+
             _thumbsArranged = true;
 
-            var thumbTop = (SliderTrack.Frame.Height - MinimumThumb.Height - 4) / 2; // (SliderTrack.Frame.Top + SliderTrack.Frame.Height / 2) - (MinimumThumb.Height / 2);
+            var thumbTop = (SliderTrack.Frame.Height - MinimumThumb.Height - 4) / 2;
             var thumbLeft = 0 - (MinimumThumb.Width / 2);
             MinimumThumb.Frame = new CGRect(thumbLeft, thumbTop, MinimumThumb.Width, MinimumThumb.Height);
             MaximumThumb.Frame = new CGRect(thumbLeft, thumbTop, MaximumThumb.Width, MaximumThumb.Height);
