@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     internal static class ElementExtensions
     {
-        public static void SetMargin(this FrameworkElement element, double left, double top, double right, double bottom) 
+        public static void SetMargin(this FrameworkElement element, double left, double top, double right, double bottom)
             => element.Margin = new Thickness(left, top, right, bottom);
 
         public static double GetActualWidth(this FrameworkElement element) => element.ActualWidth;

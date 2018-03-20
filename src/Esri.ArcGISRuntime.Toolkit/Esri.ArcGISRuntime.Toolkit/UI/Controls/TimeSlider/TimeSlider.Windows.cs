@@ -562,6 +562,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var labelFormat = e.NewValue as string;
             var slider = (TimeSlider)d;
+
             // Apply the updated string format to the full extent label elements' bindings
             slider.FullExtentStartTimeLabel?.UpdateStringFormat(
                 targetProperty: TextBlock.TextProperty,
@@ -593,6 +594,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var labelFormat = e.NewValue as string;
             var slider = (TimeSlider)d;
+
             // Apply the updated string format to the current extent label elements' bindings
             slider.MinimumThumbLabel?.UpdateStringFormat(
                 targetProperty: TextBlock.TextProperty,
@@ -604,6 +606,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 fallbackFormat: ref slider._originalCurrentExtentLabelFormat);
             slider.OnCurrentExtentLabelFormatPropertyChanged(labelFormat);
         }
+
         /// <summary>
         /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval
         /// </summary>

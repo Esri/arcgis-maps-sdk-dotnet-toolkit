@@ -733,7 +733,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance
         /// </summary>
 #if !NETFX_CORE && !XAMARIN
-		[TypeConverter(typeof(TimeExtentConverter))]
+        [TypeConverter(typeof(TimeExtentConverter))]
 #endif
         public TimeExtent FullExtent
         {
