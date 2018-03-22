@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if __IOS__
 using Color = UIKit.UIColor;
@@ -26,7 +27,7 @@ using Color = UIKit.UIColor;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    public partial class TimeSlider
+    public partial class TimeSlider : INotifyPropertyChanged
     {
         private string _defaultFullExtentLabelFormat = "M/d/yyyy";
         private string _defaultCurrentExtentLabelFormat = "M/d/yyyy";
@@ -47,6 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _currentExtent = value;
                 ApplyCurrentExtentLabelFormat();
                 OnCurrentExtentPropertyChanged(oldValue, _currentExtent);
+                OnPropertyChanged();
             }
         }
 
@@ -63,6 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _fullExtent = value;
                 ApplyFullExtentLabelFormat();
                 OnFullExtentPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -78,6 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _timeStepInterval = value;
                 OnTimeStepIntervalPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -93,6 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _timeSteps = value;
                 OnTimeStepsPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -108,6 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _playbackInterval = value;
                 OnPlaybackIntervalPropertyChanged(_playbackInterval);
+                OnPropertyChanged();
             }
         }
 
@@ -119,7 +125,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private PlaybackDirection PlaybackDirectionImpl
         {
             get => _playbackDirection;
-            set => _playbackDirection = value;
+            set
+            {
+                _playbackDirection = value;
+                OnPropertyChanged();
+            }
         }
 
         private LoopMode _playbackLoopMode = LoopMode.None;
@@ -130,7 +140,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private LoopMode PlaybackLoopModeImpl
         {
             get => _playbackLoopMode;
-            set => _playbackLoopMode = value;
+            set
+            {
+                _playbackLoopMode = value;
+                OnPropertyChanged();
+            }
         }
 
         private bool _isStartTimePinned = false;
@@ -145,6 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _isStartTimePinned = value;
                 OnIsStartTimePinnedChanged(_isStartTimePinned);
+                OnPropertyChanged();
             }
         }
 
@@ -160,6 +175,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _isEndTimePinned = value;
                 OnIsEndTimePinnedChanged(_isEndTimePinned);
+                OnPropertyChanged();
             }
         }
 
@@ -175,6 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _isPlaying = value;
                 OnIsPlayingPropertyChanged(_isPlaying);
+                OnPropertyChanged();
             }
         }
 
@@ -192,6 +209,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _fullExtentLabelFormat = value;
                 ApplyFullExtentLabelFormat();
+                OnPropertyChanged();
             }
         }
 
@@ -208,6 +226,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _currentExtentLabelFormat = value;
                 ApplyCurrentExtentLabelFormat();
                 OnCurrentExtentLabelFormatPropertyChanged(_currentExtentLabelFormat);
+                OnPropertyChanged();
             }
         }
 
@@ -223,6 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _timeStepIntervalLabelFormat = value;
                 OnTimeStepIntervalLabelFormatPropertyChanged(TimeStepIntervalLabelFormat);
+                OnPropertyChanged();
             }
         }
 
@@ -238,6 +258,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _labelMode = value;
                 OnLabelModePropertyChanged(_labelMode);
+                OnPropertyChanged();
             }
         }
 
@@ -254,6 +275,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _thumbStroke = value;
                 MinimumThumb?.SetBorderColor(value);
                 MaximumThumb?.SetBorderColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -270,6 +292,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _thumbFill = value;
                 MinimumThumb?.SetBackgroundColor(value);
                 MaximumThumb?.SetBackgroundColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -285,6 +308,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _currentExtentFill = value;
                 HorizontalTrackThumb?.SetBackgroundColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -300,6 +324,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _fullExtentFill = value;
                 SliderTrack?.SetBackgroundColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -315,6 +340,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _fullExtentStroke = value;
                 SliderTrack?.SetBorderColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -331,6 +357,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _fullExtentBorderWidth = value;
                 SliderTrack?.SetBorderWidth(value);
+                OnPropertyChanged();
             }
         }
 
@@ -349,6 +376,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     Tickmarks.TickFill = value;
                 }
+                OnPropertyChanged();
             }
         }
 
@@ -366,6 +394,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 PreviousButton?.SetBackgroundColor(value);
                 NextButton?.SetBackgroundColor(value);
                 PlayPauseButton.SetBackgroundColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -383,6 +412,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 PreviousButton?.SetBorderColor(value);
                 NextButton?.SetBorderColor(value);
                 PlayPauseButton.SetBorderColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -398,6 +428,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _fullExtentLabelColor = value;
                 FullExtentStartTimeLabel?.SetTextColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -414,6 +445,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _currentExtentLabelColor = value;
                 MinimumThumbLabel?.SetTextColor(value);
                 MaximumThumbLabel?.SetTextColor(value);
+                OnPropertyChanged();
             }
         }
 
@@ -432,6 +464,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     Tickmarks.TickLabelColor = value;
                 }
+                OnPropertyChanged();
             }
         }
 
@@ -452,6 +485,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? string.Empty;
             MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? string.Empty;
         }
+
+        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 
