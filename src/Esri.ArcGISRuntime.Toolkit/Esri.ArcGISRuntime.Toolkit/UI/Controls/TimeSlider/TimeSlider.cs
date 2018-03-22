@@ -1223,20 +1223,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 await loadable.LoadAsync();
             }
 
-            FullExtent = timeAwareLayer.FullTimeExtent;
-            TimeStepInterval = await GetTimeStepIntervalAsync(timeAwareLayer);
+            // Apply full extent and time step interval to slider properties
+            var fullExtent = timeAwareLayer.FullTimeExtent;
+            var timeStepInterval = await GetTimeStepIntervalAsync(timeAwareLayer);
 
-            if (TimeStepInterval == null)
+            if (timeStepInterval != null)
             {
-                return;
+                // Check whether the time-aware layer supports filtering based on a time instant
+                var canUseInstantaneousTime = await CanUseInstantaneousTimeAsync(timeAwareLayer);
+
+                // Apply full extent and time step interval to slider properties
+                FullExtent = fullExtent;
+                TimeStepInterval = timeStepInterval;
+
+                // TODO: Double-check whether we can choose a better default for current extent - does not seem to be exposed
+                // at all in service metadata
+                CurrentExtent = canUseInstantaneousTime ?
+                    new TimeExtent(FullExtent.StartTime) : new TimeExtent(FullExtent.StartTime, TimeSteps.ElementAt(1));
+
+                // TODO: Initialize time-zone (will require converting time zone string to strong type)
             }
-
-            // TODO: Double-check whether we can choose a better default for current extent - does not seem to be exposed
-            // at all in service metadata
-            CurrentExtent = await CanUseInstantaneousTimeAsync(timeAwareLayer) ?
-                new TimeExtent(FullExtent.StartTime) : new TimeExtent(FullExtent.StartTime, TimeSteps.ElementAt(1));
-
-            // TODO: Initialize time-zone (will require converting time zone string to strong type)
+            else
+            {
+                // TODO: What should happen in this case?  Take a guess at a time step interval and current
+                // extent?  Currently, this is a no-op.
+            }
         }
 
         /// <summary>
