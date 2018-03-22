@@ -78,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent _currentValue;
         private double _totalHorizontalChange;
         private TimeExtent _horizontalChangeExtent;
-        private ThrottleAwaiter _calculateTimeStepsThrottler = new ThrottleAwaiter(1);
+        private ThrottleAwaiter _layoutTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
 
 #endregion // Fields
@@ -741,13 +741,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => FullExtentImpl = value;
         }
 
-        private async void OnFullExtentPropertyChanged()
+        private void OnFullExtentPropertyChanged()
         {
             // TODO: For consideration - should FullExtent be snapped to a multiple of the specified time step?  E.g. if the time step interval
             // is 1 week and the full extent is 3 months (suppose 92 days in this case), should the full extent be snapped to 91 or 98 days?
-            await CalculateTimeStepsAsync();
-            PositionTickmarks();
-            UpdateTrackLayout(CurrentValidExtent);
+            CalculateTimeSteps();
         }
 
         /// <summary>
@@ -759,35 +757,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => TimeStepIntervalImpl = value;
         }
 
-        private async void OnTimeStepIntervalPropertyChanged()
+        private void OnTimeStepIntervalPropertyChanged()
         {
-            try
-            {
-                await CalculateTimeStepsAsync();
-            }
-            catch
-            {
-                // This would be unexpected, but this is here just in case we encounter an exception.  This is in an async void method, so
-                // there's no way to bubble this exception to user code.
-            }
+            CalculateTimeSteps();
         }
 
         /// <summary>
         /// Updates time steps based on the current TimeStepInterval and FullExtent.  Executes asynchronously to ensure that pending updates to
         /// both TimeStepInterval and FullExtent are taken into account before intervals and subsequent layout updates are calculated.
         /// </summary>
-        /// <returns>Task</returns>
-        private async Task CalculateTimeStepsAsync()
+        private void CalculateTimeSteps()
         {
-            // Time step calculation is throttled because FullExtent and TimeStepInterval are often changed in concert, and immediately responding to
-            // changes in one can result in undesirable behavior.  For instance, suppose TimeStepInterval is 1 day and FullExtent is 14 days, yielding
-            // 14 time steps.  Then suppose FullExtent is changed to 10 years, and TimeStepInterval to 1 year.  If the FullExtent change is responded to
-            // without accounting for the change in TimeStepInterval, the slider will try to update to accommodate ~3650 time step intervals before updating
-            // again to reduce this number to 10.  In this case, the unwieldy number of intervals will make the slider seem to become unresponsive for a
-            // time.  But in any cases where both TimeStepInterval and FullExtent are updated together, there will be an inefficient double-execution of
-            // layout logic.
-            await _calculateTimeStepsThrottler.ThrottleDelay();
-
             if (TimeStepInterval == null || FullExtent == null)
             {
                 return;
@@ -817,12 +797,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private set => TimeStepsImpl = value;
         }
 
-        private void OnTimeStepsPropertyChanged()
+        private async void OnTimeStepsPropertyChanged()
         {
-            // Update the slider UI to reflect the new time steps
-            PositionTickmarks();
-            SetButtonVisibility();
-            UpdateTrackLayout(CurrentValidExtent);
+            try
+            {
+                // Time step application is throttled because FullExtent and TimeStepInterval are often changed in concert, and immediately updating the layout
+                // based on changes in one can result in undesirable behavior.  For instance, suppose TimeStepInterval is 1 day and FullExtent is 14 days, yielding
+                // 14 time steps.  Then suppose FullExtent is changed to 10 years, and TimeStepInterval to 1 year.  If the FullExtent change is responded to
+                // without accounting for the change in TimeStepInterval, the slider will try to update to accommodate ~3650 time step intervals before updating
+                // again to reduce this number to 10.  In this case, the unwieldy number of intervals will make the slider seem to become unresponsive for a
+                // time.  But in any cases where both TimeStepInterval and FullExtent are updated together, there will be an inefficient double-execution of
+                // layout logic.
+                await _layoutTimeStepsThrottler.ThrottleDelay();
+
+                // Update the slider UI to reflect the new time steps
+                PositionTickmarks();
+                SetButtonVisibility();
+                UpdateTrackLayout(CurrentValidExtent);
+            }
+            catch
+            {
+                // This would be unexpected, but this is here just in case we encounter an exception.  This is in an async void method, so
+                // there's no way to bubble this exception to user code.
+            }
         }
 
         /// <summary>
@@ -1221,8 +1218,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <returns>Task</returns>
         public async Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer)
         {
+            if (timeAwareLayer is ILoadable loadable)
+            {
+                await loadable.LoadAsync();
+            }
+
             FullExtent = timeAwareLayer.FullTimeExtent;
             TimeStepInterval = await GetTimeStepIntervalAsync(timeAwareLayer);
+
+            if (TimeStepInterval == null)
+            {
+                return;
+            }
 
             // TODO: Double-check whether we can choose a better default for current extent - does not seem to be exposed
             // at all in service metadata
