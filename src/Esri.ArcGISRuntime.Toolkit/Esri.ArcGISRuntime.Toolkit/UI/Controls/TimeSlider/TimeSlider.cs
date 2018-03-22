@@ -1239,29 +1239,42 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <returns>The interval, represented as a <see cref="TimeValue"/> instance</returns>
         private static async Task<TimeValue> GetTimeStepIntervalAsync(ITimeAware timeAwareLayer)
         {
+            if (timeAwareLayer is ILoadable loadable)
+            {
+                await loadable.LoadAsync();
+            }
+
             var timeStepInterval = timeAwareLayer.TimeInterval;
 
             // For map image layers, if the map service does not have a time step interval, check the time step intervals
             // of the service's sub-layers
-            if (timeStepInterval == null && timeAwareLayer is ArcGISMapImageLayer mapImageLayer)
+            if (timeStepInterval == null)
             {
-                // Get the largest time-step interval defined by the service's sub-layers
-                foreach (var sublayer in mapImageLayer.Sublayers)
+                if (timeAwareLayer is ArcGISMapImageLayer mapImageLayer)
                 {
-                    if (sublayer.IsVisible)
+                    // Get the largest time-step interval defined by the service's sub-layers
+                    foreach (var sublayer in mapImageLayer.Sublayers)
                     {
-                        // Only use visible sub-layers
-                        var timeInfo = await GetTimeInfoAsync(sublayer);
-                        if (timeInfo == null)
+                        if (sublayer.IsVisible)
                         {
-                            continue;
-                        }
+                            // Only use visible sub-layers
+                            var timeInfo = await GetTimeInfoAsync(sublayer);
+                            if (timeInfo == null)
+                            {
+                                continue;
+                            }
 
-                        if (timeInfo != null && (timeStepInterval == null || timeInfo.Interval.IsGreaterThan(timeStepInterval)))
-                        {
-                            timeStepInterval = timeInfo.Interval;
+                            if (timeInfo != null && (timeStepInterval == null || timeInfo.Interval.IsGreaterThan(timeStepInterval)))
+                            {
+                                timeStepInterval = timeInfo.Interval;
+                            }
                         }
                     }
+                }
+                else if (timeAwareLayer is ILoadable loadableLayer)
+                {
+                    var timeInfo = await GetTimeInfoAsync(loadableLayer);
+                    timeStepInterval = timeInfo?.Interval;
                 }
             }
 
