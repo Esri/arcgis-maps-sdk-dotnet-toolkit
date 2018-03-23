@@ -20,7 +20,7 @@ using Xamarin.Forms;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
-    /// A control that renders a <see cref="Symbology.Symbol"/>.
+    /// The Legend Control that generates a list of Legend Items for a Layer
     /// </summary>
     public class LayerLegend : View
     {
@@ -61,9 +61,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnLayerContentPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is LayerLegend)
+            var layerLegend = bindable as LayerLegend;
+            if (layerLegend?.NativeLayerLegend != null)
             {
-                var layerLegend = (LayerLegend)bindable;
                 layerLegend.NativeLayerLegend.LayerContent = newValue as ILayerContent;
                 layerLegend.InvalidateMeasure();
             }
@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="ShowEntireTreeHierarchy"/> bindable property.
         /// </summary>
         public static readonly BindableProperty ShowEntireTreeHierarchyProperty =
-            BindableProperty.Create(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), null, BindingMode.OneWay, null, OnShowEntireTreeHierarchyPropertyChanged);
+            BindableProperty.Create(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), true, BindingMode.OneWay, null, OnShowEntireTreeHierarchyPropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
@@ -87,9 +87,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void OnShowEntireTreeHierarchyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            if (bindable is LayerLegend && newValue is bool)
+            var layerLegend = bindable as LayerLegend;
+            if (layerLegend?.NativeLayerLegend != null && newValue is bool)
             {
-                var layerLegend = (LayerLegend)bindable;
                 layerLegend.NativeLayerLegend.ShowEntireTreeHierarchy = (bool)newValue;
                 layerLegend.InvalidateMeasure();
             }

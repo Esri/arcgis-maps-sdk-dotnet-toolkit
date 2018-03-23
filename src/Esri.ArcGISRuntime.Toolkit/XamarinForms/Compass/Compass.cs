@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="Heading"/> bindable property.
         /// </summary>
         public static readonly BindableProperty HeadingProperty =
-            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0, BindingMode.OneWay, null, OnHeadingPropertyChanged);
+            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0d, BindingMode.OneWay, null, OnHeadingPropertyChanged);
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
@@ -124,7 +124,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="AutoHide"/> bindable property.
         /// </summary>
         public static readonly BindableProperty AutoHideProperty =
-            BindableProperty.Create(nameof(AutoHide), typeof(bool), typeof(Compass), false, BindingMode.OneWay, null, OnAutoHidePropertyChanged);
+            BindableProperty.Create(nameof(AutoHide), typeof(bool), typeof(Compass), true, BindingMode.OneWay, null, OnAutoHidePropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
