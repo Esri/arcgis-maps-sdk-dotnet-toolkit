@@ -14,23 +14,33 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI.Controls;
+using Xamarin.Forms;
+#if __ANDROID__
+using Xamarin.Forms.Platform.Android;
+#elif __IOS__
+using Xamarin.Forms.Platform.iOS;
+#elif NETFX_CORE
+using Xamarin.Forms.Platform.UWP;
+#endif
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+[assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Legend), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.LegendRenderer))]
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    /// <summary>
-    /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
-    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
-    /// </summary>
-    public partial class Legend : LayerList
+    internal class LegendRenderer : ViewRenderer<Legend, UI.Controls.Legend>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Legend"/> class.
-        /// </summary>
-        public Legend()
-            : base()
+        protected override void OnElementChanged(ElementChangedEventArgs<Legend> e)
         {
+            base.OnElementChanged(e);
+
+            if (Control == null)
+            {
+                SetNativeControl(e.NewElement?.NativeLegend);
+            }
         }
+
+#if !NETFX_CORE
+        /// <inheritdoc />
+        protected override bool ManageNativeControlLifetime => false;
+#endif
     }
 }

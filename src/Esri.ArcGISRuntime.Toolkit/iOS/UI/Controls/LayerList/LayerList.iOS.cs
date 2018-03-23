@@ -15,17 +15,15 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CoreGraphics;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.UI.Controls;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    [DisplayName("LayerLegend")]
-    [Category("ArcGIS Runtime Controls")]
-    public partial class LayerLegend : IComponent
+    public partial class LayerList : IComponent
     {
         private UIStackView _rootStackView;
         private UITableView _listView;
@@ -37,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
 #pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public LayerLegend(IntPtr handle)
+        public LayerList(IntPtr handle)
             : base(handle)
         {
             Initialize();
@@ -83,9 +81,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
-                EstimatedRowHeight = SymbolDisplay.MaxSize,
+                EstimatedRowHeight = 100,
             };
-            _listView.RegisterClassForCellReuse(typeof(LayerLegendItemCell), LayerLegendTableSource.CellId);
+            _listView.RegisterClassForCellReuse(typeof(LegendItemCell), LegendTableSource.CellId);
             _rootStackView.AddSubview(_listView);
 
             AddSubview(_rootStackView);
@@ -130,7 +128,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (LayerContent == null)
+            if ((GeoView as MapView)?.Map == null && (GeoView as SceneView)?.Scene == null)
             {
                 _listView.Source = null;
                 _listView.ReloadData();
@@ -138,38 +136,54 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (LayerContent is ILoadable)
+            ObservableLayerContentList layers = null;
+            if (GeoView is MapView)
             {
-                if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
+                layers = new ObservableLayerContentList(GeoView as MapView, ShowLegendInternal)
                 {
-                    (LayerContent as ILoadable).Loaded += Layer_loaded;
-                    (LayerContent as ILoadable).LoadAsync();
-                    return;
+                    ReverseOrder = !ReverseLayerOrder,
+                };
+            }
+            else if (GeoView is SceneView)
+            {
+                layers = new ObservableLayerContentList(GeoView as SceneView, ShowLegendInternal)
+                {
+                    ReverseOrder = !ReverseLayerOrder,
+                };
+            }
+
+            if (layers == null)
+            {
+                _listView.Source = null;
+                return;
+            }
+
+            foreach (var l in layers)
+            {
+                if (!(l.LayerContent is Layer))
+                {
+                    continue;
+                }
+
+                var layer = l.LayerContent as Layer;
+                if (layer.LoadStatus == LoadStatus.Loaded)
+                {
+                    l.UpdateLayerViewState(GeoView.GetLayerViewState(layer));
                 }
             }
 
-            var items = new ObservableCollection<LegendInfo>();
-            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
-            var source = new LayerLegendTableSource(items);
+            ScaleChanged();
+            SetLayerContentList(layers);
+            var source = new LegendTableSource(layers);
             _listView.Source = source;
             source.CollectionChanged += (a, b) => InvokeOnMainThread(() =>
             {
                 _listView.ReloadData();
                 InvalidateIntrinsicContentSize();
-                SetNeedsUpdateConstraints();
-                UpdateConstraints();
             });
             _listView.ReloadData();
             InvalidateIntrinsicContentSize();
-            SetNeedsUpdateConstraints();
-            UpdateConstraints();
             Hidden = false;
-        }
-
-        private void Layer_loaded(object sender, EventArgs e)
-        {
-            (sender as ILoadable).Loaded -= Layer_loaded;
-            InvokeOnMainThread(() => Refresh());
         }
     }
 }

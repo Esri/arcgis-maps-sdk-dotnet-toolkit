@@ -75,22 +75,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _imageView = new UIImageView()
             {
-                ContentMode = UIViewContentMode.ScaleAspectFit
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                AutosizesSubviews = true,
+                AutoresizingMask = UIViewAutoresizing.All,
+                ClipsToBounds = true,
+                ContentMode = UIViewContentMode.ScaleAspectFit,
             };
-            _rootStackView.AddArrangedSubview(_imageView);
+
+              _rootStackView.AddArrangedSubview(_imageView);
 
             AddSubview(_rootStackView);
 
             _rootStackView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
             _rootStackView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
 
-            _imageView.HeightAnchor.ConstraintLessThanOrEqualTo(MaxSize).Active = true;
-            _imageView.WidthAnchor.ConstraintLessThanOrEqualTo(MaxSize).Active = true;
+            _imageView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
+            _imageView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
 
             InvalidateIntrinsicContentSize();
         }
 
-        private CGSize _intrinsicContentSize;
+        /// <inheritdoc />
+        public override void UpdateConstraints()
+        {
+            base.UpdateConstraints();
+            if (!_intrinsicContentSize.IsEmpty)
+            {
+                _imageView.WidthAnchor.ConstraintEqualTo(_intrinsicContentSize.Height).Active = true;
+                _imageView.HeightAnchor.ConstraintEqualTo(_intrinsicContentSize.Height).Active = true;
+            }
+        }
+
+        private CGSize _intrinsicContentSize = CGSize.Empty;
 
         /// <inheritdoc />
         public override CGSize IntrinsicContentSize => _intrinsicContentSize;
@@ -141,6 +157,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _intrinsicContentSize = new CGSize(Math.Min(width, MaxSize), Math.Min(height, MaxSize));
                 Hidden = false;
                 InvalidateIntrinsicContentSize();
+                SetNeedsUpdateConstraints();
+                UpdateConstraints();
             }
             catch
             {

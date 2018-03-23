@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -234,4 +233,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
-#endif
