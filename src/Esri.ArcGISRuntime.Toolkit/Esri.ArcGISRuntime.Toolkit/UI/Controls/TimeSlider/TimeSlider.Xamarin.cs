@@ -44,11 +44,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _currentExtent;
             set
             {
-                var oldValue = value;
-                _currentExtent = value;
-                ApplyCurrentExtentLabelFormat();
-                OnCurrentExtentPropertyChanged(oldValue, _currentExtent);
-                OnPropertyChanged(nameof(CurrentExtent));
+                if (_currentExtent != value)
+                {
+                    var oldValue = value;
+                    _currentExtent = value;
+                    ApplyCurrentExtentLabelFormat();
+                    OnCurrentExtentPropertyChanged(oldValue, _currentExtent);
+                    OnPropertyChanged(nameof(CurrentExtent));
+                }
             }
         }
 
@@ -62,10 +65,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtent;
             set
             {
-                _fullExtent = value;
-                ApplyFullExtentLabelFormat();
-                OnFullExtentPropertyChanged();
-                OnPropertyChanged(nameof(FullExtent));
+                if (_fullExtent != value)
+                {
+                    _fullExtent = value;
+                    ApplyFullExtentLabelFormat();
+                    OnFullExtentPropertyChanged();
+                    OnPropertyChanged(nameof(FullExtent));
+                }
             }
         }
 
@@ -79,9 +85,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _timeStepInterval;
             set
             {
-                _timeStepInterval = value;
-                OnTimeStepIntervalPropertyChanged();
-                OnPropertyChanged(nameof(TimeStepInterval));
+                if (_timeStepInterval != value)
+                {
+                    _timeStepInterval = value;
+                    OnTimeStepIntervalPropertyChanged();
+                    OnPropertyChanged(nameof(TimeStepInterval));
+                }
             }
         }
 
@@ -95,9 +104,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _timeSteps;
             set
             {
-                _timeSteps = value;
-                OnTimeStepsPropertyChanged();
-                OnPropertyChanged(nameof(TimeSteps));
+                if (_timeSteps != value)
+                {
+                    _timeSteps = value;
+                    OnTimeStepsPropertyChanged();
+                    OnPropertyChanged(nameof(TimeSteps));
+                }
             }
         }
 
@@ -111,9 +123,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _playbackInterval;
             set
             {
-                _playbackInterval = value;
-                OnPlaybackIntervalPropertyChanged(_playbackInterval);
-                OnPropertyChanged(nameof(PlaybackInterval));
+                if (_playbackInterval != value)
+                {
+                    _playbackInterval = value;
+                    OnPlaybackIntervalPropertyChanged(_playbackInterval);
+                    OnPropertyChanged(nameof(PlaybackInterval));
+                }
             }
         }
 
@@ -127,8 +142,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _playbackDirection;
             set
             {
-                _playbackDirection = value;
-                OnPropertyChanged(nameof(PlaybackDirection));
+                if (_playbackDirection != value)
+                {
+                    _playbackDirection = value;
+                    OnPropertyChanged(nameof(PlaybackDirection));
+                }
             }
         }
 
@@ -142,8 +160,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _playbackLoopMode;
             set
             {
-                _playbackLoopMode = value;
-                OnPropertyChanged(nameof(PlaybackLoopMode));
+                if (_playbackLoopMode != value)
+                {
+                    _playbackLoopMode = value;
+                    OnPropertyChanged(nameof(PlaybackLoopMode));
+                }
             }
         }
 
@@ -157,9 +178,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _isStartTimePinned;
             set
             {
-                _isStartTimePinned = value;
-                OnIsStartTimePinnedChanged(_isStartTimePinned);
-                OnPropertyChanged(nameof(IsStartTimePinned));
+                if (_isStartTimePinned != value)
+                {
+                    _isStartTimePinned = value;
+                    OnIsStartTimePinnedChanged(_isStartTimePinned);
+                    OnPropertyChanged(nameof(IsStartTimePinned));
+                }
             }
         }
 
@@ -173,9 +197,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _isEndTimePinned;
             set
             {
-                _isEndTimePinned = value;
-                OnIsEndTimePinnedChanged(_isEndTimePinned);
-                OnPropertyChanged(nameof(IsEndTimePinned));
+                if (_isEndTimePinned != value)
+                {
+                    _isEndTimePinned = value;
+                    OnIsEndTimePinnedChanged(_isEndTimePinned);
+                    OnPropertyChanged(nameof(IsEndTimePinned));
+                }
             }
         }
 
@@ -189,9 +216,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => IsPlaying;
             set
             {
-                _isPlaying = value;
-                OnIsPlayingPropertyChanged(_isPlaying);
-                OnPropertyChanged(nameof(IsPlaying));
+                if (_isPlaying != value)
+                {
+                    _isPlaying = value;
+                    OnIsPlayingPropertyChanged(_isPlaying);
+                    OnPropertyChanged(nameof(IsPlaying));
+                }
             }
         }
 
@@ -207,9 +237,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtentLabelFormat;
             set
             {
-                _fullExtentLabelFormat = value;
-                ApplyFullExtentLabelFormat();
-                OnPropertyChanged(nameof(FullExtentLabelFormat));
+                if (_fullExtentLabelFormat != value)
+                {
+                    _fullExtentLabelFormat = value;
+                    ApplyFullExtentLabelFormat();
+                    OnPropertyChanged(nameof(FullExtentLabelFormat));
+                }
             }
         }
 
@@ -223,10 +256,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _currentExtentLabelFormat;
             set
             {
-                _currentExtentLabelFormat = value;
-                ApplyCurrentExtentLabelFormat();
-                OnCurrentExtentLabelFormatPropertyChanged(_currentExtentLabelFormat);
-                OnPropertyChanged(nameof(CurrentExtentLabelFormat));
+                if (_currentExtentLabelFormat != value)
+                {
+                    _currentExtentLabelFormat = value;
+                    ApplyCurrentExtentLabelFormat();
+                    OnCurrentExtentLabelFormatPropertyChanged(_currentExtentLabelFormat);
+                    OnPropertyChanged(nameof(CurrentExtentLabelFormat));
+                }
             }
         }
 
@@ -240,9 +276,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _timeStepIntervalLabelFormat;
             set
             {
-                _timeStepIntervalLabelFormat = value;
-                OnTimeStepIntervalLabelFormatPropertyChanged(TimeStepIntervalLabelFormat);
-                OnPropertyChanged(nameof(TimeStepIntervalLabelFormat));
+                if (_timeStepIntervalLabelFormat != value)
+                {
+                    _timeStepIntervalLabelFormat = value;
+                    OnTimeStepIntervalLabelFormatPropertyChanged(TimeStepIntervalLabelFormat);
+                    OnPropertyChanged(nameof(TimeStepIntervalLabelFormat));
+                }
             }
         }
 
@@ -256,9 +295,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _labelMode;
             set
             {
-                _labelMode = value;
-                OnLabelModePropertyChanged(_labelMode);
-                OnPropertyChanged(nameof(LabelMode));
+                if (_labelMode != value)
+                {
+                    _labelMode = value;
+                    OnLabelModePropertyChanged(_labelMode);
+                    OnPropertyChanged(nameof(LabelMode));
+                }
             }
         }
 
@@ -272,10 +314,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _thumbStroke;
             set
             {
-                _thumbStroke = value;
-                MinimumThumb?.SetBorderColor(value);
-                MaximumThumb?.SetBorderColor(value);
-                OnPropertyChanged(nameof(ThumbStroke));
+                if (_thumbStroke != value)
+                {
+                    _thumbStroke = value;
+                    MinimumThumb?.SetBorderColor(value);
+                    MaximumThumb?.SetBorderColor(value);
+                    OnPropertyChanged(nameof(ThumbStroke));
+                }
             }
         }
 
@@ -289,10 +334,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _thumbFill;
             set
             {
-                _thumbFill = value;
-                MinimumThumb?.SetBackgroundColor(value);
-                MaximumThumb?.SetBackgroundColor(value);
-                OnPropertyChanged(nameof(ThumbFill));
+                if (_thumbFill != value)
+                {
+                    _thumbFill = value;
+                    MinimumThumb?.SetBackgroundColor(value);
+                    MaximumThumb?.SetBackgroundColor(value);
+                    OnPropertyChanged(nameof(ThumbFill));
+                }
             }
         }
 
@@ -306,9 +354,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _currentExtentFill;
             set
             {
-                _currentExtentFill = value;
-                HorizontalTrackThumb?.SetBackgroundColor(value);
-                OnPropertyChanged(nameof(CurrentExtentFill));
+                if (_currentExtentFill != value)
+                {
+                    _currentExtentFill = value;
+                    HorizontalTrackThumb?.SetBackgroundColor(value);
+                    OnPropertyChanged(nameof(CurrentExtentFill));
+                }
             }
         }
 
@@ -322,9 +373,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtentFill;
             set
             {
-                _fullExtentFill = value;
-                SliderTrack?.SetBackgroundColor(value);
-                OnPropertyChanged(nameof(FullExtentFill));
+                if (_fullExtentFill != value)
+                {
+                    _fullExtentFill = value;
+                    SliderTrack?.SetBackgroundColor(value);
+                    OnPropertyChanged(nameof(FullExtentFill));
+                }
             }
         }
 
@@ -338,9 +392,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtentStroke;
             set
             {
-                _fullExtentStroke = value;
-                SliderTrack?.SetBorderColor(value);
-                OnPropertyChanged(nameof(FullExtentStroke));
+                if (_fullExtentStroke != value)
+                {
+                    _fullExtentStroke = value;
+                    SliderTrack?.SetBorderColor(value);
+                    OnPropertyChanged(nameof(FullExtentStroke));
+                }
             }
         }
 
@@ -355,9 +412,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtentBorderWidth;
             set
             {
-                _fullExtentBorderWidth = value;
-                SliderTrack?.SetBorderWidth(value);
-                OnPropertyChanged();
+                if (_fullExtentBorderWidth != value)
+                {
+                    _fullExtentBorderWidth = value;
+                    SliderTrack?.SetBorderWidth(value);
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -371,12 +431,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _timeStepIntervalTickFill;
             set
             {
-                _timeStepIntervalTickFill = value;
-                if (Tickmarks != null)
+                if (_timeStepIntervalTickFill != value)
                 {
-                    Tickmarks.TickFill = value;
+                    _timeStepIntervalTickFill = value;
+                    if (Tickmarks != null)
+                    {
+                        Tickmarks.TickFill = value;
+                    }
+                    OnPropertyChanged(nameof(TimeStepIntervalTickFill));
                 }
-                OnPropertyChanged(nameof(TimeStepIntervalTickFill));
             }
         }
 
@@ -390,11 +453,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _playbackButtonsFill;
             set
             {
-                _playbackButtonsFill = value;
-                PreviousButton?.SetBackgroundColor(value);
-                NextButton?.SetBackgroundColor(value);
-                PlayPauseButton.SetBackgroundColor(value);
-                OnPropertyChanged(nameof(PlaybackButtonsFill));
+                if (_playbackButtonsFill != value)
+                {
+                    _playbackButtonsFill = value;
+                    PreviousButton?.SetBackgroundColor(value);
+                    NextButton?.SetBackgroundColor(value);
+                    PlayPauseButton.SetBackgroundColor(value);
+                    OnPropertyChanged(nameof(PlaybackButtonsFill));
+                }
             }
         }
 
@@ -408,11 +474,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _playbackButtonsStroke;
             set
             {
-                _playbackButtonsStroke = value;
-                PreviousButton?.SetBorderColor(value);
-                NextButton?.SetBorderColor(value);
-                PlayPauseButton.SetBorderColor(value);
-                OnPropertyChanged(nameof(PlaybackButtonsStroke));
+                if (_playbackButtonsStroke != value)
+                {
+                    _playbackButtonsStroke = value;
+                    PreviousButton?.SetBorderColor(value);
+                    NextButton?.SetBorderColor(value);
+                    PlayPauseButton.SetBorderColor(value);
+                    OnPropertyChanged(nameof(PlaybackButtonsStroke));
+                }
             }
         }
 
@@ -426,9 +495,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtentLabelColor;
             set
             {
-                _fullExtentLabelColor = value;
-                FullExtentStartTimeLabel?.SetTextColor(value);
-                OnPropertyChanged(nameof(FullExtentLabelColor));
+                if (_fullExtentLabelColor != value)
+                {
+                    _fullExtentLabelColor = value;
+                    FullExtentStartTimeLabel?.SetTextColor(value);
+                    OnPropertyChanged(nameof(FullExtentLabelColor));
+                }
             }
         }
 
@@ -442,10 +514,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _currentExtentLabelColor;
             set
             {
-                _currentExtentLabelColor = value;
-                MinimumThumbLabel?.SetTextColor(value);
-                MaximumThumbLabel?.SetTextColor(value);
-                OnPropertyChanged(nameof(CurrentExtentLabelColor));
+                if (_currentExtentLabelColor != value)
+                {
+                    _currentExtentLabelColor = value;
+                    MinimumThumbLabel?.SetTextColor(value);
+                    MaximumThumbLabel?.SetTextColor(value);
+                    OnPropertyChanged(nameof(CurrentExtentLabelColor));
+                }
             }
         }
 
@@ -459,12 +534,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _timeStepIntervalLabelColor;
             set
             {
-                _timeStepIntervalLabelColor = value;
-                if (Tickmarks != null)
+                if (_timeStepIntervalLabelColor != value)
                 {
-                    Tickmarks.TickLabelColor = value;
+                    _timeStepIntervalLabelColor = value;
+                    if (Tickmarks != null)
+                    {
+                        Tickmarks.TickLabelColor = value;
+                    }
+                    OnPropertyChanged(nameof(TimeStepIntervalLabelColor));
                 }
-                OnPropertyChanged(nameof(TimeStepIntervalLabelColor));
             }
         }
 
