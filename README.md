@@ -33,15 +33,15 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
 |Compass   |*   |*   | * | * | * |
-|FeatureDataField   |*   |*   |   |   |   |
-|Legend   |*   |*   |*   |   |   |
+|FeatureDataField   |*   |*   | TODO | TODO | TODO |
+|Legend   |*   |*   |*   | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/pull/172) | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/pull/172) |
 |LayerLegend   |*   |*   |*   |*   |*   |
-|MeasureToolbar   |*   |*   |   |   |   |
+|MeasureToolbar   |*   |*   | TODO | TODO | TODO |
 |ScaleLine   |*   |*   |*   |*   |*   |
 |SignInForm   |   |*   |   |   |   |
 |SymbolDisplay   |*   |*   |*   |*   |*   |
-|TableOfContents   |   |*   |   |   |   |
-|TimeSlider   |*   |*   |   |   |   |
+|TableOfContents   | N/A |*   | N/A  | N/A | N/A |
+|TimeSlider   |*   |*   | TODO  | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/pull/171)  | TODO |
 
 ## Instructions for Building
 
