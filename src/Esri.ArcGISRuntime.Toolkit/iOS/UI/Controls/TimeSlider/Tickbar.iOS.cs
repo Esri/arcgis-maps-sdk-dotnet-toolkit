@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
         }
 
-        private CGSize _majorTickSize = new CGSize(1, 11);
+        private CGSize _majorTickSize = new CGSize(1, 10);
 
         /// <summary>
         /// Gets or sets the size of major tickmarks
