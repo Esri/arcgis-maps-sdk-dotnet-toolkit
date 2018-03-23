@@ -32,16 +32,16 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
-|Compass   |*   |*   | * | * | * |
-|FeatureDataField   |*   |*   | To do | To do | To do |
-|Legend   |*   |*   |*   | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/tree/jNery/issue1503_iOS_Legend/src/Esri.ArcGISRuntime.Toolkit) | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/tree/jNery/issue1503_iOS_Legend/src/Esri.ArcGISRuntime.Toolkit) |
-|LayerLegend   |*   |*   |*   |*   |*   |
-|MeasureToolbar   |*   |*   | To do | To do | To do |
-|ScaleLine   |*   |*   |*   |*   |*   |
-|SignInForm   |   |*   |   |   |   |
-|SymbolDisplay   |*   |*   |*   |*   |*   |
-|TableOfContents   | N/A |*   | N/A  | N/A | N/A |
-|TimeSlider   |*   |*   | To do  | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/tree/zwaap/timeslider-ios/src/Esri.ArcGISRuntime.Toolkit)  | To do |
+|Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|FeatureDataField   | ✔ | ✔ | To do | To do | To do |
+|Legend   | ✔ | ✔ | ✔ | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/tree/jNery/issue1503_iOS_Legend/src/Esri.ArcGISRuntime.Toolkit) | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/tree/jNery/issue1503_iOS_Legend/src/Esri.ArcGISRuntime.Toolkit) |
+|LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|MeasureToolbar   | ✔ | ✔ | To do | To do | To do |
+|ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|SignInForm   |   | ✔ |   |   |   |
+|SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|TableOfContents   | N/A | ✔ | N/A  | N/A | N/A |
+|TimeSlider   | ✔ | ✔ | To do  | [In Progress](https://github.com/Esri/arcgis-toolkit-dotnet/tree/zwaap/timeslider-ios/src/Esri.ArcGISRuntime.Toolkit)  | To do |
 
 ## Instructions for Building
 
