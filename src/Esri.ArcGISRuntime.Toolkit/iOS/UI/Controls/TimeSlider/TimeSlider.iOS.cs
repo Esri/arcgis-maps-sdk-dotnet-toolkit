@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning restore SA1306
         private RectangleView _startTimeTickmark;
         private RectangleView _endTimeTickmark;
-        private bool _thumbsArranged = false;
+        private bool _currentExtentElementsArranged = false;
         private bool _isSizeValid = false;
         private CGPoint _lastTouchLocation;
 
@@ -366,6 +366,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        private void InvalidateMeasureAndArrange()
+        {
+            ArrangeElements(true);
+            if (CurrentValidExtent != null)
+            {
+                UpdateTrackLayout(CurrentValidExtent);
+            }
+        }
+
         /// <inheritdoc />
         public override void LayoutSubviews()
         {
@@ -376,7 +385,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            ArrangeElements();
+            var currentExtentElementsArranged = _currentExtentElementsArranged;
+            _currentExtentElementsArranged = true;
+
+            ArrangeElements(!currentExtentElementsArranged);
         }
 
         private CGSize MeasureSize()
@@ -384,7 +396,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new CGSize(Bounds.Width, 6);
         }
 
-        private void ArrangeElements()
+        private void ArrangeElements(bool arrangeCurrentExtentElements)
         {
             var verticalSpacing = 5;
             var playButtonSpacing = 12;
@@ -432,15 +444,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SliderTrack.Frame = new CGRect(sliderTrackLeft, sliderTrackTop, sliderTrackWidth, SliderTrack.Height);
             Tickmarks.Frame = new CGRect(0, SliderTrack.Height, sliderTrackWidth, 50);
 
-            HorizontalTrackThumb.Frame = new CGRect(0, 0, sliderTrackWidth, SliderTrack.Height);
-
-            if (_thumbsArranged)
+            if (!arrangeCurrentExtentElements)
             {
-                // Ensure initial arrangement of thumbs is only done once per instance
                 return;
             }
 
-            _thumbsArranged = true;
+            HorizontalTrackThumb.Frame = new CGRect(0, 0, sliderTrackWidth, SliderTrack.Height);
 
             var thumbTop = (SliderTrack.Frame.Height - MinimumThumb.Height - 4) / 2;
             var thumbLeft = 0 - (MinimumThumb.Width / 2);

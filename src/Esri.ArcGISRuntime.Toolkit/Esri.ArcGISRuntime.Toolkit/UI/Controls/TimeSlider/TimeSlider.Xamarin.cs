@@ -555,6 +555,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
             FullExtentStartTimeLabel.Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? string.Empty;
             FullExtentEndTimeLabel.Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? string.Empty;
+
+            InvalidateMeasureAndArrange();
         }
 
         private void ApplyCurrentExtentLabelFormat()
@@ -562,6 +564,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var currentExtentLabelFormat = string.IsNullOrEmpty(CurrentExtentLabelFormat) ? _defaultCurrentExtentLabelFormat : CurrentExtentLabelFormat;
             MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? string.Empty;
             MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? string.Empty;
+
+            InvalidateMeasureAndArrange();
         }
 
         /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
