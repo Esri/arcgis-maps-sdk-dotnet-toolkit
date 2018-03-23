@@ -438,6 +438,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         Tickmarks.TickFill = value;
                     }
+
                     OnPropertyChanged(nameof(TimeStepIntervalTickFill));
                 }
             }
@@ -541,6 +542,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         Tickmarks.TickLabelColor = value;
                     }
+
                     OnPropertyChanged(nameof(TimeStepIntervalLabelColor));
                 }
             }
