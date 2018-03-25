@@ -213,7 +213,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private bool IsPlayingImpl
         {
-            get => IsPlaying;
+            get => _isPlaying;
             set
             {
                 if (_isPlaying != value)
