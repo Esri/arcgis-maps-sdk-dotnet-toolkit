@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CoreGraphics;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -241,6 +242,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void InvalidateMeasureAndArrange()
         {
+            // Re-layout major tickmarks and labels to accommodate possible change in label lengths
+            foreach (var tickContainer in _majorTickmarks)
+            {
+                // Get tick rectangle and label for current tick
+                var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
+                var label = tickContainer.Subviews.OfType<UILabel>().FirstOrDefault();
+                if (tick == null || label == null)
+                    continue;
+
+                // Get size of the tick label and calculate the frame for the tick, label, and container
+                var labelSize = label.SizeThatFits(Frame.Size);
+                var tickLeft = (labelSize.Width - tick.Width) / 2;
+                tick.Frame = new CGRect(tickLeft, 0, tick.Width, tick.Height);
+                label.Frame = new CGRect(0, tick.Height + LabelOffset, labelSize.Width, labelSize.Height);
+                tickContainer.Frame = new CGRect(0, 0, labelSize.Width, label.Frame.Bottom);
+            }
+
             OnArrange(Frame.Size);
         }
     }

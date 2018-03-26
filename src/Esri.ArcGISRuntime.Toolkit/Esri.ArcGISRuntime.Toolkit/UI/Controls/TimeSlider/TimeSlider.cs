@@ -659,8 +659,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     tickMarkDates.Add(d);
                 }
 
-                Tickmarks.TickmarkPositions = intervals;
                 Tickmarks.TickmarkDataSources = tickMarkDates.Cast<object>();
+                Tickmarks.TickmarkPositions = intervals;
                 Tickmarks.ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval;
             }
         }
