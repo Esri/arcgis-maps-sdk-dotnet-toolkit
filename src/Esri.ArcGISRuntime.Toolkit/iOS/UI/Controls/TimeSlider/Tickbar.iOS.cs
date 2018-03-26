@@ -249,7 +249,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
                 var label = tickContainer.Subviews.OfType<UILabel>().FirstOrDefault();
                 if (tick == null || label == null)
+                {
                     continue;
+                }
 
                 // Get size of the tick label and calculate the frame for the tick, label, and container
                 var labelSize = label.SizeThatFits(Frame.Size);

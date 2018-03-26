@@ -91,13 +91,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                 // Calculate the bounds of the tick mark
                 position = finalSize.Width * position;
-                var x = position - (GetDesiredSize(c).Width * .5);
+                var desiredSize = GetDesiredSize(c);
+                var x = position - (desiredSize.Width * .5);
 #if __IOS__
                 childBounds.X = (nfloat)x;
 #else
                 childBounds.X = x;
 #endif
-                childBounds.Width = GetDesiredSize(c).Width;
+                childBounds.Width = desiredSize.Width;
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
                 if (isMajorTickmark)
@@ -207,17 +208,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     var isMajorTickIndex = (i - firstMajorTickIndex) % majorTickInterval == 0;
 
                     // Set the visibilities of the major and minor tick for the current index
-                    _majorTickmarks[i].SetIsVisible(isMajorTickIndex);
-                    _minorTickmarks[i].SetIsVisible(!isMajorTickIndex);
-
                     // Arrange either the major or minor tick for the current index
                     if (isMajorTickIndex)
                     {
                         _majorTickmarks[i].Arrange(majorTickmarksBounds[i]);
+                        _minorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
                     }
                     else
                     {
                         _minorTickmarks[i].Arrange(minorTickmarksBounds[i]);
+                        _majorTickmarks[i].Arrange(new Rect(0, 0, 0, 0));
                     }
                 }
             }
@@ -226,13 +226,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // !ShowTickLabels
                 for (var i = 0; i < _minorTickmarks.Count; i++)
                 {
-                    _minorTickmarks[i].SetIsVisible(true);
                     _minorTickmarks[i].Arrange(minorTickmarksBounds[i]);
                 }
 
                 foreach (var majorTick in _majorTickmarks)
                 {
-                    majorTick.SetIsVisible(false);
+                    majorTick.Arrange(new Rect(0, 0, 0, 0));
                 }
             }
 

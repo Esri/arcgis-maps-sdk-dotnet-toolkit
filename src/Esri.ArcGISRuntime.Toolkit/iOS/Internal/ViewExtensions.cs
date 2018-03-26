@@ -67,7 +67,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static void SetIsEnabled(this UIControl control, bool enabled) => control.Enabled = enabled;
 
-        public static void Arrange(this UIView view, CGRect bounds) => view.Frame = bounds;
+        public static void Arrange(this UIView view, CGRect bounds)
+        {
+            if (bounds == new CGRect(0, 0, 0, 0))
+            {
+                view.SetIsVisible(false);
+            }
+            else
+            {
+                view.SetIsVisible(true);
+                view.Frame = bounds;
+            }
+        }
 
         public static void SetBackgroundColor(this UIView view, UIColor color) => view.BackgroundColor = color;
 
