@@ -18,6 +18,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Linq;
 using CoreGraphics;
 using Foundation;
 using UIKit;
@@ -284,12 +285,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var minThumbHitTestFrame = ExpandFrame(MinimumThumb.Frame, minTargetSize);
                         var maxThumbHitTestFrame = ExpandFrame(MaximumThumb.Frame, minTargetSize);
                         var location = panRecognizer.LocationInView(SliderTrack);
-                        if (minThumbHitTestFrame.Contains(location) && !IsStartTimePinned)
+
+                        // Check if gesture is within min thumb
+                        if (!IsStartTimePinned && minThumbHitTestFrame.Contains(location))
                         {
                             MinimumThumb.IsFocused = true;
                             _lastTouchLocation = panRecognizer.LocationInView(MinimumThumb);
                         }
-                        else if (maxThumbHitTestFrame.Contains(location) && !IsEndTimePinned)
+
+                        // Check if gesture is within max thumb
+                        if (!IsEndTimePinned && maxThumbHitTestFrame.Contains(location))
                         {
                             MaximumThumb.IsFocused = true;
                             _lastTouchLocation = panRecognizer.LocationInView(MaximumThumb);
@@ -308,7 +313,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             return;
                         }
 
-                        var trackedView = MinimumThumb.IsFocused ? MinimumThumb : MaximumThumb;
+                        UIView trackedView = null;
+                        if (MinimumThumb.IsFocused && MaximumThumb.IsFocused)
+                        {
+                            // Gesture was within both min and max thumb, so let the direction of the gesture determine which thumb should be dragged
+                            var maxThumbTranslateX = panRecognizer.LocationInView(MaximumThumb).X - _lastTouchLocation.X;
+                            if (maxThumbTranslateX < 0)
+                            {
+                                // Gesture is moving thumb toward the min, so put focus on min thumb
+                                trackedView = MinimumThumb;
+                                MaximumThumb.IsFocused = false;
+                            }
+                            else
+                            {
+                                // Gesture is moving thumb toward the max, so put focus on min thumb
+                                trackedView = MaximumThumb;
+                                MinimumThumb.IsFocused = false;
+                            }
+                        }
+                        else if (MinimumThumb.IsFocused)
+                        {
+                            trackedView = MinimumThumb;
+                        }
+                        else if (MaximumThumb.IsFocused)
+                        {
+                            trackedView = MaximumThumb;
+                        }
 
                         var currentLocation = panRecognizer.LocationInView(trackedView);
                         var translateX = currentLocation.X - _lastTouchLocation.X;
