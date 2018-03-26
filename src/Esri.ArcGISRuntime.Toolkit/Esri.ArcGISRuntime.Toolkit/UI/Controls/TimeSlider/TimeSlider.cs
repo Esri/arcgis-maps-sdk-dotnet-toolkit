@@ -174,8 +174,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 // One thumb
                 // Hide the middle thumb
-                HorizontalTrackThumb.SetMargin(0, 0, sliderWidth, 0);
-                HorizontalTrackThumb.SetWidth(0);
+                //HorizontalTrackThumb.SetMargin(0, 0, sliderWidth, 0);
+                //HorizontalTrackThumb.SetWidth(0);
+                HorizontalTrackThumb.SetIsVisible(false);
             }
             else
             {
@@ -185,6 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 right = Math.Min(sliderWidth, (maximum - end) * rate);
                 HorizontalTrackThumb.SetMargin(left, 0, right, 0);
                 HorizontalTrackThumb.SetWidth(Math.Max(0, sliderWidth - right - left));
+                HorizontalTrackThumb.SetIsVisible(true);
 #if !XAMARIN
                 HorizontalTrackThumb.HorizontalAlignment = HorizontalAlignment.Left;
 #endif
