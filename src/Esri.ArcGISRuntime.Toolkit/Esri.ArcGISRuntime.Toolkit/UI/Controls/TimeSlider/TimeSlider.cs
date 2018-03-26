@@ -645,7 +645,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            Tickmarks.TickmarkPositions = null;
+            //Tickmarks.TickmarkPositions = null;
             if (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext())
             {
                 var span = ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks;
@@ -664,6 +664,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Tickmarks.TickmarkDataSources = tickMarkDates.Cast<object>();
                 Tickmarks.TickmarkPositions = intervals;
                 Tickmarks.ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval;
+            }
+            else
+            {
+                Tickmarks.TickmarkPositions = null;
             }
         }
 
