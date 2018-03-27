@@ -70,8 +70,11 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
         - Building each Toolkit project automatically creates the NuGet package for each platform in the project Output folder.
         - Create a local nuget source/feed and set it to the \Output\NuGet\Release folder.
         - Add the nuget package using the standard Nuget package manager dialog in Visual Studio.
-        - It is also possible to create a nuget source pointing to the latest build (automatically updated after each pull-request gets merged): `https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet`.
         - See [Setting Up Local NuGet Feeds](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds) for more information.
+
+## Master branch NuGet Server
+If you want the latest greatest version of the toolkit, you can always get the latest NuGet packages that matches what is currently in the Master branch. These NuGet packages are automatically updated each time a pull request is merged into master. The NuGet server is available at: `https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet`.
+For more information about configuring extra NuGet servers, see the [Package Manager UI](https://docs.microsoft.com/en-us/nuget/tools/package-manager-ui#package-sources) documentation.
 
 ## System Requirements
 
