@@ -304,7 +304,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
 
                 // Update the positions of the remaining ticks
-                for (var i = 0; i < ChildCount; i++)
+                for (var i = 0; i < _minorTickmarks.Count; i++)
                 {
                     SetPosition(_minorTickmarks[i], newTickPositions.ElementAt(i));
                     SetPosition(_majorTickmarks[i], newTickPositions.ElementAt(i));
