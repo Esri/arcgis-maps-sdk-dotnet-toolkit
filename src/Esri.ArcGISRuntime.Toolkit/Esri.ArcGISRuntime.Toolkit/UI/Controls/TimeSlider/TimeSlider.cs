@@ -174,8 +174,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 // One thumb
                 // Hide the middle thumb
-                //HorizontalTrackThumb.SetMargin(0, 0, sliderWidth, 0);
-                //HorizontalTrackThumb.SetWidth(0);
                 HorizontalTrackThumb.SetIsVisible(false);
             }
             else
@@ -645,7 +643,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            //Tickmarks.TickmarkPositions = null;
             if (TimeSteps != null && TimeSteps.GetEnumerator().MoveNext())
             {
                 var span = ValidFullExtent.EndTime.Ticks - ValidFullExtent.StartTime.Ticks;
