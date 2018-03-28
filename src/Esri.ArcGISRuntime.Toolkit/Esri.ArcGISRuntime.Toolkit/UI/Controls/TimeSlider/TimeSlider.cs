@@ -729,7 +729,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 IsEndTimePinned = false;
             }
 
-            CurrentExtentChanged?.Invoke(this, new CurrentExtentChangedEventArgs(newExtent, oldExtent));
+            CurrentExtentChanged?.Invoke(this, new TimeExtentChangedEventArgs(newExtent, oldExtent));
         }
 
         /// <summary>
@@ -1389,7 +1389,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Occurs when the selected time extent has changed.
         /// </summary>
-        public event EventHandler<CurrentExtentChangedEventArgs> CurrentExtentChanged;
+        public event EventHandler<TimeExtentChangedEventArgs> CurrentExtentChanged;
 
 #endregion
 

@@ -22,14 +22,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Event arguments used when raising the <see cref="TimeSlider.CurrentExtentChanged"/> event.
     /// </summary>
-    public sealed class CurrentExtentChangedEventArgs : EventArgs
+    public sealed class TimeExtentChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CurrentExtentChangedEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="TimeExtentChangedEventArgs"/> class.
         /// </summary>
         /// <param name="newExtent">The new <see cref="TimeExtent"/> value.</param>
         /// <param name="oldExtent">The old <see cref="TimeExtent"/> value.</param>
-        internal CurrentExtentChangedEventArgs(TimeExtent newExtent, TimeExtent oldExtent)
+        internal TimeExtentChangedEventArgs(TimeExtent newExtent, TimeExtent oldExtent)
         {
             NewExtent = newExtent;
             OldExtent = oldExtent;
