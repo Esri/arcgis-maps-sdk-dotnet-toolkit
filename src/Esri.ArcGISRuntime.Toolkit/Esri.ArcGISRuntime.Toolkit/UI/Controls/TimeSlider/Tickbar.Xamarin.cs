@@ -17,8 +17,10 @@
 #if __IOS__
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.UI;
 #if __IOS__
 using Color = UIKit.UIColor;
 #endif
@@ -72,9 +74,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                 if (_majorTickmarks != null)
                 {
-                    foreach (var tick in _majorTickmarks)
+                    foreach (var tickContainer in _majorTickmarks)
                     {
-                        tick.SetBackgroundColor(value);
+                        var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
+                        tick?.SetBackgroundColor(value);
                     }
                 }
 
