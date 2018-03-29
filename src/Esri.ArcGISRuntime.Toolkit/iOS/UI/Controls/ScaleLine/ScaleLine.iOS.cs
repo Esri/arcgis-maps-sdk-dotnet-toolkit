@@ -57,8 +57,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
-        private bool _isInitialized = false;
-
         private void Initialize()
         {
             BackgroundColor = UIColor.Clear;

@@ -33,8 +33,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private UIColor _backgroundColor;
-        public override UIColor BackgroundColor 
-        { 
+
+        public override UIColor BackgroundColor
+        {
             get => _backgroundColor;
             set
             {
@@ -47,7 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private UIColor _borderColor;
-        public UIColor BorderColor 
+
+        public UIColor BorderColor
         {
             get => _borderColor;
             set
@@ -61,6 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         private double _borderWidth;
+
         public double BorderWidth
         {
             get => _borderWidth;

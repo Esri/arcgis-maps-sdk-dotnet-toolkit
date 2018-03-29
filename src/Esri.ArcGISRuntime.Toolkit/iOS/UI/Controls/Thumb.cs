@@ -31,6 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             base.BackgroundColor = UIColor.Clear;
         }
+
         public Thumb(double width, double height)
             : this()
         {

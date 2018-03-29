@@ -438,6 +438,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         Tickmarks.TickFill = value;
                     }
+
                     _startTimeTickmark?.SetBackgroundColor(value);
                     _endTimeTickmark?.SetBackgroundColor(value);
 
