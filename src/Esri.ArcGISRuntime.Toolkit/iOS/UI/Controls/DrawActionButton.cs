@@ -32,11 +32,47 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Layer.BorderColor = UIColor.Clear.CGColor;
         }
 
-        public override UIColor BackgroundColor { get; set; }
+        private UIColor _backgroundColor;
+        public override UIColor BackgroundColor 
+        { 
+            get => _backgroundColor;
+            set
+            {
+                if (_backgroundColor != value)
+                {
+                    _backgroundColor = value;
+                    SetNeedsDisplay();
+                }
+            }
+        }
 
-        public UIColor BorderColor { get; set; }
+        private UIColor _borderColor;
+        public UIColor BorderColor 
+        {
+            get => _borderColor;
+            set
+            {
+                if (_borderColor != value)
+                {
+                    _borderColor = value;
+                    SetNeedsDisplay();
+                }
+            }
+        }
 
-        public double BorderWidth { get; set; }
+        private double _borderWidth;
+        public double BorderWidth
+        {
+            get => _borderWidth;
+            set
+            {
+                if (_borderWidth != value)
+                {
+                    _borderWidth = value;
+                    SetNeedsDisplay();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the action to be executed during the control's rendering pass.  This action is responsible for rendering the control's UI.

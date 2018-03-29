@@ -35,11 +35,47 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             TouchUpInside += (s, e) => IsChecked = !IsChecked;
         }
 
-        public override UIColor BackgroundColor { get; set; }
+        private UIColor _backgroundColor;
+        public override UIColor BackgroundColor
+        {
+            get => _backgroundColor;
+            set
+            {
+                if (_backgroundColor != value)
+                {
+                    _backgroundColor = value;
+                    SetNeedsDisplay();
+                }
+            }
+        }
 
-        public UIColor BorderColor { get; set; }
+        private UIColor _borderColor;
+        public UIColor BorderColor
+        {
+            get => _borderColor;
+            set
+            {
+                if (_borderColor != value)
+                {
+                    _borderColor = value;
+                    SetNeedsDisplay();
+                }
+            }
+        }
 
-        public double BorderWidth { get; set; }
+        private double _borderWidth;
+        public double BorderWidth
+        {
+            get => _borderWidth;
+            set
+            {
+                if (_borderWidth != value)
+                {
+                    _borderWidth = value;
+                    SetNeedsDisplay();
+                }
+            }
+        }
 
         private bool _isChecked;
 
