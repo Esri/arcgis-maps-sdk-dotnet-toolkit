@@ -438,6 +438,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         Tickmarks.TickFill = value;
                     }
+                    _startTimeTickmark?.SetBackgroundColor(value);
+                    _endTimeTickmark?.SetBackgroundColor(value);
 
                     OnPropertyChanged(nameof(TimeStepIntervalTickFill));
                 }
@@ -500,6 +502,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _fullExtentLabelColor = value;
                     FullExtentStartTimeLabel?.SetTextColor(value);
+                    FullExtentEndTimeLabel?.SetTextColor(value);
                     OnPropertyChanged(nameof(FullExtentLabelColor));
                 }
             }
