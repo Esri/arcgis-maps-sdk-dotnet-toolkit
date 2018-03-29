@@ -138,9 +138,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 BorderWidth = 0
             };
 
-            var majorTickContainer = new UIView();
             if (dataSource is DateTimeOffset dateTime)
             {
+                var majorTickContainer = new UIView();
+
                 // Create label for major tickmark
                 var timeStepIntervalDateFormat = string.IsNullOrEmpty(TickLabelFormat)
                     ? _defaultTickLabelFormat : TickLabelFormat;
@@ -152,15 +153,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     Tag = (nint)dateTime.ToUnixTimeMilliseconds()
                 };
 
+                // Calculate positions of the tickmark and label
                 var labelSize = label.SizeThatFits(Frame.Size);
                 var tickLeft = (labelSize.Width - tick.Width) / 2;
                 tick.Frame = new CGRect(tickLeft, 0, tick.Width, tick.Height);
-
                 label.Frame = new CGRect(0, tick.Height + LabelOffset, labelSize.Width, labelSize.Height);
 
                 majorTickContainer.AddSubviews(tick, label);
                 majorTickContainer.Frame = new CGRect(0, 0, labelSize.Width, label.Frame.Bottom);
 
+                // Flag the tick as a major tickmark and set it's proportional position along the tick bar
                 SetIsMajorTickmark(majorTickContainer, true);
                 SetPosition(majorTickContainer, position);
 
@@ -179,8 +181,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void ApplyTickLabelFormat(UIView tick, string tickLabelFormat)
         {
+            // Retrieve the label from the container holding the major tick rectangle and label
             if (tick.Subviews.Length > 1 && tick.Subviews[1] is UILabel label)
             {
+                // Apply the specified format to the tick's date and update the label
                 var labelFormat = string.IsNullOrEmpty(tickLabelFormat) ? _defaultTickLabelFormat : tickLabelFormat;
                 var labelDate = DateTimeOffset.FromUnixTimeMilliseconds(label.Tag);
                 label.Text = labelDate.ToString(labelFormat);
@@ -227,6 +231,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdatePositionAndIsMajorTickmark(UIView view, double position, bool isMajorTickmark)
         {
+            // Use the view's tag property to store both the tick's proportional position along the tick bar and whether
+            // or not the tick is a major tickmark.  Use the first 9 digits to store the position and the last digit to
+            // store the flag.
             var storedPosition = Math.Truncate(position * 100000000);
             storedPosition -= storedPosition % 10;
             var tickmarkFlagInt = isMajorTickmark ? 1 : 0;
@@ -235,8 +242,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         private CGSize GetDesiredSize(UIView view) => view.SizeThatFits(Frame.Size);
-
-        private void RemoveChild(UIView parent, UIView child) => child.RemoveFromSuperview();
 
         private int ChildCount => Subviews.Length;
 

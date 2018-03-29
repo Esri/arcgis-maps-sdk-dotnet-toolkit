@@ -207,7 +207,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // Check whether the current tick index refers to a major or minor tick
                     var isMajorTickIndex = (i - firstMajorTickIndex) % majorTickInterval == 0;
 
-                    // Set the visibilities of the major and minor tick for the current index
                     // Arrange either the major or minor tick for the current index
                     if (isMajorTickIndex)
                     {
@@ -295,11 +294,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 for (var i = oldTickCount; i > newTickCount; i--)
                 {
                     var tickToRemove = _majorTickmarks[i - 1];
-                    RemoveChild(this, tickToRemove);
+                    this.RemoveChild(tickToRemove);
                     _majorTickmarks.Remove(tickToRemove);
 
                     tickToRemove = _minorTickmarks[i - 1];
-                    RemoveChild(this, tickToRemove);
+                    this.RemoveChild(tickToRemove);
                     _minorTickmarks.Remove(tickToRemove);
                 }
 

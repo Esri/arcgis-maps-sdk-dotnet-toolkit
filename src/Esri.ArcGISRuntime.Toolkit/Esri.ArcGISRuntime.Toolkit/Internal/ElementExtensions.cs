@@ -31,7 +31,7 @@ using System.Windows.Controls.Primitives;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Helper class for providing common cross-platform names for iOS UI component manipulation
+    /// Helper class for providing common cross-platform names for UI component manipulation
     /// </summary>
     internal static class ElementExtensions
     {
@@ -55,6 +55,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static bool GetIsEnabled(this Control control) => control.IsEnabled;
 
         public static void SetIsEnabled(this Control control, bool enabled) => control.IsEnabled = enabled;
+
+        public static void RemoveChild(this Panel parent, UIElement child) => parent.Children.Remove(child);
     }
 }
 #endif

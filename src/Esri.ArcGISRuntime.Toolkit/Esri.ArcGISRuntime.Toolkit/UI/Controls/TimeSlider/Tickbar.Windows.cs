@@ -302,8 +302,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private Size GetDesiredSize(UIElement el) => el.DesiredSize;
 
-        private void RemoveChild(Panel parent, UIElement child) => parent.Children.Remove(child);
-
         private int ChildCount => Children.Count;
     }
 }

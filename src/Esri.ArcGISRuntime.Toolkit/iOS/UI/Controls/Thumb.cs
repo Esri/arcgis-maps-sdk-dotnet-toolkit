@@ -31,17 +31,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             base.BackgroundColor = UIColor.Clear;
         }
-
-        public override CGRect Frame
-        {
-            get => base.Frame;
-            set
-            {
-                base.Frame = value;
-                OnPropertyChanged();
-            }
-        }
-
         public Thumb(double width, double height)
             : this()
         {

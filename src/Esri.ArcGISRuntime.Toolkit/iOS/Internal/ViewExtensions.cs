@@ -23,7 +23,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Helper class for providing common cross-platform names for iOS UI component manipulation
+    /// Helper class for providing common cross-platform names for UI component manipulation
     /// </summary>
     internal static class ViewExtensions
     {
@@ -93,5 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static void SetBorderWidth(this RectangleView view, double width) => view.BorderWidth = width;
 
         public static void SetTextColor(this UILabel label, UIColor color) => label.TextColor = color;
+
+        public static void RemoveChild(this UIView parent, UIView child) => child.RemoveFromSuperview();
     }
 }
