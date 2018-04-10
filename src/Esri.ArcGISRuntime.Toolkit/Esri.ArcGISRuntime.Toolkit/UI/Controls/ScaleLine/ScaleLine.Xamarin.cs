@@ -31,6 +31,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _mapScale;
             set
             {
+                if (MapView != null && !_scaleSetByMapView)
+                {
+                    throw new System.InvalidOperationException("The MapScale Property is read-only when the MapView property has been assigned");
+                }
+
                 _mapScale = value;
                 Refresh();
             }

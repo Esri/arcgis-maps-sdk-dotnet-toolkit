@@ -48,6 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TextBlock _metricUnit;
         private Rectangle _metricScaleLine;
         private Rectangle _usScaleLine;
+        private bool _scaleSetByMapView;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
@@ -65,8 +66,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the scale that the ScaleLine will
         /// use to calculate scale in metric and imperial units.
         /// </summary>
+        /// <seealso cref="MapView"/>
 #if !XAMARIN
-        /// <seealso cref="SetMapView"/>
         /// <seealso cref="MapViewProperty"/>
 #endif
 #pragma warning restore CS1587 // XML comment is not placed on a valid language element
@@ -207,26 +208,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void WireMapViewPropertyChanged(MapView oldMapView, MapView newMapView)
         {
-            var inpc = oldMapView as INotifyPropertyChanged;
-            if (inpc != null)
+            if (oldMapView is INotifyPropertyChanged inpc1)
             {
-                inpc.PropertyChanged -= MapView_PropertyChanged;
+                inpc1.PropertyChanged -= MapView_PropertyChanged;
             }
 
-            inpc = newMapView as INotifyPropertyChanged;
-            if (inpc != null)
+            if (newMapView is INotifyPropertyChanged inpc2)
             {
-                inpc.PropertyChanged += MapView_PropertyChanged;
+                inpc2.PropertyChanged += MapView_PropertyChanged;
             }
         }
 
         private void MapView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var view = GetMapView(this);
-            if ((e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating)) && !view.IsNavigating)
+            if (sender is MapView view && (e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating)) && !view.IsNavigating)
+            {
+                UpdateScalelineFromMapView(view);
+            }
+        }
+
+        private void UpdateScalelineFromMapView(MapView view)
+        {
+            _scaleSetByMapView = true;
+            if (view == null)
+            {
+                MapScale = 0d;
+            }
+            else
             {
                 MapScale = CalculateScale(view.VisibleArea, view.UnitsPerPixel);
             }
+            _scaleSetByMapView = false;
         }
 
         /// <summary>
