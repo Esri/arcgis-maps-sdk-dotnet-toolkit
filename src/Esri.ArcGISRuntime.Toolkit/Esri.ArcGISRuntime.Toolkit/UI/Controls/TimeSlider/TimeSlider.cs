@@ -80,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent _horizontalChangeExtent;
         private ThrottleAwaiter _layoutTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
-        private Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs> _timeSteps_inccListener;
+        private Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs> _timeStepsInccListener;
 
         #endregion // Fields
 
@@ -803,15 +803,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void InitializeTimeStepsChangeListener(IList<DateTimeOffset> list)
         {
-            if (_timeSteps_inccListener != null)
+            if (_timeStepsInccListener != null)
             {
-                _timeSteps_inccListener.Detach();
-                _timeSteps_inccListener = null;
+                _timeStepsInccListener.Detach();
+                _timeStepsInccListener = null;
             }
 
             if (list is System.Collections.Specialized.INotifyCollectionChanged incc)
             {
-                _timeSteps_inccListener = new Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs>(incc)
+                _timeStepsInccListener = new Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs>(incc)
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                     {
@@ -819,7 +819,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     },
                     OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
                 };
-                incc.CollectionChanged += _timeSteps_inccListener.OnEvent;
+                incc.CollectionChanged += _timeStepsInccListener.OnEvent;
             }
         }
 
