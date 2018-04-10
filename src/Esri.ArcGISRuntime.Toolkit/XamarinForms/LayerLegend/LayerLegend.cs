@@ -70,27 +70,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="ShowEntireTreeHierarchy"/> bindable property.
+        /// Identifies the <see cref="IncludeSublayers"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty ShowEntireTreeHierarchyProperty =
-            BindableProperty.Create(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), true, BindingMode.OneWay, null, OnShowEntireTreeHierarchyPropertyChanged);
+        public static readonly BindableProperty IncludeSublayersProperty =
+            BindableProperty.Create(nameof(IncludeSublayers), typeof(bool), typeof(LayerLegend), true, BindingMode.OneWay, null, OnIncludeSublayersPropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
         /// </summary>
-        /// <seealso cref="ShowEntireTreeHierarchyProperty"/>
-        public bool ShowEntireTreeHierarchy
+        /// <seealso cref="IncludeSublayersProperty"/>
+        public bool IncludeSublayers
         {
-            get { return (bool)GetValue(ShowEntireTreeHierarchyProperty); }
-            set { SetValue(ShowEntireTreeHierarchyProperty, value); }
+            get { return (bool)GetValue(IncludeSublayersProperty); }
+            set { SetValue(IncludeSublayersProperty, value); }
         }
 
-        private static void OnShowEntireTreeHierarchyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnIncludeSublayersPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var layerLegend = bindable as LayerLegend;
             if (layerLegend?.NativeLayerLegend != null && newValue is bool)
             {
-                layerLegend.NativeLayerLegend.ShowEntireTreeHierarchy = (bool)newValue;
+                layerLegend.NativeLayerLegend.IncludeSublayers = (bool)newValue;
                 layerLegend.InvalidateMeasure();
             }
         }

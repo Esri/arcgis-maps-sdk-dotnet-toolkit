@@ -43,19 +43,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private bool _showEntireTreeHierarchy = true;
+        private bool _includeSublayers = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
         /// </summary>
-        private bool ShowEntireTreeHierarchyImpl
+        private bool IncludeSublayersImpl
         {
-            get => _showEntireTreeHierarchy;
+            get => _includeSublayers;
             set
             {
-                if (_showEntireTreeHierarchy != value)
+                if (_includeSublayers != value)
                 {
-                    _showEntireTreeHierarchy = value;
+                    _includeSublayers = value;
                     Refresh();
                 }
             }

@@ -76,7 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var items = new ObservableCollection<LegendInfo>();
             ctrl.ItemsSource = items;
-            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
+            LoadRecursive(items, LayerContent, IncludeSublayers);
         }
 
         /// <summary>
@@ -97,17 +97,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
         /// </summary>
-        private bool ShowEntireTreeHierarchyImpl
+        private bool IncludeSublayersImpl
         {
-            get { return (bool)GetValue(ShowEntireTreeHierarchyProperty); }
-            set { SetValue(ShowEntireTreeHierarchyProperty, value); }
+            get { return (bool)GetValue(IncludeSublayersProperty); }
+            set { SetValue(IncludeSublayersProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="ShowEntireTreeHierarchy"/> dependency property.
+        /// Identifies the <see cref="IncludeSublayers"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowEntireTreeHierarchyProperty =
-            DependencyProperty.Register(nameof(ShowEntireTreeHierarchy), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.Refresh()));
+        public static readonly DependencyProperty IncludeSublayersProperty =
+            DependencyProperty.Register(nameof(IncludeSublayers), typeof(bool), typeof(LayerLegend), new PropertyMetadata(true, (d, e) => (d as LayerLegend)?.Refresh()));
 
         private void Layer_Loaded(object sender, EventArgs e)
         {

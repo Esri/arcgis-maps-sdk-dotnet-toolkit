@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _layerLegend = new LayerLegend()
             {
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                ShowEntireTreeHierarchy = false
+                IncludeSublayers = false
             };
 
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
