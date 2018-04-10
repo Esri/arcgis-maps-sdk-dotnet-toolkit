@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class TimeSlider
     {
-        #region Fields
+#region Fields
 
 #pragma warning disable SA1306 // Field names must begin with lower-case letter (names are made to match template names)
 #pragma warning disable SX1309 // Field names must begin with underscore (names are made to match template names)
@@ -80,9 +80,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent _horizontalChangeExtent;
         private ThrottleAwaiter _layoutTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
-        private Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs> _timeStepsInccListener;
 
-        #endregion // Fields
+#endregion // Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
@@ -788,39 +787,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 steps.Add(nextStep);
             }
 
-            TimeSteps = steps;
+            TimeSteps = steps.AsReadOnly();
             _calculateTimeStepsTcs.TrySetResult(true);
         }
 
         /// <summary>
         /// Gets the time steps that can be used to set the slider instance's current extent
         /// </summary>
-        public IList<DateTimeOffset> TimeSteps
+        public IReadOnlyList<DateTimeOffset> TimeSteps
         {
             get => TimeStepsImpl;
             private set => TimeStepsImpl = value;
-        }
-
-        private void InitializeTimeStepsChangeListener(IList<DateTimeOffset> list)
-        {
-            if (_timeStepsInccListener != null)
-            {
-                _timeStepsInccListener.Detach();
-                _timeStepsInccListener = null;
-            }
-
-            if (list is System.Collections.Specialized.INotifyCollectionChanged incc)
-            {
-                _timeStepsInccListener = new Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs>(incc)
-                {
-                    OnEventAction = (instance, source, eventArgs) =>
-                    {
-                        OnTimeStepsPropertyChanged();
-                    },
-                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
-                };
-                incc.CollectionChanged += _timeStepsInccListener.OnEvent;
-            }
         }
 
         private async void OnTimeStepsPropertyChanged()

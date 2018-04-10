@@ -94,12 +94,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private IList<DateTimeOffset> _timeSteps;
+        private IReadOnlyList<DateTimeOffset> _timeSteps;
 
         /// <summary>
         /// Gets or sets the time steps that can be used to set the slider instance's current extent
         /// </summary>
-        private IList<DateTimeOffset> TimeStepsImpl
+        private IReadOnlyList<DateTimeOffset> TimeStepsImpl
         {
             get => _timeSteps;
             set
@@ -108,7 +108,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _timeSteps = value;
                     OnTimeStepsPropertyChanged();
-                    InitializeTimeStepsChangeListener(value);
                     OnPropertyChanged(nameof(TimeSteps));
                 }
             }

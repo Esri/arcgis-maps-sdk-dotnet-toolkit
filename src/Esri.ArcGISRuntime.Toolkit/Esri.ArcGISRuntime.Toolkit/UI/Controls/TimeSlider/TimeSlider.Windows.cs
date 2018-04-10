@@ -419,24 +419,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets gets the time steps that can be used to set the slider instance's current extent
         /// </summary>
-        private IList<DateTimeOffset> TimeStepsImpl
+        private IReadOnlyList<DateTimeOffset> TimeStepsImpl
         {
-            get { return (IList<DateTimeOffset>)GetValue(TimeStepsProperty); }
+            get { return (IReadOnlyList<DateTimeOffset>)GetValue(TimeStepsProperty); }
             set { SetValue(TimeStepsProperty, value); }
         }
 
         /// <summary>
         /// Identifies the <see cref="TimeSteps"/> dependency property.
         /// </summary>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         public static readonly DependencyProperty TimeStepsProperty =
-            DependencyProperty.Register(nameof(TimeSteps), typeof(IList<DateTimeOffset>), typeof(TimeSlider),
-                new PropertyMetadata(default(IList<DateTimeOffset>), OnTimeStepsPropertyChanged));
+            DependencyProperty.Register(nameof(TimeSteps), typeof(IReadOnlyList<DateTimeOffset>), typeof(TimeSlider),
+                new PropertyMetadata(default(IReadOnlyList<DateTimeOffset>), OnTimeStepsPropertyChanged));
 
-        private static void OnTimeStepsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TimeSlider)d).OnTimeStepsPropertyChanged();
-            ((TimeSlider)d).InitializeTimeStepsChangeListener(e.NewValue as IList<DateTimeOffset>);
-        }
+        private static void OnTimeStepsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((TimeSlider)d).OnTimeStepsPropertyChanged();
 
         /// <summary>
         /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step
