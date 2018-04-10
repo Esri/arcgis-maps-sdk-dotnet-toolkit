@@ -238,6 +238,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 MapScale = CalculateScale(view.VisibleArea, view.UnitsPerPixel);
             }
+
             _scaleSetByMapView = false;
         }
 

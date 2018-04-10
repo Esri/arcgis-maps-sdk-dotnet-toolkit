@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Symbology;
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 #elif __IOS__
@@ -31,6 +33,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class SymbolDisplay : Control
     {
+        private Internal.WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object, System.ComponentModel.PropertyChangedEventArgs> _inpcListener;
+        private Task _currentUpdateTask;
+        private bool _isRefreshRequired;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
         /// </summary>
@@ -47,6 +53,50 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get => SymbolImpl;
             set => SymbolImpl = value;
+        }
+
+        private void OnSymbolChanged(Symbology.Symbol oldValue, Symbology.Symbol newValue)
+        {
+            if (oldValue != null)
+            {
+                _inpcListener?.Detach();
+                _inpcListener = null;
+            }
+
+            if (newValue != null)
+            {
+                _inpcListener = new Internal.WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object, System.ComponentModel.PropertyChangedEventArgs>(newValue)
+                {
+                    OnEventAction = (instance, source, eventArgs) =>
+                    {
+                        Refresh();
+                    },
+                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                };
+                newValue.PropertyChanged += _inpcListener.OnEvent;
+            }
+
+            Refresh();
+        }
+
+        private async void Refresh()
+        {
+            if (_currentUpdateTask != null)
+            {
+                // Instead of refreshing immediately when a refresh is already in progress, avoid updating too frequently, but just flag it dirty
+                // This avoid multiple refreshes where properties change very frequently, but just the latest state gets refreshed.
+                _isRefreshRequired = true;
+                return;
+            }
+
+            _isRefreshRequired = false;
+            var task = _currentUpdateTask = UpdateSwatchAsync();
+            await task;
+            _currentUpdateTask = null;
+            if (_isRefreshRequired)
+            {
+                Refresh();
+            }
         }
     }
 }

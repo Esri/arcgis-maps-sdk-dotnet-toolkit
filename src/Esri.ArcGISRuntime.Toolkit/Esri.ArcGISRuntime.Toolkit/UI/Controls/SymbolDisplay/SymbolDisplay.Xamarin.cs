@@ -35,8 +35,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (_symbol != value)
                 {
+                    var oldValue = _symbol;
                     _symbol = value;
-                    Refresh();
+                    OnSymbolChanged(oldValue, _symbol);
                 }
             }
         }
