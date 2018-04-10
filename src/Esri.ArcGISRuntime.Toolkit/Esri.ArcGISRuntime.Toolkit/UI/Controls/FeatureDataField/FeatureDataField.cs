@@ -171,7 +171,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var featureDataField = (FeatureDataField)d;
 
             // Clear out previous validation exception
-            featureDataField.ValidationException = null;
+            featureDataField.ClearValue(ValidationExceptionProperty);
 
             if (string.IsNullOrEmpty(featureDataField.FieldName) || featureDataField.Feature?.Attributes == null
                 || !featureDataField.Feature.Attributes.ContainsKey(featureDataField.FieldName)
@@ -191,30 +191,51 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Use the last saved attribute value on feature for old value.
             var oldValue = featureDataField.Feature.Attributes[featureDataField.FieldName];
 
-            // Raise ValueChanging event to allow for custom validation.
-            if (featureDataField.ValueChanging != null)
+            try
             {
-                var changing = new ValueChangingEventArgs(oldValue, e.NewValue);
-                featureDataField.ValueChanging(featureDataField, changing);
+                featureDataField.OnValueChanging(oldValue, e.NewValue);
 
-                // Check event args for user-defined validation exception and
-                // set FeatureDataField.ValidationException property
-                // to trigger change in visual state.
-                if (changing.ValidationException != null)
-                {
-                    featureDataField.ValidationException = changing.ValidationException;
-                    return;
-                }
+                // Raise ValueChanging event to allow for custom validation.
+                featureDataField.ValueChanging?.Invoke(featureDataField, new AttributeValueChangedEventArgs(oldValue, e.NewValue));
+            }
+            catch (System.Exception ex)
+            {
+                featureDataField.SetValue(ValidationExceptionProperty, ex);
+                return;
             }
 
             // Commits attribute edit to feature.
             var success = featureDataField.CommitChange(e.NewValue);
 
             // Raise ValueChanged event on successful edit.
-            if (success && featureDataField.ValueChanged != null)
+            if (success)
             {
-                featureDataField.ValueChanged(featureDataField, new ValueChangedEventArgs(oldValue, e.NewValue));
+                featureDataField.OnValueChanged(oldValue, e.NewValue);
+                featureDataField.ValueChanged?.Invoke(featureDataField, new AttributeValueChangedEventArgs(oldValue, e.NewValue));
             }
+        }
+
+        /// <summary>
+        /// Called when an attribute value is about to change
+        /// </summary>
+        /// <remarks>
+        /// To trigger a validation exception, throw an exception in this method.
+        /// </remarks>
+        /// <param name="oldvValue">The old attribute value</param>
+        /// <param name="newValue">The new updated attribute value</param>
+        /// <seealso cref="ValueChanging"/>
+        protected void OnValueChanging(object oldvValue, object newValue)
+        {
+        }
+
+        /// <summary>
+        /// Called when an attribute value has changed
+        /// </summary>
+        /// <param name="oldvValue">The old attribute value</param>
+        /// <param name="newValue">The new updated attribute value</param>
+        /// <seealso cref="ValueChanged"/>
+        protected void OnValueChanged(object oldvValue, object newValue)
+        {
         }
 
         /// <summary>
@@ -227,7 +248,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Exception ValidationException
         {
             get { return (Exception)GetValue(ValidationExceptionProperty); }
-            internal set { SetValue(ValidationExceptionProperty, value); }
         }
 
         /// <summary>
@@ -379,14 +399,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Occurs when the field attribute value has changed but has not yet been committed back to the feature.
         /// </summary>
         /// <remarks>
-        /// This event may be used to provide custom validation by setting <see cref="ValueChangingEventArgs.ValidationException"/>.
+        /// This event may be used to provide custom validation by throwing an exception in the event handler.
         /// </remarks>
-        public event EventHandler<ValueChangingEventArgs> ValueChanging;
+        /// <seealso cref="OnValueChanging(object, object)"/>
+        public event EventHandler<AttributeValueChangedEventArgs> ValueChanging;
 
         /// <summary>
         /// Occurs when the field attribute value has changed and committed back to the feature.
         /// </summary>
-        public event EventHandler<ValueChangedEventArgs> ValueChanged;
+        /// <seealso cref="OnValueChanged(object, object)"/>
+        public event EventHandler<AttributeValueChangedEventArgs> ValueChanged;
 
         /// <summary>
         /// Generates the control for <see cref="FeatureDataField"/>.
@@ -516,6 +538,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             var valueString = value as string;
+            if (_field.IsNullable && _field.FieldType != FieldType.Text && valueString?.Trim() == string.Empty)
+            {
+                return null;
+            }
 
             switch (_field.FieldType)
             {
@@ -691,7 +717,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             // Clears validation exception
-            ValidationException = null;
+            ClearValue(ValidationExceptionProperty);
 
             // Override value with last saved value on feature.
             BindingValue = Feature.Attributes[FieldName];
@@ -707,12 +733,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             try
             {
                 Feature.Attributes[FieldName] = ConvertToFieldType((value is KeyValuePair<object, string>) ? ((KeyValuePair<object, string>)value).Key : value);
-                ValidationException = null;
+                ClearValue(ValidationExceptionProperty);
                 return true;
             }
             catch (Exception ex)
             {
-                ValidationException = ex;
+                SetValue(ValidationExceptionProperty, ex);
                 return false;
             }
         }

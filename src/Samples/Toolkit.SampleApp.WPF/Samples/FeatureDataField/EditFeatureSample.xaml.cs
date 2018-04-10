@@ -112,5 +112,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
                 btn.IsEnabled = true;
             }
         }
+
+        private void DescriptionField_ValueChanging(object sender, UI.AttributeValueChangedEventArgs e)
+        {
+            // Example of adding a custom value validation:
+            if (e.NewValue as string == "TEST")
+                throw new ArgumentException("Custom validation: You can't enter the value 'TEST'");
+        }
     }
 }

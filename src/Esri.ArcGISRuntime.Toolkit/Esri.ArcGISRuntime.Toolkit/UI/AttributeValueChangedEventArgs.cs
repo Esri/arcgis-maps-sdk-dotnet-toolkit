@@ -18,29 +18,28 @@
 
 using System;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Base class for <see cref="ValueChangingEventArgs"/> and <see cref="ValueChangedEventArgs"/>
-    /// used in events for <see cref="FeatureDataField"/>.
+    /// Field attribute change events used by the <see cref="Controls.FeatureDataField"/>.
     /// </summary>
-    public abstract class ValueEventArgs : EventArgs
+    public sealed class AttributeValueChangedEventArgs : EventArgs
     {
-        internal ValueEventArgs(object oldValue, object newValue)
+        internal AttributeValueChangedEventArgs(object oldValue, object newValue)
         {
             OldValue = oldValue;
             NewValue = newValue;
         }
 
         /// <summary>
-        /// Gets the old value.
+        /// Gets the old attribute field value.
         /// </summary>
-        public object OldValue { get; private set; }
+        public object OldValue { get; }
 
         /// <summary>
-        /// Gets the new value.
+        /// Gets the new attribute field value.
         /// </summary>
-        public object NewValue { get; private set; }
+        public object NewValue { get; }
     }
 }
 #endif

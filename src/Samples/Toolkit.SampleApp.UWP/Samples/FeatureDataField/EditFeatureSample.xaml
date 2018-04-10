@@ -35,7 +35,7 @@
                     <TextBlock Text="Number of occupants" FontWeight="Bold" Margin="5" />
                     <esriToolkit:FeatureDataField Feature="{Binding}" FieldName="numoccup" IsReadOnly="False" x:Name="OccupantsField" />
                     <TextBlock Text="Description" FontWeight="Bold" Margin="5" />
-                    <esriToolkit:FeatureDataField Feature="{Binding}" FieldName="descdamage" IsReadOnly="False" x:Name="DescriptionField" />
+                    <esriToolkit:FeatureDataField Feature="{Binding}" FieldName="descdamage" IsReadOnly="False" x:Name="DescriptionField" ValueChanging="DescriptionField_ValueChanging" />
                     <Button Content="Apply" HorizontalAlignment="Right" Padding="30,5" Margin="0,40,0,0" Click="ApplyButton_Click" />
                 </StackPanel>
 
