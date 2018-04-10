@@ -16,6 +16,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using CoreGraphics;
 using Esri.ArcGISRuntime.UI;
 using UIKit;
@@ -133,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             remove { _disposed -= value; }
         }
 
-        private async void Refresh()
+        private async Task UpdateSwatchAsync()
         {
             if (_imageView == null)
             {

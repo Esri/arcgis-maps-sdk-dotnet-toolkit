@@ -81,6 +81,9 @@
     <Compile Include="Samples\ScaleLine\ScaleLineSample.xaml.cs">
       <DependentUpon>ScaleLineSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml.cs">
+      <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\ToC\TableOfContentsSample.xaml.cs">
       <DependentUpon>TableOfContentsSample.xaml</DependentUpon>
     </Compile>
@@ -130,6 +133,10 @@
     <Page Include="Samples\ScaleLine\ScaleLineSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Samples\ToC\TableOfContentsSample.xaml">
       <SubType>Designer</SubType>

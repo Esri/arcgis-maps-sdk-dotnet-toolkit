@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -65,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AddView(_imageView);
         }
 
-        private async void Refresh()
+        private async Task UpdateSwatchAsync()
         {
             if (_imageView == null)
             {

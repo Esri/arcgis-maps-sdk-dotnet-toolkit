@@ -16,6 +16,8 @@
 
 #if !XAMARIN
 
+using System;
+using System.Threading.Tasks;
 using Esri.ArcGISRuntime.UI;
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -50,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private Symbology.Symbol SymbolImpl
         {
-            get { return (Symbology.Symbol)GetValue(SymbolProperty); }
+            get { return GetValue(SymbolProperty) as Symbology.Symbol; }
             set { SetValue(SymbolProperty, value); }
         }
 
@@ -58,14 +60,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="Symbol"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register(nameof(Symbology.Symbol), typeof(Symbology.Symbol), typeof(SymbolDisplay), new PropertyMetadata(null, OnSymbolPropertyChanged));
+            DependencyProperty.Register(nameof(SymbolDisplay.Symbol), typeof(Symbology.Symbol), typeof(SymbolDisplay), new PropertyMetadata(null, OnSymbolPropertyChanged));
 
         private static void OnSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as SymbolDisplay)?.Refresh();
+            var sd = (SymbolDisplay)d;
+            sd.OnSymbolChanged(e.OldValue as Symbology.Symbol, e.NewValue as Symbology.Symbol);
         }
 
-        private async void Refresh()
+        private async Task UpdateSwatchAsync()
         {
             var img = GetTemplateChild("image") as Image;
             if (img == null)
@@ -96,8 +99,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     img.MaxWidth = 0;
                     img.MaxHeight = 0;
                 }
-#pragma warning restore ESRI1800
             }
+#pragma warning restore ESRI1800
         }
 
         private double GetScaleFactor()
