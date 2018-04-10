@@ -80,8 +80,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent _horizontalChangeExtent;
         private ThrottleAwaiter _layoutTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
+        private Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs> _timeSteps_inccListener;
 
-#endregion // Fields
+        #endregion // Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
@@ -794,10 +795,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the time steps that can be used to set the slider instance's current extent
         /// </summary>
-        public IEnumerable<DateTimeOffset> TimeSteps
+        public IList<DateTimeOffset> TimeSteps
         {
             get => TimeStepsImpl;
             private set => TimeStepsImpl = value;
+        }
+
+        private void InitializeTimeStepsChangeListener(IList<DateTimeOffset> list)
+        {
+            if (_timeSteps_inccListener != null)
+            {
+                _timeSteps_inccListener.Detach();
+                _timeSteps_inccListener = null;
+            }
+
+            if (list is System.Collections.Specialized.INotifyCollectionChanged incc)
+            {
+                _timeSteps_inccListener = new Internal.WeakEventListener<System.Collections.Specialized.INotifyCollectionChanged, object, System.Collections.Specialized.NotifyCollectionChangedEventArgs>(incc)
+                {
+                    OnEventAction = (instance, source, eventArgs) =>
+                    {
+                        OnTimeStepsPropertyChanged();
+                    },
+                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                };
+                incc.CollectionChanged += _timeSteps_inccListener.OnEvent;
+            }
         }
 
         private async void OnTimeStepsPropertyChanged()
