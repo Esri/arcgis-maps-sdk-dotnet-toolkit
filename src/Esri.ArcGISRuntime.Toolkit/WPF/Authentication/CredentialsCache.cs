@@ -22,11 +22,34 @@ using System.Text;
 
 namespace Esri.ArcGISRuntime.Toolkit.Authentication
 {
+
     /// <summary>
     /// A helper class for stoting credentials in the cache
     /// </summary>
     public static class CredentialsCache
     {
+        /// <summary>
+        /// A credential retrieved from the credentials cache
+        /// </summary>
+        public sealed class CachedCredential
+        {
+            internal CachedCredential(string username, SecureString password)
+            {
+                Username = username;
+                Password = password;
+            }
+
+            /// <summary>
+            /// Gets the username
+            /// </summary>
+            public string Username { get; }
+
+            /// <summary>
+            /// Gets the password
+            /// </summary>
+            public SecureString Password { get; }
+        }
+
         private static string AppNamePrefix()
         {
             return System.Windows.Application.Current.GetType().FullName + "|";
@@ -59,13 +82,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
         /// </summary>
         /// <param name="serviceUri">The endpoint to get the credential from</param>
         /// <returns>A tuple of username + password</returns>
-        public static Tuple<string, SecureString> ReadCredential(Uri serviceUri)
+        public static CachedCredential ReadCredential(Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
             var credential = CredentialManager.ReadCredential(AppNamePrefix() + host);
             if (credential != null)
             {
-                return new Tuple<string, SecureString>(credential.UserName, credential.Password);
+                return new CachedCredential(credential.UserName, credential.Password);
             }
 
             return null;
