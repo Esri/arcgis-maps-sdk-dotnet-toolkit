@@ -4,13 +4,13 @@
     <DataTemplate x:Key="LeafItemTemplate">
         <StackPanel Visibility="{Binding DisplayLegend}">
             <TextBlock Text="{Binding  LayerContent.Name}"/>
-            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="BranchItemTemplate">
         <StackPanel Visibility="{Binding DisplayLegend}">
             <TextBlock Text="{Binding  LayerContent.Name}" />
-            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
             <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
@@ -20,7 +20,7 @@
     <DataTemplate x:Key="SublayerItemTemplate">
         <StackPanel Visibility="{Binding DisplayLegend}">
             <TextBlock Text="{Binding  LayerContent.Name}" />
-            <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
             <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
         </StackPanel>
     </DataTemplate>
@@ -45,7 +45,7 @@
                 <DataTemplate>
                     <StackPanel Visibility="{Binding DisplayLegend}">
                         <TextBlock Text="{Binding  LayerContent.Name}" FontWeight="Bold" />
-                        <controls:LayerLegend LayerContent="{Binding  LayerContent}" ShowEntireTreeHierarchy="False" Margin="10,0"/>
+                        <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
                         <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
                     </StackPanel>
                 </DataTemplate>

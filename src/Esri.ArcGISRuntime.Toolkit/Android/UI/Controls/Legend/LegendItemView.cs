@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _layerLegend = new LayerLegend(context)
             {
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
-                ShowEntireTreeHierarchy = false
+                IncludeSublayers = false
             };
             AddView(_layerLegend);
 

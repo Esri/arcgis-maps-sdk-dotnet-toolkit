@@ -149,7 +149,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             var items = new ObservableCollection<LegendInfo>();
-            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
+            LoadRecursive(items, LayerContent, IncludeSublayers);
             var source = new LayerLegendTableSource(items);
             _listView.Source = source;
             source.CollectionChanged += (a, b) => InvokeOnMainThread(() =>

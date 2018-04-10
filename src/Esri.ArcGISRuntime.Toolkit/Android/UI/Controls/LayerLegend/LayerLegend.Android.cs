@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             var items = new ObservableCollection<LegendInfo>();
-            LoadRecursive(items, LayerContent, ShowEntireTreeHierarchy);
+            LoadRecursive(items, LayerContent, IncludeSublayers);
             _listView.Adapter = new LayerLegendAdapter(Context, items);
             _listView.SetHeightBasedOnChildren();
         }

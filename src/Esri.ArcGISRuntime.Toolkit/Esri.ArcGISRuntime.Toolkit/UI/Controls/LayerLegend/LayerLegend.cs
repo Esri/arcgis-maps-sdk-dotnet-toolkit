@@ -57,10 +57,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
         /// </summary>
-        public bool ShowEntireTreeHierarchy
+        public bool IncludeSublayers
         {
-            get => ShowEntireTreeHierarchyImpl;
-            set => ShowEntireTreeHierarchyImpl = value;
+            get => IncludeSublayersImpl;
+            set => IncludeSublayersImpl = value;
         }
 
         private async void LoadRecursive(IList<LegendInfo> itemsList, ILayerContent content, bool recursive)

@@ -22,7 +22,7 @@
                         <DataTemplate>
                             <StackPanel>
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                                <esriToolkit:LayerLegend LayerContent="{Binding}" ShowEntireTreeHierarchy="True" Margin="10,0" />
+                                <esriToolkit:LayerLegend LayerContent="{Binding}" IncludeSublayers="True" Margin="10,0" />
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
