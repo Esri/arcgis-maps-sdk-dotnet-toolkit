@@ -38,7 +38,7 @@
                 </TextBlock>
 
                 <TextBlock Text="Advanced Scale Calculation" Grid.Row="2" />
-                <esriToolkit:ScaleLine esriToolkit:ScaleLine.MapView="{x:Bind mapView}" Grid.Row="3" />
+                <esriToolkit:ScaleLine MapView="{x:Bind mapView}" Grid.Row="3" />
                 <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
                     <ToolTipService.ToolTip>
                         <TextBlock MaxWidth="300" TextWrapping="Wrap">

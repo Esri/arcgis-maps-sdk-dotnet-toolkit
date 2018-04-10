@@ -75,6 +75,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnMapScalePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var scaleLine = (ScaleLine)d;
+            if (scaleLine.MapView != null && !scaleLine._scaleSetByMapView)
+            {
+                throw new System.InvalidOperationException("The MapScale Property is read-only when the MapView property has been assigned");
+            }
+
             scaleLine.Refresh();
         }
 
@@ -106,37 +111,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
+        /// Gets or sets the MapView property that can be attached to a Scaleline control to accurately set the scale, instead of
         /// setting the <see cref="ScaleLine.MapScale"/> property directly.
         /// </summary>
-        /// <param name="scaleLine">The scaleline control this would be attached to</param>
-        /// <returns>The MapView the scaleline is associated with.</returns>
-        public static MapView GetMapView(DependencyObject scaleLine)
+        public MapView MapView
         {
-            return (MapView)scaleLine.GetValue(MapViewProperty);
+            get { return GetValue(MapViewProperty) as MapView; }
+            set { SetValue(MapViewProperty, value); }
         }
 
         /// <summary>
-        /// Sets the MapView attached property that can be attached to a ScaleLine control to accurately set the scale, instead of
-        /// setting the <see cref="ScaleLine.MapScale"/> property directly.
-        /// </summary>
-        /// <param name="scaleLine">The scaleline control this would be attached to</param>
-        /// <param name="mapView">The mapview to calculate the scale for</param>
-        public static void SetMapView(DependencyObject scaleLine, MapView mapView)
-        {
-            scaleLine.SetValue(MapViewProperty, mapView);
-        }
-
-        /// <summary>
-        /// Identifies the MapView Dependency Property
+        /// Identifies the <see cref="GeoView"/> Dependency Property
         /// </summary>
         public static readonly DependencyProperty MapViewProperty =
-            DependencyProperty.RegisterAttached("MapView", typeof(MapView), typeof(ScaleLine), new PropertyMetadata(null, OnMapViewPropertyChanged));
+            DependencyProperty.Register(nameof(ScaleLine.MapView), typeof(MapView), typeof(ScaleLine), new PropertyMetadata(null, OnMapViewPropertyChanged));
 
         private static void OnMapViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var scaleLine = (ScaleLine)d;
-            scaleLine.WireMapViewPropertyChanged(e.OldValue as MapView, e.NewValue as MapView);
+            var scaleline = (ScaleLine)d;
+            scaleline.WireMapViewPropertyChanged(e.OldValue as MapView, e.NewValue as MapView);
         }
 
         private void SetVisibility(bool isVisible)
