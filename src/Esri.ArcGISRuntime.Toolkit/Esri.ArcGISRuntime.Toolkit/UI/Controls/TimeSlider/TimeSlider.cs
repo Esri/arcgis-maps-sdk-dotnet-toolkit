@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class TimeSlider
     {
-#region Fields
+        #region Fields
 
 #pragma warning disable SA1306 // Field names must begin with lower-case letter (names are made to match template names)
 #pragma warning disable SX1309 // Field names must begin with underscore (names are made to match template names)
