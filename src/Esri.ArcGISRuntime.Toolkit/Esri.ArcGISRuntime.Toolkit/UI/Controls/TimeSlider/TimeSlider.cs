@@ -787,14 +787,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 steps.Add(nextStep);
             }
 
-            TimeSteps = steps;
+            TimeSteps = steps.AsReadOnly();
             _calculateTimeStepsTcs.TrySetResult(true);
         }
 
         /// <summary>
         /// Gets the time steps that can be used to set the slider instance's current extent
         /// </summary>
-        public IEnumerable<DateTimeOffset> TimeSteps
+        public IReadOnlyList<DateTimeOffset> TimeSteps
         {
             get => TimeStepsImpl;
             private set => TimeStepsImpl = value;
