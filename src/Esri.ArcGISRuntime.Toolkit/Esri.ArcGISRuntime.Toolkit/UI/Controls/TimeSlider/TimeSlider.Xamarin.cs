@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __IOS__
+#if XAMARIN
 
 using System;
 using System.Collections.Generic;
@@ -23,6 +23,8 @@ using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if __IOS__
 using Color = UIKit.UIColor;
+#elif __ANDROID__
+using Android.Graphics;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -344,7 +346,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _currentExtentFill = Color.FromRGBA(0, 111, 255, 255);
+        private Color _currentExtentFill =
+#if __IOS__
+            Color.FromRGB(0, 111, 255);
+#elif __ANDROID__
+            Color.Rgb(0, 111, 255);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
@@ -363,7 +370,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _fullExtentFill = Color.FromRGBA(170, 169, 170, 255);
+        private Color _fullExtentFill =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(170, 169, 170);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
@@ -382,9 +394,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _fullExtentStroke = Color.FromRGBA(170, 169, 170, 255);
+        private Color _fullExtentStroke =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(170, 169, 170);
+#endif
 
-        /// <summary>
+            /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
         private Color FullExtentStrokeImpl
@@ -421,7 +438,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _timeStepIntervalTickFill = Color.FromRGBA(170, 169, 170, 255);
+        private Color _timeStepIntervalTickFill =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(170, 169, 170);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the slider's tickmarks
@@ -447,7 +469,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _playbackButtonsFill = Color.FromRGBA(230, 230, 230, 255);
+        private Color _playbackButtonsFill =
+#if __IOS__
+            Color.FromRGB(230, 230, 230);
+#elif __ANDROID__
+            Color.Rgb(230, 230, 230);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the playback buttons
@@ -468,7 +495,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _playbackButtonsStroke = Color.FromRGBA(170, 169, 170, 255);
+        private Color _playbackButtonsStroke =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(170, 169, 170);
+#endif
 
         /// <summary>
         /// Gets or sets the border color of the playback buttons
@@ -552,9 +584,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #endregion // Appearance Properties
+#endregion // Appearance Properties
 
-        #endregion // Properties
+#endregion // Properties
 
         private void ApplyFullExtentLabelFormat()
         {

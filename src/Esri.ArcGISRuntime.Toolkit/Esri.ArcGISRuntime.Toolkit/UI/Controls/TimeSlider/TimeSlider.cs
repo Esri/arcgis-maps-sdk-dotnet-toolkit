@@ -15,8 +15,6 @@
 //  ******************************************************************************/
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
-#if !__ANDROID__
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,13 +39,12 @@ using Key = Windows.System.VirtualKey;
 #elif __IOS__
 using System.Drawing;
 using Brush = UIKit.UIColor;
-using ButtonBase = UIKit.UIButton;
-using FrameworkElement = UIKit.UIView;
-using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
-using RepeatButton = UIKit.UIButton;
 using TextBlock = UIKit.UILabel;
-using Thumb = UIKit.UIControl;
-using ToggleButton = UIKit.UISwitch;
+#elif __ANDROID__
+using System.Drawing;
+using Android.Content;
+using Brush = Android.Graphics.Color;
+using TextBlock = Android.Widget.TextView;
 #else
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -86,7 +83,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
-        public TimeSlider()
+        public TimeSlider(
+#if __ANDROID__
+            Context context)
+            : base(context
+#endif
+            )
         {
             Initialize();
             _playTimer = new DispatcherTimer() { Interval = PlaybackInterval };
@@ -279,6 +281,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 LineBreakMode = textBlock.LineBreakMode
             };
             return (Size)label.SizeThatFits(new CoreGraphics.CGSize(double.MaxValue, double.MaxValue));
+#elif __ANDROID__
+            throw new NotImplementedException();
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
             var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
@@ -950,7 +954,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Update the state of the play/pause button
             if (PlayPauseButton != null)
             {
+#if !__ANDROID__ // TODO on Android
                 PlayPauseButton.IsChecked = isPlaying;
+#endif
             }
         }
 
@@ -1605,5 +1611,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endregion
     }
 }
-
-#endif
