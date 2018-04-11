@@ -76,30 +76,28 @@ namespace Esri.ArcGISRuntime.Toolkit
                 return null;
             }
 
-            TimeExtent timeExtent = null;
             var timeExtentParts = timeExtentString.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
-            if (timeExtentParts.Length == 0 || timeExtentParts.Length > 2)
+            if (timeExtentParts.Length == 0)
             {
                 return null;
             }
 
-            DateTimeOffset startTime;
-            if (!DateTimeOffset.TryParse(timeExtentParts[0], culture, DateTimeStyles.AssumeUniversal, out startTime))
+            if (timeExtentParts.Length > 2)
             {
-                return null;
+                throw new FormatException("Multiple date splitters found in TimeExtent string");
             }
 
-            DateTimeOffset endTime;
-            if (timeExtentParts.Length == 2 && DateTimeOffset.TryParse(timeExtentParts[1], culture, DateTimeStyles.AssumeUniversal, out endTime))
+            DateTimeOffset startTime = DateTimeOffset.Parse(timeExtentParts[0], culture, DateTimeStyles.AssumeUniversal);
+
+            if (timeExtentParts.Length == 2)
             {
-                timeExtent = new TimeExtent(startTime, endTime);
+                DateTimeOffset endTime = DateTimeOffset.Parse(timeExtentParts[1], culture, DateTimeStyles.AssumeUniversal);
+                return new TimeExtent(startTime, endTime);
             }
             else
             {
-                timeExtent = new TimeExtent(startTime);
+                return new TimeExtent(startTime);
             }
-
-            return timeExtent;
         }
 
         private string Convert(TimeExtent timeExtent, CultureInfo culture)
@@ -111,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             if (timeExtent.StartTime == timeExtent.EndTime)
             {
-                return timeExtent.StartTime.ToString();
+                return timeExtent.StartTime.ToString(culture);
             }
             else
             {
