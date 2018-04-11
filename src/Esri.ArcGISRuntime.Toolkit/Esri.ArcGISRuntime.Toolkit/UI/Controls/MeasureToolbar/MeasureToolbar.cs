@@ -17,6 +17,7 @@
 #if !XAMARIN
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
@@ -101,6 +102,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public MeasureToolbar()
         {
             DefaultStyleKey = typeof(MeasureToolbar);
+
+            LinearUnits = new ObservableCollection<LinearUnit>()
+                {
+                    Geometry.LinearUnits.Centimeters,
+                    Geometry.LinearUnits.Feet,
+                    Geometry.LinearUnits.Inches,
+                    Geometry.LinearUnits.Kilometers,
+                    Geometry.LinearUnits.Meters,
+                    Geometry.LinearUnits.Miles,
+                    Geometry.LinearUnits.Millimeters,
+                    Geometry.LinearUnits.NauticalMiles,
+                    Geometry.LinearUnits.Yards
+                };
+            AreaUnits = new ObservableCollection<AreaUnit>()
+                {
+                    Geometry.AreaUnits.Acres,
+                    Geometry.AreaUnits.Hectares,
+                    Geometry.AreaUnits.SquareCentimeters,
+                    Geometry.AreaUnits.SquareDecimeters,
+                    Geometry.AreaUnits.SquareFeet,
+                    Geometry.AreaUnits.SquareKilometers,
+                    Geometry.AreaUnits.SquareMeters,
+                    Geometry.AreaUnits.SquareMiles,
+                    Geometry.AreaUnits.SquareMillimeters,
+                    Geometry.AreaUnits.SquareYards
+                };
+            LineSketchEditor = new SketchEditor();
+            AreaSketchEditor = new SketchEditor();
+            SelectionLineSymbol = LineSketchEditor.Style.LineSymbol;
+            SelectionFillSymbol = AreaSketchEditor.Style.FillSymbol;
         }
 
         /// <inheritdoc/>
@@ -147,74 +178,41 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _measureResultTextBlock = GetTemplateChild("MeasureResult") as TextBlock;
             _linearUnitsSelector = GetTemplateChild("LinearUnitsSelector") as UIElement;
             _areaUnitsSelector = GetTemplateChild("AreaUnitsSelector") as UIElement;
-            if (LinearUnits == null || !LinearUnits.Any())
-            {
-                LinearUnits = new LinearUnit[]
-                {
-                    Geometry.LinearUnits.Centimeters,
-                    Geometry.LinearUnits.Feet,
-                    Geometry.LinearUnits.Inches,
-                    Geometry.LinearUnits.Kilometers,
-                    Geometry.LinearUnits.Meters,
-                    Geometry.LinearUnits.Miles,
-                    Geometry.LinearUnits.Millimeters,
-                    Geometry.LinearUnits.NauticalMiles,
-                    Geometry.LinearUnits.Yards
-                };
-            }
+
+            // Base default unit selection on the culture the app is running under
+            var useMetric = !"en-us".Equals(Language.ToString(), StringComparison.OrdinalIgnoreCase);
 
             if (SelectedLinearUnit == null)
             {
-                SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ?
+                if (useMetric)
+                {
+                    SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ?
                     Geometry.LinearUnits.Meters :
                     LinearUnits.FirstOrDefault();
-            }
-
-            if (AreaUnits == null || !AreaUnits.Any())
-            {
-                AreaUnits = new AreaUnit[]
+                }
+                else
                 {
-                    Geometry.AreaUnits.Acres,
-                    Geometry.AreaUnits.Hectares,
-                    Geometry.AreaUnits.SquareCentimeters,
-                    Geometry.AreaUnits.SquareDecimeters,
-                    Geometry.AreaUnits.SquareFeet,
-                    Geometry.AreaUnits.SquareKilometers,
-                    Geometry.AreaUnits.SquareMeters,
-                    Geometry.AreaUnits.SquareMiles,
-                    Geometry.AreaUnits.SquareMillimeters,
-                    Geometry.AreaUnits.SquareYards
-                };
+                    SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Feet) ?
+                    Geometry.LinearUnits.Feet :
+                    LinearUnits.FirstOrDefault();
+                }
             }
 
             if (SelectedAreaUnit == null)
             {
-                SelectedAreaUnit = AreaUnits.Any(u => u == Geometry.AreaUnits.SquareMiles) ?
-                    Geometry.AreaUnits.SquareMiles :
+                if (useMetric)
+                {
+                    SelectedAreaUnit = AreaUnits.Any(u => u == Geometry.AreaUnits.SquareKilometers) ?
+                    Geometry.AreaUnits.SquareKilometers :
                     AreaUnits.FirstOrDefault();
+                }
+                else
+                {
+                    SelectedAreaUnit = AreaUnits.Any(u => u == Geometry.AreaUnits.SquareMiles) ?
+                        Geometry.AreaUnits.SquareMiles :
+                        AreaUnits.FirstOrDefault();
+                }
             }
-
-            if (LineSketchEditor == null)
-            {
-                LineSketchEditor = new SketchEditor();
-            }
-
-            if (AreaSketchEditor == null)
-            {
-                AreaSketchEditor = new SketchEditor();
-            }
-
-            if (SelectionLineSymbol == null)
-            {
-                SelectionLineSymbol = LineSketchEditor?.Style?.LineSymbol;
-            }
-
-            if (SelectionFillSymbol == null)
-            {
-                SelectionFillSymbol = AreaSketchEditor?.Style?.FillSymbol;
-            }
-
-            Mode = MeasureToolbarMode.None;
             PrepareMeasureMode();
         }
 
@@ -737,9 +735,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.LinearUnit"/> used to configure display for distance measurements.
         /// </summary>
-        public IEnumerable<LinearUnit> LinearUnits
+        public IList<LinearUnit> LinearUnits
         {
-            get { return (IEnumerable<LinearUnit>)GetValue(LinearUnitsProperty); }
+            get { return (IList<LinearUnit>)GetValue(LinearUnitsProperty); }
             set { SetValue(LinearUnitsProperty, value); }
         }
 
@@ -747,7 +745,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="LinearUnits"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty LinearUnitsProperty =
-            DependencyProperty.Register(nameof(LinearUnits), typeof(IEnumerable<LinearUnit>), typeof(MeasureToolbar), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(LinearUnits), typeof(IList<LinearUnit>), typeof(MeasureToolbar), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets the unit used to display for distance measurements.
@@ -773,9 +771,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.AreaUnit"/> used to configure display for area measurements.
         /// </summary>
-        public IEnumerable<AreaUnit> AreaUnits
+        public IList<AreaUnit> AreaUnits
         {
-            get { return (IEnumerable<AreaUnit>)GetValue(AreaUnitsProperty); }
+            get { return (IList<AreaUnit>)GetValue(AreaUnitsProperty); }
             set { SetValue(AreaUnitsProperty, value); }
         }
 
@@ -783,7 +781,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="AreaUnits"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty AreaUnitsProperty =
-            DependencyProperty.Register(nameof(AreaUnits), typeof(IEnumerable<AreaUnit>), typeof(MeasureToolbar), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(AreaUnits), typeof(IList<AreaUnit>), typeof(MeasureToolbar), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets the unit used to display for area measurements.
