@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __IOS__
+#if XAMARIN
 
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +23,9 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI;
 #if __IOS__
 using Color = UIKit.UIColor;
+#elif __ANDROID__
+using Android.Views;
+using Color = Android.Graphics.Color;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -76,7 +79,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     foreach (var tickContainer in _majorTickmarks)
                     {
+#if __IOS__
                         var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
+#elif __ANDROID__
+                        var tick = tickContainer is ViewGroup group ? group.GetChildren().OfType<RectangleView>().FirstOrDefault() : tickContainer;
+#endif
                         tick?.SetBackgroundColor(value);
                     }
                 }
