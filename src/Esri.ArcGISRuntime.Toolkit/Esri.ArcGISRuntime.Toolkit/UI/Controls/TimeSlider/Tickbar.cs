@@ -35,8 +35,8 @@ using Rect = CoreGraphics.CGRect;
 using Size = CoreGraphics.CGSize;
 using UIElement = UIKit.UIView;
 #elif __ANDROID__
-using Android.Content;
 using System.Drawing;
+using Android.Content;
 using Brush = Android.Graphics.Color;
 using ContentPresenter = Android.Views.View;
 using FrameworkElement = Android.Views.View;
@@ -67,12 +67,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Initializes a new instance of the <see cref="Tickbar"/> class.
         /// </summary>
+        public Tickbar(
 #if __ANDROID__
-        public Tickbar(Context context)
-            : base(context) => Initialize();
-#else
-        public Tickbar() => Initialize();
+            Context context)
+            : base(context
 #endif
+            ) => Initialize();
 
         private Size OnArrange(Size finalSize)
         {
