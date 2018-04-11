@@ -99,11 +99,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var host = _serverInfo == null ? info.ServiceUri : _serverInfo.ServerUri;
                 if (_rememberCredentialsButton != null && _rememberCredentialsButton.IsChecked.Value)
                 {
-                    Authentication.CredentialsCache.SaveCredential(_username.Text, _password.SecurePassword, host);
+                    Esri.ArcGISRuntime.Toolkit.Authentication.CredentialsCache.SaveCredential(_username.Text, _password.SecurePassword, host);
                 }
                 else
                 {
-                    Authentication.CredentialsCache.DeleteCredential(host);
+                    Esri.ArcGISRuntime.Toolkit.Authentication.CredentialsCache.DeleteCredential(host);
                 }
             }
 
@@ -134,17 +134,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (ServerHost != null && EnableCredentialCache)
             {
-                var credential = Authentication.CredentialsCache.ReadCredential(ServerHost);
+                var credential = Esri.ArcGISRuntime.Toolkit.Authentication.CredentialsCache.ReadCredential(ServerHost);
                 if (credential != null)
                 {
                     if (_username != null)
                     {
-                        _username.Text = credential.Item1;
+                        _username.Text = credential.Username;
                     }
 
                     if (_password != null)
                     {
-                        _password.Password = ConvertToUnsecureString(credential.Item2);
+                        _password.Password = ConvertToUnsecureString(credential.Password);
                     }
 
                     if (_rememberCredentialsButton != null)
