@@ -542,7 +542,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return null;
             }
-
+#if NETFX_CORE
+            CultureInfo cinfo = new CultureInfo(this.Language);
+#else
+            CultureInfo cinfo = this.Language.GetEquivalentCulture();
+#endif
             switch (_field.FieldType)
             {
                 case FieldType.Date:
@@ -557,10 +561,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             return null;
                         }
 
-                        return DateTimeOffset.Parse(valueString);
+                        return DateTimeOffset.Parse(valueString, cinfo);
                     }
 
                 case FieldType.Float32:
+                    {
+                        if (value is float)
+                        {
+                            return value;
+                        }
+
+                        return Convert.ToSingle(valueString, cinfo);
+                    }
                 case FieldType.Float64:
                     {
                         if (value is double)
@@ -568,7 +580,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             return value;
                         }
 
-                        return Convert.ToDouble(valueString, CultureInfo.InvariantCulture);
+                        return Convert.ToDouble(valueString, cinfo);
                     }
 
                 case FieldType.Guid:
@@ -593,7 +605,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             return value;
                         }
 
-                        return Convert.ToInt16(valueString, CultureInfo.InvariantCulture);
+                        return Convert.ToInt16(valueString, cinfo);
                     }
 
                 case FieldType.Int32:
@@ -603,7 +615,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             return value;
                         }
 
-                        return Convert.ToInt32(valueString, CultureInfo.InvariantCulture);
+                        return Convert.ToInt32(valueString, cinfo);
                     }
 
                 case FieldType.OID:
@@ -613,7 +625,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             return value;
                         }
 
-                        return Convert.ToInt64(valueString, CultureInfo.InvariantCulture);
+                        return Convert.ToInt64(valueString, cinfo);
                     }
 
                 case FieldType.Text:
