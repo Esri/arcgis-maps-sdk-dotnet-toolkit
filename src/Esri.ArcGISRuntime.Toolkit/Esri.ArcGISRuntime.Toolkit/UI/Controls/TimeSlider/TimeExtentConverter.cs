@@ -29,6 +29,12 @@ namespace Esri.ArcGISRuntime.Toolkit
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class TimeExtentConverter : TypeConverter
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeExtentConverter"/> class.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public TimeExtentConverter() { }
+
         /// <inheritdoc />
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
@@ -44,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <inheritdoc />
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            return Convert(value as string);
+            return Convert(value as string, culture);
         }
 
         /// <inheritdoc />
@@ -57,13 +63,13 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             if (destinationType == typeof(string) && value is TimeExtent)
             {
-                return Convert((TimeExtent)value);
+                return Convert((TimeExtent)value, culture);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private TimeExtent Convert(string timeExtentString)
+        private TimeExtent Convert(string timeExtentString, CultureInfo culture)
         {
             if (string.IsNullOrEmpty(timeExtentString))
             {
@@ -78,13 +84,13 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
 
             DateTimeOffset startTime;
-            if (!DateTimeOffset.TryParse(timeExtentParts[0], out startTime))
+            if (!DateTimeOffset.TryParse(timeExtentParts[0], culture, DateTimeStyles.AssumeUniversal, out startTime))
             {
                 return null;
             }
 
             DateTimeOffset endTime;
-            if (timeExtentParts.Length == 2 && DateTimeOffset.TryParse(timeExtentParts[1], out endTime))
+            if (timeExtentParts.Length == 2 && DateTimeOffset.TryParse(timeExtentParts[1], culture, DateTimeStyles.AssumeUniversal, out endTime))
             {
                 timeExtent = new TimeExtent(startTime, endTime);
             }
@@ -96,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             return timeExtent;
         }
 
-        private string Convert(TimeExtent timeExtent)
+        private string Convert(TimeExtent timeExtent, CultureInfo culture)
         {
             if (timeExtent == null)
             {
@@ -109,7 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
             else
             {
-                return $"{timeExtent.StartTime.ToString()} - {timeExtent.EndTime.ToString()}";
+                return $"{timeExtent.StartTime.ToString(culture)} - {timeExtent.EndTime.ToString(culture)}";
             }
         }
     }
