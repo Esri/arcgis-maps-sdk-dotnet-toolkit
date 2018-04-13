@@ -29,6 +29,12 @@ namespace Esri.ArcGISRuntime.Toolkit
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class TimeExtentConverter : TypeConverter
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeExtentConverter"/> class.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public TimeExtentConverter() { }
+
         /// <inheritdoc />
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
@@ -44,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// <inheritdoc />
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            return Convert(value as string);
+            return Convert(value as string, culture);
         }
 
         /// <inheritdoc />
@@ -57,46 +63,44 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             if (destinationType == typeof(string) && value is TimeExtent)
             {
-                return Convert((TimeExtent)value);
+                return Convert((TimeExtent)value, culture);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private TimeExtent Convert(string timeExtentString)
+        private TimeExtent Convert(string timeExtentString, CultureInfo culture)
         {
             if (string.IsNullOrEmpty(timeExtentString))
             {
                 return null;
             }
 
-            TimeExtent timeExtent = null;
             var timeExtentParts = timeExtentString.Split(new string[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
-            if (timeExtentParts.Length == 0 || timeExtentParts.Length > 2)
+            if (timeExtentParts.Length == 0)
             {
                 return null;
             }
 
-            DateTimeOffset startTime;
-            if (!DateTimeOffset.TryParse(timeExtentParts[0], out startTime))
+            if (timeExtentParts.Length > 2)
             {
-                return null;
+                throw new FormatException("Multiple date splitters found in TimeExtent string");
             }
 
-            DateTimeOffset endTime;
-            if (timeExtentParts.Length == 2 && DateTimeOffset.TryParse(timeExtentParts[1], out endTime))
+            DateTimeOffset startTime = DateTimeOffset.Parse(timeExtentParts[0], culture, DateTimeStyles.AssumeUniversal);
+
+            if (timeExtentParts.Length == 2)
             {
-                timeExtent = new TimeExtent(startTime, endTime);
+                DateTimeOffset endTime = DateTimeOffset.Parse(timeExtentParts[1], culture, DateTimeStyles.AssumeUniversal);
+                return new TimeExtent(startTime, endTime);
             }
             else
             {
-                timeExtent = new TimeExtent(startTime);
+                return new TimeExtent(startTime);
             }
-
-            return timeExtent;
         }
 
-        private string Convert(TimeExtent timeExtent)
+        private string Convert(TimeExtent timeExtent, CultureInfo culture)
         {
             if (timeExtent == null)
             {
@@ -105,11 +109,11 @@ namespace Esri.ArcGISRuntime.Toolkit
 
             if (timeExtent.StartTime == timeExtent.EndTime)
             {
-                return timeExtent.StartTime.ToString();
+                return timeExtent.StartTime.ToString(culture);
             }
             else
             {
-                return $"{timeExtent.StartTime.ToString()} - {timeExtent.EndTime.ToString()}";
+                return $"{timeExtent.StartTime.ToString(culture)} - {timeExtent.EndTime.ToString(culture)}";
             }
         }
     }

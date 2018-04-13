@@ -791,14 +791,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 steps.Add(nextStep);
             }
 
-            TimeSteps = steps;
+            TimeSteps = steps.AsReadOnly();
             _calculateTimeStepsTcs.TrySetResult(true);
         }
 
         /// <summary>
         /// Gets the time steps that can be used to set the slider instance's current extent
         /// </summary>
-        public IEnumerable<DateTimeOffset> TimeSteps
+        public IReadOnlyList<DateTimeOffset> TimeSteps
         {
             get => TimeStepsImpl;
             private set => TimeStepsImpl = value;
@@ -1468,7 +1468,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // We want to rely on step indexes, so we use the known backing type here since that's most efficent.
             // If the backing type changes, or if the property is changed to be settable, the implemetation here
             // will need to be updated accordingly.
-            var timeStepsList = (List<DateTimeOffset>)TimeSteps;
+            var timeStepsList = TimeSteps.ToList();
 
             // Get the current start and end time step indexes
             var startTimeStepIndex = timeStepsList.IndexOf(CurrentValidExtent.StartTime);
