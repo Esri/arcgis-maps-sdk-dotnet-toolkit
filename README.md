@@ -33,15 +33,15 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|FeatureDataField   | ✔ | ✔ | To do | To do | To do |
-|Legend   | ✔ | ✔ | ✔ | [✔ | ✔ |
+|FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
+|Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|MeasureToolbar   | ✔ | ✔ | To do | To do | To do |
+|MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |
 |ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |SignInForm   |   | ✔ |   |   |   |
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |TableOfContents   | N/A | ✔ | N/A  | N/A | N/A |
-|TimeSlider   | ✔ | ✔ | To do  | ✔ | To do |
+|TimeSlider   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201)  | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201) |
 
 ## Instructions for Building
 
