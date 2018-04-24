@@ -109,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="ReverseLayerOrder"/> bindable property.
         /// </summary>
         public static readonly BindableProperty ReverseLayerOrderProperty =
-            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null, OnFilterByVisibleScaleRangePropertyChanged);
+            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null, OnReverseLayerOrderPropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
