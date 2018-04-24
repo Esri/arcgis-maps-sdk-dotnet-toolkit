@@ -81,7 +81,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return finalSize;
             }
 
-            Rect childBounds = new Rect(0, 0, finalSize.Width, finalSize.Height);
             var majorTickmarksBounds = new List<Rect>();
             var minorTickmarksBounds = new List<Rect>();
 
@@ -106,8 +105,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 position = finalSize.Width * position;
                 var desiredSize = GetDesiredSize(c);
                 var x = position - (desiredSize.Width * .5);
+#if __ANDROID__
+                // In the implementation of the Android time slider, the tickbar is aligned horizontally with its parent to allow
+                // tick labels to use the entire space within the control.  The TickInset property defines how much extra room is
+                // available outside the bounds of the Tickbar and needs to be taken into account in the placement of ticks.
+                x += TickInset;
+#endif
+                var childBounds = new Rect(0, 0, desiredSize.Width, finalSize.Height);
                 childBounds.SetX(x);
-                childBounds.SetWidth(desiredSize.Width);
+                //childBounds.SetWidth(desiredSize.Width);
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
                 if (isMajorTickmark)

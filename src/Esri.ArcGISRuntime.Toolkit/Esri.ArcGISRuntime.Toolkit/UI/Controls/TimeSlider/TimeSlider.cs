@@ -44,6 +44,7 @@ using TextBlock = UIKit.UILabel;
 using System.Drawing;
 using Android.Content;
 using Brush = Android.Graphics.Color;
+using Size = Android.Util.Size;
 using TextBlock = Android.Widget.TextView;
 #else
 using System.Windows.Controls;
@@ -109,6 +110,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             var sliderWidth = SliderTrack.GetActualWidth();
+#if __ANDROID__
+            // On Android, the actual rendered width is 2 DIPs less than that reported.  Visually, the track appears
+            // to render with a margin of 1 DIP on either side.  Adjust sliderWidth accordingly.
+            sliderWidth -= Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 2, ViewExtensions.GetDisplayMetrics());
+#endif
             var minimum = ValidFullExtent.StartTime.Ticks;
             var maximum = ValidFullExtent.EndTime.Ticks;
 
@@ -127,14 +133,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Position left repeater
             right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.GetActualWidth());
-            SliderTrackStepBackRepeater.SetMargin(0, 0, right, 0);
-            SliderTrackStepBackRepeater.SetWidth(Math.Max(0, sliderWidth - right));
+            SliderTrackStepBackRepeater?.SetMargin(0, 0, right, 0);
+            SliderTrackStepBackRepeater?.SetWidth(Math.Max(0, sliderWidth - right));
 
             // Margin adjustment for the minimum thumb label
             var thumbLabelWidthAdjustment = 0d;
             var minLabelLeftMargin = -1d;
             var minLabelRightMargin = -1d;
             var minThumbLabelWidth = 0d;
+
+#if __ANDROID__
+            // On Android, the slider track is positioned relative to the bounds of the parent.  So get the distance between the parent left and
+            // track left to incorporate that into element positioning.
+            var visualXOffset = Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 1, ViewExtensions.GetDisplayMetrics());
+            var trackMarginOffset = SliderTrack.GetX() + visualXOffset - GetX();
+#else
+            var trackMarginOffset = 0;
+#endif
 
             // Position minimum thumb
             if (!IsCurrentExtentTimeInstant)
@@ -148,8 +163,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 left -= 0.5;
                 right -= 0.5;
 #endif
-                thumbLeft = left - (MinimumThumb.GetActualWidth() / 2);
-                thumbRight = right - (MinimumThumb.GetActualWidth() / 2);
+                thumbLeft = left - (MinimumThumb.GetActualWidth() / 2) + trackMarginOffset;
+                thumbRight = right - (MinimumThumb.GetActualWidth() / 2) + trackMarginOffset;
                 MinimumThumb.SetMargin(thumbLeft, 0, thumbRight, 0);
 
                 var isVisible = LabelMode == TimeSliderLabelMode.CurrentExtent && start != minimum;
@@ -161,8 +176,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Calculate thumb label position
                 minThumbLabelWidth = CalculateTextSize(MinimumThumbLabel).Width;
                 thumbLabelWidthAdjustment = minThumbLabelWidth / 2;
-                minLabelLeftMargin = left - thumbLabelWidthAdjustment;
-                minLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
+                minLabelLeftMargin = left - thumbLabelWidthAdjustment + trackMarginOffset;
+                minLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment) + trackMarginOffset;
             }
             else
             {
@@ -176,7 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 // One thumb
                 // Hide the middle thumb
-                HorizontalTrackThumb.SetIsVisible(false);
+                HorizontalTrackThumb?.SetIsVisible(false);
             }
             else
             {
@@ -184,9 +199,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Position the middle thumb
                 left = Math.Min(sliderWidth, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, (maximum - end) * rate);
-                HorizontalTrackThumb.SetMargin(left, 0, right, 0);
-                HorizontalTrackThumb.SetWidth(Math.Max(0, sliderWidth - right - left));
-                HorizontalTrackThumb.SetIsVisible(true);
+                HorizontalTrackThumb?.SetMargin(left, 0, right, 0);
+                HorizontalTrackThumb?.SetWidth(Math.Max(0, sliderWidth - right - left));
+                HorizontalTrackThumb?.SetIsVisible(true);
 #if !XAMARIN
                 HorizontalTrackThumb.HorizontalAlignment = HorizontalAlignment.Left;
 #endif
@@ -200,8 +215,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             left -= 0.5;
             right -= 0.5;
 #endif
-            thumbLeft = left - (MaximumThumb.GetActualWidth() / 2);
-            thumbRight = right - (MaximumThumb.GetActualWidth() / 2);
+            thumbLeft = left - (MaximumThumb.GetActualWidth() / 2) + trackMarginOffset;
+            thumbRight = right - (MaximumThumb.GetActualWidth() / 2) + trackMarginOffset;
             MaximumThumb.SetMargin(thumbLeft, 0, thumbRight, 0);
 
             // Update maximum thumb label visibility
@@ -210,8 +225,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position maximum thumb label
             var maxThumbLabelWidth = CalculateTextSize(MaximumThumbLabel).Width;
             thumbLabelWidthAdjustment = maxThumbLabelWidth / 2;
-            var maxLabelLeftMargin = left - thumbLabelWidthAdjustment;
-            var maxLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
+            var maxLabelLeftMargin = left - thumbLabelWidthAdjustment + trackMarginOffset;
+            var maxLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment) + trackMarginOffset;
 
             // Handle possible thumb label collision and apply label positions
             if (!IsCurrentExtentTimeInstant && MinimumThumbLabel.GetOpacity() == 1)
@@ -244,8 +259,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Position right repeater
             left = Math.Min(sliderWidth, ((end - minimum) * rate) + MaximumThumb.GetActualWidth());
-            SliderTrackStepForwardRepeater.SetMargin(left, 0, 0, 0);
-            SliderTrackStepForwardRepeater.SetWidth(Math.Max(0, sliderWidth - left));
+            SliderTrackStepForwardRepeater?.SetMargin(left, 0, 0, 0);
+            SliderTrackStepForwardRepeater?.SetWidth(Math.Max(0, sliderWidth - left));
         }
 
         /// <summary>
@@ -282,7 +297,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             return (Size)label.SizeThatFits(new CoreGraphics.CGSize(double.MaxValue, double.MaxValue));
 #elif __ANDROID__
-            throw new NotImplementedException();
+            string oldText = textBlock.Text;
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBlock.Text = text;
+            }
+
+            var size = GetDesiredSize(textBlock);
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBlock.Text = oldText;
+            }
+
+            return size;
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
             var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
@@ -672,7 +700,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Gets a value indicating whether or not the current extent represents a time instant

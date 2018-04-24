@@ -14,8 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__ANDROID__
-
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
@@ -39,5 +37,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         TimeStepInterval
     }
 }
-
-#endif

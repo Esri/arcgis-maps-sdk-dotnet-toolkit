@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Android.Content;
 using Android.Graphics;
+using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -27,21 +27,24 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    public partial class Tickbar : ViewGroup
+    [Register("Esri.ArcGISRuntime.Toolkit.Primitives.Tickbar")]
+    public partial class Tickbar : FrameLayout
     {
+        private ThrottleAwaiter _arrangeThrottler = new ThrottleAwaiter(1);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Tickbar"/> class.
+        /// </summary>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        public Tickbar(Context context, IAttributeSet attr)
+            : base(context, attr)
+        {
+            Initialize();
+        }
+
         private void Initialize()
         {
-        }
-
-        protected override void OnLayout(bool changed, int l, int t, int r, int b)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
-        {
-            throw new NotImplementedException();
-            //base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
         }
 
         private Size _majorTickSize = new Size(1, 10);
@@ -116,6 +119,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+        private float _tickInset;
+
+        /// <summary>
+        /// Gets or sets the amount by which the tick rendering area is offset from the left and right edge of the tickbar
+        /// </summary>
+        internal float TickInset
+        {
+            get => _tickInset;
+            set
+            {
+                _tickInset = value;
+                InvalidateMeasureAndArrange();
+            }
+        }
+
         /// <summary>
         /// Adds a tick to the bar's visual tree
         /// </summary>
@@ -126,14 +144,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
             // one to actually show at the position.
 
+            // Get dimension of ticks in DIPs
+            var minorTickWidthDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MinorTickSize.Width, ViewExtensions.GetDisplayMetrics());
+            var minorTickHeightDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MinorTickSize.Height, ViewExtensions.GetDisplayMetrics());
+            var majorTickWidthDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MajorTickSize.Width, ViewExtensions.GetDisplayMetrics());
+            var majorTickHeightDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MajorTickSize.Height, ViewExtensions.GetDisplayMetrics());
+
             // Create a minor tickmark
-            var tick = new RectangleView(Context)
+            var tick = new View(Context)
             {
-                BackgroundColor = TickFill,
-                Width = MinorTickSize.Width,
-                Height = MinorTickSize.Height,
-                //BorderWidth = 0
+                LayoutParameters = new FrameLayout.LayoutParams(minorTickWidthDp, minorTickHeightDp)
+                {
+                    Gravity = GravityFlags.Bottom
+                }
             };
+            tick.SetBackgroundColor(TickFill);
             SetIsMajorTickmark(tick, false);
             SetPosition(tick, position);
 
@@ -141,17 +166,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             _minorTickmarks.Add(tick);
 
             // Create a major tickmark
-            tick = new RectangleView(Context)
-            {
-                BackgroundColor = TickFill,
-                Width = MajorTickSize.Width,
-                Height = MajorTickSize.Height,
-                //BorderWidth = 0
-            };
+            tick = new View(Context);
+            tick.SetBackgroundColor(TickFill);
 
             if (dataSource is DateTimeOffset dateTime)
             {
-                var majorTickContainer = new RelativeLayout(Context);
+                var majorTickContainer = new LinearLayout(Context)
+                {
+                    Orientation = Orientation.Vertical,
+                    LayoutParameters = new FrameLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                    {
+                        Gravity = GravityFlags.Bottom
+                    }
+                };
 
                 // Create label for major tickmark
                 var timeStepIntervalDateFormat = string.IsNullOrEmpty(TickLabelFormat)
@@ -159,21 +186,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var label = new TextView(Context)
                 {
                     Text = dateTime.ToString(timeStepIntervalDateFormat),
-                    //Font = UIFont.SystemFontOfSize(11),
-                    //TextColor = TickLabelColor,
-                    Tag = dateTime.ToUnixTimeMilliseconds()
+                    Tag = dateTime.ToUnixTimeMilliseconds(),
+                    LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
                 };
                 label.SetTextColor(TickLabelColor);
 
-                // Calculate positions of the tickmark and label
-                //var labelSize = label.SizeThatFits(Frame.Size);
-                //var tickLeft = (labelSize.Width - tick.Width) / 2;
-                //tick.Frame = new CGRect(tickLeft, 0, tick.Width, tick.Height);
-                //label.Frame = new CGRect(0, tick.Height + LabelOffset, labelSize.Width, labelSize.Height);
+                var text = label.Text;
+                var color = label.CurrentTextColor;
 
-                majorTickContainer.AddView(tick);
+                tick.LayoutParameters = new LinearLayout.LayoutParams(majorTickWidthDp, majorTickHeightDp)
+                {
+                    Gravity = GravityFlags.CenterHorizontal
+                };
+
                 majorTickContainer.AddView(label);
-                //majorTickContainer.Frame = new CGRect(0, 0, labelSize.Width, label.Frame.Bottom);
+                majorTickContainer.AddView(tick);
 
                 // Flag the tick as a major tickmark and set it's proportional position along the tick bar
                 SetIsMajorTickmark(majorTickContainer, true);
@@ -184,6 +211,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else
             {
+                tick.LayoutParameters = new FrameLayout.LayoutParams(majorTickWidthDp, majorTickHeightDp)
+                {
+                    Gravity = GravityFlags.Bottom
+                };
                 SetIsMajorTickmark(tick, true);
                 SetPosition(tick, position);
 
@@ -266,35 +297,44 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private Size GetDesiredSize(View view)
         {
-            throw new NotImplementedException();
-
-            //view.SizeThatFits(Frame.Size);
+            if (view is RectangleView rectangleView)
+            {
+                return new Size((int)rectangleView.Width, (int)rectangleView.Height);
+            }
+            else if (view.LayoutParameters != null && view.LayoutParameters.Width > 0 && view.LayoutParameters.Height > 0)
+            {
+                return new Size(view.LayoutParameters.Width, view.LayoutParameters.Height);
+            }
+            else if (view is LinearLayout linearLayout && GetIsMajorTickmark(linearLayout) && linearLayout.GetChildAt(0) is TextView label)
+            {
+                label.Measure((int)MeasureSpecMode.Unspecified, (int)MeasureSpecMode.Unspecified);
+                return new Size(label.MeasuredWidth, label.MeasuredHeight);
+            }
+            else
+            {
+                view.Measure((int)MeasureSpecMode.Unspecified, (int)MeasureSpecMode.Unspecified);
+                return new Size(view.MeasuredWidth, view.MeasuredHeight);
+            }
         }
 
-        private void InvalidateMeasureAndArrange()
+        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
-            throw new NotImplementedException();
+            base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
 
-            //// Re-layout major tickmarks and labels to accommodate possible change in label lengths
-            //foreach (var tickContainer in _majorTickmarks)
-            //{
-            //    // Get tick rectangle and label for current tick
-            //    var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
-            //    var label = tickContainer.Subviews.OfType<UILabel>().FirstOrDefault();
-            //    if (tick == null || label == null)
-            //    {
-            //        continue;
-            //    }
+            InvalidateMeasureAndArrange();
+        }
 
-            //    // Get size of the tick label and calculate the frame for the tick, label, and container
-            //    var labelSize = label.SizeThatFits(Frame.Size);
-            //    var tickLeft = (labelSize.Width - tick.Width) / 2;
-            //    tick.Frame = new CGRect(tickLeft, 0, tick.Width, tick.Height);
-            //    label.Frame = new CGRect(0, tick.Height + LabelOffset, labelSize.Width, labelSize.Height);
-            //    tickContainer.Frame = new CGRect(0, 0, labelSize.Width, label.Frame.Bottom);
-            //}
+        private async void InvalidateMeasureAndArrange()
+        {
+            if (MeasuredWidth == 0 || MeasuredHeight == 0)
+            {
+                return;
+            }
 
-            //OnArrange(Frame.Size);
+            await _arrangeThrottler.ThrottleDelay();
+
+            var availableWidth = MeasuredWidth - (TickInset * 2);
+            OnArrange(new SizeF(availableWidth, MeasuredHeight));
         }
     }
 }

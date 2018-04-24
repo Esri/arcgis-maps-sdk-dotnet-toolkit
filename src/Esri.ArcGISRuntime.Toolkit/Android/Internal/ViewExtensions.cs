@@ -16,7 +16,10 @@
 
 using System;
 using System.Collections.Generic;
+using Android.App;
+using Android.Content;
 using Android.Graphics;
+using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -30,15 +33,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     internal static class ViewExtensions
     {
+        private static DisplayMetrics s_displayMetrics;
+        private static IWindowManager s_windowManager;
+
         public static void SetMargin(this View view, double left, double top, double right, double bottom)
         {
-            throw new NotImplementedException();
+            if (view.LayoutParameters is ViewGroup.MarginLayoutParams layoutParams)
+            {
+                layoutParams.LeftMargin = (int)Math.Round(left);
+            }
         }
 
-        public static double GetActualWidth(this View view)
-        {
-            throw new NotImplementedException();
-        }
+        public static double GetActualWidth(this View view) => view.MeasuredWidth;
+
+        public static double GetActualHeight(this View view) => view.MeasuredHeight;
 
         public static void SetWidth(this RectangleView view, double width)
         {
@@ -52,27 +60,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static bool GetIsVisible(this View view) => view.Visibility == ViewStates.Visible;
 
-        public static void SetIsVisible(this View view, bool isVisible) => view.Visibility = isVisible ? ViewStates.Visible : ViewStates.Invisible;
+        public static void SetIsVisible(this View view, bool isVisible) => view.Visibility = isVisible ? ViewStates.Visible : ViewStates.Gone;
 
         public static double GetOpacity(this View view) => view.Alpha;
 
         public static void SetOpacity(this View view, double opacity) => view.Alpha = (float)opacity;
 
+        public static bool GetIsEnabled(this View view) => view.Enabled;
+
         public static void SetIsEnabled(this View view, bool enabled) => view.Enabled = enabled;
 
         public static void Arrange(this View view, RectF bounds)
         {
-            throw new NotImplementedException();
-
-            //if (bounds == new Rect(0, 0, 0, 0))
-            //{
-            //    view.SetIsVisible(false);
-            //}
-            //else
-            //{
-            //    view.SetIsVisible(true);
-            //    view.Frame = bounds;
-            //}
+            if (bounds.Width() == 0 && bounds.Height() == 0)
+            {
+                view.SetIsVisible(false);
+            }
+            else
+            {
+                view.SetIsVisible(true);
+                view.SetMargin(bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+            }
         }
 
         public static void SetBackgroundColor(this View view, Color color) => view.SetBackgroundColor(color);
@@ -95,7 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         //public static void SetBorderColor(this DrawActionToggleButton view, UIColor color) => view.BorderColor = color;
 
-        public static void SetBorderWidth(this RectangleView view, double width)
+        public static void SetBorderWidth(this View view, double width)
         {
             throw new NotImplementedException();
 
@@ -118,5 +126,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         public static void Measure(this View view, SizeF availableSize) => view.Measure((int)Math.Round(availableSize.Width), (int)Math.Round(availableSize.Height));
+
+        // Gets a display metrics object for calculating display dimensions
+        internal static DisplayMetrics GetDisplayMetrics()
+        {
+            if (s_displayMetrics == null)
+            {
+                if (s_windowManager == null)
+                {
+                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                }
+
+                if (s_windowManager == null)
+                {
+                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
+                }
+                else
+                {
+                    s_displayMetrics = new DisplayMetrics();
+                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
+                }
+            }
+
+            return s_displayMetrics;
+        }
     }
 }

@@ -23,6 +23,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <TargetFrameworkIdentifier>MonoAndroid</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
 
@@ -40,7 +42,14 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\layout\TimeSlider.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\thumb.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
 	<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.2.1" />
+    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">

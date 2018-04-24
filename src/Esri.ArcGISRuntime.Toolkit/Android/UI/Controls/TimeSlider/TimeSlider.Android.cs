@@ -1,0 +1,236 @@
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using System.ComponentModel;
+using Android.Content;
+using Android.Graphics;
+using Android.Runtime;
+using Android.Support.Constraints;
+using Android.Util;
+using Android.Views;
+using Android.Widget;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.Primitives;
+
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+{
+    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider")]
+    [DisplayName("Time Slider")]
+    [Category("ArcGIS Runtime Controls")]
+    public partial class TimeSlider : ConstraintLayout, View.IOnTouchListener
+    {
+#pragma warning disable SX1309 // Names match elements in template
+#pragma warning disable SA1306 // Names match elements in template
+        private View SliderTrack;
+        private View MinimumThumb;
+        private View MaximumThumb;
+        private RectangleView HorizontalTrackThumb;
+        private Button NextButton;
+        private Button PreviousButton;
+        private ToggleButton PlayPauseButton;
+        private RectangleView SliderTrackStepBackRepeater = null;
+        private RectangleView SliderTrackStepForwardRepeater = null;
+#pragma warning restore SX1309
+#pragma warning restore SA1306
+        private RectangleView _startTimeTickmark;
+        private RectangleView _endTimeTickmark;
+        private bool _currentExtentElementsArranged = false;
+        private bool _isSizeValid = false;
+        private bool _isMinThumbFocused = false;
+        private bool _isMaxThumbFocused = false;
+        private float _lastX = 0;
+        private float _lastY = 0;
+        private ThrottleAwaiter _measureThrottler = new ThrottleAwaiter(1);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSlider"/> class.
+        /// </summary>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        public TimeSlider(Context context, IAttributeSet attr)
+            : base(context, attr)
+        {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            if (DesignTime.IsDesignMode)
+            {
+                // Add placeholder for design-time
+                // TODO
+                return;
+            }
+
+            // TODO - initialize UI
+            var inflater = LayoutInflater.FromContext(Context);
+            inflater.Inflate(Resource.Layout.TimeSlider, this, true);
+
+            SliderTrack = FindViewById<View>(Resource.Id.SliderTrack);
+            FullExtentStartTimeLabel = FindViewById<TextView>(Resource.Id.FullExtentStartTimeLabel);
+            FullExtentEndTimeLabel = FindViewById<TextView>(Resource.Id.FullExtentEndTimeLabel);
+            MinimumThumb = FindViewById<View>(Resource.Id.MinThumb);
+            MaximumThumb = FindViewById<View>(Resource.Id.MaxThumb);
+            MinimumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentStartTimeLabel);
+            MaximumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentEndTimeLabel);
+            Tickmarks = FindViewById<Tickbar>(Resource.Id.Tickmarks);
+
+            PositionTickmarks();
+            ApplyLabelMode(LabelMode);
+
+            SetOnTouchListener(this);
+        }
+
+        private void InvalidateMeasureAndArrange()
+        {
+            if (CurrentValidExtent != null)
+            {
+                UpdateTrackLayout(CurrentValidExtent);
+            }
+        }
+
+        private Size GetDesiredSize(View view)
+        {
+            view.Measure((int)MeasureSpecMode.Unspecified, (int)MeasureSpecMode.Unspecified);
+            return new Size((int)view.MeasuredWidth, (int)view.MeasuredHeight);
+        }
+
+        public bool OnTouch(View v, MotionEvent e)
+        {
+            // Get x/y coordinates of touch location
+            var touchX = e.RawX;
+            var touchY = e.RawY;
+
+            var isTouchHandled = _isMinThumbFocused || _isMaxThumbFocused;
+            var minTargetSize = TypedValue.ApplyDimension(ComplexUnitType.Dip, 44f, ViewExtensions.GetDisplayMetrics());
+            var minThumbBounds = GetBounds(MinimumThumb, minTargetSize, minTargetSize);
+            var maxThumbBounds = GetBounds(MaximumThumb, minTargetSize, minTargetSize);
+            switch (e.Action)
+            {
+                case MotionEventActions.Down:
+                    _isMinThumbFocused = minThumbBounds.Contains(touchX, touchY);
+                    _isMaxThumbFocused = maxThumbBounds.Contains(touchX, touchY);
+
+                    if (_isMinThumbFocused && !IsStartTimePinned)
+                    {
+                        _lastX = touchX - minThumbBounds.Left;
+                        isTouchHandled = true;
+                    }
+
+                    if (_isMaxThumbFocused && !IsEndTimePinned)
+                    {
+                        _lastX = touchX - maxThumbBounds.Left;
+                        isTouchHandled = true;
+                    }
+
+                    break;
+                case MotionEventActions.Move:
+                    if (!_isMinThumbFocused && !_isMaxThumbFocused && !(_isMinThumbFocused && IsStartTimePinned) && !(_isMaxThumbFocused && IsEndTimePinned))
+                    {
+                        return isTouchHandled;
+                    }
+
+                    View trackedThumb = null;
+                    if (_isMinThumbFocused && _isMaxThumbFocused)
+                    {
+                        var maxThumbTranslateX = touchX - maxThumbBounds.Left - _lastX;
+
+                        // Gesture was within both min and max thumb, so let the direction of the gesture determine which thumb should be dragged
+                        if (maxThumbTranslateX < 0)
+                        {
+                            // Gesture is moving thumb toward the min, so put focus on min thumb
+                            trackedThumb = MinimumThumb;
+                            _isMaxThumbFocused = false;
+                        }
+                        else
+                        {
+                            // Gesture is moving thumb toward the max, so put focus on max thumb
+                            trackedThumb = MaximumThumb;
+                            _isMinThumbFocused = false;
+                        }
+                    }
+                    else if (_isMinThumbFocused)
+                    {
+                        trackedThumb = MinimumThumb;
+                    }
+                    else if (_isMaxThumbFocused)
+                    {
+                        trackedThumb = MaximumThumb;
+                    }
+
+                    var currentThumbX = touchX - trackedThumb.Left;
+                    var translateX = currentThumbX - _lastX;
+
+                    System.Diagnostics.Debug.WriteLine($"Translate X: {translateX}");
+
+                    if (_isMinThumbFocused)
+                    {
+                        OnMinimumThumbDrag(translateX);
+                    }
+
+                    if (_isMaxThumbFocused)
+                    {
+                        OnMaximumThumbDrag(translateX);
+                    }
+
+                    break;
+                case MotionEventActions.Up:
+                    _isMinThumbFocused = false;
+                    _isMaxThumbFocused = false;
+                    OnDragCompleted();
+                    break;
+            }
+
+            return isTouchHandled;
+        }
+
+        public RectF GetBounds(View view, float minWidth, float minHeight)
+        {
+            var xy = new int[2];
+            view.GetLocationOnScreen(xy);
+            var left = xy[0];
+            var right = left + view.GetActualWidth();
+            var top = xy[1];
+            var bottom = top + view.GetActualHeight();
+
+            var width = right - left;
+            if (width < minWidth)
+            {
+                var expansionFactor = (int)((minWidth - width) / 2);
+                left -= expansionFactor;
+                right += expansionFactor;
+            }
+
+            var height = bottom - top;
+            if (height < minHeight)
+            {
+                var expansionFactor = (int)((minHeight - height) / 2);
+                top -= expansionFactor;
+                bottom += expansionFactor;
+            }
+
+            return new RectF((float)left, (float)top, (float)right, (float)bottom);
+        }
+
+        protected async override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
+        {
+            base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
+
+            await _measureThrottler.ThrottleDelay();
+            Tickmarks.TickInset = (float)(this.GetActualWidth() - SliderTrack.GetActualWidth()) / 2;
+        }
+    }
+}

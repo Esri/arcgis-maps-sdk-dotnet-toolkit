@@ -63,7 +63,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Color _tickFill = Color.Black;
+        private Color _tickFill =
+#if __IOS__
+            Color.Black;
+#elif __ANDROID__
+            Color.Rgb(188, 188, 188);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark
@@ -98,7 +103,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Color _tickLabelColor = Color.Black;
+        private Color _tickLabelColor =
+#if __IOS__
+            Color.Black;
+#elif __ANDROID__
+            Color.Rgb(188, 188, 188);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark

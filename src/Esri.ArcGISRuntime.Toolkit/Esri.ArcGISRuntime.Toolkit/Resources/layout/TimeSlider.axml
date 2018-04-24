@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <TextView
+    android:text="7/1/2012"
+    android:id="@+id/FullExtentStartTimeLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:clickable="false"
+    android:focusable="false"/>
+  <View
+    android:id="@+id/FullExtentStartTimeTickmark"
+    android:background="#5c5c5c"
+    android:layout_width="2dp"
+    android:layout_height="10dp"
+    android:gravity="center"
+    android:layout_gravity="center"
+    app:layout_constraintBottom_toTopOf="@id/FullExtentStartTimeLabel"
+    app:layout_constraintStart_toStartOf="@id/FullExtentStartTimeLabel"
+    app:layout_constraintEnd_toEndOf="@id/FullExtentStartTimeLabel"
+    android:clickable="false"
+    android:focusable="false" />
+  <TextView
+    android:text="7/12/2012"
+    android:id="@+id/FullExtentEndTimeLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
+    android:id="@+id/FullExtentEndTimeTickmark"
+    android:background="#5c5c5c"
+    android:layout_width="2dp"
+    android:layout_height="10dp"
+    app:layout_constraintBottom_toTopOf="@id/FullExtentEndTimeLabel"
+    app:layout_constraintStart_toStartOf="@id/FullExtentEndTimeLabel"
+    app:layout_constraintEnd_toEndOf="@id/FullExtentEndTimeLabel"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
+    android:id="@+id/SliderTrack"
+    android:layout_width="0dp"
+    android:layout_height="2dp"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
+    app:layout_constraintStart_toStartOf="@id/FullExtentStartTimeTickmark"
+    app:layout_constraintEnd_toEndOf="@id/FullExtentEndTimeTickmark"
+    app:layout_constraintBottom_toTopOf="@id/FullExtentEndTimeTickmark"
+    android:background="#5c5c5c"
+    android:clickable="false"
+    android:focusable="false" />
+  <Esri.ArcGISRuntime.Toolkit.Primitives.Tickbar
+    android:id="@+id/Tickmarks"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <Space
+    android:id="@+id/ThumbGuideStart"
+    android:layout_width="14dp"
+    android:layout_height="0dp"
+    app:layout_constraintEnd_toStartOf="@id/SliderTrack"
+    app:layout_constraintTop_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
+    android:id="@+id/MinThumb"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:background="@drawable/thumb"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <Space
+    android:id="@+id/MinThumbCenter"
+    android:layout_width="1dp"
+    android:layout_height="1dp"
+    app:layout_constraintStart_toStartOf="@id/MinThumb"
+    app:layout_constraintEnd_toEndOf="@id/MinThumb"
+    app:layout_constraintTop_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
+    android:id="@+id/MaxThumb"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:background="@drawable/thumb"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <Space
+    android:id="@+id/MaxThumbCenter"
+    android:layout_width="1dp"
+    android:layout_height="1dp"
+    app:layout_constraintStart_toStartOf="@id/MaxThumb"
+    app:layout_constraintEnd_toEndOf="@id/MaxThumb"
+    app:layout_constraintTop_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <TextView
+    android:text="7/4/2012"
+    android:id="@+id/CurrentExtentStartTimeLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:layout_constraintBottom_toTopOf="@id/MinThumbCenter"
+    app:layout_constraintStart_toStartOf="parent"
+    android:clickable="false"
+    android:focusable="false" />
+  <TextView
+    android:text="7/8/2012"
+    android:id="@+id/CurrentExtentEndTimeLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:layout_constraintBottom_toTopOf="@id/MaxThumbCenter"
+    app:layout_constraintStart_toStartOf="parent"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
+    android:id="@+id/CurrentExtentFill"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintStart_toStartOf="@id/MinThumbCenter"
+    app:layout_constraintEnd_toEndOf="@id/MaxThumbCenter"
+    app:layout_constraintTop_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:background="#5E97F6"
+    android:clickable="false"
+    android:focusable="false" />
+</merge>
