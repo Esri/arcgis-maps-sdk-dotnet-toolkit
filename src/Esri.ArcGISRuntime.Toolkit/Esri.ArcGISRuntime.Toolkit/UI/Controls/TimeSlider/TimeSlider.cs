@@ -92,6 +92,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             )
         {
             Initialize();
+        }
+
+        private void Initialize()
+        {
+            InitializeImpl();
             _playTimer = new DispatcherTimer() { Interval = PlaybackInterval };
             _playTimer.Tick += PlayTimer_Tick;
         }
@@ -982,7 +987,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Update the state of the play/pause button
             if (PlayPauseButton != null)
             {
-#if !__ANDROID__ // TODO on Android
+#if __ANDROID__
+                PlayPauseButton.Checked = isPlaying;
+#else
                 PlayPauseButton.IsChecked = isPlaying;
 #endif
             }

@@ -45,7 +45,22 @@
     <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\layout\TimeSlider.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\thumb.axml">
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\Thumb.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\Triangle.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\PauseShape.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\PlayPauseButton.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\NextPreviousShape.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\NextPreviousButton.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
 	<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.2.1" />
