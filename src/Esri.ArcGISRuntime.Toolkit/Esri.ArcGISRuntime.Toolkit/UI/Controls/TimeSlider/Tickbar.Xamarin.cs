@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #elif __ANDROID__
                         var tick = tickContainer is ViewGroup group ? group.GetChildren().OfType<RectangleView>().FirstOrDefault() : tickContainer;
 #endif
-                        tick?.SetBackgroundColor(value);
+                        tick?.SetBackgroundFill(value);
                     }
                 }
 
@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     foreach (var tick in _minorTickmarks)
                     {
-                        tick.SetBackgroundColor(value);
+                        tick.SetBackgroundFill(value);
                     }
                 }
             }

@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private View SliderTrack;
         private View MinimumThumb;
         private View MaximumThumb;
-        private RectangleView HorizontalTrackThumb;
+        private View HorizontalTrackThumb;
         private Button NextButton;
         private Button PreviousButton;
         private ToggleButton PlayPauseButton;
@@ -45,8 +45,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private RectangleView SliderTrackStepForwardRepeater = null;
 #pragma warning restore SX1309
 #pragma warning restore SA1306
-        private RectangleView _startTimeTickmark;
-        private RectangleView _endTimeTickmark;
+        private View _startTimeTickmark;
+        private View _endTimeTickmark;
         private bool _currentExtentElementsArranged = false;
         private bool _isSizeValid = false;
         private bool _isMinThumbFocused = false;
@@ -66,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Initialize();
         }
 
-        private void Initialize()
+        private void InitializeImpl()
         {
             if (DesignTime.IsDesignMode)
             {
@@ -86,10 +86,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MaximumThumb = FindViewById<View>(Resource.Id.MaxThumb);
             MinimumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentStartTimeLabel);
             MaximumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentEndTimeLabel);
+            HorizontalTrackThumb = FindViewById<View>(Resource.Id.CurrentExtentFill);
             Tickmarks = FindViewById<Tickbar>(Resource.Id.Tickmarks);
+            PlayPauseButton = FindViewById<ToggleButton>(Resource.Id.PlayPauseButton);
+            NextButton = FindViewById<Button>(Resource.Id.NextButton);
+            PreviousButton = FindViewById<Button>(Resource.Id.PreviousButton);
+            _startTimeTickmark = FindViewById<View>(Resource.Id.FullExtentStartTimeTickmark);
+            _endTimeTickmark = FindViewById<View>(Resource.Id.FullExtentEndTimeTickmark);
 
             PositionTickmarks();
             ApplyLabelMode(LabelMode);
+
+            PlayPauseButton.CheckedChange += (o, e) => IsPlaying = PlayPauseButton.Checked;
+            NextButton.Click += (o, e) => OnNextButtonClick();
+            PreviousButton.Click += (o, e) => OnPreviousButtonClick();
 
             SetOnTouchListener(this);
         }

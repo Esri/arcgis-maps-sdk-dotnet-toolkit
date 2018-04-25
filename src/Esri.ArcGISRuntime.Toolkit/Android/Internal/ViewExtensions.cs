@@ -19,12 +19,12 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Toolkit.UI;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -48,14 +48,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static double GetActualHeight(this View view) => view.MeasuredHeight;
 
-        public static void SetWidth(this RectangleView view, double width)
+        public static void SetWidth(this View view, double width)
         {
-            if (view == null)
+            if (view is RectangleView rectangleView)
             {
-                return;
+                rectangleView.Width = width;
             }
-
-            view.Width = width;
         }
 
         public static bool GetIsVisible(this View view) => view.Visibility == ViewStates.Visible;
@@ -83,31 +81,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        public static void SetBackgroundColor(this View view, Color color) => view.SetBackgroundColor(color);
+        public static void SetBackgroundFill(this View view, Color color)
+        {
+            if (view.Background is Drawable drawable)
+            {
+                drawable.SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+            }
+            else
+            {
+                view.SetBackgroundColor(color);
+            }
+        }
 
         public static void SetBorderColor(this View view, Color color)
         {
-            throw new NotImplementedException();
-
-            //view.BorderColor = color;
+            if (view.Background is Drawable drawable)
+            {
+                // TODO: This doesn't work in combination with drawable.SetColorFilter
+                drawable.SetTint(color);
+                drawable.SetTintMode(PorterDuff.Mode.SrcAtop);
+            }
+            else
+            {
+                // Can't do anything - generic support for borders doesn't exist on Android
+            }
         }
-
-        public static void SetBorderColor(this RectangleView view, Color color)
-        {
-            throw new NotImplementedException();
-
-            //view.BorderColor = color;
-        }
-
-        //public static void SetBorderColor(this DrawActionButton view, UIColor color) => view.BorderColor = color;
-
-        //public static void SetBorderColor(this DrawActionToggleButton view, UIColor color) => view.BorderColor = color;
 
         public static void SetBorderWidth(this View view, double width)
         {
-            throw new NotImplementedException();
-
-            //view.BorderWidth = width;
+            // TODO: Slider does not contain any kind of border width element.  No-op for now.
         }
 
         public static void SetTextColor(this TextView label, Color color) => label.SetTextColor(color);

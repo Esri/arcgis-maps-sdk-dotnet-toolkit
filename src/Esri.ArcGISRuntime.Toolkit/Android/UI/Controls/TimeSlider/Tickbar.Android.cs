@@ -158,7 +158,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     Gravity = GravityFlags.Bottom
                 }
             };
-            tick.SetBackgroundColor(TickFill);
+            tick.SetBackgroundFill(TickFill);
             SetIsMajorTickmark(tick, false);
             SetPosition(tick, position);
 
@@ -167,7 +167,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             // Create a major tickmark
             tick = new View(Context);
-            tick.SetBackgroundColor(TickFill);
+            tick.SetBackgroundFill(TickFill);
 
             if (dataSource is DateTimeOffset dateTime)
             {

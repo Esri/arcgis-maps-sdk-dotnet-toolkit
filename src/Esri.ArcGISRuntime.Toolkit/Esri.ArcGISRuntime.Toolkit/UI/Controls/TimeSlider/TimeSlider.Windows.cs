@@ -76,7 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isFocused;
         private bool _isMouseOver;
 
-        private void Initialize()
+        private void InitializeImpl()
         {
             DefaultStyleKey = typeof(TimeSlider);
             SizeChanged += TimeSlider_SizeChanged;

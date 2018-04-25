@@ -339,8 +339,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_thumbFill != value)
                 {
                     _thumbFill = value;
-                    MinimumThumb?.SetBackgroundColor(value);
-                    MaximumThumb?.SetBackgroundColor(value);
+                    MinimumThumb?.SetBackgroundFill(value);
+                    MaximumThumb?.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(ThumbFill));
                 }
             }
@@ -364,7 +364,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_currentExtentFill != value)
                 {
                     _currentExtentFill = value;
-                    HorizontalTrackThumb?.SetBackgroundColor(value);
+                    HorizontalTrackThumb?.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(CurrentExtentFill));
                 }
             }
@@ -388,7 +388,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_fullExtentFill != value)
                 {
                     _fullExtentFill = value;
-                    SliderTrack?.SetBackgroundColor(value);
+                    SliderTrack?.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(FullExtentFill));
                 }
             }
@@ -461,8 +461,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         Tickmarks.TickFill = value;
                     }
 
-                    _startTimeTickmark?.SetBackgroundColor(value);
-                    _endTimeTickmark?.SetBackgroundColor(value);
+                    _startTimeTickmark?.SetBackgroundFill(value);
+                    _endTimeTickmark?.SetBackgroundFill(value);
 
                     OnPropertyChanged(nameof(TimeStepIntervalTickFill));
                 }
@@ -487,9 +487,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_playbackButtonsFill != value)
                 {
                     _playbackButtonsFill = value;
-                    PreviousButton?.SetBackgroundColor(value);
-                    NextButton?.SetBackgroundColor(value);
-                    PlayPauseButton.SetBackgroundColor(value);
+                    PreviousButton?.SetBackgroundFill(value);
+                    NextButton?.SetBackgroundFill(value);
+                    PlayPauseButton.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(PlaybackButtonsFill));
                 }
             }
