@@ -306,7 +306,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbStroke = Color.LightGray;
+        private Color _thumbStroke =
+#if __IOS__
+            Color.LightGray;
+#elif __ANDROID__
+            Color.Rgb(94, 151, 246);
+#endif
 
         /// <summary>
         /// Gets or sets the border color of the thumbs
@@ -326,7 +331,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbFill = Color.White;
+        private Color _thumbFill =
+#if __IOS__
+            Color.White;
+#elif __ANDROID__
+            Color.Rgb(94, 151, 246);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the thumbs
@@ -350,7 +360,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __IOS__
             Color.FromRGB(0, 111, 255);
 #elif __ANDROID__
-            Color.Rgb(0, 111, 255);
+            Color.Rgb(94, 151, 246);
 #endif
 
         /// <summary>
@@ -412,7 +422,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_fullExtentStroke != value)
                 {
                     _fullExtentStroke = value;
+#if __IOS__
                     SliderTrack?.SetBorderColor(value);
+#elif __ANDROID__
+                    SliderTrackOutline?.SetBackgroundFill(value);
+#endif
                     OnPropertyChanged(nameof(FullExtentStroke));
                 }
             }
@@ -473,7 +487,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __IOS__
             Color.FromRGB(230, 230, 230);
 #elif __ANDROID__
-            Color.Rgb(230, 230, 230);
+            Color.Rgb(94, 151, 246);
 #endif
 
         /// <summary>
@@ -499,7 +513,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __IOS__
             Color.FromRGB(170, 169, 170);
 #elif __ANDROID__
-            Color.Rgb(170, 169, 170);
+            Color.Rgb(94, 151, 246);
 #endif
 
         /// <summary>
@@ -513,9 +527,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_playbackButtonsStroke != value)
                 {
                     _playbackButtonsStroke = value;
+#if __IOS__
+                    PlayPauseButton.SetBorderColor(value);
                     PreviousButton?.SetBorderColor(value);
                     NextButton?.SetBorderColor(value);
-                    PlayPauseButton.SetBorderColor(value);
+#elif __ANDROID__
+                    PlayButtonOutline.SetBackgroundFill(value);
+                    PauseButtonOutline.SetBackgroundFill(value);
+                    PreviousButtonOutline.SetBackgroundFill(value);
+#endif
+                    NextButtonOutline.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(PlaybackButtonsStroke));
                 }
             }

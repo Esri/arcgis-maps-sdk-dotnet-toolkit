@@ -6,9 +6,9 @@
         android:viewportHeight="29.0">
   <group>
     <path
-        android:fillColor="#5e97f6"
-        android:strokeColor="@android:color/transparent"
-        android:strokeWidth="0.5"
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#5e97f6"
+        android:strokeWidth="1"
         android:pathData="M1,1 L1,27 L9,27 L9,1 z M13,1 L13,27 L21,27 L21,1 z"/>
   </group>
 </vector>

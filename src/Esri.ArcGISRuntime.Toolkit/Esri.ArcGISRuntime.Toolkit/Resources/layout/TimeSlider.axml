@@ -12,6 +12,25 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent" />
+  <View
+    android:id="@+id/PlayButtonOutline"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@drawable/triangleOutline"
+    app:layout_constraintTop_toTopOf="@id/PlayPauseButton"
+    app:layout_constraintBottom_toBottomOf="@id/PlayPauseButton"
+    app:layout_constraintStart_toStartOf="@id/PlayPauseButton"
+    app:layout_constraintEnd_toEndOf="@id/PlayPauseButton" />
+  <View
+    android:id="@+id/PauseButtonOutline"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@drawable/pauseOutline"
+    android:visibility="gone"
+    app:layout_constraintTop_toTopOf="@id/PlayPauseButton"
+    app:layout_constraintBottom_toBottomOf="@id/PlayPauseButton"
+    app:layout_constraintStart_toStartOf="@id/PlayPauseButton"
+    app:layout_constraintEnd_toEndOf="@id/PlayPauseButton" />
   <Button
     android:id="@+id/NextButton"
     android:layout_width="22dp"
@@ -21,6 +40,15 @@
     app:layout_constraintTop_toTopOf="@id/PlayPauseButton"
     app:layout_constraintBottom_toBottomOf="@id/PlayPauseButton"
     app:layout_constraintStart_toEndOf="@id/PlayPauseButton" />
+  <View
+    android:id="@+id/NextButtonOutline"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@drawable/nextPreviousOutline"
+    app:layout_constraintTop_toTopOf="@id/NextButton"
+    app:layout_constraintBottom_toBottomOf="@id/NextButton"
+    app:layout_constraintStart_toStartOf="@id/NextButton"
+    app:layout_constraintEnd_toEndOf="@id/NextButton" />
   <Button
     android:id="@+id/PreviousButton"
     android:layout_width="22dp"
@@ -31,12 +59,22 @@
     app:layout_constraintTop_toTopOf="@id/PlayPauseButton"
     app:layout_constraintBottom_toBottomOf="@id/PlayPauseButton"
     app:layout_constraintEnd_toStartOf="@id/PlayPauseButton" />
+  <View
+    android:id="@+id/PreviousButtonOutline"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:rotation="180"
+    android:background="@drawable/nextPreviousOutline"
+    app:layout_constraintTop_toTopOf="@id/PreviousButton"
+    app:layout_constraintBottom_toBottomOf="@id/PreviousButton"
+    app:layout_constraintStart_toStartOf="@id/PreviousButton"
+    app:layout_constraintEnd_toEndOf="@id/PreviousButton" />
   <TextView
     android:text="7/1/2012"
     android:id="@+id/FullExtentStartTimeLabel"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="@id/PreviousButton"
+    app:layout_constraintTop_toTopOf="@id/PlayPauseButton"
     app:layout_constraintStart_toStartOf="parent"
     android:clickable="false"
     android:focusable="false"/>
@@ -52,8 +90,7 @@
     android:id="@+id/FullExtentEndTimeLabel"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    app:layout_constraintTop_toTopOf="@id/NextButton"
+    app:layout_constraintTop_toTopOf="@id/PlayPauseButton"
     app:layout_constraintEnd_toEndOf="parent"
     android:clickable="false"
     android:focusable="false" />
@@ -65,9 +102,9 @@
     app:layout_constraintEnd_toEndOf="@id/FullExtentEndTimeLabel"
     app:layout_constraintBottom_toTopOf="@id/FullExtentEndTimeLabel" />
   <View
-    android:id="@+id/SliderTrack"
+    android:id="@+id/SliderTrackOutline"
     android:layout_width="0dp"
-    android:layout_height="2dp"
+    android:layout_height="6dp"
     android:layout_marginLeft="0dp"
     android:layout_marginRight="0dp"
     android:layout_marginBottom="10dp"
@@ -78,27 +115,39 @@
     android:clickable="false"
     android:focusable="false" />
   <View
+    android:id="@+id/SliderTrack"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_margin="1dp"
+    app:layout_constraintStart_toStartOf="@id/SliderTrackOutline"
+    app:layout_constraintEnd_toEndOf="@id/SliderTrackOutline"
+    app:layout_constraintTop_toTopOf="@id/SliderTrackOutline"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrackOutline"
+    android:background="#5c5c5c"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
     android:id="@+id/FullExtentStartTimeTickmark"
     android:background="#5c5c5c"
-    android:layout_width="2dp"
+    android:layout_width="1dp"
     android:layout_height="0dp"
     android:layout_marginBottom="1dp"
     android:gravity="center"
     android:layout_gravity="center"
     app:layout_constraintBottom_toTopOf="@id/FullExtentStartTimeLabel"
-    app:layout_constraintTop_toBottomOf="@id/SliderTrack"
-    app:layout_constraintStart_toStartOf="@id/SliderTrack"
+    app:layout_constraintTop_toBottomOf="@id/SliderTrackOutline"
+    app:layout_constraintStart_toStartOf="@id/SliderTrackOutline"
     android:clickable="false"
     android:focusable="false" />
   <View
     android:id="@+id/FullExtentEndTimeTickmark"
     android:background="#5c5c5c"
-    android:layout_width="2dp"
+    android:layout_width="1dp"
     android:layout_height="0dp"
     android:layout_marginBottom="1dp"
     app:layout_constraintBottom_toTopOf="@id/FullExtentEndTimeLabel"
-    app:layout_constraintTop_toBottomOf="@id/SliderTrack"
-    app:layout_constraintEnd_toEndOf="@id/SliderTrack"
+    app:layout_constraintTop_toBottomOf="@id/SliderTrackOutline"
+    app:layout_constraintEnd_toEndOf="@id/SliderTrackOutline"
     android:clickable="false"
     android:focusable="false" />
   <Esri.ArcGISRuntime.Toolkit.Primitives.Tickbar
@@ -107,7 +156,7 @@
     android:layout_height="wrap_content"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toTopOf="@id/SliderTrackOutline"
     android:clickable="false"
     android:focusable="false" />
   <Space
@@ -120,9 +169,19 @@
     android:clickable="false"
     android:focusable="false" />
   <View
+    android:id="@+id/CurrentExtentFill"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="#5E97F6"
+    app:layout_constraintStart_toStartOf="@id/SliderTrack"
+    app:layout_constraintTop_toTopOf="@id/SliderTrack"
+    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
     android:id="@+id/MinThumb"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
+    android:layout_width="17dp"
+    android:layout_height="17dp"
     android:background="@drawable/thumb"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/SliderTrack"
@@ -141,8 +200,8 @@
     android:focusable="false" />
   <View
     android:id="@+id/MaxThumb"
-    android:layout_width="30dp"
-    android:layout_height="30dp"
+    android:layout_width="17dp"
+    android:layout_height="17dp"
     android:background="@drawable/thumb"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/SliderTrack"
@@ -177,17 +236,6 @@
     android:layout_marginBottom="10dp"
     app:layout_constraintBottom_toTopOf="@id/MaxThumbCenter"
     app:layout_constraintStart_toStartOf="parent"
-    android:clickable="false"
-    android:focusable="false" />
-  <View
-    android:id="@+id/CurrentExtentFill"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    app:layout_constraintStart_toStartOf="@id/MinThumbCenter"
-    app:layout_constraintEnd_toEndOf="@id/MaxThumbCenter"
-    app:layout_constraintTop_toTopOf="@id/SliderTrack"
-    app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
-    android:background="#5E97F6"
     android:clickable="false"
     android:focusable="false" />
 </merge>

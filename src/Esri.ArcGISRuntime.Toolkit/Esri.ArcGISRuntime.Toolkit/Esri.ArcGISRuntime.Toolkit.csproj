@@ -48,16 +48,25 @@
     <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\Thumb.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\Triangle.axml">
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\TriangleFill.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\PauseShape.axml">
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\TriangleOutline.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\PauseFill.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\PauseOutline.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\PlayPauseButton.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\NextPreviousShape.axml">
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\NextPreviousFill.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\NextPreviousOutline.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="$(MSBuildThisFileDirectory)Resources\drawable\NextPreviousButton.axml">

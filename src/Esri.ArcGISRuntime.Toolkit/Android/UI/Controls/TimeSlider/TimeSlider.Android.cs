@@ -35,12 +35,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning disable SX1309 // Names match elements in template
 #pragma warning disable SA1306 // Names match elements in template
         private View SliderTrack;
+        private View SliderTrackOutline;
         private View MinimumThumb;
         private View MaximumThumb;
         private View HorizontalTrackThumb;
         private Button NextButton;
         private Button PreviousButton;
+        private View NextButtonOutline;
+        private View PreviousButtonOutline;
         private ToggleButton PlayPauseButton;
+        private View PlayButtonOutline;
+        private View PauseButtonOutline;
         private RectangleView SliderTrackStepBackRepeater = null;
         private RectangleView SliderTrackStepForwardRepeater = null;
 #pragma warning restore SX1309
@@ -80,6 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             inflater.Inflate(Resource.Layout.TimeSlider, this, true);
 
             SliderTrack = FindViewById<View>(Resource.Id.SliderTrack);
+            SliderTrackOutline = FindViewById<View>(Resource.Id.SliderTrackOutline);
             FullExtentStartTimeLabel = FindViewById<TextView>(Resource.Id.FullExtentStartTimeLabel);
             FullExtentEndTimeLabel = FindViewById<TextView>(Resource.Id.FullExtentEndTimeLabel);
             MinimumThumb = FindViewById<View>(Resource.Id.MinThumb);
@@ -89,15 +95,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             HorizontalTrackThumb = FindViewById<View>(Resource.Id.CurrentExtentFill);
             Tickmarks = FindViewById<Tickbar>(Resource.Id.Tickmarks);
             PlayPauseButton = FindViewById<ToggleButton>(Resource.Id.PlayPauseButton);
+            PlayButtonOutline = FindViewById<View>(Resource.Id.PlayButtonOutline);
+            PauseButtonOutline = FindViewById<View>(Resource.Id.PauseButtonOutline);
             NextButton = FindViewById<Button>(Resource.Id.NextButton);
             PreviousButton = FindViewById<Button>(Resource.Id.PreviousButton);
+            NextButtonOutline = FindViewById<View>(Resource.Id.NextButtonOutline);
+            PreviousButtonOutline = FindViewById<View>(Resource.Id.PreviousButtonOutline);
             _startTimeTickmark = FindViewById<View>(Resource.Id.FullExtentStartTimeTickmark);
             _endTimeTickmark = FindViewById<View>(Resource.Id.FullExtentEndTimeTickmark);
 
             PositionTickmarks();
             ApplyLabelMode(LabelMode);
 
-            PlayPauseButton.CheckedChange += (o, e) => IsPlaying = PlayPauseButton.Checked;
+            PlayPauseButton.CheckedChange += (o, e) =>
+            {
+                IsPlaying = PlayPauseButton.Checked;
+                PlayButtonOutline.Visibility = IsPlaying ? ViewStates.Gone : ViewStates.Visible;
+                PauseButtonOutline.Visibility = IsPlaying ? ViewStates.Visible : ViewStates.Gone;
+            };
             NextButton.Click += (o, e) => OnNextButtonClick();
             PreviousButton.Click += (o, e) => OnPreviousButtonClick();
 

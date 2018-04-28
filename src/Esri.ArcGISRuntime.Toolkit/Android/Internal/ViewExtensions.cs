@@ -54,6 +54,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 rectangleView.Width = width;
             }
+            else if (view.LayoutParameters is ViewGroup.LayoutParams layoutParams)
+            {
+                layoutParams.Width = (int)width;
+            }
         }
 
         public static bool GetIsVisible(this View view) => view.Visibility == ViewStates.Visible;
@@ -83,7 +87,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static void SetBackgroundFill(this View view, Color color)
         {
-            if (view.Background is Drawable drawable)
+            if (view.Background is GradientDrawable gradientDrawable)
+            {
+                gradientDrawable.SetColor(color.ToArgb());
+            }
+            else if (view.Background is Drawable drawable)
             {
                 drawable.SetColorFilter(color, PorterDuff.Mode.SrcAtop);
             }
@@ -95,15 +103,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public static void SetBorderColor(this View view, Color color)
         {
-            if (view.Background is Drawable drawable)
+            if (view.Background is GradientDrawable drawable)
             {
-                // TODO: This doesn't work in combination with drawable.SetColorFilter
-                drawable.SetTint(color);
-                drawable.SetTintMode(PorterDuff.Mode.SrcAtop);
+                var strokeWidth = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, GetDisplayMetrics());
+                drawable.SetStroke(strokeWidth, color);
             }
             else
             {
-                // Can't do anything - generic support for borders doesn't exist on Android
+                // Unhandled - generic support for borders doesn't exist on Android, so needs to be accounted for on a case by case basis
             }
         }
 
