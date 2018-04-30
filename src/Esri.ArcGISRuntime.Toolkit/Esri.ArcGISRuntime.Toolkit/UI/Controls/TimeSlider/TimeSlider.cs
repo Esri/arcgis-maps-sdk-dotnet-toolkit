@@ -923,6 +923,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             var enableHorizontalTrackThumb = MaximumThumb.GetIsEnabled() && MinimumThumb.GetIsEnabled();
             HorizontalTrackThumb.SetIsEnabled(enableHorizontalTrackThumb);
+#if __ANDROID__
+            MinimumThumb.Visibility = isStartTimePinned ? Android.Views.ViewStates.Invisible : Android.Views.ViewStates.Visible;
+            PinnedMinimumThumb.Visibility = isStartTimePinned ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Gone;
+#endif
 #endif
         }
 
@@ -950,6 +954,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             var enableHorizontalTrackThumb = MaximumThumb.GetIsEnabled() && MinimumThumb.GetIsEnabled();
             HorizontalTrackThumb.SetIsEnabled(enableHorizontalTrackThumb);
+#if __ANDROID__
+            MaximumThumb.Visibility = isEndTimePinned ? Android.Views.ViewStates.Invisible : Android.Views.ViewStates.Visible;
+            PinnedMaximumThumb.Visibility = isEndTimePinned ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Gone;
+#endif
 #endif
         }
 

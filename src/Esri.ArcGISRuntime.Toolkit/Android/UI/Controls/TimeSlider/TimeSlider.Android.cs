@@ -38,6 +38,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private View SliderTrackOutline;
         private View MinimumThumb;
         private View MaximumThumb;
+        private View PinnedMinimumThumb;
+        private View PinnedMaximumThumb;
         private View HorizontalTrackThumb;
         private Button NextButton;
         private Button PreviousButton;
@@ -52,12 +54,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning restore SA1306
         private View _startTimeTickmark;
         private View _endTimeTickmark;
-        private bool _currentExtentElementsArranged = false;
-        private bool _isSizeValid = false;
         private bool _isMinThumbFocused = false;
         private bool _isMaxThumbFocused = false;
         private float _lastX = 0;
-        private float _lastY = 0;
         private ThrottleAwaiter _measureThrottler = new ThrottleAwaiter(1);
 
         /// <summary>
@@ -92,6 +91,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MaximumThumb = FindViewById<View>(Resource.Id.MaxThumb);
             MinimumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentStartTimeLabel);
             MaximumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentEndTimeLabel);
+            PinnedMinimumThumb = FindViewById<View>(Resource.Id.PinnedMinThumb);
+            PinnedMaximumThumb = FindViewById<View>(Resource.Id.PinnedMaxThumb);
             HorizontalTrackThumb = FindViewById<View>(Resource.Id.CurrentExtentFill);
             Tickmarks = FindViewById<Tickbar>(Resource.Id.Tickmarks);
             PlayPauseButton = FindViewById<ToggleButton>(Resource.Id.PlayPauseButton);

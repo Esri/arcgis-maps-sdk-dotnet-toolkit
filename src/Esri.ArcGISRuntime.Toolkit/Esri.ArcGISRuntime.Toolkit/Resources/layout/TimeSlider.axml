@@ -188,6 +188,18 @@
     app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
     android:clickable="false"
     android:focusable="false" />
+  <View
+    android:id="@+id/PinnedMinThumb"
+    android:layout_width="7dp"
+    android:layout_height="13dp"
+    android:background="#5e97f6"
+    android:visibility="invisible"
+    app:layout_constraintStart_toStartOf="@id/MinThumb"
+    app:layout_constraintEnd_toEndOf="@id/MinThumb"
+    app:layout_constraintTop_toTopOf="@id/MinThumb"
+    app:layout_constraintBottom_toBottomOf="@id/MinThumb"
+    android:clickable="false"
+    android:focusable="false" />
   <Space
     android:id="@+id/MinThumbCenter"
     android:layout_width="1dp"
@@ -206,6 +218,18 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/SliderTrack"
     app:layout_constraintBottom_toBottomOf="@id/SliderTrack"
+    android:clickable="false"
+    android:focusable="false" />
+  <View
+    android:id="@+id/PinnedMaxThumb"
+    android:layout_width="7dp"
+    android:layout_height="13dp"
+    android:background="#5e97f6"
+    android:visibility="invisible"
+    app:layout_constraintStart_toStartOf="@id/MaxThumb"
+    app:layout_constraintEnd_toEndOf="@id/MaxThumb"
+    app:layout_constraintTop_toTopOf="@id/MaxThumb"
+    app:layout_constraintBottom_toBottomOf="@id/MaxThumb"
     android:clickable="false"
     android:focusable="false" />
   <Space

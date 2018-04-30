@@ -351,6 +351,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _thumbFill = value;
                     MinimumThumb?.SetBackgroundFill(value);
                     MaximumThumb?.SetBackgroundFill(value);
+#if __ANDROID__
+                    PinnedMinimumThumb?.SetBackgroundFill(value);
+                    PinnedMaximumThumb?.SetBackgroundFill(value);
+#endif
                     OnPropertyChanged(nameof(ThumbFill));
                 }
             }
