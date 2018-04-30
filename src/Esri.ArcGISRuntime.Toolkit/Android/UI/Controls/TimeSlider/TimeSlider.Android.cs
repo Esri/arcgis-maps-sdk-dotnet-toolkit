@@ -74,8 +74,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (DesignTime.IsDesignMode)
             {
-                // Add placeholder for design-time
-                // TODO
+                // Add placeholder text
+                SetBackgroundColor(Color.LightGray);
+                var designTimePlaceholderText = new TextView(Context)
+                {
+                    Text = "Time Slider",
+                    TextSize = 16,
+                    Id = 123456789
+                };
+                designTimePlaceholderText.SetTextColor(Color.Black);
+                AddView(designTimePlaceholderText);
+
+                // Center text by constraining it to the edges of the parent view
+                var constraintSet = new ConstraintSet();
+                constraintSet.Clone(this);
+                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.Start, ConstraintSet.ParentId, ConstraintSet.Start);
+                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.End, ConstraintSet.ParentId, ConstraintSet.End);
+                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.Top, ConstraintSet.ParentId, ConstraintSet.Top, 15);
+                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.Bottom, ConstraintSet.ParentId, ConstraintSet.Bottom, 15);
+                constraintSet.ApplyTo(this);
+
                 return;
             }
 
