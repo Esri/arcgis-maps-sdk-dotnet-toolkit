@@ -30,7 +30,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [Register("Esri.ArcGISRuntime.Toolkit.Primitives.Tickbar")]
     public partial class Tickbar : FrameLayout
     {
-        private ThrottleAwaiter _arrangeThrottler = new ThrottleAwaiter(1);
+        private int _lastMeasuredWidth = 0;
+        private int _lastMeasuredHeight = 0;
+        private int _lastLayoutWidth = 0;
+        private int _lastLayoutHeight = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tickbar"/> class.
@@ -324,14 +327,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             InvalidateMeasureAndArrange();
         }
 
-        private async void InvalidateMeasureAndArrange()
+        private void InvalidateMeasureAndArrange()
         {
-            if (MeasuredWidth == 0 || MeasuredHeight == 0)
+            var layoutWidth = Right - Left;
+            var layoutHeight = Bottom - Top;
+            if (MeasuredWidth == 0 || MeasuredHeight == 0 || layoutWidth == 0 || layoutHeight == 0)
             {
+                // Zero width or zero height
                 return;
             }
 
-            await _arrangeThrottler.ThrottleDelay();
+            if (MeasuredWidth == _lastMeasuredWidth && MeasuredHeight == _lastMeasuredHeight && layoutWidth == _lastLayoutWidth && layoutHeight == _lastLayoutHeight)
+            {
+                // No change in size
+                return;
+            }
+
+            _lastMeasuredWidth = MeasuredWidth;
+            _lastMeasuredHeight = MeasuredHeight;
+            _lastLayoutWidth = layoutWidth;
+            _lastLayoutHeight = layoutHeight;
 
             var availableWidth = MeasuredWidth - (TickInset * 2);
             OnArrange(new SizeF(availableWidth, MeasuredHeight));
