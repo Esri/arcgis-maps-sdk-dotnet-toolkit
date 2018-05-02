@@ -226,7 +226,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void ApplyTickLabelFormat(View tickContainer, string tickLabelFormat)
         {
             // Retrieve the label from the container holding the major tick rectangle and label
-            if (tickContainer is ViewGroup group && group.ChildCount > 1 && group.GetChildAt(1) is TextView label)
+            if (tickContainer is ViewGroup group && group.ChildCount > 1 && group.GetChildAt(0) is TextView label)
             {
                 // Apply the specified format to the tick's date and update the label
                 var labelFormat = string.IsNullOrEmpty(tickLabelFormat) ? _defaultTickLabelFormat : tickLabelFormat;
