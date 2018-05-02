@@ -34,6 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private int _lastMeasuredHeight = 0;
         private int _lastLayoutWidth = 0;
         private int _lastLayoutHeight = 0;
+        private bool _lastLabelsVisible = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tickbar"/> class.
@@ -331,15 +332,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             var layoutWidth = Right - Left;
             var layoutHeight = Bottom - Top;
-            if (MeasuredWidth == 0 || MeasuredHeight == 0 || layoutWidth == 0 || layoutHeight == 0)
-            {
-                // Zero width or zero height
-                return;
-            }
 
-            if (MeasuredWidth == _lastMeasuredWidth && MeasuredHeight == _lastMeasuredHeight && layoutWidth == _lastLayoutWidth && layoutHeight == _lastLayoutHeight)
+            if (MeasuredWidth == _lastMeasuredWidth
+                && MeasuredHeight == _lastMeasuredHeight
+                && layoutWidth == _lastLayoutWidth
+                && layoutHeight == _lastLayoutHeight
+                && ShowTickLabels == _lastLabelsVisible)
             {
-                // No change in size
+                // No change in size or label visibility
                 return;
             }
 
@@ -347,6 +347,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             _lastMeasuredHeight = MeasuredHeight;
             _lastLayoutWidth = layoutWidth;
             _lastLayoutHeight = layoutHeight;
+            _lastLabelsVisible = ShowTickLabels;
 
             var availableWidth = MeasuredWidth - (TickInset * 2);
             OnArrange(new SizeF(availableWidth, MeasuredHeight));
