@@ -26,7 +26,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         public static bool IsEmpty(this SizeF size) => size == default(SizeF);
 
-        public static void SetX(this RectF rect, double x) => rect.Left = (float)x;
+        public static void SetX(this RectF rect, double x)
+        {
+            var width = rect.Right - rect.Left;
+            rect.Left = (float)x;
+            rect.Right = rect.Left + width;
+        }
 
         public static void SetWidth(this RectF rect, double width) => rect.Right = rect.Left + (float)width;
     }
