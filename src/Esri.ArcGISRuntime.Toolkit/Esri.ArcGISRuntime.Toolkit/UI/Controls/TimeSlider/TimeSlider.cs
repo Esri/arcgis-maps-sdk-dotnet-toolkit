@@ -1604,9 +1604,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     // Looping is enabled - calculate the number of time steps to move the current extent based on the loop mode.
 
-                    // We want to rely on step indexes, so we use the known backing type here since that's most efficent.
-                    // If the backing type changes, the implemetation here will need to be updated accordingly
-                    var timeStepsList = (List<DateTimeOffset>)TimeSteps;
+                    var timeStepsList = TimeSteps.ToList();
 
                     // Get the current start and end time step indexes
                     var startTimeStepIndex = timeStepsList.IndexOf(CurrentValidExtent.StartTime);
