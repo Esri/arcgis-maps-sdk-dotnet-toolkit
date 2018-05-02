@@ -188,6 +188,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 // There's only one thumb, so hide the min thumb
                 MinimumThumb.SetMargin(0, 0, sliderWidth, 0);
+                MinimumThumb.SetOpacity(0);
                 MinimumThumbLabel.SetOpacity(0);
             }
 
