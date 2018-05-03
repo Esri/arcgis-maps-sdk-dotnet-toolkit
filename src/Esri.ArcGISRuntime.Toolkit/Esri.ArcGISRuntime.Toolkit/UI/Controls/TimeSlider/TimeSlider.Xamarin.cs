@@ -539,8 +539,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     PlayButtonOutline.SetBackgroundFill(value);
                     PauseButtonOutline.SetBackgroundFill(value);
                     PreviousButtonOutline.SetBackgroundFill(value);
-#endif
                     NextButtonOutline.SetBackgroundFill(value);
+#endif
                     OnPropertyChanged(nameof(PlaybackButtonsStroke));
                 }
             }
