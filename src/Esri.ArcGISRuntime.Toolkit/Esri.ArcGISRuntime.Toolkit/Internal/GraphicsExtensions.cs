@@ -31,9 +31,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         public static bool IsEmpty(this Size size) => size.IsEmpty;
 
-        public static void SetX(this Rect rect, double x) => rect.X = x;
+        public static void SetX(ref this Rect rect, double x) => rect.X = x;
 
-        public static void SetWidth(this Rect rect, double width) => rect.Width = width;
+        public static void SetWidth(ref this Rect rect, double width) => rect.Width = width;
     }
 }
 

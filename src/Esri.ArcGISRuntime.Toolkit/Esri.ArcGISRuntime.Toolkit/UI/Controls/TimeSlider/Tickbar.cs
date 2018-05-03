@@ -120,7 +120,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
                 var childBounds = new Rect(0, 0, desiredSize.Width, finalSize.Height);
                 childBounds.SetX(x);
-                //childBounds.SetWidth(desiredSize.Width);
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
                 if (isMajorTickmark)

@@ -26,8 +26,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         public static bool IsEmpty(this CGSize size) => size.IsEmpty;
 
-        public static void SetX(this CGRect rect, double x) => rect.X = (nfloat)x;
+        public static void SetX(ref this CGRect rect, double x) => rect.X = (nfloat)x;
 
-        public static void SetWidth(this CGRect rect, double width) => rect.Width = (nfloat)width;
+        public static void SetWidth(ref this CGRect rect, double width) => rect.Width = (nfloat)width;
     }
 }
