@@ -109,7 +109,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // In the implementation of the Android time slider, the tickbar is aligned horizontally with its parent to allow
                 // tick labels to use the entire space within the control.  The TickInset property defines how much extra room is
                 // available outside the bounds of the Tickbar and needs to be taken into account in the placement of ticks.
-                x += TickInset;
+                // This inset also needs to be adjusted slightly, as it yields a position that is slightly offset for reasons as
+                // yet unknown.
+                var pixelsPerDip = Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 1, ViewExtensions.GetDisplayMetrics());
+                x += TickInset - (2 * pixelsPerDip);
 #endif
                 var childBounds = new Rect(0, 0, desiredSize.Width, finalSize.Height);
                 childBounds.SetX(x);

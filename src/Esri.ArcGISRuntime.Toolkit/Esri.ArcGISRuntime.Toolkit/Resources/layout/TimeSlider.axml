@@ -180,8 +180,8 @@
     android:focusable="false" />
   <View
     android:id="@+id/MinThumb"
-    android:layout_width="17dp"
-    android:layout_height="17dp"
+    android:layout_width="18dp"
+    android:layout_height="18dp"
     android:background="@drawable/thumb"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/SliderTrack"
@@ -212,8 +212,8 @@
     android:focusable="false" />
   <View
     android:id="@+id/MaxThumb"
-    android:layout_width="17dp"
-    android:layout_height="17dp"
+    android:layout_width="18dp"
+    android:layout_height="18dp"
     android:background="@drawable/thumb"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/SliderTrack"
