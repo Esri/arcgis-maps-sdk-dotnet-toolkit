@@ -151,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // On Android, the slider track is positioned relative to the bounds of the parent.  So get the distance between the parent left and
             // track left to incorporate that into element positioning.
             var visualXOffset = Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 1, ViewExtensions.GetDisplayMetrics());
-            var trackMarginOffset = SliderTrack.GetX() + visualXOffset - GetX();
+            var trackMarginOffset = SliderTrack.GetX() + visualXOffset;
 #else
             var trackMarginOffset = 0;
 #endif
