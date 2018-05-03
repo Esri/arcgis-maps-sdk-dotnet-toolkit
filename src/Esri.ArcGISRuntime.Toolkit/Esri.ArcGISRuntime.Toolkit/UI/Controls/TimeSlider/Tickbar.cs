@@ -261,8 +261,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private Size OnMeasure(Size availableSize)
         {
-            var width = availableSize.IsEmpty() ? Width : availableSize.Width;
-            var height = availableSize.IsEmpty() ? Height : availableSize.Height;
+            var width = availableSize.Width == double.PositiveInfinity || availableSize.IsEmpty() ?
+                Width : availableSize.Width;
+            var height = availableSize.Height == double.PositiveInfinity || availableSize.IsEmpty() ?
+                Height : availableSize.Height;
 
             // Get the set of ticks that we want to measure.  This could either be all ticks or only minor ticks
             var measuredChildren = ShowTickLabels ? Children.Cast<UIElement>() : Children.Cast<UIElement>().Where(el => !GetIsMajorTickmark(el));
