@@ -79,17 +79,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ThrottleAwaiter _layoutTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
 
-#endregion // Fields
+        #endregion // Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
-        public TimeSlider(
 #if __ANDROID__
-            Context context)
-            : base(context
+        public TimeSlider(Context context)
+            : base(context)
+#else
+        public TimeSlider()
+            : base()
 #endif
-            )
         {
             Initialize();
         }

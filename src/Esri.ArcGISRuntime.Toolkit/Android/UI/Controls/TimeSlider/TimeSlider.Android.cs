@@ -152,6 +152,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new Size((int)view.MeasuredWidth, (int)view.MeasuredHeight);
         }
 
+        /// <inheritdoc />
         public bool OnTouch(View v, MotionEvent e)
         {
             // Get x/y coordinates of touch location
@@ -241,7 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return isTouchHandled;
         }
 
-        public RectF GetBounds(View view, float minWidth, float minHeight)
+        private RectF GetBounds(View view, float minWidth, float minHeight)
         {
             var xy = new int[2];
             view.GetLocationOnScreen(xy);
@@ -269,6 +270,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new RectF((float)left, (float)top, (float)right, (float)bottom);
         }
 
+        /// <inheritdoc />
         protected async override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);

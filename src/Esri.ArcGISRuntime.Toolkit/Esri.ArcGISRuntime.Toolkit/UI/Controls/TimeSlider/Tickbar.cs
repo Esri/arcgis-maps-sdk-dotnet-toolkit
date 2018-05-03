@@ -67,12 +67,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Initializes a new instance of the <see cref="Tickbar"/> class.
         /// </summary>
-        public Tickbar(
 #if __ANDROID__
-            Context context)
-            : base(context
+        public Tickbar(Context context)
+            : base(context)
+#else
+        public Tickbar()
+            : base()
 #endif
-            ) => Initialize();
+        {
+            Initialize();
+        }
 
         private Size OnArrange(Size finalSize)
         {

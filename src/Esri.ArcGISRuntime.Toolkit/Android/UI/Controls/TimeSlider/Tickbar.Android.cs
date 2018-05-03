@@ -27,7 +27,6 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    [Register("Esri.ArcGISRuntime.Toolkit.Primitives.Tickbar")]
     public partial class Tickbar : FrameLayout
     {
         private int _lastMeasuredWidth = 0;
@@ -321,6 +320,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+        /// <inheritdoc />
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
