@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="Esri_ArcGISRuntime_Toolkit_Android_UpdateInternalResourceIdAssignmentsTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+  <UsingTask TaskName="Esri_ArcGISRuntime_Toolkit_Android_UpdateInternalResourceIdAssignmentsTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <ResourceFilePath Required="True" />
       <ResourceFileUpdateSucceeded ParameterType="System.Boolean" Output="True" />
