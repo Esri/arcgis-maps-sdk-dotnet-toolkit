@@ -79,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ThrottleAwaiter _layoutTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
 
-        #endregion // Fields
+#endregion // Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
@@ -192,7 +192,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 // One thumb
                 // Hide the middle thumb
-                HorizontalTrackThumb?.SetIsVisible(false);
+                HorizontalTrackThumb.SetIsVisible(false);
             }
             else
             {
@@ -200,9 +200,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Position the middle thumb
                 left = Math.Min(sliderWidth, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, (maximum - end) * rate);
-                HorizontalTrackThumb?.SetMargin(left, 0, right, 0);
-                HorizontalTrackThumb?.SetWidth(Math.Max(0, sliderWidth - right - left));
-                HorizontalTrackThumb?.SetIsVisible(true);
+                HorizontalTrackThumb.SetMargin(left, 0, right, 0);
+                HorizontalTrackThumb.SetWidth(Math.Max(0, sliderWidth - right - left));
+                HorizontalTrackThumb.SetIsVisible(true);
 #if !XAMARIN
                 HorizontalTrackThumb.HorizontalAlignment = HorizontalAlignment.Left;
 #endif
@@ -701,7 +701,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#region Properties
+        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether or not the current extent represents a time instant

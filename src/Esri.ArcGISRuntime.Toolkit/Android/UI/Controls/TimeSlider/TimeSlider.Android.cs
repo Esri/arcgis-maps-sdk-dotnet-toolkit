@@ -97,7 +97,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            // TODO - initialize UI
             var inflater = LayoutInflater.FromContext(Context);
             inflater.Inflate(Resource.Layout.TimeSlider, this, true);
 

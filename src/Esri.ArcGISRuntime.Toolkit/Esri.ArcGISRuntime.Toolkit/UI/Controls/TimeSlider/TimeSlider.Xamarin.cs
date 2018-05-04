@@ -415,7 +415,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Color.Rgb(170, 169, 170);
 #endif
 
-            /// <summary>
+        /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
         /// </summary>
         private Color FullExtentStrokeImpl
@@ -532,14 +532,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _playbackButtonsStroke = value;
 #if __IOS__
-                    PlayPauseButton.SetBorderColor(value);
                     PreviousButton?.SetBorderColor(value);
                     NextButton?.SetBorderColor(value);
+                    PlayPauseButton.SetBorderColor(value);
 #elif __ANDROID__
-                    PlayButtonOutline.SetBackgroundFill(value);
-                    PauseButtonOutline.SetBackgroundFill(value);
                     PreviousButtonOutline.SetBackgroundFill(value);
                     NextButtonOutline.SetBackgroundFill(value);
+                    PlayButtonOutline.SetBackgroundFill(value);
+                    PauseButtonOutline.SetBackgroundFill(value);
 #endif
                     OnPropertyChanged(nameof(PlaybackButtonsStroke));
                 }
@@ -609,9 +609,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#endregion // Appearance Properties
+        #endregion // Appearance Properties
 
-#endregion // Properties
+        #endregion // Properties
 
         private void ApplyFullExtentLabelFormat()
         {

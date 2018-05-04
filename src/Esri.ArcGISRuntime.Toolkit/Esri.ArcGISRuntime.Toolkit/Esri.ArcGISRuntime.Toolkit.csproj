@@ -81,7 +81,7 @@
     <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">    
+  <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
      <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.2.1">
       <ExcludeAssets>contentFiles;build</ExcludeAssets>
       <IncludeAssets>compile</IncludeAssets>
