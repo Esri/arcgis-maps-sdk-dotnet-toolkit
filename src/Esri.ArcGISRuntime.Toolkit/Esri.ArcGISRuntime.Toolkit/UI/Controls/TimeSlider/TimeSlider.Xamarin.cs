@@ -388,7 +388,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __IOS__
             Color.FromRGB(170, 169, 170);
 #elif __ANDROID__
-            Color.Rgb(170, 169, 170);
+            Color.Rgb(92, 92, 92);
 #endif
 
         /// <summary>
@@ -412,7 +412,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if __IOS__
             Color.FromRGB(170, 169, 170);
 #elif __ANDROID__
-            Color.Rgb(170, 169, 170);
+            Color.Rgb(92, 92, 92);
 #endif
 
         /// <summary>
