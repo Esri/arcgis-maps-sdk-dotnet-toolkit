@@ -87,7 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if __IOS__
                         var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
 #elif __ANDROID__
-                        var tick = tickContainer is ViewGroup group ? group.GetChildren().OfType<RectangleView>().FirstOrDefault() : tickContainer;
+                        var tick = tickContainer is ViewGroup group ? group.GetChildren().OfType<View>().LastOrDefault() : tickContainer;
 #endif
                         tick?.SetBackgroundFill(value);
                     }

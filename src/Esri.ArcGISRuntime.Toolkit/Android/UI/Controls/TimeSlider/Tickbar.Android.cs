@@ -241,7 +241,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void ApplyTickLabelColor(View tick, Color color)
         {
-            if (tick is ViewGroup group && group.ChildCount > 1 && group.GetChildAt(1) is TextView label)
+            if (tick is ViewGroup group && group.ChildCount > 1 && group.GetChildAt(0) is TextView label)
             {
                 label.SetTextColor(color);
             }
