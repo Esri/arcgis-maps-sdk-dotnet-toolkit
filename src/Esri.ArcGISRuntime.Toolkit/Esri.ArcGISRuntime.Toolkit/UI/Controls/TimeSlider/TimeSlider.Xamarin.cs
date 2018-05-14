@@ -546,7 +546,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+#if __IOS__
         private Color _fullExtentLabelColor;
+#elif __ANDROID__
+        private Color _fullExtentLabelColor = Color.Rgb(184, 184, 184);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the full extent labels
@@ -566,7 +570,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+#if __IOS__
         private Color _currentExtentLabelColor;
+#elif __ANDROID__
+        private Color _currentExtentLabelColor = Color.Rgb(184, 184, 184);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the current extent labels
@@ -586,7 +594,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+#if __IOS__
         private Color _timeStepIntervalLabelColor;
+#elif __ANDROID__
+        private Color _timeStepIntervalLabelColor = Color.Rgb(184, 184, 184);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the time step interval labels
