@@ -8,7 +8,7 @@
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Esri/arcgis-toolkit-dotnet/master/license.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>v100.2-beta3: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.2-beta3 </PackageReleaseNotes>
+    <PackageReleaseNotes>v100.3-beta4: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.2-beta3 </PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <Copyright>Copyright © 2014-2018 Esri.</Copyright>
@@ -22,12 +22,12 @@
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
     
     <!--Framework versions-->
-    <UWPTargetPlatformVersion>10.0.14393.0</UWPTargetPlatformVersion>
-    <UWPTargetPlatformMinVersion>10.0.14393.0</UWPTargetPlatformMinVersion>
+    <UWPTargetPlatformVersion>10.0.16299.0</UWPTargetPlatformVersion>
+    <UWPTargetPlatformMinVersion>10.0.16299.0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid60</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-	<DotNetTargetFramework>net452</DotNetTargetFramework>
-	<UWPTargetFramework>uap10.0</UWPTargetFramework>
+	  <DotNetTargetFramework>net461</DotNetTargetFramework>
+	  <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
   
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>

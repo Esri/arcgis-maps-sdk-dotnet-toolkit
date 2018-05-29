@@ -11,8 +11,7 @@
       mc:Ignorable="d">
     <Page.Resources>
         <symbology:SimpleFillSymbol x:Key="SFS"
-                                    Style="Solid"
-                                    Color="#4CFF0000" />
+                                    Style="Solid" />
         <symbology:SimpleRenderer x:Key="SR"
                                   Symbol="{StaticResource SFS}" />
     </Page.Resources>
