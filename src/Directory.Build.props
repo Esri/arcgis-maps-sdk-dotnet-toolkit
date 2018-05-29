@@ -43,7 +43,7 @@
         <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
       </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.2.1" PrivateAssets="all" />
+        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.5.4" PrivateAssets="all" />
       </ItemGroup>
       <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
