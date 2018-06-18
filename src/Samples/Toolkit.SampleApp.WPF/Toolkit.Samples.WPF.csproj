@@ -172,7 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.WPF">
-      <Version>100.3.0-daily2070</Version>
+      <Version>100.3.0-daily2091</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
