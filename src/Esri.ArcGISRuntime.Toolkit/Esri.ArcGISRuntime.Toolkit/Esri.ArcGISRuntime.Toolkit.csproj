@@ -35,7 +35,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.4" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.5" />
 	  <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.3.0-daily2091" />
   </ItemGroup>
 
