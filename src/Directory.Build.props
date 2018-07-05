@@ -8,7 +8,7 @@
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Esri/arcgis-toolkit-dotnet/master/license.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>v100.3-beta4: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.2-beta3 </PackageReleaseNotes>
+    <PackageReleaseNotes>v100.3-beta4: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.3-beta4</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <Copyright>Copyright © 2014-2018 Esri.</Copyright>
