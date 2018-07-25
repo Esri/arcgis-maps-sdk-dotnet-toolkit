@@ -105,8 +105,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:TableOfContents}">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                        <TreeView x:Name="List" ItemTemplate="{TemplateBinding LayerItemTemplate}" Margin="{TemplateBinding Padding}" BorderThickness="0" Padding="0" />
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" >
+                        <TreeView x:Name="List" ItemTemplate="{TemplateBinding LayerItemTemplate}" Margin="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderThickness="0" Padding="0" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
