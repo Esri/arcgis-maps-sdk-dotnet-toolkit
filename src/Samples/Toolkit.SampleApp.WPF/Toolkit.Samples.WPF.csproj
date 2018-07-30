@@ -66,6 +66,9 @@
     <Compile Include="Samples\Compass\MapViewCompassSample.xaml.cs">
       <DependentUpon>MapViewCompassSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\PopupViewer\PopupViewerSample.xaml.cs">
+      <DependentUpon>PopupViewerSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\FeatureDataField\EditFeatureSample.xaml.cs">
       <DependentUpon>EditFeatureSample.xaml</DependentUpon>
     </Compile>
@@ -92,6 +95,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\Compass\MapViewCompassSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\PopupViewer\PopupViewerSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
