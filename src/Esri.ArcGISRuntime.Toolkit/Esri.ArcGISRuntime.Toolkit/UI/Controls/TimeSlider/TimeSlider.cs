@@ -1599,7 +1599,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else
                 {
                     // Looping is enabled - calculate the number of time steps to move the current extent based on the loop mode.
-
                     var timeStepsList = TimeSteps.ToList();
 
                     // Get the current start and end time step indexes
