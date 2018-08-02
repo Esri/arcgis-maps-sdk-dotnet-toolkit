@@ -10,5 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
+    <AndroidResource Include="$(MSBuildThisFileDirectory)..\Esri.ArcGISRuntime.Toolkit\**\*.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
 </Project>
