@@ -31,6 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private LinearLayout _rootLayout;
         private TextView _editSummary;
+        private TextView _customHtmlDescription;
         private ListView _detailsList;
 
         /// <summary>
@@ -74,6 +75,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
             _rootLayout.AddView(_editSummary);
 
+            _customHtmlDescription = new TextView(Context)
+            {
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+            };
+            _rootLayout.AddView(_customHtmlDescription);
+
             _detailsList = new ListView(Context)
             {
                 ClipToOutline = true,
@@ -101,8 +108,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _detailsList.Adapter = new PopupFieldAdapter(Context, PopupManager.DisplayedFields);
-            _detailsList.SetHeightBasedOnChildren();
+            _editSummary.Visibility = PopupManager.ShowEditSummary ? ViewStates.Visible : ViewStates.Gone;
+            _editSummary.Text = PopupManager.EditSummary;
+
+            var displayDescription = PopupManager.ShowCustomDescriptionHtml || !string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml);
+            _customHtmlDescription.Visibility = displayDescription ? ViewStates.Visible : ViewStates.Gone;
+            _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml;
+
+            if (!displayDescription)
+            {
+                _detailsList.Adapter = new PopupFieldAdapter(Context, PopupManager.DisplayedFields);
+                _detailsList.SetHeightBasedOnChildren();
+            }
         }
 
         /// <inheritdoc />

@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -23,14 +24,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             try
-            {                
+            {
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
                 var popup = GetPopup(result);
                 if(popup != null)
                 {
-                    if (popup.PopupDefinition != null && !popup.PopupDefinition.ShowAttachments)
+                    if (popup.PopupDefinition != null && !popup.PopupDefinition.ShowEditSummary)
                         popup.PopupDefinition.ShowEditSummary = true;
-                    popupViewer.PopupManager = new PopupManager(popup);
+
+                    var callout = new CalloutDefinition(popup.GeoElement);
+                    callout.Tag = popup;
+                    callout.ButtonImage = new RuntimeImage(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png"));
+                    callout.OnButtonClick = new Action<object>((s) =>
+                        {
+                            popupViewer.Visibility = Visibility.Visible;
+                            popupViewer.PopupManager = new PopupManager(s as Popup);
+                        });
+                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
+                }
+                else
+                {
+                    popupViewer.PopupManager = null;
+                    popupViewer.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception ex)

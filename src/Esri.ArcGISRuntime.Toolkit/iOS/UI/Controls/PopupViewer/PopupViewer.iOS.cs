@@ -26,7 +26,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class PopupViewer : IComponent
     {
         private UIStackView _rootStackView;
-        private UITableView _listView;
+        private UILabel _editSummary;
+        private UILabel _customHtmlDescription;
+        private UITableView _detailsList;
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
         /// <summary>
@@ -71,7 +73,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Spacing = 0
             };
 
-            _listView = new UITableView(UIScreen.MainScreen.Bounds)
+            _editSummary = new UILabel()
+            {
+                Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
+                TextColor = UIColor.Black,
+                BackgroundColor = UIColor.Clear,
+                ContentMode = UIViewContentMode.Center,
+                TextAlignment = UITextAlignment.Left,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Lines = 0,
+                LineBreakMode = UILineBreakMode.WordWrap,
+                Text = "test"
+            };
+            _rootStackView.AddArrangedSubview(_editSummary);
+
+            _customHtmlDescription = new UILabel()
+            {
+                Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
+                TextColor = UIColor.Black,
+                BackgroundColor = UIColor.Clear,
+                ContentMode = UIViewContentMode.Center,
+                TextAlignment = UITextAlignment.Left,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Lines = 0,
+                LineBreakMode = UILineBreakMode.WordWrap
+            };
+            _rootStackView.AddArrangedSubview(_customHtmlDescription);
+
+            _detailsList = new UITableView(Bounds)
             {
                 ClipsToBounds = true,
                 ContentMode = UIViewContentMode.ScaleAspectFill,
@@ -83,19 +112,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 RowHeight = UITableView.AutomaticDimension,
                 EstimatedRowHeight = SymbolDisplay.MaxSize,
             };
-            _listView.RegisterClassForCellReuse(typeof(DetailsItemCell), PopupViewerTableSource.CellId);
-            _rootStackView.AddSubview(_listView);
+            _detailsList.RegisterClassForCellReuse(typeof(DetailsItemCell), PopupViewerTableSource.CellId);
+            _rootStackView.AddArrangedSubview(_detailsList);
 
             AddSubview(_rootStackView);
 
-            _listView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
-            _listView.LeftAnchor.ConstraintEqualTo(LeftAnchor).Active = true;
+            _editSummary.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
+
+            _customHtmlDescription.TopAnchor.ConstraintEqualTo(_editSummary.BottomAnchor).Active = true;
+            _customHtmlDescription.HeightAnchor.ConstraintEqualTo(HeightAnchor).Active = true;
+            _customHtmlDescription.WidthAnchor.ConstraintEqualTo(WidthAnchor).Active = true;
+
+            _detailsList.HeightAnchor.ConstraintEqualTo(HeightAnchor).Active = true;
+            _detailsList.WidthAnchor.ConstraintEqualTo(WidthAnchor).Active = true;
+            _detailsList.TopAnchor.ConstraintEqualTo(_editSummary.BottomAnchor).Active = true;
 
             InvalidateIntrinsicContentSize();
         }
 
         /// <inheritdoc />
-        public override CGSize IntrinsicContentSize => _listView.ContentSize;
+        public override CGSize IntrinsicContentSize => Bounds.Size;
 
         /// <inheritdoc />
         public override CGSize SizeThatFits(CGSize size)
@@ -121,21 +157,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Refresh()
         {
-            if (_listView == null)
+            if (_detailsList == null)
             {
                 return;
             }
 
             if (PopupManager == null)
             {
-                _listView.Source = null;
-                _listView.ReloadData();
+                _detailsList.Source = null;
+                _detailsList.ReloadData();
                 InvalidateIntrinsicContentSize();
                 return;
             }
 
-            _listView.Source = new PopupViewerTableSource(PopupManager.DisplayedFields);
-            _listView.ReloadData();
+            _editSummary.Hidden = !PopupManager.ShowEditSummary;
+            _editSummary.Text = PopupManager.EditSummary;
+
+            var displayDescription = !string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml);
+            _customHtmlDescription.Hidden = !displayDescription;
+            _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml?.ToPlainText();
+
+            _detailsList.Hidden = displayDescription;
+            if (displayDescription)
+            {
+                _detailsList.Source = null;
+                _detailsList.ReloadData();
+            }
+            else
+            {
+                _detailsList.Source = new PopupViewerTableSource(PopupManager.DisplayedFields);
+                _detailsList.ReloadData();
+            }
+
             InvalidateIntrinsicContentSize();
             SetNeedsUpdateConstraints();
             UpdateConstraints();

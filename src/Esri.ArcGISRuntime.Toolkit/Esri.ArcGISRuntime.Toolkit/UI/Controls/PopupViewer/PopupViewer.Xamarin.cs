@@ -38,7 +38,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (_popupManager != value)
                 {
-                    var oldManager = _popupManager;
                     _popupManager = value;
                     Refresh();
                 }

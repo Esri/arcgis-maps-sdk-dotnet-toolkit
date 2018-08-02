@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Refresh();
         }
 
-        internal void Refresh()
+        private void Refresh()
         {
         }
 
