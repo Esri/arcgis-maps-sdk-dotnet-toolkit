@@ -218,8 +218,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var currentThumbX = touchX - trackedThumb.Left;
                     var translateX = currentThumbX - _lastX;
 
-                    System.Diagnostics.Debug.WriteLine($"Translate X: {translateX}");
-
                     if (_isMinThumbFocused)
                     {
                         OnMinimumThumbDrag(translateX);
