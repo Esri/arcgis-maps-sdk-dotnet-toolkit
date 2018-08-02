@@ -14,4 +14,5 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit.Android.Build.targets" Condition="Exists('$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit.Android.Build.targets')" />
 </Project>
