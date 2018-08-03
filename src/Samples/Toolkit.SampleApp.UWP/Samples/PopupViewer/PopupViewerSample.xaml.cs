@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
 
         public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
 
-        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("ms-appx:///Samples/PopupViewer/expand.png"));
+        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("ms-appx:///Samples/PopupViewer/info.png"));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {

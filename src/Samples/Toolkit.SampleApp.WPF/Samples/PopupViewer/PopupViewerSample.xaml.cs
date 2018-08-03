@@ -21,7 +21,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 
         }
 
-        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("pack://application:,,,/Samples/PopupViewer/expand.png"));
+        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("pack://application:,,,/Samples/PopupViewer/info.png"));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
