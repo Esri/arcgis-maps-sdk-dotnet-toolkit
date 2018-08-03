@@ -10,15 +10,15 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <esri:MapView x:Name="mapView" 
                       Map="{x:Bind Map}" 
-                      GeoViewTapped="mapView_GeoViewTapped"
-                      Grid.Column="1"/>
+                      GeoViewTapped="mapView_GeoViewTapped"/>
         <toolkit:PopupViewer x:Name="popupViewer"
-                             Width="200"
+                             Grid.Column="1"
+                             Width="250"
                              Visibility="Collapsed"
                              HorizontalAlignment="Stretch" 
                              VerticalAlignment="Stretch" />

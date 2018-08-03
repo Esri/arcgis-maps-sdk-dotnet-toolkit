@@ -21,6 +21,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 
         }
 
+        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("pack://application:,,,/Samples/PopupViewer/expand.png"));
+
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             try
@@ -34,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 
                     var callout = new CalloutDefinition(popup.GeoElement);
                     callout.Tag = popup;
-                    callout.ButtonImage = new RuntimeImage(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png"));
+                    callout.ButtonImage = PopupImage;
                     callout.OnButtonClick = new Action<object>((s) =>
                         {
                             popupViewer.Visibility = Visibility.Visible;

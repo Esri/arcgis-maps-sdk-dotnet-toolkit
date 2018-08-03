@@ -5,9 +5,12 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Visibility = Windows.UI.Xaml.Visibility;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -22,11 +25,12 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
         public PopupViewerSample()
         {
             this.InitializeComponent();
-            
+
         }
 
         public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
 
+        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("ms-appx:///Samples/PopupViewer/expand.png"));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
@@ -42,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
 
                     var callout = new CalloutDefinition(popup.GeoElement);
                     callout.Tag = popup;
-                    callout.ButtonImage = new RuntimeImage(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png"));
+                    callout.ButtonImage = PopupImage;
                     callout.OnButtonClick = new Action<object>((s) =>
                     {
                         popupViewer.Visibility = Visibility.Visible;
