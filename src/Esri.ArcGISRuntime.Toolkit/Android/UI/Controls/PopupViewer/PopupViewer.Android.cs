@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Android.Content;
+using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -22,11 +23,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-     /// The PopupViewer control is used to display details and media, edit attributes, geometry and related records,
-     /// manage attachments of an <see cref="Data.ArcGISFeature"/> or a <see cref="ArcGISRuntime.UI.Graphic"/>
-     /// as defined in its <see cref="Mapping.Popups.Popup"/>.
-     /// </summary>
+    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer")]
     public partial class PopupViewer
     {
         private LinearLayout _rootLayout;
@@ -92,6 +89,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             };
 
             _rootLayout.AddView(_detailsList);
+
+            AddView(_rootLayout);
+
             _rootLayout.RequestLayout();
         }
 
@@ -108,14 +108,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _editSummary.Visibility = PopupManager.ShowEditSummary ? ViewStates.Visible : ViewStates.Gone;
+            // _editSummary.Visibility = PopupManager.ShowEditSummary ? ViewStates.Visible : ViewStates.Gone;
             _editSummary.Text = PopupManager.EditSummary;
 
             var displayDescription = PopupManager.ShowCustomDescriptionHtml || !string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml);
-            _customHtmlDescription.Visibility = displayDescription ? ViewStates.Visible : ViewStates.Gone;
+
+            // _customHtmlDescription.Visibility = displayDescription ? ViewStates.Visible : ViewStates.Gone;
             _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml;
 
-            if (!displayDescription)
+            // _detailsList.Visibility = displayDescription ? ViewStates.Gone : ViewStates.Visible;
+            if (displayDescription)
+            {
+                _detailsList.Adapter = null;
+                return;
+            }
+            else
             {
                 _detailsList.Adapter = new PopupFieldAdapter(Context, PopupManager.DisplayedFields);
                 _detailsList.SetHeightBasedOnChildren();

@@ -23,7 +23,7 @@
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
               <TextBlock Text="{Binding EditSummary}"
-                         Visibility="{Binding ShowEditSummary, Converter={StaticResource VisibilityConverter}}"
+                         Visibility="{Binding EditSummary, Converter={StaticResource VisibilityConverter}}"
                          TextWrapping="Wrap"/>
               <Grid Grid.Row="1">
                 <ItemsControl ItemsSource="{Binding DisplayedFields}"
@@ -33,10 +33,10 @@
                       <Grid>
                         <Grid.RowDefinitions>
                           <RowDefinition Height="Auto"/>
-                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding Field.Label}" Foreground="Gray" />
-                        <TextBlock Text="{Binding FormattedValue}" Grid.Row="1"/>
+                        <TextBlock Text="{Binding FormattedValue}" TextWrapping="Wrap" Grid.Row="1"/>
                       </Grid>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
