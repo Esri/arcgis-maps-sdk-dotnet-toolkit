@@ -42,7 +42,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 ContentMode = UIViewContentMode.Center,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                LineBreakMode = UILineBreakMode.TailTruncation
+                Lines = 0,
+                LineBreakMode = UILineBreakMode.WordWrap
             };
 
             _formattedValue = new UILabel()
@@ -53,7 +54,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 ContentMode = UIViewContentMode.Center,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                LineBreakMode = UILineBreakMode.TailTruncation
+                Lines = 0,
+                LineBreakMode = UILineBreakMode.WordWrap
             };
 
             ContentView.AddSubviews(_label, _formattedValue);

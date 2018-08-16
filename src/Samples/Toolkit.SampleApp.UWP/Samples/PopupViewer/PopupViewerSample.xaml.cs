@@ -28,9 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
 
         }
 
+        // Webmap configured with Popup
         public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
 
-        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("ms-appx:///Samples/PopupViewer/info.png"));
+        // Used in Callout to see feature details in PopupViewer
+        private RuntimeImage InfoIcon { get; } = new RuntimeImage(new Uri("ms-appx:///Samples/PopupViewer/info.png"));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
@@ -38,15 +40,16 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
             try
             {
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
+
+                // Retrieves or builds Popup from IdentifyLayerResult
                 var popup = GetPopup(result);
+
+                // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    if (popup.PopupDefinition != null && !popup.PopupDefinition.ShowEditSummary)
-                        popup.PopupDefinition.ShowEditSummary = true;
-
                     var callout = new CalloutDefinition(popup.GeoElement);
                     callout.Tag = popup;
-                    callout.ButtonImage = PopupImage;
+                    callout.ButtonImage = InfoIcon;
                     callout.OnButtonClick = new Action<object>((s) =>
                     {
                         popupViewer.Visibility = Visibility.Visible;

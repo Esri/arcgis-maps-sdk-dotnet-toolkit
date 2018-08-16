@@ -66,6 +66,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7f050000
 			public const int mapView = 2131034112;
 			
+			// aapt resource value: 0x7f050003
+			public const int popupViewer = 2131034115;
+			
 			// aapt resource value: 0x7f050002
 			public const int scaleLine = 2131034114;
 			

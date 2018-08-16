@@ -54,11 +54,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void Initialize()
         {
-            if (!DesignTime.IsDesignMode)
-            {
-                return;
-            }
-
             _rootLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Vertical,
@@ -108,22 +103,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            // _editSummary.Visibility = PopupManager.ShowEditSummary ? ViewStates.Visible : ViewStates.Gone;
+            _editSummary.Visibility = !string.IsNullOrWhiteSpace(PopupManager.EditSummary) ? ViewStates.Visible : ViewStates.Gone;
             _editSummary.Text = PopupManager.EditSummary;
 
-            var displayDescription = PopupManager.ShowCustomDescriptionHtml || !string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml);
-
-            // _customHtmlDescription.Visibility = displayDescription ? ViewStates.Visible : ViewStates.Gone;
-            _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml;
-
-            // _detailsList.Visibility = displayDescription ? ViewStates.Gone : ViewStates.Visible;
-            if (displayDescription)
+            if (!string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml))
             {
+                _customHtmlDescription.Visibility = ViewStates.Visible;
+                _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml.ToPlainText();
+                _detailsList.Visibility = ViewStates.Gone;
                 _detailsList.Adapter = null;
                 return;
             }
             else
             {
+                _customHtmlDescription.Visibility = ViewStates.Gone;
+                _customHtmlDescription.Text = null;
+                _detailsList.Visibility = ViewStates.Visible;
                 _detailsList.Adapter = new PopupFieldAdapter(Context, PopupManager.DisplayedFields);
                 _detailsList.SetHeightBasedOnChildren();
             }

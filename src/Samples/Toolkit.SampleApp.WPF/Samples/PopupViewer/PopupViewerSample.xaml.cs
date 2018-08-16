@@ -21,22 +21,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 
         }
 
-        private RuntimeImage PopupImage { get; } = new RuntimeImage(new Uri("pack://application:,,,/Samples/PopupViewer/info.png"));
+        // Used in Callout to see feature details in PopupViewer
+        private RuntimeImage InfoIcon { get; } = new RuntimeImage(new Uri("pack://application:,,,/Samples/PopupViewer/info.png"));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             try
             {
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
-                var popup = GetPopup(result);
-                if(popup != null)
-                {
-                    if (popup.PopupDefinition != null && !popup.PopupDefinition.ShowEditSummary)
-                        popup.PopupDefinition.ShowEditSummary = true;
 
+                // Retrieves or builds Popup from IdentifyLayerResult
+                var popup = GetPopup(result);
+
+                // Displays callout and updates visibility of PopupViewer
+                if (popup != null)
+                {
                     var callout = new CalloutDefinition(popup.GeoElement);
                     callout.Tag = popup;
-                    callout.ButtonImage = PopupImage;
+                    callout.ButtonImage = InfoIcon;
                     callout.OnButtonClick = new Action<object>((s) =>
                         {
                             popupViewer.Visibility = Visibility.Visible;
