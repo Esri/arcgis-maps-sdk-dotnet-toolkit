@@ -26,7 +26,8 @@ namespace Toolkit.Samples.Forms
 
         }
 
-        private Map _map = new Map(Basemap.CreateStreets());
+        // Webmap configured with Popup
+        private Map _map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
 
         /// <summary>
         /// Gets or sets the map

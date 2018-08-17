@@ -21,4 +21,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MapViewModel.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)info.png" />
+  </ItemGroup>
 </Project>

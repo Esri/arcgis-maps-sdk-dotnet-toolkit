@@ -17,7 +17,8 @@
         <esriTK:Compass HorizontalOptions="End" VerticalOptions="Start" Margin="20"
                     GeoView="{x:Reference mapView}"
                     AutoHide="False" />
-        
+
+        <esriTK:PopupViewer x:Name="popupViewer" HorizontalOptions="End" VerticalOptions="Start" Margin="20" IsVisible="False"/>
         <esriTK:ScaleLine HorizontalOptions="Start" VerticalOptions="End" Margin="20"
                     MapView="{x:Reference mapView}"/>
     </Grid>
