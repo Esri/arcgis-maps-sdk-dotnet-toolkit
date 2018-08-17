@@ -73,10 +73,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void UpdateConstraints()
         {
             base.UpdateConstraints();
-
             _label.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
             _formattedValue.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
 
+            _label.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
+            _formattedValue.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
             if (_constraintsUpdated)
             {
                 return;

@@ -15,8 +15,11 @@
 //  ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using CoreGraphics;
+using Esri.ArcGISRuntime.Mapping.Popups;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -25,7 +28,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Category("ArcGIS Runtime Controls")]
     public partial class PopupViewer : IComponent
     {
-        private UIStackView _rootStackView;
         private UILabel _editSummary;
         private UILabel _customHtmlDescription;
         private UITableView _detailsList;
@@ -64,69 +66,44 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Hidden = true;
             }
 
-            _rootStackView = new UIStackView()
-            {
-                Axis = UILayoutConstraintAxis.Vertical,
-                Alignment = UIStackViewAlignment.Leading,
-                Distribution = UIStackViewDistribution.Fill,
-                TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
-            };
-
             _editSummary = new UILabel()
             {
                 Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
-                ContentMode = UIViewContentMode.Center,
+                ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
-                LineBreakMode = UILineBreakMode.WordWrap,
-                Text = "test"
+                LineBreakMode = UILineBreakMode.WordWrap
             };
-            _rootStackView.AddArrangedSubview(_editSummary);
 
             _customHtmlDescription = new UILabel()
             {
                 Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
-                ContentMode = UIViewContentMode.Center,
+                ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
                 LineBreakMode = UILineBreakMode.WordWrap
             };
-            _rootStackView.AddArrangedSubview(_customHtmlDescription);
 
-            _detailsList = new UITableView(Bounds)
+            _detailsList = new UITableView()
             {
                 ClipsToBounds = true,
-                ContentMode = UIViewContentMode.ScaleAspectFill,
+                ContentMode = UIViewContentMode.TopLeft,
                 SeparatorStyle = UITableViewCellSeparatorStyle.None,
                 AllowsSelection = false,
                 Bounces = true,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
-                EstimatedRowHeight = SymbolDisplay.MaxSize,
+                EstimatedRowHeight = UIFont.LabelFontSize * 3,
             };
             _detailsList.RegisterClassForCellReuse(typeof(DetailsItemCell), PopupViewerTableSource.CellId);
-            _rootStackView.AddArrangedSubview(_detailsList);
-
-            AddSubview(_rootStackView);
-
-            _editSummary.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
-
-            _customHtmlDescription.TopAnchor.ConstraintEqualTo(_editSummary.BottomAnchor).Active = true;
-            _customHtmlDescription.HeightAnchor.ConstraintEqualTo(HeightAnchor).Active = true;
-            _customHtmlDescription.WidthAnchor.ConstraintEqualTo(WidthAnchor).Active = true;
-
-            _detailsList.HeightAnchor.ConstraintEqualTo(HeightAnchor).Active = true;
-            _detailsList.WidthAnchor.ConstraintEqualTo(WidthAnchor).Active = true;
-            _detailsList.TopAnchor.ConstraintEqualTo(_editSummary.BottomAnchor).Active = true;
-
+            AddSubviews(_editSummary, _customHtmlDescription, _detailsList);
             InvalidateIntrinsicContentSize();
         }
 
@@ -170,28 +147,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _editSummary.Hidden = !PopupManager.ShowEditSummary;
-            _editSummary.Text = PopupManager.EditSummary;
-
-            var displayDescription = !string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml);
-            _customHtmlDescription.Hidden = !displayDescription;
-            _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml?.ToPlainText();
-
-            _detailsList.Hidden = displayDescription;
-            if (displayDescription)
+            var margin = LayoutMarginsGuide;
+            NSLayoutYAxisAnchor topAnchor = margin.TopAnchor;
+            if (!string.IsNullOrWhiteSpace(PopupManager.EditSummary))
             {
+                topAnchor = _editSummary.BottomAnchor;
+                _editSummary.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
+                _editSummary.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor, 5).Active = true;
+                _editSummary.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor, -5).Active = true;
+                _editSummary.Hidden = false;
+                _editSummary.Text = PopupManager.EditSummary;
+            }
+
+            if (!string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml))
+            {
+                _customHtmlDescription.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
+                _customHtmlDescription.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor, 5).Active = true;
+                _customHtmlDescription.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor, -5).Active = true;
+                _customHtmlDescription.Hidden = false;
+                _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml.ToPlainText();
+                _detailsList.Hidden = true;
                 _detailsList.Source = null;
                 _detailsList.ReloadData();
             }
             else
             {
+                _customHtmlDescription.Hidden = true;
+                _customHtmlDescription.Text = null;
+                _detailsList.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
+                _detailsList.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor, 5).Active = true;
+                _detailsList.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor, -5).Active = true;
+                _detailsList.BottomAnchor.ConstraintEqualTo(margin.BottomAnchor, -5).Active = true;
+                _detailsList.Hidden = false;
                 _detailsList.Source = new PopupViewerTableSource(PopupManager.DisplayedFields);
                 _detailsList.ReloadData();
             }
 
             InvalidateIntrinsicContentSize();
-            SetNeedsUpdateConstraints();
-            UpdateConstraints();
             Hidden = false;
         }
     }

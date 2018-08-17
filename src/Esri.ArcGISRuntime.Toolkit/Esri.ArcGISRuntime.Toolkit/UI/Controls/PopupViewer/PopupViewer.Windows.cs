@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Identifies the <see cref="GeoView"/> dependency property.
+        /// Identifies the <see cref="PopupManager"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty PopupManagerProperty =
             DependencyProperty.Register(nameof(PopupManager), typeof(PopupManager), typeof(PopupViewer),

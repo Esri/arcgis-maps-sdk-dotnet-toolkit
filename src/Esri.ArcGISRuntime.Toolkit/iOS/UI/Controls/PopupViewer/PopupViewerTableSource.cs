@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Foundation;
@@ -41,6 +40,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override nint RowsInSection(UITableView tableview, nint section)
         {
             return _displayFields?.Count ?? 0;
+        }
+
+        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
+        {
+            return UIFont.LabelFontSize * 3;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)

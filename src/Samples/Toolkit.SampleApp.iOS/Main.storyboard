@@ -23,6 +23,11 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <rect key="contentStretch" x="0.0" y="0" width="1" height="1"/>
                             </view>
+                            <view contentMode="scaleToFill" id="4682" customClass="PopupViewer" translatesAutoresizingMaskIntoConstraints="NO" layoutMarginsFollowReadableWidth="YES" insetsLayoutMarginsFromSafeArea="NO">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="contentStretch" x="0.0" y="0" width="1" height="1"/>
+                            </view>
                             <view contentMode="scaleToFill" id="451" customClass="ScaleLine" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" ambiguous="YES">
                                 <rect key="frame" x="25" y="659" width="240" height="52"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,14 +45,17 @@
                             <constraint id="913" firstItem="451" firstAttribute="left" secondItem="224" secondAttribute="left" constant="25"/>
                             <constraint id="4169" firstItem="1389" firstAttribute="right" secondItem="224" secondAttribute="right" constant="-25"/>
                             <constraint id="4170" firstItem="1389" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="25"/>
-                            <constraint id="4421" firstItem="1389" firstAttribute="height" constant="60" />
-							<constraint id="4422" firstItem="1389" firstAttribute="width" constant="60" />
+                            <constraint id="4421" firstItem="1389" firstAttribute="height" constant="60"/>
+                            <constraint id="4422" firstItem="1389" firstAttribute="width" constant="60"/>
+                            <constraint id="916" firstItem="4682" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="0"/>
+                            <constraint id="917" firstItem="4682" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="0"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="224" id="name-outlet-224"/>
                         <outlet property="scaleLine" destination="451" id="name-outlet-451"/>
                         <outlet property="compass" destination="1389" id="name-outlet-1389"/>
+                        <outlet property="popupViewer" destination="4682" id="name-outlet-4682"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
