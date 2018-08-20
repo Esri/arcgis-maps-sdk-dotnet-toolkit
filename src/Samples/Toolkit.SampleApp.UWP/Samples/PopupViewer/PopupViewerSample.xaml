@@ -18,7 +18,8 @@
                       GeoViewTapped="mapView_GeoViewTapped"/>
         <toolkit:PopupViewer x:Name="popupViewer"
                              Grid.Column="1"
-                             Width="250"
+                             Padding="5"
+                             Width="300"
                              Visibility="Collapsed"
                              HorizontalAlignment="Stretch" 
                              VerticalAlignment="Stretch" />

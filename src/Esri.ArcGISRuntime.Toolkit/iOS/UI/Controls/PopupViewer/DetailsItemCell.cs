@@ -61,10 +61,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ContentView.AddSubviews(_label, _formattedValue);
         }
 
-        public void Update(PopupFieldValue field)
+        internal void Update(PopupFieldValue field)
         {
             _label.Text = field?.Field?.Label;
             _formattedValue.Text = field?.FormattedValue;
+        }
+
+        internal void SetForegroundColor(UIColor foregroundColor)
+        {
+            _label.TextColor = foregroundColor;
+            _formattedValue.TextColor = foregroundColor;
         }
 
         private bool _constraintsUpdated = false;

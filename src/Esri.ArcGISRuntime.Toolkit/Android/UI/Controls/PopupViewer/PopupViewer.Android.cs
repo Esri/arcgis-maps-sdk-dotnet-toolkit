@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Android.Content;
+using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
@@ -65,12 +66,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
             };
+            _editSummary.SetTextColor(_foregroundColor);
             _rootLayout.AddView(_editSummary);
 
             _customHtmlDescription = new TextView(Context)
             {
                 LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
             };
+            _customHtmlDescription.SetTextColor(_foregroundColor);
             _rootLayout.AddView(_customHtmlDescription);
 
             _detailsList = new ListView(Context)
@@ -119,8 +122,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _customHtmlDescription.Visibility = ViewStates.Gone;
                 _customHtmlDescription.Text = null;
                 _detailsList.Visibility = ViewStates.Visible;
-                _detailsList.Adapter = new PopupFieldAdapter(Context, PopupManager.DisplayedFields);
+                _detailsList.Adapter = new PopupFieldAdapter(Context, PopupManager.DisplayedFields, _foregroundColor);
                 _detailsList.SetHeightBasedOnChildren();
+            }
+        }
+
+        private Color _foregroundColor = Color.Black;
+
+        /// <summary>
+        /// Gets or sets the color of the foreground elements of the <see cref="PopupViewer"/>
+        /// </summary>
+        public Color ForegroundColor
+        {
+            get => _foregroundColor;
+            set
+            {
+                _foregroundColor = value;
+
+                if (_customHtmlDescription == null)
+                {
+                    return;
+                }
+
+                _editSummary.SetTextColor(value);
+                _customHtmlDescription.SetTextColor(value);
+                (_detailsList.Adapter as PopupFieldAdapter)?.SetForegroundColor(value);
             }
         }
 

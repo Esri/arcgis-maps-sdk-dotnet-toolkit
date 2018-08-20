@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Android.Content;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping.Popups;
@@ -28,13 +29,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private readonly IReadOnlyList<PopupFieldValue> _displayFields;
         private readonly Context _context;
+        private Color _foregroundColor = Color.Black;
 
-        internal PopupFieldAdapter(Context context, IEnumerable<PopupFieldValue> displayFields)
+        internal PopupFieldAdapter(Context context, IEnumerable<PopupFieldValue> displayFields, Color foregroundColor)
         {
             _context = context;
             _displayFields = displayFields?.Any() ?? false ?
                 new ReadOnlyCollection<PopupFieldValue>(displayFields?.ToList()) :
                 new ReadOnlyCollection<PopupFieldValue>(Enumerable.Empty<PopupFieldValue>().ToList());
+            _foregroundColor = foregroundColor;
+        }
+
+        internal void SetForegroundColor(Color foregroundColor)
+        {
+            _foregroundColor = foregroundColor;
         }
 
         public override PopupFieldValue this[int position] => _displayFields[position];
@@ -51,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var popupFieldValue = _displayFields[position];
             if (convertView == null)
             {
-                convertView = new DetailsItemView(_context);
+                convertView = new DetailsItemView(_context, _foregroundColor);
             }
 
             (convertView as DetailsItemView)?.Update(popupFieldValue);

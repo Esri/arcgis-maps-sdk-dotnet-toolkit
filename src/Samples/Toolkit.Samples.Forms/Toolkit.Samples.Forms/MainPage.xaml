@@ -18,7 +18,13 @@
                     GeoView="{x:Reference mapView}"
                     AutoHide="False" />
 
-        <esriTK:PopupViewer x:Name="popupViewer" HorizontalOptions="End" VerticalOptions="Start" Margin="20" IsVisible="False"/>
+        
+        <esriTK:PopupViewer x:Name="popupViewer" 
+                            Foreground="Black"
+                            HorizontalOptions="EndAndExpand" 
+                            VerticalOptions="StartAndExpand" 
+                            IsVisible="False"/>
+        
         <esriTK:ScaleLine HorizontalOptions="Start" VerticalOptions="End" Margin="20"
                     MapView="{x:Reference mapView}"/>
     </Grid>

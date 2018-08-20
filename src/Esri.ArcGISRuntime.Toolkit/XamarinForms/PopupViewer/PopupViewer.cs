@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -67,6 +68,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 popupViewer.NativePopupViewer.PopupManager = newValue as PopupManager;
                 popupViewer.InvalidateMeasure();
+            }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="Foreground"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty ForegroundProperty =
+            BindableProperty.Create(nameof(Foreground), typeof(Color), typeof(PopupViewer), Color.Black, BindingMode.OneWay, null, OnForegroundChanged);
+
+        /// <summary>
+        /// Gets or sets the foreground color.
+        /// </summary>
+        public Color Foreground
+        {
+            get { return (Color)GetValue(ForegroundProperty); }
+            set { SetValue(ForegroundProperty, value); }
+        }
+
+        private static void OnForegroundChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var nativeView = ((PopupViewer)bindable).NativePopupViewer;
+            if (newValue != null)
+            {
+                nativeView.SetForeground(((Color)newValue).ToNativeColor());
             }
         }
     }

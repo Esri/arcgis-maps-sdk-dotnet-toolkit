@@ -53,6 +53,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
 #endif
         }
 
+        internal static void SetForeground(this UI.Controls.PopupViewer popupViewer, NativeColor color)
+        {
+#if NETFX_CORE
+            popupViewer.Foreground = new SolidColorBrush(color);
+#else
+            popupViewer.ForegroundColor = color;
+#endif
+        }
+
         internal static Esri.ArcGISRuntime.UI.Controls.GeoView GetNativeGeoView(this Esri.ArcGISRuntime.Xamarin.Forms.GeoView geoView)
         {
             var property = typeof(Esri.ArcGISRuntime.Xamarin.Forms.GeoView).GetProperty("NativeGeoView", BindingFlags.Instance | BindingFlags.NonPublic);

@@ -28,13 +28,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private readonly IReadOnlyList<PopupFieldValue> _displayFields;
         internal static readonly NSString CellId = new NSString(nameof(DetailsItemCell));
+        private UIColor _foregroundColor = UIColor.Black;
 
-        public PopupViewerTableSource(IEnumerable<PopupFieldValue> displayFields)
+        public PopupViewerTableSource(IEnumerable<PopupFieldValue> displayFields, UIColor foregroundColor)
             : base()
         {
             _displayFields = displayFields?.Any() ?? false ?
                 new ReadOnlyCollection<PopupFieldValue>(displayFields?.ToList()) :
                 new ReadOnlyCollection<PopupFieldValue>(Enumerable.Empty<PopupFieldValue>().ToList());
+            _foregroundColor = foregroundColor;
+        }
+
+        internal void SetForegroundColor(UIColor foregroundColor)
+        {
+            _foregroundColor = foregroundColor;
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
@@ -50,8 +57,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var info = _displayFields[indexPath.Row];
-            var cell = tableView.DequeueReusableCell(CellId, indexPath);
-            (cell as DetailsItemCell)?.Update(info);
+            var cell = tableView.DequeueReusableCell(CellId) as DetailsItemCell;
+            cell?.SetForegroundColor(_foregroundColor);
+            cell?.Update(info);
             cell?.SetNeedsUpdateConstraints();
             cell?.UpdateConstraints();
             return cell;

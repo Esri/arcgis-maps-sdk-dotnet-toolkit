@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Android.Content;
+using Android.Graphics;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping.Popups;
@@ -26,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly TextView _label;
         private readonly TextView _formattedValue;
 
-        internal DetailsItemView(Context context)
+        internal DetailsItemView(Context context, Color foregroundColor)
             : base(context)
         {
             Orientation = Orientation.Vertical;
@@ -37,11 +38,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
             };
+            _label.SetTextColor(foregroundColor);
             AddView(_label);
+
             _formattedValue = new TextView(context)
             {
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
             };
+            _formattedValue.SetTextColor(foregroundColor);
             AddView(_formattedValue);
             RequestLayout();
         }

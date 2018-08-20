@@ -107,8 +107,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidateIntrinsicContentSize();
         }
 
+        /// <summary>
+        /// Gets total size needed for PopupViewer
+        /// </summary>
+        /// <returns>The total size of control</returns>
+        private CGSize MeasureSize()
+        {
+            var size = CGSize.Empty;
+            size = CGSize.Add(size, _editSummary.IntrinsicContentSize);
+            size = CGSize.Add(size, _customHtmlDescription.IntrinsicContentSize);
+            size = CGSize.Add(size, _detailsList.ContentSize);
+            return size;
+        }
+
         /// <inheritdoc />
-        public override CGSize IntrinsicContentSize => Bounds.Size;
+        public override CGSize IntrinsicContentSize => MeasureSize();
 
         /// <inheritdoc />
         public override CGSize SizeThatFits(CGSize size)
@@ -179,12 +192,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _detailsList.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor, -5).Active = true;
                 _detailsList.BottomAnchor.ConstraintEqualTo(margin.BottomAnchor, -5).Active = true;
                 _detailsList.Hidden = false;
-                _detailsList.Source = new PopupViewerTableSource(PopupManager.DisplayedFields);
+                _detailsList.Source = new PopupViewerTableSource(PopupManager.DisplayedFields, _foregroundColor);
                 _detailsList.ReloadData();
             }
 
             InvalidateIntrinsicContentSize();
             Hidden = false;
+        }
+
+        private UIColor _foregroundColor = UIColor.Black;
+
+        /// <summary>
+        /// Gets or sets the color of the foreground elements of the <see cref="PopupViewer"/>
+        /// </summary>
+        public UIColor ForegroundColor
+        {
+            get => _foregroundColor;
+            set
+            {
+                _foregroundColor = value;
+
+                _editSummary.TextColor = value;
+                _customHtmlDescription.TextColor = value;
+                (_detailsList.Source as PopupViewerTableSource)?.SetForegroundColor(value);
+            }
         }
     }
 }
