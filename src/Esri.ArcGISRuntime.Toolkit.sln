@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.Forms.iOS",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.Forms.UWP", "Samples\Toolkit.Samples.Forms\Toolkit.Samples.Forms.UWP\Toolkit.Samples.Forms.UWP.csproj", "{BF26BE88-B6CC-48FC-8C0F-0EF5664EE379}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.Forms", "Samples\Toolkit.Samples.Forms\Toolkit.Samples.Forms\Toolkit.Samples.Forms.csproj", "{D7B89B7D-F360-4A68-AECB-C27CADDC8118}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Samples.Forms", "Samples\Toolkit.Samples.Forms\Toolkit.Samples.Forms\Toolkit.Samples.Forms.csproj", "{D7B89B7D-F360-4A68-AECB-C27CADDC8118}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -239,8 +239,6 @@ Global
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x64.Build.0 = Release|x64
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x64.Deploy.0 = Release|x64
 		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x86.ActiveCfg = Release|x86
-		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x86.Build.0 = Release|x86
-		{A36F7903-8CC6-4BE6-84C9-F04FF14236D7}.Release|x86.Deploy.0 = Release|x86
 		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
 		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Ad-Hoc|Any CPU.Build.0 = Release|Any CPU
 		{27F5F55F-9553-4A63-B462-FC410D6C7168}.Ad-Hoc|Any CPU.Deploy.0 = Release|Any CPU
