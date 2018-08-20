@@ -69,7 +69,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             var legend = bindable as Legend;
             if (legend?.NativeLegend != null)
             {
+#if !NETSTANDARD2_0
                 legend.NativeLegend.GeoView = (newValue as GeoView)?.GetNativeGeoView();
+#endif
                 legend.InvalidateMeasure();
             }
         }
