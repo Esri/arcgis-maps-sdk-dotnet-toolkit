@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !NETSTANDARD2_0
 using Xamarin.Forms;
 #if __ANDROID__
 using Xamarin.Forms.Platform.Android;
@@ -44,3 +45,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
     }
 }
+#endif

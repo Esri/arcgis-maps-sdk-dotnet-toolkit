@@ -23,6 +23,8 @@ using NativeColor = UIKit.UIColor;
 #elif NETFX_CORE
 using Windows.UI.Xaml.Media;
 using NativeColor = Windows.UI.Color;
+#elif NETSTANDARD2_0
+using NativeColor = System.Drawing.Color;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
@@ -41,9 +43,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
             return NativeColor.Argb(a, r, g, b);
 #elif __IOS__
             return NativeColor.FromRGBA(r, g, b, a);
+#elif NETSTANDARD2_0
+            return NativeColor.FromArgb(a, r, g, b);
 #endif
         }
 
+#if !NETSTANDARD2_0
         internal static void SetForeground(this UI.Controls.ScaleLine scaleline, NativeColor color)
         {
 #if NETFX_CORE
@@ -67,5 +72,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
             var property = typeof(Esri.ArcGISRuntime.Xamarin.Forms.GeoView).GetProperty("NativeGeoView", BindingFlags.Instance | BindingFlags.NonPublic);
             return property?.GetValue(geoView) as Esri.ArcGISRuntime.UI.Controls.GeoView;
         }
+#endif
     }
 }
