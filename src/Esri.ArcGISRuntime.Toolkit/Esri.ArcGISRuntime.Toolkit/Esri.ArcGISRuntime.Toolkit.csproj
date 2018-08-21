@@ -13,7 +13,6 @@
     <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>$(OutputPath)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
@@ -40,7 +39,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-	<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.3.0" />
+    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.0" />
+	  <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.3.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
@@ -73,7 +73,15 @@
   </ItemGroup>
   
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit.Android.targets">
+      <Pack>true</Pack>
+      <PackagePath>build\$(AndroidTargetFramework)\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <_ResxFiles Remove="**\*.resx" />
+    <None Remove="**\*.axml" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
   	<Compile Remove="LocalizedStrings\Resources.Designer.cs" />
@@ -102,5 +110,4 @@
   <Import Project="$(MSBuildThisFileDirectory)..\WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
   
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
-  
 </Project>

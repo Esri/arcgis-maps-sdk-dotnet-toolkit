@@ -80,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        public static void SetBackgroundColor(this UIView view, UIColor color) => view.BackgroundColor = color;
+        public static void SetBackgroundFill(this UIView view, UIColor color) => view.BackgroundColor = color;
 
         public static void SetBorderColor(this Thumb view, UIColor color) => view.BorderColor = color;
 

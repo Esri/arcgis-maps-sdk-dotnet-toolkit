@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
-#if !__ANDROID__
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +34,15 @@ using FrameworkElement = UIKit.UIView;
 using Rect = CoreGraphics.CGRect;
 using Size = CoreGraphics.CGSize;
 using UIElement = UIKit.UIView;
+#elif __ANDROID__
+using System.Drawing;
+using Android.Content;
+using Brush = Android.Graphics.Color;
+using ContentPresenter = Android.Views.View;
+using FrameworkElement = Android.Views.View;
+using Rect = Android.Graphics.RectF;
+using Size = Android.Util.SizeF;
+using UIElement = Android.Views.View;
 #else
 using System.Text;
 using System.Windows;
@@ -59,7 +67,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Initializes a new instance of the <see cref="Tickbar"/> class.
         /// </summary>
-        public Tickbar() => Initialize();
+#if __ANDROID__
+        public Tickbar(Context context)
+            : base(context)
+#else
+        public Tickbar()
+            : base()
+#endif
+        {
+            Initialize();
+        }
 
         private Size OnArrange(Size finalSize)
         {
@@ -68,7 +85,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return finalSize;
             }
 
-            Rect childBounds = new Rect(0, 0, finalSize.Width, finalSize.Height);
             var majorTickmarksBounds = new List<Rect>();
             var minorTickmarksBounds = new List<Rect>();
 
@@ -93,12 +109,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 position = finalSize.Width * position;
                 var desiredSize = GetDesiredSize(c);
                 var x = position - (desiredSize.Width * .5);
-#if __IOS__
-                childBounds.X = (nfloat)x;
-#else
-                childBounds.X = x;
+#if __ANDROID__
+                // In the implementation of the Android time slider, the tickbar is aligned horizontally with its parent to allow
+                // tick labels to use the entire space within the control.  The TickInset property defines how much extra room is
+                // available outside the bounds of the Tickbar and needs to be taken into account in the placement of ticks.
+                // This inset also needs to be adjusted slightly, as it yields a position that is slightly offset for reasons as
+                // yet unknown.
+                var pixelsPerDip = Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 1, ViewExtensions.GetDisplayMetrics());
+                x += TickInset - (2 * pixelsPerDip);
 #endif
-                childBounds.Width = desiredSize.Width;
+                var childBounds = new Rect(0, 0, desiredSize.Width, finalSize.Height);
+                childBounds.SetX(x);
 
                 // Store the bounds for application later once tick (i.e. label) collision has been accounted for
                 if (isMajorTickmark)
@@ -239,8 +260,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private Size OnMeasure(Size availableSize)
         {
-            double width = availableSize.Width == double.PositiveInfinity ? Width : availableSize.Width;
-            double height = availableSize.Height == double.PositiveInfinity ? Height : availableSize.Height;
+            var width = availableSize.Width == double.PositiveInfinity || availableSize.IsEmpty() ?
+                Width : availableSize.Width;
+            var height = availableSize.Height == double.PositiveInfinity || availableSize.IsEmpty() ?
+                Height : availableSize.Height;
 
             // Get the set of ticks that we want to measure.  This could either be all ticks or only minor ticks
             var measuredChildren = ShowTickLabels ? Children.Cast<UIElement>() : Children.Cast<UIElement>().Where(el => !GetIsMajorTickmark(el));
@@ -256,7 +279,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 height = 0;
                 foreach (UIElement d in measuredChildren)
                 {
-                    height = Math.Max(GetDesiredSize(d).Height, height);
+                    var maxHeight = Math.Max(GetDesiredSize(d).Height, height);
+                    height =
+#if __IOS__
+                        (nfloat)maxHeight;
+#else
+                        maxHeight;
+#endif
                 }
             }
 
@@ -345,7 +374,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             var newDataSources = dataSources ?? new List<object>();
 
-#if !__IOS__
+#if !XAMARIN
             for (var i = 0; i < _majorTickmarks.Count; i++)
             {
                 _majorTickmarks[i].Content = i < newDataSources.Count() ? newDataSources.ElementAt(i) : null;
@@ -409,5 +438,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-
-#endif

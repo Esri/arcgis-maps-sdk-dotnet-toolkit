@@ -14,6 +14,7 @@
     <Copyright>Copyright © 2014-2018 Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
+    <LangVersion>7.2</LangVersion>
 
     <!--Project type identifiers-->
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
@@ -24,7 +25,7 @@
     <!--Framework versions-->
     <UWPTargetPlatformVersion>10.0.16299.0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.16299.0</UWPTargetPlatformMinVersion>
-    <AndroidTargetFramework>monoandroid60</AndroidTargetFramework>
+    <AndroidTargetFramework>monoandroid70</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
       <DotNetTargetFramework>net461</DotNetTargetFramework>
       <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>

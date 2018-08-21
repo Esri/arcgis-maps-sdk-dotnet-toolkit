@@ -14,8 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__ANDROID__
-
 using System;
 using Esri.ArcGISRuntime.ArcGISServices;
 
@@ -320,5 +318,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
     }
 }
-
-#endif
