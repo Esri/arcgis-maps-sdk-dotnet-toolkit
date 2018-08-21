@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
@@ -26,7 +27,6 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 
 #if NETFX_CORE
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -36,7 +36,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Media;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -213,6 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         AreaUnits.FirstOrDefault();
                 }
             }
+
             PrepareMeasureMode();
         }
 
@@ -723,7 +723,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="SelectionColor"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SelectionColorProperty =
-            DependencyProperty.Register(nameof(SelectionColor), typeof(Color), typeof(MeasureToolbar), new PropertyMetadata(Colors.Cyan, OnSelectionColorPropertyChanged));
+            DependencyProperty.Register(nameof(SelectionColor), typeof(Color), typeof(MeasureToolbar), new PropertyMetadata(Color.Cyan, OnSelectionColorPropertyChanged));
 
         private static void OnSelectionColorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

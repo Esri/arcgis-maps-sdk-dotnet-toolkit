@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SymbolDisplay
 
         public List<SimpleMarkerSymbolStyle> SimpleMarkerSymbolStyles { get; } = Enum.GetValues(typeof(SimpleMarkerSymbolStyle)).OfType<SimpleMarkerSymbolStyle>().ToList();
 
-        public SimpleMarkerSymbol Symbol { get; } = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, Windows.UI.Colors.Red, 20) { Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Windows.UI.Colors.Black, 2) };
+        public SimpleMarkerSymbol Symbol { get; } = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Red, 20) { Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Black, 2) };
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -8,7 +8,7 @@
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Esri/arcgis-toolkit-dotnet/master/license.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>v100.2-beta3: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.2-beta3 </PackageReleaseNotes>
+    <PackageReleaseNotes>v100.3-beta4: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.3-beta4</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <Copyright>Copyright © 2014-2018 Esri.</Copyright>
@@ -23,12 +23,12 @@
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
     
     <!--Framework versions-->
-    <UWPTargetPlatformVersion>10.0.14393.0</UWPTargetPlatformVersion>
-    <UWPTargetPlatformMinVersion>10.0.14393.0</UWPTargetPlatformMinVersion>
-    <AndroidTargetFramework>monoandroid80</AndroidTargetFramework>
+    <UWPTargetPlatformVersion>10.0.16299.0</UWPTargetPlatformVersion>
+    <UWPTargetPlatformMinVersion>10.0.16299.0</UWPTargetPlatformMinVersion>
+    <AndroidTargetFramework>monoandroid70</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-	<DotNetTargetFramework>net452</DotNetTargetFramework>
-	<UWPTargetFramework>uap10.0</UWPTargetFramework>
+      <DotNetTargetFramework>net461</DotNetTargetFramework>
+      <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
   
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
@@ -44,7 +44,7 @@
         <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
       </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.2.1" PrivateAssets="all" />
+        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.5.4" PrivateAssets="all" />
       </ItemGroup>
       <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
@@ -69,14 +69,14 @@
           BeforeTargets="_GenerateRestoreProjectSpec"
           DependsOnTargets="GetBuildVersion"
           Condition=" '$(NerdbankGitVersioningTasksPath)' != '' " />
-		  
-		  
-	<!--
+          
+          
+    <!--
     // This task disable doc warnings in the auto-generated XamlTypeInfo.g.cs file,
     // and also hides the public class from intellisense.
     -->
 
-	<UsingTask TaskName="XamlTypeInfoBuildTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <UsingTask TaskName="XamlTypeInfoBuildTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
         <ParameterGroup>
             <InputFilename ParameterType="System.String" Required="true" />
         </ParameterGroup>
@@ -87,30 +87,30 @@
             <Using Namespace="Microsoft.Build.Utilities" />
             <Code Type="Fragment" Language="cs">
                 <![CDATA[
-				//Note: If this task returns 'false' it will break the shared project manager project picker and intellisense.
-				//so we always return true.
+                //Note: If this task returns 'false' it will break the shared project manager project picker and intellisense.
+                //so we always return true.
                 try {
                     if (!System.IO.File.Exists(InputFilename)) 
-					{
-						return true; 
-					}
-					string code = System.IO.File.ReadAllText(InputFilename);
+                    {
+                        return true; 
+                    }
+                    string code = System.IO.File.ReadAllText(InputFilename);
 
-					if (code.StartsWith("#pragma warning disable 1591")) //Already modified 
-						return true; 
-					int idx = code.IndexOf("[System.CodeDom.Compiler.GeneratedCodeAttribute"); 
-					if (idx < 0) 
-					{
-						return true; 
-					}
-					string insert = "[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]\n    "; 
-					code = "#pragma warning disable 1591\n" + code.Substring(0, idx) + insert + code.Substring(idx) + 
-						"#pragma warning restore 1591\n"; 
-					System.IO.File.WriteAllText(InputFilename, code); 
-					return true; 
+                    if (code.StartsWith("#pragma warning disable 1591")) //Already modified 
+                        return true; 
+                    int idx = code.IndexOf("[System.CodeDom.Compiler.GeneratedCodeAttribute"); 
+                    if (idx < 0) 
+                    {
+                        return true; 
+                    }
+                    string insert = "[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]\n    "; 
+                    code = "#pragma warning disable 1591\n" + code.Substring(0, idx) + insert + code.Substring(idx) + 
+                        "#pragma warning restore 1591\n"; 
+                    System.IO.File.WriteAllText(InputFilename, code); 
+                    return true; 
                 }
                 catch (Exception ex) {
-					ex = new Exception("XamlTypeInfoBuildTask: " + ex.Message, ex);
+                    ex = new Exception("XamlTypeInfoBuildTask: " + ex.Message, ex);
                     Log.LogErrorFromException(ex);
                     return false;
                 }
@@ -118,9 +118,9 @@
             </Code>
         </Task>
     </UsingTask>
-	<Target Name="XamlTypeInfoBuildTask" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)' AND '$(DesignTimeBuild)' != 'true'"
-					AfterTargets="MarkupCompilePass2"
-					BeforeTargets="CoreCompile">
-		<XamlTypeInfoBuildTask InputFilename="$(IntermediateOutputPath)\XamlTypeInfo.g.cs" />
-	</Target>
+    <Target Name="XamlTypeInfoBuildTask" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)' AND '$(DesignTimeBuild)' != 'true'"
+                    AfterTargets="MarkupCompilePass2"
+                    BeforeTargets="CoreCompile">
+        <XamlTypeInfoBuildTask InputFilename="$(IntermediateOutputPath)\XamlTypeInfo.g.cs" />
+    </Target>
 </Project>

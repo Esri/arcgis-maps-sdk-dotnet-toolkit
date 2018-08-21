@@ -26,6 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		
 		public static void UpdateIdValues()
 		{
+			global::Esri.ArcGISRuntime.Toolkit.Resource.Drawable.esri = global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.esri;
 		}
 		
 		public partial class Attribute
