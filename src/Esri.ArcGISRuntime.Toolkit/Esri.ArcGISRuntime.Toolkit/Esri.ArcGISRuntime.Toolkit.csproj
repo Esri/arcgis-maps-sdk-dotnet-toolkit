@@ -73,7 +73,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit.Android.targets">
+    <None Include="$(MSBuildThisFileDirectory)build\Android\Esri.ArcGISRuntime.Toolkit.targets">
       <Pack>true</Pack>
       <PackagePath>build\$(AndroidTargetFramework)\</PackagePath>
     </None>
