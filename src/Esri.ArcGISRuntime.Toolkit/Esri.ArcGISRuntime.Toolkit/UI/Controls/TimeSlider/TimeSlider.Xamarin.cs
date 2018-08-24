@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __IOS__
+#if XAMARIN
 
 using System;
 using System.Collections.Generic;
@@ -23,6 +23,8 @@ using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if __IOS__
 using Color = UIKit.UIColor;
+#elif __ANDROID__
+using Android.Graphics;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -304,7 +306,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbStroke = Color.LightGray;
+        private Color _thumbStroke =
+#if __IOS__
+            Color.LightGray;
+#elif __ANDROID__
+            Color.Rgb(94, 151, 246);
+#endif
 
         /// <summary>
         /// Gets or sets the border color of the thumbs
@@ -324,7 +331,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _thumbFill = Color.White;
+        private Color _thumbFill =
+#if __IOS__
+            Color.White;
+#elif __ANDROID__
+            Color.Rgb(94, 151, 246);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the thumbs
@@ -337,14 +349,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_thumbFill != value)
                 {
                     _thumbFill = value;
-                    MinimumThumb?.SetBackgroundColor(value);
-                    MaximumThumb?.SetBackgroundColor(value);
+                    MinimumThumb?.SetBackgroundFill(value);
+                    MaximumThumb?.SetBackgroundFill(value);
+#if __ANDROID__
+                    PinnedMinimumThumb?.SetBackgroundFill(value);
+                    PinnedMaximumThumb?.SetBackgroundFill(value);
+#endif
                     OnPropertyChanged(nameof(ThumbFill));
                 }
             }
         }
 
-        private Color _currentExtentFill = Color.FromRGBA(0, 111, 255, 255);
+        private Color _currentExtentFill =
+#if __IOS__
+            Color.FromRGB(0, 111, 255);
+#elif __ANDROID__
+            Color.Rgb(94, 151, 246);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
@@ -357,13 +378,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_currentExtentFill != value)
                 {
                     _currentExtentFill = value;
-                    HorizontalTrackThumb?.SetBackgroundColor(value);
+                    HorizontalTrackThumb?.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(CurrentExtentFill));
                 }
             }
         }
 
-        private Color _fullExtentFill = Color.FromRGBA(170, 169, 170, 255);
+        private Color _fullExtentFill =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(92, 92, 92);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
@@ -376,13 +402,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_fullExtentFill != value)
                 {
                     _fullExtentFill = value;
-                    SliderTrack?.SetBackgroundColor(value);
+                    SliderTrack?.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(FullExtentFill));
                 }
             }
         }
 
-        private Color _fullExtentStroke = Color.FromRGBA(170, 169, 170, 255);
+        private Color _fullExtentStroke =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(92, 92, 92);
+#endif
 
         /// <summary>
         /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
@@ -395,7 +426,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_fullExtentStroke != value)
                 {
                     _fullExtentStroke = value;
+#if __IOS__
                     SliderTrack?.SetBorderColor(value);
+#elif __ANDROID__
+                    SliderTrackOutline?.SetBackgroundFill(value);
+#endif
                     OnPropertyChanged(nameof(FullExtentStroke));
                 }
             }
@@ -421,7 +456,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private Color _timeStepIntervalTickFill = Color.FromRGBA(170, 169, 170, 255);
+        private Color _timeStepIntervalTickFill =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(170, 169, 170);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the slider's tickmarks
@@ -439,15 +479,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         Tickmarks.TickFill = value;
                     }
 
-                    _startTimeTickmark?.SetBackgroundColor(value);
-                    _endTimeTickmark?.SetBackgroundColor(value);
+                    _startTimeTickmark?.SetBackgroundFill(value);
+                    _endTimeTickmark?.SetBackgroundFill(value);
 
                     OnPropertyChanged(nameof(TimeStepIntervalTickFill));
                 }
             }
         }
 
-        private Color _playbackButtonsFill = Color.FromRGBA(230, 230, 230, 255);
+        private Color _playbackButtonsFill =
+#if __IOS__
+            Color.FromRGB(230, 230, 230);
+#elif __ANDROID__
+            Color.Rgb(94, 151, 246);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color of the playback buttons
@@ -460,15 +505,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_playbackButtonsFill != value)
                 {
                     _playbackButtonsFill = value;
-                    PreviousButton?.SetBackgroundColor(value);
-                    NextButton?.SetBackgroundColor(value);
-                    PlayPauseButton.SetBackgroundColor(value);
+                    PreviousButton?.SetBackgroundFill(value);
+                    NextButton?.SetBackgroundFill(value);
+                    PlayPauseButton.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(PlaybackButtonsFill));
                 }
             }
         }
 
-        private Color _playbackButtonsStroke = Color.FromRGBA(170, 169, 170, 255);
+        private Color _playbackButtonsStroke =
+#if __IOS__
+            Color.FromRGB(170, 169, 170);
+#elif __ANDROID__
+            Color.Rgb(94, 151, 246);
+#endif
 
         /// <summary>
         /// Gets or sets the border color of the playback buttons
@@ -481,15 +531,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_playbackButtonsStroke != value)
                 {
                     _playbackButtonsStroke = value;
+#if __IOS__
                     PreviousButton?.SetBorderColor(value);
                     NextButton?.SetBorderColor(value);
                     PlayPauseButton.SetBorderColor(value);
+#elif __ANDROID__
+                    PreviousButtonOutline.SetBackgroundFill(value);
+                    NextButtonOutline.SetBackgroundFill(value);
+                    PlayButtonOutline.SetBackgroundFill(value);
+                    PauseButtonOutline.SetBackgroundFill(value);
+#endif
                     OnPropertyChanged(nameof(PlaybackButtonsStroke));
                 }
             }
         }
 
+#if __IOS__
         private Color _fullExtentLabelColor;
+#elif __ANDROID__
+        private Color _fullExtentLabelColor = Color.Rgb(184, 184, 184);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the full extent labels
@@ -509,7 +570,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+#if __IOS__
         private Color _currentExtentLabelColor;
+#elif __ANDROID__
+        private Color _currentExtentLabelColor = Color.Rgb(184, 184, 184);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the current extent labels
@@ -529,7 +594,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+#if __IOS__
         private Color _timeStepIntervalLabelColor;
+#elif __ANDROID__
+        private Color _timeStepIntervalLabelColor = Color.Rgb(184, 184, 184);
+#endif
 
         /// <summary>
         /// Gets or sets the color of the time step interval labels

@@ -14,26 +14,20 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.UI
+using System;
+using CoreGraphics;
+
+namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Represents the display mode for time slider labels
+    /// Helper class for providing common cross-platform names for members having to do with graphics or drawing-related objects
     /// </summary>
-    public enum TimeSliderLabelMode
+    internal static class GraphicsExtensions
     {
-        /// <summary>
-        /// Display no labels along the time slider
-        /// </summary>
-        None,
+        public static bool IsEmpty(this CGSize size) => size.IsEmpty;
 
-        /// <summary>
-        /// Display labels for the time slider's current extent (i.e. on the slider's thumbs)
-        /// </summary>
-        CurrentExtent,
+        public static void SetX(ref this CGRect rect, double x) => rect.X = (nfloat)x;
 
-        /// <summary>
-        /// Display labels for the time slider's time step intervals (i.e. on the slider's tick marks)
-        /// </summary>
-        TimeStepInterval
+        public static void SetWidth(ref this CGRect rect, double width) => rect.Width = (nfloat)width;
     }
 }

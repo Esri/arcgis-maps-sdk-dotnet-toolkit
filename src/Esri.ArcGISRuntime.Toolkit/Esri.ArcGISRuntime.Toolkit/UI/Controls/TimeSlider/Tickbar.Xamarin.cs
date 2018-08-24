@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __IOS__
+#if XAMARIN
 
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +23,9 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI;
 #if __IOS__
 using Color = UIKit.UIColor;
+#elif __ANDROID__
+using Android.Views;
+using Color = Android.Graphics.Color;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -60,7 +63,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Color _tickFill = Color.Black;
+        private Color _tickFill =
+#if __IOS__
+            Color.Black;
+#elif __ANDROID__
+            Color.Rgb(188, 188, 188);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark
@@ -76,8 +84,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     foreach (var tickContainer in _majorTickmarks)
                     {
+#if __IOS__
                         var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
-                        tick?.SetBackgroundColor(value);
+#elif __ANDROID__
+                        var tick = tickContainer is ViewGroup group ? group.GetChildren().OfType<View>().LastOrDefault() : tickContainer;
+#endif
+                        tick?.SetBackgroundFill(value);
                     }
                 }
 
@@ -85,13 +97,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     foreach (var tick in _minorTickmarks)
                     {
-                        tick.SetBackgroundColor(value);
+                        tick.SetBackgroundFill(value);
                     }
                 }
             }
         }
 
-        private Color _tickLabelColor = Color.Black;
+        private Color _tickLabelColor =
+#if __IOS__
+            Color.Black;
+#elif __ANDROID__
+            Color.Rgb(188, 188, 188);
+#endif
 
         /// <summary>
         /// Gets or sets the fill color for each tick mark

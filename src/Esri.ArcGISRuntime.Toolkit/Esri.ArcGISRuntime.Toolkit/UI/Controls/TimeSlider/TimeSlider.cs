@@ -15,8 +15,6 @@
 //  ******************************************************************************/
 
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
-#if !__ANDROID__
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,13 +39,13 @@ using Key = Windows.System.VirtualKey;
 #elif __IOS__
 using System.Drawing;
 using Brush = UIKit.UIColor;
-using ButtonBase = UIKit.UIButton;
-using FrameworkElement = UIKit.UIView;
-using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
-using RepeatButton = UIKit.UIButton;
 using TextBlock = UIKit.UILabel;
-using Thumb = UIKit.UIControl;
-using ToggleButton = UIKit.UISwitch;
+#elif __ANDROID__
+using System.Drawing;
+using Android.Content;
+using Brush = Android.Graphics.Color;
+using Size = Android.Util.Size;
+using TextBlock = Android.Widget.TextView;
 #else
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -86,9 +84,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
+#if __ANDROID__
+        public TimeSlider(Context context)
+            : base(context)
+#else
         public TimeSlider()
+            : base()
+#endif
         {
             Initialize();
+        }
+
+        private void Initialize()
+        {
+            InitializeImpl();
             _playTimer = new DispatcherTimer() { Interval = PlaybackInterval };
             _playTimer.Tick += PlayTimer_Tick;
         }
@@ -125,14 +134,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Position left repeater
             right = Math.Min(sliderWidth, ((maximum - start) * rate) + MaximumThumb.GetActualWidth());
-            SliderTrackStepBackRepeater.SetMargin(0, 0, right, 0);
-            SliderTrackStepBackRepeater.SetWidth(Math.Max(0, sliderWidth - right));
+            SliderTrackStepBackRepeater?.SetMargin(0, 0, right, 0);
+            SliderTrackStepBackRepeater?.SetWidth(Math.Max(0, sliderWidth - right));
 
             // Margin adjustment for the minimum thumb label
             var thumbLabelWidthAdjustment = 0d;
             var minLabelLeftMargin = -1d;
             var minLabelRightMargin = -1d;
             var minThumbLabelWidth = 0d;
+
+#if __ANDROID__
+            // On Android, the slider track is positioned relative to the bounds of the parent.  So get the distance between the parent left and
+            // track left to incorporate that into element positioning.
+            var trackMarginOffset = SliderTrack.GetX();
+#else
+            var trackMarginOffset = 0;
+#endif
 
             // Position minimum thumb
             if (!IsCurrentExtentTimeInstant)
@@ -146,8 +163,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 left -= 0.5;
                 right -= 0.5;
 #endif
-                thumbLeft = left - (MinimumThumb.GetActualWidth() / 2);
-                thumbRight = right - (MinimumThumb.GetActualWidth() / 2);
+                thumbLeft = left - (MinimumThumb.GetActualWidth() / 2) + trackMarginOffset;
+                thumbRight = right - (MinimumThumb.GetActualWidth() / 2) + trackMarginOffset;
                 MinimumThumb.SetMargin(thumbLeft, 0, thumbRight, 0);
 
                 var isVisible = LabelMode == TimeSliderLabelMode.CurrentExtent && start != minimum;
@@ -159,13 +176,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Calculate thumb label position
                 minThumbLabelWidth = CalculateTextSize(MinimumThumbLabel).Width;
                 thumbLabelWidthAdjustment = minThumbLabelWidth / 2;
-                minLabelLeftMargin = left - thumbLabelWidthAdjustment;
-                minLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
+                minLabelLeftMargin = left - thumbLabelWidthAdjustment + trackMarginOffset;
+                minLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment) + trackMarginOffset;
             }
             else
             {
                 // There's only one thumb, so hide the min thumb
                 MinimumThumb.SetMargin(0, 0, sliderWidth, 0);
+                MinimumThumb.SetOpacity(0);
                 MinimumThumbLabel.SetOpacity(0);
             }
 
@@ -198,8 +216,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             left -= 0.5;
             right -= 0.5;
 #endif
-            thumbLeft = left - (MaximumThumb.GetActualWidth() / 2);
-            thumbRight = right - (MaximumThumb.GetActualWidth() / 2);
+            thumbLeft = left - (MaximumThumb.GetActualWidth() / 2) + trackMarginOffset;
+            thumbRight = right - (MaximumThumb.GetActualWidth() / 2) + trackMarginOffset;
             MaximumThumb.SetMargin(thumbLeft, 0, thumbRight, 0);
 
             // Update maximum thumb label visibility
@@ -208,8 +226,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position maximum thumb label
             var maxThumbLabelWidth = CalculateTextSize(MaximumThumbLabel).Width;
             thumbLabelWidthAdjustment = maxThumbLabelWidth / 2;
-            var maxLabelLeftMargin = left - thumbLabelWidthAdjustment;
-            var maxLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment);
+            var maxLabelLeftMargin = left - thumbLabelWidthAdjustment + trackMarginOffset;
+            var maxLabelRightMargin = Math.Min(sliderWidth, right - thumbLabelWidthAdjustment) + trackMarginOffset;
 
             // Handle possible thumb label collision and apply label positions
             if (!IsCurrentExtentTimeInstant && MinimumThumbLabel.GetOpacity() == 1)
@@ -242,8 +260,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Position right repeater
             left = Math.Min(sliderWidth, ((end - minimum) * rate) + MaximumThumb.GetActualWidth());
-            SliderTrackStepForwardRepeater.SetMargin(left, 0, 0, 0);
-            SliderTrackStepForwardRepeater.SetWidth(Math.Max(0, sliderWidth - left));
+            SliderTrackStepForwardRepeater?.SetMargin(left, 0, 0, 0);
+            SliderTrackStepForwardRepeater?.SetWidth(Math.Max(0, sliderWidth - left));
         }
 
         /// <summary>
@@ -279,6 +297,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 LineBreakMode = textBlock.LineBreakMode
             };
             return (Size)label.SizeThatFits(new CoreGraphics.CGSize(double.MaxValue, double.MaxValue));
+#elif __ANDROID__
+            string oldText = textBlock.Text;
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBlock.Text = text;
+            }
+
+            var size = GetDesiredSize(textBlock);
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                textBlock.Text = oldText;
+            }
+
+            return size;
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
             var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
@@ -886,6 +919,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             var enableHorizontalTrackThumb = MaximumThumb.GetIsEnabled() && MinimumThumb.GetIsEnabled();
             HorizontalTrackThumb.SetIsEnabled(enableHorizontalTrackThumb);
+#if __ANDROID__
+            MinimumThumb.Visibility = isStartTimePinned ? Android.Views.ViewStates.Invisible : Android.Views.ViewStates.Visible;
+            PinnedMinimumThumb.Visibility = isStartTimePinned ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Gone;
+#endif
 #endif
         }
 
@@ -913,6 +950,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Enable or disable the middle thumb based on whether both the start and end thumbs are pinned
             var enableHorizontalTrackThumb = MaximumThumb.GetIsEnabled() && MinimumThumb.GetIsEnabled();
             HorizontalTrackThumb.SetIsEnabled(enableHorizontalTrackThumb);
+#if __ANDROID__
+            MaximumThumb.Visibility = isEndTimePinned ? Android.Views.ViewStates.Invisible : Android.Views.ViewStates.Visible;
+            PinnedMaximumThumb.Visibility = isEndTimePinned ? Android.Views.ViewStates.Visible : Android.Views.ViewStates.Gone;
+#endif
 #endif
         }
 
@@ -950,7 +991,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Update the state of the play/pause button
             if (PlayPauseButton != null)
             {
+#if __ANDROID__
+                PlayPauseButton.Checked = isPlaying;
+#else
                 PlayPauseButton.IsChecked = isPlaying;
+#endif
             }
         }
 
@@ -1554,10 +1599,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else
                 {
                     // Looping is enabled - calculate the number of time steps to move the current extent based on the loop mode.
-
-                    // We want to rely on step indexes, so we use the known backing type here since that's most efficent.
-                    // If the backing type changes, the implemetation here will need to be updated accordingly
-                    var timeStepsList = (List<DateTimeOffset>)TimeSteps;
+                    var timeStepsList = TimeSteps.ToList();
 
                     // Get the current start and end time step indexes
                     var startTimeStepIndex = timeStepsList.IndexOf(CurrentValidExtent.StartTime);
@@ -1605,5 +1647,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endregion
     }
 }
-
-#endif

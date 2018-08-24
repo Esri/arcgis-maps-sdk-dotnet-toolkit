@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
-        private void Initialize()
+        private void InitializeImpl()
         {
             if (DesignTime.IsDesignMode)
             {

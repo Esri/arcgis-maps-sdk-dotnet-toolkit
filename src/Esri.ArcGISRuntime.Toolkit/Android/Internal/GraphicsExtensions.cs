@@ -14,26 +14,25 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.UI
+using Android.Graphics;
+using Android.Util;
+
+namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Represents the display mode for time slider labels
+    /// Helper class for providing common cross-platform names for members having to do with graphics or drawing-related objects
     /// </summary>
-    public enum TimeSliderLabelMode
+    internal static class GraphicsExtensions
     {
-        /// <summary>
-        /// Display no labels along the time slider
-        /// </summary>
-        None,
+        public static bool IsEmpty(this SizeF size) => size == default(SizeF);
 
-        /// <summary>
-        /// Display labels for the time slider's current extent (i.e. on the slider's thumbs)
-        /// </summary>
-        CurrentExtent,
+        public static void SetX(this RectF rect, double x)
+        {
+            var width = rect.Right - rect.Left;
+            rect.Left = (float)x;
+            rect.Right = rect.Left + width;
+        }
 
-        /// <summary>
-        /// Display labels for the time slider's time step intervals (i.e. on the slider's tick marks)
-        /// </summary>
-        TimeStepInterval
+        public static void SetWidth(this RectF rect, double width) => rect.Right = rect.Left + (float)width;
     }
 }

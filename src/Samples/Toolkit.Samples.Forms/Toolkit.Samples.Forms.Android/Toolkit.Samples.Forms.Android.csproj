@@ -107,4 +107,5 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Import Project="$(MSBuildThisFileDirectory)..\..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\build\android\Esri.ArcGISRuntime.Toolkit.targets" Condition="Exists('$(MSBuildThisFileDirectory)..\..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\build\android\Esri.ArcGISRuntime.Toolkit.targets')" />
 </Project>
