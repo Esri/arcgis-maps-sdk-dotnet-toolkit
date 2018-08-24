@@ -37,6 +37,7 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |
+|PopupViewer | ✔ | ✔ | ✔ | ✔ | ✔ |
 |ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |SignInForm   |   | ✔ |   |   |   |
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |

@@ -15,11 +15,10 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using CoreGraphics;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

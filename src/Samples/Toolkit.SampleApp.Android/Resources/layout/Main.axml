@@ -24,7 +24,7 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/scaleLine" />
     <Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer
-        android:background="@android:color/black"
+        android:background="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

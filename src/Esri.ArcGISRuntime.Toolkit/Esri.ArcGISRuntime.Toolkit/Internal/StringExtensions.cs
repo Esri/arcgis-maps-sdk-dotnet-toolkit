@@ -16,28 +16,31 @@
 
 using System.Text.RegularExpressions;
 
-/// <summary>
-/// Helper class for providing common cross-platform string manipulations.
-/// </summary>
-[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-public static class StringExtensions
+namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
-    private const string HtmlLineBreakRegex = @"<br ?/?>";
-    private const string HtmlStripperRegex = @"<(.|\n)*?>";
-
     /// <summary>
-    /// Strips-out html code from text.
+    /// Helper class for providing common cross-platform string manipulations.
     /// </summary>
-    /// <param name="htmlText">Text that may contain html code.</param>
-    /// <returns>Plain text after html code is removed.</returns>
-    public static string ToPlainText(this string htmlText)
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    internal static class StringExtensions
     {
-        // Replace HTML line break tags.
-        htmlText = Regex.Replace(htmlText, HtmlLineBreakRegex, string.Empty);
+        private const string HtmlLineBreakRegex = @"<br ?/?>";
+        private const string HtmlStripperRegex = @"<(.|\n)*?>";
 
-        // Remove the rest of HTML tags.
-        htmlText = Regex.Replace(htmlText, HtmlStripperRegex, string.Empty);
+        /// <summary>
+        /// Strips-out html code from text.
+        /// </summary>
+        /// <param name="htmlText">Text that may contain html code.</param>
+        /// <returns>Plain text after html code is removed.</returns>
+        internal static string ToPlainText(this string htmlText)
+        {
+            // Replace HTML line break tags.
+            htmlText = Regex.Replace(htmlText, HtmlLineBreakRegex, string.Empty);
 
-        return htmlText;
+            // Remove the rest of HTML tags.
+            htmlText = Regex.Replace(htmlText, HtmlStripperRegex, string.Empty);
+
+            return htmlText;
+        }
     }
 }
