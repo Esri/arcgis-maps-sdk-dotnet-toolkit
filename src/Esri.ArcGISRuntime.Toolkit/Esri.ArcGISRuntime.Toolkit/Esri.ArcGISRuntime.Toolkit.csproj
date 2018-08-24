@@ -73,7 +73,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit.Android.targets">
+    <None Include="$(MSBuildThisFileDirectory)build\Esri.ArcGISRuntime.Toolkit.*.targets" Exclude="$(MSBuildThisFileDirectory)build\Esri.ArcGISRuntime.Toolkit.Android.targets">
       <Pack>true</Pack>
       <PackagePath>build\$(AndroidTargetFramework)\</PackagePath>
     </None>
@@ -103,6 +103,15 @@
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
+
+  <Target Name="CopyAndroidTargetsFile" DependsOnTargets="GetBuildVersion" AfterTargets="GetBuildVersion" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)' AND '$(NuGetPackageVersion)' != ''">
+    <PropertyGroup>
+      <CopyAndroidTargetsFileCommand>
+        XCOPY "$(MSBuildThisFileDirectory)build\Esri.ArcGISRuntime.Toolkit.Android.targets" "$(MSBuildThisFileDirectory)build\Esri.ArcGISRuntime.Toolkit.$(NuGetPackageVersion).*" /Y
+      </CopyAndroidTargetsFileCommand>
+    </PropertyGroup>
+    <Exec Command="$(CopyAndroidTargetsFileCommand)" LogStandardErrorAsError="true" />
+  </Target>
 
   <Import Project="$(MSBuildThisFileDirectory)..\Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
