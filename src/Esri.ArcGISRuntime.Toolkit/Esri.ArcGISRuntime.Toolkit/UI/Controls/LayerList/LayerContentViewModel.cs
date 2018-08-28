@@ -260,7 +260,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (LayerContent is Layer)
             {
                 var ext = ((Layer)LayerContent).FullExtent;
-                if (ext != null)
+                if (ext != null && !ext.IsEmpty)
                 {
                     return new Viewpoint(ext);
                 }
@@ -288,6 +288,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             else if (e.PropertyName == nameof(ILoadable.LoadStatus))
             {
                 UpdateLoadingStatus();
+            }
+            else if (e.PropertyName == nameof(Layer.FullExtent))
+            {
+                _zoomToCommand.RaiseCanExecuteChanged();
             }
         }
 

@@ -42,7 +42,7 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |SignInForm   |   | ✔ |   |   |   |
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |TableOfContents   | N/A | ✔ | N/A  | N/A | N/A |
-|TimeSlider   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201)  | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201) |
+|TimeSlider   | ✔ | ✔ | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201) |
 
 ## Instructions for Building
 
