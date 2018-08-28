@@ -68,6 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _editSummary = new UILabel()
             {
                 Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
+                ClipsToBounds = true,
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
@@ -80,6 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _customHtmlDescription = new UILabel()
             {
                 Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
+                ClipsToBounds = true,
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
@@ -100,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
-                EstimatedRowHeight = (nfloat)(UIFont.LabelFontSize * 2.5),
+                EstimatedRowHeight = (nfloat)(UIFont.LabelFontSize * 2.4),
             };
             _detailsList.RegisterClassForCellReuse(typeof(DetailsItemCell), PopupViewerTableSource.CellId);
             AddSubviews(_editSummary, _customHtmlDescription, _detailsList);
@@ -115,12 +117,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (_intrinsicContentSize == CGSize.Empty)
             {
-                var editSummarySize = _editSummary.SizeThatFits(Bounds.Size);
-                var customHtmlDescSize = _customHtmlDescription.SizeThatFits(Bounds.Size);
-                var detailsListSize = _detailsList.SizeThatFits(Bounds.Size);
-                var width = Math.Max(Math.Max(Math.Max(Bounds.Width, editSummarySize.Width), customHtmlDescSize.Width), detailsListSize.Width);
-                var height = editSummarySize.Height + customHtmlDescSize.Height + detailsListSize.Height;
-                _intrinsicContentSize = new CGSize(width, height);
+                var height = _editSummary.IntrinsicContentSize.Height + _customHtmlDescription.IntrinsicContentSize.Height + _detailsList.ContentSize.Height;
+                var maxWidth = Superview.Frame.GetMaxY() - Superview.Frame.GetMinY();
+                if (maxWidth == 0)
+                {
+                    maxWidth = (nfloat)Math.Max(Math.Max(_editSummary.IntrinsicContentSize.Width, _customHtmlDescription.IntrinsicContentSize.Width), _detailsList.ContentSize.Width);
+                }
+
+                _intrinsicContentSize = new CGSize(maxWidth, height);
             }
 
             return _intrinsicContentSize;
@@ -152,11 +156,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void UpdateConstraints()
         {
             base.UpdateConstraints();
-            _editSummary.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
-            _customHtmlDescription.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
 
-            _editSummary.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
-            _customHtmlDescription.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
             if (_constraintsUpdated || PopupManager == null)
             {
                 return;
@@ -172,7 +172,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _editSummary.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
                 _editSummary.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-                _editSummary.WidthAnchor.ConstraintEqualTo(margin.WidthAnchor).Active = true;
+                _editSummary.WidthAnchor.ConstraintEqualTo(Superview.Bounds.Width).Active = true;
                 _editSummary.BottomAnchor.ConstraintEqualTo(bottomAnchor).Active = true;
             }
             else
@@ -185,13 +185,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _customHtmlDescription.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
                 _customHtmlDescription.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-                _customHtmlDescription.WidthAnchor.ConstraintEqualTo(margin.WidthAnchor).Active = true;
+                _customHtmlDescription.WidthAnchor.ConstraintEqualTo(Superview.Bounds.Width).Active = true;
             }
             else
             {
                 _detailsList.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
                 _detailsList.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-                _detailsList.WidthAnchor.ConstraintEqualTo(margin.WidthAnchor).Active = true;
+                _detailsList.WidthAnchor.ConstraintEqualTo(Superview.Bounds.Width).Active = true;
                 _detailsList.BottomAnchor.ConstraintEqualTo(margin.BottomAnchor, -5).Active = true;
             }
         }
@@ -255,6 +255,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             InvalidateIntrinsicContentSize();
             SetNeedsUpdateConstraints();
+            UpdateConstraints();
             Hidden = false;
         }
 
