@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _label = new UILabel()
             {
-                Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
+                Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 TextColor = UIColor.Gray,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.Center,
@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _formattedValue = new UILabel()
             {
-                Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
+                Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.Center,

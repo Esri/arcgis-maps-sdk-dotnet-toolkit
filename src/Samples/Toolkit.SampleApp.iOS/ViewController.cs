@@ -43,6 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             scaleLine.MapView = mapView;
             compass.GeoView = mapView;
             compass.AutoHide = false;
+            popupViewer.BackgroundColor = UIColor.White;
         }
 
         public override void ViewDidAppear(bool animated)

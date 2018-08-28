@@ -67,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _editSummary = new UILabel()
             {
-                Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
+                Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
@@ -79,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _customHtmlDescription = new UILabel()
             {
-                Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
+                Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
@@ -91,6 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _detailsList = new UITableView()
             {
+                BackgroundColor = UIColor.Clear,
                 ClipsToBounds = true,
                 ContentMode = UIViewContentMode.TopLeft,
                 SeparatorStyle = UITableViewCellSeparatorStyle.None,
@@ -99,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
-                EstimatedRowHeight = UIFont.LabelFontSize * 3,
+                EstimatedRowHeight = (nfloat)(UIFont.LabelFontSize * 2.5),
             };
             _detailsList.RegisterClassForCellReuse(typeof(DetailsItemCell), PopupViewerTableSource.CellId);
             AddSubviews(_editSummary, _customHtmlDescription, _detailsList);
@@ -112,11 +113,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <returns>The total size of control</returns>
         private CGSize MeasureSize()
         {
-            var size = CGSize.Empty;
-            size = CGSize.Add(size, _editSummary.IntrinsicContentSize);
-            size = CGSize.Add(size, _customHtmlDescription.IntrinsicContentSize);
-            size = CGSize.Add(size, _detailsList.ContentSize);
-            return size;
+            if (_intrinsicContentSize == CGSize.Empty)
+            {
+                var editSummarySize = _editSummary.SizeThatFits(Bounds.Size);
+                var customHtmlDescSize = _customHtmlDescription.SizeThatFits(Bounds.Size);
+                var detailsListSize = _detailsList.SizeThatFits(Bounds.Size);
+                var width = Math.Max(Math.Max(Math.Max(Bounds.Width, editSummarySize.Width), customHtmlDescSize.Width), detailsListSize.Width);
+                var height = editSummarySize.Height + customHtmlDescSize.Height + detailsListSize.Height;
+                _intrinsicContentSize = new CGSize(width, height);
+            }
+
+            return _intrinsicContentSize;
+        }
+
+        private CGSize _intrinsicContentSize = CGSize.Empty;
+
+        /// <inheritdoc />
+        public override void InvalidateIntrinsicContentSize()
+        {
+            base.InvalidateIntrinsicContentSize();
+            _intrinsicContentSize = CGSize.Empty;
+            _constraintsUpdated = false;
         }
 
         /// <inheritdoc />
@@ -128,6 +145,55 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var widthThatFits = Math.Min(size.Width, IntrinsicContentSize.Width);
             var heightThatFits = Math.Min(size.Height, IntrinsicContentSize.Height);
             return new CGSize(widthThatFits, heightThatFits);
+        }
+
+        private bool _constraintsUpdated = false;
+
+        public override void UpdateConstraints()
+        {
+            base.UpdateConstraints();
+            _editSummary.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
+            _customHtmlDescription.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
+
+            _editSummary.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
+            _customHtmlDescription.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
+            if (_constraintsUpdated || PopupManager == null)
+            {
+                return;
+            }
+
+            _constraintsUpdated = true;
+            var margin = LayoutMarginsGuide;
+            var topAnchor = !string.IsNullOrWhiteSpace(PopupManager.EditSummary) ?
+                _editSummary.BottomAnchor : margin.TopAnchor;
+            var bottomAnchor = !string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml) ?
+                _customHtmlDescription.TopAnchor : _detailsList.TopAnchor;
+            if (!string.IsNullOrWhiteSpace(PopupManager.EditSummary))
+            {
+                _editSummary.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
+                _editSummary.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
+                _editSummary.WidthAnchor.ConstraintEqualTo(margin.WidthAnchor).Active = true;
+                _editSummary.BottomAnchor.ConstraintEqualTo(bottomAnchor).Active = true;
+            }
+            else
+            {
+                _editSummary.Hidden = true;
+                _editSummary.Text = null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml))
+            {
+                _customHtmlDescription.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
+                _customHtmlDescription.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
+                _customHtmlDescription.WidthAnchor.ConstraintEqualTo(margin.WidthAnchor).Active = true;
+            }
+            else
+            {
+                _detailsList.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
+                _detailsList.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
+                _detailsList.WidthAnchor.ConstraintEqualTo(margin.WidthAnchor).Active = true;
+                _detailsList.BottomAnchor.ConstraintEqualTo(margin.BottomAnchor, -5).Active = true;
+            }
         }
 
         /// <inheritdoc cref="IComponent.Site" />
@@ -159,23 +225,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var margin = LayoutMarginsGuide;
-            NSLayoutYAxisAnchor topAnchor = margin.TopAnchor;
             if (!string.IsNullOrWhiteSpace(PopupManager.EditSummary))
             {
-                topAnchor = _editSummary.BottomAnchor;
-                _editSummary.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
-                _editSummary.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor, 5).Active = true;
-                _editSummary.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor, -5).Active = true;
                 _editSummary.Hidden = false;
                 _editSummary.Text = PopupManager.EditSummary;
+            }
+            else
+            {
+                _editSummary.Hidden = true;
+                _editSummary.Text = null;
             }
 
             if (!string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml))
             {
-                _customHtmlDescription.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
-                _customHtmlDescription.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor, 5).Active = true;
-                _customHtmlDescription.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor, -5).Active = true;
                 _customHtmlDescription.Hidden = false;
                 _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml.ToPlainText();
                 _detailsList.Hidden = true;
@@ -186,16 +248,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _customHtmlDescription.Hidden = true;
                 _customHtmlDescription.Text = null;
-                _detailsList.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
-                _detailsList.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor, 5).Active = true;
-                _detailsList.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor, -5).Active = true;
-                _detailsList.BottomAnchor.ConstraintEqualTo(margin.BottomAnchor, -5).Active = true;
                 _detailsList.Hidden = false;
                 _detailsList.Source = new PopupViewerTableSource(PopupManager.DisplayedFields, _foregroundColor);
                 _detailsList.ReloadData();
             }
 
             InvalidateIntrinsicContentSize();
+            SetNeedsUpdateConstraints();
             Hidden = false;
         }
 

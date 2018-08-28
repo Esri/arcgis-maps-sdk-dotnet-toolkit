@@ -26,11 +26,435 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		
 		public static void UpdateIdValues()
 		{
-			global::Esri.ArcGISRuntime.Toolkit.Resource.Drawable.esri = global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.esri;
+			var toolkitAssembly = typeof(Esri.ArcGISRuntime.Toolkit.UI.LoopMode).Assembly;
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("barrierAllowsGoneWidgets")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.barrierAllowsGoneWidgets);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("barrierDirection")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.barrierDirection);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("chainUseRtl")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.chainUseRtl);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("constraintSet")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.constraintSet);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("constraint_referenced_ids")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.constraint_referenced_ids);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("content")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.content);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("emptyVisibility")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.emptyVisibility);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constrainedHeight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constrainedHeight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constrainedWidth")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constrainedWidth);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintBaseline_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintBaseline_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintBaseline_toBaselineOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintBaseline_toBaselineOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintBottom_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintBottom_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintBottom_toBottomOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintBottom_toBottomOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintBottom_toTopOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintBottom_toTopOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintCircle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintCircle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintCircleAngle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintCircleAngle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintCircleRadius")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintCircleRadius);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintDimensionRatio")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintDimensionRatio);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintEnd_toEndOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintEnd_toEndOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintEnd_toStartOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintEnd_toStartOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintGuide_begin")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintGuide_begin);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintGuide_end")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintGuide_end);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintGuide_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintGuide_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintHeight_default")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintHeight_default);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintHeight_max")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintHeight_max);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintHeight_min")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintHeight_min);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintHeight_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintHeight_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintHorizontal_bias")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintHorizontal_bias);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintHorizontal_chainStyle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintHorizontal_chainStyle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintHorizontal_weight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintHorizontal_weight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintLeft_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintLeft_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintLeft_toLeftOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintLeft_toLeftOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintLeft_toRightOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintLeft_toRightOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintRight_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintRight_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintRight_toLeftOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintRight_toLeftOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintRight_toRightOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintRight_toRightOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintStart_toEndOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintStart_toEndOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintStart_toStartOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintStart_toStartOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintTop_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintTop_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintTop_toBottomOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintTop_toBottomOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintTop_toTopOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintTop_toTopOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintVertical_bias")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintVertical_bias);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintVertical_chainStyle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintVertical_chainStyle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintVertical_weight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintVertical_weight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintWidth_default")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintWidth_default);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintWidth_max")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintWidth_max);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintWidth_min")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintWidth_min);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_constraintWidth_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_constraintWidth_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_editor_absoluteX")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_editor_absoluteX);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_editor_absoluteY")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_editor_absoluteY);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_goneMarginBottom")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_goneMarginBottom);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_goneMarginEnd")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_goneMarginEnd);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_goneMarginLeft")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_goneMarginLeft);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_goneMarginRight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_goneMarginRight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_goneMarginStart")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_goneMarginStart);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_goneMarginTop")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_goneMarginTop);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Attribute")?.GetField("layout_optimizationLevel")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Attribute.layout_optimizationLevel);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("esri")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.esri);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("NextPreviousButton")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.NextPreviousButton);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("NextPreviousFill")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.NextPreviousFill);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("NextPreviousOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.NextPreviousOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("PauseFill")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.PauseFill);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("PauseOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.PauseOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("PlayPauseButton")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.PlayPauseButton);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("Thumb")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.Thumb);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("TriangleFill")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.TriangleFill);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Drawable")?.GetField("TriangleOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Drawable.TriangleOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("CurrentExtentEndTimeLabel")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.CurrentExtentEndTimeLabel);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("CurrentExtentFill")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.CurrentExtentFill);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("CurrentExtentStartTimeLabel")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.CurrentExtentStartTimeLabel);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("FullExtentEndGuide")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.FullExtentEndGuide);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("FullExtentEndTimeLabel")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.FullExtentEndTimeLabel);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("FullExtentEndTimeTickmark")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.FullExtentEndTimeTickmark);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("FullExtentStartGuide")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.FullExtentStartGuide);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("FullExtentStartTimeLabel")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.FullExtentStartTimeLabel);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("FullExtentStartTimeTickmark")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.FullExtentStartTimeTickmark);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("MaxThumb")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.MaxThumb);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("MaxThumbCenter")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.MaxThumbCenter);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("MinThumb")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.MinThumb);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("MinThumbCenter")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.MinThumbCenter);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("NextButton")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.NextButton);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("NextButtonOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.NextButtonOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("PauseButtonOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.PauseButtonOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("PinnedMaxThumb")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.PinnedMaxThumb);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("PinnedMinThumb")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.PinnedMinThumb);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("PlayButtonOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.PlayButtonOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("PlayPauseButton")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.PlayPauseButton);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("PreviousButton")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.PreviousButton);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("PreviousButtonOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.PreviousButtonOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("SliderTrack")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.SliderTrack);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("SliderTrackOutline")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.SliderTrackOutline);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("ThumbGuideStart")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.ThumbGuideStart);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("Tickmarks")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.Tickmarks);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("barrier")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.barrier);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("bottom")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.bottom);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("chains")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.chains);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("dimensions")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.dimensions);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("direct")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.direct);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("end")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.end);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("gone")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.gone);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("invisible")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.invisible);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("left")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.left);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("none")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.none);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("packed")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.packed);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("parent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.parent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("right")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.right);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("spread")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.spread);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("spread_inside")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.spread_inside);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("standard")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.standard);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("start")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.start);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("top")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.top);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Id")?.GetField("wrap")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Id.wrap);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Layout")?.GetField("TimeSlider")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Layout.TimeSlider);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_android_maxHeight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_android_maxHeight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_android_maxWidth")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_android_maxWidth);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_android_minHeight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_android_minHeight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_android_minWidth")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_android_minWidth);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_android_orientation")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_android_orientation);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_barrierAllowsGoneWidgets")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_barrierAllowsGoneWidgets);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_barrierDirection")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_barrierDirection);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_chainUseRtl")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_chainUseRtl);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_constraintSet")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_constraintSet);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_constraint_referenced_ids")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_constraint_referenced_ids);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constrainedHeight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constrainedHeight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constrainedWidth")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constrainedWidth);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintBaseline_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintBaseline_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintBottom_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintBottom_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintBottom_toBottomOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintBottom_toBottomOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintBottom_toTopOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintBottom_toTopOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintCircle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintCircle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintCircleAngle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintCircleAngle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintCircleRadius")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintCircleRadius);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintDimensionRatio")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintDimensionRatio);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintEnd_toEndOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintEnd_toEndOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintEnd_toStartOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintEnd_toStartOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintGuide_begin")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintGuide_begin);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintGuide_end")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintGuide_end);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintGuide_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintGuide_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintHeight_default")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintHeight_default);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintHeight_max")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintHeight_max);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintHeight_min")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintHeight_min);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintHeight_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintHeight_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintHorizontal_bias")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintHorizontal_bias);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintHorizontal_chainStyle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintHorizontal_chainStyle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintHorizontal_weight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintHorizontal_weight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintLeft_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintLeft_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintLeft_toLeftOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintLeft_toLeftOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintLeft_toRightOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintLeft_toRightOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintRight_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintRight_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintRight_toLeftOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintRight_toLeftOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintRight_toRightOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintRight_toRightOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintStart_toEndOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintStart_toEndOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintStart_toStartOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintStart_toStartOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintTop_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintTop_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintTop_toBottomOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintTop_toBottomOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintTop_toTopOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintTop_toTopOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintVertical_bias")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintVertical_bias);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintVertical_chainStyle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintVertical_chainStyle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintVertical_weight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintVertical_weight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintWidth_default")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintWidth_default);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintWidth_max")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintWidth_max);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintWidth_min")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintWidth_min);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_constraintWidth_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_constraintWidth_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_editor_absoluteX")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_editor_absoluteX);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_editor_absoluteY")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_editor_absoluteY);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_goneMarginBottom")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_goneMarginBottom);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_goneMarginEnd")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_goneMarginEnd);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_goneMarginLeft")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_goneMarginLeft);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_goneMarginRight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_goneMarginRight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_goneMarginStart")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_goneMarginStart);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_goneMarginTop")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_goneMarginTop);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_Layout_layout_optimizationLevel")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_Layout_layout_optimizationLevel);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_placeholder")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_placeholder);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_placeholder_content")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_placeholder_content);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintLayout_placeholder_emptyVisibility")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintLayout_placeholder_emptyVisibility);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_alpha")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_alpha);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_elevation")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_elevation);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_id")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_id);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_height")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_height);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_marginBottom")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_marginBottom);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_marginEnd")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_marginEnd);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_marginLeft")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_marginLeft);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_marginRight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_marginRight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_marginStart")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_marginStart);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_marginTop")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_marginTop);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_layout_width")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_layout_width);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_orientation")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_orientation);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_rotation")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_rotation);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_rotationX")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_rotationX);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_rotationY")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_rotationY);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_scaleX")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_scaleX);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_scaleY")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_scaleY);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_transformPivotX")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_transformPivotX);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_transformPivotY")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_transformPivotY);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_translationX")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_translationX);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_translationY")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_translationY);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_translationZ")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_translationZ);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_android_visibility")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_android_visibility);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constrainedHeight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constrainedHeight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constrainedWidth")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constrainedWidth);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintBaseline_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintBaseline_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintBaseline_toBaselineOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintBaseline_toBaselineOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintBottom_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintBottom_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintBottom_toBottomOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintBottom_toBottomOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintBottom_toTopOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintBottom_toTopOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintCircle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintCircle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintCircleAngle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintCircleAngle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintCircleRadius")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintCircleRadius);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintDimensionRatio")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintDimensionRatio);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintEnd_toEndOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintEnd_toEndOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintEnd_toStartOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintEnd_toStartOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintGuide_begin")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintGuide_begin);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintGuide_end")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintGuide_end);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintGuide_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintGuide_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintHeight_default")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintHeight_default);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintHeight_max")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintHeight_max);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintHeight_min")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintHeight_min);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintHeight_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintHeight_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintHorizontal_bias")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintHorizontal_bias);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintHorizontal_chainStyle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintHorizontal_chainStyle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintHorizontal_weight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintHorizontal_weight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintLeft_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintLeft_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintLeft_toLeftOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintLeft_toLeftOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintLeft_toRightOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintLeft_toRightOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintRight_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintRight_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintRight_toLeftOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintRight_toLeftOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintRight_toRightOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintRight_toRightOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintStart_toEndOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintStart_toEndOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintStart_toStartOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintStart_toStartOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintTop_creator")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintTop_creator);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintTop_toBottomOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintTop_toBottomOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintTop_toTopOf")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintTop_toTopOf);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintVertical_bias")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintVertical_bias);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintVertical_chainStyle")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintVertical_chainStyle);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintVertical_weight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintVertical_weight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintWidth_default")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintWidth_default);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintWidth_max")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintWidth_max);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintWidth_min")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintWidth_min);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_constraintWidth_percent")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_constraintWidth_percent);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_editor_absoluteX")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_editor_absoluteX);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_editor_absoluteY")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_editor_absoluteY);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_goneMarginBottom")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_goneMarginBottom);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_goneMarginEnd")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_goneMarginEnd);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_goneMarginLeft")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_goneMarginLeft);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_goneMarginRight")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_goneMarginRight);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_goneMarginStart")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_goneMarginStart);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("ConstraintSet_layout_goneMarginTop")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.ConstraintSet_layout_goneMarginTop);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("LinearConstraintLayout")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.LinearConstraintLayout);
+			toolkitAssembly?.GetType("Esri.ArcGISRuntime.Toolkit.Resource")?.GetNestedType("Styleable")?.GetField("LinearConstraintLayout_android_orientation")?.SetValue(null, global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.LinearConstraintLayout_android_orientation);
 		}
 		
 		public partial class Attribute
 		{
+			
+			// aapt resource value: 0x7f010000
+			public const int barrierAllowsGoneWidgets = 2130771968;
+			
+			// aapt resource value: 0x7f010001
+			public const int barrierDirection = 2130771969;
+			
+			// aapt resource value: 0x7f010002
+			public const int chainUseRtl = 2130771970;
+			
+			// aapt resource value: 0x7f010003
+			public const int constraintSet = 2130771971;
+			
+			// aapt resource value: 0x7f010004
+			public const int constraint_referenced_ids = 2130771972;
+			
+			// aapt resource value: 0x7f010005
+			public const int content = 2130771973;
+			
+			// aapt resource value: 0x7f010006
+			public const int emptyVisibility = 2130771974;
+			
+			// aapt resource value: 0x7f010007
+			public const int layout_constrainedHeight = 2130771975;
+			
+			// aapt resource value: 0x7f010008
+			public const int layout_constrainedWidth = 2130771976;
+			
+			// aapt resource value: 0x7f010009
+			public const int layout_constraintBaseline_creator = 2130771977;
+			
+			// aapt resource value: 0x7f01000a
+			public const int layout_constraintBaseline_toBaselineOf = 2130771978;
+			
+			// aapt resource value: 0x7f01000b
+			public const int layout_constraintBottom_creator = 2130771979;
+			
+			// aapt resource value: 0x7f01000c
+			public const int layout_constraintBottom_toBottomOf = 2130771980;
+			
+			// aapt resource value: 0x7f01000d
+			public const int layout_constraintBottom_toTopOf = 2130771981;
+			
+			// aapt resource value: 0x7f01000e
+			public const int layout_constraintCircle = 2130771982;
+			
+			// aapt resource value: 0x7f01000f
+			public const int layout_constraintCircleAngle = 2130771983;
+			
+			// aapt resource value: 0x7f010010
+			public const int layout_constraintCircleRadius = 2130771984;
+			
+			// aapt resource value: 0x7f010011
+			public const int layout_constraintDimensionRatio = 2130771985;
+			
+			// aapt resource value: 0x7f010012
+			public const int layout_constraintEnd_toEndOf = 2130771986;
+			
+			// aapt resource value: 0x7f010013
+			public const int layout_constraintEnd_toStartOf = 2130771987;
+			
+			// aapt resource value: 0x7f010014
+			public const int layout_constraintGuide_begin = 2130771988;
+			
+			// aapt resource value: 0x7f010015
+			public const int layout_constraintGuide_end = 2130771989;
+			
+			// aapt resource value: 0x7f010016
+			public const int layout_constraintGuide_percent = 2130771990;
+			
+			// aapt resource value: 0x7f010017
+			public const int layout_constraintHeight_default = 2130771991;
+			
+			// aapt resource value: 0x7f010018
+			public const int layout_constraintHeight_max = 2130771992;
+			
+			// aapt resource value: 0x7f010019
+			public const int layout_constraintHeight_min = 2130771993;
+			
+			// aapt resource value: 0x7f01001a
+			public const int layout_constraintHeight_percent = 2130771994;
+			
+			// aapt resource value: 0x7f01001b
+			public const int layout_constraintHorizontal_bias = 2130771995;
+			
+			// aapt resource value: 0x7f01001c
+			public const int layout_constraintHorizontal_chainStyle = 2130771996;
+			
+			// aapt resource value: 0x7f01001d
+			public const int layout_constraintHorizontal_weight = 2130771997;
+			
+			// aapt resource value: 0x7f01001e
+			public const int layout_constraintLeft_creator = 2130771998;
+			
+			// aapt resource value: 0x7f01001f
+			public const int layout_constraintLeft_toLeftOf = 2130771999;
+			
+			// aapt resource value: 0x7f010020
+			public const int layout_constraintLeft_toRightOf = 2130772000;
+			
+			// aapt resource value: 0x7f010021
+			public const int layout_constraintRight_creator = 2130772001;
+			
+			// aapt resource value: 0x7f010022
+			public const int layout_constraintRight_toLeftOf = 2130772002;
+			
+			// aapt resource value: 0x7f010023
+			public const int layout_constraintRight_toRightOf = 2130772003;
+			
+			// aapt resource value: 0x7f010024
+			public const int layout_constraintStart_toEndOf = 2130772004;
+			
+			// aapt resource value: 0x7f010025
+			public const int layout_constraintStart_toStartOf = 2130772005;
+			
+			// aapt resource value: 0x7f010026
+			public const int layout_constraintTop_creator = 2130772006;
+			
+			// aapt resource value: 0x7f010027
+			public const int layout_constraintTop_toBottomOf = 2130772007;
+			
+			// aapt resource value: 0x7f010028
+			public const int layout_constraintTop_toTopOf = 2130772008;
+			
+			// aapt resource value: 0x7f010029
+			public const int layout_constraintVertical_bias = 2130772009;
+			
+			// aapt resource value: 0x7f01002a
+			public const int layout_constraintVertical_chainStyle = 2130772010;
+			
+			// aapt resource value: 0x7f01002b
+			public const int layout_constraintVertical_weight = 2130772011;
+			
+			// aapt resource value: 0x7f01002c
+			public const int layout_constraintWidth_default = 2130772012;
+			
+			// aapt resource value: 0x7f01002d
+			public const int layout_constraintWidth_max = 2130772013;
+			
+			// aapt resource value: 0x7f01002e
+			public const int layout_constraintWidth_min = 2130772014;
+			
+			// aapt resource value: 0x7f01002f
+			public const int layout_constraintWidth_percent = 2130772015;
+			
+			// aapt resource value: 0x7f010030
+			public const int layout_editor_absoluteX = 2130772016;
+			
+			// aapt resource value: 0x7f010031
+			public const int layout_editor_absoluteY = 2130772017;
+			
+			// aapt resource value: 0x7f010032
+			public const int layout_goneMarginBottom = 2130772018;
+			
+			// aapt resource value: 0x7f010033
+			public const int layout_goneMarginEnd = 2130772019;
+			
+			// aapt resource value: 0x7f010034
+			public const int layout_goneMarginLeft = 2130772020;
+			
+			// aapt resource value: 0x7f010035
+			public const int layout_goneMarginRight = 2130772021;
+			
+			// aapt resource value: 0x7f010036
+			public const int layout_goneMarginStart = 2130772022;
+			
+			// aapt resource value: 0x7f010037
+			public const int layout_goneMarginTop = 2130772023;
+			
+			// aapt resource value: 0x7f010038
+			public const int layout_optimizationLevel = 2130772024;
 			
 			static Attribute()
 			{
@@ -48,6 +472,33 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7f020000
 			public const int esri = 2130837504;
 			
+			// aapt resource value: 0x7f020001
+			public const int NextPreviousButton = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int NextPreviousFill = 2130837506;
+			
+			// aapt resource value: 0x7f020003
+			public const int NextPreviousOutline = 2130837507;
+			
+			// aapt resource value: 0x7f020004
+			public const int PauseFill = 2130837508;
+			
+			// aapt resource value: 0x7f020005
+			public const int PauseOutline = 2130837509;
+			
+			// aapt resource value: 0x7f020006
+			public const int PlayPauseButton = 2130837510;
+			
+			// aapt resource value: 0x7f020007
+			public const int Thumb = 2130837511;
+			
+			// aapt resource value: 0x7f020008
+			public const int TriangleFill = 2130837512;
+			
+			// aapt resource value: 0x7f020009
+			public const int TriangleOutline = 2130837513;
+			
 			static Drawable()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
@@ -61,17 +512,155 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050001
-			public const int compass = 2131034113;
+			// aapt resource value: 0x7f050031
+			public const int CurrentExtentEndTimeLabel = 2131034161;
+			
+			// aapt resource value: 0x7f050029
+			public const int CurrentExtentFill = 2131034153;
+			
+			// aapt resource value: 0x7f050030
+			public const int CurrentExtentStartTimeLabel = 2131034160;
+			
+			// aapt resource value: 0x7f050022
+			public const int FullExtentEndGuide = 2131034146;
+			
+			// aapt resource value: 0x7f050021
+			public const int FullExtentEndTimeLabel = 2131034145;
+			
+			// aapt resource value: 0x7f050026
+			public const int FullExtentEndTimeTickmark = 2131034150;
+			
+			// aapt resource value: 0x7f050020
+			public const int FullExtentStartGuide = 2131034144;
+			
+			// aapt resource value: 0x7f05001f
+			public const int FullExtentStartTimeLabel = 2131034143;
+			
+			// aapt resource value: 0x7f050025
+			public const int FullExtentStartTimeTickmark = 2131034149;
+			
+			// aapt resource value: 0x7f05002d
+			public const int MaxThumb = 2131034157;
+			
+			// aapt resource value: 0x7f05002f
+			public const int MaxThumbCenter = 2131034159;
+			
+			// aapt resource value: 0x7f05002a
+			public const int MinThumb = 2131034154;
+			
+			// aapt resource value: 0x7f05002c
+			public const int MinThumbCenter = 2131034156;
+			
+			// aapt resource value: 0x7f05001b
+			public const int NextButton = 2131034139;
+			
+			// aapt resource value: 0x7f05001c
+			public const int NextButtonOutline = 2131034140;
+			
+			// aapt resource value: 0x7f05001a
+			public const int PauseButtonOutline = 2131034138;
+			
+			// aapt resource value: 0x7f05002e
+			public const int PinnedMaxThumb = 2131034158;
+			
+			// aapt resource value: 0x7f05002b
+			public const int PinnedMinThumb = 2131034155;
+			
+			// aapt resource value: 0x7f050019
+			public const int PlayButtonOutline = 2131034137;
+			
+			// aapt resource value: 0x7f050018
+			public const int PlayPauseButton = 2131034136;
+			
+			// aapt resource value: 0x7f05001d
+			public const int PreviousButton = 2131034141;
+			
+			// aapt resource value: 0x7f05001e
+			public const int PreviousButtonOutline = 2131034142;
+			
+			// aapt resource value: 0x7f050024
+			public const int SliderTrack = 2131034148;
+			
+			// aapt resource value: 0x7f050023
+			public const int SliderTrackOutline = 2131034147;
+			
+			// aapt resource value: 0x7f050028
+			public const int ThumbGuideStart = 2131034152;
+			
+			// aapt resource value: 0x7f050027
+			public const int Tickmarks = 2131034151;
+			
+			// aapt resource value: 0x7f05000e
+			public const int barrier = 2131034126;
 			
 			// aapt resource value: 0x7f050000
-			public const int mapView = 2131034112;
+			public const int bottom = 2131034112;
 			
-			// aapt resource value: 0x7f050003
-			public const int popupViewer = 2131034115;
+			// aapt resource value: 0x7f05000f
+			public const int chains = 2131034127;
+			
+			// aapt resource value: 0x7f050015
+			public const int compass = 2131034133;
+			
+			// aapt resource value: 0x7f050010
+			public const int dimensions = 2131034128;
+			
+			// aapt resource value: 0x7f050011
+			public const int direct = 2131034129;
+			
+			// aapt resource value: 0x7f050001
+			public const int end = 2131034113;
+			
+			// aapt resource value: 0x7f050006
+			public const int gone = 2131034118;
+			
+			// aapt resource value: 0x7f050007
+			public const int invisible = 2131034119;
 			
 			// aapt resource value: 0x7f050002
-			public const int scaleLine = 2131034114;
+			public const int left = 2131034114;
+			
+			// aapt resource value: 0x7f050014
+			public const int mapView = 2131034132;
+			
+			// aapt resource value: 0x7f050012
+			public const int none = 2131034130;
+			
+			// aapt resource value: 0x7f05000c
+			public const int packed = 2131034124;
+			
+			// aapt resource value: 0x7f050008
+			public const int parent = 2131034120;
+			
+			// aapt resource value: 0x7f050009
+			public const int percent = 2131034121;
+			
+			// aapt resource value: 0x7f050017
+			public const int popupViewer = 2131034135;
+			
+			// aapt resource value: 0x7f050003
+			public const int right = 2131034115;
+			
+			// aapt resource value: 0x7f050016
+			public const int scaleLine = 2131034134;
+			
+			// aapt resource value: 0x7f05000a
+			public const int spread = 2131034122;
+			
+			// aapt resource value: 0x7f05000d
+			public const int spread_inside = 2131034125;
+			
+			// aapt resource value: 0x7f050013
+			public const int standard = 2131034131;
+			
+			// aapt resource value: 0x7f050004
+			public const int start = 2131034116;
+			
+			// aapt resource value: 0x7f050005
+			public const int top = 2131034117;
+			
+			// aapt resource value: 0x7f05000b
+			public const int wrap = 2131034123;
 			
 			static Id()
 			{
@@ -88,6 +677,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			
 			// aapt resource value: 0x7f030000
 			public const int Main = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int TimeSlider = 2130903041;
 			
 			static Layout()
 			{
@@ -111,6 +703,567 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			}
 			
 			private String()
+			{
+			}
+		}
+		
+		public partial class Styleable
+		{
+			
+			public static int[] ConstraintLayout_Layout = new int[] {
+					16842948,
+					16843039,
+					16843040,
+					16843071,
+					16843072,
+					2130771968,
+					2130771969,
+					2130771970,
+					2130771971,
+					2130771972,
+					2130771975,
+					2130771976,
+					2130771977,
+					2130771978,
+					2130771979,
+					2130771980,
+					2130771981,
+					2130771982,
+					2130771983,
+					2130771984,
+					2130771985,
+					2130771986,
+					2130771987,
+					2130771988,
+					2130771989,
+					2130771990,
+					2130771991,
+					2130771992,
+					2130771993,
+					2130771994,
+					2130771995,
+					2130771996,
+					2130771997,
+					2130771998,
+					2130771999,
+					2130772000,
+					2130772001,
+					2130772002,
+					2130772003,
+					2130772004,
+					2130772005,
+					2130772006,
+					2130772007,
+					2130772008,
+					2130772009,
+					2130772010,
+					2130772011,
+					2130772012,
+					2130772013,
+					2130772014,
+					2130772015,
+					2130772016,
+					2130772017,
+					2130772018,
+					2130772019,
+					2130772020,
+					2130772021,
+					2130772022,
+					2130772023,
+					2130772024};
+			
+			// aapt resource value: 2
+			public const int ConstraintLayout_Layout_android_maxHeight = 2;
+			
+			// aapt resource value: 1
+			public const int ConstraintLayout_Layout_android_maxWidth = 1;
+			
+			// aapt resource value: 4
+			public const int ConstraintLayout_Layout_android_minHeight = 4;
+			
+			// aapt resource value: 3
+			public const int ConstraintLayout_Layout_android_minWidth = 3;
+			
+			// aapt resource value: 0
+			public const int ConstraintLayout_Layout_android_orientation = 0;
+			
+			// aapt resource value: 5
+			public const int ConstraintLayout_Layout_barrierAllowsGoneWidgets = 5;
+			
+			// aapt resource value: 6
+			public const int ConstraintLayout_Layout_barrierDirection = 6;
+			
+			// aapt resource value: 7
+			public const int ConstraintLayout_Layout_chainUseRtl = 7;
+			
+			// aapt resource value: 8
+			public const int ConstraintLayout_Layout_constraintSet = 8;
+			
+			// aapt resource value: 9
+			public const int ConstraintLayout_Layout_constraint_referenced_ids = 9;
+			
+			// aapt resource value: 10
+			public const int ConstraintLayout_Layout_layout_constrainedHeight = 10;
+			
+			// aapt resource value: 11
+			public const int ConstraintLayout_Layout_layout_constrainedWidth = 11;
+			
+			// aapt resource value: 12
+			public const int ConstraintLayout_Layout_layout_constraintBaseline_creator = 12;
+			
+			// aapt resource value: 13
+			public const int ConstraintLayout_Layout_layout_constraintBaseline_toBaselineOf = 13;
+			
+			// aapt resource value: 14
+			public const int ConstraintLayout_Layout_layout_constraintBottom_creator = 14;
+			
+			// aapt resource value: 15
+			public const int ConstraintLayout_Layout_layout_constraintBottom_toBottomOf = 15;
+			
+			// aapt resource value: 16
+			public const int ConstraintLayout_Layout_layout_constraintBottom_toTopOf = 16;
+			
+			// aapt resource value: 17
+			public const int ConstraintLayout_Layout_layout_constraintCircle = 17;
+			
+			// aapt resource value: 18
+			public const int ConstraintLayout_Layout_layout_constraintCircleAngle = 18;
+			
+			// aapt resource value: 19
+			public const int ConstraintLayout_Layout_layout_constraintCircleRadius = 19;
+			
+			// aapt resource value: 20
+			public const int ConstraintLayout_Layout_layout_constraintDimensionRatio = 20;
+			
+			// aapt resource value: 21
+			public const int ConstraintLayout_Layout_layout_constraintEnd_toEndOf = 21;
+			
+			// aapt resource value: 22
+			public const int ConstraintLayout_Layout_layout_constraintEnd_toStartOf = 22;
+			
+			// aapt resource value: 23
+			public const int ConstraintLayout_Layout_layout_constraintGuide_begin = 23;
+			
+			// aapt resource value: 24
+			public const int ConstraintLayout_Layout_layout_constraintGuide_end = 24;
+			
+			// aapt resource value: 25
+			public const int ConstraintLayout_Layout_layout_constraintGuide_percent = 25;
+			
+			// aapt resource value: 26
+			public const int ConstraintLayout_Layout_layout_constraintHeight_default = 26;
+			
+			// aapt resource value: 27
+			public const int ConstraintLayout_Layout_layout_constraintHeight_max = 27;
+			
+			// aapt resource value: 28
+			public const int ConstraintLayout_Layout_layout_constraintHeight_min = 28;
+			
+			// aapt resource value: 29
+			public const int ConstraintLayout_Layout_layout_constraintHeight_percent = 29;
+			
+			// aapt resource value: 30
+			public const int ConstraintLayout_Layout_layout_constraintHorizontal_bias = 30;
+			
+			// aapt resource value: 31
+			public const int ConstraintLayout_Layout_layout_constraintHorizontal_chainStyle = 31;
+			
+			// aapt resource value: 32
+			public const int ConstraintLayout_Layout_layout_constraintHorizontal_weight = 32;
+			
+			// aapt resource value: 33
+			public const int ConstraintLayout_Layout_layout_constraintLeft_creator = 33;
+			
+			// aapt resource value: 34
+			public const int ConstraintLayout_Layout_layout_constraintLeft_toLeftOf = 34;
+			
+			// aapt resource value: 35
+			public const int ConstraintLayout_Layout_layout_constraintLeft_toRightOf = 35;
+			
+			// aapt resource value: 36
+			public const int ConstraintLayout_Layout_layout_constraintRight_creator = 36;
+			
+			// aapt resource value: 37
+			public const int ConstraintLayout_Layout_layout_constraintRight_toLeftOf = 37;
+			
+			// aapt resource value: 38
+			public const int ConstraintLayout_Layout_layout_constraintRight_toRightOf = 38;
+			
+			// aapt resource value: 39
+			public const int ConstraintLayout_Layout_layout_constraintStart_toEndOf = 39;
+			
+			// aapt resource value: 40
+			public const int ConstraintLayout_Layout_layout_constraintStart_toStartOf = 40;
+			
+			// aapt resource value: 41
+			public const int ConstraintLayout_Layout_layout_constraintTop_creator = 41;
+			
+			// aapt resource value: 42
+			public const int ConstraintLayout_Layout_layout_constraintTop_toBottomOf = 42;
+			
+			// aapt resource value: 43
+			public const int ConstraintLayout_Layout_layout_constraintTop_toTopOf = 43;
+			
+			// aapt resource value: 44
+			public const int ConstraintLayout_Layout_layout_constraintVertical_bias = 44;
+			
+			// aapt resource value: 45
+			public const int ConstraintLayout_Layout_layout_constraintVertical_chainStyle = 45;
+			
+			// aapt resource value: 46
+			public const int ConstraintLayout_Layout_layout_constraintVertical_weight = 46;
+			
+			// aapt resource value: 47
+			public const int ConstraintLayout_Layout_layout_constraintWidth_default = 47;
+			
+			// aapt resource value: 48
+			public const int ConstraintLayout_Layout_layout_constraintWidth_max = 48;
+			
+			// aapt resource value: 49
+			public const int ConstraintLayout_Layout_layout_constraintWidth_min = 49;
+			
+			// aapt resource value: 50
+			public const int ConstraintLayout_Layout_layout_constraintWidth_percent = 50;
+			
+			// aapt resource value: 51
+			public const int ConstraintLayout_Layout_layout_editor_absoluteX = 51;
+			
+			// aapt resource value: 52
+			public const int ConstraintLayout_Layout_layout_editor_absoluteY = 52;
+			
+			// aapt resource value: 53
+			public const int ConstraintLayout_Layout_layout_goneMarginBottom = 53;
+			
+			// aapt resource value: 54
+			public const int ConstraintLayout_Layout_layout_goneMarginEnd = 54;
+			
+			// aapt resource value: 55
+			public const int ConstraintLayout_Layout_layout_goneMarginLeft = 55;
+			
+			// aapt resource value: 56
+			public const int ConstraintLayout_Layout_layout_goneMarginRight = 56;
+			
+			// aapt resource value: 57
+			public const int ConstraintLayout_Layout_layout_goneMarginStart = 57;
+			
+			// aapt resource value: 58
+			public const int ConstraintLayout_Layout_layout_goneMarginTop = 58;
+			
+			// aapt resource value: 59
+			public const int ConstraintLayout_Layout_layout_optimizationLevel = 59;
+			
+			public static int[] ConstraintLayout_placeholder = new int[] {
+					2130771973,
+					2130771974};
+			
+			// aapt resource value: 0
+			public const int ConstraintLayout_placeholder_content = 0;
+			
+			// aapt resource value: 1
+			public const int ConstraintLayout_placeholder_emptyVisibility = 1;
+			
+			public static int[] ConstraintSet = new int[] {
+					16842948,
+					16842960,
+					16842972,
+					16842996,
+					16842997,
+					16842999,
+					16843000,
+					16843001,
+					16843002,
+					16843551,
+					16843552,
+					16843553,
+					16843554,
+					16843555,
+					16843556,
+					16843557,
+					16843558,
+					16843559,
+					16843560,
+					16843701,
+					16843702,
+					16843770,
+					16843840,
+					2130771975,
+					2130771976,
+					2130771977,
+					2130771978,
+					2130771979,
+					2130771980,
+					2130771981,
+					2130771982,
+					2130771983,
+					2130771984,
+					2130771985,
+					2130771986,
+					2130771987,
+					2130771988,
+					2130771989,
+					2130771990,
+					2130771991,
+					2130771992,
+					2130771993,
+					2130771994,
+					2130771995,
+					2130771996,
+					2130771997,
+					2130771998,
+					2130771999,
+					2130772000,
+					2130772001,
+					2130772002,
+					2130772003,
+					2130772004,
+					2130772005,
+					2130772006,
+					2130772007,
+					2130772008,
+					2130772009,
+					2130772010,
+					2130772011,
+					2130772012,
+					2130772013,
+					2130772014,
+					2130772015,
+					2130772016,
+					2130772017,
+					2130772018,
+					2130772019,
+					2130772020,
+					2130772021,
+					2130772022,
+					2130772023};
+			
+			// aapt resource value: 9
+			public const int ConstraintSet_android_alpha = 9;
+			
+			// aapt resource value: 22
+			public const int ConstraintSet_android_elevation = 22;
+			
+			// aapt resource value: 1
+			public const int ConstraintSet_android_id = 1;
+			
+			// aapt resource value: 4
+			public const int ConstraintSet_android_layout_height = 4;
+			
+			// aapt resource value: 8
+			public const int ConstraintSet_android_layout_marginBottom = 8;
+			
+			// aapt resource value: 20
+			public const int ConstraintSet_android_layout_marginEnd = 20;
+			
+			// aapt resource value: 5
+			public const int ConstraintSet_android_layout_marginLeft = 5;
+			
+			// aapt resource value: 7
+			public const int ConstraintSet_android_layout_marginRight = 7;
+			
+			// aapt resource value: 19
+			public const int ConstraintSet_android_layout_marginStart = 19;
+			
+			// aapt resource value: 6
+			public const int ConstraintSet_android_layout_marginTop = 6;
+			
+			// aapt resource value: 3
+			public const int ConstraintSet_android_layout_width = 3;
+			
+			// aapt resource value: 0
+			public const int ConstraintSet_android_orientation = 0;
+			
+			// aapt resource value: 16
+			public const int ConstraintSet_android_rotation = 16;
+			
+			// aapt resource value: 17
+			public const int ConstraintSet_android_rotationX = 17;
+			
+			// aapt resource value: 18
+			public const int ConstraintSet_android_rotationY = 18;
+			
+			// aapt resource value: 14
+			public const int ConstraintSet_android_scaleX = 14;
+			
+			// aapt resource value: 15
+			public const int ConstraintSet_android_scaleY = 15;
+			
+			// aapt resource value: 10
+			public const int ConstraintSet_android_transformPivotX = 10;
+			
+			// aapt resource value: 11
+			public const int ConstraintSet_android_transformPivotY = 11;
+			
+			// aapt resource value: 12
+			public const int ConstraintSet_android_translationX = 12;
+			
+			// aapt resource value: 13
+			public const int ConstraintSet_android_translationY = 13;
+			
+			// aapt resource value: 21
+			public const int ConstraintSet_android_translationZ = 21;
+			
+			// aapt resource value: 2
+			public const int ConstraintSet_android_visibility = 2;
+			
+			// aapt resource value: 23
+			public const int ConstraintSet_layout_constrainedHeight = 23;
+			
+			// aapt resource value: 24
+			public const int ConstraintSet_layout_constrainedWidth = 24;
+			
+			// aapt resource value: 25
+			public const int ConstraintSet_layout_constraintBaseline_creator = 25;
+			
+			// aapt resource value: 26
+			public const int ConstraintSet_layout_constraintBaseline_toBaselineOf = 26;
+			
+			// aapt resource value: 27
+			public const int ConstraintSet_layout_constraintBottom_creator = 27;
+			
+			// aapt resource value: 28
+			public const int ConstraintSet_layout_constraintBottom_toBottomOf = 28;
+			
+			// aapt resource value: 29
+			public const int ConstraintSet_layout_constraintBottom_toTopOf = 29;
+			
+			// aapt resource value: 30
+			public const int ConstraintSet_layout_constraintCircle = 30;
+			
+			// aapt resource value: 31
+			public const int ConstraintSet_layout_constraintCircleAngle = 31;
+			
+			// aapt resource value: 32
+			public const int ConstraintSet_layout_constraintCircleRadius = 32;
+			
+			// aapt resource value: 33
+			public const int ConstraintSet_layout_constraintDimensionRatio = 33;
+			
+			// aapt resource value: 34
+			public const int ConstraintSet_layout_constraintEnd_toEndOf = 34;
+			
+			// aapt resource value: 35
+			public const int ConstraintSet_layout_constraintEnd_toStartOf = 35;
+			
+			// aapt resource value: 36
+			public const int ConstraintSet_layout_constraintGuide_begin = 36;
+			
+			// aapt resource value: 37
+			public const int ConstraintSet_layout_constraintGuide_end = 37;
+			
+			// aapt resource value: 38
+			public const int ConstraintSet_layout_constraintGuide_percent = 38;
+			
+			// aapt resource value: 39
+			public const int ConstraintSet_layout_constraintHeight_default = 39;
+			
+			// aapt resource value: 40
+			public const int ConstraintSet_layout_constraintHeight_max = 40;
+			
+			// aapt resource value: 41
+			public const int ConstraintSet_layout_constraintHeight_min = 41;
+			
+			// aapt resource value: 42
+			public const int ConstraintSet_layout_constraintHeight_percent = 42;
+			
+			// aapt resource value: 43
+			public const int ConstraintSet_layout_constraintHorizontal_bias = 43;
+			
+			// aapt resource value: 44
+			public const int ConstraintSet_layout_constraintHorizontal_chainStyle = 44;
+			
+			// aapt resource value: 45
+			public const int ConstraintSet_layout_constraintHorizontal_weight = 45;
+			
+			// aapt resource value: 46
+			public const int ConstraintSet_layout_constraintLeft_creator = 46;
+			
+			// aapt resource value: 47
+			public const int ConstraintSet_layout_constraintLeft_toLeftOf = 47;
+			
+			// aapt resource value: 48
+			public const int ConstraintSet_layout_constraintLeft_toRightOf = 48;
+			
+			// aapt resource value: 49
+			public const int ConstraintSet_layout_constraintRight_creator = 49;
+			
+			// aapt resource value: 50
+			public const int ConstraintSet_layout_constraintRight_toLeftOf = 50;
+			
+			// aapt resource value: 51
+			public const int ConstraintSet_layout_constraintRight_toRightOf = 51;
+			
+			// aapt resource value: 52
+			public const int ConstraintSet_layout_constraintStart_toEndOf = 52;
+			
+			// aapt resource value: 53
+			public const int ConstraintSet_layout_constraintStart_toStartOf = 53;
+			
+			// aapt resource value: 54
+			public const int ConstraintSet_layout_constraintTop_creator = 54;
+			
+			// aapt resource value: 55
+			public const int ConstraintSet_layout_constraintTop_toBottomOf = 55;
+			
+			// aapt resource value: 56
+			public const int ConstraintSet_layout_constraintTop_toTopOf = 56;
+			
+			// aapt resource value: 57
+			public const int ConstraintSet_layout_constraintVertical_bias = 57;
+			
+			// aapt resource value: 58
+			public const int ConstraintSet_layout_constraintVertical_chainStyle = 58;
+			
+			// aapt resource value: 59
+			public const int ConstraintSet_layout_constraintVertical_weight = 59;
+			
+			// aapt resource value: 60
+			public const int ConstraintSet_layout_constraintWidth_default = 60;
+			
+			// aapt resource value: 61
+			public const int ConstraintSet_layout_constraintWidth_max = 61;
+			
+			// aapt resource value: 62
+			public const int ConstraintSet_layout_constraintWidth_min = 62;
+			
+			// aapt resource value: 63
+			public const int ConstraintSet_layout_constraintWidth_percent = 63;
+			
+			// aapt resource value: 64
+			public const int ConstraintSet_layout_editor_absoluteX = 64;
+			
+			// aapt resource value: 65
+			public const int ConstraintSet_layout_editor_absoluteY = 65;
+			
+			// aapt resource value: 66
+			public const int ConstraintSet_layout_goneMarginBottom = 66;
+			
+			// aapt resource value: 67
+			public const int ConstraintSet_layout_goneMarginEnd = 67;
+			
+			// aapt resource value: 68
+			public const int ConstraintSet_layout_goneMarginLeft = 68;
+			
+			// aapt resource value: 69
+			public const int ConstraintSet_layout_goneMarginRight = 69;
+			
+			// aapt resource value: 70
+			public const int ConstraintSet_layout_goneMarginStart = 70;
+			
+			// aapt resource value: 71
+			public const int ConstraintSet_layout_goneMarginTop = 71;
+			
+			public static int[] LinearConstraintLayout = new int[] {
+					16842948};
+			
+			// aapt resource value: 0
+			public const int LinearConstraintLayout_android_orientation = 0;
+			
+			static Styleable()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Styleable()
 			{
 			}
 		}

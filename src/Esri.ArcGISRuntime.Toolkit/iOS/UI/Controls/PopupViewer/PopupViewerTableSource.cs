@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
-            return UIFont.LabelFontSize * 3;
+            return (nfloat)(UIFont.LabelFontSize * 2.5);
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
