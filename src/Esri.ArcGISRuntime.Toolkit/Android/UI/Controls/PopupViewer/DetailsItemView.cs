@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
             };
-            _label.SetTextColor(foregroundColor);
+            _label.SetTextColor(Color.Argb(foregroundColor.A / 2, foregroundColor.R, foregroundColor.G, foregroundColor.B));
             AddView(_label);
 
             _formattedValue = new TextView(context)

@@ -38,17 +38,27 @@
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding Field.Label}" 
                                    Foreground="{ThemeResource AppBarItemDisabledForegroundThemeBrush}" />
-                        <TextBlock Text="{Binding FormattedValue}"
-                                   Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
-                                   TextWrapping="Wrap" Grid.Row="1"/>
+                        <TextBox IsReadOnly ="True"
+                                 BorderThickness="0"
+                                 Margin="0"
+                                 Padding="0"
+                                 Background="Transparent"
+                                 Text="{Binding FormattedValue, Mode=OneWay}"
+                                 Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
+                                 TextWrapping="Wrap" Grid.Row="1"/>
                       </Grid>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <TextBlock Text="{Binding CustomDescriptionHtml, Converter={StaticResource HtmlToPlainTextConverter}}"
-                           Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
-                           Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}}"
-                           TextWrapping="Wrap"/>
+                <TextBox IsReadOnly="True"
+                         BorderThickness="0"
+                         Margin="0"
+                         Padding="0"
+                         Background="Transparent"
+                         Text="{Binding CustomDescriptionHtml, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}"
+                         Foreground="{ThemeResource AppBarItemForegroundThemeBrush}"
+                         Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}}"
+                         TextWrapping="Wrap"/>
               </Grid>
             </Grid>
           </Border>

@@ -37,14 +37,25 @@
                           <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding Field.Label}" Foreground="Gray" />
-                        <TextBlock Text="{Binding FormattedValue}" TextWrapping="Wrap" Grid.Row="1"/>
+                        <TextBox IsReadOnly="True"
+                                 BorderThickness="0"
+                                 Margin="0"
+                                 Padding="0"
+                                 Background="Transparent"
+                                 Text="{Binding FormattedValue, Mode=OneWay}"
+                                 TextWrapping="Wrap" Grid.Row="1"/>
                       </Grid>
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <TextBlock Text="{Binding CustomDescriptionHtml, Converter={StaticResource HtmlToPlainTextConverter}}"                           
-                           Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}}"
-                           TextWrapping="Wrap"/>
+                <TextBox IsReadOnly="True"
+                         BorderThickness="0"
+                         Margin="0"
+                         Padding="0"
+                         Background="Transparent"
+                         Text="{Binding CustomDescriptionHtml, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}"                           
+                         Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}}"
+                         TextWrapping="Wrap"/>
               </Grid>
             </Grid>
           </Border>

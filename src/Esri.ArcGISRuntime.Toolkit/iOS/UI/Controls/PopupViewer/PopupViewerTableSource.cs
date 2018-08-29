@@ -58,10 +58,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var info = _displayFields[indexPath.Row];
             var cell = tableView.DequeueReusableCell(CellId) as DetailsItemCell;
-            cell?.SetForegroundColor(_foregroundColor);
-            cell?.Update(info);
-            cell?.SetNeedsUpdateConstraints();
-            cell?.UpdateConstraints();
+            if (cell == null)
+            {
+                return null;
+            }
+
+            cell.LayoutMargins = UIEdgeInsets.Zero;
+            cell.SetForegroundColor(_foregroundColor);
+            cell.Update(info);
+            cell.SetNeedsUpdateConstraints();
+            cell.UpdateConstraints();
             return cell;
         }
     }

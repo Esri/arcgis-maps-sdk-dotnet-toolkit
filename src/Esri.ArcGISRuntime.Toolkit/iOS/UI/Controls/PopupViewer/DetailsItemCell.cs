@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 TextColor = UIColor.Gray,
                 BackgroundColor = UIColor.Clear,
-                ContentMode = UIViewContentMode.Center,
+                ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
-                ContentMode = UIViewContentMode.Center,
+                ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
@@ -69,7 +69,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void SetForegroundColor(UIColor foregroundColor)
         {
-            _label.TextColor = foregroundColor;
+            nfloat r, g, b, a;
+            foregroundColor.GetRGBA(out r, out g, out b, out a);
+            _label.TextColor = UIColor.FromRGBA(r, g, b, a / 2);
             _formattedValue.TextColor = foregroundColor;
         }
 

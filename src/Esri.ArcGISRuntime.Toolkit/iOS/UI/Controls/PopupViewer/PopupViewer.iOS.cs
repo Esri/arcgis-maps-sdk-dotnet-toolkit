@@ -91,8 +91,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 LineBreakMode = UILineBreakMode.WordWrap
             };
 
-            _detailsList = new UITableView()
+            _detailsList = new UITableView(CGRect.Empty, UITableViewStyle.Plain)
             {
+                PreservesSuperviewLayoutMargins = false,
+                SeparatorInset = UIEdgeInsets.Zero,
+                LayoutMargins = UIEdgeInsets.Zero,
                 BackgroundColor = UIColor.Clear,
                 ClipsToBounds = true,
                 ContentMode = UIViewContentMode.TopLeft,
@@ -117,7 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (_intrinsicContentSize == CGSize.Empty)
             {
-                var height = _editSummary.IntrinsicContentSize.Height + _customHtmlDescription.IntrinsicContentSize.Height + _detailsList.ContentSize.Height;
+                var height = _editSummary.IntrinsicContentSize.Height + _customHtmlDescription.IntrinsicContentSize.Height + _detailsList.ContentSize.Height + UIFont.LabelFontSize;
                 var maxWidth = Superview.Frame.GetMaxY() - Superview.Frame.GetMinY();
                 if (maxWidth == 0)
                 {
@@ -153,6 +156,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private bool _constraintsUpdated = false;
 
+        /// <inheritdoc />
         public override void UpdateConstraints()
         {
             base.UpdateConstraints();
