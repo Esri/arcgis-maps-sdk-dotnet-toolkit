@@ -34,22 +34,22 @@
   </PropertyGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.5" />
-	  <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.3.0" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
+	  <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.4.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.0" />
-	  <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.3.0" />
+	  <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.4.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.3.0" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.4.0" />
     <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
-     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.3.0">
+     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.4.0">
       <ExcludeAssets>contentFiles;build</ExcludeAssets>
       <IncludeAssets>compile</IncludeAssets>
       <PrivateAssets></PrivateAssets>
@@ -62,7 +62,7 @@
   </ItemGroup>
   
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-     <PackageReference Include="Esri.ArcGISRuntime" Version="100.3.0" />
+     <PackageReference Include="Esri.ArcGISRuntime" Version="100.4.0" />
   </ItemGroup>
    
   <ItemGroup> 
