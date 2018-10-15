@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer.PopupViewerSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <esri:MapView x:Name="mapView" 
+                      Map="https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2" 
+                      GeoViewTapped="mapView_GeoViewTapped"/>
+        <esri:PopupViewer x:Name="popupViewer" 
+                          Grid.Column="1"
+                          Padding="5"
+                          Width="300"
+                          Visibility="Collapsed"
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Stretch" />        
+    </Grid>
+</UserControl>

@@ -72,7 +72,6 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
     <Folder Include="Resources\drawable\" />
     <Folder Include="Resources\mipmap-hdpi\" />
     <Folder Include="Resources\mipmap-mdpi\" />
@@ -90,6 +89,9 @@
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android">
       <Version>100.4.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\info.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="$(MSBuildThisFileDirectory)..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\build\android\Esri.ArcGISRuntime.Toolkit.targets" Condition="Exists('$(MSBuildThisFileDirectory)..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\build\android\Esri.ArcGISRuntime.Toolkit.targets')" />

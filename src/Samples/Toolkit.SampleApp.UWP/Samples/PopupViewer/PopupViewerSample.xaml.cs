@@ -1,69 +1,56 @@
 ﻿using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Security;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UIKit;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Controls;
+using Visibility = Windows.UI.Xaml.Visibility;
 
-namespace Esri.ArcGISRuntime.Toolkit.SampleApp
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
 {
-    public partial class ViewController : UIViewController
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class PopupViewerSample : Page
     {
-        public ViewController(IntPtr handle) : base(handle)
+        public PopupViewerSample()
         {
+            this.InitializeComponent();
+
         }
+
+        // Webmap configured with Popup
+        public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
 
         private RuntimeImage _infoIcon = null;
-        private RuntimeImage InfoIcon => _infoIcon;
-
-        public override async void ViewDidLoad()
+        // Used in Callout to see feature details in PopupViewer
+        private RuntimeImage InfoIcon
         {
-            base.ViewDidLoad();
-
-
-            // Used in Callout to see feature details in PopupViewer
-            _infoIcon = await UIImage.FromBundle("info.png")?.ToRuntimeImageAsync();
-
-            // Used to demonstrate display of EditSummary in PopupViewer
-            // Provides credentials to token-secured layer that has editor-tracking enabled
-            AuthenticationManager.Current.ChallengeHandler = new ChallengeHandler(async (info) =>
+            get
             {
-                return await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, "user1", "user1");
-            });
-
-            mapView.GeoViewTapped += mapView_GeoViewTapped;
-
-            // Webmap configured with Popup
-            mapView.Map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
-
-            scaleLine.MapView = mapView;
-            compass.GeoView = mapView;
-            compass.AutoHide = false;
-            popupViewer.BackgroundColor = UIColor.White;
+                if (_infoIcon == null)
+                {
+                    var fileName = RequestedTheme == Windows.UI.Xaml.ElementTheme.Dark ? "info_light.png" : "info_dark.png";
+                    _infoIcon = new RuntimeImage(new Uri($"ms-appx:///Samples/PopupViewer/{fileName}"));
+                }
+                return _infoIcon;
+            }
         }
 
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-            // Attach the scaleline to always sit right on top of the attribution text
-            scaleLine.BottomAnchor.ConstraintEqualTo(mapView.AttributionTopAnchor, -10).Active = true;
-        }
 
-        public override void DidReceiveMemoryWarning()
-        {
-            base.DidReceiveMemoryWarning();
-            // Release any cached data, images, etc that aren't in use.
-        }
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             Exception error = null;
             try
             {
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
+
                 // Retrieves or builds Popup from IdentifyLayerResult
                 var popup = GetPopup(result);
 
@@ -75,15 +62,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                     callout.ButtonImage = InfoIcon;
                     callout.OnButtonClick = new Action<object>((s) =>
                     {
-                        popupViewer.Hidden = false;
-                        popupViewer.PopupManager = new PopupManager(popup);
+                        popupViewer.Visibility = Visibility.Visible;
+                        popupViewer.PopupManager = new PopupManager(s as Popup);
                     });
                     mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
                 }
                 else
                 {
                     popupViewer.PopupManager = null;
-                    popupViewer.Hidden = true;
+                    popupViewer.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception ex)
@@ -91,11 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 error = ex;
             }
             if (error != null)
-            {
-                var alert = UIAlertController.Create(error.GetType().Name, error.Message, UIAlertControllerStyle.Alert);
-                alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                this.PresentViewController(alert, true, null);
-            }
+                await new MessageDialog(error.Message, error.GetType().Name).ShowAsync();
         }
 
         private Popup GetPopup(IdentifyLayerResult result)
