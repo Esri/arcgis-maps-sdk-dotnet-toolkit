@@ -53,11 +53,11 @@
   </Choose>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>2.0.37-beta</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>2.2.13</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.37-beta" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="all" />
   </ItemGroup>
   
    <!-- https://github.com/NuGet/Home/issues/4337 -->
