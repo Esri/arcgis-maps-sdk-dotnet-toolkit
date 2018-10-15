@@ -5,10 +5,6 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
-using Telerik.Data.Core;
-using Telerik.UI.Xaml.Controls.Grid;
-using Telerik.UI.Xaml.Controls.Grid.Primitives;
-using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
 {
@@ -22,6 +18,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
             this.InitializeComponent();
             var _ = LoadFeaturesAsync();
         }
+
+        private ServiceFeatureTable table;
+
         /// <summary>
         /// Requests for features whose attributes will be displayed in <see cref="UI.FeatureDataField"/>
         /// </summary>
@@ -31,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
             string error = null;
             try
             {
-                var table = new ServiceFeatureTable(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessmentStatePlane/FeatureServer/0"));
+                table = new ServiceFeatureTable(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessmentStatePlane/FeatureServer/0"));
                 table.FeatureRequestMode = FeatureRequestMode.ManualCache;
                 await table.LoadAsync();
                 var queryParameters = new QueryParameters()
@@ -42,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
                 // Request for the same fields defined in the ListView.ItemTemplate.
                 var outFields = new string[] { "objectid", "incidentid", "typdamage", "habitable", "predisval", "inspdate", "lastupdate" };
                 var features = await table.PopulateFromServiceAsync(queryParameters, true, outFields);
-                grid.ItemsSource = features.ToList();
+                FeatureList.ItemsSource = features.ToList();
             }
             catch (Exception exception)
             {
@@ -51,6 +50,36 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
             if (!string.IsNullOrEmpty(error))
             {
                 await new MessageDialog($"Error occured : {error}", "Sample error").ShowAsync();
+            }
+        }
+
+        private async void ApplyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (sender as Button);
+            var feature = btn.DataContext as ArcGISFeature;
+            if (feature != null)
+            {
+                btn.IsEnabled = false;
+                var table = (feature.FeatureTable as ServiceFeatureTable);
+                try
+                {
+                    await table.UpdateFeatureAsync(feature);
+                }
+                catch (System.Exception ex)
+                {
+                    await new MessageDialog("Failed to apply edit: " + ex.Message).ShowAsync();
+                    btn.IsEnabled = true;
+                    return;
+                }
+                try
+                {
+                    var result = await table.ApplyEditsAsync();
+                }
+                catch (System.Exception ex)
+                {
+                    await new MessageDialog("Failed to submit data back to the server: " + ex.Message).ShowAsync();
+                }
+                btn.IsEnabled = true;
             }
         }
     }

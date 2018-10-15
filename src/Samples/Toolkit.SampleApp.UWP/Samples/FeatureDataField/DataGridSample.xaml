@@ -5,88 +5,94 @@
       xmlns:esriUI="using:Esri.ArcGISRuntime.UI.Controls"
       xmlns:esri="using:Esri.ArcGISRuntime.Mapping"
       xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+      xmlns:uwptoolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:telerikUI="using:Telerik.UI.Xaml.Controls.Grid"
       xmlns:telerikCore="using:Telerik.Data.Core"
       >
     <!-- This sample uses fields defined by this feature service
          http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessmentStatePlane/FeatureServer/0 -->
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <telerikUI:RadDataGrid x:Name="grid" AutoGenerateColumns="False" UserGroupMode="Disabled" UserSortMode="None">
-            <telerikUI:RadDataGrid.Columns>
-                <telerikUI:DataGridTemplateColumn Header="Object ID" CanUserSort="True" >
-                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+        <uwptoolkit:DataGrid x:Name="FeatureList" AutoGenerateColumns="False">
+            <uwptoolkit:DataGrid.Columns>
+
+                <!-- 'objectid' is read-only field that will display as read-only, provide a TextBlock for ReadOnlyTemplate -->
+                <!-- We could also use DataGridTextColumn here, which would be simpler, so this is mostly for demonstration purposes: 
+                                <DataGridTextColumn Header="Incident ID" Binding="{Binding Attributes[incidentid]}" /> -->
+
+                <uwptoolkit:DataGridTemplateColumn Header="Object ID" IsReadOnly="True" Width="150" >
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!-- 'objectid' is read-only field that will display as read-only, provide a TextBlock for ReadOnlyTemplate -->
                             <esriToolkit:FeatureDataField Feature="{Binding}"
-                                                          FieldName="objectid"
-                                                          IsReadOnly="True">
+                                                       FieldName="objectid"
+                                                       IsReadOnly="True">
                                 <esriToolkit:FeatureDataField.ReadOnlyTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Value, Mode=OneWay}"
-                                                   Foreground="{ThemeResource ApplicationForegroundThemeBrush}" />
+                                        <TextBlock Text="{Binding Value, Mode=OneWay}" />
                                     </DataTemplate>
                                 </esriToolkit:FeatureDataField.ReadOnlyTemplate>
                             </esriToolkit:FeatureDataField>
                         </DataTemplate>
-                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                </telerikUI:DataGridTemplateColumn>
-                <telerikUI:DataGridTemplateColumn Header="Damage Type" CanUserResize="True" CanUserSort="True" >
-                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+                <!-- 'incidentid' is an editable text field but can be displayed as read-only by setting IsReadOnly="True" -->
+                <uwptoolkit:DataGridTemplateColumn Header="Incident ID">
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!-- 'typdamage' is an editable coded-value domain field, leave it as editable -->
+                            <esriToolkit:FeatureDataField Feature="{Binding}" FieldName="incidentid" IsReadOnly="True" />
+                        </DataTemplate>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+                <!-- 'typdamage' is an editable coded-value domain field, leave it as editable -->
+                <uwptoolkit:DataGridTemplateColumn Header="Damage Type">
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <esriToolkit:FeatureDataField Feature="{Binding}" FieldName="typdamage" />
+                        </DataTemplate>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+                <!-- 'habitable' is an editable coded-value domain field, make it read-only -->
+                <uwptoolkit:DataGridTemplateColumn Header="Habitable" Width="150">
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <esriToolkit:FeatureDataField Feature="{Binding}" FieldName="habitable" />
+                        </DataTemplate>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+                <!-- 'predisval' is an editable double field, leave it as editable -->
+                <uwptoolkit:DataGridTemplateColumn Header="Value Before Damage" MinWidth="150">
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <esriToolkit:FeatureDataField Feature="{Binding}" FieldName="predisval" />
+                        </DataTemplate>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+                <!-- 'inspdate' is an editable date field, leave it as editable and provide a DatePicker for InputTemplate -->
+                <uwptoolkit:DataGridTemplateColumn Header="Inspection Date" MinWidth="150">
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
                             <esriToolkit:FeatureDataField Feature="{Binding}"
-                                                          FieldName="typdamage" />
+                                                       FieldName="inspdate" />
                         </DataTemplate>
-                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                </telerikUI:DataGridTemplateColumn>
-                <telerikUI:DataGridTemplateColumn Header="Habitable">
-                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+                <!-- 'lastupdate' is an editable date field, make it read-only -->
+                <uwptoolkit:DataGridTemplateColumn Header="Last updated" MinWidth="150">
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!-- 'habitable' is an editable coded-value domain field, make it read-only -->
                             <esriToolkit:FeatureDataField Feature="{Binding}"
-                                                          FieldName="habitable"
-                                                          HorizontalAlignment="Stretch"
-                                                          IsReadOnly="True" />
+                                                       FieldName="lastupdate"
+                                                       IsReadOnly="True" />
                         </DataTemplate>
-                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                </telerikUI:DataGridTemplateColumn>
-                <telerikUI:DataGridTemplateColumn Header="Value Before Damage">
-                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+                <uwptoolkit:DataGridTemplateColumn Header="">
+                    <uwptoolkit:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!-- 'predisval' is an editable double field, leave it as editable and provide minimum width -->
-                            <esriToolkit:FeatureDataField Feature="{Binding}"
-                                                          FieldName="predisval"
-                                                          MinWidth="100" />
+                            <Button Content="Apply" Click="ApplyButton_Click" />
                         </DataTemplate>
-                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                </telerikUI:DataGridTemplateColumn>
-                <telerikUI:DataGridTemplateColumn Header="Inspection Data">
-                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                        <DataTemplate>
-                            <!-- 'inspdate' is an editable date field, leave it as editable and provide a DatePicker for InputTemplate -->
-                            <esriToolkit:FeatureDataField Feature="{Binding}"
-                                                          FieldName="inspdate">
-                                <esriToolkit:FeatureDataField.InputTemplate>
-                                    <DataTemplate>
-                                        <DatePicker Date="{Binding Value, Mode=TwoWay}" />
-                                    </DataTemplate>
-                                </esriToolkit:FeatureDataField.InputTemplate>
-                            </esriToolkit:FeatureDataField>
-                        </DataTemplate>
-                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                </telerikUI:DataGridTemplateColumn>
-                <telerikUI:DataGridTemplateColumn Header="Last Updated">
-                    <telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                        <DataTemplate>
-                            <!-- 'lastupdate' is an editable date field, make it read-only -->
-                            <esriToolkit:FeatureDataField Feature="{Binding Mode=TwoWay}"
-                                                          FieldName="lastupdate"
-                                                          MinWidth="100"
-                                                          IsReadOnly="True" />
-                        </DataTemplate>
-                    </telerikUI:DataGridTemplateColumn.CellContentTemplate>
-                </telerikUI:DataGridTemplateColumn>
-            </telerikUI:RadDataGrid.Columns>
-        </telerikUI:RadDataGrid>
+                    </uwptoolkit:DataGridTemplateColumn.CellTemplate>
+                </uwptoolkit:DataGridTemplateColumn>
+            </uwptoolkit:DataGrid.Columns>
+        </uwptoolkit:DataGrid>
     </Grid>
 </Page>
