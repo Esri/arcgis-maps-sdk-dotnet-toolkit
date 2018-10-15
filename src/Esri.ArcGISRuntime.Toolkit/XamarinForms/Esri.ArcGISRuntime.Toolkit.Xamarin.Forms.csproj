@@ -30,7 +30,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>
