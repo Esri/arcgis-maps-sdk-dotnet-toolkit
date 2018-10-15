@@ -163,5 +163,8 @@
       <Project>{d7b89b7d-f360-4a68-aecb-c27caddc8118}</Project>
       <Name>Toolkit.Samples.Forms</Name>
     </ProjectReference>
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS">
+      <Version>100.4.0</Version>
+    </PackageReference>
   </ItemGroup>
 </Project>
