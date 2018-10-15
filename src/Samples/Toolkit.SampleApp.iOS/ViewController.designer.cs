@@ -23,6 +23,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer popupViewer { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine scaleLine { get; set; }
 
         void ReleaseDesignerOutlets ()
@@ -35,6 +39,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             if (mapView != null) {
                 mapView.Dispose ();
                 mapView = null;
+            }
+
+            if (popupViewer != null) {
+                popupViewer.Dispose ();
+                popupViewer = null;
             }
 
             if (scaleLine != null) {

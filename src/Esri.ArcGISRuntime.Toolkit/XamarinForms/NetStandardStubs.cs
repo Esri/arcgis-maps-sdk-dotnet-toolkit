@@ -33,6 +33,12 @@ using Esri.ArcGISRuntime.Symbology;
 // This is a little simpler than excluding all references to these classes
 namespace Esri.ArcGISRuntime.UI.Controls
 {
+    internal class PopupViewer
+    {
+        public object PopupManager { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        internal void SetForeground(Color color) => throw new NotImplementedException();
+    }
+
     internal class Compass
     {
         public bool AutoHide { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

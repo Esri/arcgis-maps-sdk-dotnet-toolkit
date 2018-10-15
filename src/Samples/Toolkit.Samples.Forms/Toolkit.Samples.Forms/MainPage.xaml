@@ -20,6 +20,13 @@
         
         <esriTK:ScaleLine HorizontalOptions="Start" VerticalOptions="End" Margin="20"
                     MapView="{x:Reference mapView}"/>
+
+        <esriTK:PopupViewer x:Name="popupViewer" 
+                            BackgroundColor="White"
+                            Foreground="Black"
+                            HorizontalOptions="StartAndExpand" 
+                            VerticalOptions="EndAndExpand"
+                            IsVisible="False"/>
     </Grid>
     
 </ContentPage>

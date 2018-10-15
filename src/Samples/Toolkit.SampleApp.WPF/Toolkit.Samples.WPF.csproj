@@ -66,6 +66,9 @@
     <Compile Include="Samples\Compass\MapViewCompassSample.xaml.cs">
       <DependentUpon>MapViewCompassSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\PopupViewer\PopupViewerSample.xaml.cs">
+      <DependentUpon>PopupViewerSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\FeatureDataField\EditFeatureSample.xaml.cs">
       <DependentUpon>EditFeatureSample.xaml</DependentUpon>
     </Compile>
@@ -92,6 +95,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\Compass\MapViewCompassSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\PopupViewer\PopupViewerSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -180,6 +187,9 @@
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Samples\PopupViewer\info.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -123,6 +123,9 @@
     <Compile Include="Samples\ScaleLine\ScaleLineSample.xaml.cs">
       <DependentUpon>ScaleLineSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\PopupViewer\PopupViewerSample.xaml.cs">
+      <DependentUpon>PopupViewerSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml.cs">
       <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
     </Compile>
@@ -145,6 +148,8 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="Samples\PopupViewer\info_dark.png" />
+    <Content Include="Samples\PopupViewer\info_light.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -184,6 +189,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\ScaleLine\ScaleLineSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\PopupViewer\PopupViewerSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
