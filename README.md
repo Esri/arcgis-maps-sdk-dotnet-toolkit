@@ -25,7 +25,6 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 - SignInForm: Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources.
 - ChallengeHandler: Displays SignInForm when accessing secure ArcGIS resources, as well as helper classes for storing credentials in Windows' credentials cache. 
 - SymbolDisplay: Renders a symbol in a control.
-- TableOfContents: Creates a tree-view of the entire map document. Optionally displays legend information for the layers. 
 - TimeSlider: Allows interactively defining a temporal range (i.e. time extent) and animating time moving forward or backward.  Can be used to manipulate the time extent in a MapView or SceneView. 
 
 ## Feature availability by platform/API
@@ -41,7 +40,6 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |SignInForm   |   | ✔ |   |   |   |
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|TableOfContents   | N/A | ✔ | N/A  | N/A | N/A |
 |TimeSlider   | ✔ | ✔ | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201) |
 
 ## Instructions for Building
