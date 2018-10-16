@@ -87,9 +87,6 @@
     <Compile Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml.cs">
       <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Samples\ToC\TableOfContentsSample.xaml.cs">
-      <DependentUpon>TableOfContentsSample.xaml</DependentUpon>
-    </Compile>
     <Page Include="Samples\Compass\SceneViewCompassSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,10 +142,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Samples\ToC\TableOfContentsSample.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -179,7 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.WPF">
-      <Version>100.3.0</Version>
+      <Version>100.4.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

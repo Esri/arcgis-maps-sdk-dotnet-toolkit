@@ -8,7 +8,7 @@
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Esri/arcgis-toolkit-dotnet/master/license.txt</PackageLicenseUrl>
-    <PackageReleaseNotes>v100.3-beta4: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.3-beta4</PackageReleaseNotes>
+    <PackageReleaseNotes>v100.4-beta5: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.4-beta5</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType></RepositoryType>
     <Copyright>Copyright © 2014-2018 Esri.</Copyright>
@@ -25,7 +25,7 @@
     <!--Framework versions-->
     <UWPTargetPlatformVersion>10.0.16299.0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.16299.0</UWPTargetPlatformMinVersion>
-    <AndroidTargetFramework>monoandroid70</AndroidTargetFramework>
+    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
       <DotNetTargetFramework>net461</DotNetTargetFramework>
       <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
@@ -53,11 +53,11 @@
   </Choose>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>2.0.37-beta</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>2.2.13</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.37-beta" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="all" />
   </ItemGroup>
   
    <!-- https://github.com/NuGet/Home/issues/4337 -->
