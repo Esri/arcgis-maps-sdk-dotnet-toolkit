@@ -4,6 +4,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.Preview;component/UI/Controls/SignInForm/SignInForm.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.Preview;component/UI/Controls/TableOfContents/TableOfContents.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
    

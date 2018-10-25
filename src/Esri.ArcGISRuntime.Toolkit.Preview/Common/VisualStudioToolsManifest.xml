@@ -2,6 +2,7 @@
   <File Reference="Esri.ArcGISRuntime.Toolkit.dll">
     <ToolboxItems VSCategory="ArcGIS Runtime" BlendCategory="ArcGIS Runtime">
       <Item Type=" Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls.SignInForm" />
+	  <Item Type=" Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls.TableOfContents" />	  
     </ToolboxItems>
   </File>
 </FileList>
