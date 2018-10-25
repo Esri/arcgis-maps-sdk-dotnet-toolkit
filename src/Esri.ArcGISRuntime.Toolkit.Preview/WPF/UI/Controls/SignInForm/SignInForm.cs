@@ -21,8 +21,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Esri.ArcGISRuntime.Security;
+using Esri.ArcGISRuntime.Toolkit.Preview.Authentication;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
 {
     /// <summary>
     /// A Sign-in form for generating either an ArcGIS Token Credential or a Network Credential.
@@ -99,11 +100,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var host = _serverInfo == null ? info.ServiceUri : _serverInfo.ServerUri;
                 if (_rememberCredentialsButton != null && _rememberCredentialsButton.IsChecked.Value)
                 {
-                    Esri.ArcGISRuntime.Toolkit.Authentication.CredentialsCache.SaveCredential(_username.Text, _password.SecurePassword, host);
+                    CredentialsCache.SaveCredential(_username.Text, _password.SecurePassword, host);
                 }
                 else
                 {
-                    Esri.ArcGISRuntime.Toolkit.Authentication.CredentialsCache.DeleteCredential(host);
+                    CredentialsCache.DeleteCredential(host);
                 }
             }
 
@@ -134,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (ServerHost != null && EnableCredentialCache)
             {
-                var credential = Esri.ArcGISRuntime.Toolkit.Authentication.CredentialsCache.ReadCredential(ServerHost);
+                var credential = CredentialsCache.ReadCredential(ServerHost);
                 if (credential != null)
                 {
                     if (_username != null)

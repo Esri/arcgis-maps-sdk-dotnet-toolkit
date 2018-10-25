@@ -17,7 +17,7 @@
 using System.Security.Cryptography.X509Certificates;
 using Esri.ArcGISRuntime.Security;
 
-namespace Esri.ArcGISRuntime.Toolkit.Authentication
+namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
     /// <summary>
     /// A helper class for picking a certificate from the Certificate Store

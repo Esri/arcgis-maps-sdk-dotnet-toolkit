@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace Esri.ArcGISRuntime.Toolkit.Authentication
+namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
 
     /// <summary>

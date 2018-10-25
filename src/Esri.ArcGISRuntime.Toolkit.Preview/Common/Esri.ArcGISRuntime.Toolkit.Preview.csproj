@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework)</TargetFrameworks>
-    <Title>ArcGIS Runtime SDK for .NET - Toolkit</Title>
+    <Title>ArcGIS Runtime SDK for .NET - Toolkit Preview Package</Title>
     <Description>ArcGIS Runtime controls and utilities for WPF, Universal Windows, iOS and Android apps.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D iOS Android UWP Xamarin WPF toolkit</PackageTags>
-    <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
-    <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit.Preview</RootNamespace>
+    <AssemblyName>Esri.ArcGISRuntime.Toolkit.Preview</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
 	  <!-- Work around MSBuild bug when building from comandline: https://github.com/Microsoft/msbuild/issues/2274 -->
@@ -35,35 +35,18 @@
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.4" />
-	  <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.4.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.0" />
-	  <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.4.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.4.0" />
-    <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
-     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.4.0">
-      <ExcludeAssets>contentFiles;build</ExcludeAssets>
-      <IncludeAssets>compile</IncludeAssets>
-      <PrivateAssets></PrivateAssets>
-    </PackageReference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Security" />
   </ItemGroup>
-  
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-     <PackageReference Include="Esri.ArcGISRuntime" Version="100.4.0" />
-  </ItemGroup>
-   
+    
   <ItemGroup> 
      <PackageReference Include="StyleCop.Analyzers">
 	  <PrivateAssets>all</PrivateAssets>
@@ -72,7 +55,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)build\Android\Esri.ArcGISRuntime.Toolkit.targets">
+    <None Include="$(MSBuildThisFileDirectory)build\Android\Esri.ArcGISRuntime.Toolkit.Preview.targets">
       <Pack>true</Pack>
       <PackagePath>build\$(AndroidTargetFramework)\</PackagePath>
     </None>
@@ -102,11 +85,18 @@
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
+ 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+      <Private>false</Private>
+      <PrivateAssets>analyzers</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)..\Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
-  
+  <Import Project="$(MSBuildThisFileDirectory)..\Android\Esri.ArcGISRuntime.Toolkit.Preview.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
+
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 </Project>

@@ -17,9 +17,10 @@
 using System.Threading.Tasks;
 using System.Windows;
 using Esri.ArcGISRuntime.Security;
+using Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.Authentication
+namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
     /// <summary>
     /// Custom <see cref="AuthenticationManager"/> Challenge Handler that combines user/password, certificate and OAuth authentication

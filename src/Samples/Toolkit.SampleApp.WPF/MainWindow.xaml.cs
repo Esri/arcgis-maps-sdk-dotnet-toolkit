@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
 
             // Configure this app to use the Toolkit's Authentication Challenge Handler
             Esri.ArcGISRuntime.Security.AuthenticationManager.Current.ChallengeHandler =
-                new Esri.ArcGISRuntime.Toolkit.Authentication.ChallengeHandler(this.Dispatcher);
+                new Esri.ArcGISRuntime.Toolkit.Preview.Authentication.ChallengeHandler(this.Dispatcher);
             LoadSamples();
 
         }
