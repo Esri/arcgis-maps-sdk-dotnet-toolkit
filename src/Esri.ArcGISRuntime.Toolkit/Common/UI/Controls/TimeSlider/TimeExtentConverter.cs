@@ -33,7 +33,9 @@ namespace Esri.ArcGISRuntime.Toolkit
         /// Initializes a new instance of the <see cref="TimeExtentConverter"/> class.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public TimeExtentConverter() { }
+        public TimeExtentConverter() 
+        {
+        }
 
         /// <inheritdoc />
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

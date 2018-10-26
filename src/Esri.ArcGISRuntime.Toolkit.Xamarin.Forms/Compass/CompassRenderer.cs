@@ -29,6 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class CompassRenderer : ViewRenderer<Compass, Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass>
     {
+#if __ANDROID__
+        public CompassRenderer(Android.Content.Context context)
+            : base(context)
+        {
+        }
+#endif
+
         protected override void OnElementChanged(ElementChangedEventArgs<Compass> e)
         {
             base.OnElementChanged(e);

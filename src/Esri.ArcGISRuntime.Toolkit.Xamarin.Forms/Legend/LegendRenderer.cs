@@ -29,6 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class LegendRenderer : ViewRenderer<Legend, UI.Controls.Legend>
     {
+#if __ANDROID__
+        public LegendRenderer(Android.Content.Context context)
+            : base(context)
+        {
+        }
+#endif
+
         protected override void OnElementChanged(ElementChangedEventArgs<Legend> e)
         {
             base.OnElementChanged(e);

@@ -29,6 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class ScaleLineRenderer : ViewRenderer<ScaleLine, Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine>
     {
+#if __ANDROID__
+        public ScaleLineRenderer(Android.Content.Context context)
+            : base(context)
+        {
+        }
+#endif
+
         protected override void OnElementChanged(ElementChangedEventArgs<ScaleLine> e)
         {
             base.OnElementChanged(e);

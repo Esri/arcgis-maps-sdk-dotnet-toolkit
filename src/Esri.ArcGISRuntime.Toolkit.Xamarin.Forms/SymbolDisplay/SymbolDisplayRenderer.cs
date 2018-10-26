@@ -29,6 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class SymbolDisplayRenderer : ViewRenderer<SymbolDisplay, UI.Controls.SymbolDisplay>
     {
+#if __ANDROID__
+        public SymbolDisplayRenderer(Android.Content.Context context)
+            : base(context)
+        {
+        }
+#endif
+
         protected override void OnElementChanged(ElementChangedEventArgs<SymbolDisplay> e)
         {
             base.OnElementChanged(e);

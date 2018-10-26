@@ -29,6 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class PopupViewerRenderer : ViewRenderer<PopupViewer, UI.Controls.PopupViewer>
     {
+#if __ANDROID__
+        public PopupViewerRenderer(Android.Content.Context context)
+            : base(context)
+        {
+        }
+#endif
+
         protected override void OnElementChanged(ElementChangedEventArgs<PopupViewer> e)
         {
             base.OnElementChanged(e);

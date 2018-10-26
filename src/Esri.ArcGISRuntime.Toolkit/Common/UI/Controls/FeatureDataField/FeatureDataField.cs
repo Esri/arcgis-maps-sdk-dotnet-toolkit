@@ -543,9 +543,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return null;
             }
 #if NETFX_CORE
-            CultureInfo cinfo = new CultureInfo(this.Language);
+            CultureInfo cinfo = new CultureInfo(Language);
 #else
-            CultureInfo cinfo = this.Language.GetEquivalentCulture();
+            CultureInfo cinfo = Language.GetEquivalentCulture();
 #endif
             switch (_field.FieldType)
             {
@@ -573,6 +573,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                         return Convert.ToSingle(valueString, cinfo);
                     }
+
                 case FieldType.Float64:
                     {
                         if (value is double)
