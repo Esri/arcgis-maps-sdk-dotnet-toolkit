@@ -9,8 +9,8 @@
       <Code Type="Fragment" Language="cs">
         try
         {
-          var publicResourceClassDecl = "public partial class Resource";
-          var internalResourceClassDecl = "internal partial class Resource";
+          var publicResourceClassDecl = "public";
+          var internalResourceClassDecl = "[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]\npublic";
           
           // Check whether the auto-generated Resource.Designer.cs file exists
           if (File.Exists(ResourceFilePath))
