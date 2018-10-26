@@ -28,8 +28,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class LayerContentViewModel : INotifyPropertyChanged
     {
-        private DelegateCommand _reloadCommand;
-        private DelegateCommand _zoomToCommand;
         private WeakReference<GeoView> _view;
         private bool _generateLegend;
         private SynchronizationContext _context;
@@ -58,21 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (layerContent is Esri.ArcGISRuntime.ILoadable)
             {
                 var l = layerContent as Esri.ArcGISRuntime.ILoadable;
-                ReloadCommand = _reloadCommand = new DelegateCommand(
-                    (s) =>
-                    {
-                        l.RetryLoadAsync();
-                        UpdateLoadingStatus();
-                    },
-                    (s) =>
-                    {
-                        return l.LoadStatus == Esri.ArcGISRuntime.LoadStatus.FailedToLoad;
-                    });
                 UpdateLoadingStatus();
-            }
-            else
-            {
-                ReloadCommand = _reloadCommand = new DelegateCommand((s) => { }, (s) => { return false; });
             }
 
             if (LayerContent is Layer)
@@ -95,25 +79,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     UpdateLayerViewState(null);
                 }
             }
-
-            ZoomToCommand = _zoomToCommand = new DelegateCommand(
-                (s) =>
-                {
-                    GeoView gview;
-                    bool hasView = _view.TryGetTarget(out gview);
-                    if (hasView)
-                    {
-                        var vp = GetExtent();
-                        if (vp != null)
-                        {
-                            gview.SetViewpointAsync(vp);
-                        }
-                    }
-                }, (s) =>
-                {
-                    GeoView gview;
-                    return _view.TryGetTarget(out gview) && GetExtent() != null;
-                });
         }
 
         public Symbology.Symbol Symbol { get; }
@@ -289,10 +254,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 UpdateLoadingStatus();
             }
-            else if (e.PropertyName == nameof(Layer.FullExtent))
-            {
-                _zoomToCommand.RaiseCanExecuteChanged();
-            }
         }
 
         public ILayerContent LayerContent { get; }
@@ -320,14 +281,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateLoadingStatus();
             UpdateIsInScaleRange(state != null && state.Status != LayerViewStatus.OutOfScale);
             UpdateIsActive(state != null && state.Status == LayerViewStatus.Active);
-            if (state != null && state.Status == LayerViewStatus.Error && LayerContent is ILoadable)
-            {
-                var l = LayerContent as Esri.ArcGISRuntime.ILoadable;
-                if (l.LoadError != null)
-                {
-                    _reloadCommand?.RaiseCanExecuteChanged();
-                }
-            }
         }
 
         private void UpdateIsActive(bool isActive)
@@ -336,7 +289,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 IsActive = isActive;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsActive)));
-                _zoomToCommand?.RaiseCanExecuteChanged();
             }
         }
 
@@ -373,7 +325,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Error = null;
                 }
 
-                _reloadCommand?.RaiseCanExecuteChanged();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasError)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Error)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayLegend)));
@@ -404,44 +355,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public bool IsActive { get; private set; } = true;
 
-        public System.Windows.Input.ICommand ReloadCommand { get; }
-
-        public System.Windows.Input.ICommand ZoomToCommand { get; }
-
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private class DelegateCommand : System.Windows.Input.ICommand
-        {
-            private Action<object> _execute;
-            private Func<object, bool> _canExecute;
-
-            public DelegateCommand(Action execute)
-                : this((o) => { execute(); }, null)
-            {
-            }
-
-            public DelegateCommand(Action<object> execute, Func<object, bool> canExecute)
-            {
-                _execute = execute;
-                _canExecute = canExecute;
-            }
-
-            public event EventHandler CanExecuteChanged;
-
-            internal void RaiseCanExecuteChanged()
-            {
-                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return _canExecute == null || _canExecute(parameter);
-            }
-
-            public void Execute(object parameter)
-            {
-                _execute(parameter);
-            }
-        }
     }
 }

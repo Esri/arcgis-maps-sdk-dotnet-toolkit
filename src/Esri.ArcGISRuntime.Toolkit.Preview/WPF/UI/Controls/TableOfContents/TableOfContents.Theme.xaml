@@ -46,13 +46,6 @@
                                 <TextBlock Text="{Binding IsInScaleRange}" />
                             </StackPanel>
                         </Grid.ToolTip>-->
-                        <Grid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem IsCheckable="True" IsChecked="{Binding LayerContent.IsVisible, Mode=TwoWay}" Header="Enabled" IsEnabled="{Binding LayerContent.CanChangeVisibility}" Style="{StaticResource HideMenuItemWhenDisabled}" />
-                                <MenuItem Command="{Binding ZoomToCommand}" Header="Zoom to" Style="{StaticResource HideMenuItemWhenDisabled}" />
-                                <MenuItem Command="{Binding ReloadCommand}" Header="Reload" Style="{StaticResource HideMenuItemWhenDisabled}" />
-                            </ContextMenu>
-                        </Grid.ContextMenu>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />

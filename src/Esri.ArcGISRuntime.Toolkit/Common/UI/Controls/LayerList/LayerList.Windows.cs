@@ -62,6 +62,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return;
             }
+#if !NETFX_CORE
+            ContextMenuService.AddContextMenuOpeningHandler(list, ContextMenuEventHandler);
+#endif
 
             if ((GeoView as MapView)?.Map == null && (GeoView as SceneView)?.Scene == null)
             {
@@ -216,6 +219,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty LayerItemTemplateProperty =
             DependencyProperty.Register(nameof(LayerItemTemplate), typeof(DataTemplate), typeof(LayerList), new PropertyMetadata(null));
+
+#if !NETFX_CORE
+
+        private void ContextMenuEventHandler(object sender, ContextMenuEventArgs e)
+        {
+            (sender as FrameworkElement).ContextMenu = null;
+            var vm = (e.OriginalSource as FrameworkElement)?.DataContext as LayerContentViewModel;
+            if (vm != null && vm.LayerContent != null)
+            {
+                if (LayerContentContextMenuOpening != null)
+                {
+                    var args = new LayerContentContextMenuEventArgs(sender, e)
+                    {
+                        MenuItems = new System.Collections.Generic.List<MenuItem>(),
+                        LayerContent = vm.LayerContent
+                    };
+                    args.Menu = new ContextMenu() { ItemsSource = args.MenuItems };
+                    LayerContentContextMenuOpening?.Invoke(this, args);
+                    e.Handled = args.Handled;
+                    if (args.MenuItems.Count > 0)
+                    {
+                        (sender as FrameworkElement).ContextMenu = args.Menu;
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Event fired by the <see cref="LayerList"/> when right-clicking an item
+        /// </summary>
+        public event System.EventHandler<LayerContentContextMenuEventArgs> LayerContentContextMenuOpening;
+#endif
     }
 }
 #endif
