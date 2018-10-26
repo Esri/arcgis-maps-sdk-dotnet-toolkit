@@ -155,7 +155,7 @@
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit\XamarinForms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
+    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
       <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
     </ProjectReference>

@@ -18,6 +18,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Toolkit.Samples.Forms.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>D5B3EB224010A62C834F4B99AD011B9EF9460C96</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -155,7 +156,7 @@
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit\XamarinForms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
+    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
       <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
     </ProjectReference>
