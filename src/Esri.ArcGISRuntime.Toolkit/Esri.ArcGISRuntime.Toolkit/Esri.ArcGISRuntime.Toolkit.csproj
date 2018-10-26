@@ -70,13 +70,6 @@
       <Version>1.0.2</Version>
     </PackageReference>
   </ItemGroup>
-  
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)build\Android\Esri.ArcGISRuntime.Toolkit.targets">
-      <Pack>true</Pack>
-      <PackagePath>build\$(AndroidTargetFramework)\</PackagePath>
-    </None>
-  </ItemGroup>
 
   <ItemGroup>
     <_ResxFiles Remove="**\*.resx" />
