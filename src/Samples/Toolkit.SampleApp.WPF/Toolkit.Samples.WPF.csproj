@@ -87,6 +87,9 @@
     <Compile Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml.cs">
       <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\ToC\TableOfContentsSample.xaml.cs">
+      <DependentUpon>TableOfContentsSample.xaml</DependentUpon>
+    </Compile>
     <Page Include="Samples\Compass\SceneViewCompassSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -142,6 +145,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Samples\ToC\TableOfContentsSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -176,7 +183,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit.Preview\Common\Esri.ArcGISRuntime.Toolkit.Preview.csproj">
+      <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
+      <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj">
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>

@@ -38,9 +38,9 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 |MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |
 |PopupViewer | ✔ | ✔ | ✔ | ✔ | ✔ |
 |ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|SignInForm   |   | ✔ |   |   |   |
+|SignInForm   |   | Preview |   |   |   |
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|TableOfContents   | N/A | [Branch](https://github.com/Esri/arcgis-toolkit-dotnet/tree/TableOfContents) | N/A  | N/A | N/A |
+|TableOfContents   | N/A | Preview | N/A  | N/A | N/A |
 |TimeSlider   | ✔ | ✔ | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201) |
 
 ## Instructions for Building

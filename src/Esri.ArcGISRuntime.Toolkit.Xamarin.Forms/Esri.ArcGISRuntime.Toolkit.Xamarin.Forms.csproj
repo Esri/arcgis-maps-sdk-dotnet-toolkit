@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
+    <Authors>ESRI Inc.</Authors>
+    <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.Forms apps</Title>
+    <Description>ArcGIS Runtime controls and utilities for Xamarin.Forms apps.</Description>
+    <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D iOS Android UWP Xamarin.Forms Xamarin Mobile toolkit</PackageTags>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</RootNamespace>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+	<!-- Work around MSBuild bug when building from commandline: https://github.com/Microsoft/msbuild/issues/2274 -->
+    <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+    <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
+    <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Esri.ArcGISRuntime.Toolkit\Common\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.4.0" />
+    <PackageReference Include="Xamarin.Forms" Version="3.1.0.637273" />
+    <PackageReference Include="StyleCop.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <Version>1.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <ProjectReference Include="..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj" />
+  </ItemGroup>
+  
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+
+  <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
+  <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
+    <ItemGroup>
+      <PackagingOutputs Remove="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\Esri.ArcGISRuntime.Toolkit\Common'))\**\*.*" />
+      <PackagingOutputs Remove="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\Esri.ArcGISRuntime.Toolkit\UWP'))\**\*.*" />
+    </ItemGroup>
+  </Target>
+  
+</Project>
+
+
