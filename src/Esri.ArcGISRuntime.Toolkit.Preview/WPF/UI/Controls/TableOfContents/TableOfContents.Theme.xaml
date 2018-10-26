@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls">
 
     <Style TargetType="{x:Type controls:TableOfContents}">
@@ -62,44 +62,45 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                      <toolkit:SymbolDisplay Symbol="{Binding Symbol, Mode=OneTime}" Margin="0,0,5,0" MaxHeight="40" MaxWidth="40">
-                          <toolkit:SymbolDisplay.Style>
-                                <Style TargetType="toolkit:SymbolDisplay">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Symbol, Mode=OneTime}" Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </toolkit:SymbolDisplay.Style>
-                        </toolkit:SymbolDisplay>
+                      <esri:SymbolDisplay Symbol="{Binding Symbol, Mode=OneTime}" Margin="0,0,5,0" MaxHeight="40" MaxWidth="40">
+                        <esri:SymbolDisplay.Style>
+                          <Style TargetType="esri:SymbolDisplay">
+                            <Style.Triggers>
+                              <DataTrigger Binding="{Binding Symbol, Mode=OneTime}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                              </DataTrigger>
+                            </Style.Triggers>
+                          </Style>
+                        </esri:SymbolDisplay.Style>
+                        </esri:SymbolDisplay>
                         <CheckBox Grid.Column="1" IsChecked="{Binding LayerContent.IsVisible, Mode=TwoWay}">
-                            <CheckBox.Style>
-                                <Style TargetType="CheckBox">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding LayerContent.CanChangeVisibility, Mode=OneTime}" Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </CheckBox.Style>
+                          <CheckBox.Style>
+                            <Style TargetType="CheckBox">
+                              <Style.Triggers>
+                                <DataTrigger Binding="{Binding LayerContent.CanChangeVisibility, Mode=OneTime}" Value="False">
+                                  <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                              </Style.Triggers>
+                            </Style>
+                          </CheckBox.Style>
                         </CheckBox>
 
                         <TextBlock Text="{Binding LayerContent.Name, Mode=OneWay}" Grid.Column="2" VerticalAlignment="Center">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasError}" Value="True">
-                                            <Setter Property="Foreground" Value="Red" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsActive}" Value="False">
-                                            <Setter Property="Opacity" Value=".5" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
+                          <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                              <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasError}" Value="True">
+                                  <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                  <Setter Property="Opacity" Value=".5" />
+                                </DataTrigger>
+                              </Style.Triggers>
+                            </Style>
+                          </TextBlock.Style>
                         </TextBlock>
-                    </Grid>
+
+                      </Grid>
                 </HierarchicalDataTemplate>
             </Setter.Value>
         </Setter>
@@ -107,7 +108,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:TableOfContents}">
                     <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                        <TreeView x:Name="List" ItemTemplate="{TemplateBinding LayerItemTemplate}" Margin="{TemplateBinding Padding}" BorderThickness="0" Padding="0" />
+                        <TreeView x:Name="List" ItemTemplate="{TemplateBinding LayerItemTemplate}" Margin="{TemplateBinding Padding}" BorderThickness="0" Padding="0" Background="Transparent" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
