@@ -88,8 +88,7 @@
  
   <ItemGroup>
     <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-      <Private>false</Private>
-      <PrivateAssets>analyzers;contentFiles</PrivateAssets>
+	    <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
 
