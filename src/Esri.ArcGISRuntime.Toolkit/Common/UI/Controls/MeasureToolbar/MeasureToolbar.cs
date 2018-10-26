@@ -711,28 +711,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the color used for highlighting the feature or graphic whose geometry is measured for distance or area.
-        /// </summary>
-        public Color SelectionColor
-        {
-            get { return (Color)GetValue(SelectionColorProperty); }
-            set { SetValue(SelectionColorProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionColor"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SelectionColorProperty =
-            DependencyProperty.Register(nameof(SelectionColor), typeof(Color), typeof(MeasureToolbar), new PropertyMetadata(Color.Cyan, OnSelectionColorPropertyChanged));
-
-        private static void OnSelectionColorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var newColor = (Color)e.NewValue;
-            toolbar._measureFeatureResultOverlay.SelectionColor = newColor;
-        }
-
-        /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.LinearUnit"/> used to configure display for distance measurements.
         /// </summary>
         public IList<LinearUnit> LinearUnits
