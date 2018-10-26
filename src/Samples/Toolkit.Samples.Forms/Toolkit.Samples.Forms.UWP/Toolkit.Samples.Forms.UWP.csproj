@@ -152,7 +152,7 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.1.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj">
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>

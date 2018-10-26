@@ -187,7 +187,7 @@
       <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj">
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>

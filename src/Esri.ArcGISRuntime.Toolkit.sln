@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.Android", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.iOS", "Samples\Toolkit.SampleApp.iOS\Toolkit.Samples.iOS.csproj", "{EA9694F8-A3C7-4F34-B4F0-BF17A231BF7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit", "Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj", "{332171E3-4D72-4148-9DDF-341CAFB61CA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit", "Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj", "{332171E3-4D72-4148-9DDF-341CAFB61CA3}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Android", "Esri.ArcGISRuntime.Toolkit\Android\Esri.ArcGISRuntime.Toolkit.Android.shproj", "{C8657C80-A1AB-4D77-9F75-D923AB430CFB}"
 EndProject

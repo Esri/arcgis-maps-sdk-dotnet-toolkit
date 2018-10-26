@@ -80,7 +80,7 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+    <ProjectReference Include="..\..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj">
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
@@ -94,5 +94,4 @@
     <AndroidAsset Include="Assets\info.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-  <Import Project="$(MSBuildThisFileDirectory)..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\build\android\Esri.ArcGISRuntime.Toolkit.targets" Condition="Exists('$(MSBuildThisFileDirectory)..\..\Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit\build\android\Esri.ArcGISRuntime.Toolkit.targets')" />
 </Project>
