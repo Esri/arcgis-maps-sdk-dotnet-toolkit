@@ -9,9 +9,9 @@
     <RootNamespace>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</RootNamespace>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-	<!-- Work around MSBuild bug when building from commandline: https://github.com/Microsoft/msbuild/issues/2274 -->
+    <!-- Work around MSBuild bug when building from commandline: https://github.com/Microsoft/msbuild/issues/2274 -->
     <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
-	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
