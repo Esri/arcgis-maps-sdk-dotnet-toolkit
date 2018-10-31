@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework)</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit</Title>
-    <Description>ArcGIS Runtime controls and utilities for WPF, Universal Windows, iOS and Android apps.</Description>
-    <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D iOS Android UWP Xamarin WPF toolkit</PackageTags>
+    <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP), Windows Presentation Foundation (WPF), Xamarin.Android, and Xamarin.iOS apps.</Description>
+    <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
     <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
     <Configurations>Debug;Release</Configurations>
