@@ -6,14 +6,7 @@ You can use the Toolkit in your projects by:
 1. Building the source code available in this repo (see instructions below)
 2. Installing the latest stable release or pre-release from NuGet
     - Stable: [![NuGet](https://img.shields.io/nuget/v/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
-    - Pre-release: [![NuGet](https://img.shields.io/nuget/vpre/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)   
-
-Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x and 10.2.x
-
-- [100.x (current version)](https://developers.arcgis.com/net/latest/)
-- [10.2.x (previous version)](https://developers.arcgis.com/net/10-2/)
-
-**The Toolkit for v100.x is currently in Beta: [Get the latest!](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)**
+    - Absolute latest: [![NuGet](https://img.shields.io/nuget/vpre/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)   
 
 ## Features
 
@@ -21,11 +14,15 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
 - FeatureDataField: Displays and optionally allows editing of a single field attribute of a feature.
 - Legend: Displays a legend for a single layer in your map (and optionally for its sub layers).
 - MeasureToolbar: Allows measurement of distances and areas on the map view.
-- ScaleLine: Displays current scale reference.
-- SignInForm: Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources.
-- ChallengeHandler: Displays SignInForm when accessing secure ArcGIS resources, as well as helper classes for storing credentials in Windows' credentials cache. 
+- PopupViewer: Display details and media, edit attributes, geometry and related records, and manage the attachments of features and graphics (popups are defined in the popup property of features and graphics).
+- ScaleLine: Displays current scale reference. 
 - SymbolDisplay: Renders a symbol in a control.
 - TimeSlider: Allows interactively defining a temporal range (i.e. time extent) and animating time moving forward or backward.  Can be used to manipulate the time extent in a MapView or SceneView. 
+
+### Features in Preview
+
+- ChallengeHandler: Displays SignInForm when accessing secure ArcGIS resources, as well as helper classes for storing credentials in Windows' credentials cache.
+- SignInForm: Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources.
 
 ## Feature availability by platform/API
 
@@ -50,9 +47,9 @@ Two concurrent and supported versions of ArcGIS Runtime SDK are available: 100.x
         - `Universal Windows Platform development` (UWP)
         - `.NET desktop development` (WPF)
         - `Mobile development with .NET` (Xamarin.Android, Xamarin.iOS, and Xamarin.Forms)
-        - '.NET Core 2.0 SDK'
+        - `.NET Core cross-platform development`
 2. Confirm your system meets the requirements for developing with ArcGIS Runtime SDK for .NET:
-   - [WPF](http://developers.arcgis.com/net/desktop/guide/system-requirements.htm)
+   - [WPF](https://developers.arcgis.com/net/latest/wpf/guide/system-requirements.htm)
    - [UWP](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
    - [Xamarin.Android](https://developers.arcgis.com/net/latest/android/guide/system-requirements.htm)
    - [Xamarin.iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
