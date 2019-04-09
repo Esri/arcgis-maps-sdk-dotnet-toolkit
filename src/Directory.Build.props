@@ -6,7 +6,7 @@
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
-    <PackageReleaseNotes>v100.4: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.4.0</PackageReleaseNotes>
+    <PackageReleaseNotes>v100.5: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.5.0</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -27,8 +27,8 @@
     <UWPTargetPlatformMinVersion>10.0.16299.0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-      <DotNetTargetFramework>net461</DotNetTargetFramework>
-      <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+    <DotNetTargetFramework>net461</DotNetTargetFramework>
+    <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
   
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
@@ -45,7 +45,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="MSBuild.Sdk.Extras" Version="1.5.4" PrivateAssets="all" />
+        <PackageReference Include="MSBuild.Sdk.Extras" Version="2.0.24" PrivateAssets="all" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
       </ItemGroup>
       <ItemGroup>
@@ -59,7 +59,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.138" PrivateAssets="all" />
   </ItemGroup>
   
    <!-- https://github.com/NuGet/Home/issues/4337 -->
