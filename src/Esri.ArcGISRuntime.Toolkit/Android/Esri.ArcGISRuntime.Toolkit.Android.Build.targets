@@ -8,43 +8,43 @@
       <Code Type="Fragment" Language="cs">
         try
         {
-        var publicResourceClassDecl = "public";
-        var internalResourceClassDecl = "[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]\npublic";
-
-        // Check whether the auto-generated Resource.Designer.cs file exists
-        if (File.Exists(ResourceFilePath))
-        {
-        Log.LogMessage("Found auto-generated resource file: " + ResourceFilePath, MessageImportance.Low);
-
-        // Read the file
-        var resourceClassDef = File.ReadAllText(ResourceFilePath);
-        if (resourceClassDef.Contains(publicResourceClassDecl))
-        {
-        // Make the Resource class internal
-        resourceClassDef = resourceClassDef.Replace(publicResourceClassDecl, internalResourceClassDecl);
-        File.WriteAllText(ResourceFilePath, resourceClassDef);
-        Log.LogMessage("Updated auto-generated resource file to make Resource class internal", MessageImportance.Low);
-        }
-        else if (resourceClassDef.Contains(internalResourceClassDecl))
-        {
-        Log.LogMessage("Auto-generated Resource class is already updated", MessageImportance.Low);
-        }
-        else
-        {
-        Log.LogError("Resource class declaration not found in auto-generated file " + ResourceFilePath);
-        return false;
-        }
-        }
-        else
-        {
-        Log.LogError("Auto-generated file not found at path " + ResourceFilePath);
-        return false;
-        }
+            var publicResourceClassDecl = "public";
+            var internalResourceClassDecl = "[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]\npublic";
+            
+            // Check whether the auto-generated Resource.Designer.cs file exists
+            if (File.Exists(ResourceFilePath))
+            {
+                Log.LogMessage("Found auto-generated resource file: " + ResourceFilePath, MessageImportance.Low);
+                
+                // Read the file
+                var resourceClassDef = File.ReadAllText(ResourceFilePath);
+                if (resourceClassDef.Contains(internalResourceClassDecl))
+                {
+                    Log.LogMessage("Auto-generated Resource class is already updated", MessageImportance.Low);
+                }
+                else if (resourceClassDef.Contains(publicResourceClassDecl))
+                {
+                    // Make the Resource class internal
+                    resourceClassDef = resourceClassDef.Replace(publicResourceClassDecl, internalResourceClassDecl);
+                    File.WriteAllText(ResourceFilePath, resourceClassDef);
+                    Log.LogMessage("Updated auto-generated resource file to make Resource class internal", MessageImportance.Low);
+                }
+                else
+                {
+                    Log.LogError("Resource class declaration not found in auto-generated file " + ResourceFilePath);
+                    return false;
+                }
+            }
+            else
+            {
+                Log.LogError("Auto-generated file not found at path " + ResourceFilePath);
+                return false;
+            }
         }
         catch (Exception ex)
         {
-        Log.LogError("Error occured: " + ex.Message + "\n" + ex.StackTrace);
-        return false;
+            Log.LogError("Error occured: " + ex.Message + "\n" + ex.StackTrace);
+            return false;
         }
       </Code>
     </Task>
