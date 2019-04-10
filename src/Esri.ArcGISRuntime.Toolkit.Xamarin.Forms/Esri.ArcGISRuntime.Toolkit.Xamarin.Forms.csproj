@@ -27,25 +27,8 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-    <!--<PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.5.0" />-->
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <!--<PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.5.0" />-->
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <!--<PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.5.0" />-->
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <!--<PackageReference Include="Esri.ArcGISRuntime" Version="100.5.0" />-->
-  </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime" Version="100.5.0" IncludeAssets="all" PrivateAssets="none" />
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.5.0" IncludeAssets="all" PrivateAssets="none" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.5.0" />
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
     <PackageReference Include="StyleCop.Analyzers">
       <PrivateAssets>all</PrivateAssets>

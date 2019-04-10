@@ -31,16 +31,16 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.2" />
-	  <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.5.0" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.5.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.5.0" />
     <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
-     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.5.0">
+    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="100.5.0">
       <ExcludeAssets>contentFiles;build</ExcludeAssets>
       <IncludeAssets>compile</IncludeAssets>
       <PrivateAssets></PrivateAssets>
@@ -50,14 +50,14 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
      <PackageReference Include="Esri.ArcGISRuntime" Version="100.5.0" />
   </ItemGroup>
-   
-  <ItemGroup> 
+
+  <ItemGroup>
      <PackageReference Include="StyleCop.Analyzers">
-	    <PrivateAssets>all</PrivateAssets>
+      <PrivateAssets>all</PrivateAssets>
       <Version>1.0.2</Version>
     </PackageReference>
   </ItemGroup>
@@ -67,21 +67,21 @@
     <None Remove="**\*.axml" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-  	<Compile Remove="LocalizedStrings\Resources.Designer.cs" />
+    <Compile Remove="LocalizedStrings\Resources.Designer.cs" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)' != '$(UWPTargetFramework)'">
     <EmbeddedResource Update="LocalizedStrings\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-	  <Compile Update="LocalizedStrings\Resources.Designer.cs">
+    <Compile Update="LocalizedStrings\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
- 
+
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>

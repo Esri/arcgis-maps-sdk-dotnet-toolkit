@@ -8,7 +8,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
     <PackageReleaseNotes>v100.5: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.5.0</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
-	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Copyright>Copyright © 2014-2019 Esri.</Copyright>
@@ -21,7 +21,7 @@
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
     <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true'">false</IsToolkitLibrary>
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
-    
+
     <!--Framework versions-->
     <UWPTargetPlatformVersion>10.0.16299.0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.16299.0</UWPTargetPlatformMinVersion>
@@ -29,7 +29,7 @@
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
-  
+
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
@@ -60,7 +60,7 @@
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.138" PrivateAssets="all" />
   </ItemGroup>
-  
+
    <!-- https://github.com/NuGet/Home/issues/4337 -->
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' == 'true' ">
     <Import Project="$(UserProfile)\.nuget\packages\nerdbank.gitversioning\$(NerdbankGitVersioningVersion)\buildCrossTargeting\Nerdbank.GitVersioning.targets"
@@ -70,8 +70,8 @@
           BeforeTargets="_GenerateRestoreProjectSpec"
           DependsOnTargets="GetBuildVersion"
           Condition=" '$(NerdbankGitVersioningTasksPath)' != '' " />
-          
-          
+
+
     <!--
     // This task disable doc warnings in the auto-generated XamlTypeInfo.g.cs file,
     // and also hides the public class from intellisense.
