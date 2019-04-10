@@ -28,11 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="LayerLegend"/> class
         /// </summary>
         public LayerLegend()
-            : this(new Esri.ArcGISRuntime.UI.Controls.LayerLegend())
+            : this(new Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend())
         {
         }
 
-        internal LayerLegend(Esri.ArcGISRuntime.UI.Controls.LayerLegend nativeLayerLegend)
+        internal LayerLegend(Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend nativeLayerLegend)
         {
             NativeLayerLegend = nativeLayerLegend;
 
@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
         }
 
-        internal Esri.ArcGISRuntime.UI.Controls.LayerLegend NativeLayerLegend { get; }
+        internal Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend NativeLayerLegend { get; }
 
         /// <summary>
         /// Identifies the <see cref="LayerContent"/> bindable property.

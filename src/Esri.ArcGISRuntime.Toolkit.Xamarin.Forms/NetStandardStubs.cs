@@ -33,7 +33,7 @@ using Esri.ArcGISRuntime.Xamarin.Forms;
 
 // This file contains a collection of stubs solely used for the .NET Standard build
 // This is a little simpler than excluding all references to these classes
-namespace Esri.ArcGISRuntime.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class PopupViewer
     {
@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.UI.Controls
     }
 }
 
-namespace Esri.ArcGISRuntime.Xamarin.Forms
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class TimeSliderRenderer
     {

@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 oldElement.PropertyChanged -= OnElementPropertyChanged;
             }
 
-            if (newElement == null)
+            if (newElement != null)
             {
                 newElement.PropertyChanged += OnElementPropertyChanged;
 

@@ -18,6 +18,8 @@
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
 using System.ComponentModel;
+using Windows.Foundation;
+using Windows.UI.Xaml;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
 
@@ -28,17 +30,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public TimeSliderRenderer()
         {
             Init();
-            Element.SizeChanged += OnElementSizeChanged;
+            SizeChanged += OnElementSizeChanged;
         }
 
-        private void OnElementSizeChanged(object sender, EventArgs e)
+        private void OnElementSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //throw new NotImplementedException();
+            
+        }
         }
 
         SizeRequest IVisualElementRenderer.GetDesiredSize(double widthConstraint, double heightConstraint)
         {
-            return new SizeRequest(new Size(DesiredSize.Width, DesiredSize.Height));
+            return new SizeRequest(new global::Xamarin.Forms.Size(DesiredSize.Width, DesiredSize.Height));
         }
 
         Windows.UI.Xaml.FrameworkElement IVisualElementRenderer.ContainerElement => this;

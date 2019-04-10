@@ -28,11 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class
         /// </summary>
         public SymbolDisplay()
-            : this(new Esri.ArcGISRuntime.UI.Controls.SymbolDisplay())
+            : this(new Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay())
         {
         }
 
-        internal SymbolDisplay(Esri.ArcGISRuntime.UI.Controls.SymbolDisplay nativeSymbolDisplay)
+        internal SymbolDisplay(Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay nativeSymbolDisplay)
         {
             NativeSymbolDisplay = nativeSymbolDisplay;
 
@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
         }
 
-        internal Esri.ArcGISRuntime.UI.Controls.SymbolDisplay NativeSymbolDisplay { get; }
+        internal Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay NativeSymbolDisplay { get; }
 
         /// <summary>
         /// Identifies the <see cref="Symbol"/> bindable property.
