@@ -80,6 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
                 CurrentExtent = Element.CurrentExtent;
                 FullExtent = Element.FullExtent;
+                TimeStepInterval = Element.TimeStepInterval;
             }
         }
 
@@ -89,10 +90,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 case nameof(TimeSlider.CurrentExtent): CurrentExtent = Element.CurrentExtent; break;
                 case nameof(TimeSlider.FullExtent): FullExtent = Element.FullExtent; break;
+                case nameof(TimeSlider.TimeStepInterval): TimeStepInterval = Element.TimeStepInterval; break;
                 default: break;
             }
 
-            // TODO: More
+            // TODO: Handle more properties
         }
 
         void IDisposable.Dispose()
