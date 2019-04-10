@@ -245,6 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
+
         /// <summary>
         /// Event fired by the <see cref="LayerList"/> when right-clicking an item
         /// </summary>

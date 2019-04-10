@@ -56,6 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
             // Use reflection until this moves into the main package
             var prop = typeof(LayerList).GetProperty("ShowLegendInternal", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             prop.SetValue(d, e.NewValue);
+
             // ((TableOfContents)d).ShowLegendInternal = (bool)e.NewValue;
         }
     }

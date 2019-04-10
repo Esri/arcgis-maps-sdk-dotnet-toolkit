@@ -22,7 +22,6 @@ using System.Text;
 
 namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
-
     /// <summary>
     /// A helper class for stoting credentials in the cache
     /// </summary>
