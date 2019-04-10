@@ -21,12 +21,14 @@ using System.Drawing;
 using System.Text;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Xamarin.Forms;
 
 [assembly: System.Runtime.CompilerServices.ReferenceAssembly]
 
 // Ignore code-analyzer warnings to simplify the use of this class
 #pragma warning disable SA1649
 #pragma warning disable SA1402
+#pragma warning disable SA1403
 #pragma warning disable SA1516
 
 // This file contains a collection of stubs solely used for the .NET Standard build
@@ -65,14 +67,35 @@ namespace Esri.ArcGISRuntime.UI.Controls
         internal void SetForeground(Color color) => throw new NotImplementedException();
     }
 
+    internal class TimeSlider
+    {
+    }
+
     internal class SymbolDisplay
     {
         public Symbol Symbol { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
 
+namespace Esri.ArcGISRuntime.Xamarin.Forms
+{
+    internal class TimeSliderRenderer
+    {
+        public void InitializeTimeSteps(int count) => throw new NotImplementedException();
+
+        public bool StepForward(int timeSteps = 1) => throw new NotImplementedException();
+
+        public bool StepBack(int timeSteps = 1) => throw new NotImplementedException();
+
+        public System.Threading.Tasks.Task InitializeTimePropertiesAsync(GeoView geoView) => throw new NotImplementedException();
+
+        public System.Threading.Tasks.Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer) => throw new NotImplementedException();
+    }
+}
+
 #pragma warning restore SA1516
 #pragma warning restore SA1402
+#pragma warning restore SA1403
 #pragma warning restore SA1649
 
 #endif

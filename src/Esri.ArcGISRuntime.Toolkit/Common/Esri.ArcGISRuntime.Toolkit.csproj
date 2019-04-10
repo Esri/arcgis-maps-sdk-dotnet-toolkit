@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>$(DotNetTargetFramework);$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);netstandard2.0</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit</Title>
     <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP), Windows Presentation Foundation (WPF), Xamarin.Android, and Xamarin.iOS apps.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
@@ -62,10 +62,19 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Compile Remove="**\*.cs" />
+    <Compile Include="UI\Controls\TimeSlider\LoopMode.cs" />
+    <Compile Include="UI\Controls\TimeSlider\PlaybackDirection.cs" />
+    <Compile Include="UI\Controls\TimeSlider\TimeExtentChangedEventArgs.cs" />
+    <Compile Include="UI\Controls\TimeSlider\TimeSliderLabelMode.cs" />
+  </ItemGroup>
+  
   <ItemGroup>
     <_ResxFiles Remove="**\*.resx" />
     <None Remove="**\*.axml" />
   </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <Compile Remove="LocalizedStrings\Resources.Designer.cs" />
   </ItemGroup>
