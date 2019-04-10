@@ -21,25 +21,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties
     internal static class Resources
     {
 #if NETFX_CORE
-        private static readonly Windows.ApplicationModel.Resources.ResourceLoader s_resource = Windows.ApplicationModel.Resources.ResourceLoader.GetForViewIndependentUse("Esri.ArcGISRuntime.Toolkit/Resources");
+        private static readonly Windows.ApplicationModel.Resources.ResourceLoader _resource = Windows.ApplicationModel.Resources.ResourceLoader.GetForViewIndependentUse("Esri.ArcGISRuntime.Toolkit/Resources");
 
         public static string GetString(string name)
         {
-            return s_resource.GetString(name);
+            return _resource.GetString(name);
         }
 #else
-        private static ResourceManager s_resourceManager;
+        private static ResourceManager _resourceManager;
 
         private static ResourceManager ResourceManager
         {
             get
             {
-                if (s_resourceManager == null)
+                if (_resourceManager == null)
                 {
-                    s_resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.LocalizedStrings.Resources", typeof(Resources).Assembly);
+                    _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.LocalizedStrings.Resources", typeof(Resources).Assembly);
                 }
 
-                return s_resourceManager;
+                return _resourceManager;
             }
         }
 
