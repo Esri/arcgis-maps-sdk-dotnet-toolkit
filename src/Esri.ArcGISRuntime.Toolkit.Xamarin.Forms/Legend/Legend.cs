@@ -31,11 +31,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="Legend"/> class
         /// </summary>
         public Legend()
-            : this(new UI.Controls.Legend())
+            : this(new Esri.ArcGISRuntime.UI.Controls.Legend())
         {
         }
 
-        internal Legend(UI.Controls.Legend nativeLegend)
+        internal Legend(Esri.ArcGISRuntime.UI.Controls.Legend nativeLegend)
         {
             NativeLegend = nativeLegend;
 
@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
         }
 
-        internal UI.Controls.Legend NativeLegend { get; }
+        internal Esri.ArcGISRuntime.UI.Controls.Legend NativeLegend { get; }
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> bindable property.

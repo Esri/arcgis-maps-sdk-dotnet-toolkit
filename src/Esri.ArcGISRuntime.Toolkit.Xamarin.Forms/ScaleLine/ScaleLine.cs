@@ -33,11 +33,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="ScaleLine"/> class
         /// </summary>
         public ScaleLine()
-            : this(new UI.Controls.ScaleLine())
+            : this(new Esri.ArcGISRuntime.UI.Controls.ScaleLine())
         {
         }
 
-        internal ScaleLine(UI.Controls.ScaleLine nativeScaleLine)
+        internal ScaleLine(Esri.ArcGISRuntime.UI.Controls.ScaleLine nativeScaleLine)
         {
             NativeScaleLine = nativeScaleLine;
 
@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
         }
 
-        internal UI.Controls.ScaleLine NativeScaleLine { get; }
+        internal Esri.ArcGISRuntime.UI.Controls.ScaleLine NativeScaleLine { get; }
 
         /// <summary>
         /// Identifies the <see cref="TargetWidth"/> bindable property.

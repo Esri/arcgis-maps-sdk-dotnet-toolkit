@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// </summary>
     public class Compass : View
     {
-        internal UI.Controls.Compass NativeCompass { get; }
+        internal Esri.ArcGISRuntime.UI.Controls.Compass NativeCompass { get; }
 
         private bool _headingSetByGeoView;
 
@@ -34,11 +34,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="Compass"/> class
         /// </summary>
         public Compass()
-            : this(new UI.Controls.Compass())
+            : this(new Esri.ArcGISRuntime.UI.Controls.Compass())
         {
         }
 
-        internal Compass(UI.Controls.Compass nativeCompass)
+        internal Compass(Esri.ArcGISRuntime.UI.Controls.Compass nativeCompass)
         {
             NativeCompass = nativeCompass;
 

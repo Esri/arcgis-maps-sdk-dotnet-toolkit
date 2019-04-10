@@ -31,11 +31,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="PopupViewer"/> class
         /// </summary>
         public PopupViewer()
-            : this(new UI.Controls.PopupViewer())
+            : this(new Esri.ArcGISRuntime.UI.Controls.PopupViewer())
         {
         }
 
-        internal PopupViewer(UI.Controls.PopupViewer nativePopupViewer)
+        internal PopupViewer(Esri.ArcGISRuntime.UI.Controls.PopupViewer nativePopupViewer)
         {
             NativePopupViewer = nativePopupViewer;
 
@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
         }
 
-        internal UI.Controls.PopupViewer NativePopupViewer { get; }
+        internal Esri.ArcGISRuntime.UI.Controls.PopupViewer NativePopupViewer { get; }
 
         /// <summary>
         /// Identifies the <see cref="PopupManager"/> bindable property.
