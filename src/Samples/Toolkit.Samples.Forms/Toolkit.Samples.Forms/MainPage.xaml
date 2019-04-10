@@ -27,6 +27,11 @@
                             HorizontalOptions="StartAndExpand" 
                             VerticalOptions="EndAndExpand"
                             IsVisible="False"/>
+
+        <esriTK:TimeSlider x:Name="timeSlider"
+                           HorizontalOptions="Fill" 
+                            VerticalOptions="End"
+                           />
     </Grid>
     
 </ContentPage>

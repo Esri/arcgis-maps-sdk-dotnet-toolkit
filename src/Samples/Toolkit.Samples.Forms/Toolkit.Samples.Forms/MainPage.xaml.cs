@@ -25,7 +25,8 @@ namespace Toolkit.Samples.Forms
             {
                 return await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, "user1", "user1");
             });
-
+            timeSlider.FullExtent = new Esri.ArcGISRuntime.TimeExtent(DateTimeOffset.Now.AddYears(-1), DateTimeOffset.Now);
+            timeSlider.CurrentExtent = new Esri.ArcGISRuntime.TimeExtent(DateTimeOffset.Now.AddMonths(-1), DateTimeOffset.Now);
             mapView.GeoViewTapped += mapView_GeoViewTapped;
         }
 
