@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
 
   <PropertyGroup>
     <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework)</TargetFrameworks>
@@ -24,23 +24,13 @@
   <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
-   <DefineConstants>$(DefineConstants);NETFRAMEWORK</DefineConstants>
-  </PropertyGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.4" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-  </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
     <Reference Include="System.Security" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
     
   <ItemGroup> 
@@ -85,8 +75,6 @@
   <Import Project="$(MSBuildThisFileDirectory)..\iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
-
-  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
