@@ -8,10 +8,10 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
     <PackageReleaseNotes>v100.5: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.5.0</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
-	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	  <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <Copyright>Copyright © 2014-2018 Esri.</Copyright>
+    <Copyright>Copyright © 2014-2019 Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
     <LangVersion>7.2</LangVersion>
@@ -43,9 +43,8 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-	</PropertyGroup>
+      </PropertyGroup>
       <ItemGroup>
-        <PackageReference Include="MSBuild.Sdk.Extras" Version="2.0.24" PrivateAssets="all" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
       </ItemGroup>
       <ItemGroup>
