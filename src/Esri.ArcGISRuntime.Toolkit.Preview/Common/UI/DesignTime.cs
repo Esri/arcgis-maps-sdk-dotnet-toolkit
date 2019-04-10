@@ -21,37 +21,37 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
 {
     internal static partial class DesignTime
     {
-        private static bool? s_isInDesignMode;
+        private static bool? _isInDesignMode;
 
         internal static bool IsDesignMode
         {
             get
             {
-                if (!s_isInDesignMode.HasValue)
+                if (!_isInDesignMode.HasValue)
                 {
 #if NETFX_CORE
-                    s_isInDesignMode = Windows.ApplicationModel.DesignMode.DesignModeEnabled;
+                    _isInDesignMode = Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #elif !XAMARIN
                     var prop = DesignerProperties.IsInDesignModeProperty;
-                    s_isInDesignMode
+                    _isInDesignMode
                         = (bool)DependencyPropertyDescriptor
                         .FromProperty(prop, typeof(FrameworkElement))
                         .Metadata.DefaultValue;
 #elif __ANDROID__
                     // Assume we're in design-time if there is no application context
-                    s_isInDesignMode = Android.App.Application.Context == null;
+                    _isInDesignMode = Android.App.Application.Context == null;
 #else
-                    s_isInDesignMode = false;
+                    _isInDesignMode = false;
 #endif
                 }
 
-                return s_isInDesignMode.Value;
+                return _isInDesignMode.Value;
             }
 
 #if __IOS__
             set
             {
-                s_isInDesignMode = value;
+                _isInDesignMode = value;
             }
 #endif
         }
