@@ -59,8 +59,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             NativeSlider = nativeSlider;
 
 #if XAMARIN
+            // On Xamarin platforms, listen to the native time slider's PropertyChanged event to synchronize changes
+            // between the native slider and the Xamarin Forms wrapper
             NativeSlider.PropertyChanged += NativeSlider_PropertyChanged;
 #elif NETFX_CORE
+            // On UWP, use a binding proxy to listen for property changes in the native time slider.  This is needed
+            // because the UWP time slider relies on DependencyProperties to surface property changes and does not implement
+            // INotifyPropertyChanged.
             _bindingProxy.PropertyChanged += NativeSlider_PropertyChanged;
             SetProxyBinding(nameof(CurrentExtent), TimeSliderBindingProxy.CurrentExtentProperty);
             SetProxyBinding(nameof(FullExtent), TimeSliderBindingProxy.FullExtentProperty);
@@ -116,14 +121,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             OnCurrentExtentChanged(e);
         }
 
+        // Handles property changes coming from the native time slider
         private void NativeSlider_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine($"TimeSlider property changed: {e.PropertyName}");
-            // TODO implement INotifyPropertyChanged for Xamarin platforms to allow binding updates of:
-            // TimeSteps
-
+            // Check whether the property change originated from the Xamarin Forms wrapper
             if (_propertyChangedByFormsSlider)
             {
+                // This change started with the Xamarin Forms implementation, so the Xamarin Forms wrapper is already synced
                 return;
             }
 
@@ -996,6 +1000,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
 #endregion
 
+#region Playback Methods
+
+        /// <summary>
+        /// Moves the slider position forward by the specified number of time steps.
+        /// </summary>
+        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested</returns>
+        /// <param name="timeSteps">The number of steps to advance the slider's position</param>
+        /// <remarks>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
+        /// time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
+        /// extent could not be moved by the specified number of time steps without going beyond the end of the time slider's full extent.
+        /// If the current time extent is a time instant and either the start or end time are pinned, then the method call will attempt to
+        /// move the unpinned end of the time extent.  In that case, the method will return false if the unpinned end could not be moved by
+        /// the specified number of steps without going beyond the end of the full extent or the pinned end of the current extent.  In all
+        /// cases, when the method returns false, the time slider's current extent will be unchanged.</remarks>
+        public bool StepForward(int timeSteps = 1) => NativeSlider.StepForward(timeSteps);
+
+        /// <summary>
+        /// Moves the slider position back by the specified number of time steps.
+        /// </summary>
+        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested</returns>
+        /// <param name="timeSteps">The number of steps to advance the slider's position</param>
+        /// <remarks>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
+        /// time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
+        /// extent could not be moved by the specified number of time steps without going beyond the start of the time slider's full extent.
+        /// If the current time extent is a time instant and either the start or end time are pinned, then the method call will attempt to
+        /// move the unpinned end of the time extent.  In that case, the method will return false if the unpinned end could not be moved by
+        /// the specified number of steps without going beyond the start of the full extent or the pinned end of the current extent.  In all
+        /// cases, when the method returns false, the time slider's current extent will be unchanged.</remarks>
+        public bool StepBack(int timeSteps = 1) => NativeSlider.StepBack(timeSteps);
+
+#endregion
+
         /// <summary>
         /// Occurs when the selected time extent has changed.
         /// </summary>
@@ -1005,60 +1041,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             CurrentExtentChanged?.Invoke(this, e);
         }
-
-        //  TODO: GeoView binding
-
-        ///// <summary>
-        ///// Gets or sets the GeoView property that can be attached to a Compass control to accurately set the heading, instead of
-        ///// setting the <see cref="Compass.Heading"/> property directly.
-        ///// </summary>
-        //public GeoView GeoView
-        //{
-        //    get { return GetValue(GeoViewProperty) as GeoView; }
-        //    set { SetValue(GeoViewProperty, value); }
-        //}
-
-        ///// <summary>
-        ///// Identifies the <see cref="GeoView"/> Dependency Property
-        ///// </summary>
-        //public static readonly BindableProperty GeoViewProperty =
-        //    BindableProperty.Create(nameof(TimeSlider.GeoView), typeof(GeoView), typeof(TimeSlider), null, BindingMode.OneWay, null, OnGeoViewPropertyChanged);
-
-        //private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        //{
-        //    var slider = (TimeSlider)bindable;
-        //    var inpc = oldValue as INotifyPropertyChanged;
-        //    if (inpc != null)
-        //    {
-        //        inpc.PropertyChanged -= slider.GeoView_PropertyChanged;
-        //    }
-
-        //    inpc = newValue as INotifyPropertyChanged;
-        //    if (inpc != null)
-        //    {
-        //        inpc.PropertyChanged += slider.GeoView_PropertyChanged;
-        //    }
-
-        //    slider.UpdateTimeSliderFromGeoView(newValue as GeoView);
-        //}
-
-        //private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    var view = (GeoView)sender;
-        //    if (e.PropertyName == nameof(GeoView.TimeExtent))
-        //    {
-        //        _timeExtentSetByGeoView = true;
-        //        TimeExtent = view.TimeExtent;
-        //        _timeExtentSetByGeoView = false;
-        //    }
-        //}
-
-        //private void UpdateTimeSliderFromGeoView(GeoView view)
-        //{
-        //    _headingSetByGeoView = true;
-        //    Heading = (view is MapView) ? ((MapView)view).MapRotation : (view is SceneView ? ((SceneView)view).Camera.Heading : 0);
-        //    _headingSetByGeoView = false;
-        //}
     }
 }
 
