@@ -29,7 +29,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         {
             if (value != null && parameter is string formatString)
             {
-                return string.Format(formatString, value);
+                try
+                {
+                    return string.Format(formatString, value);
+                }
+                catch
+                {
+                    // If the specified string format is invalid, just return the bound value
+                    return value;
+                }
             }
             else
             {
