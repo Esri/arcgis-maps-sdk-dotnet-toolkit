@@ -14,17 +14,20 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !NETSTANDARD2_0
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 #if NETFX_CORE
 using Windows.UI.Xaml.Media;
+#endif
+#if NETSTANDARD2_0
+using Esri.ArcGISRuntime.UI.Controls;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -94,7 +97,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             SetProxyBinding(nameof(TimeStepIntervalLabelColor), TimeSliderBindingProxy.TimeStepIntervalLabelColorProperty);
             nativeSlider.SizeChanged += (o, e) => InvalidateMeasure();
 #endif
+
+#if !NETSTANDARD2_0
             NativeSlider.CurrentExtentChanged += NativeSlider_CurrentExtentChanged;
+#endif
         }
 
 #if NETFX_CORE
@@ -110,6 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 #endif
 
+#if !NETSTANDARD2_0
         private void NativeSlider_CurrentExtentChanged(object sender, TimeExtentChangedEventArgs e)
         {
             if (_propertyChangedByFormsSlider)
@@ -177,6 +184,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 // at the native control level
             }
         }
+#endif
 
         /// <summary>
         /// Identifies the <see cref="CurrentExtent"/> bindable property.
@@ -988,7 +996,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         /// <param name="geoView">The GeoView to use to initialize the time-slider's properties</param>
         /// <returns>Task</returns>
-        public Task InitializeTimePropertiesAsync(GeoView geoView) => NativeSlider.InitializeTimePropertiesAsync(geoView.GetNativeGeoView());
+        public Task InitializeTimePropertiesAsync(GeoView geoView)
+        {
+#if NETSTANDARD2_0
+            throw new NotImplementedException();
+#else
+            return NativeSlider.InitializeTimePropertiesAsync(geoView.GetNativeGeoView());
+#endif
+        }
 
         /// <summary>
         /// Initializes the time slider's temporal properties based on the specified time-aware layer. Specifically,
@@ -1043,5 +1058,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
     }
 }
-
-#endif

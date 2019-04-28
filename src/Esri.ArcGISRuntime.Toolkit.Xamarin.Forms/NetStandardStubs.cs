@@ -19,8 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Xamarin.Forms;
 
 [assembly: System.Runtime.CompilerServices.ReferenceAssembly]
 
@@ -69,6 +71,49 @@ namespace Esri.ArcGISRuntime.UI.Controls
     {
         public Symbol Symbol { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
+
+    internal class TimeSlider
+    {
+        public TimeExtent CurrentExtent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TimeExtent FullExtent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TimeValue TimeStepInterval { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IReadOnlyList<DateTimeOffset> TimeSteps { get => throw new NotImplementedException(); }
+        public TimeSpan PlaybackInterval { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public PlaybackDirection PlaybackDirection { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public LoopMode PlaybackLoopMode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsStartTimePinned { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsEndTimePinned { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsPlaying { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string FullExtentLabelFormat { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string CurrentExtentLabelFormat { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string TimeStepIntervalLabelFormat { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TimeSliderLabelMode LabelMode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color ThumbStroke { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color ThumbFill { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color CurrentExtentFill { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color FullExtentFill { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color FullExtentStroke { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color TimeStepIntervalTickFill { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color PlaybackButtonsFill { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color PlaybackButtonsStroke { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color FullExtentLabelColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color CurrentExtentLabelColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Color TimeStepIntervalLabelColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public void InitializeTimeSteps(int count) => throw new NotImplementedException();
+        public Task InitializeTimePropertiesAsync(GeoView geoView) => throw new NotImplementedException();
+        public Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer) => throw new NotImplementedException();
+        public bool StepForward(int timeSteps = 1) => throw new NotImplementedException();
+        public bool StepBack(int timeSteps = 1) => throw new NotImplementedException();
+        public event EventHandler<TimeExtentChangedEventArgs> CurrentExtentChanged;
+    }
+
+    public enum PlaybackDirection { }
+
+    public enum LoopMode { }
+
+    public enum TimeSliderLabelMode { }
+
+    public class TimeExtentChangedEventArgs : System.EventArgs { }
 }
 
 #pragma warning restore SA1516
