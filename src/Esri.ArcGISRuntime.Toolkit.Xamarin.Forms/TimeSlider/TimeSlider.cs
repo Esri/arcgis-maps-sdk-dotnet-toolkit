@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
+using Esri.ArcGISRuntime.Toolkit.UI;
 #if NETFX_CORE
 using Windows.UI.Xaml.Media;
 #endif

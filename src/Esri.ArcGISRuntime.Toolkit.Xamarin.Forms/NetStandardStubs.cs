@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 
 [assembly: System.Runtime.CompilerServices.ReferenceAssembly]
@@ -33,7 +34,7 @@ using Esri.ArcGISRuntime.Xamarin.Forms;
 
 // This file contains a collection of stubs solely used for the .NET Standard build
 // This is a little simpler than excluding all references to these classes
-namespace Esri.ArcGISRuntime.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class PopupViewer
     {
@@ -106,14 +107,6 @@ namespace Esri.ArcGISRuntime.UI.Controls
         public bool StepBack(int timeSteps = 1) => throw new NotImplementedException();
         public event EventHandler<TimeExtentChangedEventArgs> CurrentExtentChanged;
     }
-
-    public enum PlaybackDirection { }
-
-    public enum LoopMode { }
-
-    public enum TimeSliderLabelMode { }
-
-    public class TimeExtentChangedEventArgs : System.EventArgs { }
 }
 
 #pragma warning restore SA1516

@@ -24,8 +24,6 @@
   <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.5.0" />
@@ -36,7 +34,7 @@
     </PackageReference>
   </ItemGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+  <ItemGroup>
     <ProjectReference Include="..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj" />
   </ItemGroup>
 
