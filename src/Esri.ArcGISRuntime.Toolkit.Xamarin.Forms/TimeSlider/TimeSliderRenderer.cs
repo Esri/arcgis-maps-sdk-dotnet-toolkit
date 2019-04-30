@@ -29,6 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class TimeSliderRenderer : ViewRenderer<TimeSlider, Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider>
     {
+#if __ANDROID__
+        public TimeSliderRenderer(Android.Content.Context context)
+            : base(context)
+        {
+        }
+#endif
+
         protected override void OnElementChanged(ElementChangedEventArgs<TimeSlider> e)
         {
             base.OnElementChanged(e);

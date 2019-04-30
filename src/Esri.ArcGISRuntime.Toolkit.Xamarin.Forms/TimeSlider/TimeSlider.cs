@@ -18,17 +18,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
-using Esri.ArcGISRuntime.Toolkit.UI;
 #if NETFX_CORE
 using Windows.UI.Xaml.Media;
-#endif
-#if NETSTANDARD2_0
-using Esri.ArcGISRuntime.UI.Controls;
-#else
-using Esri.ArcGISRuntime.Toolkit.UI;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -99,9 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             nativeSlider.SizeChanged += (o, e) => InvalidateMeasure();
 #endif
 
-#if !NETSTANDARD2_0
             NativeSlider.CurrentExtentChanged += NativeSlider_CurrentExtentChanged;
-#endif
         }
 
 #if NETFX_CORE
@@ -117,7 +110,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 #endif
 
-#if !NETSTANDARD2_0
         private void NativeSlider_CurrentExtentChanged(object sender, TimeExtentChangedEventArgs e)
         {
             if (_propertyChangedByFormsSlider)
@@ -185,7 +177,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 // at the native control level
             }
         }
-#endif
 
         /// <summary>
         /// Identifies the <see cref="CurrentExtent"/> bindable property.
@@ -193,9 +184,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty CurrentExtentProperty =
             BindableProperty.Create(nameof(CurrentExtent), typeof(TimeExtent), typeof(TimeSlider), null, BindingMode.OneWay, null, OnCurrentExtentPropertyChanged);
 
-        //#if !NETFX_CORE && !XAMARIN
-        //        [TypeConverter(typeof(TimeExtentConverter))]
-        //#endif
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
@@ -231,9 +219,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty FullExtentProperty =
             BindableProperty.Create(nameof(FullExtent), typeof(TimeExtent), typeof(TimeSlider), null, BindingMode.OneWay, null, OnFullExtentPropertyChanged);
 
-        //#if !NETFX_CORE && !XAMARIN
-        //        [TypeConverter(typeof(TimeExtentConverter))]
-        //#endif
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
