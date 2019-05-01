@@ -15,13 +15,21 @@
 //  ******************************************************************************/
 
 using System;
+#if !NETSTANDARD2_0
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
+#if !NETSTANDARD2_0
     /// <summary>
     /// Event arguments used when raising the <see cref="TimeSlider.CurrentExtentChanged"/> event.
     /// </summary>
+#else
+    /// <summary>
+    /// Event arguments used when raising the TimeSlider.CurrentExtentChanged event.
+    /// </summary>
+#endif
     public sealed class TimeExtentChangedEventArgs : EventArgs
     {
         /// <summary>
