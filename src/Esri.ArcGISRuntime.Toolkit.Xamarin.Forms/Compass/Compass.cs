@@ -41,7 +41,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         internal Compass(UI.Controls.Compass nativeCompass)
         {
             NativeCompass = nativeCompass;
-
+            HorizontalOptions = LayoutOptions.End;
+            VerticalOptions = LayoutOptions.Start;
 #if NETFX_CORE
             nativeCompass.SizeChanged += (o, e) => InvalidateMeasure();
 #endif
