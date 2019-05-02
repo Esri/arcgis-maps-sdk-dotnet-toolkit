@@ -83,7 +83,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override CGSize SizeThatFits(CGSize size)
         {
-            var size2 = base.SizeThatFits(size);
             var widthThatFits = Math.Min(size.Width, IntrinsicContentSize.Width);
             var heightThatFits = Math.Min(size.Height, IntrinsicContentSize.Height);
             return new CGSize(widthThatFits, heightThatFits);
