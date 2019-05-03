@@ -16,9 +16,9 @@
 
 using System;
 using System.ComponentModel;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
-using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
@@ -44,6 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             NativeCompass = nativeCompass;
             HorizontalOptions = LayoutOptions.End;
             VerticalOptions = LayoutOptions.Start;
+            WidthRequest = 30;
+            HeightRequest = 30;
 #if NETFX_CORE
             nativeCompass.SizeChanged += (o, e) => InvalidateMeasure();
             nativeCompass.RegisterPropertyChangedCallback(UI.Controls.Compass.HeadingProperty, (d, e) => UpdateHeadingFromNativeCompass());
@@ -142,5 +144,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #endif
             compass._headingSetByNativeControl = false;
         }
+
+#if __IOS__
+        private UIKit.NSLayoutConstraint _widthConstraint;
+        private UIKit.NSLayoutConstraint _heightConstraint;
+
+        /// <inheritdoc />
+        protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
+        {
+            if (_widthConstraint != null)
+            {
+                _widthConstraint.Active = false;
+            }
+
+            if (_heightConstraint != null)
+            {
+                _heightConstraint.Active = false;
+            }
+
+            _widthConstraint = NativeCompass.WidthAnchor.ConstraintEqualTo((nfloat)widthConstraint);
+            _heightConstraint = NativeCompass.WidthAnchor.ConstraintEqualTo((nfloat)heightConstraint);
+
+            if (_widthConstraint != null)
+            {
+                _widthConstraint.Active = true;
+            }
+
+            if (_heightConstraint != null)
+            {
+                _heightConstraint.Active = true;
+            }
+
+            return base.OnMeasure(widthConstraint, heightConstraint);
+        }
+#endif
     }
 }
