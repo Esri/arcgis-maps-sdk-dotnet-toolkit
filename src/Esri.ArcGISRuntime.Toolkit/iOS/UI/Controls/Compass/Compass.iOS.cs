@@ -78,9 +78,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-        public override CGSize IntrinsicContentSize { get; } = new CGSize(DefaultSize, DefaultSize);
-
-        /// <inheritdoc />
         public override void Draw(CGRect rect)
         {
             base.Draw(rect);

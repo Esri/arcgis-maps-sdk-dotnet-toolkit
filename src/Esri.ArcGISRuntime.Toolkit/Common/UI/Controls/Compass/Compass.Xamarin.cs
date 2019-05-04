@@ -17,11 +17,12 @@
 #if XAMARIN
 
 using System;
+using System.ComponentModel;
 using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    public partial class Compass
+    public partial class Compass : System.ComponentModel.INotifyPropertyChanged
     {
         private double _heading;
 
@@ -37,6 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 _heading = value;
                 UpdateCompassRotation(true);
+                OnPropertyChanged(nameof(Heading));
             }
         }
 
@@ -49,6 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _autoHide = value;
                 SetVisibility(!(value && _heading == 0));
+                OnPropertyChanged(nameof(AutoHide));
             }
         }
 
@@ -66,8 +69,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var oldView = _geoView;
                 _geoView = value;
                 WireGeoViewPropertyChanged(oldView, _geoView);
+                OnPropertyChanged(nameof(GeoView));
             }
         }
+
+        private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
 #endif

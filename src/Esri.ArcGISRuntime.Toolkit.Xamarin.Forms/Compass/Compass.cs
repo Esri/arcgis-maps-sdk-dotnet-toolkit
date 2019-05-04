@@ -16,6 +16,7 @@
 
 using System;
 using System.ComponentModel;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -28,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     {
         internal UI.Controls.Compass NativeCompass { get; }
 
-        private bool _headingSetByGeoView;
+        private bool _headingSetByNativeControl;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class
@@ -41,53 +42,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         internal Compass(UI.Controls.Compass nativeCompass)
         {
             NativeCompass = nativeCompass;
-
+            HorizontalOptions = LayoutOptions.End;
+            VerticalOptions = LayoutOptions.Start;
+            WidthRequest = 30;
+            HeightRequest = 30;
 #if NETFX_CORE
             nativeCompass.SizeChanged += (o, e) => InvalidateMeasure();
+            nativeCompass.RegisterPropertyChangedCallback(UI.Controls.Compass.HeadingProperty, (d, e) => UpdateHeadingFromNativeCompass());
+#elif !NETSTANDARD2_0
+            nativeCompass.PropertyChanged += (d, e) =>
+            {
+                if (e.PropertyName == nameof(Heading))
+                {
+                    UpdateHeadingFromNativeCompass();
+                }
+            };
 #endif
-
-            var tapRecognizer = new TapGestureRecognizer();
-            tapRecognizer.Command = new TapCommand(ResetRotation);
-            GestureRecognizers.Add(tapRecognizer);
         }
 
-        private class TapCommand : System.Windows.Input.ICommand
+        private void UpdateHeadingFromNativeCompass()
         {
-            private Action _action;
-
-            public TapCommand(Action action)
-            {
-                _action = action;
-            }
-
-#pragma warning disable CS0067 // Event never used because it never changes, but is required by the interface
-            public event EventHandler CanExecuteChanged;
-#pragma warning restore CS0067
-
-            public bool CanExecute(object parameter)
-            {
-                return _action != null;
-            }
-
-            public void Execute(object parameter)
-            {
-                _action?.Invoke();
-            }
-        }
-
-        private void ResetRotation()
-        {
-            var view = GeoView;
-            if (view is MapView)
-            {
-                ((MapView)view).SetViewpointRotationAsync(0);
-            }
-            else if (view is SceneView)
-            {
-                var sv = (SceneView)view;
-                var c = sv.Camera;
-                sv.SetViewpointCameraAsync(c.RotateTo(0, c.Pitch, c.Roll));
-            }
+            _headingSetByNativeControl = true;
+            Heading = NativeCompass.Heading;
+            _headingSetByNativeControl = false;
         }
 
         /// <summary>
@@ -110,13 +87,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (newValue != null)
             {
                 var compass = (Compass)bindable;
-                if (compass.GeoView != null && !compass._headingSetByGeoView)
+                if (!compass._headingSetByNativeControl)
                 {
-                    throw new InvalidOperationException("The Heading Property is read-only when the GeoView property has been assigned");
+                    compass.NativeCompass.Heading = (double)newValue;
                 }
-
-                compass.NativeCompass.Heading = (double)newValue;
-                 compass.InvalidateMeasure();
             }
         }
 
@@ -141,7 +115,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var compass = (Compass)bindable;
                 compass.NativeCompass.AutoHide = (bool)newValue;
-                compass.InvalidateMeasure();
             }
         }
 
@@ -164,36 +137,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var compass = (Compass)bindable;
-            var inpc = oldValue as INotifyPropertyChanged;
-            if (inpc != null)
-            {
-                inpc.PropertyChanged -= compass.GeoView_PropertyChanged;
-            }
 
-            inpc = newValue as INotifyPropertyChanged;
-            if (inpc != null)
-            {
-                inpc.PropertyChanged += compass.GeoView_PropertyChanged;
-            }
-
-            compass.UpdateCompassFromGeoView(newValue as GeoView);
+            compass._headingSetByNativeControl = true;
+#if !NETSTANDARD2_0
+            compass.NativeCompass.GeoView = (newValue as GeoView)?.GetNativeGeoView();
+#endif
+            compass._headingSetByNativeControl = false;
         }
 
-        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+#if __IOS__
+        private UIKit.NSLayoutConstraint _widthConstraint;
+        private UIKit.NSLayoutConstraint _heightConstraint;
+
+        /// <inheritdoc />
+        protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
         {
-            var view = GeoView;
-            if ((view is MapView && e.PropertyName == nameof(MapView.MapRotation)) ||
-                (view is SceneView && e.PropertyName == nameof(SceneView.Camera)))
+            if (_widthConstraint != null)
             {
-                UpdateCompassFromGeoView(GeoView);
+                _widthConstraint.Active = false;
             }
-        }
 
-        private void UpdateCompassFromGeoView(GeoView view)
-        {
-            _headingSetByGeoView = true;
-            Heading = (view is MapView) ? ((MapView)view).MapRotation : (view is SceneView ? ((SceneView)view).Camera.Heading : 0);
-            _headingSetByGeoView = false;
+            if (_heightConstraint != null)
+            {
+                _heightConstraint.Active = false;
+            }
+
+            _widthConstraint = NativeCompass.WidthAnchor.ConstraintEqualTo((nfloat)widthConstraint);
+            _heightConstraint = NativeCompass.WidthAnchor.ConstraintEqualTo((nfloat)heightConstraint);
+
+            if (_widthConstraint != null)
+            {
+                _widthConstraint.Active = true;
+            }
+
+            if (_heightConstraint != null)
+            {
+                _heightConstraint.Active = true;
+            }
+
+            return base.OnMeasure(widthConstraint, heightConstraint);
         }
+#endif
     }
 }
