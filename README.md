@@ -38,7 +38,7 @@ You can use the Toolkit in your projects by:
 |SignInForm   |   | Preview |   |   |   |
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |TableOfContents   | N/A | Preview | N/A  | N/A | N/A |
-|TimeSlider   | ✔ | ✔ | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/201.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/201) |
+|TimeSlider   | ✔ | ✔ | ✔ | ✔ | ✔ |
 
 ## Instructions for Building
 
