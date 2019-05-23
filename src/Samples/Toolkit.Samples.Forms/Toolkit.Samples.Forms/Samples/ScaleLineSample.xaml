@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+             x:Class="Toolkit.Samples.Forms.Samples.ScaleLineSample" Title="ScaleLine">
+    <ContentPage.Content>
+        <Grid>
+            <esriUI:MapView x:Name="mapView" />
+
+            <esriTK:ScaleLine HorizontalOptions="Start" VerticalOptions="End" Margin="20"
+                    MapView="{x:Reference mapView}"/>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -11,7 +11,7 @@ namespace Toolkit.Samples.Forms
 		{
 			InitializeComponent();
 
-			MainPage = new Toolkit.Samples.Forms.MainPage();
+			MainPage = new NavigationPage(new MainPage());
 		}
 
 		protected override void OnStart ()
