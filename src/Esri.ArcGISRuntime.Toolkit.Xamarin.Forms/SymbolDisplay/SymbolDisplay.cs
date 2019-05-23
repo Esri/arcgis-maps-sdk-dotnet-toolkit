@@ -28,26 +28,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class
         /// </summary>
         public SymbolDisplay()
-            : this(new UI.Controls.SymbolDisplay())
         {
+            HorizontalOptions = LayoutOptions.Start;
+            VerticalOptions = LayoutOptions.Start;
         }
-
-        internal SymbolDisplay(UI.Controls.SymbolDisplay nativeSymbolDisplay)
-        {
-            NativeSymbolDisplay = nativeSymbolDisplay;
-
-#if NETFX_CORE
-            nativeSymbolDisplay.SizeChanged += (o, e) => InvalidateMeasure();
-#endif
-        }
-
-        internal UI.Controls.SymbolDisplay NativeSymbolDisplay { get; }
 
         /// <summary>
         /// Identifies the <see cref="Symbol"/> bindable property.
         /// </summary>
         public static readonly BindableProperty SymbolProperty =
-            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(SymbolDisplay), null, BindingMode.OneWay, null, OnSymbolPropertyChanged);
+            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(SymbolDisplay), null, BindingMode.OneWay, null);
 
         /// <summary>
         /// Gets or sets the symbol to render.
@@ -57,16 +47,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get { return (Symbol)GetValue(SymbolProperty); }
             set { SetValue(SymbolProperty, value); }
-        }
-
-        private static void OnSymbolPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var symbolDisplay = bindable as SymbolDisplay;
-            if (symbolDisplay?.NativeSymbolDisplay != null)
-            {
-                symbolDisplay.NativeSymbolDisplay.Symbol = newValue as Symbol;
-                symbolDisplay.InvalidateMeasure();
-            }
         }
     }
 }

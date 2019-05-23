@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if !NETSTANDARD2_0
+using System.ComponentModel;
 using Xamarin.Forms;
 #if __ANDROID__
 using Xamarin.Forms.Platform.Android;
@@ -23,6 +24,8 @@ using Xamarin.Forms.Platform.iOS;
 #elif NETFX_CORE
 using Xamarin.Forms.Platform.UWP;
 #endif
+
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Legend), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.LegendRenderer))]
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -40,10 +43,47 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            if (e.NewElement != null)
             {
-                SetNativeControl(e.NewElement?.NativeLegend);
+                if (Control == null)
+                {
+#if __ANDROID__
+                    UI.Controls.Legend ctrl = new UI.Controls.Legend(Context);
+#else
+                    UI.Controls.Legend ctrl = new UI.Controls.Legend();
+#endif
+                    ctrl.GeoView = Element.GeoView?.GetNativeGeoView();
+                    ctrl.FilterByVisibleScaleRange = Element.FilterByVisibleScaleRange;
+                    ctrl.ReverseLayerOrder = Element.ReverseLayerOrder;
+
+                    SetNativeControl(ctrl);
+#if NETFX_CORE
+                    ctrl.SizeChanged += (s, args) => InvalidateMeasure();
+#else
+#endif
+                }
             }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (Control != null)
+            {
+                if (e.PropertyName == Legend.GeoViewProperty.PropertyName)
+                {
+                    Control.GeoView = Element.GeoView?.GetNativeGeoView();
+                }
+                else if (e.PropertyName == Legend.FilterByVisibleScaleRangeProperty.PropertyName)
+                {
+                    Control.FilterByVisibleScaleRange = Element.FilterByVisibleScaleRange;
+                }
+                else if (e.PropertyName == Legend.ReverseLayerOrderProperty.PropertyName)
+                {
+                    Control.ReverseLayerOrder = Element.ReverseLayerOrder;
+                }
+            }
+
+            base.OnElementPropertyChanged(sender, e);
         }
 
 #if !NETFX_CORE

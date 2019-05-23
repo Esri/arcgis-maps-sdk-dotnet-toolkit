@@ -16,7 +16,6 @@
 
 using System;
 using System.ComponentModel;
-using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -27,51 +26,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// </summary>
     public class Compass : View
     {
-        internal UI.Controls.Compass NativeCompass { get; }
-
-        private bool _headingSetByNativeControl;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class
         /// </summary>
         public Compass()
-            : this(new UI.Controls.Compass())
         {
-        }
-
-        internal Compass(UI.Controls.Compass nativeCompass)
-        {
-            NativeCompass = nativeCompass;
             HorizontalOptions = LayoutOptions.End;
             VerticalOptions = LayoutOptions.Start;
             WidthRequest = 30;
             HeightRequest = 30;
-#if NETFX_CORE
-            nativeCompass.SizeChanged += (o, e) => InvalidateMeasure();
-            nativeCompass.RegisterPropertyChangedCallback(UI.Controls.Compass.HeadingProperty, (d, e) => UpdateHeadingFromNativeCompass());
-#elif !NETSTANDARD2_0
-            nativeCompass.PropertyChanged += (d, e) =>
-            {
-                if (e.PropertyName == nameof(Heading))
-                {
-                    UpdateHeadingFromNativeCompass();
-                }
-            };
-#endif
-        }
-
-        private void UpdateHeadingFromNativeCompass()
-        {
-            _headingSetByNativeControl = true;
-            Heading = NativeCompass.Heading;
-            _headingSetByNativeControl = false;
         }
 
         /// <summary>
         /// Identifies the <see cref="Heading"/> bindable property.
         /// </summary>
         public static readonly BindableProperty HeadingProperty =
-            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0d, BindingMode.OneWay, null, OnHeadingPropertyChanged);
+            BindableProperty.Create(nameof(Heading), typeof(double), typeof(Compass), 0d, BindingMode.OneWay, null);
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
@@ -82,23 +52,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             set { SetValue(HeadingProperty, value); }
         }
 
-        private static void OnHeadingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (newValue != null)
-            {
-                var compass = (Compass)bindable;
-                if (!compass._headingSetByNativeControl)
-                {
-                    compass.NativeCompass.Heading = (double)newValue;
-                }
-            }
-        }
-
         /// <summary>
         /// Identifies the <see cref="AutoHide"/> bindable property.
         /// </summary>
         public static readonly BindableProperty AutoHideProperty =
-            BindableProperty.Create(nameof(AutoHide), typeof(bool), typeof(Compass), true, BindingMode.OneWay, null, OnAutoHidePropertyChanged);
+            BindableProperty.Create(nameof(AutoHide), typeof(bool), typeof(Compass), true, BindingMode.OneWay, null);
 
         /// <summary>
         /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
@@ -107,15 +65,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get { return (bool)GetValue(AutoHideProperty); }
             set { SetValue(AutoHideProperty, value); }
-        }
-
-        private static void OnAutoHidePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (newValue != null)
-            {
-                var compass = (Compass)bindable;
-                compass.NativeCompass.AutoHide = (bool)newValue;
-            }
         }
 
         /// <summary>
@@ -132,51 +81,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="GeoView"/> Dependency Property
         /// </summary>
         public static readonly BindableProperty GeoViewProperty =
-            BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, null, OnGeoViewPropertyChanged);
-
-        private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var compass = (Compass)bindable;
-
-            compass._headingSetByNativeControl = true;
-#if !NETSTANDARD2_0
-            compass.NativeCompass.GeoView = (newValue as GeoView)?.GetNativeGeoView();
-#endif
-            compass._headingSetByNativeControl = false;
-        }
-
-#if __IOS__
-        private UIKit.NSLayoutConstraint _widthConstraint;
-        private UIKit.NSLayoutConstraint _heightConstraint;
-
-        /// <inheritdoc />
-        protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
-        {
-            if (_widthConstraint != null)
-            {
-                _widthConstraint.Active = false;
-            }
-
-            if (_heightConstraint != null)
-            {
-                _heightConstraint.Active = false;
-            }
-
-            _widthConstraint = NativeCompass.WidthAnchor.ConstraintEqualTo((nfloat)widthConstraint);
-            _heightConstraint = NativeCompass.WidthAnchor.ConstraintEqualTo((nfloat)heightConstraint);
-
-            if (_widthConstraint != null)
-            {
-                _widthConstraint.Active = true;
-            }
-
-            if (_heightConstraint != null)
-            {
-                _heightConstraint.Active = true;
-            }
-
-            return base.OnMeasure(widthConstraint, heightConstraint);
-        }
-#endif
+            BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, null);
     }
 }

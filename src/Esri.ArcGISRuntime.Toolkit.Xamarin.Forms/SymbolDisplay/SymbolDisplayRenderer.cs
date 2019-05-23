@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if !NETSTANDARD2_0
+using System.ComponentModel;
 using Xamarin.Forms;
 #if __ANDROID__
 using Xamarin.Forms.Platform.Android;
@@ -40,10 +41,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            if (e.NewElement != null)
             {
-                SetNativeControl(e.NewElement?.NativeSymbolDisplay);
+                if (Control == null)
+                {
+#if __ANDROID__
+                    UI.Controls.SymbolDisplay ctrl = new UI.Controls.SymbolDisplay(Context);
+#else
+                    UI.Controls.SymbolDisplay ctrl = new UI.Controls.SymbolDisplay();
+#endif
+                    ctrl.Symbol = Element.Symbol;
+                    SetNativeControl(ctrl);
+                }
             }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == SymbolDisplay.SymbolProperty.PropertyName)
+            {
+                Control.Symbol = Element.Symbol;
+            }
+            base.OnElementPropertyChanged(sender, e);
         }
 
 #if !NETFX_CORE

@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -31,26 +30,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="Legend"/> class
         /// </summary>
         public Legend()
-            : this(new UI.Controls.Legend())
         {
+            HorizontalOptions = LayoutOptions.Start;
+            VerticalOptions = LayoutOptions.Start;
         }
-
-        internal Legend(UI.Controls.Legend nativeLegend)
-        {
-            NativeLegend = nativeLegend;
-
-#if NETFX_CORE
-            nativeLegend.SizeChanged += (o, e) => InvalidateMeasure();
-#endif
-        }
-
-        internal UI.Controls.Legend NativeLegend { get; }
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> bindable property.
         /// </summary>
         public static readonly BindableProperty GeoViewProperty =
-            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(Legend), null, BindingMode.OneWay, null, OnGeoViewPropertyChanged);
+            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(Legend), null, BindingMode.OneWay, null);
 
         /// <summary>
         /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
@@ -64,23 +53,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             set { SetValue(GeoViewProperty, value); }
         }
 
-        private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var legend = bindable as Legend;
-            if (legend?.NativeLegend != null)
-            {
-#if !NETSTANDARD2_0
-                legend.NativeLegend.GeoView = (newValue as GeoView)?.GetNativeGeoView();
-#endif
-                legend.InvalidateMeasure();
-            }
-        }
-
         /// <summary>
         /// Identifies the <see cref="FilterByVisibleScaleRange"/> bindable property.
         /// </summary>
         public static readonly BindableProperty FilterByVisibleScaleRangeProperty =
-            BindableProperty.Create(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null, OnFilterByVisibleScaleRangePropertyChanged);
+            BindableProperty.Create(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null);
 
         /// <summary>
         /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
@@ -97,21 +74,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             set { SetValue(FilterByVisibleScaleRangeProperty, value); }
         }
 
-        private static void OnFilterByVisibleScaleRangePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var legend = bindable as Legend;
-            if (legend?.NativeLegend != null && newValue is bool)
-            {
-                legend.NativeLegend.FilterByVisibleScaleRange = (bool)newValue;
-                legend.InvalidateMeasure();
-            }
-        }
-
         /// <summary>
         /// Identifies the <see cref="ReverseLayerOrder"/> bindable property.
         /// </summary>
         public static readonly BindableProperty ReverseLayerOrderProperty =
-            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null, OnReverseLayerOrderPropertyChanged);
+            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null);
 
         /// <summary>
         /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
@@ -125,16 +92,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get { return (bool)GetValue(ReverseLayerOrderProperty); }
             set { SetValue(ReverseLayerOrderProperty, value); }
-        }
-
-        private static void OnReverseLayerOrderPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var legend = bindable as Legend;
-            if (legend?.NativeLegend != null && newValue is bool)
-            {
-                legend.NativeLegend.ReverseLayerOrder = !(bool)newValue;
-                legend.InvalidateMeasure();
-            }
         }
     }
 }
