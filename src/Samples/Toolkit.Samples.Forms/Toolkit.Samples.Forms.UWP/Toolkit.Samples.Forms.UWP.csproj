@@ -125,9 +125,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="..\..\..\..\..\..\..\applications\1-InitialReplica.geodatabase">
-      <Link>1-InitialReplica.geodatabase</Link>
-    </Content>
     <None Include="Toolkit.Samples.Forms.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
