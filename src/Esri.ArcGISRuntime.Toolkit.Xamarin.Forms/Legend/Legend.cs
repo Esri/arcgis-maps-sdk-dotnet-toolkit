@@ -35,6 +35,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             VerticalOptions = LayoutOptions.Start;
         }
 
+        internal void OnInvalidateMeasure()
+        {
+            base.InvalidateMeasure();
+        }
+
         /// <summary>
         /// Identifies the <see cref="GeoView"/> bindable property.
         /// </summary>

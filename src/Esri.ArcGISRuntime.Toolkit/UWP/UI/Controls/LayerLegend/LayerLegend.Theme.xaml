@@ -4,11 +4,13 @@
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
 
     <Style TargetType="controls:LayerLegend" >
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <controls:SymbolDisplay Symbol="{Binding Symbol}" MaxHeight="40" MaxWidth="40" />
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <controls:SymbolDisplay Symbol="{Binding Symbol}" MaxHeight="40" Width="40" VerticalAlignment="Center" Margin="0,0,5,0" />
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>
@@ -24,7 +26,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:LayerLegend">
-                    <ListView x:Name="ItemsList" 
+                    <ItemsControl x:Name="ItemsList"
                               ItemTemplate="{TemplateBinding ItemTemplate}" 
                               ItemsPanel="{TemplateBinding ItemsPanel}" />
                 </ControlTemplate>

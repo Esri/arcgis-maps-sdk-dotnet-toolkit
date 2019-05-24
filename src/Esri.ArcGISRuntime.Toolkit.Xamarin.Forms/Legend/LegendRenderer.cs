@@ -22,6 +22,7 @@ using Xamarin.Forms.Platform.Android;
 #elif __IOS__
 using Xamarin.Forms.Platform.iOS;
 #elif NETFX_CORE
+using Windows.Foundation;
 using Xamarin.Forms.Platform.UWP;
 #endif
 
@@ -58,8 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
                     SetNativeControl(ctrl);
 #if NETFX_CORE
-                    ctrl.SizeChanged += (s, args) => InvalidateMeasure();
-#else
+                    ctrl.SizeChanged += (s, args) => Element.OnInvalidateMeasure();
 #endif
                 }
             }
@@ -86,9 +86,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             base.OnElementPropertyChanged(sender, e);
         }
 
-#if !NETFX_CORE
-        /// <inheritdoc />
-        protected override bool ManageNativeControlLifetime => false;
+#if NETFX_CORE
+        protected override Windows.Foundation.Size MeasureOverride(Windows.Foundation.Size availableSize)
+        {
+            Control.Measure(availableSize);
+            return Control.DesiredSize;
+        }
 #endif
     }
 }

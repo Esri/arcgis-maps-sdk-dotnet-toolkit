@@ -17,15 +17,15 @@
     </Style>
     <DataTemplate x:Key="LeafItemTemplate">
         <StackPanel Style="{StaticResource DisplayLegendStyle}">
-            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
-            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+            <TextBlock Text="{Binding LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="BranchItemTemplate">
         <StackPanel Style="{StaticResource DisplayLegendStyle}">
-            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
-            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
-            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
+            <TextBlock Text="{Binding LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
     <controls:LegendItemTemplateSelector x:Key="ItemTemplateSelector" 
@@ -33,9 +33,9 @@
                                    LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
     <DataTemplate x:Key="SublayerItemTemplate">
         <StackPanel Style="{StaticResource DisplayLegendStyle}">
-            <TextBlock Text="{Binding  LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
-            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
-            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
+            <TextBlock Text="{Binding LayerContent.Name}" Style="{StaticResource DisplayTitleStyle}"/>
+            <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
         </StackPanel>
     </DataTemplate>
     <controls:LegendItemTemplateSelector x:Key="SublayerItemTemplateSelector" 
@@ -56,9 +56,9 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel Style="{StaticResource DisplayLegendStyle}">
-                        <TextBlock Text="{Binding  LayerContent.Name}" FontWeight="Bold" Style="{StaticResource DisplayTitleStyle}"/>
-                        <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
-                        <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
+                        <TextBlock Text="{Binding LayerContent.Name}" FontWeight="Bold" Style="{StaticResource DisplayTitleStyle}"/>
+                        <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+                        <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>

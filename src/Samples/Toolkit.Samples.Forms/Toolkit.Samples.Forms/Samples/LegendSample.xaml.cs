@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Esri.ArcGISRuntime.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Toolkit.Samples.Forms.Samples
 		public LegendSample ()
 		{
 			InitializeComponent ();
-            mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
+            mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213"));
         }
     }
 }
