@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     ctrl.AutoHide = Element.AutoHide;
 
 #if NETFX_CORE
-                    //ctrl.SizeChanged += (o, args) => InvalidateMeasure();
+                    ctrl.Margin = new Windows.UI.Xaml.Thickness(0, 0, 1, 0);
                     ctrl.RegisterPropertyChangedCallback(UI.Controls.Compass.HeadingProperty, (d, args) => UpdateHeadingFromNativeCompass());
 #elif !NETSTANDARD2_0
                     ctrl.PropertyChanged += (s, args) =>
@@ -77,7 +77,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     SetNativeControl(ctrl);
                     UpdateHeadingFromNativeCompass();
                 }
+                e.NewElement.SizeChanged += NewElement_SizeChanged;
             }
+        }
+
+        private void NewElement_SizeChanged(object sender, EventArgs e)
+        {
+#if NETFX_CORE
+            Control.Width = Element.Width - 1;
+            Control.Height = Element.Height;
+#elif __ANDROID__
+            Control.LayoutParameters = new LayoutParams((int)Context.ToPixels(Element.Width), (int)Context.ToPixels(Element.Height));
+#elif __IOS__
+            if (_widthConstraint != null)
+            {
+                _widthConstraint.Active = false;
+            }
+
+            if (Element.Width >= 0)
+            {
+                _widthConstraint = Control.WidthAnchor.ConstraintEqualTo((nfloat)Element.Width);
+                if (_widthConstraint != null)
+                {
+                    _widthConstraint.Active = true;
+                }
+            }
+
+            if (_heightConstraint != null)
+            {
+                _heightConstraint.Active = false;
+            }
+
+            if (Element.Height >= 0)
+            {
+                _heightConstraint = Control.HeightAnchor.ConstraintEqualTo((nfloat)Element.Height);
+                if (_heightConstraint != null)
+                {
+                    _heightConstraint.Active = true;
+                }
+            }
+#endif
         }
 
         private bool _isUpdatingHeadingFromGeoView;
@@ -113,38 +152,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     Control.AutoHide = Element.AutoHide;
                 }
 #if __IOS__
-                else if (e.PropertyName == VisualElement.WidthProperty.PropertyName)
-                {
-                    if (_widthConstraint != null)
-                    {
-                        _widthConstraint.Active = false;
-                    }
+                //else if (e.PropertyName == VisualElement.WidthProperty.PropertyName)
+                //{
+                //    if (_widthConstraint != null)
+                //    {
+                //        _widthConstraint.Active = false;
+                //    }
 
-                    if (Element.Width >= 0)
-                    {
-                        _widthConstraint = Control.WidthAnchor.ConstraintEqualTo((nfloat)Element.Width);
-                        if (_widthConstraint != null)
-                        {
-                            _widthConstraint.Active = true;
-                        }
-                    }
-                }
-                else if (e.PropertyName == VisualElement.HeightProperty.PropertyName)
-                {
-                    if (_heightConstraint != null)
-                    {
-                        _heightConstraint.Active = false;
-                    }
+                //    if (Element.Width >= 0)
+                //    {
+                //        _widthConstraint = Control.WidthAnchor.ConstraintEqualTo((nfloat)Element.Width);
+                //        if (_widthConstraint != null)
+                //        {
+                //            _widthConstraint.Active = true;
+                //        }
+                //    }
+                //}
+                //else if (e.PropertyName == VisualElement.HeightProperty.PropertyName)
+                //{
+                //    if (_heightConstraint != null)
+                //    {
+                //        _heightConstraint.Active = false;
+                //    }
 
-                    if (Element.Height >= 0)
-                    {
-                        _heightConstraint = Control.HeightAnchor.ConstraintEqualTo((nfloat)Element.Height);
-                        if (_heightConstraint != null)
-                        {
-                            _heightConstraint.Active = true;
-                        }
-                    }
-                }
+                //    if (Element.Height >= 0)
+                //    {
+                //        _heightConstraint = Control.HeightAnchor.ConstraintEqualTo((nfloat)Element.Height);
+                //        if (_heightConstraint != null)
+                //        {
+                //            _heightConstraint.Active = true;
+                //        }
+                //    }
+                //}
 #endif
             }
 

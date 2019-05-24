@@ -11,6 +11,14 @@
             <esriTK:Compass HorizontalOptions="End" VerticalOptions="Start" Margin="20"
                     GeoView="{x:Reference mapView}" WidthRequest="30" HeightRequest="30"
                     AutoHide="False" x:Name="compass" />
+
+            <StackLayout HorizontalOptions="Start" VerticalOptions="Start" Margin="20" Padding="20" BackgroundColor="#F2F2F2">
+                <Label Text="AutoHide Compass" />
+                <Switch IsToggled="{Binding AutoHide, Source={x:Reference compass}}" />
+                <Label Text="Size" />
+                <Slider Value="30" Maximum="100" Minimum="10" ValueChanged="Slider_ValueChanged" MaximumTrackColor="Gray" />
+            </StackLayout>
+
         </Grid>
     </ContentPage.Content>
 </ContentPage>
