@@ -106,34 +106,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             lp.Width = (int)Context.ToPixels(Element.Width);
             lp.Height = (int)Context.ToPixels(Element.Height);
             Control.LayoutParameters = lp;
-#elif __IOS__
-            if (_widthConstraint != null)
-            {
-                _widthConstraint.Active = false;
-            }
-
-            if (Element.Width >= 0)
-            {
-                _widthConstraint = Control.WidthAnchor.ConstraintEqualTo((nfloat)Element.Width);
-                if (_widthConstraint != null)
-                {
-                    _widthConstraint.Active = true;
-                }
-            }
-
-            if (_heightConstraint != null)
-            {
-                _heightConstraint.Active = false;
-            }
-
-            if (Element.Height >= 0)
-            {
-                _heightConstraint = Control.HeightAnchor.ConstraintEqualTo((nfloat)Element.Height);
-                if (_heightConstraint != null)
-                {
-                    _heightConstraint.Active = true;
-                }
-            }
 #endif
         }
 
@@ -169,40 +141,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 {
                     Control.AutoHide = Element.AutoHide;
                 }
-#if __IOS__
-                //else if (e.PropertyName == VisualElement.WidthProperty.PropertyName)
-                //{
-                //    if (_widthConstraint != null)
-                //    {
-                //        _widthConstraint.Active = false;
-                //    }
-
-                //    if (Element.Width >= 0)
-                //    {
-                //        _widthConstraint = Control.WidthAnchor.ConstraintEqualTo((nfloat)Element.Width);
-                //        if (_widthConstraint != null)
-                //        {
-                //            _widthConstraint.Active = true;
-                //        }
-                //    }
-                //}
-                //else if (e.PropertyName == VisualElement.HeightProperty.PropertyName)
-                //{
-                //    if (_heightConstraint != null)
-                //    {
-                //        _heightConstraint.Active = false;
-                //    }
-
-                //    if (Element.Height >= 0)
-                //    {
-                //        _heightConstraint = Control.HeightAnchor.ConstraintEqualTo((nfloat)Element.Height);
-                //        if (_heightConstraint != null)
-                //        {
-                //            _heightConstraint.Active = true;
-                //        }
-                //    }
-                //}
-#endif
             }
 
             base.OnElementPropertyChanged(sender, e);
