@@ -37,4 +37,28 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Samples\CompassMapViewSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Samples\CompassSceneViewSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Samples\LegendSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Samples\PopupViewerSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Samples\ScaleLineSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+
 </Project>

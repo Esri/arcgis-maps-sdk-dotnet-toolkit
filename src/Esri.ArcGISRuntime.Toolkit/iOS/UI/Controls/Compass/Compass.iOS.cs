@@ -81,20 +81,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void Draw(CGRect rect)
         {
             base.Draw(rect);
-
-            nfloat size = rect.Width > rect.Height ? rect.Height : rect.Width;
+            nfloat size = (rect.Width > rect.Height ? rect.Height : rect.Width) - 2;
             double c = size * .5;
             var l = (rect.Width - size) * .5;
             var t = (rect.Height - size) * .5;
             CGRect r = new CGRect(l, t, size, size);
             var context = UIGraphics.GetCurrentContext();
+            context.TranslateCTM(rect.Width / 2, rect.Height / 2);
+            context.RotateCTM((nfloat)(-Heading / 180 * Math.PI));
+            context.TranslateCTM(-rect.Width / 2, -rect.Height / 2);
             context.SetFillColor(UIColor.FromRGB(51, 51, 51).CGColor);
             context.FillEllipseInRect(r);
             context.SetStrokeColor(UIColor.White.CGColor);
             context.StrokeEllipseInRect(r);
 
             var path = new CGPath();
-
             // create geometry
             path.AddLines(new CGPoint[]
             {
@@ -132,8 +133,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 SetVisibility(Heading != 0);
             }
-
-            Transform = CGAffineTransform.MakeRotation((float)(Math.PI * -Heading / 180d));
+            SetNeedsDisplay();
         }
 
         private void SetVisibility(bool isVisible)

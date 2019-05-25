@@ -15,7 +15,7 @@ using Android.Views;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
-    [Activity(Label = "Toolkit.Samples.Droid", MainLauncher = true)]
+    [Activity(Label = "Toolkit Samples (Native Android)", MainLauncher = true)]
     public class MainActivity : ListActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

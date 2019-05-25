@@ -19,5 +19,10 @@ namespace Toolkit.Samples.Forms.Samples
 			InitializeComponent();
             mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
 		}
-	}
+
+        private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            compass.WidthRequest = compass.HeightRequest = e.NewValue;
+        }
+    }
 }
