@@ -75,26 +75,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
 
-            //// Initialize dimensions of root layout
-            //_northArrow.Invalidate();
             MeasureChild(_northArrow, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(widthMeasureSpec), MeasureSpecMode.AtMost), MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
 
-            //// Calculate the ideal width and height for the view
-            //var desiredWidth = PaddingLeft + PaddingRight + _northArrow.MeasuredWidth;
-            //var desiredHeight = PaddingTop + PaddingBottom + _northArrow.MeasuredHeight;
+            // Calculate the ideal width and height for the view
+            var desiredWidth = PaddingLeft + PaddingRight + _northArrow.MeasuredWidth;
+            var desiredHeight = PaddingTop + PaddingBottom + _northArrow.MeasuredHeight;
 
-            //// Get the width and height of the view given any width and height constraints indicated by the width and height spec values
-            //var width = ResolveSize(desiredWidth, widthMeasureSpec);
-            //var height = ResolveSize(desiredHeight, heightMeasureSpec);
-            //SetMeasuredDimension(width, height);
+            // Get the width and height of the view given any width and height constraints indicated by the width and height spec values
+            var width = ResolveSize(desiredWidth, widthMeasureSpec);
+            var height = ResolveSize(desiredHeight, heightMeasureSpec);
+            SetMeasuredDimension(width, height);
         }
 
         /// <inheritdoc />
-        //protected override void OnLayout(bool changed, int l, int t, int r, int b)
-        //{
-        //    // Forward layout call to the root layout
-        //    _northArrow.Layout(PaddingLeft, PaddingTop, _northArrow.MeasuredWidth + PaddingLeft, _northArrow.MeasuredHeight + PaddingBottom);
-        //}
+        protected override void OnLayout(bool changed, int l, int t, int r, int b)
+        {
+            // Forward layout call to the root layout
+            _northArrow.Layout(PaddingLeft, PaddingTop, _northArrow.MeasuredWidth + PaddingLeft, _northArrow.MeasuredHeight + PaddingBottom);
+        }
 
         private void SetVisibility(bool isVisible, bool animate = true)
         {
@@ -176,12 +174,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 SetWillNotDraw(false);
             }
 
-            protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
-            {
-                Invalidate();
-                base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
-            }
-
             /// <inheritdoc />
             protected override void OnDraw(Canvas canvas)
             {
@@ -219,10 +211,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 path.Close();
                 canvas.DrawPath(path, paint);
 
-                base.OnDraw(canvas);
-
                 PivotX = (size / 2) + l;
                 PivotY = (size / 2) + t;
+
+                base.OnDraw(canvas);
             }
 
             public float Size { get; set; } = (float)DefaultSize;

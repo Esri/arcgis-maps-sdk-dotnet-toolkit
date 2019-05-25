@@ -48,6 +48,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         protected override void OnElementChanged(ElementChangedEventArgs<Compass> e)
         {
             base.OnElementChanged(e);
+            if (e.OldElement != null)
+            {
+                e.NewElement.SizeChanged -= Element_SizeChanged;
+            }
 
             if (e.NewElement != null)
             {
@@ -77,17 +81,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     SetNativeControl(ctrl);
                     UpdateHeadingFromNativeCompass();
                 }
-                e.NewElement.SizeChanged += NewElement_SizeChanged;
+
+                e.NewElement.SizeChanged += Element_SizeChanged;
             }
         }
 
-        private void NewElement_SizeChanged(object sender, EventArgs e)
+        protected override void Dispose(bool disposing)
+        {
+            if (Element != null)
+            {
+                Element.SizeChanged -= Element_SizeChanged;
+            }
+
+            base.Dispose(disposing);
+        }
+
+        private void Element_SizeChanged(object sender, EventArgs e)
         {
 #if NETFX_CORE
             Control.Width = Element.Width - 1;
             Control.Height = Element.Height;
 #elif __ANDROID__
-            Control.LayoutParameters = new LayoutParams((int)Context.ToPixels(Element.Width), (int)Context.ToPixels(Element.Height));
+            var lp = Control.LayoutParameters;
+            lp.Width = (int)Context.ToPixels(Element.Width);
+            lp.Height = (int)Context.ToPixels(Element.Height);
+            Control.LayoutParameters = lp;
 #elif __IOS__
             if (_widthConstraint != null)
             {

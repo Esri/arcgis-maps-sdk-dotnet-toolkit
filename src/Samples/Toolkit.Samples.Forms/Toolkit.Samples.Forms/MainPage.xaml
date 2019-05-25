@@ -5,7 +5,7 @@
              xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
              xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
              x:Class="Toolkit.Samples.Forms.MainPage"
-             Title="Toolkit Samples"
+             Title="Toolkit Samples (Xamarin.Forms)"
              >
 
     <Grid>
