@@ -48,6 +48,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         protected override void OnElementChanged(ElementChangedEventArgs<Compass> e)
         {
             base.OnElementChanged(e);
+            if (e.OldElement != null)
+            {
+                e.NewElement.SizeChanged -= Element_SizeChanged;
+            }
 
             if (e.NewElement != null)
             {
@@ -63,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     ctrl.AutoHide = Element.AutoHide;
 
 #if NETFX_CORE
-                    //ctrl.SizeChanged += (o, args) => InvalidateMeasure();
+                    ctrl.Margin = new Windows.UI.Xaml.Thickness(0, 0, 1, 0);
                     ctrl.RegisterPropertyChangedCallback(UI.Controls.Compass.HeadingProperty, (d, args) => UpdateHeadingFromNativeCompass());
 #elif !NETSTANDARD2_0
                     ctrl.PropertyChanged += (s, args) =>
@@ -77,7 +81,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     SetNativeControl(ctrl);
                     UpdateHeadingFromNativeCompass();
                 }
+
+                e.NewElement.SizeChanged += Element_SizeChanged;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (Element != null)
+            {
+                Element.SizeChanged -= Element_SizeChanged;
+            }
+
+            base.Dispose(disposing);
+        }
+
+        private void Element_SizeChanged(object sender, EventArgs e)
+        {
+#if NETFX_CORE
+            Control.Width = Math.Max(0, Element.Width - 1);
+            Control.Height = Element.Height;
+#elif __ANDROID__
+            var lp = Control.LayoutParameters;
+            lp.Width = (int)Context.ToPixels(Element.Width);
+            lp.Height = (int)Context.ToPixels(Element.Height);
+            Control.LayoutParameters = lp;
+#endif
         }
 
         private bool _isUpdatingHeadingFromGeoView;
@@ -112,40 +141,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 {
                     Control.AutoHide = Element.AutoHide;
                 }
-#if __IOS__
-                else if (e.PropertyName == VisualElement.WidthProperty.PropertyName)
-                {
-                    if (_widthConstraint != null)
-                    {
-                        _widthConstraint.Active = false;
-                    }
-
-                    if (Element.Width >= 0)
-                    {
-                        _widthConstraint = Control.WidthAnchor.ConstraintEqualTo((nfloat)Element.Width);
-                        if (_widthConstraint != null)
-                        {
-                            _widthConstraint.Active = true;
-                        }
-                    }
-                }
-                else if (e.PropertyName == VisualElement.HeightProperty.PropertyName)
-                {
-                    if (_heightConstraint != null)
-                    {
-                        _heightConstraint.Active = false;
-                    }
-
-                    if (Element.Height >= 0)
-                    {
-                        _heightConstraint = Control.HeightAnchor.ConstraintEqualTo((nfloat)Element.Height);
-                        if (_heightConstraint != null)
-                        {
-                            _heightConstraint.Active = true;
-                        }
-                    }
-                }
-#endif
             }
 
             base.OnElementPropertyChanged(sender, e);

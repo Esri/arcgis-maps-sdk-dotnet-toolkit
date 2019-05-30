@@ -58,6 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var size = (int)CalculateScreenDimension((float)DefaultSize);
             _northArrow = new NorthArrowShape(Context) { Size = size };
+            _northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
             AddView(_northArrow);
             UpdateCompassRotation(false);
             _northArrow.Click += (s, e) => ResetRotation();
@@ -74,7 +75,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
 
-            // Initialize dimensions of root layout
             MeasureChild(_northArrow, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(widthMeasureSpec), MeasureSpecMode.AtMost), MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
 
             // Calculate the ideal width and height for the view
@@ -171,6 +171,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             internal NorthArrowShape(Context context)
                 : base(context)
             {
+                SetWillNotDraw(false);
             }
 
             /// <inheritdoc />
@@ -210,10 +211,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 path.Close();
                 canvas.DrawPath(path, paint);
 
-                base.OnDraw(canvas);
-
                 PivotX = (size / 2) + l;
                 PivotY = (size / 2) + t;
+
+                base.OnDraw(canvas);
             }
 
             public float Size { get; set; } = (float)DefaultSize;

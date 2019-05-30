@@ -17,10 +17,7 @@ namespace Toolkit.Samples.Forms
         public MainPage()
         {
             InitializeComponent();
-
-            //symbol.Symbol = new Esri.ArcGISRuntime.Symbology.SimpleMarkerSymbol(Esri.ArcGISRuntime.Symbology.SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 25);
             SamplesList.ItemsSource = SampleDatasource.Current.Samples;
-
         }
 
         private void SamplesList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -28,6 +25,7 @@ namespace Toolkit.Samples.Forms
             var sample = e.SelectedItem as Sample;
             if(sample != null)
             {
+                SamplesList.SelectedItem = null;
                 Navigation.PushAsync(Activator.CreateInstance(sample.Page) as Page);
             }
         }
