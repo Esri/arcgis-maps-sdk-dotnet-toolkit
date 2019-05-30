@@ -99,7 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private void Element_SizeChanged(object sender, EventArgs e)
         {
 #if NETFX_CORE
-            Control.Width = Element.Width - 1;
+            Control.Width = Math.Max(0, Element.Width - 1);
             Control.Height = Element.Height;
 #elif __ANDROID__
             var lp = Control.LayoutParameters;
