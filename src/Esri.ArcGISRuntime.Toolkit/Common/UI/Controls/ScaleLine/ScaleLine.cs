@@ -50,16 +50,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Rectangle _usScaleLine;
         private bool _scaleSetByMapView;
 
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
         public ScaleLine()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
+            : base()
         {
             Initialize();
         }
+#endif
 
 #pragma warning disable CS1587 // XML comment is not placed on a valid language element
         /// <summary>

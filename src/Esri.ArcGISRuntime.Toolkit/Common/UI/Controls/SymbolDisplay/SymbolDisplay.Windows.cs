@@ -19,8 +19,8 @@
 using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.UI;
-using Windows.Foundation;
 #if NETFX_CORE
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #else

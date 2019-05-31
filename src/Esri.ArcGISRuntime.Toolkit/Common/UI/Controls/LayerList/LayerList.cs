@@ -42,16 +42,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isScaleSet = false;
         private bool _scaleChanged;
 
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerList"/> class.
         /// </summary>
         public LayerList()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
         {
             Initialize();
         }
+#endif
 
         internal void ScaleChanged()
         {
