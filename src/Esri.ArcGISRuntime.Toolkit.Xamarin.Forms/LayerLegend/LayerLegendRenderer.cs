@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if !NETSTANDARD2_0
+using System.ComponentModel;
 using Xamarin.Forms;
 #if __ANDROID__
 using Xamarin.Forms.Platform.Android;
@@ -40,16 +41,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            if (e.NewElement != null)
             {
-                SetNativeControl(e.NewElement?.NativeLayerLegend);
+                if (Control == null)
+                {
+#if __ANDROID__
+                    UI.Controls.LayerLegend ctrl = new UI.Controls.LayerLegend(Context);
+#else
+                    UI.Controls.LayerLegend ctrl = new UI.Controls.LayerLegend();
+#endif
+                    ctrl.IncludeSublayers = Element.IncludeSublayers;
+                    ctrl.LayerContent = Element.LayerContent;
+                    SetNativeControl(ctrl);
+                }
             }
         }
 
-#if !NETFX_CORE
-        /// <inheritdoc />
-        protected override bool ManageNativeControlLifetime => false;
-#endif
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (Control != null)
+            {
+                if (e.PropertyName == LayerLegend.IncludeSublayersProperty.PropertyName)
+                {
+                    Control.IncludeSublayers = Element.IncludeSublayers;
+                }
+                else if (e.PropertyName == LayerLegend.LayerContentProperty.PropertyName)
+                {
+                    Control.LayerContent = Element.LayerContent;
+                }
+            }
+
+            base.OnElementPropertyChanged(sender, e);
+        }
     }
 }
 #endif
