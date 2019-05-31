@@ -10,6 +10,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 
@@ -26,9 +27,20 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.LegendSample);
             mapView = FindViewById<MapView>(Resource.Id.mapView);
-            mapView.Map = new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213"));
+            mapView.Map = CreateMap();
             var legend = FindViewById<UI.Controls.Legend>(Resource.Id.legend);
             legend.GeoView = mapView;
+        }
+
+        private Map CreateMap()
+        {
+            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            {
+                InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
+            };
+            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer")));
+            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0")));
+            return map;
         }
     }
 }

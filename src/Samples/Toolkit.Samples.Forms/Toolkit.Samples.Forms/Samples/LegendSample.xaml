@@ -5,15 +5,24 @@
              xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
              x:Class="Toolkit.Samples.Forms.Samples.LegendSample" Title="Legend">
     <ContentPage.Content>
-        <Grid>
+        <Grid SizeChanged="Grid_SizeChanged">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <esriUI:MapView x:Name="mapView" />
-
-            <esriTK:Legend HorizontalOptions="Start" VerticalOptions="Start" 
-            IsVisible="True" GeoView="{x:Reference mapView}" Grid.Row="1" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <esriUI:MapView x:Name="mapView" Grid.ColumnSpan="2" />
+            <esriTK:Legend x:Name="legend" 
+            IsVisible="True" GeoView="{x:Reference mapView}" Grid.Row="1" Grid.ColumnSpan="2" />
+            <StackLayout HorizontalOptions="End" VerticalOptions="Start"
+                         Grid.ColumnSpan="2" Margin="20" BackgroundColor="#55FFFFFF">
+                <Label Text="Filter by scale range" />
+                <Switch x:Name="filterByScaleRange" 
+                        IsToggled="{Binding FilterByVisibleScaleRange, Source={x:Reference legend}, Mode=TwoWay}" />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>
