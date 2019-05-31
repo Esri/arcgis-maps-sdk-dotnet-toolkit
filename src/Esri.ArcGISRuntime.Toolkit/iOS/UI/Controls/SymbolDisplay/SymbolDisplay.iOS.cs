@@ -160,6 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 InvalidateIntrinsicContentSize();
                 SetNeedsUpdateConstraints();
                 UpdateConstraints();
+                SourceUpdated?.Invoke(this, EventArgs.Empty);
             }
             catch
             {

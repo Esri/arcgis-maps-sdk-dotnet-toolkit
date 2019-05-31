@@ -1,35 +1,25 @@
 ﻿using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using System.Text;
+using System.Threading.Tasks;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
-namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SymbolDisplay
+namespace Toolkit.Samples.Forms.Samples
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class SymbolDisplaySample : Page
-    {
-        public SymbolDisplaySample()
-        {
-            this.InitializeComponent();
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [SampleInfoAttribute(Category = "SymbolDisplay", Description = "Renders a symbol")]
+    public partial class SymbolDisplaySample : ContentPage
+	{
+		public SymbolDisplaySample ()
+		{
+			InitializeComponent();
             LoadSymbols();
-        }
+		}
 
         private void LoadSymbols()
         {
@@ -51,27 +41,27 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SymbolDisplay
             AddSymbol(new PictureMarkerSymbol(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png")));
         }
 
-        private void AddSymbol(Symbology.Symbol symbol)
+        private void AddSymbol(Symbol symbol)
         {
-            int columnCount = SymbolGrid.ColumnDefinitions.Count;
-            var sd = new UI.Controls.SymbolDisplay() { Symbol = symbol };
-            var f = new Border()
+            int columnCount = LayoutRoot.ColumnDefinitions.Count;
+            var sd = new SymbolDisplay() { Symbol = symbol };
+            Frame f = new Frame()
             {
-                HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Center,
-                VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center,
-                BorderBrush = new SolidColorBrush(Colors.Black),
-                BorderThickness = new Thickness(1),
-                Padding = new Thickness(0)
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                BorderColor = Color.Black,
+                Padding = 0,
+                CornerRadius = 0
             };
-            f.Child = sd;
-            int count = SymbolGrid.Children.Count;
+            f.Content = sd;
+            int count = LayoutRoot.Children.Count;
             var row = count / columnCount;
             var column = count % columnCount;
             if (column == 0)
-                SymbolGrid.RowDefinitions.Add(new RowDefinition());
+                LayoutRoot.RowDefinitions.Add(new RowDefinition());
             Grid.SetRow(f, row);
             Grid.SetColumn(f, column);
-            SymbolGrid.Children.Add(f);
+            LayoutRoot.Children.Add(f);
         }
     }
 }

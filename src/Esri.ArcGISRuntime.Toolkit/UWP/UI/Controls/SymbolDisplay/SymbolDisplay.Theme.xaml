@@ -4,7 +4,9 @@
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
 
     <Style TargetType="controls:SymbolDisplay" >
-       <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="BorderThickness" Value="0" />
        <Setter Property="BorderBrush" Value="Transparent" />
        <Setter Property="Background" Value="Transparent" />
        <Setter Property="Padding" Value="0" />
@@ -15,7 +17,7 @@
                  <Border BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}">
-                     <Image x:Name="image" Stretch="Fill" Margin="{TemplateBinding Padding}"/>
+                     <Image x:Name="image" Stretch="UniformToFill" Margin="{TemplateBinding Padding}"/>
                  </Border>
               </ControlTemplate>
           </Setter.Value>

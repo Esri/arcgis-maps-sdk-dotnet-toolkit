@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using Esri.ArcGISRuntime.Symbology;
 using Xamarin.Forms;
 
@@ -29,8 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public SymbolDisplay()
         {
-            HorizontalOptions = LayoutOptions.Start;
-            VerticalOptions = LayoutOptions.Start;
+            HorizontalOptions = LayoutOptions.Center;
+            VerticalOptions = LayoutOptions.Center;
         }
 
         /// <summary>
@@ -47,6 +48,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get { return (Symbol)GetValue(SymbolProperty); }
             set { SetValue(SymbolProperty, value); }
+        }
+
+        /// <summary>
+        /// Used by the renderer to trigger measure invalidation
+        /// </summary>
+        internal void InvalidateMeasure_Internal()
+        {
+            InvalidateMeasure();
         }
     }
 }

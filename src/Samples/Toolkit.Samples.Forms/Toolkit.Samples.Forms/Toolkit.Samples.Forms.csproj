@@ -20,6 +20,9 @@
     <Compile Update="Samples\PopupViewerSample.xaml.cs">
       <DependentUpon>PopupViewerSample.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Samples\SymbolEditorSample.xaml.cs">
+      <DependentUpon>SymbolEditorSample.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +36,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Samples\ScaleLineSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Samples\SymbolDisplaySample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

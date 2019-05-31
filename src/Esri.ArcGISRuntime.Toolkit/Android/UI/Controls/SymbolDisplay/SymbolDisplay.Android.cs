@@ -30,7 +30,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private static DisplayMetrics s_displayMetrics;
         private static IWindowManager s_windowManager;
-        private ImageView _imageView;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
@@ -55,91 +54,50 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Initialize()
         {
-            _imageView = new ImageView(Context)
-            {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
-            };
-            _imageView.SetMaxWidth(40);
-            _imageView.SetMaxHeight(40);
-            _imageView.SetScaleType(ImageView.ScaleType.CenterInside);
-
-            AddView(_imageView);
+            SetScaleType(ImageView.ScaleType.Center);
         }
 
         private async Task UpdateSwatchAsync()
         {
-            if (_imageView == null)
-            {
-                return;
-            }
-
             if (Symbol == null)
             {
-                _imageView.SetImageResource(0);
-                _imageView.LayoutParameters.Width = 0;
-                _imageView.LayoutParameters.Height = 0;
+                SetImageResource(0);
                 return;
             }
 
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
             try
             {
-                var scale = GetScaleFactor();
+                var scale = GetScaleFactor(Context);
                 var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                _imageView.LayoutParameters.Width = (int)(imageData.Width / scale);
-                _imageView.LayoutParameters.Height = (int)(imageData.Height / scale);
-                _imageView.SetImageBitmap(await imageData.ToImageSourceAsync());
+                SetImageBitmap(await imageData.ToImageSourceAsync());
+                SourceUpdated?.Invoke(this, System.EventArgs.Empty);
             }
             catch
             {
-                _imageView.SetImageResource(0);
+                SetImageResource(0);
             }
 #pragma warning restore ESRI1800
         }
 
-        private static double GetScaleFactor()
+        private static double GetScaleFactor(Context context)
         {
-            return GetDisplayMetrics()?.Density ?? 1;
-        }
-
-        /// <inheritdoc />
-        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
-        {
-            base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
-
-            // Initialize dimensions of root layout
-            MeasureChild(_imageView, widthMeasureSpec, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
-
-            // Calculate the ideal width and height for the view
-            var desiredWidth = PaddingLeft + PaddingRight + _imageView.MeasuredWidth;
-            var desiredHeight = PaddingTop + PaddingBottom + _imageView.MeasuredHeight;
-
-            // Get the width and height of the view given any width and height constraints indicated by the width and height spec values
-            var width = ResolveSize(desiredWidth, widthMeasureSpec);
-            var height = ResolveSize(desiredHeight, heightMeasureSpec);
-            SetMeasuredDimension(width, height);
-        }
-
-        /// <inheritdoc />
-        protected override void OnLayout(bool changed, int l, int t, int r, int b)
-        {
-            // Forward layout call to the root layout
-            _imageView.Layout(PaddingLeft, PaddingTop, _imageView.MeasuredWidth + PaddingLeft, _imageView.MeasuredHeight + PaddingBottom);
+            return GetDisplayMetrics(context)?.Density ?? 1;
         }
 
         // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics GetDisplayMetrics()
+        private static DisplayMetrics GetDisplayMetrics(Context context)
         {
             if (s_displayMetrics == null)
             {
                 if (s_windowManager == null)
                 {
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                    s_windowManager = context.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
                 }
 
                 if (s_windowManager == null)
                 {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
+                    s_displayMetrics = context.Resources?.DisplayMetrics;
                 }
                 else
                 {
