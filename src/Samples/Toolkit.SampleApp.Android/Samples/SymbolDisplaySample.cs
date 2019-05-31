@@ -15,7 +15,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
     [SampleInfoAttribute(Category = "SymbolDisplay", Description = "Renders a symbol")]
-    [Activity(Label = "SymbolDisplay")]
+    [Activity(Label = "SymbolDisplay", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class SymbolDisplaySample : Activity
     {
         private GridLayout rootLayout;

@@ -15,7 +15,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
     [SampleInfoAttribute(Category = "SymbolDisplay", Description = "Dynamically edit a symbol and render it")]
-    [Activity(Label = "Symbol Editor")]
+    [Activity(Label = "Symbol Editor", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class SymbolEditorSample : Activity
     {
         private SimpleMarkerSymbol Symbol { get; } = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Square, System.Drawing.Color.Red, 20) { Outline = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Black, 2) };

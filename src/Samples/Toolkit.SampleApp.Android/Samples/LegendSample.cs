@@ -16,7 +16,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    [Activity(Label = "Legend")]
+    [Activity(Label = "Legend", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     [SampleInfoAttribute(Category = "Legend", Description = "Render a legend for a map")]
     public class LegendSampleActivity : Activity
     {
