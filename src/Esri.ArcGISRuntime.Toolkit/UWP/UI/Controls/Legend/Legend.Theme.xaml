@@ -57,12 +57,14 @@
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}">
-                        <ItemsControl x:Name="List"
-                                          Foreground="{TemplateBinding Foreground}"
-                                          ItemTemplate="{TemplateBinding LayerItemTemplate}"
-                                          Margin="{TemplateBinding Padding}"
-                                          BorderThickness="0"
-                                          Padding="0" />
+                      <ListView x:Name="List"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        ItemTemplate="{TemplateBinding LayerItemTemplate}"
+                                        Margin="{TemplateBinding Padding}"
+                                        BorderThickness="0"
+                                        Padding="0" SelectionMode="None" 
+                                        IsItemClickEnabled="False" >
+                      </ListView>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
