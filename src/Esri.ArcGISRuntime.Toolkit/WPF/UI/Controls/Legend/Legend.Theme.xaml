@@ -69,7 +69,7 @@
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}">
-                        <ItemsControl x:Name="List"
+                        <ListView x:Name="List"
                                           ItemTemplate="{TemplateBinding LayerItemTemplate}"
                                           Margin="{TemplateBinding Padding}"
                                           BorderThickness="0"
