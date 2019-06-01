@@ -63,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleScreenAdapter.cs" />
     <Compile Include="Samples\CompassSceneViewSample.cs" />
+    <Compile Include="Samples\LayerLegendSample.cs" />
     <Compile Include="Samples\LegendSample.cs" />
     <Compile Include="Samples\PopupSample.cs" />
     <Compile Include="Samples\ScaleLineSample.cs" />
@@ -128,6 +129,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\SymbolEditorSample.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\LayerLegendSample.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

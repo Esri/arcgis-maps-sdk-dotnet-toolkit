@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class LayerLegend
     {
         private ListView _listView;
-        private SynchronizationContext _syncContext;
+        private Android.OS.Handler _uithread;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
@@ -55,8 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Initialize()
         {
-            _syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
-
+            _uithread = new Android.OS.Handler(Context.MainLooper);
             _listView = new ListView(Context)
             {
                 ClipToOutline = true,
@@ -102,7 +101,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Layer_Loaded(object sender, System.EventArgs e)
         {
             (sender as ILoadable).Loaded -= Layer_Loaded;
-            _syncContext?.Post(_ => Refresh(), null);
+            _uithread.Post(Refresh);
+        }
+
+        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
+        {
+            base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
+
+            // Initialize dimensions of root layout
+            MeasureChild(_listView, widthMeasureSpec, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
+
+            // Calculate the ideal width and height for the view
+            var desiredWidth = PaddingLeft + PaddingRight + _listView.MeasuredWidth;
+            var desiredHeight = PaddingTop + PaddingBottom + _listView.MeasuredHeight;
+
+            // Get the width and height of the view given any width and height constraints indicated by the width and height spec values
+            var width = ResolveSize(desiredWidth, widthMeasureSpec);
+            var height = ResolveSize(desiredHeight, heightMeasureSpec);
+            SetMeasuredDimension(width, height);
+        }
+
+        /// <inheritdoc />
+        protected override void OnLayout(bool changed, int l, int t, int r, int b)
+        {
+            _listView.Layout(PaddingLeft, PaddingTop, _listView.MeasuredWidth + PaddingLeft, _listView.MeasuredHeight + PaddingBottom);
         }
     }
 }

@@ -17,6 +17,9 @@
     <Compile Update="Samples\CompassMapViewSample.xaml.cs">
       <DependentUpon>CompassMapViewSample.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Samples\LayerLegendSample.xaml.cs">
+      <DependentUpon>LayerLegendSample.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Samples\PopupViewerSample.xaml.cs">
       <DependentUpon>PopupViewerSample.xaml</DependentUpon>
     </Compile>
