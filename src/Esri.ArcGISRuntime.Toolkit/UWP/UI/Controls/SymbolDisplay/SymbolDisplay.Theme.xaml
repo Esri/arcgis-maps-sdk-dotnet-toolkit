@@ -17,7 +17,7 @@
                  <Border BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}">
-                     <Image x:Name="image" Stretch="UniformToFill" Margin="{TemplateBinding Padding}"/>
+                     <Image x:Name="image" Stretch="Uniform" Margin="{TemplateBinding Padding}"/>
                  </Border>
               </ControlTemplate>
           </Setter.Value>
