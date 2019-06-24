@@ -1,0 +1,59 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
+  
+  <PropertyGroup>
+    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
+    <iOSTargetFramework>xamarinios10</iOSTargetFramework>
+    <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
+    <Title>ArcGIS Runtime SDK for .NET - AR Toolkit Xamarin.Forms</Title>
+    <Description>ArcGIS Runtime Augmented Reality controls and utilities for Universal Windows Platform (UWP), Xamarin.Android, and Xamarin.iOS apps.</Description>
+    <PackageTags>AR Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
+    <RootNamespace>Esri.ArcGISRuntime.ARToolkit</RootNamespace>
+    <AssemblyName>Esri.ArcGISRuntime.ARToolkit</AssemblyName>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Copyright>Copyright © 2018-2019 Esri.</Copyright>
+    <Authors>Esri Inc.</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.6.0-daily2459" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.6.0-daily2459" />
+    <PackageReference Include="Xamarin.Google.ARCore" Version="1.8.0" />
+    <None Remove="Resources\**\*.*" />
+    <AndroidResource Include="Resources\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.6.0-daily2459" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+     <PackageReference Include="Esri.ArcGISRuntime" Version="100.6.0-daily2459" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <Version>1.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ARSceneView.*.cs">
+      <DependentUpon>ARSceneView.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

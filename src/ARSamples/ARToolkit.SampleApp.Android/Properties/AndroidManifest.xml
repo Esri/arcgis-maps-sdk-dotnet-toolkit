@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+          android:versionCode="1" 
+          android:versionName="1.0" 
+          package="com.esri.ARToolkit.Droid">
+  <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="27" />
+
+  <!-- Both "AR Optional" and "AR Required" apps require CAMERA permission. -->
+  <uses-permission android:name="android.permission.CAMERA" />
+  <!-- Indicates that app requires ARCore ("AR Required"). Ensures app is only
+     visible in the Google Play Store on devices that support ARCore.
+     For "AR Optional" apps remove this line. -->
+  <uses-feature android:name="android.hardware.camera.ar" />
+
+
+  <application android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/AppTheme">
+
+    <!-- Indicates that app requires ARCore ("AR Required"). Causes Google
+         Play Store to download and install ARCore along with the app.
+         For an "AR Optional" app, specify "optional" instead of "required".
+    -->
+    <meta-data android:name="com.google.ar.core" android:value="required" />
+  </application>
+</manifest>
