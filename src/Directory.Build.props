@@ -38,7 +38,7 @@
   <Choose>
     <When Condition="$(IsToolkitLibrary)" >      
       <PropertyGroup>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
@@ -48,7 +48,7 @@
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
       </ItemGroup>
       <ItemGroup>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)Esri.ArcGISRuntime.Toolkit\stylecop.json" />
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" />
       </ItemGroup>
     </When>
   </Choose>

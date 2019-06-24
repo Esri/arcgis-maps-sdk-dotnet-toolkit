@@ -95,9 +95,9 @@
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)..\Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
 
 </Project>

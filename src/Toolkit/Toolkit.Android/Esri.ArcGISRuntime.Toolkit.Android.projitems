@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
-    <AndroidResource Include="$(MSBuildThisFileDirectory)..\Common\**\*.axml">
+    <AndroidResource Include="$(MSBuildThisFileDirectory)..\Toolkit\**\*.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

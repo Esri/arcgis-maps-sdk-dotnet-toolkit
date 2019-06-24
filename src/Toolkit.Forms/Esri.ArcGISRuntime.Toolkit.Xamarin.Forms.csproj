@@ -35,21 +35,19 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj" />
+    <ProjectReference Include="..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Esri.ArcGISRuntime.Toolkit\Common\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
   </ItemGroup>
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
     <ItemGroup>
-      <PackagingOutputs Remove="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\Esri.ArcGISRuntime.Toolkit\Common'))\**\*.*" />
-      <PackagingOutputs Remove="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\Esri.ArcGISRuntime.Toolkit\UWP'))\**\*.*" />
+      <PackagingOutputs Remove="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\Toolkit\Toolkit'))\**\*.*" />
+      <PackagingOutputs Remove="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\Toolkit\Toolkit.UWP'))\**\*.*" />
     </ItemGroup>
   </Target>
   
 </Project>
-
-
