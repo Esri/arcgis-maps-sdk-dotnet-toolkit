@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit.Xamarin.Forms", "Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj", "{BC141500-2741-4F13-86DC-2FA002422C60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit.Xamarin.Forms", "Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj", "{BC141500-2741-4F13-86DC-2FA002422C60}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Esri.ArcGISRuntime.Toolkit", "Esri.ArcGISRuntime.Toolkit", "{BD5B4F64-D32F-4DF3-B34D-070B7D526579}"
 EndProject
@@ -24,15 +24,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.Android", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Samples.iOS", "Samples\Toolkit.SampleApp.iOS\Toolkit.Samples.iOS.csproj", "{EA9694F8-A3C7-4F34-B4F0-BF17A231BF7E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit", "Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj", "{332171E3-4D72-4148-9DDF-341CAFB61CA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit", "Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj", "{332171E3-4D72-4148-9DDF-341CAFB61CA3}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Android", "Esri.ArcGISRuntime.Toolkit\Android\Esri.ArcGISRuntime.Toolkit.Android.shproj", "{C8657C80-A1AB-4D77-9F75-D923AB430CFB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Android", "Toolkit\Toolkit.Android\Esri.ArcGISRuntime.Toolkit.Android.shproj", "{C8657C80-A1AB-4D77-9F75-D923AB430CFB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.iOS", "Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.shproj", "{C8677C80-A1AB-4D77-9F75-C923AB330AFB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.iOS", "Toolkit\Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.shproj", "{C8677C80-A1AB-4D77-9F75-C923AB330AFB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.UWP", "Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.shproj", "{E8657C80-A1AB-4D77-9F75-C923AB330AFB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.UWP", "Toolkit\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.shproj", "{E8657C80-A1AB-4D77-9F75-C923AB330AFB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.WPF", "Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.shproj", "{A9657C80-A1AB-4D77-9F75-C923AB330AFB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.WPF", "Toolkit\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.shproj", "{A9657C80-A1AB-4D77-9F75-C923AB330AFB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Esri.ArcGISRuntime.Toolkit.Xamarin.Forms", "Esri.ArcGISRuntime.Toolkit.Xamarin.Forms", "{1CBB77FA-C00B-4728-823D-FA44E9408007}"
 EndProject
@@ -48,31 +48,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Samples.Forms", "Sa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Esri.ArcGISRuntime.Toolkit.Preview", "Esri.ArcGISRuntime.Toolkit.Preview", "{C46AD5CF-538C-480A-ABDC-AD98E3E33F79}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.Android", "Esri.ArcGISRuntime.Toolkit.Preview\Android\Esri.ArcGISRuntime.Toolkit.Preview.Android.shproj", "{E1657C80-F1AB-4E77-9F75-D923AB430CFB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.Android", "Toolkit.Preview\Toolkit.Preview.Android\Esri.ArcGISRuntime.Toolkit.Preview.Android.shproj", "{E1657C80-F1AB-4E77-9F75-D923AB430CFB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.iOS", "Esri.ArcGISRuntime.Toolkit.Preview\iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.shproj", "{28677C81-A1AB-4D77-9975-C923EB330AFB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.iOS", "Toolkit.Preview\Toolkit.Preview.iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.shproj", "{28677C81-A1AB-4D77-9975-C923EB330AFB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.UWP", "Esri.ArcGISRuntime.Toolkit.Preview\UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.shproj", "{C8652D80-A1AB-8D13-9F75-D923AB3303FB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.UWP", "Toolkit.Preview\Toolkit.Preview.UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.shproj", "{C8652D80-A1AB-8D13-9F75-D923AB3303FB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.WPF", "Esri.ArcGISRuntime.Toolkit.Preview\WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.shproj", "{496269C0-A1AB-4E78-9F76-D923AB330AFB}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.WPF", "Toolkit.Preview\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.shproj", "{496269C0-A1AB-4E78-9F76-D923AB330AFB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.Shared", "Esri.ArcGISRuntime.Toolkit.Preview\Shared\Esri.ArcGISRuntime.Toolkit.Preview.Shared.shproj", "{18357C70-A1AB-4E82-1F75-C933AB330F6B}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.Preview.Shared", "Toolkit.Preview\Toolkit.Preview.Shared\Esri.ArcGISRuntime.Toolkit.Preview.Shared.shproj", "{18357C70-A1AB-4E82-1F75-C933AB330F6B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit.Preview", "Esri.ArcGISRuntime.Toolkit.Preview\Common\Esri.ArcGISRuntime.Toolkit.Preview.csproj", "{C0F42FBA-15F8-4D1E-B60F-06BB32CA19DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.Toolkit.Preview", "Toolkit.Preview\Toolkit.Preview\Esri.ArcGISRuntime.Toolkit.Preview.csproj", "{C0F42FBA-15F8-4D1E-B60F-06BB32CA19DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Native", "Native", "{1D1309F0-3323-4686-A08E-EDEA9CF21070}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Esri.ArcGISRuntime.Toolkit.Preview\Shared\Esri.ArcGISRuntime.Toolkit.Preview.Shared.projitems*{18357c70-a1ab-4e82-1f75-c933ab330f6b}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit.Preview\iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.projitems*{28677c81-a1ab-4d77-9975-c923eb330afb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit.Preview\WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems*{496269c0-a1ab-4e78-9f76-d923ab330afb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems*{a9657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit.Preview\UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.projitems*{c8652d80-a1ab-8d13-9f75-d923ab3303fb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit\Android\Esri.ArcGISRuntime.Toolkit.Android.projitems*{c8657c80-a1ab-4d77-9f75-d923ab430cfb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit\iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems*{c8677c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit.Preview\Android\Esri.ArcGISRuntime.Toolkit.Preview.Android.projitems*{e1657c80-f1ab-4e77-9f75-d923ab430cfb}*SharedItemsImports = 13
-		Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems*{e8657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
+		Toolkit.Preview\Toolkit.Preview.Shared\Esri.ArcGISRuntime.Toolkit.Preview.Shared.projitems*{18357c70-a1ab-4e82-1f75-c933ab330f6b}*SharedItemsImports = 13
+		Toolkit.Preview\Toolkit.Preview.iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.projitems*{28677c81-a1ab-4d77-9975-c923eb330afb}*SharedItemsImports = 13
+		Toolkit.Preview\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems*{496269c0-a1ab-4e78-9f76-d923ab330afb}*SharedItemsImports = 13
+		Toolkit\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems*{a9657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
+		Toolkit.Preview\Toolkit.Preview.UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.projitems*{c8652d80-a1ab-8d13-9f75-d923ab3303fb}*SharedItemsImports = 13
+		Toolkit\Toolkit.Android\Esri.ArcGISRuntime.Toolkit.Android.projitems*{c8657c80-a1ab-4d77-9f75-d923ab430cfb}*SharedItemsImports = 13
+		Toolkit\Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems*{c8677c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
+		Toolkit.Preview\Toolkit.Preview.Android\Esri.ArcGISRuntime.Toolkit.Preview.Android.projitems*{e1657c80-f1ab-4e77-9f75-d923ab430cfb}*SharedItemsImports = 13
+		Toolkit\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems*{e8657c80-a1ab-4d77-9f75-c923ab330afb}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU

@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             base.OnElementChanged(e);
             if (e.OldElement != null)
             {
-                e.NewElement.SizeChanged -= Element_SizeChanged;
+                e.OldElement.SizeChanged -= Element_SizeChanged;
             }
 
             if (e.NewElement != null)
