@@ -175,11 +175,11 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.8" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit\Common\Esri.ArcGISRuntime.Toolkit.csproj">
+    <ProjectReference Include="..\..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
+    <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
       <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
     </ProjectReference>
