@@ -9,6 +9,12 @@
 		android:layout_height="0dp"
         android:layout_width="match_parent"
         android:layout_weight="1" />
+	<CheckBox
+		android:id="@+id/checkboxVisibleRangeOnly"
+		android:layout_height="20dp"
+		android:layout_width="match_parent"
+		android:text="Filter by visible scale range"
+		android:checked="true"  />
 	 <Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend
 	    android:layout_height="0dp"
         android:layout_width="match_parent"

@@ -30,6 +30,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             mapView.Map = CreateMap();
             var legend = FindViewById<UI.Controls.Legend>(Resource.Id.legend);
             legend.GeoView = mapView;
+            var checkbox = FindViewById<CheckBox>(Resource.Id.checkboxVisibleRangeOnly);
+            checkbox.CheckedChange += (s, e) =>
+            {
+                legend.FilterByVisibleScaleRange = e.IsChecked;
+            };
         }
 
         private Map CreateMap()

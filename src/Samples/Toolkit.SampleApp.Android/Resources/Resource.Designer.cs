@@ -511,86 +511,86 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f050038
-			public const int CurrentExtentEndTimeLabel = 2131034168;
-			
-			// aapt resource value: 0x7f050030
-			public const int CurrentExtentFill = 2131034160;
-			
-			// aapt resource value: 0x7f050037
-			public const int CurrentExtentStartTimeLabel = 2131034167;
-			
-			// aapt resource value: 0x7f050029
-			public const int FullExtentEndGuide = 2131034153;
-			
-			// aapt resource value: 0x7f050028
-			public const int FullExtentEndTimeLabel = 2131034152;
-			
-			// aapt resource value: 0x7f05002d
-			public const int FullExtentEndTimeTickmark = 2131034157;
-			
-			// aapt resource value: 0x7f050027
-			public const int FullExtentStartGuide = 2131034151;
-			
-			// aapt resource value: 0x7f050026
-			public const int FullExtentStartTimeLabel = 2131034150;
-			
-			// aapt resource value: 0x7f05002c
-			public const int FullExtentStartTimeTickmark = 2131034156;
-			
-			// aapt resource value: 0x7f050034
-			public const int MaxThumb = 2131034164;
-			
-			// aapt resource value: 0x7f050036
-			public const int MaxThumbCenter = 2131034166;
+			// aapt resource value: 0x7f050039
+			public const int CurrentExtentEndTimeLabel = 2131034169;
 			
 			// aapt resource value: 0x7f050031
-			public const int MinThumb = 2131034161;
+			public const int CurrentExtentFill = 2131034161;
 			
-			// aapt resource value: 0x7f050033
-			public const int MinThumbCenter = 2131034163;
-			
-			// aapt resource value: 0x7f050022
-			public const int NextButton = 2131034146;
-			
-			// aapt resource value: 0x7f050023
-			public const int NextButtonOutline = 2131034147;
-			
-			// aapt resource value: 0x7f050021
-			public const int PauseButtonOutline = 2131034145;
-			
-			// aapt resource value: 0x7f050035
-			public const int PinnedMaxThumb = 2131034165;
-			
-			// aapt resource value: 0x7f050032
-			public const int PinnedMinThumb = 2131034162;
-			
-			// aapt resource value: 0x7f050020
-			public const int PlayButtonOutline = 2131034144;
-			
-			// aapt resource value: 0x7f05001f
-			public const int PlayPauseButton = 2131034143;
-			
-			// aapt resource value: 0x7f050024
-			public const int PreviousButton = 2131034148;
-			
-			// aapt resource value: 0x7f050025
-			public const int PreviousButtonOutline = 2131034149;
-			
-			// aapt resource value: 0x7f05002b
-			public const int SliderTrack = 2131034155;
+			// aapt resource value: 0x7f050038
+			public const int CurrentExtentStartTimeLabel = 2131034168;
 			
 			// aapt resource value: 0x7f05002a
-			public const int SliderTrackOutline = 2131034154;
+			public const int FullExtentEndGuide = 2131034154;
 			
-			// aapt resource value: 0x7f05002f
-			public const int ThumbGuideStart = 2131034159;
+			// aapt resource value: 0x7f050029
+			public const int FullExtentEndTimeLabel = 2131034153;
 			
 			// aapt resource value: 0x7f05002e
-			public const int Tickmarks = 2131034158;
+			public const int FullExtentEndTimeTickmark = 2131034158;
 			
-			// aapt resource value: 0x7f05001c
-			public const int angleSlider = 2131034140;
+			// aapt resource value: 0x7f050028
+			public const int FullExtentStartGuide = 2131034152;
+			
+			// aapt resource value: 0x7f050027
+			public const int FullExtentStartTimeLabel = 2131034151;
+			
+			// aapt resource value: 0x7f05002d
+			public const int FullExtentStartTimeTickmark = 2131034157;
+			
+			// aapt resource value: 0x7f050035
+			public const int MaxThumb = 2131034165;
+			
+			// aapt resource value: 0x7f050037
+			public const int MaxThumbCenter = 2131034167;
+			
+			// aapt resource value: 0x7f050032
+			public const int MinThumb = 2131034162;
+			
+			// aapt resource value: 0x7f050034
+			public const int MinThumbCenter = 2131034164;
+			
+			// aapt resource value: 0x7f050023
+			public const int NextButton = 2131034147;
+			
+			// aapt resource value: 0x7f050024
+			public const int NextButtonOutline = 2131034148;
+			
+			// aapt resource value: 0x7f050022
+			public const int PauseButtonOutline = 2131034146;
+			
+			// aapt resource value: 0x7f050036
+			public const int PinnedMaxThumb = 2131034166;
+			
+			// aapt resource value: 0x7f050033
+			public const int PinnedMinThumb = 2131034163;
+			
+			// aapt resource value: 0x7f050021
+			public const int PlayButtonOutline = 2131034145;
+			
+			// aapt resource value: 0x7f050020
+			public const int PlayPauseButton = 2131034144;
+			
+			// aapt resource value: 0x7f050025
+			public const int PreviousButton = 2131034149;
+			
+			// aapt resource value: 0x7f050026
+			public const int PreviousButtonOutline = 2131034150;
+			
+			// aapt resource value: 0x7f05002c
+			public const int SliderTrack = 2131034156;
+			
+			// aapt resource value: 0x7f05002b
+			public const int SliderTrackOutline = 2131034155;
+			
+			// aapt resource value: 0x7f050030
+			public const int ThumbGuideStart = 2131034160;
+			
+			// aapt resource value: 0x7f05002f
+			public const int Tickmarks = 2131034159;
+			
+			// aapt resource value: 0x7f05001d
+			public const int angleSlider = 2131034141;
 			
 			// aapt resource value: 0x7f05000e
 			public const int barrier = 2131034126;
@@ -600,6 +600,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			
 			// aapt resource value: 0x7f05000f
 			public const int chains = 2131034127;
+			
+			// aapt resource value: 0x7f050019
+			public const int checkboxVisibleRangeOnly = 2131034137;
 			
 			// aapt resource value: 0x7f050015
 			public const int compass = 2131034133;
@@ -625,8 +628,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7f050002
 			public const int left = 2131034114;
 			
-			// aapt resource value: 0x7f050019
-			public const int legend = 2131034137;
+			// aapt resource value: 0x7f05001a
+			public const int legend = 2131034138;
 			
 			// aapt resource value: 0x7f050014
 			public const int mapView = 2131034132;
@@ -643,14 +646,14 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7f050009
 			public const int percent = 2131034121;
 			
-			// aapt resource value: 0x7f05001a
-			public const int popupViewer = 2131034138;
+			// aapt resource value: 0x7f05001b
+			public const int popupViewer = 2131034139;
 			
 			// aapt resource value: 0x7f050003
 			public const int right = 2131034115;
 			
-			// aapt resource value: 0x7f05001b
-			public const int scaleLine = 2131034139;
+			// aapt resource value: 0x7f05001c
+			public const int scaleLine = 2131034140;
 			
 			// aapt resource value: 0x7f050017
 			public const int sceneView = 2131034135;
@@ -670,11 +673,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7f050004
 			public const int start = 2131034116;
 			
-			// aapt resource value: 0x7f05001d
-			public const int styleSelector = 2131034141;
-			
 			// aapt resource value: 0x7f05001e
-			public const int symbolDisplay = 2131034142;
+			public const int styleSelector = 2131034142;
+			
+			// aapt resource value: 0x7f05001f
+			public const int symbolDisplay = 2131034143;
 			
 			// aapt resource value: 0x7f050005
 			public const int top = 2131034117;
