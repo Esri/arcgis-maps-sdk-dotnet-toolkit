@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.LegendSample);
             mapView = FindViewById<MapView>(Resource.Id.mapView);
-            mapView.Map = new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213"));
+            mapView.Map = new Map(new Uri("https://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213"));
             var legend = FindViewById<UI.Controls.Legend>(Resource.Id.legend);
             legend.GeoView = mapView;
         }

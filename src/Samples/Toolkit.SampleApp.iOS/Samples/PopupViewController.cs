@@ -2,6 +2,7 @@
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Security;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
@@ -9,25 +10,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UIKit;
 
-namespace Esri.ArcGISRuntime.Toolkit.SampleApp
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    public partial class ViewController : UIViewController
+    [SampleInfoAttribute(Category = "Popup", Description = "Use PopupViewer to display detailed feature information")]
+    public partial class PopupViewController : UIViewController
     {
-        public ViewController(IntPtr handle) : base(handle)
+        private MapView mapView;
+        private PopupViewer popupViewer;
+
+        public PopupViewController()
         {
         }
 
-        private RuntimeImage _infoIcon = null;
-        private RuntimeImage InfoIcon => _infoIcon;
-
+        private RuntimeImage InfoIcon;
         public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-
-            // Used in Callout to see feature details in PopupViewer
-            _infoIcon = await UIImage.FromBundle("info.png")?.ToRuntimeImageAsync();
-
             // Used to demonstrate display of EditSummary in PopupViewer
             // Provides credentials to token-secured layer that has editor-tracking enabled
             AuthenticationManager.Current.ChallengeHandler = new ChallengeHandler(async (info) =>
@@ -35,29 +33,44 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 return await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, "user1", "user1");
             });
 
+            mapView = new MapView()
+            {
+                Map = new Map(Basemap.CreateLightGrayCanvasVector()),
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
+            this.View.AddSubview(mapView);
+
+            popupViewer = new PopupViewer()
+            {
+                Frame = new CoreGraphics.CGRect(0, 0, 414, 736),
+                BackgroundColor = UIColor.White,
+                ContentStretch = new CoreGraphics.CGRect(0, 0, 1, 1),
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Hidden = true
+            };
+            this.View.AddSubview(popupViewer);
+
+            mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+            mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
+            mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
+            mapView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
+            popupViewer.TopAnchor.ConstraintEqualTo(View.TopAnchor).Active = true;
+            popupViewer.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+
+            // Used in Callout to see feature details in PopupViewer
+            InfoIcon = await UIImage.FromBundle("info.png")?.ToRuntimeImageAsync();
             mapView.GeoViewTapped += mapView_GeoViewTapped;
 
             // Webmap configured with Popup
             mapView.Map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
 
-            scaleLine.MapView = mapView;
-            compass.GeoView = mapView;
-            compass.AutoHide = false;
-            popupViewer.BackgroundColor = UIColor.White;
+        }
+        public override void ViewDidDisappear(bool animated)
+        {
+            AuthenticationManager.Current.ChallengeHandler = null;
+            base.ViewDidDisappear(animated);
         }
 
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-            // Attach the scaleline to always sit right on top of the attribution text
-            scaleLine.BottomAnchor.ConstraintEqualTo(mapView.AttributionTopAnchor, -10).Active = true;
-        }
-
-        public override void DidReceiveMemoryWarning()
-        {
-            base.DidReceiveMemoryWarning();
-            // Release any cached data, images, etc that aren't in use.
-        }
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             Exception error = null;

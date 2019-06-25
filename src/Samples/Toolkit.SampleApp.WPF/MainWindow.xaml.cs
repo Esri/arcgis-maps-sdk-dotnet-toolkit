@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             MenuItem samplesItem = new MenuItem() { Header = "Samples" };
             foreach (var sample in samples.OrderBy(s=>s.Category))
             {
-                MenuItem sampleitem = new MenuItem() { Header = sample.Name, Tag = sample };
+                MenuItem sampleitem = new MenuItem() { Header = sample.Name, Tag = sample, ToolTip = sample.Description };
                 sampleitem.Click += (s, e) => { sampleitem_Click(sample, s as MenuItem); };
                 MenuItem root = samplesItem;
                 if (sample.Category != null)
