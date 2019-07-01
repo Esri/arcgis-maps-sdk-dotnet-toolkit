@@ -197,6 +197,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _cameraView.Source = _mediaCapture;
             await _mediaCapture.StartPreviewAsync();
         }
+
+        private TransformationMatrix HitTest(Windows.Foundation.Point screenPoint)
+        {
+            throw new NotSupportedException();
+        }
     }
 }
 #endif

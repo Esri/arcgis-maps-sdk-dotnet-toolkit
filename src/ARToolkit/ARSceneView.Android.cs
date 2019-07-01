@@ -18,6 +18,7 @@
 using System;
 using Android.Content;
 using Android.Opengl;
+using Android.Runtime;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 using Google.AR.Core;
@@ -255,7 +256,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
                             _controller.OriginCamera = _start;
                         }
 
-                        _controller.TransformationMatrix = new TransformationMatrix(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
+                        _controller.TransformationMatrix = new TransformationMatrix(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz()) + InitialTransformation;
+                        var intrinsics = camera.ImageIntrinsics;
+                        float[] fl = intrinsics.GetFocalLength();
+                        float[] pp = intrinsics.GetPrincipalPoint();
+                        int[] size = intrinsics.GetImageDimensions();
+                        SetFieldOfView(fl[0], fl[1], pp[0], pp[1], size[0], size[1], GetDeviceOrientation());
                     }
                 }
 
@@ -265,9 +271,26 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
 
                 OnDrawComplete(gl, _session, frame);
+                _lastFrame = frame;
             }
-            catch
+            catch(System.Exception ex)
             {
+
+            }
+        }
+
+        private Frame _lastFrame;
+
+        private UI.DeviceOrientation GetDeviceOrientation()
+        {
+            var windowManager = Context.GetSystemService(Context.WindowService).JavaCast<Android.Views.IWindowManager>();
+            switch (windowManager.DefaultDisplay.Rotation)
+            {
+                case Android.Views.SurfaceOrientation.Rotation0: return UI.DeviceOrientation.Portrait;
+                case Android.Views.SurfaceOrientation.Rotation90: return UI.DeviceOrientation.LandscapeLeft;
+                case Android.Views.SurfaceOrientation.Rotation180: return UI.DeviceOrientation.ReversePortrait;
+                case Android.Views.SurfaceOrientation.Rotation270:
+                default: return UI.DeviceOrientation.LandscapeRight;
             }
         }
 
@@ -309,6 +332,23 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private bool _isTracking;
 
         public event EventHandler<bool> IsTrackingStateChanged;
+
+        private TransformationMatrix HitTest(Android.Graphics.PointF screenPoint)
+        {
+            var frame = _lastFrame;
+            if (frame != null && frame.Camera.TrackingState == TrackingState.Tracking)
+            {
+                var hitResults = _lastFrame.HitTest(screenPoint.X, screenPoint.Y);
+                var hitResult = hitResults.Count > 0 ? hitResults[0] : null;
+                if (hitResult != null)
+                {
+                    var q = hitResult.HitPose.GetRotationQuaternion();
+                    var t = hitResult.HitPose.GetTranslation();
+                    return new TransformationMatrix(q[0], q[1], q[2], q[3], t[0], t[1], t[2]);
+                }
+            }
+            return null;
+        }
     }
 }
 #endif

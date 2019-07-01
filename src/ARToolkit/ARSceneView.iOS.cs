@@ -19,6 +19,7 @@ using System;
 using ARKit;
 using CoreMedia;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using Foundation;
 using UIKit;
@@ -139,7 +140,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                         var q = pov.WorldOrientation;
                         var t = pov.Transform;
-                        _controller.TransformationMatrix = new TransformationMatrix(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
+                        _controller.TransformationMatrix = new TransformationMatrix(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z) + InitialTransformation;
+                        var intrinsics = frame.Camera.Intrinsics;
+                        var imageResolution = frame.Camera.ImageResolution;
+                        SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
                     }
                 }
             }
@@ -147,6 +151,18 @@ namespace Esri.ArcGISRuntime.ARToolkit
             if (IsManualRendering)
             {
                 RenderFrame();
+            }
+        }
+
+        private DeviceOrientation GetDeviceOrientation()
+        {
+            switch (UIDevice.CurrentDevice.Orientation)
+            {
+                case UIDeviceOrientation.Portrait: return DeviceOrientation.Portrait;
+                case UIDeviceOrientation.LandscapeLeft: return DeviceOrientation.LandscapeLeft;
+                case UIDeviceOrientation.LandscapeRight: return DeviceOrientation.LandscapeRight;
+                case UIDeviceOrientation.PortraitUpsideDown: return DeviceOrientation.ReversePortrait;
+                default: return DeviceOrientation.Portrait;
             }
         }
 
@@ -255,6 +271,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Gets a value indicating whether <c>ARKit</c> is supported on this device.
         /// </summary>
         public bool IsSupported => ARWorldTrackingConfiguration.IsSupported;
+        private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint)
+        {
+            throw new NotImplementedException("TODO");
+        }
     }
 }
 #endif
