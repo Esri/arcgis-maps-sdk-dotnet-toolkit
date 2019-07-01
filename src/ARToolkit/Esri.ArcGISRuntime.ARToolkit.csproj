@@ -24,22 +24,22 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.6.0-daily2459" />
+    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="100.6.0-daily2466" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.6.0-daily2459" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="100.6.0-daily2466" />
     <PackageReference Include="Xamarin.Google.ARCore" Version="1.8.0" />
     <None Remove="Resources\**\*.*" />
     <AndroidResource Include="Resources\**\*.*" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.6.0-daily2459" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="100.6.0-daily2466" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-     <PackageReference Include="Esri.ArcGISRuntime" Version="100.6.0-daily2459" />
+     <PackageReference Include="Esri.ArcGISRuntime" Version="100.6.0-daily2466" />
   </ItemGroup>
   
   <ItemGroup>
