@@ -119,3 +119,4 @@ project.lock.json
 src/.vs/
 NuGet/
 src/Samples/Toolkit.SampleApp.UWP/BundleArtifacts/
+src/ARToolkit/.vs/

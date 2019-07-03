@@ -101,7 +101,8 @@ namespace ARToolkit.SampleApp
         public static async Task<Scene> CreateBartonSchoolHouse(ARSceneView sv)
         {
             var scene = new Scene();
-            scene.InitialViewpoint = new Viewpoint(new MapPoint(34.0508296, -117.215160, SpatialReferences.Wgs84), new Esri.ArcGISRuntime.Mapping.Camera(34.0508296, -117.215160, 385, 51, 75, 0));
+            //scene.InitialViewpoint = new Viewpoint(new MapPoint(34.0508296, -117.215160, SpatialReferences.Wgs84), new Esri.ArcGISRuntime.Mapping.Camera(34.0508296, -117.215160, 385, 0, 0, 0));
+            sv.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(34.0508296, -117.215160, 385, 0, 90, 0);
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
             scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));

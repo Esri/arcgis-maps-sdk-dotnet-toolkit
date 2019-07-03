@@ -32,6 +32,29 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             ARView = arView = SetContentView();
             arView.IsTrackingStateChanged += IsTrackingStateChanged;
+            arView.GeoViewTapped += ARView_GeoViewTapped;
+            arView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
+        }
+
+        private void ArView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)
+        {
+            if (arView.SetInitialTransformation(e.Position))
+            {
+                Toast.MakeText(this, "Placed scene", ToastLength.Short).Show();
+            }
+            else
+            {
+                Toast.MakeText(this, "Couldn't place scene", ToastLength.Short).Show();
+            }
+        }
+
+        private async void ARView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
+        {
+            var loc = await arView.ScreenToLocationAsync(e.Position);
+            if (loc != null)
+            {
+                Toast.MakeText(this, "Location: " + Esri.ArcGISRuntime.Geometry.CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 4), ToastLength.Short).Show();
+            }
         }
 
         protected virtual Esri.ArcGISRuntime.ARToolkit.ARSceneView SetContentView()

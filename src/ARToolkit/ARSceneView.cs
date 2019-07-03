@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             set
             {
                 _controller.OriginCamera = value;
-                ResetTracking();
+                //ResetTracking();
                 OriginCameraChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -97,7 +97,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 return null;
             }
-            return new Mapping.Camera(matrix).Location;
+
+            return new Mapping.Camera(Camera.Transformation + matrix).Location;
         }
 
         public void ResetTracking()
@@ -105,7 +106,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             var vc = Camera;
             if (vc != null)
             {
-                OriginCamera = vc;
+                _controller.OriginCamera = vc;
             }
             StopTracking();
             StartTracking();
@@ -130,7 +131,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             return true;
         }
 
-        private static Mapping.TransformationMatrix IdentityMatrix = new Mapping.TransformationMatrix(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
+        private static readonly Mapping.TransformationMatrix IdentityMatrix = new Mapping.TransformationMatrix(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
     }
 }
 #endif

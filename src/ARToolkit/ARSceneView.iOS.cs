@@ -120,8 +120,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             System.Diagnostics.Debug.WriteLine($"CameraTrackingStateChanged: {camera.TrackingState} : {reason}");
         }
 
-        private Mapping.Camera _start;
-
         private void FrameUpdated(object sender, ARFrame frame)
         {
             if (_tracking)
@@ -132,15 +130,15 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     var c = Camera;
                     if (c != null)
                     {
-                         if (_start == null)
+                         if (_controller.OriginCamera == null)
                         {
-                            _start = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
-                            _controller.OriginCamera = _start;
+                            _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
+                            OriginCameraChanged?.Invoke(this, EventArgs.Empty);
                         }
 
                         var q = pov.WorldOrientation;
                         var t = pov.Transform;
-                        _controller.TransformationMatrix = new TransformationMatrix(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z) + InitialTransformation;
+                        _controller.TransformationMatrix = InitialTransformation + new TransformationMatrix(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
                         var intrinsics = frame.Camera.Intrinsics;
                         var imageResolution = frame.Camera.ImageResolution;
                         SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
@@ -196,6 +194,25 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             _arview.Session.Pause();
             _arview.Session.Delegate = null;
+        }
+
+        private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
+        {
+            var hit = _arview.Session.CurrentFrame.HitTest(screenPoint, type);
+            if (hit.Length > 0)
+            {
+                var l = hit[0].LocalTransform;
+                var t = hit[0].WorldTransform;
+                var a = hit[0].Anchor;
+                var d = hit[0].Distance;
+                var rtype = hit[0].Type;
+                var qw = Math.Sqrt(1 + t.Column0.X + t.Column1.Y + t.Column2.Z) / 2.0;
+                var qx = (t.Column2.Y - t.Column1.Z) / (qw * 4);
+                var qy = (t.Column0.Z - t.Column2.X) / (qw * 4);
+                var qz = (t.Column1.X - t.Column0.Y) / (qw * 4);
+                return new TransformationMatrix(qx, qy, qz, qw, t.M14, -t.M24, t.M34);
+            }
+            return null;
         }
 
         private class ARViewDelegate : ARSCNViewDelegate
@@ -271,10 +288,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Gets a value indicating whether <c>ARKit</c> is supported on this device.
         /// </summary>
         public bool IsSupported => ARWorldTrackingConfiguration.IsSupported;
-        private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint)
-        {
-            throw new NotImplementedException("TODO");
-        }
     }
 }
 #endif

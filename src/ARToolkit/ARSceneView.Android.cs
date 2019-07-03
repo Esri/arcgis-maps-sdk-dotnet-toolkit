@@ -192,8 +192,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
         }
 
-        private Esri.ArcGISRuntime.Mapping.Camera _start;
-
         private void OnDrawFrame(IGL10 gl)
         {
             // Clear screen to notify driver it should not load any pixels from previous frame.
@@ -250,13 +248,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     var c = Camera;
                     if (c != null)
                     {
-                        if (_start == null)
+                        if (_controller.OriginCamera == null)
                         {
-                            _start = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
-                            _controller.OriginCamera = _start;
+                            _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
+                            OriginCameraChanged?.Invoke(this, EventArgs.Empty);
                         }
 
-                        _controller.TransformationMatrix = new TransformationMatrix(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz()) + InitialTransformation;
+                        _controller.TransformationMatrix = InitialTransformation + new TransformationMatrix(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
                         var intrinsics = camera.ImageIntrinsics;
                         float[] fl = intrinsics.GetFocalLength();
                         float[] pp = intrinsics.GetPrincipalPoint();

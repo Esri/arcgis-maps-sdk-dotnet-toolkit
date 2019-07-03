@@ -143,8 +143,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _mediaCapture?.Dispose();
         }
 
-        private Esri.ArcGISRuntime.Mapping.Camera _start;
-
         private void Sensor_ReadingChanged(OrientationSensor sender, OrientationSensorReadingChangedEventArgs args)
         {
             var c = Camera;
@@ -156,18 +154,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
             var l = c.Transformation;
             var q = args.Reading.Quaternion;
 
-            if (_start == null)
+            if (_controller.OriginCamera == null)
             {
-                _start = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 0, 0);
+                _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
+                OriginCameraChanged?.Invoke(this, EventArgs.Empty);
             }
 
-            if (_start == null)
-            {
-                _start = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
-                _controller.OriginCamera = _start;
-            }
-
-            _controller.TransformationMatrix = new TransformationMatrix(q.X, q.Y, q.Z, q.W, 0, 0, 0);
+            _controller.TransformationMatrix = InitialTransformation + new TransformationMatrix(q.X, q.Y, q.Z, q.W, 0, 0, 0);
         }
 
         private async void StartCapturing()

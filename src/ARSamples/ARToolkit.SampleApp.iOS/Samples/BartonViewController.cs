@@ -28,6 +28,7 @@ namespace ARToolkit.SampleApp.Samples
         ARSceneView _sceneView;
         UIView bg;
         ARSCNView _arview;
+        UILabel lbl;
         //UIButton btn;
         public BartonViewController() : base()
         {
@@ -52,11 +53,29 @@ namespace ARToolkit.SampleApp.Samples
             // Add the MapView to the Subview
             View.AddSubview(_sceneView);
 
+            lbl = new UILabel();
+            lbl.Text = "Initializing...";
+            View.AddSubview(lbl);
+
             _sceneView.Scene = await ARTestScenes.CreateBartonSchoolHouse(_sceneView);
+            _sceneView.GeoViewDoubleTapped += SceneView_GeoViewDoubleTapped;
             //btn = new UIButton();
             //btn.TitleLabel.Text = "Flip";
             //View.AddSubview(btn);
         }
+
+        private void SceneView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)
+        {
+            if (_sceneView.SetInitialTransformation(e.Position))
+            {
+                lbl.Text = "Placed scene";
+            }
+            else
+            {
+                lbl.Text = "Couldn't place scene";
+            }
+        }
+
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
@@ -81,7 +100,8 @@ namespace ARToolkit.SampleApp.Samples
             // Fill the screen with the map
             //_sceneView.Frame = new CoreGraphics.CGRect(20, 20, View.Bounds.Width-40, View.Bounds.Height-40);
             _sceneView.Frame = new CoreGraphics.CGRect(0, 0, View.Bounds.Width, View.Bounds.Height);
-            //btn.Frame = new CoreGraphics.CGRect(20, 20, 100, 20);
+            lbl.Frame = new CoreGraphics.CGRect(0, 20, View.Bounds.Width, 20);
+            
             base.ViewDidLayoutSubviews();
         }
     }
