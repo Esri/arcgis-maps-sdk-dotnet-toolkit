@@ -28,6 +28,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 {
     public partial class ARSceneView : SceneView
     {
+        private bool _created;
         private ARSCNView _arview;
         private ArSessionDel _delegate;
 
@@ -37,40 +38,32 @@ namespace Esri.ArcGISRuntime.ARToolkit
             BackgroundColor = UIColor.Clear;
             IsManualRendering = true;
 
-            // _arview = new ARSCNView();
+            _arview = new ARSCNView() { TranslatesAutoresizingMaskIntoConstraints = false };
             _delegate.FrameUpdated += FrameUpdated;
             _delegate.CameraTrackingStateChanged += CameraTrackingStateChanged;
         }
 
+        /// <summary>
+        /// Gets a reference to the ARKit SceneView child control
+        /// </summary>
         public ARSCNView ARSCNView
         {
             get => _arview;
-            set
-            {
-                if (_arview != value)
-                {
-                    // if (_arview?.Session != null)
-                    //     _arview.Session.Delegate = null;
-                    _arview = value;
-
-                    // if (_arview?.Session != null)
-                    //     _arview.Session.Delegate = _delegate;
-                }
-            }
         }
 
         /// <inheritdoc />
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
-
-            // _arview = new ARSCNView();
-            // InsertSubview(_arview, 0);
-            // AddSubview(_arview);
-            _arview.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
-            _arview.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
-            _arview.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
-            _arview.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
+            if (!_created)
+            {
+                _created = true;
+                InsertSubview(_arview, 0);
+                _arview.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
+                _arview.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
+                _arview.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
+                _arview.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
+            }
             if (_isStarted)
             {
                 StartTracking();
@@ -170,11 +163,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void OnStartTracking()
         {
             _isStarted = true;
-            if (_arview == null)
-            {
-                return;
-            }
-
             // Each session has to be configured.
             //  We will use ARWorldTrackingConfiguration to have full access to device orientation,
             // rear camera, device position and to detect real-world flat surfaces:

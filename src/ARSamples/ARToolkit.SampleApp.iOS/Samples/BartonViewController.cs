@@ -27,9 +27,8 @@ namespace ARToolkit.SampleApp.Samples
     {
         ARSceneView _sceneView;
         UIView bg;
-        ARSCNView _arview;
         UILabel lbl;
-        //UIButton btn;
+        
         public BartonViewController() : base()
         {
         }
@@ -45,12 +44,9 @@ namespace ARToolkit.SampleApp.Samples
             
             View.AddSubview(bg);
 
-           _arview = new ARSCNView();
-            View.AddSubview(_arview);
-            // Create a new map view, set its map, and provide the coordinates for laying it out
+            // Create a new AR Scene View, set its scene, and provide the coordinates for laying it out
             _sceneView = new ARSceneView();
-            _sceneView.ARSCNView = _arview;
-            // Add the MapView to the Subview
+            // Add the ARSceneView to the Subview
             View.AddSubview(_sceneView);
 
             lbl = new UILabel();
@@ -59,9 +55,6 @@ namespace ARToolkit.SampleApp.Samples
 
             _sceneView.Scene = await ARTestScenes.CreateBartonSchoolHouse(_sceneView);
             _sceneView.GeoViewDoubleTapped += SceneView_GeoViewDoubleTapped;
-            //btn = new UIButton();
-            //btn.TitleLabel.Text = "Flip";
-            //View.AddSubview(btn);
         }
 
         private void SceneView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)
@@ -79,26 +72,13 @@ namespace ARToolkit.SampleApp.Samples
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-
-            //var configuration = new ARWorldTrackingConfiguration
-            //{
-            //    PlaneDetection = ARPlaneDetection.Horizontal,
-            //    LightEstimationEnabled = false
-            //};
-
-            // Once we have our configuration we need to run session with it.
-            // ResetTracking will just reset tracking by session to start it again from scratch:
-            //_arview.Session.Run(configuration, ARSessionRunOptions.ResetTracking);
-
             _sceneView.StartTracking();
         }
 
         public override void ViewDidLayoutSubviews()
         {
             bg.Frame = new CoreGraphics.CGRect(0, 0, View.Bounds.Width, View.Bounds.Height);
-            _arview.Frame = new CoreGraphics.CGRect(0, 0, View.Bounds.Width, View.Bounds.Height);
             // Fill the screen with the map
-            //_sceneView.Frame = new CoreGraphics.CGRect(20, 20, View.Bounds.Width-40, View.Bounds.Height-40);
             _sceneView.Frame = new CoreGraphics.CGRect(0, 0, View.Bounds.Width, View.Bounds.Height);
             lbl.Frame = new CoreGraphics.CGRect(0, 20, View.Bounds.Width, 20);
             
