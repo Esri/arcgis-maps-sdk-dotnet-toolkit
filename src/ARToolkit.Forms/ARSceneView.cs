@@ -69,5 +69,25 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         {
             MessagingCenter.Send(this, "StopTracking");
         }
+
+        public void ResetTracking()
+        {
+            MessagingCenter.Send(this, "StopTracking");
+        }
+
+        public Geometry.MapPoint ARScreenToLocation(Point screenPoint)
+        {
+            throw new NotImplementedException("TODO");
+        }
+
+        public void SetInitialTransformation(Mapping.TransformationMatrix transformationMatrix)
+        {
+            MessagingCenter.Send(this, "SetInitialTransformation", transformationMatrix);
+        }
+
+        public bool SetInitialTransformation(Point screenLocation)
+        {
+            throw new NotImplementedException("TODO");
+        }
     }
 }

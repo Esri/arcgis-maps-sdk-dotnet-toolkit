@@ -77,6 +77,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StartTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StopTracking");
+                MessagingCenter.Unsubscribe<ARSceneView>(this, "ResetTracking");
+                MessagingCenter.Unsubscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation");
             }
 
             if (e.NewElement != null)
@@ -90,6 +92,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
 
                 MessagingCenter.Subscribe<ARSceneView>(this, "StartTracking", (s) => ARControl.StartTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
+                MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl.ResetTracking(), elm);
+                MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl.SetInitialTransformation(a), elm);
             }
         }
 
