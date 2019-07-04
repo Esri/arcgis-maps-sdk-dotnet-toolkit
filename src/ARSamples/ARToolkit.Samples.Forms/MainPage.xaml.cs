@@ -34,8 +34,11 @@ namespace ARToolkit.SampleApp.Forms
                     {
                         await sample.GetDataAsync((status) =>
                         {
-                            dataDialog.IsVisible = true;
-                            this.status.Text = status;
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                dataDialog.IsVisible = true;
+                                this.status.Text = status;
+                            });
                         });
                     }
                     catch (System.Exception ex)
@@ -45,7 +48,7 @@ namespace ARToolkit.SampleApp.Forms
                     }
                     finally
                     {
-                        dataDialog.IsVisible = true;
+                        dataDialog.IsVisible = false;
                     }
                 }
 

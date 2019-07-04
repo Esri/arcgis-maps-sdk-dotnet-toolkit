@@ -17,6 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Samples\BartonSchoolHouseSample.xaml.cs">
+      <DependentUpon>BartonSchoolHouseSample.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Samples\EarthSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
