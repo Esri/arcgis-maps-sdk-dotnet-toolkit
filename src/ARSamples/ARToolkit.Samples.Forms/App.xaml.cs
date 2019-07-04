@@ -3,7 +3,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace ArcGISAR.Forms
+namespace ARToolkit.SampleApp.Forms
 {
     public partial class App : Application
     {

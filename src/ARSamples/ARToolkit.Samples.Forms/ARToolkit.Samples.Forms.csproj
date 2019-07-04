@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
+    <PackageReference Include="Xamarin.Forms">
+      <Version>$(XamarinFormsVersion)</Version>
+    </PackageReference>
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj" />
   </ItemGroup>
@@ -18,6 +20,18 @@
     <EmbeddedResource Update="Samples\EarthSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Update="Samples\EarthSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
 
   <Import Project="..\SampleHelpers\SampleHelpers.projitems" Label="Shared" />

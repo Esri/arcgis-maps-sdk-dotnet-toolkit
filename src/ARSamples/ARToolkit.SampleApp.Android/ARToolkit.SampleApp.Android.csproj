@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android">
-      <Version>100.6.0-daily2466</Version>
+      <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
     <PackageReference Include="One_Sgp4">
       <Version>1.0.8</Version>

@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-namespace ArcGISAR.Forms.iOS
+namespace ARToolkit.SampleApp.Forms.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 
@@ -23,7 +23,7 @@ namespace ArcGISAR.Forms.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+            LoadApplication(new ARToolkit.SampleApp.Forms.App());
 
             return base.FinishedLaunching(app, options);
         }

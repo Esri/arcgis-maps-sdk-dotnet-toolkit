@@ -83,6 +83,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 var elm = (ARSceneView)e.NewElement;
                 ARControl.TranslationFactor = elm.TranslationFactor;
+                ARControl.OriginCamera = elm.OriginCamera;
                 MessagingCenter.Subscribe<ARSceneView>(this, "StartTracking", (s) => ARControl.StartTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
             }
@@ -95,6 +96,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             if (e.PropertyName == ARSceneView.TranslationFactorProperty.PropertyName)
             {
                 ARControl.TranslationFactor = ARElement.TranslationFactor;
+            }
+            else if (e.PropertyName == ARSceneView.OriginCameraProperty.PropertyName)
+            {
+                ARControl.OriginCamera = ARElement.OriginCamera;
             }
         }
 

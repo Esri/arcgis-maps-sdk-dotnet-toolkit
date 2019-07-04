@@ -48,6 +48,18 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
             set { SetValue(TranslationFactorProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="OriginCamera"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty OriginCameraProperty =
+            BindableProperty.Create(nameof(OriginCamera), typeof(Mapping.Camera), typeof(ARSceneView), null, BindingMode.TwoWay, null);
+
+        public Mapping.Camera OriginCamera
+        {
+            get { return (Mapping.Camera)GetValue(OriginCameraProperty); }
+            set { SetValue(OriginCameraProperty, value); }
+        }
+
         public void StartTracking()
         {
             MessagingCenter.Send(this, "StartTracking");

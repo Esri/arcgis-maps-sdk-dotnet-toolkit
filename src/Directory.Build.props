@@ -33,6 +33,8 @@
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
+    <ArcGISRuntimePackageVersion>100.6.0-daily2470</ArcGISRuntimePackageVersion>
+    <XamarinFormsVersion>4.1.0.555618</XamarinFormsVersion>
   </PropertyGroup>
 
   <Choose>

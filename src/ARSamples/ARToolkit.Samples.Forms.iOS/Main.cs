@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-namespace ArcGISAR.Forms.iOS
+namespace ARToolkit.SampleApp.Forms.iOS
 {
     public class Application
     {

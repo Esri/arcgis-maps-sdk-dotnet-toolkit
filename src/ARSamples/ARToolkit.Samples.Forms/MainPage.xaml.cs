@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace ArcGISAR.Forms
+namespace ARToolkit.SampleApp.Forms
 {
     public partial class MainPage : ContentPage
     {
-        private static SampleHelpers.SampleDatasource sampleList = new SampleHelpers.SampleDatasource(typeof(Xamarin.Forms.Page));
+        private static ARToolkit.SampleApp.SampleDatasource sampleList = new ARToolkit.SampleApp.SampleDatasource(typeof(Xamarin.Forms.Page));
 
         public MainPage()
         {
@@ -25,7 +25,7 @@ namespace ArcGISAR.Forms
 
         private async void Samples_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var sample = e.SelectedItem as SampleHelpers.Sample;
+            var sample = e.SelectedItem as ARToolkit.SampleApp.Sample;
             if (sample != null)
             {
                 if (sample.HasSampleData)

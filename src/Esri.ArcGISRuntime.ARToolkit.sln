@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Esri.ArcGISRuntime.ARToolkit", "ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj", "{168467DC-6D2D-477A-9AC2-F1486FA67E0A}"
 EndProject
@@ -361,6 +361,7 @@ Global
 		{7E1C85F3-F7E0-4997-B591-D39A578359B2}.Debug|ARM64.Build.0 = Debug|ARM64
 		{7E1C85F3-F7E0-4997-B591-D39A578359B2}.Debug|ARM64.Deploy.0 = Debug|ARM64
 		{7E1C85F3-F7E0-4997-B591-D39A578359B2}.Debug|iPhone.ActiveCfg = Debug|x86
+		{7E1C85F3-F7E0-4997-B591-D39A578359B2}.Debug|iPhone.Build.0 = Debug|x86
 		{7E1C85F3-F7E0-4997-B591-D39A578359B2}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
 		{7E1C85F3-F7E0-4997-B591-D39A578359B2}.Debug|x64.ActiveCfg = Debug|x64
 		{7E1C85F3-F7E0-4997-B591-D39A578359B2}.Debug|x64.Build.0 = Debug|x64
@@ -611,6 +612,7 @@ Global
 		{C99B9A94-7C64-4832-8F56-DC4E06861760}.Debug|ARM.Deploy.0 = Debug|ARM
 		{C99B9A94-7C64-4832-8F56-DC4E06861760}.Debug|ARM64.ActiveCfg = Debug|x86
 		{C99B9A94-7C64-4832-8F56-DC4E06861760}.Debug|iPhone.ActiveCfg = Debug|x86
+		{C99B9A94-7C64-4832-8F56-DC4E06861760}.Debug|iPhone.Build.0 = Debug|x86
 		{C99B9A94-7C64-4832-8F56-DC4E06861760}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
 		{C99B9A94-7C64-4832-8F56-DC4E06861760}.Debug|x64.ActiveCfg = Debug|x64
 		{C99B9A94-7C64-4832-8F56-DC4E06861760}.Debug|x64.Build.0 = Debug|x64

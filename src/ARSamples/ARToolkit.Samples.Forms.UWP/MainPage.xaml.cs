@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace ArcGISAR.Forms.UWP
+namespace ARToolkit.SampleApp.Forms.UWP
 {
     public sealed partial class MainPage
     {
@@ -21,7 +21,7 @@ namespace ArcGISAR.Forms.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new ArcGISAR.Forms.App());
+            LoadApplication(new ARToolkit.SampleApp.Forms.App());
         }
     }
 }

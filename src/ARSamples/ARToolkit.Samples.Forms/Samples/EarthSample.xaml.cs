@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace ArcGISAR.Forms.Samples
+namespace ARToolkit.SampleApp.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class EarthSample : ContentPage

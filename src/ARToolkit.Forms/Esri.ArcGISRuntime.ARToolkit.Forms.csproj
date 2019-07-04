@@ -26,8 +26,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.6.0-daily2470" />
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsVersion)" />
     <PackageReference Include="StyleCop.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <Version>1.0.2</Version>

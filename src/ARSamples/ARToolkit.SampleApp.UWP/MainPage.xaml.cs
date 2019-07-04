@@ -30,7 +30,7 @@ namespace ARToolkit.SampleApp
         }
         private async void Load()
         { 
-            arview.Scene = await SampleHelpers.ARTestScenes.CreateBartonSchoolHouse(arview);
+            arview.Scene = await ARTestScenes.CreateBartonSchoolHouse(arview);
             //arview.Scene = new Scene(Basemap.CreateImagery());
         }
     }
