@@ -52,7 +52,7 @@ namespace ARToolkit.SampleApp
             scene.OperationalLayers.Add(iml);
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
-            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
             sv.TranslationFactor = 1000;
             return scene;
@@ -72,7 +72,7 @@ namespace ARToolkit.SampleApp
             scene.OperationalLayers.Add(iml);
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
-            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
             sv.TranslationFactor = 500;
             return scene;
@@ -80,7 +80,7 @@ namespace ARToolkit.SampleApp
 
         public static async Task<Scene> CreatePhiladelphia(ARSceneView sv)
         {
-            Uri buildingsService = new Uri("http://scenesampleserverdev.arcgis.com/arcgis/rest/services/Hosted/Buildings_Philadelphia/SceneServer");
+            Uri buildingsService = new Uri("https://scenesampleserverdev.arcgis.com/arcgis/rest/services/Hosted/Buildings_Philadelphia/SceneServer");
             var iml = new ArcGISSceneLayer(buildingsService) { Opacity = 1 };
             await iml.LoadAsync();
 
@@ -92,7 +92,7 @@ namespace ARToolkit.SampleApp
             scene.OperationalLayers.Add(iml);
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
-            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
             sv.TranslationFactor = 500;
             return scene;
@@ -105,7 +105,7 @@ namespace ARToolkit.SampleApp
             sv.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(34.0508296, -117.215160, 385, 0, 90, 0);
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
-            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
             sv.TranslationFactor = 150;
             var p = Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);

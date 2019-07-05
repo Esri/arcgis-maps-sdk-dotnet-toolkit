@@ -56,6 +56,7 @@
     <CodesignProvision>.NET Dev Demo</CodesignProvision>
     <CodesignExtraArgs />
     <CodesignResourceRules />
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -155,6 +156,9 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS">
+      <Version>100.6.0-daily2470</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>$(XamarinFormsVersion)</Version>
     </PackageReference>
