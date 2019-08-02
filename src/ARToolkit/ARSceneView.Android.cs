@@ -19,6 +19,8 @@ using System;
 using Android.Content;
 using Android.Opengl;
 using Android.Runtime;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 using Google.AR.Core;
@@ -55,6 +57,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private Renderer _renderer;
         private GLSurfaceView _surfaceView;
         private Google.AR.Core.Session _session;
+
+        /// <summary>
+        /// A value defining whether a request for ARCore has been made. Used when requesting installation of ARCore.
+        /// </summary>
+        private bool _arCoreInstallRequested;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ARSceneView"/> class.
@@ -99,6 +106,27 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void InitARCore()
         {
+            if (Context is Android.App.Activity activity)
+            {
+                if (ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
+                {
+                    ActivityCompat.RequestPermissions(activity, new string[] { Android.Manifest.Permission.Camera }, 0);
+                    return;
+                }
+
+                if (ArCoreApk.Instance.RequestInstall(activity, !_arCoreInstallRequested) == ArCoreApk.InstallStatus.InstallRequested)
+                {
+                    _arCoreInstallRequested = true;
+                    return;
+                }
+            }
+
+            var availability = ArCoreApk.Instance.CheckAvailability(Context);
+            if (availability != ArCoreApk.Availability.SupportedInstalled)
+            {
+                throw new NotSupportedException("This device does not support AR: " + availability.ToString());
+            }
+
             string message = null;
             Exception exception = null;
             Session session = null;
@@ -134,10 +162,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             // Create default config, check is supported, create session from that config.
             var config = new Google.AR.Core.Config(session);
-            if (!session.IsSupported(config))
-            {
-                throw new NotSupportedException("This device does not support AR");
-            }
 
             session.Configure(config);
             _session = session;

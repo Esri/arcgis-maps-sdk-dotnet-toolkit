@@ -127,48 +127,21 @@ namespace ARToolkit.SampleApp.Samples
         protected override void OnResume()
         {
             base.OnResume();
-            // ARCore requires camera permissions to operate. If we did not yet obtain runtime
-            // permission on Android M and above, now is a good time to ask the user for it.
-            //TODO ArCoreApk.Instance.RequestInstall(this, )
-            if (ContextCompat.CheckSelfPermission(this, Android.Manifest.Permission.Camera) == Android.Content.PM.Permission.Granted)
+            try
             {
-                try
-                {
-                    this.arView.StartTracking();
-                }
-                catch(System.Exception ex)
-                {
-                    Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
-                    Finish();
-                }
+                this.arView.StartTracking();
             }
-            else
+            catch(System.Exception ex)
             {
-                ActivityCompat.RequestPermissions(this, new string[] { Android.Manifest.Permission.Camera }, 0);
+                Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+                Finish();
             }
         }
 
         protected override void OnPause()
         {
             base.OnPause();
-            //if (ContextCompat.CheckSelfPermission(this, Android.Manifest.Permission.Camera) == Android.Content.PM.Permission.Granted)
-            {
-                // Note that the order matters - GLSurfaceView is paused first so that it does not try
-                // to query the session. If Session is paused before GLSurfaceView, GLSurfaceView may
-                // still call mSession.update() and get a SessionPausedException.
-                arView.StopTracking();
-            }
-        }
-
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-            if (ContextCompat.CheckSelfPermission(this, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
-            {
-                Toast.MakeText(this, "Camera permission is needed to run this application", ToastLength.Long).Show();
-                Finish();
-            }
+            arView.StopTracking();
         }
 
         public override void OnWindowFocusChanged(bool hasFocus)
