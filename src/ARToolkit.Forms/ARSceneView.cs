@@ -34,6 +34,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         {
             SpaceEffect = UI.SpaceEffect.None;
             AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+            OriginCamera = new Mapping.Camera(0, 0, 15E6, 0, 0, 0);
         }
 
         /// <summary>

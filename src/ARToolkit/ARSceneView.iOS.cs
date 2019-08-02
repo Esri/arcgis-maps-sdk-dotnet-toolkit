@@ -64,6 +64,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 _arview.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
                 _arview.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
             }
+
             if (_isStarted)
             {
                 StartTracking();
@@ -131,7 +132,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                         var q = pov.WorldOrientation;
                         var t = pov.Transform;
-                        _controller.TransformationMatrix = InitialTransformation + new TransformationMatrix(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
+                        _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
                         var intrinsics = frame.Camera.Intrinsics;
                         var imageResolution = frame.Camera.ImageResolution;
                         SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
@@ -163,6 +164,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void OnStartTracking()
         {
             _isStarted = true;
+
             // Each session has to be configured.
             //  We will use ARWorldTrackingConfiguration to have full access to device orientation,
             // rear camera, device position and to detect real-world flat surfaces:
@@ -198,8 +200,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 var qx = (t.Column2.Y - t.Column1.Z) / (qw * 4);
                 var qy = (t.Column0.Z - t.Column2.X) / (qw * 4);
                 var qz = (t.Column1.X - t.Column0.Y) / (qw * 4);
-                return new TransformationMatrix(qx, qy, qz, qw, t.M14, -t.M24, t.M34);
+                return TransformationMatrix.Create(0, 1, 0, 1, t.Column3.X, t.Column3.Z, t.Column3.Y);
             }
+
             return null;
         }
 

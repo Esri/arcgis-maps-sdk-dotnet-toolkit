@@ -160,7 +160,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 OriginCameraChanged?.Invoke(this, EventArgs.Empty);
             }
 
-            _controller.TransformationMatrix = InitialTransformation + new TransformationMatrix(q.X, q.Y, q.Z, q.W, 0, 0, 0);
+            _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, 0, 0, 0);
         }
 
         private async void StartCapturing()

@@ -53,6 +53,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 return;
             }
+
             CameraController = _controller;
             OnStartTracking();
             IsTracking = true;
@@ -81,14 +82,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
             set
             {
                 _controller.OriginCamera = value;
-                //ResetTracking();
+                // ResetTracking();
                 OriginCameraChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         public event EventHandler OriginCameraChanged;
 
-        public Mapping.TransformationMatrix InitialTransformation { get; private set; } = IdentityMatrix;
+        public Mapping.TransformationMatrix InitialTransformation { get; private set; } = Mapping.TransformationMatrix.Identity;
 
         public Geometry.MapPoint ARScreenToLocation(Point screenPoint)
         {
@@ -108,6 +109,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 _controller.OriginCamera = vc;
             }
+
             StopTracking();
             StartTracking();
         }
@@ -115,7 +117,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public void SetInitialTransformation(Mapping.TransformationMatrix transformationMatrix)
         {
             if (transformationMatrix == null)
+            {
                 throw new ArgumentNullException(nameof(transformationMatrix));
+            }
+
             InitialTransformation = transformationMatrix;
         }
 
@@ -127,11 +132,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 return false;
             }
 
-            InitialTransformation = IdentityMatrix - origin;
+            InitialTransformation = Mapping.TransformationMatrix.Identity - origin;
             return true;
         }
-
-        private static readonly Mapping.TransformationMatrix IdentityMatrix = new Mapping.TransformationMatrix(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
     }
 }
 #endif

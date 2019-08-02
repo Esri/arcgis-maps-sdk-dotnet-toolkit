@@ -254,7 +254,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                             OriginCameraChanged?.Invoke(this, EventArgs.Empty);
                         }
 
-                        _controller.TransformationMatrix = InitialTransformation + new TransformationMatrix(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
+                        _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
                         var intrinsics = camera.ImageIntrinsics;
                         float[] fl = intrinsics.GetFocalLength();
                         float[] pp = intrinsics.GetPrincipalPoint();
@@ -271,9 +271,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 OnDrawComplete(gl, _session, frame);
                 _lastFrame = frame;
             }
-            catch(System.Exception ex)
+            catch (System.Exception)
             {
-
             }
         }
 
@@ -342,9 +341,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 {
                     var q = hitResult.HitPose.GetRotationQuaternion();
                     var t = hitResult.HitPose.GetTranslation();
-                    return new TransformationMatrix(q[0], q[1], q[2], q[3], t[0], t[1], t[2]);
+                    return TransformationMatrix.Create(q[0], q[1], q[2], q[3], t[0], t[1], t[2]);
                 }
             }
+
             return null;
         }
     }
