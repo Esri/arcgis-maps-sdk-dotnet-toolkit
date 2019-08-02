@@ -72,6 +72,31 @@ namespace Esri.ArcGISRuntime.ARToolkit
             set => _controller.TranslationFactor = value;
         }
 
+        private bool _renderVideoFeed = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the background of the <see cref="ARSceneView"/> is transparent or not. Enabling transparency allows for the
+        /// camera feed to be visible underneath the <see cref="ARSceneView"/>.
+        /// </summary>
+        public bool RenderVideoFeed
+        {
+            get => _renderVideoFeed;
+            set
+            {
+                _renderVideoFeed = value;
+                if (_renderVideoFeed)
+                {
+                    SpaceEffect = UI.SpaceEffect.None;
+                    AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+                }
+                else
+                {
+                    SpaceEffect = UI.SpaceEffect.Stars;
+                    AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.HorizonOnly;
+                }
+            }
+        }
+
         public bool IsTracking { get; private set; }
 
         private Mapping.Camera _originCamera;

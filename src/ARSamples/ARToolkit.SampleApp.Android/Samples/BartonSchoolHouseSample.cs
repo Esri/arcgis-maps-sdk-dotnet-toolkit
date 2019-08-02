@@ -17,18 +17,19 @@ using Android.Support.Design.Widget;
 using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
 using System.Threading.Tasks;
+using Android.Views;
 
 namespace ARToolkit.SampleApp.Samples
 {
     [Activity(
         Label = "Barton School House",
-        Theme = "@style/Theme.AppCompat.NoActionBar",
+        Theme = "@style/Theme.AppCompat",
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = Android.Content.PM.ScreenOrientation.Locked)]
     [SampleData(ItemId = "b30f53d65c714054b75a0eb16639529a", Path = "BartonSchoolHouse_3d_mesh.slpk")]
     public class BartonSchoolHouseSample : ARActivityBase
     {
         private Scene Scene;
-
+        
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);

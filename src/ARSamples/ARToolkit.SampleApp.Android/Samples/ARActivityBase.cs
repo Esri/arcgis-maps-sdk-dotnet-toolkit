@@ -17,12 +17,14 @@ using Android.Support.Design.Widget;
 using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
 using System.Threading.Tasks;
+using Android.Views;
 
 namespace ARToolkit.SampleApp.Samples
 {
     public abstract class ARActivityBase : AppCompatActivity
     {
         private Esri.ArcGISRuntime.ARToolkit.ARSceneView arView;
+        private bool renderPlanes;
         private Snackbar mLoadingMessageSnackbar = null;
 
         protected Esri.ArcGISRuntime.ARToolkit.ARSceneView ARView { get; private set; }
@@ -34,6 +36,56 @@ namespace ARToolkit.SampleApp.Samples
             arView.IsTrackingStateChanged += IsTrackingStateChanged;
             arView.GeoViewTapped += ARView_GeoViewTapped;
             arView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
+            ARView.DrawBegin += ARView_DrawBegin;
+        }
+
+        public override bool OnCreateOptionsMenu(IMenu menu)
+        {
+            menu.Add(Menu.None, 1, Menu.None, "Toggle camera");
+            menu.Add(Menu.None, 2, Menu.None, "Toggle render surfaces");
+            return base.OnCreateOptionsMenu(menu);
+        }
+
+        public override bool OnOptionsItemSelected(IMenuItem item)
+        {
+            if (item.ItemId == 1)
+            {
+                ARView.RenderVideoFeed = !ARView.RenderVideoFeed;
+            }
+            if (item.ItemId == 2)
+            {
+                renderPlanes = !renderPlanes;
+            }
+            return base.OnOptionsItemSelected(item);
+        }
+
+        private Renderers.PlaneRenderer pr = null;
+
+        private void ARView_DrawBegin(object sender, Esri.ArcGISRuntime.ARToolkit.DrawEventArgs e)
+        {
+            if (renderPlanes)
+            {
+                // Use a custom renderer to render the planes
+                // prior to rendering the scene
+                if (pr == null)
+                {
+                    pr = new Renderers.PlaneRenderer();
+                    pr.CreateOnGlThread(/*context=*/this, "trigrid.png");
+                }
+                var camera = e.Frame.Camera;
+                float[] projmtx = new float[16];
+                camera.GetProjectionMatrix(projmtx, 0, 0.1f, 100.0f);
+                var planes = new List<Plane>();
+                foreach (var p in e.Session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))))
+                {
+                    var plane = (Plane)p;
+                    planes.Add(plane);
+                }
+                if (planes.Count > 0)
+                {
+                    pr.DrawPlanes(planes, camera.DisplayOrientedPose, projmtx);
+                }
+            }
         }
 
         private void ArView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)
@@ -51,7 +103,7 @@ namespace ARToolkit.SampleApp.Samples
         private async void ARView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             var loc = await arView.ScreenToLocationAsync(e.Position);
-            if (loc != null)
+            if (loc != null && loc.SpatialReference != null)
             {
                 Toast.MakeText(this, "Location: " + Esri.ArcGISRuntime.Geometry.CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 4), ToastLength.Short).Show();
             }

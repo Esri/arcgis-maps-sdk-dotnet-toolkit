@@ -27,7 +27,7 @@ namespace ARToolkit.SampleApp.Samples
 {
     [Activity(
         Label = "Satellites",
-        Theme = "@style/Theme.AppCompat.NoActionBar",
+        Theme = "@style/Theme.AppCompat",
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = Android.Content.PM.ScreenOrientation.Locked)]
     public class SatellitesSample : ARActivityBase
     {

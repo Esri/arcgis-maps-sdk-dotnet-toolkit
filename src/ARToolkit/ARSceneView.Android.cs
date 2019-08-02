@@ -180,7 +180,18 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <param name="frame">Frame</param>
         protected virtual void OnDrawBegin(IGL10 gl, Session session, Frame frame)
         {
+            DrawBegin?.Invoke(this, new DrawEventArgs(gl, session, frame));
         }
+
+        /// <summary>
+        /// Occurs before the Scene gets updated
+        /// </summary>
+        public event EventHandler<DrawEventArgs> DrawBegin;
+
+        /// <summary>
+        /// Occurs after the Scene has rendered
+        /// </summary>
+        public event EventHandler<DrawEventArgs> DrawComplete;
 
         /// <summary>
         /// Occurs after the Scene has rendered
@@ -190,6 +201,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <param name="frame">Frame</param>
         protected virtual void OnDrawComplete(IGL10 gl, Session session, Frame frame)
         {
+            DrawComplete?.Invoke(this, new DrawEventArgs(gl, session, frame));
         }
 
         private void OnDrawFrame(IGL10 gl)
@@ -216,7 +228,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 var camera = frame.Camera;
 
                 // Draw background.
-                _backgroundRenderer.Draw(frame);
+                if (_renderVideoFeed)
+                {
+                    _backgroundRenderer.Draw(frame);
+                }
+
+                OnDrawBegin(gl, _session, frame);
 
                 // If not tracking, don't draw 3d objects.
                 if (camera.TrackingState == TrackingState.Paused)
@@ -232,8 +249,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     _isTracking = tracking;
                     IsTrackingStateChanged?.Invoke(this, tracking);
                 }
-
-                OnDrawBegin(gl, _session, frame);
 
                 // Get projection matrix.
                 float[] projmtx = new float[16];
@@ -347,6 +362,36 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             return null;
         }
+    }
+
+    /// <summary>
+    /// Event args used for the <see cref="ARSceneView.DrawBegin"/> and <see cref="ARSceneView.DrawComplete"/> events.
+    /// </summary>
+    /// <seealso cref="ARSceneView.DrawBegin"/> 
+    /// <seealso cref="ARSceneView.DrawComplete"/>
+    public class DrawEventArgs : EventArgs
+    {
+        internal DrawEventArgs(IGL10 gl, Session session, Frame frame)
+        {
+            GL = gl;
+            Session = session;
+            Frame = frame;
+        }
+
+        /// <summary>
+        /// Gets the current frame
+        /// </summary>
+        public Frame Frame { get; }
+
+        /// <summary>
+        /// Gets the session
+        /// </summary>
+        public Session Session { get; }
+
+        /// <summary>
+        /// Gets the GL context
+        /// </summary>
+        public IGL10 GL { get; }
     }
 }
 #endif
