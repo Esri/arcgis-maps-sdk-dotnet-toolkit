@@ -38,6 +38,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
             BackgroundColor = UIColor.Clear;
             IsManualRendering = true;
 
+            // Each session has to be configured.
+            //  We will use ARWorldTrackingConfiguration to have full access to device orientation,
+            // rear camera, device position and to detect real-world flat surfaces:
+            _arConfiguration = new ARWorldTrackingConfiguration
+            {
+                PlaneDetection = ARPlaneDetection.Horizontal,
+                WorldAlignment = ARWorldAlignment.GravityAndHeading,
+                LightEstimationEnabled = false
+            };
+
             _arview = new ARSCNView() { TranslatesAutoresizingMaskIntoConstraints = false };
             _delegate.FrameUpdated += FrameUpdated;
             _delegate.CameraTrackingStateChanged += CameraTrackingStateChanged;
@@ -124,7 +134,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     var c = Camera;
                     if (c != null)
                     {
-                         if (_controller.OriginCamera == null)
+                        if (_controller.OriginCamera == null)
                         {
                             _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
                             OriginCameraChanged?.Invoke(this, EventArgs.Empty);
@@ -158,32 +168,48 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
-        private ARSession _arsession;
         private bool _isStarted;
 
         private void OnStartTracking()
         {
             _isStarted = true;
 
-            // Each session has to be configured.
-            //  We will use ARWorldTrackingConfiguration to have full access to device orientation,
-            // rear camera, device position and to detect real-world flat surfaces:
-            var configuration = new ARWorldTrackingConfiguration
-            {
-                PlaneDetection = ARPlaneDetection.Horizontal,
-                LightEstimationEnabled = false
-            };
-
             // Once we have our configuration we need to run session with it.
             // ResetTracking will just reset tracking by session to start it again from scratch:
             _arview.Session.Delegate = _delegate;
-            _arview.Session.Run(configuration, ARSessionRunOptions.ResetTracking);
+            _arview.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
         }
 
         private void OnStopTracking()
         {
             _arview.Session.Pause();
             _arview.Session.Delegate = null;
+        }
+
+        private ARConfiguration _arConfiguration;
+
+        /// <summary>
+        /// Gets or sets the world tracking information used by ARKit.
+        /// </summary>
+        public ARConfiguration ARConfiguration
+        {
+            get => _arConfiguration;
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
+                if (value != _arConfiguration)
+                {
+                    _arConfiguration = value;
+                    if (IsTracking)
+                    {
+                        ResetTracking();
+                    }
+                }
+            }
         }
 
         private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)

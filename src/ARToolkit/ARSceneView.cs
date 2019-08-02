@@ -37,6 +37,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private TransformationMatrixCameraController _controller = new TransformationMatrixCameraController() { TranslationFactor = 100 };
 
 #if !__ANDROID__
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ARSceneView"/> class.
+        /// </summary>
         public ARSceneView()
         {
             SpaceEffect = UI.SpaceEffect.None;
@@ -47,6 +50,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
         }
 #endif
 
+        /// <summary>
+        /// Starts device tracking.
+        /// </summary>
         public void StartTracking()
         {
             if (IsTracking)
@@ -59,6 +65,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
             IsTracking = true;
         }
 
+        /// <summary>
+        /// Suspends device tracking.
+        /// </summary>
         public void StopTracking()
         {
             IsTracking = false;
@@ -66,6 +75,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
             CameraController = new GlobeCameraController();
         }
 
+        /// <summary>
+        /// Gets or sets translation factor used to support a table top AR experience.
+        /// </summary>
+        /// <remarks>A value of 1 means if the device 1 meter in the real world, it'll move 1 m in the AR world. Set this to 1000 to make 1 m meter 1km in the AR world.</remarks>
         public double TranslationFactor
         {
             get => _controller.TranslationFactor;
@@ -88,34 +101,67 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 {
                     SpaceEffect = UI.SpaceEffect.None;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+#if NETFX_CORE
+                    _cameraView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    StartCapturing();
+#endif
                 }
                 else
                 {
                     SpaceEffect = UI.SpaceEffect.Stars;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.HorizonOnly;
+#if NETFX_CORE
+                    _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    StopCapturing();
+#endif
                 }
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether tracking is currently active
+        /// </summary>
+        /// <seealso cref="StartTracking"/>
+        /// <seealso cref="StopTracking"/>
         public bool IsTracking { get; private set; }
 
-        private Mapping.Camera _originCamera;
-
+        /// <summary>
+        /// Gets or sets the viewpoint camera used to set the initial view of the sceneView instead of the device's GPS location via the location data source.
+        /// </summary>
+        /// <seealso cref="OriginCameraChanged"/>
         public Mapping.Camera OriginCamera
         {
             get => _controller.OriginCamera;
             set
             {
                 _controller.OriginCamera = value;
-                // ResetTracking();
+                if (IsTracking)
+                {
+                    ResetTracking();
+                }
+
                 OriginCameraChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
+        /// <summary>
+        /// Raised when the <see cref="OriginCamera"/> has changed
+        /// </summary>
+        /// <seealso cref="OriginCamera"/>
         public event EventHandler OriginCameraChanged;
 
+        /// <summary>
+        /// Gets the initial transformation used for a table top experience.  Defaults to the Identity Matrix.
+        /// </summary>
+        /// <seealso cref="SetInitialTransformation(Mapping.TransformationMatrix)"/>
+        /// <seealso cref="SetInitialTransformation(Point)"/>
         public Mapping.TransformationMatrix InitialTransformation { get; private set; } = Mapping.TransformationMatrix.Identity;
 
+        /// <summary>
+        /// Determines the map point for the given screen point hittesting any surface in the scene.
+        /// </summary>
+        /// <param name="screenPoint"> The point in screen coordinates.</param>
+        /// <returns>The map point corresponding to screenPoint.</returns>
         public Geometry.MapPoint ARScreenToLocation(Point screenPoint)
         {
             var matrix = HitTest(screenPoint);
@@ -127,6 +173,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
             return new Mapping.Camera(Camera.Transformation + matrix).Location;
         }
 
+        /// <summary>
+        /// Resets the device tracking, using <see cref="OriginCamera"/> if it's not null or the device's GPS location via the location data source.
+        /// </summary>
         public void ResetTracking()
         {
             var vc = Camera;
@@ -139,6 +188,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
             StartTracking();
         }
 
+        /// <summary>
+        /// Sets the initial transformation used to offset the <see cref="OriginCamera"/>.
+        /// </summary>
+        /// <param name="transformationMatrix">Initial transformation matrix</param>
+        /// <seealso cref="SetInitialTransformation(Point)"/>
         public void SetInitialTransformation(Mapping.TransformationMatrix transformationMatrix)
         {
             if (transformationMatrix == null)
@@ -149,6 +203,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
             InitialTransformation = transformationMatrix;
         }
 
+        /// <summary>
+        ///  Sets the initial transformation used to offset the <see cref="OriginCamera"/>.
+        ///  The initial transformation is based on an AR point determined via existing plane hit detection from <paramref name="screenLocation"/>.
+        /// </summary>
+        /// <param name="screenLocation">The screen point to determine the <see cref="InitialTransformation"/> from.</param>
+        /// <returns>if an AR point cannot be determined, this method will return <c>false</c>.</returns>
+        /// <seealso cref="SetInitialTransformation(Mapping.TransformationMatrix)"/>
         public bool SetInitialTransformation(Point screenLocation)
         {
             var origin = HitTest(screenLocation);

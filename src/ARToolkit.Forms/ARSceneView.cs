@@ -61,6 +61,18 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
             set { SetValue(OriginCameraProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="RenderVideoFeed"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty RenderVideoFeedProperty =
+            BindableProperty.Create(nameof(RenderVideoFeed), typeof(bool), typeof(ARSceneView), true, BindingMode.TwoWay, null);
+
+        public bool RenderVideoFeed
+        {
+            get { return (bool)GetValue(RenderVideoFeedProperty); }
+            set { SetValue(RenderVideoFeedProperty, value); }
+        }
+
         public void StartTracking()
         {
             MessagingCenter.Send(this, "StartTracking");

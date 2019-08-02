@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 _cameraView.Source = null;
             }
 
-            _mediaCapture?.Dispose();
+            StopCapturing();
         }
 
         private void Sensor_ReadingChanged(OrientationSensor sender, OrientationSensorReadingChangedEventArgs args)
@@ -165,7 +165,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private async void StartCapturing()
         {
-            if (_cameraView == null)
+            if (_cameraView == null || !RenderVideoFeed || !_isLoaded)
             {
                 return;
             }
@@ -189,6 +189,17 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             _cameraView.Source = _mediaCapture;
             await _mediaCapture.StartPreviewAsync();
+        }
+
+        private void StopCapturing()
+        {
+            if (_cameraView != null)
+            {
+                _cameraView.Source = null;
+            }
+
+            _mediaCapture?.Dispose();
+            _mediaCapture = null;
         }
 
         private TransformationMatrix HitTest(Windows.Foundation.Point screenPoint)

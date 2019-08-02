@@ -55,7 +55,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private DisplayRotationHelper _displayRotationHelper;
         private BackgroundRenderer _backgroundRenderer = new BackgroundRenderer();
         private Renderer _renderer;
-        private GLSurfaceView _surfaceView;
         private Google.AR.Core.Session _session;
 
         /// <summary>
@@ -84,6 +83,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
             Initialize();
         }
 
+        /// <summary>
+        /// Gets a reference to the ARCore Session
+        /// </summary>
         public Session Session => _session;
 
         private void Initialize()
@@ -171,7 +173,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             _isTracking = false;
             _displayRotationHelper?.OnPause();
-            _surfaceView?.OnPause();
             if (_session != null)
             {
                 _session.Pause();
@@ -192,7 +193,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 _session.Resume();
             }
 
-            _surfaceView?.OnResume();
             _displayRotationHelper?.OnResume();
         }
 
@@ -330,12 +330,23 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
+        /// <summary>
+        /// Records a change in surface dimensions.
+        /// </summary>
+        /// <param name="gl">GL context</param>
+        /// <param name="width">The updated width of the surface.</param>
+        /// <param name="height">The updated height of the surface.</param>
         protected virtual void OnSurfaceChanged(IGL10 gl, int width, int height)
         {
             _displayRotationHelper.OnSurfaceChanged(width, height);
             GLES20.GlViewport(0, 0, width, height);
         }
 
+        /// <summary>
+        /// Triggered when the GL surface has been created
+        /// </summary>
+        /// <param name="gl">GL context</param>
+        /// <param name="config">GL Configuration</param>
         protected virtual void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
         {
             GLES20.GlClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -367,6 +378,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private bool _isTracking;
 
+        /// <summary>
+        /// Raised if the tracking state changes
+        /// </summary>
+        /// <seealso cref="IsTracking"/>
+        /// <seealso cref="StartTracking"/>
+        /// <seealso cref="StopTracking"/>
         public event EventHandler<bool> IsTrackingStateChanged;
 
         private TransformationMatrix HitTest(Android.Graphics.PointF screenPoint)
@@ -391,9 +408,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
     /// <summary>
     /// Event args used for the <see cref="ARSceneView.DrawBegin"/> and <see cref="ARSceneView.DrawComplete"/> events.
     /// </summary>
-    /// <seealso cref="ARSceneView.DrawBegin"/> 
+    /// <seealso cref="ARSceneView.DrawBegin"/>
     /// <seealso cref="ARSceneView.DrawComplete"/>
-    public class DrawEventArgs : EventArgs
+#pragma warning disable SA1402
+    public sealed class DrawEventArgs : EventArgs
+#pragma warning restore SA1402
     {
         internal DrawEventArgs(IGL10 gl, Session session, Frame frame)
         {
