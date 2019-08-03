@@ -63,6 +63,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             CameraController = _controller;
             OnStartTracking();
             IsTracking = true;
+            _ = _locationDataSource?.StartAsync();
         }
 
         /// <summary>
@@ -71,6 +72,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public void StopTracking()
         {
             IsTracking = false;
+            _ = _locationDataSource?.StopAsync();
             OnStopTracking();
             CameraController = new GlobeCameraController();
         }
@@ -86,6 +88,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 _controller.OriginCamera = vc;
             }
 
+            _initialLocation = null;
             StopTracking();
             StartTracking();
         }
@@ -129,6 +132,58 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     StopCapturing();
 #endif
+                }
+            }
+        }
+
+        private Location.LocationDataSource _locationDataSource;
+
+        /// <summary>
+        /// Gets or sets the data source used to get device location.
+        /// </summary>
+        public Location.LocationDataSource LocationDataSource
+        {
+            get => _locationDataSource;
+            set
+            {
+                if (_locationDataSource != value)
+                {
+                    if (_locationDataSource != null)
+                    {
+                        _locationDataSource.LocationChanged -= LocationDataSource_LocationChanged;
+                    }
+
+                    _locationDataSource = value;
+                    if (_locationDataSource != null)
+                    {
+                        // TODO: Should be a weak listener
+                        _locationDataSource.LocationChanged += LocationDataSource_LocationChanged;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initial location from location data source.
+        /// </summary>
+        private MapPoint _initialLocation;
+
+        private void LocationDataSource_LocationChanged(object sender, Location.Location e)
+        {
+            var locationPoint = e.Position;
+            if (locationPoint != null)
+            {
+                if (_initialLocation == null)
+                {
+                    _initialLocation = locationPoint;
+
+                    // Create a new camera based on our location and set it on the cameraController.
+                    OriginCamera = new Mapping.Camera(locationPoint, heading: 0.0, pitch: 0.0, roll: 0.0);
+                }
+                else
+                {
+                    var camera = Camera.MoveTo(locationPoint);
+                    SetViewpointCamera(camera);
                 }
             }
         }

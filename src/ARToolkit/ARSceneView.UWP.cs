@@ -37,7 +37,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void Initialize()
         {
             _isTracking = true;
-            // IsManualRendering = true;
             Loaded += ARSceneView_Loaded;
             Unloaded += ARSceneView_Unloaded;
         }

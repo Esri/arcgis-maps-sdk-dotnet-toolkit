@@ -87,6 +87,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 var elm = (ARSceneView)e.NewElement;
                 ARControl.TranslationFactor = elm.TranslationFactor;
                 ARControl.RenderVideoFeed = elm.RenderVideoFeed;
+                ARControl.LocationDataSource = elm.LocationDataSource;
                 if (elm.OriginCamera != null)
                 {
                     ARControl.OriginCamera = elm.OriginCamera;
@@ -120,6 +121,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             else if (e.PropertyName == ARSceneView.RenderVideoFeedProperty.PropertyName)
             {
                 ARControl.RenderVideoFeed = ARElement.RenderVideoFeed;
+            }
+            else if (e.PropertyName == ARSceneView.LocationDataSourceProperty.PropertyName)
+            {
+                ARControl.LocationDataSource = ARElement.LocationDataSource;
             }
         }
 

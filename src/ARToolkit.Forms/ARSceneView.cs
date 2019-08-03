@@ -15,8 +15,7 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Esri.ArcGISRuntime.Location;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.ARToolkit.Forms
@@ -51,6 +50,22 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         {
             get { return (double)GetValue(TranslationFactorProperty); }
             set { SetValue(TranslationFactorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="LocationDataSource"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty LocationDataSourceProperty =
+            BindableProperty.Create(nameof(LocationDataSource), typeof(LocationDataSource), typeof(ARSceneView), null, BindingMode.TwoWay, null);
+
+        /// <summary>
+        /// Gets or sets translation factor used to support a table top AR experience.
+        /// </summary>
+        /// <remarks>A value of 1 means if the device 1 meter in the real world, it'll move 1 m in the AR world. Set this to 1000 to make 1 m meter 1km in the AR world.</remarks>
+        public LocationDataSource LocationDataSource
+        {
+            get { return GetValue(LocationDataSourceProperty) as LocationDataSource; }
+            set { SetValue(LocationDataSourceProperty, value); }
         }
 
         /// <summary>

@@ -217,16 +217,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
             var hit = _arview.Session.CurrentFrame.HitTest(screenPoint, type);
             if (hit.Length > 0)
             {
-                var l = hit[0].LocalTransform;
+                // Get the worldTransform from the first result; if there's no worldTransform, return null.
                 var t = hit[0].WorldTransform;
-                var a = hit[0].Anchor;
-                var d = hit[0].Distance;
-                var rtype = hit[0].Type;
-                var qw = Math.Sqrt(1 + t.Column0.X + t.Column1.Y + t.Column2.Z) / 2.0;
-                var qx = (t.Column2.Y - t.Column1.Z) / (qw * 4);
-                var qy = (t.Column0.Z - t.Column2.X) / (qw * 4);
-                var qz = (t.Column1.X - t.Column0.Y) / (qw * 4);
-                return TransformationMatrix.Create(0, 1, 0, 1, t.Column3.X, t.Column3.Z, t.Column3.Y);
+                if (t == null)
+                {
+                    return null;
+                }
+
+                return TransformationMatrix.Create(0, 0, 0, 1, t.Column3.X, -t.Column3.Z, t.Column3.Y);
             }
 
             return null;
