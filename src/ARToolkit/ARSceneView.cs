@@ -76,6 +76,21 @@ namespace Esri.ArcGISRuntime.ARToolkit
         }
 
         /// <summary>
+        /// Resets the device tracking, using <see cref="OriginCamera"/> if it's not null or the device's GPS location via the location data source.
+        /// </summary>
+        public void ResetTracking()
+        {
+            var vc = Camera;
+            if (vc != null)
+            {
+                _controller.OriginCamera = vc;
+            }
+
+            StopTracking();
+            StartTracking();
+        }
+
+        /// <summary>
         /// Gets or sets translation factor used to support a table top AR experience.
         /// </summary>
         /// <remarks>A value of 1 means if the device 1 meter in the real world, it'll move 1 m in the AR world. Set this to 1000 to make 1 m meter 1km in the AR world.</remarks>
@@ -171,21 +186,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
 
             return new Mapping.Camera(Camera.Transformation + matrix).Location;
-        }
-
-        /// <summary>
-        /// Resets the device tracking, using <see cref="OriginCamera"/> if it's not null or the device's GPS location via the location data source.
-        /// </summary>
-        public void ResetTracking()
-        {
-            var vc = Camera;
-            if (vc != null)
-            {
-                _controller.OriginCamera = vc;
-            }
-
-            StopTracking();
-            StartTracking();
         }
 
         /// <summary>

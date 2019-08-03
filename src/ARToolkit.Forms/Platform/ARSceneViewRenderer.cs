@@ -75,6 +75,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             base.OnElementChanged(e);
             if (e.OldElement != null)
             {
+                ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StartTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StopTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "ResetTracking");
@@ -91,11 +92,17 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                     ARControl.OriginCamera = elm.OriginCamera;
                 }
 
+                ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
                 MessagingCenter.Subscribe<ARSceneView>(this, "StartTracking", (s) => ARControl.StartTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl.ResetTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl.SetInitialTransformation(a), elm);
             }
+        }
+
+        private void ARControl_OriginCameraChanged(object sender, System.EventArgs e)
+        {
+            ARElement?.RaiseOriginCameraChanged();
         }
 
         /// <inheritdoc />
@@ -119,6 +126,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
+            ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
             ARControl.StopTracking();
             base.Dispose(disposing);
         }
