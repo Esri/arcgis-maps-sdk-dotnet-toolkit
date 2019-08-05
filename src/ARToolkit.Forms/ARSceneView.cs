@@ -116,6 +116,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// </summary>
         public void StartTracking()
         {
+#if !NETSTANDARD2_0
+            if (NativeARSceneView() == null)
+                throw new InvalidOperationException("Cannot start tracking before the view has appeared");
+#endif
             MessagingCenter.Send(this, "StartTracking");
         }
 
@@ -156,6 +160,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// <seealso cref="SetInitialTransformation(Point)"/>
         public void SetInitialTransformation(Mapping.TransformationMatrix transformationMatrix)
         {
+#if !NETSTANDARD2_0
+            if (NativeARSceneView() == null)
+                throw new InvalidOperationException("Cannot set initial transformation before the view has appeared");
+#endif
             MessagingCenter.Send(this, "SetInitialTransformation", transformationMatrix);
         }
 
