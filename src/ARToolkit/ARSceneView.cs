@@ -43,8 +43,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public ARSceneView()
         {
             SpaceEffect = UI.SpaceEffect.None;
-
-            // IsManualRendering = true;
             AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
             Initialize();
         }

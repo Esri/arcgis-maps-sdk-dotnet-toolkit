@@ -35,7 +35,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void Initialize()
         {
             _delegate = new ArSessionDel(this);
-            BackgroundColor = UIColor.Clear;
             IsManualRendering = true;
 
             // Each session has to be configured.
