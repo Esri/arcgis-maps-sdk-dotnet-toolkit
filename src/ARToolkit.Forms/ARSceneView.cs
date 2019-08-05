@@ -136,7 +136,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// </summary>
         public void ResetTracking()
         {
-            MessagingCenter.Send(this, "StopTracking");
+            MessagingCenter.Send(this, "ResetTracking");
         }
 
         /// <summary>
