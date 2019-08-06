@@ -23,6 +23,10 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />

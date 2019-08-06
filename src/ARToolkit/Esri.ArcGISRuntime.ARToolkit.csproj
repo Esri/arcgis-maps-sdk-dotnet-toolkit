@@ -22,6 +22,10 @@
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
+  </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />

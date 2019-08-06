@@ -157,7 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS">
-      <Version>100.6.0-daily2498</Version>
+      <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>$(XamarinFormsVersion)</Version>
