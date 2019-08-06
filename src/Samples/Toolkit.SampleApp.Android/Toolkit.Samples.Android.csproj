@@ -93,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android">
-      <Version>100.5.0</Version>
+      <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,14 @@
 <Project>
 
   <PropertyGroup>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.5.0</ArcGISRuntimeToolkitPackageVersion>
+
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
-    <PackageReleaseNotes>v100.5: https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v100.5.0</PackageReleaseNotes>
+    <PackageReleaseNotes>v$(ArcGISRuntimeToolkitPackageVersion): https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v$(ArcGISRuntimeToolkitPackageVersion)</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -30,6 +32,9 @@
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
 
+	<ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'!=''">100.5</ArcGISRuntimePackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">3.6.0.264807</XamarinFormsPackageVersion>
+
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
@@ -44,7 +49,7 @@
         <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
       </PropertyGroup>
-      <ItemGroup>
+      <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)..\.git')">
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
       </ItemGroup>
       <ItemGroup>
@@ -57,7 +62,7 @@
     <NerdbankGitVersioningVersion>2.2.13</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(VersionOverride)'!='true'">
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.3.138" PrivateAssets="all" />
   </ItemGroup>
 
