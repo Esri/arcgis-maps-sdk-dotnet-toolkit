@@ -32,7 +32,7 @@
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
 
-	<ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'!=''">100.5</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.5</ArcGISRuntimePackageVersion>
     <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">3.6.0.264807</XamarinFormsPackageVersion>
 
     <!--Output paths-->
