@@ -160,7 +160,7 @@
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>$(XamarinFormsVersion)</Version>
+      <Version>$(XamarinFormsPackageVersion)</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
