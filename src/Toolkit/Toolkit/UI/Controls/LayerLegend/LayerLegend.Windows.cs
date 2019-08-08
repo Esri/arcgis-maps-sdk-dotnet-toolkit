@@ -31,9 +31,6 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The Legend Control that generates a list of Legend Items for a Layer
-    /// </summary>
     public partial class LayerLegend
     {
         private void Initialize() => DefaultStyleKey = typeof(LayerLegend);
