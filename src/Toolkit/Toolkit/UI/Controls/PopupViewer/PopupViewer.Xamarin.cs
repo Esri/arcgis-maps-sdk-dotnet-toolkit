@@ -19,11 +19,6 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The PopupViewer control is used to display details and media, edit attributes, geometry and related records,
-    /// manage attachments of an <see cref="Data.ArcGISFeature"/> or a <see cref="ArcGISRuntime.UI.Graphic"/>
-    /// as defined in its <see cref="Mapping.Popups.Popup"/>.
-    /// </summary>
     public partial class PopupViewer
     {
         private PopupManager _popupManager;
