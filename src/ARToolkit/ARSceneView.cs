@@ -53,13 +53,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Starts device tracking.
         /// </summary>
-        public async Task StartTrackingAsync()
+        public Task StartTrackingAsync()
         {
-            if (_locationDataSource != null && !_locationDataSource.IsStarted)
-                await _locationDataSource.StartAsync();
-
             OnStartTracking();
             IsTracking = true;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -68,7 +66,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public void StopTracking()
         {
             OnStopTracking();
-            _ = _locationDataSource?.StopAsync();
             IsTracking = false;
         }
 
@@ -77,7 +74,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public void ResetTracking()
         {
-            _initialLocation = null;
             _ = StartTrackingAsync();
         }
 
@@ -120,62 +116,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     StopCapturing();
 #endif
-                }
-            }
-        }
-
-        private Location.LocationDataSource _locationDataSource;
-
-        /// <summary>
-        /// Gets or sets the data source used to get device location.
-        /// </summary>
-        public Location.LocationDataSource LocationDataSource
-        {
-            get => _locationDataSource;
-            set
-            {
-                if (_locationDataSource != value)
-                {
-                    if (_locationDataSource != null)
-                    {
-                        _locationDataSource.LocationChanged -= LocationDataSource_LocationChanged;
-                    }
-
-                    _locationDataSource = value;
-                    if (_locationDataSource != null)
-                    {
-                        // TODO: Should be a weak listener
-                        _locationDataSource.LocationChanged += LocationDataSource_LocationChanged;
-                        if (_locationDataSource != null && IsTracking && !_locationDataSource.IsStarted)
-                        {
-                            _locationDataSource.StartAsync();
-                        }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initial location from location data source.
-        /// </summary>
-        private MapPoint _initialLocation;
-
-        private void LocationDataSource_LocationChanged(object sender, Location.Location e)
-        {
-            var locationPoint = e.Position;
-            if (locationPoint != null)
-            {
-                if (_initialLocation == null)
-                {
-                    _initialLocation = locationPoint;
-
-                    // Create a new camera based on our location and set it on the cameraController.
-                    OriginCamera = new Mapping.Camera(locationPoint, heading: 0.0, pitch: 0.0, roll: 0.0);
-                }
-                else
-                {
-                    var camera = Camera.MoveTo(locationPoint);
-                    SetViewpointCamera(camera);
                 }
             }
         }
