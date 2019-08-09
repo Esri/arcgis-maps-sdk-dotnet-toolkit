@@ -48,7 +48,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ARView.StartTracking();
+            ARView.StartTrackingAsync();
         }
 
         protected override void OnDisappearing()

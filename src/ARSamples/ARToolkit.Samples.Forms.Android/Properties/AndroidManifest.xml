@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.ARToolkit.Forms">
     <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="27" />
 
-
+  <!-- Location service is used for full-scale AR where the current device location is required -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  
   <!-- Both "AR Optional" and "AR Required" apps require CAMERA permission. -->
   <uses-permission android:name="android.permission.CAMERA" />
   <!-- Indicates that app requires ARCore ("AR Required"). Ensures app is only

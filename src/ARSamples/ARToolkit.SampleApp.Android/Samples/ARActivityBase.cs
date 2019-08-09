@@ -129,7 +129,7 @@ namespace ARToolkit.SampleApp.Samples
             base.OnResume();
             try
             {
-                this.arView.StartTracking();
+                this.arView.StartTrackingAsync();
             }
             catch(System.Exception ex)
             {

@@ -104,6 +104,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
             mSurfaceView.RenderMode = Rendermode.Continuously;
             AddViewInLayout(mSurfaceView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
             IsManualRendering = true;
+
+            CameraController = _controller;
         }
 
         private void InitARCore()
@@ -382,7 +384,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Raised if the tracking state changes
         /// </summary>
         /// <seealso cref="IsTracking"/>
-        /// <seealso cref="StartTracking"/>
+        /// <seealso cref="StartTrackingAsync"/>
         /// <seealso cref="StopTracking"/>
         public event EventHandler<bool> IsTrackingStateChanged;
 

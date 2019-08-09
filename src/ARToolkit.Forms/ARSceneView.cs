@@ -114,13 +114,15 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// <summary>
         /// Starts device tracking.
         /// </summary>
-        public void StartTracking()
+        public System.Threading.Tasks.Task StartTrackingAsync()
         {
 #if !NETSTANDARD2_0
             if (NativeARSceneView() == null)
                 throw new InvalidOperationException("Cannot start tracking before the view has appeared");
+            return NativeARSceneView().StartTrackingAsync();
+#else
+            throw new PlatformNotSupportedException();
 #endif
-            MessagingCenter.Send(this, "StartTracking");
         }
 
         /// <summary>

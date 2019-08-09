@@ -76,7 +76,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             if (e.OldElement != null)
             {
                 ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
-                MessagingCenter.Unsubscribe<ARSceneView>(this, "StartTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StopTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "ResetTracking");
                 MessagingCenter.Unsubscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation");
@@ -94,7 +93,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 }
 
                 ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
-                MessagingCenter.Subscribe<ARSceneView>(this, "StartTracking", (s) => ARControl.StartTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl.ResetTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl.SetInitialTransformation(a), elm);

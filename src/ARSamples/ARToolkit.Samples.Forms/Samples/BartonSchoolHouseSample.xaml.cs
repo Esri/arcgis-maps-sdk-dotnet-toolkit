@@ -18,7 +18,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
 		public BartonSchoolHouseSample()
 		{
 			InitializeComponent ();
-		}
+        }
         private Scene Scene;
 
         private async void Init()
@@ -27,7 +27,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
             {
                 Scene = await ARTestScenes.CreateBartonSchoolHouse(ARView);
                 ARView.Scene = Scene;
-                ARView.StartTracking();
+                ARView.StartTrackingAsync();
             }
             catch (System.Exception ex)
             {

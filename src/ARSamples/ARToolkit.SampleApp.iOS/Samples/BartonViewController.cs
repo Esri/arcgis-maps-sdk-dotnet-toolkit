@@ -72,7 +72,7 @@ namespace ARToolkit.SampleApp.Samples
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            _sceneView.StartTracking();
+            _sceneView.StartTrackingAsync();
         }
 
         public override void ViewDidLayoutSubviews()

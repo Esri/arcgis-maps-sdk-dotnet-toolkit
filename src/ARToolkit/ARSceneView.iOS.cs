@@ -66,6 +66,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
             base.LayoutSubviews();
             if (!_created)
             {
+                // Temporary workaround:	
+                Subviews[0].BackgroundColor = UIColor.Clear;
+
                 _created = true;
                 InsertSubview(_arview, 0);
                 _arview.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
@@ -76,7 +79,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             if (_isStarted)
             {
-                StartTracking();
+                StartTrackingAsync();
             }
         }
 

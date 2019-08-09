@@ -16,6 +16,7 @@
 
 #if !NETSTANDARD2_0
 using System;
+using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
@@ -34,7 +35,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
     /// </summary>
     public partial class ARSceneView : SceneView
     {
-        private TransformationMatrixCameraController _controller = new TransformationMatrixCameraController() { TranslationFactor = 100 };
+        private readonly TransformationMatrixCameraController _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 };
 
 #if !__ANDROID__
         /// <summary>
@@ -44,6 +45,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             SpaceEffect = UI.SpaceEffect.None;
             AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+            CameraController = _controller;
             Initialize();
         }
 #endif
@@ -51,17 +53,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Starts device tracking.
         /// </summary>
-        public void StartTracking()
+        public async Task StartTrackingAsync()
         {
-            if (IsTracking)
-            {
-                return;
-            }
+            if (_locationDataSource != null && !_locationDataSource.IsStarted)
+                await _locationDataSource.StartAsync();
 
-            CameraController = _controller;
             OnStartTracking();
             IsTracking = true;
-            _ = _locationDataSource?.StartAsync();
         }
 
         /// <summary>
@@ -69,10 +67,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public void StopTracking()
         {
-            IsTracking = false;
-            _ = _locationDataSource?.StopAsync();
             OnStopTracking();
-            CameraController = new GlobeCameraController();
+            _ = _locationDataSource?.StopAsync();
+            IsTracking = false;
         }
 
         /// <summary>
@@ -80,15 +77,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public void ResetTracking()
         {
-            var vc = Camera;
-            if (vc != null)
-            {
-                _controller.OriginCamera = vc;
-            }
-
             _initialLocation = null;
-            StopTracking();
-            StartTracking();
+            _ = StartTrackingAsync();
         }
 
         /// <summary>
@@ -156,6 +146,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     {
                         // TODO: Should be a weak listener
                         _locationDataSource.LocationChanged += LocationDataSource_LocationChanged;
+                        if (_locationDataSource != null && IsTracking && !_locationDataSource.IsStarted)
+                        {
+                            _locationDataSource.StartAsync();
+                        }
                     }
                 }
             }
@@ -189,7 +183,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Gets a value indicating whether tracking is currently active
         /// </summary>
-        /// <seealso cref="StartTracking"/>
+        /// <seealso cref="StartTrackingAsync"/>
         /// <seealso cref="StopTracking"/>
         public bool IsTracking { get; private set; }
 

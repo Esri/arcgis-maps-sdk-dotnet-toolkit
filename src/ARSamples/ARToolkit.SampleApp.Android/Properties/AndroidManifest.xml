@@ -5,6 +5,9 @@
           package="com.esri.ARToolkit.Droid">
   <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="27" />
 
+  <!-- Location service is used for full-scale AR where the current device location is required -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
   <!-- Both "AR Optional" and "AR Required" apps require CAMERA permission. -->
   <uses-permission android:name="android.permission.CAMERA" />
   <!-- Indicates that app requires ARCore ("AR Required"). Ensures app is only
