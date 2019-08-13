@@ -65,8 +65,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             base.LayoutSubviews();
             if (!_created)
-            {
-                // Temporary workaround:	
+            {	
                 Subviews[0].BackgroundColor = UIColor.Clear;
 
                 _created = true;
@@ -232,20 +231,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             return null;
         }
 
-        private class ARViewDelegate : ARSCNViewDelegate
-        {
-        }
-
-        private class ARSessionObserver : IARSessionObserver
-        {
-            public IntPtr Handle => throw new NotImplementedException();
-
-            public void Dispose()
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         private class ArSessionDel : ARSessionDelegate
         {
             private readonly ARSceneView _view;
@@ -300,11 +285,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             public event EventHandler<ARCamera> CameraTrackingStateChanged;
         }
-
-        /// <summary>
-        /// Gets a value indicating whether <c>ARKit</c> is supported on this device.
-        /// </summary>
-        public bool IsSupported => ARWorldTrackingConfiguration.IsSupported;
     }
 }
 #endif
