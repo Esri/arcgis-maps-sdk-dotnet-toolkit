@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
     /// </summary>
     public partial class ARSceneView : SceneView
     {
-        private readonly TransformationMatrixCameraController _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 };
+        private TransformationMatrixCameraController _controller;
 
 #if !__ANDROID__
         /// <summary>
@@ -43,18 +43,30 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public ARSceneView()
         {
+            InitializeCommon();
+        }
+
+        private bool IsDesignTime { get; } = false;
+#endif
+
+        private void InitializeCommon()
+        {
+            if (!IsDesignTime)
+        {
             SpaceEffect = UI.SpaceEffect.None;
             AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
-            CameraController = _controller;
+                _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 }; ;
+            }
+            
             Initialize();
         }
-#endif
 
         /// <summary>
         /// Starts device tracking.
         /// </summary>
         public Task StartTrackingAsync()
         {
+            CameraController = _controller;
             OnStartTracking();
             IsTracking = true;
             return Task.CompletedTask;

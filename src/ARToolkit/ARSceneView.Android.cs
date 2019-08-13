@@ -55,6 +55,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private DisplayRotationHelper _displayRotationHelper;
         private BackgroundRenderer _backgroundRenderer = new BackgroundRenderer();
         private Renderer _renderer;
+        private CompassOrientationHelper _orientationHelper; //Used for getting heading, and orientation if ARCore is disabled
         private Google.AR.Core.Session _session;
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public ARSceneView(Android.Content.Context context)
             : base(context)
         {
-            Initialize();
+            InitializeCommon();
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public ARSceneView(Context context, Android.Util.IAttributeSet attr)
             : base(context, attr)
         {
-            Initialize();
+            InitializeCommon();
         }
 
         /// <summary>
@@ -88,11 +89,15 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public Session Session => _session;
 
+        private bool IsDesignTime => IsInEditMode;
+       
         private void Initialize()
         {
-            SpaceEffect = UI.SpaceEffect.None;
-            AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
-            _displayRotationHelper = new DisplayRotationHelper(/*context=*/ Context);
+            if (IsDesignTime)
+                return;
+            _displayRotationHelper = new DisplayRotationHelper(Context);
+            _orientationHelper = new CompassOrientationHelper(Context);
+            _orientationHelper.OrientationChanged += OrientationHelper_OrientationChanged;
             _renderer = new Renderer(OnDrawFrame, OnSurfaceChanged, OnSurfaceCreated);
             GLSurfaceView mSurfaceView = new GLSurfaceView(Context);
 
@@ -104,9 +109,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
             mSurfaceView.RenderMode = Rendermode.Continuously;
             AddViewInLayout(mSurfaceView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
             IsManualRendering = true;
-
-            CameraController = _controller;
         }
+
+        public bool UseARCore { get; set; } = true;
 
         private void InitARCore()
         {
@@ -175,6 +180,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             _isTracking = false;
             _displayRotationHelper?.OnPause();
+            _orientationHelper?.Pause();
             if (_session != null)
             {
                 _session.Pause();
@@ -183,19 +189,22 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnStartTracking()
         {
-            if (_session == null)
+            if (UseARCore)
             {
-                InitARCore();
-            }
+                if (_session == null)
+                {
+                    InitARCore();
+                }
 
-            if (_session != null)
-            {
-                _isTracking = false;
-                IsTrackingStateChanged?.Invoke(this, false);
-                _session.Resume();
+                if (_session != null)
+                {
+                    _isTracking = false;
+                    IsTrackingStateChanged?.Invoke(this, false);
+                    _session.Resume();
+                }
+                _displayRotationHelper?.OnResume();
             }
-
-            _displayRotationHelper?.OnResume();
+            _orientationHelper?.Resume();
         }
 
         /// <summary>
@@ -230,94 +239,117 @@ namespace Esri.ArcGISRuntime.ARToolkit
             DrawComplete?.Invoke(this, new DrawEventArgs(gl, session, frame));
         }
 
+        private Frame _lastFrame;
+
         private void OnDrawFrame(IGL10 gl)
         {
             // Clear screen to notify driver it should not load any pixels from previous frame.
             GLES20.GlClear(GLES20.GlColorBufferBit | GLES20.GlDepthBufferBit);
 
-            if (_session == null)
+            if (_session != null && UseARCore)
             {
-                return;
-            }
-
-            // Notify ARCore session that the view size changed so that the perspective matrix and
-            // the video background can be properly adjusted.
-            _displayRotationHelper.UpdateSessionIfNeeded(_session);
-            try
-            {
-                _session.SetCameraTextureName(_backgroundRenderer.TextureId);
-
-                // Obtain the current frame from ARSession. When the configuration is set to
-                // UpdateMode.BLOCKING (it is by default), this will throttle the rendering to the
-                // camera framerate.
-                Frame frame = _session.Update();
-                var camera = frame.Camera;
-
-                // Draw background.
-                if (_renderVideoFeed)
+                // Notify ARCore session that the view size changed so that the perspective matrix and
+                // the video background can be properly adjusted.
+                _displayRotationHelper.UpdateSessionIfNeeded(_session);
+                try
                 {
-                    _backgroundRenderer.Draw(frame);
-                }
+                    _session.SetCameraTextureName(_backgroundRenderer.TextureId);
 
-                OnDrawBegin(gl, _session, frame);
+                    // Obtain the current frame from ARSession. When the configuration is set to
+                    // UpdateMode.BLOCKING (it is by default), this will throttle the rendering to the
+                    // camera framerate.
+                    Frame frame = _session.Update();
+                    var camera = frame.Camera;
 
-                // If not tracking, don't draw 3d objects.
-                if (camera.TrackingState == TrackingState.Paused)
-                {
-                    return;
-                }
-
-                // No tracking error at this point. If we detected any plane, then hide the
-                // message UI, otherwise show searchingPlane message.
-                bool tracking = HasTrackingPlane();
-                if (_isTracking != tracking)
-                {
-                    _isTracking = tracking;
-                    IsTrackingStateChanged?.Invoke(this, tracking);
-                }
-
-                // Get projection matrix.
-                float[] projmtx = new float[16];
-                camera.GetProjectionMatrix(projmtx, 0, 0.1f, 100.0f);
-
-                // Get camera matrix and draw.
-                // float[] viewmtx = new float[16];
-                // camera.GetViewMatrix(viewmtx, 0);
-                if (tracking)
-                {
-                    var pose = camera.DisplayOrientedPose;
-                    var c = Camera;
-                    if (c != null)
+                    // Draw background.
+                    if (_renderVideoFeed)
                     {
-                        if (_controller.OriginCamera == null)
-                        {
-                            _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
-                            OriginCameraChanged?.Invoke(this, EventArgs.Empty);
-                        }
-
-                        _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
-                        var intrinsics = camera.ImageIntrinsics;
-                        float[] fl = intrinsics.GetFocalLength();
-                        float[] pp = intrinsics.GetPrincipalPoint();
-                        int[] size = intrinsics.GetImageDimensions();
-                        SetFieldOfView(fl[0], fl[1], pp[0], pp[1], size[0], size[1], GetDeviceOrientation());
+                        _backgroundRenderer.Draw(frame);
                     }
+
+                    OnDrawBegin(gl, _session, frame);
+
+                    // If not tracking, don't draw 3d objects.
+                    if (camera.TrackingState == TrackingState.Paused)
+                    {
+                        return;
+                    }
+
+                    // No tracking error at this point. If we detected any plane, then hide the
+                    // message UI, otherwise show searchingPlane message.
+                    bool tracking = HasTrackingPlane();
+                    if (_isTracking != tracking)
+                    {
+                        _isTracking = tracking;
+                        IsTrackingStateChanged?.Invoke(this, tracking);
+                    }
+
+                    // Get projection matrix.
+                    float[] projmtx = new float[16];
+                    camera.GetProjectionMatrix(projmtx, 0, 0.1f, 100.0f);
+
+                    // Get camera matrix and draw.
+                    // float[] viewmtx = new float[16];
+                    // camera.GetViewMatrix(viewmtx, 0);
+                    if (tracking)
+                    {
+                        var pose = camera.DisplayOrientedPose;
+                        var c = Camera;
+                        if (c != null)
+                        {
+                            if (_controller.OriginCamera == null)
+                            {
+                                _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
+                                OriginCameraChanged?.Invoke(this, EventArgs.Empty);
+                            }
+
+                            _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
+                            var intrinsics = camera.ImageIntrinsics;
+                            float[] fl = intrinsics.GetFocalLength();
+                            float[] pp = intrinsics.GetPrincipalPoint();
+                            int[] size = intrinsics.GetImageDimensions();
+                            SetFieldOfView(fl[0], fl[1], pp[0], pp[1], size[0], size[1], GetDeviceOrientation());
+                        }
+                    }
+                    if (IsManualRendering)
+                    {
+                        RenderFrame();
+                    }
+
+                    OnDrawComplete(gl, _session, frame);
+                    _lastFrame = frame;
+                }
+                catch (System.Exception)
+                {
+                }
+            }
+            else
+            {
+                if(RenderVideoFeed)
+                {
+                    // TODO: Render the camera on the background
                 }
 
                 if (IsManualRendering)
                 {
                     RenderFrame();
                 }
-
-                OnDrawComplete(gl, _session, frame);
-                _lastFrame = frame;
-            }
-            catch (System.Exception)
-            {
             }
         }
 
-        private Frame _lastFrame;
+        private void OrientationHelper_OrientationChanged(object sender, CompassOrientationEventArgs e)
+        {
+            if (!UseARCore)
+            {
+                // Use orientation sensor instead of ARCore
+                var m = e.Transformation;
+                var qw = Math.Sqrt(1 + m[0] + m[4] + m[8]) / 2;
+                var qx = (m[7] - m[5]) / (4 * qw);
+                var qy = (m[2] - m[6]) / (4 * qw);
+                var qz = (m[3] - m[1]) / (4 * qw);
+                _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(qx, qz, -qy, qw, 0, 0, 0);
+            }
+        }
 
         private UI.DeviceOrientation GetDeviceOrientation()
         {
