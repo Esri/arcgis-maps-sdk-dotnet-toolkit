@@ -39,6 +39,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _isTracking = true;
             Loaded += ARSceneView_Loaded;
             Unloaded += ARSceneView_Unloaded;
+            IsManualRendering = false;
+            
         }
 
         /// <inheritdoc />
@@ -48,7 +50,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
             var elm = GetTemplateChild("MapSurface") as FrameworkElement;
             if (elm != null && elm.Parent is Panel parent)
             {
-                _cameraView = new CaptureElement() { Stretch = Windows.UI.Xaml.Media.Stretch.Uniform };
+                _cameraView = new CaptureElement()
+                {
+                    Stretch = Windows.UI.Xaml.Media.Stretch.Uniform,
+                    Visibility = RenderVideoFeed ? Visibility.Visible : Visibility.Collapsed
+                };
                 parent.Children.Insert(parent.Children.IndexOf(elm), _cameraView);
             }
         }
@@ -79,23 +85,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _isTracking = false;
         }
 
-        private void CompositionTarget_Rendering(object sender, object e)
-        {
-            // TODO: Use Camera frame sync instead
-            RenderFrame();
-        }
-
         private void ARSceneView_Loaded(object sender, RoutedEventArgs e)
         {
             _isLoaded = true;
             if (_isTracking)
             {
                 InitializeTracker();
-            }
-
-            if (IsManualRendering)
-            {
-                Windows.UI.Xaml.Media.CompositionTarget.Rendering += CompositionTarget_Rendering;
             }
         }
 
@@ -118,11 +113,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 DisposeTracking();
             }
-
-            if (IsManualRendering)
-            {
-                Windows.UI.Xaml.Media.CompositionTarget.Rendering -= CompositionTarget_Rendering;
-            }
         }
 
         private void DisposeTracking()
@@ -133,7 +123,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
 
             _sensor = null;
-            // Windows.UI.Xaml.Media.CompositionTarget.Rendering -= CompositionTarget_Rendering;
             if (_cameraView != null)
             {
                 _cameraView.Source = null;
@@ -203,7 +192,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private TransformationMatrix HitTest(Windows.Foundation.Point screenPoint)
         {
-            throw new NotSupportedException();
+            throw new PlatformNotSupportedException();
         }
     }
 }

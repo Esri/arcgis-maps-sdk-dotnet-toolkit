@@ -26,12 +26,13 @@ namespace ARToolkit.SampleApp
         public MainPage()
         {
             this.InitializeComponent();
-            Load();
+            Samples.ItemsSource = new SampleDatasource().Samples;
         }
-        private async void Load()
-        { 
-            arview.Scene = await ARTestScenes.CreateBartonSchoolHouse(arview);
-            //arview.Scene = new Scene(Basemap.CreateImagery());
+
+        private void Samples_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var s = e.ClickedItem as Sample;
+            Frame.Navigate(s.Type);
         }
     }
 }

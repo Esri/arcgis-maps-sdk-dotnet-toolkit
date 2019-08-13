@@ -116,7 +116,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     SpaceEffect = UI.SpaceEffect.None;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
 #if NETFX_CORE
+                    if (_cameraView != null)
+                    {
                     _cameraView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    }
                     StartCapturing();
 #endif
                 }
@@ -125,7 +128,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     SpaceEffect = UI.SpaceEffect.Stars;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.HorizonOnly;
 #if NETFX_CORE
+                    if(_cameraView != null)
+                    {
                     _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    }
                     StopCapturing();
 #endif
                 }
