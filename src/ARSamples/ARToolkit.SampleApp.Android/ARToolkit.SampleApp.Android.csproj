@@ -67,7 +67,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleScreenAdapter.cs" />
     <Compile Include="Samples\ARActivityBase.cs" />
-    <Compile Include="Samples\SatelliteSample.cs" />
     <Compile Include="Samples\EarthSample.cs" />
     <Compile Include="Samples\BartonSchoolHouseSample.cs" />
     <Compile Include="Utilities.cs" />
