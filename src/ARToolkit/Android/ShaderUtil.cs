@@ -25,9 +25,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
 {
     internal static class ShaderUtil
     {
-        public static int LoadGLShader(string tag, Context context, int type, int resId)
+        public static int LoadGLShader(Context context, int type, int resId)
         {
             var code = ReadRawTextFile(context, resId);
+            return LoadGLShader(type, code);
+        }
+
+        public static int LoadGLShader(int type, string code)
+        {
             var shader = GLES20.GlCreateShader(type);
 
             GLES20.GlShaderSource(shader, code);

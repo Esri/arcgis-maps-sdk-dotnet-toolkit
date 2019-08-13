@@ -29,8 +29,24 @@ namespace Esri.ArcGISRuntime.ARToolkit
     internal class BackgroundRenderer
     {
         private const string TAG = "BACKGROUNDRENDERER";
+    private const string ScreenQuadVertex =
+@"attribute vec4 a_Position;
+attribute vec2 a_TexCoord;
+varying vec2 v_TexCoord;
+void main() {
+   gl_Position = a_Position;
+   v_TexCoord = a_TexCoord;
+}";
+    private const string ScreenQuadFragment =
+@"#extension GL_OES_EGL_image_external : require
+precision mediump float;
+varying vec2 v_TexCoord;
+uniform samplerExternalOES sTexture;
+void main() {
+    gl_FragColor = texture2D(sTexture, v_TexCoord);
+}";
 
-        private const int CoordPerVertex = 2;
+    private const int CoordPerVertex = 2;
         private const int TexCoordsPerVertex = 2;
         private const int FloatSize = 4;
 
@@ -87,8 +103,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
             bbTexCoordsTransformed.Order(ByteOrder.NativeOrder());
             _quadTexCoords = bbTexCoordsTransformed.AsFloatBuffer();
 
-            int vertexShader = ShaderUtil.LoadGLShader(TAG, context, GLES20.GlVertexShader, Resource.Raw.screenquad_vertex);
-            int fragmentShader = ShaderUtil.LoadGLShader(TAG, context, GLES20.GlFragmentShader, Resource.Raw.screenquad_fragment_oes);
+            int vertexShader = ShaderUtil.LoadGLShader(GLES20.GlVertexShader, ScreenQuadVertex);
+            int fragmentShader = ShaderUtil.LoadGLShader(GLES20.GlFragmentShader, ScreenQuadFragment);
 
             _quadProgram = GLES20.GlCreateProgram();
             GLES20.GlAttachShader(_quadProgram, vertexShader);
