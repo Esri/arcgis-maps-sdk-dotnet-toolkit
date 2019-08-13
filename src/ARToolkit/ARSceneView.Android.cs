@@ -189,6 +189,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnStartTracking()
         {
+            headingOffset = 0;
             if (UseARCore)
             {
                 if (_session == null)
@@ -302,8 +303,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
                                 _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
                                 OriginCameraChanged?.Invoke(this, EventArgs.Empty);
                             }
-
-                            _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
+                            var headingOffsetMatrix = TransformationMatrix.Identity;
+                            if(headingOffset != 0)
+                            {
+                                //Apply offset to heading
+                                //var q = new double[4];
+                                var angleInRadians = headingOffset * (Math.PI / 180.0);
+                                //var v = new double[] { 0, , 0, Math.Cos(.5 * angleInRadians) };
+                                headingOffsetMatrix = TransformationMatrix.Create(0, Math.Sin(.5 * angleInRadians), 0, Math.Cos(.5 * angleInRadians), 0, 0, 0);
+                            }
+                            _controller.TransformationMatrix = headingOffsetMatrix + InitialTransformation + TransformationMatrix.Create(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
                             var intrinsics = camera.ImageIntrinsics;
                             float[] fl = intrinsics.GetFocalLength();
                             float[] pp = intrinsics.GetPrincipalPoint();
@@ -337,6 +346,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
+        private double headingOffset = 0;
+        private Android.Hardware.SensorStatus headingOffsetAccuracy = Android.Hardware.SensorStatus.NoContact;
         private void OrientationHelper_OrientationChanged(object sender, CompassOrientationEventArgs e)
         {
             if (!UseARCore)
@@ -348,6 +359,19 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 var qy = (m[2] - m[6]) / (4 * qw);
                 var qz = (m[3] - m[1]) / (4 * qw);
                 _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(qx, qz, -qy, qw, 0, 0, 0);
+            }
+            else
+            {
+                if (_isTracking && e.Accuracy > headingOffsetAccuracy && e.Pitch > 20 && e.Pitch < 140)
+                {
+                    // Compass heading got better - update offset, but only if pitch isn't too big
+                    var c = Camera;
+                    if (c != null)
+                    {
+                        headingOffset = c.Heading - e.Azimuth;
+                        headingOffsetAccuracy = e.Accuracy;
+                    }
+                }
             }
         }
 

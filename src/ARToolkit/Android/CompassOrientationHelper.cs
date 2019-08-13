@@ -92,45 +92,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         void ISensorEventListener.OnSensorChanged(SensorEvent e)
         {
-            Android.Hardware.Axis ax, ay;
-            switch (_windowManager.DefaultDisplay.Rotation)
-            {
-                case SurfaceOrientation.Rotation90:
-                    ax = Android.Hardware.Axis.Z;
-                    ay = Android.Hardware.Axis.MinusX;
-                    break;
-                case SurfaceOrientation.Rotation180:
-                    ax = Android.Hardware.Axis.MinusX;
-                    ay = Android.Hardware.Axis.MinusZ;
-                    break;
-                case SurfaceOrientation.Rotation270:
-                    ax = Android.Hardware.Axis.MinusZ;
-                    ay = Android.Hardware.Axis.X;
-                    break;
-                case SurfaceOrientation.Rotation0:
-                default:
-                    ax = Android.Hardware.Axis.X;
-                    ay = Android.Hardware.Axis.Z;
-                    break;
-            }
+            float[] rotationMatrix = null;
 
             if (e.Sensor == _rotationSensor)
             {
                 var rotationVector = e.Values.ToArray();
-                float[] rotationMatrix = new float[9];
+                rotationMatrix = new float[9];
                 SensorManager.GetRotationMatrixFromVector(rotationMatrix, rotationVector);
-                float[] adjustedRotationMatrix = new float[9];
-                SensorManager.RemapCoordinateSystem(rotationMatrix, ax, ay, adjustedRotationMatrix);
-                // Transform rotation matrix into azimuth/pitch/roll
-                float[] orientation = new float[3];
-                SensorManager.GetOrientation(adjustedRotationMatrix, orientation);
-                OrientationChanged?.Invoke(this, new CompassOrientationEventArgs()
-                {
-                    Transformation = adjustedRotationMatrix,
-                    Orientation = orientation,
-                    Accuracy = _currentAccuracy
-                });
-                return;
             }
             else if (e.Sensor == _accelerometer)
             {
@@ -142,21 +110,45 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
             if (_lastAccelerometer != null && _lastMagnetometer != null)
             {
-                float[] gravity = new float[9];
+                rotationMatrix = new float[9];
                 float[] magnetic = new float[9];
-                SensorManager.GetRotationMatrix(gravity, magnetic, _lastAccelerometer, _lastMagnetometer);
-
-                float[] outGravity = new float[9];
-                SensorManager.RemapCoordinateSystem(gravity, Android.Hardware.Axis.X, Android.Hardware.Axis.Z, outGravity);
-                float[] values = new float[3];
-                SensorManager.GetOrientation(outGravity, values);
-
+                SensorManager.GetRotationMatrix(rotationMatrix, magnetic, _lastAccelerometer, _lastMagnetometer);
                 _lastMagnetometer = null;
                 _lastAccelerometer = null;
+            }
+            if(rotationMatrix != null)
+            {
+                Android.Hardware.Axis ax, ay;
+                switch (_windowManager.DefaultDisplay.Rotation)
+                {
+                    case SurfaceOrientation.Rotation90:
+                        ax = Android.Hardware.Axis.Z;
+                        ay = Android.Hardware.Axis.MinusX;
+                        break;
+                    case SurfaceOrientation.Rotation180:
+                        ax = Android.Hardware.Axis.MinusX;
+                        ay = Android.Hardware.Axis.MinusZ;
+                        break;
+                    case SurfaceOrientation.Rotation270:
+                        ax = Android.Hardware.Axis.MinusZ;
+                        ay = Android.Hardware.Axis.X;
+                        break;
+                    case SurfaceOrientation.Rotation0:
+                    default:
+                        ax = Android.Hardware.Axis.X;
+                        ay = Android.Hardware.Axis.Z;
+                        break;
+                }
+                float[] adjustedRotationMatrix = new float[9];
+                SensorManager.RemapCoordinateSystem(rotationMatrix, ax, ay, adjustedRotationMatrix);
+                // Transform rotation matrix into azimuth/pitch/roll
+                float[] orientation = new float[3];
+                SensorManager.GetOrientation(adjustedRotationMatrix, orientation);
+
                 OrientationChanged?.Invoke(this, new CompassOrientationEventArgs()
                 {
-                    Transformation = gravity,
-                    Orientation = values,
+                    Transformation = rotationMatrix,
+                    Orientation = orientation,
                     Accuracy = _currentAccuracy
                 });
             }
