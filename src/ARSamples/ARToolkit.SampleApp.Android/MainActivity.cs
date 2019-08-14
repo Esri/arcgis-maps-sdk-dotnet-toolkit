@@ -40,7 +40,12 @@ namespace ARToolkit.SampleApp
         protected async override void OnListItemClick(ListView l, View v, int position, long id)
         {
             var item = ((SampleScreenAdapter)ListAdapter)[position];
-            if(item.HasSampleData)
+            if (!item.IsDeviceSupported)
+            {
+                Toast.MakeText(this, "This device does not support running this sample.", ToastLength.Long).Show();
+                return;
+            }
+            if (item.HasSampleData)
             {
                 var downloadView = FindViewById<LinearLayout>(Resource.Id.downloadView);
                 var downloadStatus = FindViewById<TextView>(Resource.Id.downloadStatus);

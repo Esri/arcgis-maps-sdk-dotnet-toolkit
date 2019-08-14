@@ -66,6 +66,12 @@ namespace ARToolkit.SampleApp
             {
                 var item = _data[indexPath.Row];
 
+                if(!item.IsDeviceSupported)
+                {
+                    UIAlertView _error = new UIAlertView("Not supported", "This device does not support running this sample.", del: null, "Ok");
+                    _error.Show();
+                    return;
+                }
                 if (item.HasSampleData)
                 {
                     // Show progress overlay

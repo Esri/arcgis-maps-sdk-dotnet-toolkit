@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Initializes a new instance of the <see cref="ARSceneView"/> class.
         /// </summary>
-        public ARSceneView()
+        public ARSceneView() : base()
         {
             InitializeCommon();
         }

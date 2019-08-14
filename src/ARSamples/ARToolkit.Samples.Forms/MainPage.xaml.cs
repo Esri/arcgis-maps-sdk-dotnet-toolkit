@@ -28,6 +28,12 @@ namespace ARToolkit.SampleApp.Forms
             var sample = e.SelectedItem as ARToolkit.SampleApp.Sample;
             if (sample != null)
             {
+                samples.SelectedItem = null;
+                if (!sample.IsDeviceSupported)
+                {
+                    await DisplayAlert("Not Supported", "This device does not support running this sample.", "OK");
+                    return;
+                }
                 if (sample.HasSampleData)
                 {
                     try
@@ -53,7 +59,6 @@ namespace ARToolkit.SampleApp.Forms
                 }
 
                 var _ = Navigation.PushAsync(Activator.CreateInstance(sample.Type) as Page);
-                samples.SelectedItem = null;
             }
         }
     }

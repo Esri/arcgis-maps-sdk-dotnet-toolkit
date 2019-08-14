@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void Initialize()
         {
-            _isTracking = true;
+            _isTracking = false;
             Loaded += ARSceneView_Loaded;
             Unloaded += ARSceneView_Unloaded;
             IsManualRendering = false;
@@ -56,6 +56,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     Visibility = RenderVideoFeed ? Visibility.Visible : Visibility.Collapsed
                 };
                 parent.Children.Insert(parent.Children.IndexOf(elm), _cameraView);
+            }
+            if(IsTracking)
+            {
+                StartCapturing();
             }
         }
 
@@ -96,7 +100,18 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void InitializeTracker()
         {
-            _sensor =  UseCompass ? OrientationSensor.GetDefaultForRelativeReadings() : OrientationSensor.GetDefault(SensorReadingType.Absolute, SensorOptimizationGoal.Precision);
+            if(UseCompass)
+            {
+                _sensor = OrientationSensor.GetDefault(SensorReadingType.Absolute, SensorOptimizationGoal.Precision);
+            }
+            else
+            {
+                _sensor = OrientationSensor.GetDefaultForRelativeReadings();
+            }
+            if (_sensor == null)
+            {
+                _sensor = OrientationSensor.GetDefault();
+            }
             if (_sensor == null)
             {
                 throw new NotSupportedException("No Orientation Sensor detected");

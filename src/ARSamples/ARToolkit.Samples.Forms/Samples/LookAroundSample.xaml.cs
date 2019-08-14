@@ -12,7 +12,9 @@ using Xamarin.Forms.Xaml;
 namespace ARToolkit.SampleApp.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfo(DisplayName = "Camera Tracking Disabled", Description = "A sample that doesn't rely on ARCore/ARKit but only features the ability to look around based on the device's motion sensors")]
+    [SampleInfo(DisplayName = "Camera Tracking Disabled", 
+        Description = "A sample that doesn't rely on ARCore/ARKit but only features the ability to look around based on the device's motion sensors",
+        DeviceRequirement = Esri.ArcGISRuntime.ARToolkit.DeviceSupport.ThreeDegreesOfFreedom)]
     public partial class LookAroundSample : ContentPage
 	{
 		public LookAroundSample()
