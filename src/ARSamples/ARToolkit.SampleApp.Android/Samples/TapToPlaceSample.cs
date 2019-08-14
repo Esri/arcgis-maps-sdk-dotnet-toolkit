@@ -30,8 +30,6 @@ namespace ARToolkit.SampleApp.Samples
         Description = "This demonstrates the table-top experience, where you can double-tap a surface to place the scene on that surface")]
     public class TapToPlaceSample : ARActivityBase
     {
-        private Scene Scene;
-        
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -43,9 +41,10 @@ namespace ARToolkit.SampleApp.Samples
                 // Load the package.
                 await package.LoadAsync();
                 // Show the first scene.
-                Scene = package.Scenes[0];
-                Scene.BaseSurface.BackgroundGrid.IsVisible = false;
-                ARView.Scene = Scene;
+                var scene = package.Scenes[0];
+                scene.BaseSurface.BackgroundGrid.IsVisible = false;
+                scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
+                ARView.Scene = scene;
                 //We'll set the origin of the scene in the middle so we can use that as the tie-point
                 ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(39.9579126, -75.1705827, 9.64, 0, 90, 0);
                 ARView.TranslationFactor = 1000; // By increasing the translation factor, the scene appears as if it's at scale 1:1000

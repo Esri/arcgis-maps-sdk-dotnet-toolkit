@@ -84,9 +84,13 @@
     <Compile Include="SamplesViewController.designer.cs">
       <DependentUpon>SamplesViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Samples\BartonViewController.cs" />
-    <Compile Include="Samples\BartonViewController.designer.cs">
-      <DependentUpon>BartonViewController.cs</DependentUpon>
+    <Compile Include="Samples\EarthViewController.cs" />
+    <Compile Include="Samples\EarthViewController.designer.cs">
+      <DependentUpon>EarthViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\TapToPlaceViewController.cs" />
+    <Compile Include="Samples\TapToPlaceViewController.designer.cs">
+      <DependentUpon>TapToPlaceViewController.cs</DependentUpon>
     </Compile>
     <None Include="Info.plist">
       <SubType>Designer</SubType>

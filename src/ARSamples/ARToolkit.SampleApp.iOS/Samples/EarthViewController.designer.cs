@@ -10,8 +10,8 @@ using System.CodeDom.Compiler;
 
 namespace ARToolkit.SampleApp
 {
-    [Register ("BartonViewController")]
-    partial class BartonViewController
+    [Register ("EarthViewController")]
+    partial class EarthViewController
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

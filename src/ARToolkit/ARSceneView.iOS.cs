@@ -16,6 +16,7 @@
 
 #if __IOS__
 using System;
+using System.Linq;
 using ARKit;
 using CoreMedia;
 using Esri.ArcGISRuntime.Mapping;
@@ -242,17 +243,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
         {
-            var hit = _arview.Session.CurrentFrame.HitTest(screenPoint, type);
-            if (hit.Length > 0)
+            var hit = _arview.HitTest(screenPoint, type);
+            // Get the worldTransform from the first result; if there's no worldTransform, return null.
+            var t = hit?.FirstOrDefault()?.WorldTransform;
+            if (t != null)
             {
-                // Get the worldTransform from the first result; if there's no worldTransform, return null.
-                var t = hit[0].WorldTransform;
-                if (t == null)
-                {
-                    return null;
-                }
-
-                return TransformationMatrix.Create(0, 0, 0, 1, t.Column3.X, -t.Column3.Z, t.Column3.Y);
+                return TransformationMatrix.Create(0, 0, 0, 1, t.Value.Column3.X, t.Value.Column3.Y, t.Value.Column3.Z);
             }
 
             return null;

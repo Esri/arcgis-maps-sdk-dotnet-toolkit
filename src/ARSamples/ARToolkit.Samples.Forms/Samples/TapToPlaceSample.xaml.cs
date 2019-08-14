@@ -36,6 +36,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 // Show the first scene.
                 var scene = package.Scenes[0];
                 scene.BaseSurface.BackgroundGrid.IsVisible = false;
+                scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
                 ARView.Scene = scene;
                 //We'll set the origin of the scene in the middle so we can use that as the tie-point
                 ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(39.9579126, -75.1705827, 9.64, 0, 90, 0);
