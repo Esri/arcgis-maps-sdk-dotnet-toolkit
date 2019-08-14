@@ -113,16 +113,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
         }
 
         /// <inheritdoc />
-        protected override void OnControlPropertyChanged(string propertyName)
-        {
-            if(propertyName == nameof(SceneView.CameraController))
-            {
-                ARElement.CameraController = ARControl.CameraController;
-            }
-            base.OnControlPropertyChanged(propertyName);
-        }
-
-        /// <inheritdoc />
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
