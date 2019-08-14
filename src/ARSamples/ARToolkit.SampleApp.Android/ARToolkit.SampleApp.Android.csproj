@@ -69,6 +69,8 @@
     <Compile Include="SampleScreenAdapter.cs" />
     <Compile Include="Samples\ARActivityBase.cs" />
     <Compile Include="Samples\LookAroundSample.cs" />
+    <Compile Include="Samples\ManualCalibration.cs" />
+    <Compile Include="Samples\FullScaleAR.cs" />
     <Compile Include="Samples\EarthSample.cs" />
     <Compile Include="Samples\TapToPlaceSample.cs" />
     <Compile Include="Utilities.cs" />
@@ -138,6 +140,18 @@
       <Project>{168467dc-6d2d-477a-9ac2-f1486fa67e0a}</Project>
       <Name>Esri.ArcGISRuntime.ARToolkit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\fullscalear.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\manualcalibration.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="..\SampleHelpers\SampleHelpers.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
