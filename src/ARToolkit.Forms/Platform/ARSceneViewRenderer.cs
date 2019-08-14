@@ -86,11 +86,17 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 var elm = (ARSceneView)e.NewElement;
                 ARControl.TranslationFactor = elm.TranslationFactor;
                 ARControl.RenderVideoFeed = elm.RenderVideoFeed;
+                ARControl.UseCompass = elm.UseCompass;
+#if __ANDROID__
+                ARControl.UseARCore = elm.UseCameraTracking;
+#elif __IOS__
+                ARControl.UseARKit = elm.UseCameraTracking;
+#endif
                 if (elm.OriginCamera != null)
                 {
                     ARControl.OriginCamera = elm.OriginCamera;
                 }
-
+                elm.CameraController = ARControl.CameraController; //Ensure we use the native view's camera controller
                 ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
                 MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl.ResetTracking(), elm);
@@ -101,6 +107,16 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
         private void ARControl_OriginCameraChanged(object sender, System.EventArgs e)
         {
             ARElement?.RaiseOriginCameraChanged();
+        }
+
+        /// <inheritdoc />
+        protected override void OnControlPropertyChanged(string propertyName)
+        {
+            if(propertyName == nameof(SceneView.CameraController))
+            {
+                ARElement.CameraController = ARControl.CameraController;
+            }
+            base.OnControlPropertyChanged(propertyName);
         }
 
         /// <inheritdoc />
@@ -118,6 +134,18 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             else if (e.PropertyName == ARSceneView.RenderVideoFeedProperty.PropertyName)
             {
                 ARControl.RenderVideoFeed = ARElement.RenderVideoFeed;
+            }
+            else if (e.PropertyName == ARSceneView.UseCompassProperty.PropertyName)
+            {
+                ARControl.UseCompass = ARElement.UseCompass;
+            }
+            else if (e.PropertyName == ARSceneView.UseCameraTrackingProperty.PropertyName)
+            {
+#if __ANDROID__
+                ARControl.UseARCore = ARElement.UseCameraTracking;
+#elif __IOS__
+                ARControl.UseARKit = ARElement.UseCameraTracking;
+#endif
             }
         }
 

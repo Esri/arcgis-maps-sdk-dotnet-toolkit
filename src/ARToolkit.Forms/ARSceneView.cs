@@ -96,6 +96,45 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         }
 
         /// <summary>
+        /// Identifies the <see cref="UseCompass"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty UseCompassProperty =
+            BindableProperty.Create(nameof(UseCompass), typeof(bool), typeof(ARSceneView), false, BindingMode.TwoWay, null);
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the scene should attempt to use the device compass to align the scene towards north.
+        /// </summary>
+        /// <remarks>
+        /// Note that the accuracy of the compass can heavily affect the quality of alignment.
+        /// </remarks>
+        public bool UseCompass
+        {
+            get { return (bool)GetValue(UseCompassProperty); }
+            set { SetValue(UseCompassProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="UseCameraTracking"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty UseCameraTrackingProperty =
+            BindableProperty.Create(nameof(UseCameraTracking), typeof(bool), typeof(ARSceneView), true, BindingMode.TwoWay, null);
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the camera should be used for device movement tracking by for instance utilizing ARCore on Android, or ARKit on iOS.
+        /// </summary>
+        /// <remarks>
+        /// This value should be set prior to starting to track, and disabled if the device doesn't support 
+        /// ARCore / 6-degrees of freedom tracking (see <see cref="SupportLevel"/>).
+        /// </remarks>
+        /// <seealso cref="SupportLevel"/>
+
+        public bool UseCameraTracking
+        {
+            get { return (bool)GetValue(UseCameraTrackingProperty); }
+            set { SetValue(UseCameraTrackingProperty, value); }
+        }
+
+        /// <summary>
         /// Starts device tracking.
         /// </summary>
         public System.Threading.Tasks.Task StartTrackingAsync()
@@ -243,5 +282,16 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
             }
         }
 #endif
+        public static DeviceSupport SupportLevel
+        {
+            get
+            {
+#if !NETSTANDARD2_0
+                return Esri.ArcGISRuntime.ARToolkit.ARSceneView.SupportLevel;
+#else
+                return DeviceSupport.NotSupported;
+#endif
+            }
+        }
     }
 }

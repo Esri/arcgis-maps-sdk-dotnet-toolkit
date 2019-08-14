@@ -3,14 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ARToolkit.SampleApp.Forms"
              xmlns:esri="clr-namespace:Esri.ArcGISRuntime.ARToolkit.Forms;assembly=Esri.ArcGISRuntime.ARToolkit.Forms"
-             x:Class="ARToolkit.SampleApp.Forms.MainPage" Title="Barton Schoolhouse">
+             x:Class="ARToolkit.SampleApp.Forms.MainPage" Title="Xamarin.Forms ARToolkit Samples">
 
     <Grid>
 
-    <ListView x:Name="samples" ItemSelected="Samples_ItemSelected">
+    <ListView x:Name="samples" ItemSelected="Samples_ItemSelected" Margin="20" RowHeight="100">
         <ListView.ItemTemplate>
             <DataTemplate >
-                <TextCell Text="{Binding Name}"></TextCell>
+                    <ViewCell>
+                        <StackLayout Margin="0,5,0,0">
+                            <Label Text="{Binding Name}" FontSize="16" TextColor="Black" FontAttributes="Bold" />
+                            <Label Text="{Binding Description}" TextColor="Black" />
+                        </StackLayout>
+                    </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

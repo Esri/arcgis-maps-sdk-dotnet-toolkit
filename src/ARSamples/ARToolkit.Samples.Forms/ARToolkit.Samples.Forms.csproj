@@ -17,8 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Samples\BartonSchoolHouseSample.xaml.cs">
-      <DependentUpon>BartonSchoolHouseSample.xaml</DependentUpon>
+    <Compile Update="Samples\LookAroundSample.xaml.cs">
+      <DependentUpon>LookAroundSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Samples\FullScaleARSample.xaml.cs">
+      <DependentUpon>FullScaleARSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Samples\TapToPlaceSample.xaml.cs">
+      <DependentUpon>TapToPlaceSample.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

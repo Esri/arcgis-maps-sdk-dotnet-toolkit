@@ -60,6 +60,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
             get => _arview;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether ARKit should be used for tracking the device movements
+        /// </summary>
+        /// <remarks>
+        /// This value should be set prior to starting to track, and disabled if the device doesn't support 
+        /// ARCore / 6-degrees of freedom tracking (see <see cref="SupportLevel"/>).
+        /// </remarks>
+        /// <seealso cref="SupportLevel"/>
+        public bool UseARKit { get; set; }
+
         /// <inheritdoc />
         public override void LayoutSubviews()
         {

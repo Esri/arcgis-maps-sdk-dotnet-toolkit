@@ -12,7 +12,8 @@ using Xamarin.Forms.Xaml;
 namespace ARToolkit.SampleApp.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EarthSample : ContentPage
+    [SampleInfo(DisplayName = "Earth", Description = "Shows the entire earth hovering in front of you, allowing you to walk around it")]
+    public partial class EarthSample : ContentPage
 	{
 		public EarthSample ()
 		{
@@ -24,20 +25,18 @@ namespace ARToolkit.SampleApp.Forms.Samples
         {
             try
             {
-                var Scene = new Scene(Basemap.CreateImagery())
-                {
-                    InitialViewpoint = new Viewpoint(
-                        new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84),
-                        new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84), 0, 0, 0))
-                };
-                Scene.BaseSurface = new Surface();
-                Scene.BaseSurface.BackgroundGrid.IsVisible = false;
-                Scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
-                Scene.BaseSurface.ElevationExaggeration = 10;
-                Scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
+                var scene = new Scene(Basemap.CreateImagery());
+                scene.BaseSurface = new Surface();
+                scene.BaseSurface.BackgroundGrid.IsVisible = false;
+                scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+                scene.BaseSurface.ElevationExaggeration = 10;
+                scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
                 ARView.TranslationFactor = 100000000;
-                await Scene.LoadAsync();
-                ARView.Scene = Scene;
+                // Set pitch to 0 so looking forward looks "down" on earth from space
+                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84), 0, 0, 0);
+
+                await scene.LoadAsync();
+                ARView.Scene = scene;
             }
             catch (System.Exception ex)
             {

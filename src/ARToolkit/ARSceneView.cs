@@ -27,9 +27,11 @@ using Point = CoreGraphics.CGPoint;
 #elif NETFX_CORE
 using Point = Windows.Foundation.Point;
 #endif
+#endif
 
 namespace Esri.ArcGISRuntime.ARToolkit
 {
+#if !NETSTANDARD2_0
     /// <summary>
     /// The Augmented Reality-enabled SceneView control
     /// </summary>
@@ -52,14 +54,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void InitializeCommon()
         {
             if (!IsDesignTime)
-            {
-                SpaceEffect = UI.SpaceEffect.None;
-                AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
-                _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 }; ;
+                {
+                    SpaceEffect = UI.SpaceEffect.None;
+                    AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+                    _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 }; ;
             }
             
-            Initialize();
-        }
+                    Initialize();
+                }
 
         /// <summary>
         /// Starts device tracking.
@@ -268,13 +270,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 return DeviceSupport.NotSupported;
             }
         }
+    }
 
-        public enum DeviceSupport
-        {
-            NotSupported,
-            ThreeDegreesOfFreedom,
-            SixDegreesOfFreedom
-        }
+#endif
+    public enum DeviceSupport
+    {
+        NotSupported,
+        ThreeDegreesOfFreedom,
+        SixDegreesOfFreedom
     }
 }
-#endif
