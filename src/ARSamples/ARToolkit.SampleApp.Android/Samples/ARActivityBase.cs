@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
 using System.Threading.Tasks;
 using Android.Views;
+using System.Linq;
 
 namespace ARToolkit.SampleApp.Samples
 {
@@ -25,7 +26,6 @@ namespace ARToolkit.SampleApp.Samples
     {
         private Esri.ArcGISRuntime.ARToolkit.ARSceneView arView;
         private bool renderPlanes;
-        private Snackbar mLoadingMessageSnackbar = null;
 
         protected Esri.ArcGISRuntime.ARToolkit.ARSceneView ARView { get; private set; }
 
@@ -33,9 +33,7 @@ namespace ARToolkit.SampleApp.Samples
         {
             base.OnCreate(savedInstanceState);
             ARView = arView = SetContentView();
-            arView.IsTrackingStateChanged += IsTrackingStateChanged;
             arView.GeoViewTapped += ARView_GeoViewTapped;
-            arView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
             ARView.DrawBegin += ARView_DrawBegin;
         }
 
@@ -54,15 +52,22 @@ namespace ARToolkit.SampleApp.Samples
             }
             if (item.ItemId == 2)
             {
-                renderPlanes = !renderPlanes;
+                ToggleRenderPlanes(!renderPlanes);
             }
             return base.OnOptionsItemSelected(item);
+        }
+
+        protected void ToggleRenderPlanes(bool turnOn)
+        {
+            renderPlanes = turnOn;
         }
 
         private Renderers.PlaneRenderer pr = null;
 
         private void ARView_DrawBegin(object sender, Esri.ArcGISRuntime.ARToolkit.DrawEventArgs e)
         {
+            if (!ARView.UseARCore) return;
+            bool planesDetected = false;
             if (renderPlanes)
             {
                 // Use a custom renderer to render the planes
@@ -79,24 +84,23 @@ namespace ARToolkit.SampleApp.Samples
                 foreach (var p in e.Session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))))
                 {
                     var plane = (Plane)p;
-                    planes.Add(plane);
+                    if(plane.TrackingState == TrackingState.Tracking)
+                        planes.Add(plane);
                 }
                 if (planes.Count > 0)
                 {
                     pr.DrawPlanes(planes, camera.DisplayOrientedPose, projmtx);
+                    planesDetected = true;
                 }
             }
-        }
-
-        private void ArView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)
-        {
-            if (arView.SetInitialTransformation(e.Position))
+            else if(!isSurfaceDetectionComplete)
             {
-                Toast.MakeText(this, "Placed scene", ToastLength.Short).Show();
+                planesDetected = e.Session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))).OfType<Plane>().Where(p => p.TrackingState == TrackingState.Tracking).Any();
             }
-            else
+            if (!isSurfaceDetectionComplete && planesDetected)
             {
-                Toast.MakeText(this, "Couldn't place scene", ToastLength.Short).Show();
+                OnPlanesDetected();
+                isSurfaceDetectionComplete = true;
             }
         }
 
@@ -114,22 +118,18 @@ namespace ARToolkit.SampleApp.Samples
             SetContentView(Resource.Layout.simplearview);
             return FindViewById<Esri.ArcGISRuntime.ARToolkit.ARSceneView>(Resource.Id.sceneView1);
         }
-
-        private void IsTrackingStateChanged(object sender, bool isTracking)
-        {
-            if (isTracking)
-            {
-                arView.IsTrackingStateChanged -= IsTrackingStateChanged;
-                hideLoadingMessage();
-            }
-        }
-
+        bool isSurfaceDetectionComplete;
         protected override void OnResume()
         {
             base.OnResume();
             try
             {
+                isSurfaceDetectionComplete = false;
                 this.arView.StartTrackingAsync();
+                if(ARView.UseARCore)
+                {
+                    ShowLookingForSurfaces();
+                }
             }
             catch(System.Exception ex)
             {
@@ -154,25 +154,21 @@ namespace ARToolkit.SampleApp.Samples
             }
         }
 
-        private void showLoadingMessage()
+        private void ShowLookingForSurfaces()
         {
             this.RunOnUiThread(() =>
             {
-                mLoadingMessageSnackbar = Snackbar.Make(FindViewById(Android.Resource.Id.Content),
-                        "Searching for surfaces...", Snackbar.LengthIndefinite);
-                mLoadingMessageSnackbar.View.SetBackgroundColor(Android.Graphics.Color.DarkGray);
-                mLoadingMessageSnackbar.Show();
+                var statusView = FindViewById<TextView>(Resource.Id.trackingStatus);
+                if (statusView != null) statusView.Visibility = ViewStates.Visible;
             });
         }
 
-        private void hideLoadingMessage()
+        protected virtual void OnPlanesDetected()
         {
-            if (mLoadingMessageSnackbar == null)
-                return;
             this.RunOnUiThread(() =>
             {
-                mLoadingMessageSnackbar?.Dismiss();
-                mLoadingMessageSnackbar = null;
+                var statusView = FindViewById<TextView>(Resource.Id.trackingStatus);
+                if(statusView != null) statusView.Visibility = ViewStates.Gone;
             });
         }
     }

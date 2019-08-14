@@ -5,11 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffff0000">
+    android:background="#00000000">
 
    <Esri.ArcGISRuntime.ARToolkit.ARSceneView         
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/sceneView1"/>
+
+     <TextView android:visibility="invisible"
+            android:id="@+id/trackingStatus"
+            android:text="Looking for surfaces. Move the device in a circular motion to detect surfaces..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#ff0000"
+            android:textSize="24dp"/>
 
 </RelativeLayout>

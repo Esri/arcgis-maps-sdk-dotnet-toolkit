@@ -52,9 +52,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void InitializeCommon()
         {
             if (!IsDesignTime)
-        {
-            SpaceEffect = UI.SpaceEffect.None;
-            AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+            {
+                SpaceEffect = UI.SpaceEffect.None;
+                AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
                 _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 }; ;
             }
             
@@ -67,8 +67,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public Task StartTrackingAsync()
         {
             CameraController = _controller;
+            var currentTrackingValue = IsTracking;
             OnStartTracking();
             IsTracking = true;
+            if(!currentTrackingValue)
+                IsTrackingStateChanged?.Invoke(this, true);
             return Task.CompletedTask;
         }
 
@@ -78,7 +81,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public void StopTracking()
         {
             OnStopTracking();
-            IsTracking = false;
+            if (IsTracking)
+            {
+                IsTracking = false;
+                IsTrackingStateChanged?.Invoke(this, false);
+            }
         }
 
         /// <summary>
@@ -118,7 +125,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 #if NETFX_CORE
                     if (_cameraView != null)
                     {
-                    _cameraView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                        _cameraView.Visibility = Windows.UI.Xaml.Visibility.Visible;
                     }
                     StartCapturing();
 #endif
@@ -130,7 +137,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 #if NETFX_CORE
                     if(_cameraView != null)
                     {
-                    _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                        _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     }
                     StopCapturing();
 #endif
@@ -144,6 +151,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <seealso cref="StartTrackingAsync"/>
         /// <seealso cref="StopTracking"/>
         public bool IsTracking { get; private set; }
+
+        /// <summary>
+        /// Raised if the tracking state changes
+        /// </summary>
+        /// <seealso cref="IsTracking"/>
+        /// <seealso cref="StartTrackingAsync"/>
+        /// <seealso cref="StopTracking"/>
+        public event EventHandler<bool> IsTrackingStateChanged;
 
         /// <summary>
         /// Gets or sets the viewpoint camera used to set the initial view of the sceneView instead of the device's GPS location via the location data source.
@@ -225,6 +240,40 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             InitialTransformation = Mapping.TransformationMatrix.Identity - origin;
             return true;
+        }
+
+        public static DeviceSupport SupportLevel
+        {
+            get
+            {
+#if __ANDROID__
+                var availability = Google.AR.Core.ArCoreApk.Instance.CheckAvailability(global::Android.App.Application.Context);
+                if (availability == Google.AR.Core.ArCoreApk.Availability.SupportedApkTooOld ||
+                    availability == Google.AR.Core.ArCoreApk.Availability.SupportedInstalled ||
+                    availability == Google.AR.Core.ArCoreApk.Availability.SupportedNotInstalled)
+                {
+                    return DeviceSupport.SixDegreesOfFreedom;
+                }
+                if (CompassOrientationHelper.IsSupported(global::Android.App.Application.Context))
+                    return DeviceSupport.ThreeDegreesOfFreedom;
+#elif __IOS__
+                if (ARKit.ARConfiguration.IsSupported)
+                    return DeviceSupport.SixDegreesOfFreedom;
+                else
+                    return DeviceSupport.ThreeDegreesOfFreedom;
+#elif NETFX_CORE
+                if (Windows.Devices.Sensors.OrientationSensor.GetDefault() != null)
+                    return DeviceSupport.ThreeDegreesOfFreedom;
+#endif
+                return DeviceSupport.NotSupported;
+            }
+        }
+
+        public enum DeviceSupport
+        {
+            NotSupported,
+            ThreeDegreesOfFreedom,
+            SixDegreesOfFreedom
         }
     }
 }

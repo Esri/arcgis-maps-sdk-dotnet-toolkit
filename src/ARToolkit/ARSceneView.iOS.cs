@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _arConfiguration = new ARWorldTrackingConfiguration
             {
                 PlaneDetection = ARPlaneDetection.Horizontal,
-                WorldAlignment = ARWorldAlignment.GravityAndHeading,
+                WorldAlignment = ARWorldAlignment.Gravity,
                 LightEstimationEnabled = false
             };
 
@@ -135,12 +135,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     var c = Camera;
                     if (c != null)
                     {
-                        if (_controller.OriginCamera == null)
-                        {
-                            _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
-                            OriginCameraChanged?.Invoke(this, EventArgs.Empty);
-                        }
-
                         var q = pov.WorldOrientation;
                         var t = pov.Transform;
                         _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
@@ -212,6 +206,29 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
         }
+
+        private bool useCompass;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the scene should attempt to the device compass to align the scene towards north
+        /// </summary>
+        /// <remarks>
+        /// Note that the accuracy of the compass can heavily affect the quality of alignment.
+        /// The property updates the WorldAlignment property on the ARWorldTrackingConfiguration to either GravityAndHeading or Gravity.
+        /// </remarks>.
+        public bool UseCompass
+        {
+            get { return useCompass; }
+            set
+            {
+                useCompass = value;
+                if(ARConfiguration is ARWorldTrackingConfiguration w)
+                {
+                    w.WorldAlignment = value ? ARWorldAlignment.GravityAndHeading : ARWorldAlignment.Gravity;
+                }
+            }
+        }
+
 
         private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
         {

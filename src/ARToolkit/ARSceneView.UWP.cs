@@ -96,12 +96,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void InitializeTracker()
         {
-            _sensor = OrientationSensor.GetDefault();
+            _sensor =  UseCompass ? OrientationSensor.GetDefaultForRelativeReadings() : OrientationSensor.GetDefault(SensorReadingType.Absolute, SensorOptimizationGoal.Precision);
             if (_sensor == null)
             {
                 throw new NotSupportedException("No Orientation Sensor detected");
             }
-
             _sensor.ReadingChanged += Sensor_ReadingChanged;
             StartCapturing();
         }
@@ -141,13 +140,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             var l = c.Transformation;
             var q = args.Reading.Quaternion;
-
-            if (_controller.OriginCamera == null)
-            {
-                _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
-                OriginCameraChanged?.Invoke(this, EventArgs.Empty);
-            }
-
             _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, 0, 0, 0);
         }
 
@@ -194,6 +186,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             throw new PlatformNotSupportedException();
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the scene should attempt to the device compass to align the scene towards north.
+        /// </summary>
+        /// <remarks>
+        /// Note that the accuracy of the compass can heavily affect the quality of alignment.
+        /// </remarks>
+        public bool UseCompass { get; set; } = false;
     }
 }
 #endif

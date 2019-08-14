@@ -147,7 +147,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                 OrientationChanged?.Invoke(this, new CompassOrientationEventArgs()
                 {
-                    Transformation = rotationMatrix,
+                    Transformation = adjustedRotationMatrix,
                     Orientation = orientation,
                     Accuracy = _currentAccuracy
                 });

@@ -52,6 +52,7 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -67,9 +68,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleScreenAdapter.cs" />
     <Compile Include="Samples\ARActivityBase.cs" />
-    <Compile Include="Samples\CityOfBrestSample.cs" />
+    <Compile Include="Samples\LookAroundSample.cs" />
     <Compile Include="Samples\EarthSample.cs" />
-    <Compile Include="Samples\BartonSchoolHouseSample.cs" />
+    <Compile Include="Samples\TapToPlaceSample.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

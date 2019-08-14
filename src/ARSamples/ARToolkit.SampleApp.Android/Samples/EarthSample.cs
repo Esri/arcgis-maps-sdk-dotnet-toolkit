@@ -24,6 +24,7 @@ namespace ARToolkit.SampleApp.Samples
         Label = "Earth",
         Theme = "@style/Theme.AppCompat",
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = Android.Content.PM.ScreenOrientation.Locked)]
+    [SampleInfo(DisplayName = "Earth", Description = "Shows the entire earth hovering in front of you allowing you to walk around it")]
     public class EarthSample : ARActivityBase
     {
         private Scene Scene;

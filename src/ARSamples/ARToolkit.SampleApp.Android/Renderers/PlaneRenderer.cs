@@ -44,6 +44,7 @@ namespace ARToolkit.SampleApp.Renderers
         int mPlaneXZPositionAlphaAttribute;
 
         int mPlaneModelUniform;
+        int planeNormalUniform;
         int mPlaneModelViewProjectionUniform;
         int mTextureUniform;
         int mLineColorUniform;
@@ -60,7 +61,7 @@ namespace ARToolkit.SampleApp.Renderers
         float[] mModelMatrix = new float[16];
         float[] mModelViewMatrix = new float[16];
         float[] mModelViewProjectionMatrix = new float[16];
-        float[] mPlaneColor = new float[4];
+        float[] mPlaneColor = new float[4] { 1f, 1f, 1f, 1f };
         float[] mPlaneAngleUvMatrix = new float[4]; // 2x2 rotation matrix applied to uv coords.
 
         Dictionary<Plane, int> mPlaneIndexMap = new Dictionary<Plane, int>();
@@ -115,6 +116,7 @@ namespace ARToolkit.SampleApp.Renderers
                 "a_XZPositionAlpha");
 
             mPlaneModelUniform = GLES20.GlGetUniformLocation(mPlaneProgram, "u_Model");
+            planeNormalUniform = GLES20.GlGetUniformLocation(mPlaneProgram, "u_Normal");
             mPlaneModelViewProjectionUniform = GLES20.GlGetUniformLocation(mPlaneProgram, "u_ModelViewProjection");
             mTextureUniform = GLES20.GlGetUniformLocation(mPlaneProgram, "u_Texture");
             mLineColorUniform = GLES20.GlGetUniformLocation(mPlaneProgram, "u_lineColor");
@@ -220,7 +222,7 @@ namespace ARToolkit.SampleApp.Renderers
             }
         }
 
-        void Draw(float[] cameraView, float[] cameraPerspective)
+        void Draw(float[] cameraView, float[] cameraPerspective, float[] planeNormal)
         {
             // Build the ModelView and ModelViewProjection matrices
             // for calculating cube position and light.
@@ -235,6 +237,7 @@ namespace ARToolkit.SampleApp.Renderers
 
             // Set the Model and ModelViewProjection matrices in the shader.
             GLES20.GlUniformMatrix4fv(mPlaneModelUniform, 1, false, mModelMatrix, 0);
+            GLES20.GlUniform3f(planeNormalUniform, planeNormal[0], planeNormal[1], planeNormal[2]);
             GLES20.GlUniformMatrix4fv(
                 mPlaneModelViewProjectionUniform, 1, false, mModelViewProjectionMatrix, 0);
 
@@ -368,7 +371,7 @@ namespace ARToolkit.SampleApp.Renderers
                 GLES20.GlUniformMatrix2fv(mPlaneUvMatrixUniform, 1, false, mPlaneAngleUvMatrix, 0);
 
 
-                Draw(cameraView, cameraPerspective);
+                Draw(cameraView, cameraPerspective, normal);
             }
 
             // Clean up the state we set

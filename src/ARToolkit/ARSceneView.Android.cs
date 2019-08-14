@@ -111,7 +111,29 @@ namespace Esri.ArcGISRuntime.ARToolkit
             IsManualRendering = true;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether ARCore should be used for tracking the device movements
+        /// </summary>
+        /// <remarks>
+        /// This value should be set prior to starting to track, and disabled if the device doesn't support 
+        /// ARCore / 6-degrees of freedom tracking (see <see cref="SupportLevel"/>).
+        /// </remarks>
+        /// <seealso cref="SupportLevel"/>
         public bool UseARCore { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the scene should attempt to use the device compass to align the scene towards north.
+        /// </summary>
+        /// <remarks>
+        /// Note that the accuracy of the compass can heavily affect the quality of alignment.
+        /// </remarks>
+        /// <seealso cref="CompassHeading"/>
+        public bool UseCompass { get; set; } = false;
+
+        /// <summary>
+        /// Gets the heading reported by the built-in compass, or NaN if no compass heading is available
+        /// </summary>
+        public double CompassHeading { get; private set; } = double.NaN;
 
         private void InitARCore()
         {
@@ -290,26 +312,17 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     camera.GetProjectionMatrix(projmtx, 0, 0.1f, 100.0f);
 
                     // Get camera matrix and draw.
-                    // float[] viewmtx = new float[16];
-                    // camera.GetViewMatrix(viewmtx, 0);
                     if (tracking)
                     {
                         var pose = camera.DisplayOrientedPose;
                         var c = Camera;
                         if (c != null)
                         {
-                            if (_controller.OriginCamera == null)
-                            {
-                                _controller.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(c.Location, c.Heading, 90, 0);
-                                OriginCameraChanged?.Invoke(this, EventArgs.Empty);
-                            }
                             var headingOffsetMatrix = TransformationMatrix.Identity;
-                            if(headingOffset != 0)
+                            if(headingOffset != 0 && UseCompass)
                             {
                                 //Apply offset to heading
-                                //var q = new double[4];
                                 var angleInRadians = headingOffset * (Math.PI / 180.0);
-                                //var v = new double[] { 0, , 0, Math.Cos(.5 * angleInRadians) };
                                 headingOffsetMatrix = TransformationMatrix.Create(0, Math.Sin(.5 * angleInRadians), 0, Math.Cos(.5 * angleInRadians), 0, 0, 0);
                             }
                             _controller.TransformationMatrix = headingOffsetMatrix + InitialTransformation + TransformationMatrix.Create(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
@@ -350,6 +363,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private Android.Hardware.SensorStatus headingOffsetAccuracy = Android.Hardware.SensorStatus.NoContact;
         private void OrientationHelper_OrientationChanged(object sender, CompassOrientationEventArgs e)
         {
+            CompassHeading = e.Azimuth;
             if (!UseARCore)
             {
                 // Use orientation sensor instead of ARCore
@@ -362,7 +376,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
             else
             {
-                if (_isTracking && e.Accuracy > headingOffsetAccuracy && e.Pitch > 20 && e.Pitch < 140)
+                if (UseCompass && _isTracking && e.Accuracy > headingOffsetAccuracy && e.Pitch > 20 && e.Pitch < 140)
                 {
                     // Compass heading got better - update offset, but only if pitch isn't too big
                     var c = Camera;
@@ -436,26 +450,24 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private bool _isTracking;
 
-        /// <summary>
-        /// Raised if the tracking state changes
-        /// </summary>
-        /// <seealso cref="IsTracking"/>
-        /// <seealso cref="StartTrackingAsync"/>
-        /// <seealso cref="StopTracking"/>
-        public event EventHandler<bool> IsTrackingStateChanged;
-
         private TransformationMatrix HitTest(Android.Graphics.PointF screenPoint)
         {
-            var frame = _lastFrame;
-            if (frame != null && frame.Camera.TrackingState == TrackingState.Tracking)
+            if (!UseARCore)
+                throw new InvalidOperationException("HitTest not supported when ARCore is disabled");
+            var camera = _lastFrame?.Camera;
+            if (camera != null && camera.TrackingState == TrackingState.Tracking)
             {
+                var pose = camera.Pose;
                 var hitResults = _lastFrame.HitTest(screenPoint.X, screenPoint.Y);
-                var hitResult = hitResults.Count > 0 ? hitResults[0] : null;
-                if (hitResult != null)
+                foreach (var item in hitResults)
                 {
-                    var q = hitResult.HitPose.GetRotationQuaternion();
-                    var t = hitResult.HitPose.GetTranslation();
-                    return TransformationMatrix.Create(q[0], q[1], q[2], q[3], t[0], t[1], t[2]);
+                    if (item.Trackable is Plane pl && pl.IsPoseInPolygon(item.HitPose) ||
+                        item.Trackable is Point pnt && pnt.GetOrientationMode() == Point.OrientationMode.EstimatedSurfaceNormal)
+                    {
+                        var q = item.HitPose.GetRotationQuaternion();
+                        var t = item.HitPose.GetTranslation();
+                        return TransformationMatrix.Create(q[0], q[1], q[2], q[3], t[0], t[1], t[2]);
+                    }
                 }
             }
 

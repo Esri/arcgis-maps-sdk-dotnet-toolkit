@@ -102,7 +102,7 @@ namespace ARToolkit.SampleApp
         {
             var scene = new Scene();
             //scene.InitialViewpoint = new Viewpoint(new MapPoint(34.0508296, -117.215160, SpatialReferences.Wgs84), new Esri.ArcGISRuntime.Mapping.Camera(34.0508296, -117.215160, 385, 0, 0, 0));
-            sv.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(34.0508296, -117.215160, 385, 0, 90, 0);
+            sv.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(34.0508296, -117.215160, 369, 0, 90, 0);
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
             scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));

@@ -21,32 +21,28 @@ using System.Threading.Tasks;
 namespace ARToolkit.SampleApp.Samples
 {
     [Activity(
-        Label = "City of Brest",
+        Label = "Look around mode",
         Theme = "@style/Theme.AppCompat",
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = Android.Content.PM.ScreenOrientation.Locked)]
-    [SampleInfo(DisplayName = "City of Brest", Description = "A sample that doens't rely on ARCore but only features the ability to look around")]
-    public class CityOfBrestSample : ARActivityBase
+    [SampleInfo(DisplayName = "ARCore Disabled", Description = "A sample that doens't rely on ARCore but only features the ability to look around based on a motion sensor")]
+    public class LookAroundSample : ARActivityBase
     {
-        private Scene Scene;
-
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             try
             {
+                ARView.UseARCore = false; // Disable ARCore. We'll just rely on the motion sensors in the device instead
+                ARView.UseCompass = true; // Optional: Use the compass to match north with real-world north. If false, the app will launch looking towards the heading defined in the OriginCamera
                 ARView.RenderVideoFeed = false;
+                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
+
                 Surface sceneSurface = new Surface();
                 sceneSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
                 Scene scene = new Scene(Basemap.CreateImagery())
                 {
                     BaseSurface = sceneSurface
                 };
-
-                // Create and add a building layer.
-                ArcGISSceneLayer buildingsLayer = new ArcGISSceneLayer(new Uri("https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0"));
-                scene.OperationalLayers.Add(buildingsLayer);
-                MapPoint start = new MapPoint(-4.494677, 48.384472, 24.772694, SpatialReferences.Wgs84);
-                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(start, 200, 0, 90, 0);
                 ARView.Scene = scene;
                 ARView.StartTrackingAsync();
             }
