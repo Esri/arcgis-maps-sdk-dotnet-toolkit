@@ -75,7 +75,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             base.OnElementChanged(e);
             if (e.OldElement != null)
             {
-                ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
+                if (ARControl != null) //This is null during dispose clean-up, but we already unsubscribed during dispose
+                {
+                    ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
+                }
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StopTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "ResetTracking");
                 MessagingCenter.Unsubscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation");
