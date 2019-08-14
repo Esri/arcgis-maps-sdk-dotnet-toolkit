@@ -22,6 +22,9 @@ using System.Linq;
 
 namespace ARToolkit.SampleApp.Samples
 {
+    /// <summary>
+    /// Base class for some common functionality used by most of the samples
+    /// </summary>
     public abstract class ARActivityBase : AppCompatActivity
     {
         private Esri.ArcGISRuntime.ARToolkit.ARSceneView arView;

@@ -21,7 +21,7 @@ using Android.Views;
 
 namespace ARToolkit.SampleApp
 {
-    [Activity(Label = "ARToolkit Samples", MainLauncher = true, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
+    [Activity(Label = "ARToolkit Samples", MainLauncher = true, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation, Theme = "@style/Theme.AppCompat")]
     public class MainActivity : ListActivity
     {
         private static SampleDatasource list = new SampleDatasource();
@@ -42,6 +42,8 @@ namespace ARToolkit.SampleApp
             var item = ((SampleScreenAdapter)ListAdapter)[position];
             if(item.HasSampleData)
             {
+                var downloadView = FindViewById<LinearLayout>(Resource.Id.downloadView);
+                var downloadStatus = FindViewById<TextView>(Resource.Id.downloadStatus);
                 var toast = Toast.MakeText(this, "Downloading sample data... ", ToastLength.Long);
                 try
                 {
@@ -49,17 +51,19 @@ namespace ARToolkit.SampleApp
                     {
                         RunOnUiThread(() =>
                         {
-                            toast.SetText(status);
-                            toast.Show();
+                            downloadView.Visibility = ViewStates.Visible;
+                            downloadStatus.Text = status;
                         });
-                    });
-                    toast.Cancel();
+                    }, true);
                 }
-                catch(System.Exception ex)
+                catch (System.Exception ex)
                 {
-                    toast.Cancel();
                     Toast.MakeText(this, "Failed to download data: " + ex.Message, ToastLength.Long).Show();
                     return;
+                }
+                finally
+                {
+                    downloadView.Visibility = ViewStates.Gone;
                 }
             }
             StartActivity(item.Type);
