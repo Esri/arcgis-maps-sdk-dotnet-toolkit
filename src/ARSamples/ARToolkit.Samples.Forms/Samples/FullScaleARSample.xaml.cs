@@ -14,6 +14,7 @@ using Xamarin.Forms.Xaml;
 namespace ARToolkit.SampleApp.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [SampleInfo(DisplayName = "GPS/Compass-based Full-scale AR", Description = "Uses the device's GPS to continously snap the origin to your current location. Best results are achieved with a very high-accuracy GPS, and a good compass alignment.")]
     public partial class FullScaleARSample : ContentPage
 	{
         private Scene Scene;
