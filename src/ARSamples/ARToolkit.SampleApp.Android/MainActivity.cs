@@ -59,7 +59,7 @@ namespace ARToolkit.SampleApp
                             downloadView.Visibility = ViewStates.Visible;
                             downloadStatus.Text = status;
                         });
-                    }, true);
+                    });
                 }
                 catch (System.Exception ex)
                 {
