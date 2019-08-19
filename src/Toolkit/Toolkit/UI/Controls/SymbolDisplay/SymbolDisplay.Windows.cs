@@ -20,6 +20,7 @@ using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.UI;
 #if NETFX_CORE
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #else
@@ -84,14 +85,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else
             {
-#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 try
                 {
                     var scale = GetScaleFactor();
+#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                     var imageData = await Symbol.CreateSwatchAsync(scale * 96);
                     img.MaxWidth = imageData.Width / scale;
                     img.MaxHeight = imageData.Height / scale;
                     img.Source = await imageData.ToImageSourceAsync();
+                    SourceUpdated?.Invoke(this, EventArgs.Empty);
+#pragma warning restore ESRI1800
                 }
                 catch
                 {
@@ -100,7 +103,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     img.MaxHeight = 0;
                 }
             }
-#pragma warning restore ESRI1800
         }
 
         private double GetScaleFactor()

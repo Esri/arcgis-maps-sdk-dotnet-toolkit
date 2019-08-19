@@ -37,16 +37,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const double DefaultSize = 30;
         private bool _headingSetByGeoView;
 
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         public Compass()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
+            : base()
         {
             Initialize();
         }
+#endif
 
         /// <summary>
         /// Gets or sets the Heading for the compass.

@@ -13,23 +13,23 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "Legend", Description = "Render a legend for a map")]
-    public partial class LegendSample : ContentPage
+    [SampleInfoAttribute(Category = "Legend", Description = "Render a legend for a layer")]
+    public partial class LayerLegendSample : ContentPage
 	{
-		public LegendSample ()
+		public LayerLegendSample()
 		{
 			InitializeComponent ();
             mapView.Map = CreateMap();
+            layerLegend.LayerContent = mapView.Map.OperationalLayers[0];
         }
 
         private Map CreateMap()
         {
             Map map = new Map(Basemap.CreateLightGrayCanvasVector())
             {
-                InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
+                InitialViewpoint = new Viewpoint(new Envelope(-1.98402303E7, 2144435, -7452840, 1.15368106626E7, SpatialReferences.WebMercator))
             };
-            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer")));
-            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0")));
+            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_Population_Density/MapServer")));
             return map;
         }
 
@@ -39,25 +39,25 @@ namespace Toolkit.Samples.Forms.Samples
             if(((Grid)sender).Width > ((Grid)sender).Height)
             {
                 Grid.SetColumnSpan(mapView, 1);
-                Grid.SetColumnSpan(legend, 1);
+                Grid.SetColumnSpan(layerLegend, 1);
                 Grid.SetColumn(mapView, 1);
-                Grid.SetRow(legend, 0);
+                Grid.SetRow(layerLegend, 0);
                 Grid.SetRowSpan(mapView, 2);
-                Grid.SetRowSpan(legend, 2);
+                Grid.SetRowSpan(layerLegend, 2);
                 if (((Grid)sender).Width > 600)
-                    legend.WidthRequest = 300;
+                    layerLegend.WidthRequest = 300;
                 else
-                    legend.ClearValue(WidthRequestProperty);
+                    layerLegend.ClearValue(WidthRequestProperty);
             }
             else
             {
-                legend.ClearValue(WidthRequestProperty);
+                layerLegend.ClearValue(WidthRequestProperty);
                 Grid.SetColumnSpan(mapView, 2);
-                Grid.SetColumnSpan(legend, 2);
+                Grid.SetColumnSpan(layerLegend, 2);
                 Grid.SetColumn(mapView, 0);
-                Grid.SetRow(legend, 1);
+                Grid.SetRow(layerLegend, 1);
                 Grid.SetRowSpan(mapView, 1);
-                Grid.SetRowSpan(legend, 1);
+                Grid.SetRowSpan(layerLegend, 1);
             }
         }
 

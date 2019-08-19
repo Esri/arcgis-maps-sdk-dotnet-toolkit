@@ -33,7 +33,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="ScaleLine"/> class
         /// </summary>
         public ScaleLine()
+#if __ANDROID__
+            : this(new UI.Controls.ScaleLine(global::Android.App.Application.Context))
+#else
             : this(new UI.Controls.ScaleLine())
+#endif
         {
         }
 
