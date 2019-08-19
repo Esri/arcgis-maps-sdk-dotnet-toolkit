@@ -1,29 +1,33 @@
-﻿using Esri.ArcGISRuntime.Symbology;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples.SymbolDisplay
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    /// <summary>
-    /// Interaction logic for SymbolDisplaySample.xaml
-    /// </summary>
-    public partial class SymbolDisplaySample : UserControl
+    [SampleInfoAttribute(Category = "SymbolDisplay", Description = "Renders a symbol")]
+    [Activity(Label = "SymbolDisplay", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
+    public class SymbolDisplaySample : Activity
     {
-        public SymbolDisplaySample()
+        private GridLayout rootLayout;
+
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            InitializeComponent();
+            base.OnCreate(savedInstanceState);
+            rootLayout = new GridLayout(this);
+            rootLayout.LayoutParameters = new ViewGroup.LayoutParams(-1, -1);
+            rootLayout.ColumnCount = 4;
+            rootLayout.RowCount = 4;
+            SetContentView(rootLayout);
             LoadSymbols();
         }
 
@@ -47,27 +51,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.SymbolDisplay
             AddSymbol(new PictureMarkerSymbol(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png")));
         }
 
-        private void AddSymbol(Symbology.Symbol symbol)
+        private void AddSymbol(Symbol symbol)
         {
-            int columnCount = SymbolGrid.ColumnDefinitions.Count;
-            var sd = new UI.Controls.SymbolDisplay() { Symbol = symbol };
-            var f = new Border()
-            {
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                VerticalAlignment = System.Windows.VerticalAlignment.Center,
-                BorderBrush = new SolidColorBrush(Colors.Black),
-                BorderThickness = new Thickness(1),
-                Padding = new Thickness(0)
-            };
-            f.Child = sd;
-            int count = SymbolGrid.Children.Count;
-            var row = count / columnCount;
-            var column = count % columnCount;
-            if (column == 0)
-                SymbolGrid.RowDefinitions.Add(new RowDefinition());
-            Grid.SetRow(f, row);
-            Grid.SetColumn(f, column);
-            SymbolGrid.Children.Add(f);
+            var sd = new SymbolDisplay(this) { Symbol = symbol };
+            sd.SetMaxHeight(40);
+            var p = new GridLayout.LayoutParams();
+            p.SetGravity(GravityFlags.Center);
+            sd.LayoutParameters = p;
+            rootLayout.AddView(sd);
         }
     }
 }

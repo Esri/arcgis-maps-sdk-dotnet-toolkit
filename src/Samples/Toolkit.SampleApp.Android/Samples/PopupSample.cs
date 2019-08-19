@@ -15,7 +15,7 @@ using System.IO;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    [Activity(Label = "Popup")]
+    [Activity(Label = "Popup", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     [SampleInfoAttribute(Category = "Popup", Description = "Use PopupViewer to display detailed feature information")]
     public class PopupSampleActivity : Activity
     {

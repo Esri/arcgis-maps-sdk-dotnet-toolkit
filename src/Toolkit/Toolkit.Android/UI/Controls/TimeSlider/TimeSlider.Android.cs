@@ -63,6 +63,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        public TimeSlider(Context context)
+            : base(context)
+        {
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TimeSlider"/> class.
+        /// </summary>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
         public TimeSlider(Context context, IAttributeSet attr)
             : base(context, attr)

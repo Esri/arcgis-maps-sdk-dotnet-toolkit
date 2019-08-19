@@ -1,31 +1,25 @@
 ﻿using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples.SymbolDisplay
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Toolkit.Samples.Forms.Samples
 {
-    /// <summary>
-    /// Interaction logic for SymbolDisplaySample.xaml
-    /// </summary>
-    public partial class SymbolDisplaySample : UserControl
-    {
-        public SymbolDisplaySample()
-        {
-            InitializeComponent();
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [SampleInfoAttribute(Category = "SymbolDisplay", Description = "Renders a symbol")]
+    public partial class SymbolDisplaySample : ContentPage
+	{
+		public SymbolDisplaySample ()
+		{
+			InitializeComponent();
             LoadSymbols();
-        }
+		}
 
         private void LoadSymbols()
         {
@@ -47,27 +41,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.SymbolDisplay
             AddSymbol(new PictureMarkerSymbol(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png")));
         }
 
-        private void AddSymbol(Symbology.Symbol symbol)
+        private void AddSymbol(Symbol symbol)
         {
-            int columnCount = SymbolGrid.ColumnDefinitions.Count;
-            var sd = new UI.Controls.SymbolDisplay() { Symbol = symbol };
-            var f = new Border()
+            int columnCount = LayoutRoot.ColumnDefinitions.Count;
+            var sd = new SymbolDisplay() { Symbol = symbol };
+            Frame f = new Frame()
             {
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                VerticalAlignment = System.Windows.VerticalAlignment.Center,
-                BorderBrush = new SolidColorBrush(Colors.Black),
-                BorderThickness = new Thickness(1),
-                Padding = new Thickness(0)
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                BorderColor = Color.Black,
+                Padding = 0,
+                CornerRadius = 0
             };
-            f.Child = sd;
-            int count = SymbolGrid.Children.Count;
+            f.Content = sd;
+            int count = LayoutRoot.Children.Count;
             var row = count / columnCount;
             var column = count % columnCount;
             if (column == 0)
-                SymbolGrid.RowDefinitions.Add(new RowDefinition());
+                LayoutRoot.RowDefinitions.Add(new RowDefinition());
             Grid.SetRow(f, row);
             Grid.SetColumn(f, column);
-            SymbolGrid.Children.Add(f);
+            LayoutRoot.Children.Add(f);
         }
     }
 }

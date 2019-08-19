@@ -34,16 +34,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class LayerLegend : Control
     {
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         public LayerLegend()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
+            : base()
         {
             Initialize();
         }
+#endif
 
         /// <summary>
         /// Gets or sets the layer to display the legend for.

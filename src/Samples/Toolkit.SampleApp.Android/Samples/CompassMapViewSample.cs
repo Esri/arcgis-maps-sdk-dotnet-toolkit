@@ -14,7 +14,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    [Activity(Label = "Compass - MapView")]
+    [Activity(Label = "Compass - MapView", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     [SampleInfoAttribute(Category = "Compass", Description = "Compass used with a MapView")]
     public class CompassMapViewSampleActivity : Activity
     {

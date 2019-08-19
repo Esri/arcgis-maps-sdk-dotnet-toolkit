@@ -25,6 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class Legend : LayerList
     {
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
@@ -32,5 +33,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             : base()
         {
         }
+#endif
     }
 }

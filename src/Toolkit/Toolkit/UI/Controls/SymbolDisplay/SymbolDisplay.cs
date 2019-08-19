@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Controls;
 #elif __IOS__
 using Control = UIKit.UIView;
 #elif __ANDROID__
-using Control = Android.Views.ViewGroup;
+using Control = Android.Widget.ImageView;
 #else
 using System.Windows.Controls;
 #endif
@@ -37,14 +37,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Task _currentUpdateTask;
         private bool _isRefreshRequired;
 
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
         /// </summary>
-        public SymbolDisplay()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
+        public SymbolDisplay() => Initialize();
 #endif
-        => Initialize();
 
         /// <summary>
         /// Gets or sets the symbol to render
@@ -98,5 +96,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Refresh();
             }
         }
+
+        /// <summary>
+        /// Triggered when the image source has updated
+        /// </summary>
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        public event System.EventHandler SourceUpdated;
     }
 }

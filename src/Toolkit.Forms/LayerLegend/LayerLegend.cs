@@ -28,7 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="LayerLegend"/> class
         /// </summary>
         public LayerLegend()
+#if __ANDROID__
+            : this(new UI.Controls.LayerLegend(global::Android.App.Application.Context))
+#else
             : this(new UI.Controls.LayerLegend())
+#endif
         {
         }
 
