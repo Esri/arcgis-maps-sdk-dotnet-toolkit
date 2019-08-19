@@ -19,7 +19,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:LayerLegend">
-                    <ListView x:Name="ItemsList"
+                    <ListView x:Name="ItemsList" 
                               SelectionMode="None"
                               IsItemClickEnabled="False"
                               ItemTemplate="{TemplateBinding ItemTemplate}" 

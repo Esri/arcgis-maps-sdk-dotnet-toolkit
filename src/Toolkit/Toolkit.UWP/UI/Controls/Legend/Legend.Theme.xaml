@@ -3,15 +3,15 @@
                     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <DataTemplate x:Key="LeafItemTemplate">
         <StackPanel Visibility="{Binding DisplayLegend}">
-            <TextBlock Text="{Binding LayerContent.Name}"/>
-            <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+            <TextBlock Text="{Binding  LayerContent.Name}"/>
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
         </StackPanel>
     </DataTemplate>
     <DataTemplate x:Key="BranchItemTemplate">
         <StackPanel Visibility="{Binding DisplayLegend}">
-            <TextBlock Text="{Binding LayerContent.Name}" />
-            <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
-            <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
+            <TextBlock Text="{Binding  LayerContent.Name}" />
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplate="{StaticResource LeafItemTemplate}"/>
         </StackPanel>
     </DataTemplate>
     <controls:LegendItemTemplateSelector x:Key="ItemTemplateSelector" 
@@ -19,9 +19,9 @@
                                    LeafItemTemplate="{StaticResource LeafItemTemplate}"/>
     <DataTemplate x:Key="SublayerItemTemplate">
         <StackPanel Visibility="{Binding DisplayLegend}">
-            <TextBlock Text="{Binding LayerContent.Name}" />
-            <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
-            <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
+            <TextBlock Text="{Binding  LayerContent.Name}" />
+            <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+            <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource ItemTemplateSelector}"/>
         </StackPanel>
     </DataTemplate>
     <controls:LegendItemTemplateSelector x:Key="SublayerItemTemplateSelector" 
@@ -44,9 +44,9 @@
             <Setter.Value>
                 <DataTemplate>
                     <StackPanel Visibility="{Binding DisplayLegend}">
-                        <TextBlock Text="{Binding LayerContent.Name}" FontWeight="Bold" />
-                        <controls:LayerLegend LayerContent="{Binding LayerContent}" IncludeSublayers="False" Margin="10,0"/>
-                        <ItemsControl ItemsSource="{Binding Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
+                        <TextBlock Text="{Binding  LayerContent.Name}" FontWeight="Bold" />
+                        <controls:LayerLegend LayerContent="{Binding  LayerContent}" IncludeSublayers="False" Margin="10,0"/>
+                        <ItemsControl ItemsSource="{Binding  Sublayers}" ItemTemplateSelector="{StaticResource SublayerItemTemplateSelector}"/>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -58,10 +58,10 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}">
                       <ListView x:Name="List"
-                                        Foreground="{TemplateBinding Foreground}"
-                                        ItemTemplate="{TemplateBinding LayerItemTemplate}"
-                                        Margin="{TemplateBinding Padding}"
-                                        BorderThickness="0"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          ItemTemplate="{TemplateBinding LayerItemTemplate}"
+                                          Margin="{TemplateBinding Padding}"
+                                          BorderThickness="0"
                                         Padding="0" SelectionMode="None" 
                                         IsItemClickEnabled="False" >
                       </ListView>

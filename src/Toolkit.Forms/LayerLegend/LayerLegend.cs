@@ -28,14 +28,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes a new instance of the <see cref="LayerLegend"/> class
         /// </summary>
         public LayerLegend()
+#if __ANDROID__
+            : this(new UI.Controls.LayerLegend(global::Android.App.Application.Context))
+#else
+            : this(new UI.Controls.LayerLegend())
+#endif
         {
         }
+
+        internal LayerLegend(UI.Controls.LayerLegend nativeLayerLegend)
+        {
+            NativeLayerLegend = nativeLayerLegend;
+
+#if NETFX_CORE
+            nativeLayerLegend.SizeChanged += (o, e) => InvalidateMeasure();
+#endif
+        }
+
+        internal UI.Controls.LayerLegend NativeLayerLegend { get; }
 
         /// <summary>
         /// Identifies the <see cref="LayerContent"/> bindable property.
         /// </summary>
         public static readonly BindableProperty LayerContentProperty =
-            BindableProperty.Create(nameof(LayerContent), typeof(ILayerContent), typeof(LayerLegend), null, BindingMode.OneWay, null);
+            BindableProperty.Create(nameof(LayerContent), typeof(ILayerContent), typeof(LayerLegend), null, BindingMode.OneWay, null, OnLayerContentPropertyChanged);
 
         /// <summary>
         /// Gets or sets the layer to display the legend for.
@@ -47,11 +63,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             set { SetValue(LayerContentProperty, value); }
         }
 
+        private static void OnLayerContentPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var layerLegend = bindable as LayerLegend;
+            if (layerLegend?.NativeLayerLegend != null)
+            {
+                layerLegend.NativeLayerLegend.LayerContent = newValue as ILayerContent;
+                layerLegend.InvalidateMeasure();
+            }
+        }
+
         /// <summary>
         /// Identifies the <see cref="IncludeSublayers"/> bindable property.
         /// </summary>
         public static readonly BindableProperty IncludeSublayersProperty =
-            BindableProperty.Create(nameof(IncludeSublayers), typeof(bool), typeof(LayerLegend), true, BindingMode.OneWay, null);
+            BindableProperty.Create(nameof(IncludeSublayers), typeof(bool), typeof(LayerLegend), true, BindingMode.OneWay, null, OnIncludeSublayersPropertyChanged);
 
         /// <summary>
         /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
@@ -61,6 +87,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get { return (bool)GetValue(IncludeSublayersProperty); }
             set { SetValue(IncludeSublayersProperty, value); }
+        }
+
+        private static void OnIncludeSublayersPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var layerLegend = bindable as LayerLegend;
+            if (layerLegend?.NativeLayerLegend != null && newValue is bool)
+            {
+                layerLegend.NativeLayerLegend.IncludeSublayers = (bool)newValue;
+                layerLegend.InvalidateMeasure();
+            }
         }
     }
 }
