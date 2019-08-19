@@ -244,7 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.UWP">
-      <Version>100.5.0</Version>
+      <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.8" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">

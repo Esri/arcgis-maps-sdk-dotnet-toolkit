@@ -20,9 +20,6 @@ using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The Legend Control that generates a list of Legend Items for a Layer
-    /// </summary>
     public partial class LayerLegend
     {
         private ILayerContent _layerContent;

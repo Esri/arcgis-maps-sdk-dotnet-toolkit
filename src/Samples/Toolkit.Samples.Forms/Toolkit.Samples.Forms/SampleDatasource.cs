@@ -55,18 +55,19 @@ namespace Toolkit.Samples.Forms
                 Category = attr.Category;
                 Description = attr.Description;
             }
-            else if (!Page.Namespace.EndsWith(".Samples")) //use sub namespace instead
-            {
-                Category = Page.Namespace.Substring(Page.Namespace.IndexOf(".Samples.") + 9);
-            }
             if (string.IsNullOrEmpty(Name))
             {
                 //Deduce name from type name
-                Name = Regex.Replace(Page.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0");
+                Name = Regex.Replace(Page.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS");
                 if (Name.EndsWith("Sample"))
                     Name = Name.Substring(0, Name.Length - 6);
-                if (Name.Contains("Arc GIS"))
-                    Name = Name.Replace("Arc GIS", "ArcGIS");
+            }
+            if (string.IsNullOrEmpty(Category))
+            {
+                if (!Page.Namespace.EndsWith(".Samples")) //use sub namespace instead
+                {
+                    Category = Page.Namespace.Substring(Page.Namespace.IndexOf(".Samples.") + 9);
+                }
             }
         }
 

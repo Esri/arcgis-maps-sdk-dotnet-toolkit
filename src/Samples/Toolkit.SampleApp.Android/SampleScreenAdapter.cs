@@ -13,6 +13,7 @@ using Android.Widget;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public class SampleInfoAttributeAttribute : Attribute
     {
         public SampleInfoAttributeAttribute()
@@ -42,10 +43,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                     sample.Category = attr.Category;
                     sample.Description = attr.Description;
                 }
-                else if (!sample.Activity.Namespace.EndsWith(".Samples")) //use sub namespace instead
-                {
-                    sample.Category = sample.Activity.Namespace.Substring(sample.Activity.Namespace.IndexOf(".Samples.") + 9);
-                }
                 if (string.IsNullOrEmpty(sample?.Name))
                 {
                     var actAttr = sample.Activity.GetTypeInfo().GetCustomAttribute(typeof(ActivityAttribute)) as ActivityAttribute;
@@ -54,13 +51,18 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                     else
                     {
                         //Deduce name from type name
-                        sample.Name = Regex.Replace(sample.Activity.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0");
+                        sample.Name = Regex.Replace(sample.Activity.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS");
                         if (sample.Name.EndsWith("Activity"))
                             sample.Name = sample.Name.Substring(0, sample.Name.Length - 8);
                         if (sample.Name.EndsWith("Sample"))
                             sample.Name = sample.Name.Substring(0, sample.Name.Length - 6);
-                        if (sample.Name.Contains("Arc GIS"))
-                            sample.Name = sample.Name.Replace("Arc GIS", "ArcGIS");
+                    }
+                }
+                if (string.IsNullOrEmpty(sample.Category))
+                {
+                    if (!sample.Activity.Namespace.EndsWith(".Samples")) //use sub namespace instead
+                    {
+                        sample.Category = sample.Activity.Namespace.Substring(sample.Activity.Namespace.IndexOf(".Samples.") + 9);
                     }
                 }
             }

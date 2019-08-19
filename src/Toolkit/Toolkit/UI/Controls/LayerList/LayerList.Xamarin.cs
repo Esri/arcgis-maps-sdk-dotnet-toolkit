@@ -20,11 +20,6 @@ using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The base class for <see cref="Legend"/>
-    /// and TableOfContents control is used to display symbology and description for a set of <see cref="Layer"/>s
-    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/>.
-    /// </summary>
     public partial class LayerList
     {
         private GeoView _geoView;

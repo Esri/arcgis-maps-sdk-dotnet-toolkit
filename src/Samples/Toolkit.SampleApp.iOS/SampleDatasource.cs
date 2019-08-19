@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using System.Text.RegularExpressions;
+using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
@@ -21,13 +20,12 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public string DisplayName { get; set; }
     }
 
-    [Windows.UI.Xaml.Data.Bindable]
 	public class SampleDatasource
     {
         private SampleDatasource() 
         {
-            var pages = from t in App.Current.GetType().GetTypeInfo().Assembly.ExportedTypes
-                where t.GetTypeInfo().IsSubclassOf(typeof(Page)) && t.FullName.Contains(".Samples.")
+            var pages = from t in typeof(AppDelegate).GetTypeInfo().Assembly.ExportedTypes
+                where t.GetTypeInfo().IsSubclassOf(typeof(UIViewController)) && t.FullName.Contains(".Samples.")
                 select t;
 
             Samples = (from p in pages select new Sample() { Page = p }).ToArray();
@@ -42,9 +40,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 }
                 if (string.IsNullOrEmpty(sample.Name))
                 {
-                    sample.Name = Regex.Replace(sample.Page.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS");
-                    if (sample.Name.EndsWith("Sample"))
-                        sample.Name = sample.Name.Substring(0, sample.Name.Length - 6);
+                    sample.Name = sample.Page.Name;
+                    if (sample.Name.EndsWith("ViewController"))
+                        sample.Name = sample.Name.Substring(0, sample.Name.Length - 14);
+                    sample.Name = Regex.Replace(sample.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS");
                 }
                 if (string.IsNullOrEmpty(sample.Category))
                 {
@@ -53,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                         sample.Category = sample.Page.Namespace.Substring(sample.Page.Namespace.IndexOf(".Samples.") + 9);
                     }
                 }
-			}
+            }
         }
 
         public IEnumerable<Sample> Samples { get; private set; }
@@ -80,25 +79,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 				return groups;
 			}
 		}
-		CollectionViewSource m_CollectionViewSource;
-		public CollectionViewSource CollectionViewSource
-		{
-			get
-			{
-				if(m_CollectionViewSource == null)
-				{
-					m_CollectionViewSource = new CollectionViewSource()
-					{
-						IsSourceGrouped = true,
-						Source = SamplesByCategory,
-						ItemsPath = new Windows.UI.Xaml.PropertyPath("Items")
-					};
-				}
-				return m_CollectionViewSource;
-			}
-		}
     }
-	[Windows.UI.Xaml.Data.Bindable]
+
 	public class SampleGroup
 	{
 		public SampleGroup(IEnumerable<Sample> samples)
@@ -110,7 +92,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public IEnumerable<Sample> Items { get; private set; }
 	}
 
-	[Windows.UI.Xaml.Data.Bindable]
 	public class Sample
     {
         public Type Page { get; set; }
@@ -120,15 +101,5 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public string Description { get; set; }
 
 		public string Category { get; set; }
-
-        public double FontSize
-        {
-            get
-            {
-                if (Order == 0) return 24;
-                return 14;
-            }
-        }
-        public int Order { get; set; }
     }
 }

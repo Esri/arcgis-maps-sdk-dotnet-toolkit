@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="100.5.0" ExcludeAssets="none" />
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="$(ArcGISRuntimePackageVersion)" ExcludeAssets="none" />
+    <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
