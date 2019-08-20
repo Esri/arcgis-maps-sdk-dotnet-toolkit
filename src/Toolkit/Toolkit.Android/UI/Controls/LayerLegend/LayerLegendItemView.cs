@@ -37,6 +37,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.MatchParent)
             };
+            _symbolDisplay.SetMaxHeight(40);
+            _symbolDisplay.SetMaxWidth(40);
             AddView(_symbolDisplay);
 
             _textView = new TextView(context)
