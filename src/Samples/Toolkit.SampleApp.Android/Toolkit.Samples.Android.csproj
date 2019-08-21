@@ -17,7 +17,7 @@
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
@@ -63,10 +63,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleScreenAdapter.cs" />
     <Compile Include="Samples\CompassSceneViewSample.cs" />
+    <Compile Include="Samples\LayerLegendSample.cs" />
     <Compile Include="Samples\LegendSample.cs" />
     <Compile Include="Samples\PopupSample.cs" />
     <Compile Include="Samples\ScaleLineSample.cs" />
     <Compile Include="Samples\CompassMapViewSample.cs" />
+    <Compile Include="Samples\SymbolEditorSample.cs" />
+    <Compile Include="Samples\SymbolDisplaySample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />
@@ -121,6 +124,18 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\CompassMapViewSample.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\SymbolEditorSample.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\LayerLegendSample.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

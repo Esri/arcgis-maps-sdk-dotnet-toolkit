@@ -35,16 +35,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class PopupViewer : Control
     {
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
         public PopupViewer()
-#if __ANDROID__
-            : base(Android.App.Application.Context)
-#endif
+            : base()
         {
             Initialize();
         }
+#endif
 
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.

@@ -14,7 +14,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    [Activity(Label = "ScaleLine")]
+    [Activity(Label = "ScaleLine", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     [SampleInfoAttribute(Category = "ScaleLine")]
     public class ScaleLineSampleActivity : Activity
     {

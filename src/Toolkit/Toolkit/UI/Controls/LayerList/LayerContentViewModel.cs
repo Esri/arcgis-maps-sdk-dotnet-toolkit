@@ -347,7 +347,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public bool DisplayLegend => !HasError && (!_filterByVisibleScaleRange || IsInScaleRange);
 
-        public bool IsSublayer => LayerContent is ArcGISSublayer;
+        public bool IsSublayer => LayerContent is ArcGISSublayer || LayerContent is WmsSublayer;
 
         public string Error { get; private set; }
 

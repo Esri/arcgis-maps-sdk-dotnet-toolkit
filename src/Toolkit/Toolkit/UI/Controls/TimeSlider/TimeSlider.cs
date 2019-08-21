@@ -84,16 +84,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
-#if __ANDROID__
-        public TimeSlider(Context context)
-            : base(context)
-#else
+#if !__ANDROID__
         public TimeSlider()
             : base()
-#endif
         {
             Initialize();
         }
+#endif
 
         private void Initialize()
         {

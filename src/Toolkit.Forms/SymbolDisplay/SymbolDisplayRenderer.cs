@@ -51,6 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     UI.Controls.SymbolDisplay ctrl = new UI.Controls.SymbolDisplay();
 #endif
                     ctrl.Symbol = Element.Symbol;
+                    ctrl.SourceUpdated += (s, args) => Element?.InvalidateMeasure_Internal();
                     SetNativeControl(ctrl);
                 }
             }
@@ -64,11 +65,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
             base.OnElementPropertyChanged(sender, e);
         }
-
-#if !NETFX_CORE
-        /// <inheritdoc />
-        protected override bool ManageNativeControlLifetime => false;
-#endif
     }
 }
 #endif

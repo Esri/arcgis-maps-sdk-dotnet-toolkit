@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.5.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.6.0</ArcGISRuntimeToolkitPackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -32,7 +32,7 @@
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
 
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.6.0-daily2511</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.6</ArcGISRuntimePackageVersion>
     <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.1.0.555618</XamarinFormsPackageVersion>
 
     <!--Output paths-->

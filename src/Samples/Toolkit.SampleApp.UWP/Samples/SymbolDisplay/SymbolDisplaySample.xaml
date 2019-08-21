@@ -8,22 +8,13 @@
     xmlns:esri="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <Grid x:Name="SymbolGrid" Background="LightGray">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        
-        <StackPanel Width="300" Margin="20">
-            
-            <Slider Header="Size" Minimum="5" Maximum="100" Value="{x:Bind Symbol.Size, Mode=TwoWay}" />
-            <ComboBox Header="Style" ItemsSource="{x:Bind SimpleMarkerSymbolStyles}" SelectedItem="{x:Bind Symbol.Style, Mode=OneWay}" SelectionChanged="ComboBox_SelectionChanged" />
-            <Slider Header="Angle" Minimum="0" Maximum="360" Value="{x:Bind Symbol.Angle, Mode=TwoWay}" />
-
-        </StackPanel>
-
-        <esri:SymbolDisplay Symbol="{x:Bind Symbol}" Grid.Column="1" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
     </Grid>
 </Page>
+

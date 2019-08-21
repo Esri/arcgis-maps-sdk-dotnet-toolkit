@@ -29,8 +29,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend")]
     public partial class LayerLegend
     {
-        private ListView _listView;
-        private SynchronizationContext _syncContext;
+        private ListView _listView;        
+        private Android.OS.Handler _uithread;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
@@ -55,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Initialize()
         {
-            _syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
+            _uithread = new Android.OS.Handler(Context.MainLooper);
 
             _listView = new ListView(Context)
             {
@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Layer_Loaded(object sender, System.EventArgs e)
         {
             (sender as ILoadable).Loaded -= Layer_Loaded;
-            _syncContext?.Post(_ => Refresh(), null);
+            _uithread.Post(Refresh);
         }
 
         /// <inheritdoc />
