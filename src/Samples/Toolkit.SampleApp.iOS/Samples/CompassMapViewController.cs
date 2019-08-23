@@ -53,23 +53,22 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             };
             this.View.AddSubview(slider);
 
+            slider.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
+            slider.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor, 20).Active = true;
+            slider.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor, -20).Active = true;
             mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
             mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
-            mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
-            mapView.BottomAnchor.ConstraintEqualTo(slider.TopAnchor).Active = true;
+            mapView.TopAnchor.ConstraintEqualTo(slider.BottomAnchor).Active = true;
+            mapView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
             compass.TrailingAnchor.ConstraintEqualTo(mapView.TrailingAnchor, -20).Active = true;
             compass.TopAnchor.ConstraintEqualTo(mapView.TopAnchor, 20).Active = true;
             (widthConstraint = compass.WidthAnchor.ConstraintEqualTo(50)).Active = true;
             (heightConstraint = compass.HeightAnchor.ConstraintEqualTo(50)).Active = true;
-            slider.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor, 20).Active = true;
-            slider.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor, -20).Active = true;
-            slider.BottomAnchor.ConstraintEqualTo(View.BottomAnchor, -20).Active = true;
-            //slider.HeightAnchor.ConstraintEqualTo(50);
         }
 
         public override void ViewDidLayoutSubviews()
         {
-           
+
             base.ViewDidLayoutSubviews();
         }
 
