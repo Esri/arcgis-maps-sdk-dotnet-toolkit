@@ -37,7 +37,6 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             ARView = arView = SetContentView();
             arView.GeoViewTapped += ARView_GeoViewTapped;
-            ARView.DrawBegin += ARView_DrawBegin;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -62,49 +61,9 @@ namespace ARToolkit.SampleApp.Samples
 
         protected void ToggleRenderPlanes(bool turnOn)
         {
+            ARView.ArSceneView.PlaneRenderer.Enabled = turnOn;
+            ARView.ArSceneView.PlaneRenderer.Visible = turnOn;
             renderPlanes = turnOn;
-        }
-
-        private Renderers.PlaneRenderer pr = null;
-
-        private void ARView_DrawBegin(object sender, Esri.ArcGISRuntime.ARToolkit.DrawEventArgs e)
-        {
-            if (!ARView.UseARCore) return;
-            bool planesDetected = false;
-            if (renderPlanes)
-            {
-                // Use a custom renderer to render the planes
-                // prior to rendering the scene
-                if (pr == null)
-                {
-                    pr = new Renderers.PlaneRenderer();
-                    pr.CreateOnGlThread(/*context=*/this, "trigrid.png");
-                }
-                var camera = e.Frame.Camera;
-                float[] projmtx = new float[16];
-                camera.GetProjectionMatrix(projmtx, 0, 0.1f, 100.0f);
-                var planes = new List<Plane>();
-                foreach (var p in e.Session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))))
-                {
-                    var plane = (Plane)p;
-                    if(plane.TrackingState == TrackingState.Tracking)
-                        planes.Add(plane);
-                }
-                if (planes.Count > 0)
-                {
-                    pr.DrawPlanes(planes, camera.DisplayOrientedPose, projmtx);
-                    planesDetected = true;
-                }
-            }
-            else if(!isSurfaceDetectionComplete)
-            {
-                planesDetected = e.Session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))).OfType<Plane>().Where(p => p.TrackingState == TrackingState.Tracking).Any();
-            }
-            if (!isSurfaceDetectionComplete && planesDetected)
-            {
-                OnPlanesDetected();
-                isSurfaceDetectionComplete = true;
-            }
         }
 
         private async void ARView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
@@ -128,10 +87,10 @@ namespace ARToolkit.SampleApp.Samples
             try
             {
                 isSurfaceDetectionComplete = false;
-                this.arView.StartTrackingAsync();
-                if(ARView.UseARCore)
+                _ = this.arView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+                if (ARView.UseARCore)
                 {
-                    ShowLookingForSurfaces();
+                    //ShowLookingForSurfaces();
                 }
             }
             catch(System.Exception ex)

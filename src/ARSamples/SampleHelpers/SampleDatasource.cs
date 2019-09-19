@@ -44,7 +44,6 @@ namespace ARToolkit.SampleApp
                     sample.Name = attr.DisplayName;
                     sample.Category = attr.Category;
                     sample.Description = attr.Description;
-                    sample.DeviceRequirement = attr.DeviceRequirement;
                 }
                 else if (!sample.Type.Namespace.EndsWith(".Samples")) //use sub namespace instead
                 {
@@ -103,7 +102,6 @@ namespace ARToolkit.SampleApp
 
     public class Sample
     {
-        private static Esri.ArcGISRuntime.ARToolkit.DeviceSupport? DeviceSupport;
         public Type Type { get; set; }
 
         public string Name { get; set; }
@@ -111,23 +109,7 @@ namespace ARToolkit.SampleApp
         public string Description { get; set; }
 
         public string Category { get; set; }
-        public Esri.ArcGISRuntime.ARToolkit.DeviceSupport DeviceRequirement { get; set; }
-        public bool IsDeviceSupported
-        {
-            get
-            {
-                if (!DeviceSupport.HasValue)
-                {
-#if NETSTANDARD2_0
-                    DeviceSupport = Esri.ArcGISRuntime.ARToolkit.Forms.ARSceneView.SupportLevel;
-#else
-                    DeviceSupport = Esri.ArcGISRuntime.ARToolkit.ARSceneView.SupportLevel;
-#endif
-                }
-                return DeviceSupport >= DeviceRequirement;
-            }
-        }
-
+        public bool IsDeviceSupported => true;
         public bool HasSampleData
         {
             get

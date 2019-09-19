@@ -10,8 +10,6 @@
             <StackLayout Margin="20">
                 <Label Text="Compass offset:" />
                 <Slider Minimum="0" Maximum="360" x:Name="CompassOffset" ValueChanged="CompassOffset_ValueChanged" />
-                    <Button Text="Align heading to compass"
-                        HorizontalOptions="Fill" Clicked="CalibrateHeadingToCompass_Click" />
                 <Label Text="Vertical offset:" />
                 <Slider Minimum="0" Maximum="100" x:Name="VerticalOffset" ValueChanged="VerticalOffset_ValueChanged" />
                 <Button Text="Toggle Basemap" Clicked="ToggleBasemap_Click" />

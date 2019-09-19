@@ -13,8 +13,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfo(DisplayName = "Camera Tracking Disabled", 
-        Description = "A sample that doesn't rely on ARCore/ARKit but only features the ability to look around based on the device's motion sensors",
-        DeviceRequirement = Esri.ArcGISRuntime.ARToolkit.DeviceSupport.ThreeDegreesOfFreedom)]
+        Description = "A sample that doesn't rely on ARCore/ARKit but only features the ability to look around based on the device's motion sensors")]
     public partial class LookAroundSample : ContentPage
 	{
 		public LookAroundSample()
@@ -27,8 +26,6 @@ namespace ARToolkit.SampleApp.Forms.Samples
         {
             try
             {
-                ARView.UseCameraTracking = false; // Disable ARCore/ARKit SLAM based tracking. We'll just rely on the motion sensors in the device instead
-                ARView.UseCompass = true; // Optional: Use the compass to match north with real-world north. If false, the app will launch looking towards the heading defined in the OriginCamera
                 ARView.RenderVideoFeed = false;
                 ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
 

@@ -16,6 +16,7 @@
 
 #if __ANDROID__
 using System;
+using System.Threading.Tasks;
 using Android.Content;
 using Android.Opengl;
 using Android.Runtime;
@@ -24,7 +25,6 @@ using Android.Support.V4.Content;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 using Google.AR.Core;
-using Google.AR.Core.Exceptions;
 using Javax.Microedition.Khronos.Opengles;
 
 namespace Esri.ArcGISRuntime.ARToolkit
@@ -32,36 +32,76 @@ namespace Esri.ArcGISRuntime.ARToolkit
     [Android.Runtime.Register("Esri.ArcGISRuntime.ARToolkit.ARSceneView")]
     public partial class ARSceneView : SceneView
     {
-        private class Renderer : Java.Lang.Object, GLSurfaceView.IRenderer
+        private class UpdateListener : Java.Lang.Object, Google.AR.Sceneform.Scene.IOnUpdateListener
         {
-            private Action<IGL10> _onDraw;
-            private Action<IGL10, int, int> _surfaceChanged;
-            private Action<IGL10, Javax.Microedition.Khronos.Egl.EGLConfig> _onSurfaceCreated;
+            private readonly Action<Google.AR.Sceneform.FrameTime> _onUpdate;
 
-            public Renderer(Action<IGL10> onDraw, Action<IGL10, int, int> surfaceChanged, Action<IGL10, Javax.Microedition.Khronos.Egl.EGLConfig> onSurfaceCreated)
+            public UpdateListener(Action<Google.AR.Sceneform.FrameTime> onUpdate)
             {
-                _onDraw = onDraw;
-                _surfaceChanged = surfaceChanged;
-                _onSurfaceCreated = onSurfaceCreated;
+                _onUpdate = onUpdate ?? throw new ArgumentNullException(nameof(onUpdate));
             }
 
-            public void OnDrawFrame(IGL10 gl) => _onDraw(gl);
-
-            public void OnSurfaceChanged(IGL10 gl, int width, int height) => _surfaceChanged(gl, width, height);
-
-            public void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config) => _onSurfaceCreated(gl, config);
+            void Google.AR.Sceneform.Scene.IOnUpdateListener.OnUpdate(Google.AR.Sceneform.FrameTime p0) => _onUpdate(p0);
         }
 
-        private DisplayRotationHelper _displayRotationHelper;
-        private BackgroundRenderer _backgroundRenderer = new BackgroundRenderer();
-        private Renderer _renderer;
-        private CompassOrientationHelper _orientationHelper; //Used for getting heading, and orientation if ARCore is disabled
-        private Google.AR.Core.Session _session;
+        private class OrientationListener : Android.Views.OrientationEventListener
+        {
+            private readonly Context _context;
+            private UI.DeviceOrientation _currentOrientation = UI.DeviceOrientation.Portrait;
+            
+            public UI.DeviceOrientation CurrentOrientation
+            {
+                get => _currentOrientation;
+                private set
+                {
+                    if (value != _currentOrientation)
+                    {
+                        _currentOrientation = value;
+                        OrientationChanged?.Invoke(this, _currentOrientation);
+                    }
+                }
+            }
 
-        /// <summary>
-        /// A value defining whether a request for ARCore has been made. Used when requesting installation of ARCore.
-        /// </summary>
-        private bool _arCoreInstallRequested;
+            public OrientationListener(Context context) : base(context, Android.Hardware.SensorDelay.Normal)
+            {
+                _context = context;
+            }
+
+            public override void Enable()
+            {
+                var windowManager = _context.GetSystemService(Context.WindowService).JavaCast<Android.Views.IWindowManager>();
+                CurrentOrientation = ToDeviceOrientation(((int?)windowManager?.DefaultDisplay?.Rotation) ?? 0);
+                base.Enable();
+            }
+
+            public override void OnOrientationChanged(int orientation) => CurrentOrientation = ToDeviceOrientation(orientation);
+
+            private static UI.DeviceOrientation ToDeviceOrientation(int orientation)
+            {
+                switch (orientation)
+                {
+                    case (int)Android.Views.SurfaceOrientation.Rotation90:
+                        return UI.DeviceOrientation.LandscapeRight;
+                    case (int)Android.Views.SurfaceOrientation.Rotation180:
+                        return UI.DeviceOrientation.ReversePortrait; 
+                    case (int)Android.Views.SurfaceOrientation.Rotation270:
+                        return UI.DeviceOrientation.LandscapeRight;
+                    case (int)Android.Views.SurfaceOrientation.Rotation0:
+                    default:
+                        return UI.DeviceOrientation.Portrait;
+                }
+                
+            }
+
+            public event EventHandler<UI.DeviceOrientation> OrientationChanged;
+        }
+
+        private OrientationListener _orientationListener;
+        private UpdateListener _updateListener;
+        private UI.DeviceOrientation _screenOrientation;
+        private CompassOrientationHelper _compassListener; //Used for getting heading, and orientation if ARCore is disabled
+        private double? _initialHeading;
+        private Android.Views.View _sceneviewSurface;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ARSceneView"/> class.
@@ -81,289 +121,55 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public ARSceneView(Context context, Android.Util.IAttributeSet attr)
             : base(context, attr)
         {
+            using (var style = context.Theme.ObtainStyledAttributes(attr, Resource.Styleable.ArcGISARSceneView, 0, 0))
+            {
+                RenderVideoFeed = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_renderVideoFeed, true);
+                NorthAlign = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_northAlign, true);
+            }
             InitializeCommon();
         }
 
-        /// <summary>
-        /// Gets a reference to the ARCore Session
-        /// </summary>
-        public Session Session => _session;
-
         private bool IsDesignTime => IsInEditMode;
-       
+
+        Google.AR.Sceneform.ArSceneView _arSceneView;
         private void Initialize()
         {
             if (IsDesignTime)
                 return;
-            _displayRotationHelper = new DisplayRotationHelper(Context);
-            _orientationHelper = new CompassOrientationHelper(Context);
-            _orientationHelper.OrientationChanged += OrientationHelper_OrientationChanged;
-            _renderer = new Renderer(OnDrawFrame, OnSurfaceChanged, OnSurfaceCreated);
-            GLSurfaceView mSurfaceView = new GLSurfaceView(Context);
+            CheckArCoreAvailability();
+            _updateListener = new UpdateListener(OnFrameUpdated);
+            _orientationListener = new OrientationListener(Context);
+            _orientationListener.OrientationChanged += (s, orientation) => _screenOrientation = orientation;
+            _compassListener = new CompassOrientationHelper(Context);
+            _compassListener.OrientationChanged += OrientationHelper_OrientationChanged;
 
-            // Set up renderer.
-            mSurfaceView.PreserveEGLContextOnPause = true;
-            mSurfaceView.SetEGLContextClientVersion(2);
-            mSurfaceView.SetEGLConfigChooser(8, 8, 8, 8, 16, 0); // Alpha used for plane blending.
-            mSurfaceView.SetRenderer(_renderer);
-            mSurfaceView.RenderMode = Rendermode.Continuously;
-            AddViewInLayout(mSurfaceView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
+            _sceneviewSurface = GetChildAt(0);
+
+            _arSceneView = new Google.AR.Sceneform.ArSceneView(Context);
+            AddViewInLayout(_arSceneView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
             IsManualRendering = true;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ARCore should be used for tracking the device movements
-        /// </summary>
-        /// <remarks>
-        /// This value should be set prior to starting to track, and disabled if the device doesn't support 
-        /// ARCore / 6-degrees of freedom tracking (see <see cref="SupportLevel"/>).
-        /// </remarks>
-        /// <seealso cref="SupportLevel"/>
-        public bool UseARCore { get; set; } = true;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the scene should attempt to use the device compass to align the scene towards north.
-        /// </summary>
-        /// <remarks>
-        /// Note that the accuracy of the compass can heavily affect the quality of alignment.
-        /// </remarks>
-        /// <seealso cref="CompassHeading"/>
-        public bool UseCompass { get; set; } = false;
-
-        /// <summary>
-        /// Gets the heading reported by the built-in compass, or NaN if no compass heading is available
-        /// </summary>
-        public double CompassHeading { get; private set; } = double.NaN;
-
-        private void InitARCore()
-        {
-            if (Context is Android.App.Activity activity)
-            {
-                if (ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
-                {
-                    ActivityCompat.RequestPermissions(activity, new string[] { Android.Manifest.Permission.Camera }, 0);
-                    return;
-                }
-
-                if (ArCoreApk.Instance.RequestInstall(activity, !_arCoreInstallRequested) == ArCoreApk.InstallStatus.InstallRequested)
-                {
-                    _arCoreInstallRequested = true;
-                    return;
-                }
-            }
-
-            var availability = ArCoreApk.Instance.CheckAvailability(Context);
-            if (availability != ArCoreApk.Availability.SupportedInstalled)
-            {
-                throw new NotSupportedException("This device does not support AR: " + availability.ToString());
-            }
-
-            string message = null;
-            Exception exception = null;
-            Session session = null;
-            try
-            {
-                session = new Session(Context);
-            }
-            catch (UnavailableArcoreNotInstalledException e)
-            {
-                message = "Please install ARCore";
-                exception = e;
-            }
-            catch (UnavailableApkTooOldException e)
-            {
-                message = "Please update ARCore";
-                exception = e;
-            }
-            catch (UnavailableSdkTooOldException e)
-            {
-                message = "Please update this app";
-                exception = e;
-            }
-            catch (Java.Lang.Exception e)
-            {
-                exception = e;
-                message = "This device does not support AR";
-            }
-
-            if (message != null)
-            {
-                throw new Exception(message, exception);
-            }
-
-            // Create default config, check is supported, create session from that config.
-            var config = new Google.AR.Core.Config(session);
-
-            session.Configure(config);
-            _session = session;
-        }
-
-        private void OnStopTracking()
-        {
-            _isTracking = false;
-            _displayRotationHelper?.OnPause();
-            _orientationHelper?.Pause();
-            if (_session != null)
-            {
-                _session.Pause();
-            }
-        }
-
-        private void OnStartTracking()
-        {
-            headingOffset = 0;
-            if (UseARCore)
-            {
-                if (_session == null)
-                {
-                    InitARCore();
-                }
-
-                if (_session != null)
-                {
-                    _isTracking = false;
-                    IsTrackingStateChanged?.Invoke(this, false);
-                    _session.Resume();
-                }
-                _displayRotationHelper?.OnResume();
-            }
-            _orientationHelper?.Resume();
-        }
-
-        /// <summary>
-        /// Occurs before the Scene gets updated
-        /// </summary>
-        /// <param name="gl">GL Context</param>
-        /// <param name="session">AR Core Session</param>
-        /// <param name="frame">Frame</param>
-        protected virtual void OnDrawBegin(IGL10 gl, Session session, Frame frame)
-        {
-            DrawBegin?.Invoke(this, new DrawEventArgs(gl, session, frame));
-        }
-
-        /// <summary>
-        /// Occurs before the Scene gets updated
-        /// </summary>
-        public event EventHandler<DrawEventArgs> DrawBegin;
-
-        /// <summary>
-        /// Occurs after the Scene has rendered
-        /// </summary>
-        public event EventHandler<DrawEventArgs> DrawComplete;
-
-        /// <summary>
-        /// Occurs after the Scene has rendered
-        /// </summary>
-        /// <param name="gl">GL Context</param>
-        /// <param name="session">AR Core Session</param>
-        /// <param name="frame">Frame</param>
-        protected virtual void OnDrawComplete(IGL10 gl, Session session, Frame frame)
-        {
-            DrawComplete?.Invoke(this, new DrawEventArgs(gl, session, frame));
-        }
-
-        private Frame _lastFrame;
-
-        private void OnDrawFrame(IGL10 gl)
-        {
-            // Clear screen to notify driver it should not load any pixels from previous frame.
-            GLES20.GlClear(GLES20.GlColorBufferBit | GLES20.GlDepthBufferBit);
-
-            if (_session != null && UseARCore)
-            {
-                // Notify ARCore session that the view size changed so that the perspective matrix and
-                // the video background can be properly adjusted.
-                _displayRotationHelper.UpdateSessionIfNeeded(_session);
-                try
-                {
-                    _session.SetCameraTextureName(_backgroundRenderer.TextureId);
-
-                    // Obtain the current frame from ARSession. When the configuration is set to
-                    // UpdateMode.BLOCKING (it is by default), this will throttle the rendering to the
-                    // camera framerate.
-                    Frame frame = _session.Update();
-                    var camera = frame.Camera;
-
-                    // Draw background.
-                    if (_renderVideoFeed)
-                    {
-                        _backgroundRenderer.Draw(frame);
-                    }
-
-                    OnDrawBegin(gl, _session, frame);
-
-                    // If not tracking, don't draw 3d objects.
-                    if (camera.TrackingState == TrackingState.Paused)
-                    {
-                        return;
-                    }
-
-                    // No tracking error at this point. If we detected any plane, then hide the
-                    // message UI, otherwise show searchingPlane message.
-                    bool tracking = HasTrackingPlane();
-                    if (_isTracking != tracking)
-                    {
-                        _isTracking = tracking;
-                        IsTrackingStateChanged?.Invoke(this, tracking);
-                    }
-
-                    // Get projection matrix.
-                    float[] projmtx = new float[16];
-                    camera.GetProjectionMatrix(projmtx, 0, 0.1f, 100.0f);
-
-                    // Get camera matrix and draw.
-                    if (tracking)
-                    {
-                        var pose = camera.DisplayOrientedPose;
-                        var c = Camera;
-                        if (c != null)
-                        {
-                            var headingOffsetMatrix = TransformationMatrix.Identity;
-                            if(headingOffset != 0 && UseCompass)
-                            {
-                                //Apply offset to heading
-                                var angleInRadians = headingOffset * (Math.PI / 180.0);
-                                headingOffsetMatrix = TransformationMatrix.Create(0, Math.Sin(.5 * angleInRadians), 0, Math.Cos(.5 * angleInRadians), 0, 0, 0);
-                            }
-                            _controller.TransformationMatrix = headingOffsetMatrix + InitialTransformation + TransformationMatrix.Create(pose.Qx(), pose.Qy(), pose.Qz(), pose.Qw(), pose.Tx(), pose.Ty(), pose.Tz());
-                            var intrinsics = camera.ImageIntrinsics;
-                            float[] fl = intrinsics.GetFocalLength();
-                            float[] pp = intrinsics.GetPrincipalPoint();
-                            int[] size = intrinsics.GetImageDimensions();
-                            SetFieldOfView(fl[0], fl[1], pp[0], pp[1], size[0], size[1], GetDeviceOrientation());
-                        }
-                    }
-                    if (IsManualRendering)
-                    {
-                        RenderFrame();
-                    }
-
-                    OnDrawComplete(gl, _session, frame);
-                    _lastFrame = frame;
-                }
-                catch (System.Exception)
-                {
-                }
-            }
-            else
-            {
-                if(RenderVideoFeed)
-                {
-                    // TODO: Render the camera on the background
-                }
-
-                if (IsManualRendering)
-                {
-                    RenderFrame();
-                }
-            }
-        }
-
-        private double headingOffset = 0;
-        private Android.Hardware.SensorStatus headingOffsetAccuracy = Android.Hardware.SensorStatus.NoContact;
         private void OrientationHelper_OrientationChanged(object sender, CompassOrientationEventArgs e)
         {
-            CompassHeading = e.Azimuth;
+            if (e.Accuracy == Android.Hardware.SensorStatus.NoContact)
+                return;
+            // Keep track of initial heading to oriente scene correctly as ARCore doesn't provide global heading accuracy.
+            if (!_initialHeading.HasValue)
+            {
+                _initialHeading = e.Azimuth;
+
+                if (UseARCore && NorthAlign)
+                {
+                    var camera = OriginCamera;
+                    if (camera != null)
+                    {
+                        OriginCamera = new Mapping.Camera(camera.Location, _initialHeading.Value, camera.Pitch, camera.Roll);
+                        _initialHeading = e.Azimuth;
+                    }
+                }
+            }
+
             if (!UseARCore)
             {
                 // Use orientation sensor instead of ARCore
@@ -374,91 +180,143 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 var qz = (m[3] - m[1]) / (4 * qw);
                 _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(qx, qz, -qy, qw, 0, 0, 0);
             }
-            else
+        }
+
+        /// <inheritdoc />
+        protected override void OnLayout(bool changed, int left, int top, int right, int bottom)
+        {
+            _arSceneView.Layout(left, top, right, bottom);
+            base.OnLayout(changed, left, top, right, bottom);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether ARCore should be used for tracking the device movements
+        /// </summary>
+        public bool UseARCore { get; private set; } = true;
+
+        /// <summary>
+        /// Gets the AR SurfaceView that integrates with ARCore and renders a scene.
+        /// </summary>
+        public Google.AR.Sceneform.ArSceneView ArSceneView => _arSceneView;
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether the scene should attempt to use the device compass to align the scene towards north.
+        /// </summary>
+        /// <remarks>
+        /// Note that the accuracy of the compass can heavily affect the quality of a good world alignment.
+        /// </remarks>
+        public bool NorthAlign { get; set; } = true;
+
+        private bool RequestLocationPermission()
+        {
+            if (!(Context is Android.App.Activity activity))
             {
-                if (UseCompass && _isTracking && e.Accuracy > headingOffsetAccuracy && e.Pitch > 20 && e.Pitch < 140)
+                // Throw exception if Context is not an instance of Activity as it's required for permission request
+                throw new NotSupportedException("Context must be an instance of Activity");
+            }
+            if (ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.AccessFineLocation) != Android.Content.PM.Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions(activity, new string[] { Android.Manifest.Permission.AccessFineLocation }, 0);
+                return false;
+            }
+            return true;
+        }
+
+        private void StartArCoreSession()
+        {
+            if(!(Context is Android.App.Activity activity))
+            {
+                // Throw exception if Context is not an instance of Activity as it's required for permission request
+                throw new NotSupportedException("Context must be an instance of Activity");
+            }
+
+            if(UseARCore && RenderVideoFeed && ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
+            {
+                ActivityCompat.RequestPermissions(activity, new string[] { Android.Manifest.Permission.Camera }, 0);
+                return;
+            }
+
+            if (UseARCore)
+            {
+                if (_arSceneView?.Session == null)
                 {
-                    // Compass heading got better - update offset, but only if pitch isn't too big
-                    var c = Camera;
-                    if (c != null)
-                    {
-                        headingOffset = c.Heading - e.Azimuth;
-                        headingOffsetAccuracy = e.Accuracy;
-                    }
+                    // Create the session
+                    var session = new Session(Context);
+                    var config = new Config(session);
+                    config.SetUpdateMode(Config.UpdateMode.LatestCameraImage);
+                    config.SetFocusMode(Config.FocusMode.Auto);
+                    session.Configure(config);
+                    _arSceneView.SetupSession(session);
+                }
+
+                // ensure that OnUpdateListener is added on the UI thread to prevent threading issues with ARCore
+                Post(() => _arSceneView.Scene.AddOnUpdateListener(_updateListener));
+
+                _arSceneView.Resume();
+            }
+        }
+
+        private void OnStopTracking()
+        {
+            _orientationListener.Disable();
+            _compassListener?.Pause();
+            if (_arSceneView != null)
+            {
+                Post(() => _arSceneView.Scene.RemoveOnUpdateListener(_updateListener));
+                _arSceneView.Pause();
+            }
+            _initialHeading = null;
+        }
+
+        private void OnStartTracking()
+        {
+            _initialHeading = null;
+            _orientationListener.Enable();
+            _compassListener.Resume();
+            if (UseARCore)
+            {
+                StartArCoreSession();
+            }
+        }
+
+        private void OnResetTracking()
+        {
+            if (UseARCore)
+            {
+                StartArCoreSession();
+            }
+        }
+
+        private void OnFrameUpdated(Google.AR.Sceneform.FrameTime obj)
+        {
+            var arCamera = _arSceneView?.ArFrame?.Camera;
+            if (arCamera != null && IsTracking)
+            {
+                var rot = arCamera.DisplayOrientedPose.GetRotationQuaternion();
+                var tr = arCamera.DisplayOrientedPose.GetTranslation();
+                var arCoreTransMatrix = TransformationMatrix.Create(rot[0], rot[1], rot[2], rot[3], tr[0], tr[1], tr[2]);
+                _controller.TransformationMatrix = InitialTransformation + arCoreTransMatrix;
+                var it = arCamera.ImageIntrinsics;
+                var fl = it.GetFocalLength();
+                var pp = it.GetPrincipalPoint();
+                var id = it.GetImageDimensions();
+                SetFieldOfView(fl[0], fl[1], pp[0], pp[1], id[0], id[1], _screenOrientation);
+                if (IsManualRendering)
+                {
+                    RenderFrame();
                 }
             }
         }
-
-        private UI.DeviceOrientation GetDeviceOrientation()
-        {
-            var windowManager = Context.GetSystemService(Context.WindowService).JavaCast<Android.Views.IWindowManager>();
-            switch (windowManager.DefaultDisplay.Rotation)
-            {
-                case Android.Views.SurfaceOrientation.Rotation0: return UI.DeviceOrientation.Portrait;
-                case Android.Views.SurfaceOrientation.Rotation90: return UI.DeviceOrientation.LandscapeLeft;
-                case Android.Views.SurfaceOrientation.Rotation180: return UI.DeviceOrientation.ReversePortrait;
-                case Android.Views.SurfaceOrientation.Rotation270:
-                default: return UI.DeviceOrientation.LandscapeRight;
-            }
-        }
-
-        /// <summary>
-        /// Records a change in surface dimensions.
-        /// </summary>
-        /// <param name="gl">GL context</param>
-        /// <param name="width">The updated width of the surface.</param>
-        /// <param name="height">The updated height of the surface.</param>
-        protected virtual void OnSurfaceChanged(IGL10 gl, int width, int height)
-        {
-            _displayRotationHelper.OnSurfaceChanged(width, height);
-            GLES20.GlViewport(0, 0, width, height);
-        }
-
-        /// <summary>
-        /// Triggered when the GL surface has been created
-        /// </summary>
-        /// <param name="gl">GL context</param>
-        /// <param name="config">GL Configuration</param>
-        protected virtual void OnSurfaceCreated(IGL10 gl, Javax.Microedition.Khronos.Egl.EGLConfig config)
-        {
-            GLES20.GlClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
-            // Create the texture and pass it to ARCore session to be filled during update().
-            _backgroundRenderer.CreateOnGlThread(/*context=*/Context);
-            if (_session != null)
-            {
-                _session.SetCameraTextureName(_backgroundRenderer.TextureId);
-            }
-        }
-
-        /// <summary>
-        /// Checks if we detected at least one plane.
-        /// </summary>
-        /// <returns>True if at least one plane is detected</returns>
-        private bool HasTrackingPlane()
-        {
-            foreach (var plane in _session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))))
-            {
-                if (((Plane)plane).TrackingState == TrackingState.Tracking)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private bool _isTracking;
 
         private TransformationMatrix HitTest(Android.Graphics.PointF screenPoint)
         {
             if (!UseARCore)
                 throw new InvalidOperationException("HitTest not supported when ARCore is disabled");
-            var camera = _lastFrame?.Camera;
+            var frame = _arSceneView?.ArFrame;
+            var camera = frame?.Camera;
             if (camera != null && camera.TrackingState == TrackingState.Tracking)
             {
-                var pose = camera.Pose;
-                var hitResults = _lastFrame.HitTest(screenPoint.X, screenPoint.Y);
+                var hitResults = frame.HitTest(screenPoint.X, screenPoint.Y);
                 foreach (var item in hitResults)
                 {
                     if (item.Trackable is Plane pl && pl.IsPoseInPolygon(item.HitPose) ||
@@ -473,38 +331,103 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             return null;
         }
-    }
 
-    /// <summary>
-    /// Event args used for the <see cref="ARSceneView.DrawBegin"/> and <see cref="ARSceneView.DrawComplete"/> events.
-    /// </summary>
-    /// <seealso cref="ARSceneView.DrawBegin"/>
-    /// <seealso cref="ARSceneView.DrawComplete"/>
-#pragma warning disable SA1402
-    public sealed class DrawEventArgs : EventArgs
-#pragma warning restore SA1402
-    {
-        internal DrawEventArgs(IGL10 gl, Session session, Frame frame)
+        #region ARCore Checkers/Install
+
+
+        private void CheckArCoreAvailability()
         {
-            GL = gl;
-            Session = session;
-            Frame = frame;
+            ArCoreAvailability = ArCoreApk.Instance.CheckAvailability(Context);
         }
 
         /// <summary>
-        /// Gets the current frame
+        /// A value defining whether a request for ARCore has been made. Used when requesting installation of ARCore.
         /// </summary>
-        public Frame Frame { get; }
+        private bool _arCoreInstallRequested;
 
         /// <summary>
-        /// Gets the session
+        /// Requests installation of ARCore using ArCoreApk. Should only be called once we know the device is supported by ARCore.
         /// </summary>
-        public Session Session { get; }
+        private void RequestArCoreInstall(Android.App.Activity activity)
+        {
+            try
+            {
+                if (ArCoreApk.Instance.RequestInstall(activity, !_arCoreInstallRequested) == ArCoreApk.InstallStatus.InstallRequested)
+                {
+                    _arCoreInstallRequested = true;
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private ArCoreApk.Availability _ArCoreAvailability;
+
+        private ArCoreApk.Availability ArCoreAvailability
+        {
+            get => _ArCoreAvailability;
+            set
+            {
+                if (value != _ArCoreAvailability)
+                {
+                    var newValue = _ArCoreAvailability = value;
+                    if (newValue == ArCoreApk.Availability.UnknownChecking)
+                    {
+                        _ = CheckArCoreJob();
+                    }
+                    else if (newValue == ArCoreApk.Availability.SupportedInstalled)
+                    {
+                        UseARCore = true;
+                    }
+                    else if (newValue == ArCoreApk.Availability.SupportedNotInstalled ||
+                        newValue == ArCoreApk.Availability.SupportedApkTooOld)
+                    {
+                        RequestArCoreInstall(Context as Android.App.Activity);
+                    }
+                    else
+                    {
+                        UseARCore = false;
+                        //TODO: Once we support camera without ARCore, only switch to manual rendering if video feed is off
+                        IsManualRendering = false;
+                        RenderVideoFeed = false;
+                    }
+                }
+            }
+        }
+
+        private Task _checkArCoreJob;
 
         /// <summary>
-        /// Gets the GL context
+        /// A background task used to poll ArCoreApk to set the value of ARCore availability for the current device.
         /// </summary>
-        public IGL10 GL { get; }
+        /// <remarks>
+        /// The ArCoreApk.getInstance().checkAvailability() function may initiate a query to a remote service to determine compatibility, in which case
+        /// it immediately returns ArCoreApk.Availability.UNKNOWN_CHECKING.This leaves us unable to determine if the device
+        /// is compatible with ARCore until the value is retrieved.See: https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/ArCoreApk#checkAvailability(android.content.Context)        ///
+        /// We should not be calling ArCoreApk.getInstance().requestInstall() until we've received one of the SUPPORTED_...
+        /// values so this job allows us to do this. See: https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/ArCoreApk#requestInstall(android.app.Activity,%20boolean)
+        /// </remarks>
+        /// <returns></returns>
+        private Task CheckArCoreJob()
+        {
+            if (_checkArCoreJob == null)
+            {
+                _checkArCoreJob = Task.Run(async () =>
+                {
+                    while (ArCoreApk.Instance.CheckAvailability(Context) == ArCoreApk.Availability.UnknownChecking)
+                    {
+                        await Task.Delay(100);
+                    }
+                    ArCoreAvailability = ArCoreApk.Instance.CheckAvailability(Context);
+                });
+            }
+
+            return _checkArCoreJob;
+        }
+
+        #endregion
     }
 }
 #endif

@@ -129,7 +129,7 @@ namespace ARToolkit.SampleApp.Samples
                 {
                     statusText.Text = "";
                 });
-                SnapToSurface(e.Position, ARView.CompassHeading);
+                //SnapToSurface(e.Position, ARView.CompassHeading);
             }
         }
 
@@ -212,8 +212,7 @@ namespace ARToolkit.SampleApp.Samples
 
         private void ARView_ViewpointChanged(object sender, EventArgs e)
         {
-            if(!locationDataSource.IsStarted)
-                statusText.Text = $"Compass: {ARView.CompassHeading.ToString("0")} Camera: {ARView.Camera.Heading.ToString("0")}°";
+            statusText.Text = $"Heading: {ARView.Camera.Heading.ToString("0")}°";
         }
 
 

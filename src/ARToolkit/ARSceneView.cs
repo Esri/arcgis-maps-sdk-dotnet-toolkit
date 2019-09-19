@@ -18,6 +18,7 @@
 using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 #if __ANDROID__
@@ -38,6 +39,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
     public partial class ARSceneView : SceneView
     {
         private TransformationMatrixCameraController _controller;
+        private bool _initialLocationSet = false; // Denotes whether we've received our initial location from the data source.
+        private ARLocationTrackingMode _locationTrackingMode = ARLocationTrackingMode.Ignore; // The tracking mode controlling how the locations generated from the location data source are used during AR tracking.
+        private LocationDataSource _locationDataSource;
 
 #if !__ANDROID__
         /// <summary>
@@ -54,27 +58,43 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void InitializeCommon()
         {
             if (!IsDesignTime)
-                {
-                    SpaceEffect = UI.SpaceEffect.None;
-                    AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
-                    _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 }; ;
+            {
+                SpaceEffect = UI.SpaceEffect.None;
+                AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+                _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 };
+                _controller.OriginCameraChanged += Controller_OriginCameraChanged;
+                LocationDataSource = new SystemLocationDataSource();
             }
-            
-                    Initialize();
-                }
 
+            Initialize();
+        }
+
+        private void Controller_OriginCameraChanged(object sender, EventArgs e) => OriginCameraChanged?.Invoke(this, e);
+        
         /// <summary>
         /// Starts device tracking.
         /// </summary>
-        public Task StartTrackingAsync()
+        /// <param name="locationTrackingMode">
+        /// </param>
+        public async Task StartTrackingAsync(ARLocationTrackingMode locationTrackingMode = ARLocationTrackingMode.Ignore)
         {
+            _locationTrackingMode = locationTrackingMode;
+            if (locationTrackingMode != ARLocationTrackingMode.Ignore)
+            {
+                if (LocationDataSource == null)
+                    throw new InvalidOperationException("Cannot use location tracking without the LocationDataSource property being initialized");
+#if __ANDROID__
+                if (!RequestLocationPermission())
+                    return;
+#endif
+                await LocationDataSource.StartAsync();
+            }
             CameraController = _controller;
             var currentTrackingValue = IsTracking;
             OnStartTracking();
             IsTracking = true;
             if(!currentTrackingValue)
                 IsTrackingStateChanged?.Invoke(this, true);
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -83,6 +103,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public void StopTracking()
         {
             OnStopTracking();
+            _ = LocationDataSource?.StopAsync();
+
             if (IsTracking)
             {
                 IsTracking = false;
@@ -95,7 +117,63 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public void ResetTracking()
         {
-            _ = StartTrackingAsync();
+            InitialTransformation = Mapping.TransformationMatrix.Identity;
+            _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
+            _initialLocationSet = false;
+            OriginCamera = null;
+#if __ANDROID__
+            _initialHeading = null;
+#endif
+            OnResetTracking();
+        }
+
+        /// <summary>
+        /// The data source used to get device location.
+        /// Used either in conjuction with device camera tracking data or when device camera tracking is not present or not being used.
+        /// </summary>
+        public LocationDataSource LocationDataSource
+        {
+            get => _locationDataSource;
+            set
+            {
+                if(_locationDataSource != null)
+                {
+                    _locationDataSource.LocationChanged -= LocationDataSource_LocationChanged;
+                }
+                _locationDataSource = value;
+                if (_locationDataSource != null)
+                {
+                    _locationDataSource.LocationChanged += LocationDataSource_LocationChanged;
+                }
+            }
+        }
+
+        private void LocationDataSource_LocationChanged(object sender, Location.Location e)
+        {
+            if (_locationTrackingMode == ARLocationTrackingMode.Ignore)
+                return;
+            if (e.IsLastKnown)
+                return;
+            var locationPoint = e.Position;
+            if (_locationTrackingMode == ARLocationTrackingMode.Initial && !_initialLocationSet)
+            {
+                // if location has altitude, use that else use a default value
+                var newCamera = new Mapping.Camera(locationPoint.X, locationPoint.Y, locationPoint.HasZ ? locationPoint.Z : 1, 0, 90, 0);
+                OriginCamera = newCamera;
+                _initialLocationSet = true;
+            }
+            else if (_locationTrackingMode == ARLocationTrackingMode.Continuous)
+            {
+                var originCamera = OriginCamera;
+                // if location has altitude, use that else the previous value
+                OriginCamera = new Mapping.Camera(locationPoint.X, locationPoint.Y, locationPoint.HasZ ? locationPoint.Z : originCamera.Location.Z, originCamera.Heading, originCamera.Pitch, originCamera.Roll);
+            }
+            OnResetTracking();
+            InitialTransformation = Mapping.TransformationMatrix.Identity;
+            if (_locationTrackingMode != ARLocationTrackingMode.Continuous)
+            {
+                _ = LocationDataSource.StopAsync();
+            }
         }
 
         /// <summary>
@@ -148,7 +226,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         }
 
         /// <summary>
-        /// Gets a value indicating whether tracking is currently active
+        /// Gets a value indicating whether tracking of location and angles is currently active
         /// </summary>
         /// <seealso cref="StartTrackingAsync"/>
         /// <seealso cref="StopTracking"/>
@@ -169,16 +247,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public Mapping.Camera OriginCamera
         {
             get => _controller.OriginCamera;
-            set
-            {
-                _controller.OriginCamera = value;
-                if (IsTracking)
-                {
-                    ResetTracking();
-                }
-
-                OriginCameraChanged?.Invoke(this, EventArgs.Empty);
-            }
+            set => _controller.OriginCamera = value;
         }
 
         /// <summary>
@@ -243,40 +312,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             InitialTransformation = Mapping.TransformationMatrix.Identity - origin;
             return true;
         }
-
-        public static DeviceSupport SupportLevel
-        {
-            get
-            {
-#if __ANDROID__
-                var availability = Google.AR.Core.ArCoreApk.Instance.CheckAvailability(global::Android.App.Application.Context);
-                if (availability == Google.AR.Core.ArCoreApk.Availability.SupportedApkTooOld ||
-                    availability == Google.AR.Core.ArCoreApk.Availability.SupportedInstalled ||
-                    availability == Google.AR.Core.ArCoreApk.Availability.SupportedNotInstalled)
-                {
-                    return DeviceSupport.SixDegreesOfFreedom;
-                }
-                if (CompassOrientationHelper.IsSupported(global::Android.App.Application.Context))
-                    return DeviceSupport.ThreeDegreesOfFreedom;
-#elif __IOS__
-                if (ARKit.ARConfiguration.IsSupported)
-                    return DeviceSupport.SixDegreesOfFreedom;
-                else
-                    return DeviceSupport.ThreeDegreesOfFreedom;
-#elif NETFX_CORE
-                if (Windows.Devices.Sensors.OrientationSensor.GetDefault() != null)
-                    return DeviceSupport.ThreeDegreesOfFreedom;
-#endif
-                return DeviceSupport.NotSupported;
-            }
-        }
     }
 
 #endif
-    public enum DeviceSupport
-    {
-        NotSupported,
-        ThreeDegreesOfFreedom,
-        SixDegreesOfFreedom
-    }
 }

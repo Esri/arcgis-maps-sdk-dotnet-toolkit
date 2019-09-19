@@ -89,12 +89,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 var elm = (ARSceneView)e.NewElement;
                 ARControl.TranslationFactor = elm.TranslationFactor;
                 ARControl.RenderVideoFeed = elm.RenderVideoFeed;
-                ARControl.UseCompass = elm.UseCompass;
-#if __ANDROID__
-                ARControl.UseARCore = elm.UseCameraTracking;
-#elif __IOS__
-                ARControl.UseARKit = elm.UseCameraTracking;
-#endif
+                ARControl.NorthAlign = elm.NorthAlign;
+                ARControl.LocationDataSource = elm.LocationDataSource;
+                SetPlaneRendering(elm.RenderPlanes);
+                SetSceneOpacity(elm.Opacity);
                 if (elm.OriginCamera != null)
                 {
                     ARControl.OriginCamera = elm.OriginCamera;
@@ -128,19 +126,47 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 ARControl.RenderVideoFeed = ARElement.RenderVideoFeed;
             }
-            else if (e.PropertyName == ARSceneView.UseCompassProperty.PropertyName)
+            else if (e.PropertyName == ARSceneView.NorthAlignProperty.PropertyName)
             {
-                ARControl.UseCompass = ARElement.UseCompass;
+                ARControl.NorthAlign = ARElement.NorthAlign;
             }
-            else if (e.PropertyName == ARSceneView.UseCameraTrackingProperty.PropertyName)
+            else if (e.PropertyName == ARSceneView.RenderPlanesProperty.PropertyName)
             {
-#if __ANDROID__
-                ARControl.UseARCore = ARElement.UseCameraTracking;
-#elif __IOS__
-                ARControl.UseARKit = ARElement.UseCameraTracking;
-#endif
+                SetPlaneRendering(ARElement.RenderPlanes);
+            }
+            else if (e.PropertyName == ARSceneView.LocationDataSourceProperty.PropertyName)
+            {
+                ARControl.LocationDataSource = ARElement.LocationDataSource;
+            }
+            else if (e.PropertyName == ARSceneView.OpacityProperty.PropertyName)
+            {
+                SetSceneOpacity(ARElement.Opacity);
             }
         }
+
+        private void SetPlaneRendering(bool on)
+        {
+#if __ANDROID__
+            ARControl.ArSceneView.PlaneRenderer.Enabled = on;
+            ARControl.ArSceneView.PlaneRenderer.Visible = on;
+#elif __IOS__
+            ARControl.ARSCNView.DebugOptions = on ? ARKit.ARSCNDebugOptions.ShowFeaturePoints : SceneKit.SCNDebugOptions.None;
+#elif NETFX_CORE
+            //Not supported on UWP
+#endif
+        }
+
+        private void SetSceneOpacity(double opacity)
+        {
+#if __ANDROID__
+            // ARControl.SceneAlpha = (float)opacity; //Not supported on Android
+#elif __IOS__
+            ARControl.SceneAlpha = (nfloat)opacity;
+#elif NETFX_CORE
+            ARControl.SceneOpacity = opacity;
+#endif
+        }
+
 
         /// <inheritdoc />
         protected override void Dispose(bool disposing)

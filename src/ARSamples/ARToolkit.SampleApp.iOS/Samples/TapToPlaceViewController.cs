@@ -67,7 +67,7 @@ namespace ARToolkit.SampleApp.Samples
             ARView.SetInitialTransformation(TransformationMatrix.Create(0, 0, 0, 1, 0, .5, 1.5));
             //Listend for double-tap to place
             ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
-
+            ARView.NorthAlign = false;
             ARView.ARSCNView.DebugOptions = ARSCNDebugOptions.ShowFeaturePoints;
 
             UISwitch sw = new UISwitch() { TranslatesAutoresizingMaskIntoConstraints = false };

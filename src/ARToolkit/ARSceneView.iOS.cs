@@ -32,6 +32,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private bool _created;
         private ARSCNView _arview;
         private ArSessionDel _delegate;
+        private UIView _sceneviewSurface;
 
         private void Initialize()
         {
@@ -62,22 +63,18 @@ namespace Esri.ArcGISRuntime.ARToolkit
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether ARKit should be used for tracking the device movements
+        /// Gets a value indicating whether ARKit should be used for tracking the device movements
         /// </summary>
-        /// <remarks>
-        /// This value should be set prior to starting to track, and disabled if the device doesn't support 
-        /// ARCore / 6-degrees of freedom tracking (see <see cref="SupportLevel"/>).
-        /// </remarks>
-        /// <seealso cref="SupportLevel"/>
-        public bool UseARKit { get; set; }
+        public bool UseARKit { get; private set; }
 
         /// <inheritdoc />
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
             if (!_created)
-            {	
-                Subviews[0].BackgroundColor = UIColor.Clear;
+            {
+                _sceneviewSurface = Subviews[0];
+                _sceneviewSurface.BackgroundColor = UIColor.Clear;
 
                 _created = true;
                 InsertSubview(_arview, 0);
@@ -89,7 +86,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             if (_isStarted)
             {
-                StartTrackingAsync();
+                OnStartTracking();
             }
         }
 
@@ -179,17 +176,30 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void OnStartTracking()
         {
             _isStarted = true;
-
-            // Once we have our configuration we need to run session with it.
-            // ResetTracking will just reset tracking by session to start it again from scratch:
-            _arview.Session.Delegate = _delegate;
-            _arview.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
+            if (UseARKit)
+            {
+                // Once we have our configuration we need to run session with it.
+                // ResetTracking will just reset tracking by session to start it again from scratch:
+                _arview.Session.Delegate = _delegate;
+                _arview.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
+            }
         }
 
         private void OnStopTracking()
         {
-            _arview.Session.Pause();
-            _arview.Session.Delegate = null;
+            if (UseARKit)
+            {
+                _arview.Session.Pause();
+                _arview.Session.Delegate = null;
+            }
+        }
+
+        private void OnResetTracking()
+        {
+            if (UseARKit)
+            {
+                _arview.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking | ARSessionRunOptions.RemoveExistingAnchors);
+            }
         }
 
         private ARConfiguration _arConfiguration;
@@ -210,15 +220,25 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 if (value != _arConfiguration)
                 {
                     _arConfiguration = value;
-                    if (IsTracking)
+                    if (IsTracking && UseARKit)
                     {
-                        ResetTracking();
+                        _arview.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
                     }
                 }
             }
         }
 
-        private bool useCompass;
+        /// <summary>
+        /// Gets or sets the opacity the <see cref="Scene" /> is rendered with. 
+        /// This is useful for making the scene slightly see-through while placing it.
+        /// </summary>
+        public nfloat SceneAlpha
+        {
+            get => _sceneviewSurface.Alpha;
+            set => _sceneviewSurface.Alpha = value;
+        }
+
+        private bool _northAlign = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether the scene should attempt to the device compass to align the scene towards north
@@ -227,19 +247,21 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Note that the accuracy of the compass can heavily affect the quality of alignment.
         /// The property updates the WorldAlignment property on the ARWorldTrackingConfiguration to either GravityAndHeading or Gravity.
         /// </remarks>.
-        public bool UseCompass
+        public bool NorthAlign
         {
-            get { return useCompass; }
+            get { return _northAlign; }
             set
             {
-                useCompass = value;
-                if(ARConfiguration is ARWorldTrackingConfiguration w)
+                if (_northAlign != value)
                 {
-                    w.WorldAlignment = value ? ARWorldAlignment.GravityAndHeading : ARWorldAlignment.Gravity;
+                    _northAlign = value;
+                    if (ARConfiguration is ARWorldTrackingConfiguration w)
+                    {
+                        w.WorldAlignment = value ? ARWorldAlignment.GravityAndHeading : ARWorldAlignment.Gravity;
+                    }
                 }
             }
         }
-
 
         private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
         {
@@ -266,7 +288,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera) => CameraTrackingStateChanged?.Invoke(session, camera);
 
             public override void DidUpdateFrame(ARSession session, ARFrame frame)
-            {
+            {   
                 FrameUpdated?.Invoke(this, frame);
                 frame.Dispose(); // Must dispose frame after this. See https://xamarin.github.io/bugzilla-archives/60/60393/bug.html
             }

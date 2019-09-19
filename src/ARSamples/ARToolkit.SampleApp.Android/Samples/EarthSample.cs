@@ -41,7 +41,7 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.TranslationFactor = 100000000;
                 // Set pitch to 0 so looking forward looks "down" on earth from space
                 ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84), 0, 0, 0);
-                
+                ARView.NorthAlign = false;
                 await scene.LoadAsync();
                 ARView.Scene = scene;
             }

@@ -34,10 +34,7 @@ namespace ARToolkit.SampleApp.Samples
     {
         private Scene Scene;
         private double verticalOffsetFromTerrain = 1.5;
-        private LocationDataSource locationDataSource = new Esri.ArcGISRuntime.Location.SystemLocationDataSource();
-        private Location lastLocation;
         private double previousElevationOffset = 0;
-        //private CompassOrientationHelper compass;
         TextView headingReadout;
 
         protected override ARSceneView SetContentView()
@@ -52,8 +49,10 @@ namespace ARToolkit.SampleApp.Samples
 
             //Configure ARView for 1:1 AR
             ARView.TranslationFactor = 1; // 1:1 AR Scale
-            ARView.UseCompass = true; // Attempt to align with north
+            //ARView.UseCompass = true; // Attempt to align with north
             ARView.ViewpointChanged += ARView_ViewpointChanged; // Used for reporting the current heading on the UI
+            ARView.LocationDataSource = new SystemLocationDataSource();
+
 
             // Calibration UI
             var settingsView = FindViewById<LinearLayout>(Resource.Id.settingsView);
@@ -79,9 +78,6 @@ namespace ARToolkit.SampleApp.Samples
             };
 
             headingReadout = FindViewById<TextView>(Resource.Id.headingText);
-
-            // We'll use a location datasource to snap origin to our current position
-            locationDataSource.LocationChanged += LocationDataSource_LocationChanged;
 
             //Configure scene
             Scene = new Scene(Basemap.CreateStreets());
@@ -116,7 +112,7 @@ namespace ARToolkit.SampleApp.Samples
 
         private void ARView_ViewpointChanged(object sender, EventArgs e)
         {
-            headingReadout.Text = $"Compass: {ARView.CompassHeading.ToString("0")} Camera: {ARView.Camera.Heading.ToString("0")}°";
+            //headingReadout.Text = $"Compass: {ARView.CompassHeading.ToString("0")} Camera: {ARView.Camera.Heading.ToString("0")}°";
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -141,89 +137,5 @@ namespace ARToolkit.SampleApp.Samples
             return true;
         }
 
-        /// <summary>
-        /// Called each time the location datasource receives a new location
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <remarks>
-        /// We'll use this to occasionally update the location of the device, which will help to account for drift in ARCore
-        /// when walking larger distances. A high-accuracy GPS will also more frequently snap the location, as the increased accuracy 
-        /// will trigger more frequent origin updates.
-        /// </remarks>
-        private async void LocationDataSource_LocationChanged(object sender, Esri.ArcGISRuntime.Location.Location e)
-        {
-            var locationPoint = e.Position;
-            if (locationPoint != null)
-            {
-                // Update origin on first location, if location is better than previous one, or we moved a certain amount
-                // since last origin update
-                if (lastLocation == null || lastLocation.HorizontalAccuracy > lastLocation.HorizontalAccuracy ||
-                    GeometryEngine.DistanceGeodetic(lastLocation.Position, ARView.OriginCamera.Location, LinearUnits.Meters, AngularUnits.Degrees, GeodeticCurveType.Geodesic).Distance > lastLocation.HorizontalAccuracy)
-                {
-                    // Create a new camera based on our location and set it on the cameraController.
-                    if (!double.IsNaN(verticalOffsetFromTerrain))
-                    {
-                        if (Scene?.BaseSurface != null)
-                        {
-                            try
-                            {
-                                double elevation = await Scene.BaseSurface.GetElevationAsync(locationPoint);
-                                locationPoint = new MapPoint(locationPoint.X, locationPoint.Y, elevation + verticalOffsetFromTerrain, locationPoint.SpatialReference);
-                            }
-                            catch (System.Exception ex)
-                            {
-                                Toast.MakeText(this, "Failed to snap location to terrain\n" + ex.Message, ToastLength.Short).Show();
-                            }
-                        }
-                    }
-                    // Set the origin to our new location
-                    ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(locationPoint, heading: ARView.OriginCamera.Heading, pitch: 90.0, roll: 0.0);
-                    ResetInitialTransform();
-                    lastLocation = e;
-                }
-            }
-        }
-
-        private void ResetInitialTransform()
-        {
-            // Negate the current device movement so it's relative to the new origin
-            var it = ARView.InitialTransformation;
-            var ct = (ARView.CameraController as Esri.ArcGISRuntime.UI.TransformationMatrixCameraController).TransformationMatrix;
-            var camt = ct - it; // This is the relative transformation matrix of the device as reported by ARCore
-            var tm = TransformationMatrix.Create(
-                it.QuaternionX, it.QuaternionY, it.QuaternionZ, it.QuaternionW,
-                -camt.TranslationX, -camt.TranslationY, -camt.TranslationZ);
-            ARView.SetInitialTransformation(tm);
-        }
-
-        protected override void OnPause()
-        {
-            var _ = locationDataSource?.StopAsync();
-            base.OnPause();
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            if (ContextCompat.CheckSelfPermission(this, Android.Manifest.Permission.AccessFineLocation) == Android.Content.PM.Permission.Granted)
-            {
-                _ = locationDataSource?.StartAsync();
-            }
-            else
-            {
-                ActivityCompat.RequestPermissions(this, new string[] { Android.Manifest.Permission.AccessFineLocation }, 0);
-            }
-        }
-
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
-        {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (ContextCompat.CheckSelfPermission(this, Android.Manifest.Permission.AccessFineLocation) != Android.Content.PM.Permission.Granted)
-            {
-                Toast.MakeText(this, "Location permission is needed to run this sample", ToastLength.Long).Show();
-                Finish();
-            }
-        }
     }
 }

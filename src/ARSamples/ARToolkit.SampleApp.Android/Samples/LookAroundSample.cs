@@ -32,8 +32,6 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             try
             {
-                ARView.UseARCore = false; // Disable ARCore. We'll just rely on the motion sensors in the device instead
-                ARView.UseCompass = true; // Optional: Use the compass to match north with real-world north. If false, the app will launch looking towards the heading defined in the OriginCamera
                 ARView.RenderVideoFeed = false;
                 ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
 
@@ -44,7 +42,7 @@ namespace ARToolkit.SampleApp.Samples
                     BaseSurface = sceneSurface
                 };
                 ARView.Scene = scene;
-                ARView.StartTrackingAsync();
+                ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
             }
             catch (System.Exception ex)
             {

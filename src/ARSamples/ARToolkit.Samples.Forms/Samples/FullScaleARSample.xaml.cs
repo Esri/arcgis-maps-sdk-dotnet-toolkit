@@ -24,18 +24,16 @@ namespace ARToolkit.SampleApp.Forms.Samples
 
         public FullScaleARSample()
 		{
-            var t= typeof(Esri.ArcGISRuntime.Location.LocationDataSource).Assembly.GetType("Esri.ArcGISRuntime.Location.SystemLocationDataSource");
+            InitializeComponent();
+            var t = typeof(Esri.ArcGISRuntime.Location.LocationDataSource).Assembly.GetType("Esri.ArcGISRuntime.Location.SystemLocationDataSource");
             locationDataSource = (LocationDataSource)Activator.CreateInstance(t);
-			InitializeComponent ();
+            ARView.LocationDataSource = locationDataSource;
         }
 
         private async void Init()
         {
             try
             {
-                locationDataSource.HeadingChanged += LocationDataSource_HeadingChanged;
-                locationDataSource.LocationChanged += LocationDataSource_LocationChanged;
-
                 Scene = new Scene(Basemap.CreateStreets());
                 Scene.Basemap.BaseLayers[0].Opacity = .75;
                 Scene.BaseSurface = new Surface();
@@ -53,7 +51,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
 
                 await Scene.LoadAsync();
                 ARView.Scene = Scene;
-                await ARView.StartTrackingAsync();
+                await ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Continuous);
                 await locationDataSource.StartAsync();
             }
             catch (System.Exception ex)
@@ -61,68 +59,6 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 await DisplayAlert("Failed to load scene", ex.Message, "OK");
                 await Navigation.PopAsync();
             }
-        }
-
-        private void CalibrateHeadingToCompass_Click(object sender, EventArgs e)
-        {
-            if (!double.IsNaN(_currentHeading))
-            {
-                double offset = ARView.OriginCamera.Heading + (_currentHeading - ARView.Camera.Heading);
-                while (offset < 0) offset += 360;
-                while (offset > 360) offset -= 360;
-                CompassOffset.Value = offset;
-            }
-        }
-
-        private async void LocationDataSource_LocationChanged(object sender, Esri.ArcGISRuntime.Location.Location e)
-        {
-            var locationPoint = e.Position;
-            if (locationPoint != null)
-            {
-                // Update origin on first location, if location is better than previous one, or we moved a certain amount
-                // since last origin update
-                // In that care create a new Origin Ccamera based on our location and up.
-                if (lastLocation == null || lastLocation.HorizontalAccuracy > lastLocation.HorizontalAccuracy ||
-                    GeometryEngine.DistanceGeodetic(lastLocation.Position, ARView.OriginCamera.Location, LinearUnits.Meters, AngularUnits.Degrees, GeodeticCurveType.Geodesic).Distance > lastLocation.HorizontalAccuracy)
-                {
-                    if (!double.IsNaN(verticalOffsetFromTerrain))
-                    {
-                        if (Scene?.BaseSurface != null)
-                        {
-                            try
-                            {
-                                double elevation = await Scene.BaseSurface.GetElevationAsync(locationPoint);
-                                locationPoint = new MapPoint(locationPoint.X, locationPoint.Y, elevation + verticalOffsetFromTerrain, locationPoint.SpatialReference);
-                            }
-                            catch { }
-                        }
-                    }
-                    ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(locationPoint, heading: ARView.OriginCamera.Heading, pitch: 90.0, roll: 0.0);
-                    //Negate current device movement so it's relative to the new origin
-                    var it = ARView.InitialTransformation;
-                    if (ARView.CameraController is Esri.ArcGISRuntime.UI.TransformationMatrixCameraController)
-                    {
-                        var ct = (ARView.CameraController as Esri.ArcGISRuntime.UI.TransformationMatrixCameraController).TransformationMatrix;
-                        var camt = ct - it;
-                        var tm = TransformationMatrix.Create(
-                            it.QuaternionX, it.QuaternionY, it.QuaternionZ, it.QuaternionW,
-                            -camt.TranslationX, -camt.TranslationY, -camt.TranslationZ);
-                        ARView.SetInitialTransformation(tm);
-                    }
-                    lastLocation = e;
-                }
-            }
-        }
-
-        private double _currentHeading;
-
-        private void LocationDataSource_HeadingChanged(object sender, double heading)
-        {
-            _currentHeading = heading;
-            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-            {
-                HeadingReadout.Text = $"Compass = {_currentHeading.ToString("0")}°. Camera = {ARView.Camera.Heading.ToString("0")}°";
-            });
         }
 
         protected override void OnAppearing()
