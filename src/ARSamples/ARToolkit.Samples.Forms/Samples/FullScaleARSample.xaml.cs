@@ -19,14 +19,12 @@ namespace ARToolkit.SampleApp.Forms.Samples
 	{
         private Scene Scene;
         private double verticalOffsetFromTerrain = 1.2;
-        private LocationDataSource locationDataSource;
-        private Location lastLocation;
 
         public FullScaleARSample()
 		{
             InitializeComponent();
             var t = typeof(Esri.ArcGISRuntime.Location.LocationDataSource).Assembly.GetType("Esri.ArcGISRuntime.Location.SystemLocationDataSource");
-            locationDataSource = (LocationDataSource)Activator.CreateInstance(t);
+            var locationDataSource = (LocationDataSource)Activator.CreateInstance(t);
             ARView.LocationDataSource = locationDataSource;
         }
 
@@ -52,7 +50,6 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 await Scene.LoadAsync();
                 ARView.Scene = Scene;
                 await ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Continuous);
-                await locationDataSource.StartAsync();
             }
             catch (System.Exception ex)
             {

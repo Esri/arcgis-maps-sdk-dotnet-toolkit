@@ -145,22 +145,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="SceneOpacity"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty SceneOpacityProperty =
-            BindableProperty.Create(nameof(SceneOpacity), typeof(double), typeof(ARSceneView), 1d, BindingMode.TwoWay, null);
-
-        /// <summary>
-        /// Gets or sets the opacity the <see cref="Esri.ArcGISRuntime.Xamarin.Forms.SceneView.Scene" /> is rendered with. 
-        /// This is useful for making the scene slightly see-through while placing it.
-        /// </summary>
-        public double SceneOpacity
-        {
-            get { return (double)GetValue(SceneOpacityProperty); }
-            set { SetValue(SceneOpacityProperty, value); }
-        }
-
-        /// <summary>
         /// Starts device tracking.
         /// </summary>
         public System.Threading.Tasks.Task StartTrackingAsync(ARLocationTrackingMode locationTrackingMode = ARLocationTrackingMode.Ignore)

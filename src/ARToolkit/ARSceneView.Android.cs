@@ -147,7 +147,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             _arSceneView = new Google.AR.Sceneform.ArSceneView(Context);
             AddViewInLayout(_arSceneView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
-            IsManualRendering = true;
+            // Tell the SceneView we will be calling `RenderFrame()` manually if we're using ARCore.
+            IsManualRendering = IsUsingARCore;
         }
 
         private void OrientationHelper_OrientationChanged(object sender, CompassOrientationEventArgs e)
@@ -159,7 +160,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 _initialHeading = e.Azimuth;
 
-                if (UseARCore && NorthAlign)
+                if (IsUsingARCore && NorthAlign)
                 {
                     var camera = OriginCamera;
                     if (camera != null)
@@ -170,7 +171,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
 
-            if (!UseARCore)
+            if (!IsUsingARCore)
             {
                 // Use orientation sensor instead of ARCore
                 var m = e.Transformation;
@@ -192,7 +193,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Gets a value indicating whether ARCore should be used for tracking the device movements
         /// </summary>
-        public bool UseARCore { get; private set; } = true;
+        public bool IsUsingARCore { get; private set; } = true;
 
         /// <summary>
         /// Gets the AR SurfaceView that integrates with ARCore and renders a scene.
@@ -230,13 +231,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 throw new NotSupportedException("Context must be an instance of Activity");
             }
 
-            if(UseARCore && RenderVideoFeed && ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
+            if(IsUsingARCore && RenderVideoFeed && ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
             {
                 ActivityCompat.RequestPermissions(activity, new string[] { Android.Manifest.Permission.Camera }, 0);
                 return;
             }
 
-            if (UseARCore)
+            if (IsUsingARCore)
             {
                 if (_arSceneView?.Session == null)
                 {
@@ -273,7 +274,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _initialHeading = null;
             _orientationListener.Enable();
             _compassListener.Resume();
-            if (UseARCore)
+            if (IsUsingARCore)
             {
                 StartArCoreSession();
             }
@@ -281,7 +282,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnResetTracking()
         {
-            if (UseARCore)
+            if (IsUsingARCore)
             {
                 StartArCoreSession();
             }
@@ -310,7 +311,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private TransformationMatrix HitTest(Android.Graphics.PointF screenPoint)
         {
-            if (!UseARCore)
+            if (!IsUsingARCore)
                 throw new InvalidOperationException("HitTest not supported when ARCore is disabled");
             var frame = _arSceneView?.ArFrame;
             var camera = frame?.Camera;
@@ -332,7 +333,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             return null;
         }
 
-        #region ARCore Checkers/Install
+#region ARCore Checkers/Install
 
 
         private void CheckArCoreAvailability()
@@ -379,7 +380,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     }
                     else if (newValue == ArCoreApk.Availability.SupportedInstalled)
                     {
-                        UseARCore = true;
+                        IsUsingARCore = true;
                     }
                     else if (newValue == ArCoreApk.Availability.SupportedNotInstalled ||
                         newValue == ArCoreApk.Availability.SupportedApkTooOld)
@@ -388,10 +389,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     }
                     else
                     {
-                        UseARCore = false;
-                        //TODO: Once we support camera without ARCore, only switch to manual rendering if video feed is off
-                        IsManualRendering = false;
-                        RenderVideoFeed = false;
+                        IsUsingARCore = false;
                     }
                 }
             }
@@ -427,7 +425,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             return _checkArCoreJob;
         }
 
-        #endregion
+#endregion
     }
 }
 #endif

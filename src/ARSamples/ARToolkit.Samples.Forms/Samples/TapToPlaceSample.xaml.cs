@@ -46,7 +46,6 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 //Listend for double-tap to place
                 ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
                 ARView.RenderPlanes = true;
-                ARView.SceneOpacity = .5; // Render the scene slightly transparent until it's been placed (Note: Not supported on Android and will have no effect)
             }
             catch (System.Exception ex)
             {
@@ -59,7 +58,6 @@ namespace ARToolkit.SampleApp.Forms.Samples
             if (ARView.SetInitialTransformation(e.Position))
             {
                 //Scene placed successfully
-                ARView.SceneOpacity = 1;
             }
         }
 

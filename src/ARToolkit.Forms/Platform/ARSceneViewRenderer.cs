@@ -92,7 +92,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 ARControl.NorthAlign = elm.NorthAlign;
                 ARControl.LocationDataSource = elm.LocationDataSource;
                 SetPlaneRendering(elm.RenderPlanes);
-                SetSceneOpacity(elm.Opacity);
                 if (elm.OriginCamera != null)
                 {
                     ARControl.OriginCamera = elm.OriginCamera;
@@ -138,10 +137,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 ARControl.LocationDataSource = ARElement.LocationDataSource;
             }
-            else if (e.PropertyName == ARSceneView.OpacityProperty.PropertyName)
-            {
-                SetSceneOpacity(ARElement.Opacity);
-            }
         }
 
         private void SetPlaneRendering(bool on)
@@ -150,20 +145,9 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             ARControl.ArSceneView.PlaneRenderer.Enabled = on;
             ARControl.ArSceneView.PlaneRenderer.Visible = on;
 #elif __IOS__
-            ARControl.ARSCNView.DebugOptions = on ? ARKit.ARSCNDebugOptions.ShowFeaturePoints : SceneKit.SCNDebugOptions.None;
+            ARControl.RenderPlanes = true;
 #elif NETFX_CORE
             //Not supported on UWP
-#endif
-        }
-
-        private void SetSceneOpacity(double opacity)
-        {
-#if __ANDROID__
-            // ARControl.SceneAlpha = (float)opacity; //Not supported on Android
-#elif __IOS__
-            ARControl.SceneAlpha = (nfloat)opacity;
-#elif NETFX_CORE
-            ARControl.SceneOpacity = opacity;
 #endif
         }
 

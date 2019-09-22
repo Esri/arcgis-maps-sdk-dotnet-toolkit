@@ -275,8 +275,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 return null;
             }
-
-            return new Mapping.Camera(Camera.Transformation + matrix).Location;
+            var translatedMatrix = Mapping.TransformationMatrix.Create(
+                matrix.QuaternionX, matrix.QuaternionY, matrix.QuaternionZ, matrix.QuaternionW,
+                matrix.TranslationX * TranslationFactor, matrix.TranslationY * TranslationFactor, matrix.TranslationZ * TranslationFactor);
+            return new Mapping.Camera(OriginCamera.Transformation + translatedMatrix).Location;
         }
 
         /// <summary>

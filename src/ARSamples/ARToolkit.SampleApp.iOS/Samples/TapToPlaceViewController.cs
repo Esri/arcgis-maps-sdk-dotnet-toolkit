@@ -27,7 +27,6 @@ namespace ARToolkit.SampleApp.Samples
     public partial class TapToPlaceViewController : UIViewController
     {
         ARSceneView ARView;
-        UIView bg;
         UILabel lbl;
         
         public TapToPlaceViewController() : base()
@@ -68,7 +67,7 @@ namespace ARToolkit.SampleApp.Samples
             //Listend for double-tap to place
             ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
             ARView.NorthAlign = false;
-            ARView.ARSCNView.DebugOptions = ARSCNDebugOptions.ShowFeaturePoints;
+            ARView.RenderPlanes = true;
 
             UISwitch sw = new UISwitch() { TranslatesAutoresizingMaskIntoConstraints = false };
             sw.ValueChanged += Sw_ValueChanged;
@@ -84,7 +83,7 @@ namespace ARToolkit.SampleApp.Samples
         private void Sw_ValueChanged(object sender, EventArgs e)
         {
             var isOn = ((UISwitch)sender).On;
-            ARView.ARSCNView.DebugOptions = isOn ? ARSCNDebugOptions.ShowFeaturePoints : SceneKit.SCNDebugOptions.None;
+            ARView.RenderPlanes = isOn;
         }
 
         private void ArView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)

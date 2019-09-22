@@ -33,7 +33,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private MediaCapture _mediaCapture;
         private bool _isLoaded;
         private bool _isTracking;
-        private UIElement _sceneviewSurface;
 
         private void Initialize()
         {
@@ -49,11 +48,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             base.OnApplyTemplate();
             var elm = GetTemplateChild("MapSurface") as FrameworkElement;
-            _sceneviewSurface = elm;
-            if(elm != null)
-            {
-                elm.Opacity = _sceneOpacity;
-            }
 
             if (elm != null && elm.Parent is Panel parent)
             {
@@ -220,23 +214,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Note that the accuracy of the compass can heavily affect the quality of alignment.
         /// </remarks>
         public bool NorthAlign { get; set; } = true;
-
-        private double _sceneOpacity = 1;
-
-        /// <summary>
-        /// Gets or sets the opacity the <see cref="Scene" /> is rendered with. 
-        /// This is useful for making the scene slightly see-through while placing it.
-        /// </summary>
-        public double SceneOpacity
-        {
-            get => _sceneOpacity;
-            set
-            {
-                _sceneOpacity = value;
-                if(_sceneviewSurface != null)
-                    _sceneviewSurface.Opacity = value;
-            }
-        }
     }
 }
 #endif

@@ -80,15 +80,14 @@ namespace ARToolkit.SampleApp.Samples
             SetContentView(Resource.Layout.simplearview);
             return FindViewById<Esri.ArcGISRuntime.ARToolkit.ARSceneView>(Resource.Id.sceneView1);
         }
-        bool isSurfaceDetectionComplete;
+
         protected override void OnResume()
         {
             base.OnResume();
             try
             {
-                isSurfaceDetectionComplete = false;
                 _ = this.arView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
-                if (ARView.UseARCore)
+                if (ARView.IsUsingARCore)
                 {
                     //ShowLookingForSurfaces();
                 }
