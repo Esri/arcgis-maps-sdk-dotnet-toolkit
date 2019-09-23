@@ -47,6 +47,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private class OrientationListener : Android.Views.OrientationEventListener
         {
             private readonly Context _context;
+            private Android.Views.IWindowManager _windowManager;
             private UI.DeviceOrientation _currentOrientation = UI.DeviceOrientation.Portrait;
             
             public UI.DeviceOrientation CurrentOrientation
@@ -69,24 +70,35 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             public override void Enable()
             {
-                var windowManager = _context.GetSystemService(Context.WindowService).JavaCast<Android.Views.IWindowManager>();
-                CurrentOrientation = ToDeviceOrientation(((int?)windowManager?.DefaultDisplay?.Rotation) ?? 0);
+                _windowManager = _context.GetSystemService(Context.WindowService).JavaCast<Android.Views.IWindowManager>();
+                CurrentOrientation = ToDeviceOrientation(WindowOrientation);
                 base.Enable();
             }
 
-            public override void OnOrientationChanged(int orientation) => CurrentOrientation = ToDeviceOrientation(orientation);
+            public override void OnOrientationChanged(int orientation)
+            {
+                // We are ignoring the orientation value supplied by it as it doesn't
+                // reflect the orientation of the Window at all times. Instead we are making a call to the WindowManager to retrieve
+                // the orientation it reports.
+                CurrentOrientation = ToDeviceOrientation(WindowOrientation);
+            }
+            private Android.Views.SurfaceOrientation WindowOrientation
+            {
+                get => _windowManager?.DefaultDisplay?.Rotation ?? Android.Views.SurfaceOrientation.Rotation0;
+            }
 
-            private static UI.DeviceOrientation ToDeviceOrientation(int orientation)
+
+            private static UI.DeviceOrientation ToDeviceOrientation(Android.Views.SurfaceOrientation orientation)
             {
                 switch (orientation)
                 {
-                    case (int)Android.Views.SurfaceOrientation.Rotation90:
+                    case Android.Views.SurfaceOrientation.Rotation90:
                         return UI.DeviceOrientation.LandscapeRight;
-                    case (int)Android.Views.SurfaceOrientation.Rotation180:
+                    case Android.Views.SurfaceOrientation.Rotation180:
                         return UI.DeviceOrientation.ReversePortrait; 
-                    case (int)Android.Views.SurfaceOrientation.Rotation270:
+                    case Android.Views.SurfaceOrientation.Rotation270:
                         return UI.DeviceOrientation.LandscapeRight;
-                    case (int)Android.Views.SurfaceOrientation.Rotation0:
+                    case Android.Views.SurfaceOrientation.Rotation0:
                     default:
                         return UI.DeviceOrientation.Portrait;
                 }
