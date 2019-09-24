@@ -159,7 +159,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             if (_locationTrackingMode == ARLocationTrackingMode.Initial && !_initialLocationSet)
             {
                 // if location has altitude, use that else use a default value
-                var newCamera = new Mapping.Camera(locationPoint.X, locationPoint.Y, locationPoint.HasZ ? locationPoint.Z : 1, 0, 90, 0);
+                var newCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : 1, 0, 90, 0);
                 OriginCamera = newCamera;
                 _initialLocationSet = true;
             }
@@ -167,7 +167,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 var originCamera = OriginCamera;
                 // if location has altitude, use that else the previous value
-                OriginCamera = new Mapping.Camera(locationPoint.X, locationPoint.Y, locationPoint.HasZ ? locationPoint.Z : originCamera.Location.Z, originCamera.Heading, originCamera.Pitch, originCamera.Roll);
+                OriginCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : originCamera.Location.Z, originCamera.Heading, originCamera.Pitch, originCamera.Roll);
             }
             OnResetTracking();
             InitialTransformation = Mapping.TransformationMatrix.Identity;
