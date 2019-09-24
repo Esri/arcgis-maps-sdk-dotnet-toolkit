@@ -114,7 +114,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private CompassOrientationHelper _compassListener; //Used for getting heading, and orientation if ARCore is disabled
         private double? _initialHeading;
         private Android.Views.View _sceneviewSurface;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ARSceneView"/> class.
         /// </summary>
@@ -133,12 +132,15 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public ARSceneView(Context context, Android.Util.IAttributeSet attr)
             : base(context, attr)
         {
-            using (var style = context.Theme.ObtainStyledAttributes(attr, Resource.Styleable.ArcGISARSceneView, 0, 0))
-            {
-                RenderVideoFeed = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_renderVideoFeed, true);
-                NorthAlign = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_northAlign, true);
-            }
             InitializeCommon();
+            if (!IsDesignTime)
+            {
+                using (var style = context.Theme.ObtainStyledAttributes(attr, Resource.Styleable.ArcGISARSceneView, 0, 0))
+                {
+                    RenderVideoFeed = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_renderVideoFeed, true);
+                    NorthAlign = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_northAlign, true);
+                }
+            }
         }
 
         private bool IsDesignTime => IsInEditMode;
@@ -198,7 +200,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <inheritdoc />
         protected override void OnLayout(bool changed, int left, int top, int right, int bottom)
         {
-            _arSceneView.Layout(left, top, right, bottom);
+            if (!IsDesignTime)
+            {
+                _arSceneView.Layout(left, top, right, bottom);
+            }
             base.OnLayout(changed, left, top, right, bottom);
         }
 
