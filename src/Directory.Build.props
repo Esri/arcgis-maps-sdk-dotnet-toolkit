@@ -31,6 +31,7 @@
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+	<NetCoreTargetFramework>netcoreapp3.0</NetCoreTargetFramework>
 
     <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.6.0</ArcGISRuntimePackageVersion>
     <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.1.0.555618</XamarinFormsPackageVersion>

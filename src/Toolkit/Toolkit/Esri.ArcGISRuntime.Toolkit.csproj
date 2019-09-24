@@ -1,7 +1,7 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.41">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);netstandard2.0</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit</Title>
     <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP), Windows Presentation Foundation (WPF), Xamarin.Android, and Xamarin.iOS apps.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
@@ -18,12 +18,15 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'">
+    <UseWpf>true</UseWpf>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
@@ -50,6 +53,14 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)">
+      <ExcludeAssets>contentFiles;build</ExcludeAssets>
+      <IncludeAssets>compile</IncludeAssets>
+      <PrivateAssets></PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
@@ -100,5 +111,6 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'" />
 
 </Project>
