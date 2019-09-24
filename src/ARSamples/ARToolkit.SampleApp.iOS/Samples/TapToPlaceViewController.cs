@@ -45,9 +45,11 @@ namespace ARToolkit.SampleApp.Samples
             // Add the ARSceneView to the Subview
             View.AddSubview(ARView);
 
-            lbl = new UILabel();
-            lbl.Text = "Initializing...";
+            lbl = new UILabel() { TranslatesAutoresizingMaskIntoConstraints = false };
+            lbl.Text = "Move the device in a circular motion to detect surfaces...";
             View.AddSubview(lbl);
+            lbl.TopAnchor.ConstraintEqualTo(this.View.TopAnchor, 0).Active = true;
+            lbl.LeftAnchor.ConstraintEqualTo(this.View.LeftAnchor, 0).Active = true;
 
             var p = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             var path = System.IO.Path.Combine(p, "philadelphia.mspk");
@@ -77,7 +79,16 @@ namespace ARToolkit.SampleApp.Samples
             sw.WidthAnchor.ConstraintEqualTo(100);
             sw.HeightAnchor.ConstraintEqualTo(30);
 
+            ARView.PlanesDetectedChanged += ARView_PlanesDetectedChanged;
             _ = ARView.StartTrackingAsync();
+        }
+
+        private void ARView_PlanesDetectedChanged(object sender, bool planesDetected)
+        {
+            CoreFoundation.DispatchQueue.MainQueue.DispatchSync(() =>
+            {
+                lbl.Text = planesDetected ? "" : "Move the device in a circular motion to detect surfaces...";
+            });
         }
 
         private void Sw_ValueChanged(object sender, EventArgs e)

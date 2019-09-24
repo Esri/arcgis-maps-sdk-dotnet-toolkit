@@ -113,7 +113,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private UI.DeviceOrientation _screenOrientation;
         private CompassOrientationHelper _compassListener; //Used for getting heading, and orientation if ARCore is disabled
         private double? _initialHeading;
-        private Android.Views.View _sceneviewSurface;
+        private int _planesCount = 0;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ARSceneView"/> class.
         /// </summary>
@@ -156,8 +157,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _orientationListener.OrientationChanged += (s, orientation) => _screenOrientation = orientation;
             _compassListener = new CompassOrientationHelper(Context);
             _compassListener.OrientationChanged += OrientationHelper_OrientationChanged;
-
-            _sceneviewSurface = GetChildAt(0);
 
             _arSceneView = new Google.AR.Sceneform.ArSceneView(Context);
             AddViewInLayout(_arSceneView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
@@ -269,7 +268,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                 // ensure that OnUpdateListener is added on the UI thread to prevent threading issues with ARCore
                 Post(() => _arSceneView.Scene.AddOnUpdateListener(_updateListener));
-
                 _arSceneView.Resume();
             }
         }
@@ -283,6 +281,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 Post(() => _arSceneView.Scene.RemoveOnUpdateListener(_updateListener));
                 _arSceneView.Pause();
             }
+            if (_planesCount > 0)
+                PlanesDetectedChanged?.Invoke(this, false);
+            _planesCount = 0;
             _initialHeading = null;
         }
 
@@ -322,6 +323,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 if (IsManualRendering)
                 {
                     RenderFrame();
+                }
+
+                if(_planesCount == 0)
+                {
+                    _planesCount = _arSceneView?.Session?.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))).Count ?? 0;
+                    if (_planesCount > 0)
+                        RaisePlanesDetectedChanged(true);
                 }
             }
         }

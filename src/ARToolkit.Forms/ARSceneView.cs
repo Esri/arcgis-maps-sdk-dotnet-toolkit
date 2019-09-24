@@ -235,6 +235,16 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
             }
         }
 
+        /// <summary>
+        /// Raises an event indicating whether horizontal planes are currently detected or not
+        /// </summary>
+        public event EventHandler<bool> PlanesDetectedChanged;
+
+        internal void RaisePlanesDetectedChanged(bool planesDetected)
+        {
+            PlanesDetectedChanged?.Invoke(this, planesDetected);
+        }
+
 #if !NETSTANDARD
         private Esri.ArcGISRuntime.ARToolkit.ARSceneView NativeARSceneView()
         {

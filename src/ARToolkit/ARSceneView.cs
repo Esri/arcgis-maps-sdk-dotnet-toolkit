@@ -315,6 +315,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
             InitialTransformation = Mapping.TransformationMatrix.Identity - origin;
             return true;
         }
+
+        /// <summary>
+        /// Raises an event indicating whether horizontal planes are currently detected or not
+        /// </summary>
+        public event EventHandler<bool> PlanesDetectedChanged;
+
+        internal void RaisePlanesDetectedChanged(bool planesDetected)
+        {
+            PlanesDetectedChanged?.Invoke(this, planesDetected);
+        }
     }
 
 #endif

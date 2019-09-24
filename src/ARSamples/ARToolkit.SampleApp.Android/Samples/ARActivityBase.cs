@@ -37,6 +37,12 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             ARView = arView = SetContentView();
             arView.GeoViewTapped += ARView_GeoViewTapped;
+            ARView.PlanesDetectedChanged += ARView_PlanesDetectedChanged;
+        }
+
+        private void ARView_PlanesDetectedChanged(object sender, bool planesDetected)
+        {
+            OnPlanesDetected(planesDetected);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -89,7 +95,7 @@ namespace ARToolkit.SampleApp.Samples
                 _ = this.arView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
                 if (ARView.IsUsingARCore)
                 {
-                    //ShowLookingForSurfaces();
+                    OnPlanesDetected(false);
                 }
             }
             catch(System.Exception ex)
@@ -124,12 +130,12 @@ namespace ARToolkit.SampleApp.Samples
             });
         }
 
-        protected virtual void OnPlanesDetected()
+        protected virtual void OnPlanesDetected(bool detected)
         {
             this.RunOnUiThread(() =>
             {
                 var statusView = FindViewById<TextView>(Resource.Id.trackingStatus);
-                if(statusView != null) statusView.Visibility = ViewStates.Gone;
+                if(statusView != null) statusView.Visibility = detected ? ViewStates.Gone : ViewStates.Visible;
             });
         }
     }

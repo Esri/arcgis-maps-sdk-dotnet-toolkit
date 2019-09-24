@@ -197,6 +197,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 ARSCNView.Session.Pause();
                 ARSCNView.Session.Delegate = null;
+                if (ARSCNView.Delegate is ARDelegate ard)
+                {
+                    ard.OnStop();
+                }
             }
         }
 
@@ -298,7 +302,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     _renderPlanes = value;
                     if(ARSCNView.Delegate is ARDelegate ard)
                     {
-                        ard.TogglePlanes(value);
+                        ard.TogglePlanes(_renderPlanes);
                     }
                 }
             }
@@ -316,21 +320,22 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             public override void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
             {
-                if(_sceneView.RenderPlanes)
+                if (anchor is ARPlaneAnchor planeAnchor)
                 {
-                    if(anchor is ARPlaneAnchor planeAnchor)
-                    {
-                        var plane = new Plane(planeAnchor);
-                        _planes[planeAnchor.Identifier] = plane;
+                    var plane = new Plane(planeAnchor) { Hidden = !_sceneView.RenderPlanes };
+                    _planes[planeAnchor.Identifier] = plane;
                         node.AddChildNode(plane);
-                    }
+                    if (_planes.Count == 1)
+                        _sceneView?.RaisePlanesDetectedChanged(true);
                 }
-                _sceneView?.ARSCNViewDelegate?.DidAddNode(renderer, node, anchor);
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.DidAddNode(renderer, node, anchor);
             }
 
             public override void WillUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
             {
-                _sceneView?.ARSCNViewDelegate?.WillUpdateNode(renderer, node, anchor);
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.WillUpdateNode(renderer, node, anchor);
             }
 
             public override void DidUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
@@ -340,7 +345,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     var plane = _planes[anchor.Identifier];
                     plane.Update(planeAnchor);
                 }
-                _sceneView?.ARSCNViewDelegate?.DidUpdateNode(renderer, node, anchor);
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.DidUpdateNode(renderer, node, anchor);
             }
 
             public override void DidRemoveNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
@@ -348,15 +354,25 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 if (_sceneView.RenderPlanes && anchor is ARPlaneAnchor planeAnchor && _planes.ContainsKey(anchor.Identifier))
                 {
                     _planes.Remove(anchor.Identifier, out Plane plane);
+                    if (_planes.Count == 0)
+                        _sceneView?.RaisePlanesDetectedChanged(false);
                 }
-                _sceneView?.ARSCNViewDelegate?.DidRemoveNode(renderer, node, anchor);
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.DidRemoveNode(renderer, node, anchor);
             }
 
-            internal void TogglePlanes(bool value)
+            internal void OnStop()
+            {
+                if (_planes.Count > 0)
+                    _sceneView?.RaisePlanesDetectedChanged(false);
+                _planes.Clear();
+            }
+
+            internal void TogglePlanes(bool renderPlanes)
             {
                 foreach (var plane in _planes.Values.ToArray())
                 {
-                    plane.Hidden = value;
+                    plane.Hidden = !renderPlanes;
                 }
             }
 

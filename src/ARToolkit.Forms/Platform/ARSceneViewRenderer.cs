@@ -78,6 +78,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 if (ARControl != null) //This is null during dispose clean-up, but we already unsubscribed during dispose
                 {
                     ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
+                    ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
                 }
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StopTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "ResetTracking");
@@ -98,10 +99,16 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 }
                 elm.CameraController = ARControl.CameraController; //Ensure we use the native view's camera controller
                 ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
+                ARControl.PlanesDetectedChanged += ARControl_PlanesDetectedChanged;
                 MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl.ResetTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl.SetInitialTransformation(a), elm);
             }
+        }
+
+        private void ARControl_PlanesDetectedChanged(object sender, bool planesDetected)
+        {
+            ARElement?.RaisePlanesDetectedChanged(planesDetected);
         }
 
         private void ARControl_OriginCameraChanged(object sender, System.EventArgs e)
@@ -156,6 +163,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
         protected override void Dispose(bool disposing)
         {
             ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
+            ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
             ARControl.StopTracking();
             base.Dispose(disposing);
         }
