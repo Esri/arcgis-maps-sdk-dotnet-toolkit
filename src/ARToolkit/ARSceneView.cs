@@ -61,6 +61,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 SpaceEffect = UI.SpaceEffect.None;
                 AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
+                InitialTransformation = Mapping.TransformationMatrix.Identity;
                 _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 };
                 _controller.OriginCameraChanged += Controller_OriginCameraChanged;
                 LocationDataSource = new SystemLocationDataSource();
@@ -261,7 +262,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         /// <seealso cref="SetInitialTransformation(Mapping.TransformationMatrix)"/>
         /// <seealso cref="SetInitialTransformation(Point)"/>
-        public Mapping.TransformationMatrix InitialTransformation { get; private set; } = Mapping.TransformationMatrix.Identity;
+        public Mapping.TransformationMatrix InitialTransformation { get; private set; };
 
         /// <summary>
         /// Determines the map point for the given screen point hittesting any surface in the scene.
