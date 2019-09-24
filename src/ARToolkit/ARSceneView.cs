@@ -262,7 +262,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         /// <seealso cref="SetInitialTransformation(Mapping.TransformationMatrix)"/>
         /// <seealso cref="SetInitialTransformation(Point)"/>
-        public Mapping.TransformationMatrix InitialTransformation { get; private set; };
+        public Mapping.TransformationMatrix InitialTransformation { get; private set; }
 
         /// <summary>
         /// Determines the map point for the given screen point hittesting any surface in the scene.
