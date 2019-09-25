@@ -148,35 +148,38 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
         }
-
+        private object locationLock = new object();
         private void LocationDataSource_LocationChanged(object sender, Location.Location e)
         {
             if (_locationTrackingMode == ARLocationTrackingMode.Ignore)
                 return;
             if (e.IsLastKnown)
                 return;
-            var locationPoint = e.Position;
-            if (_locationTrackingMode == ARLocationTrackingMode.Initial || !_initialLocationSet)
+            lock (locationLock)
             {
-                // if location has altitude, use that else use a default value
-                var newCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : 1, 0, 90, 0);
-                OriginCamera = newCamera;
-                _initialLocationSet = true;
+                if (_locationTrackingMode == ARLocationTrackingMode.Initial && _initialLocationSet)
+                    return; //Can happen when location datasource is rapidly firing
+                var locationPoint = e.Position;
+                if (_locationTrackingMode == ARLocationTrackingMode.Initial || !_initialLocationSet)
+                {
+                    // if location has altitude, use that else use a default value
+                    var newCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : 1, 0, 90, 0);
+                    OriginCamera = newCamera;
+                    _initialLocationSet = true;
+                }
+                else if (_locationTrackingMode == ARLocationTrackingMode.Continuous)
+                {
+                    var originCamera = OriginCamera;
+                    // if location has altitude, use that else the previous value
+                    OriginCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : originCamera.Location.Z, originCamera.Heading, originCamera.Pitch, originCamera.Roll);
+                }
             }
-            else if (_locationTrackingMode == ARLocationTrackingMode.Continuous)
-            {
-                var originCamera = OriginCamera;
-                // if location has altitude, use that else the previous value
-                OriginCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : originCamera.Location.Z, originCamera.Heading, originCamera.Pitch, originCamera.Roll);
+            _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
+                if (_locationTrackingMode != ARLocationTrackingMode.Continuous)
+                {
+                    _ = LocationDataSource.StopAsync();
+                }
             }
-            if(IsTracking)
-                OnResetTracking();
-            InitialTransformation = Mapping.TransformationMatrix.Identity;
-            if (_locationTrackingMode != ARLocationTrackingMode.Continuous)
-            {
-                _ = LocationDataSource.StopAsync();
-            }
-        }
 
         /// <summary>
         /// Gets or sets translation factor used to support a table top AR experience.

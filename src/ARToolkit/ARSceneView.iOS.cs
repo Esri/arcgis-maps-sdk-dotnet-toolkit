@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _arConfiguration = new ARWorldTrackingConfiguration
             {
                 PlaneDetection = ARPlaneDetection.Horizontal,
-                WorldAlignment = ARWorldAlignment.Gravity,
+                WorldAlignment = ARWorldAlignment.GravityAndHeading,
                 LightEstimationEnabled = false
             };
 

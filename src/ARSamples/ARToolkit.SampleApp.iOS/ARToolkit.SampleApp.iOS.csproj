@@ -84,6 +84,14 @@
     <Compile Include="SamplesViewController.designer.cs">
       <DependentUpon>SamplesViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Samples\ManualCalibrationController.cs" />
+    <Compile Include="Samples\ManualCalibrationController.designer.cs">
+      <DependentUpon>ManualCalibrationController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\ContinousGPSController.cs" />
+    <Compile Include="Samples\ContinousGPSController.designer.cs">
+      <DependentUpon>ContinousGPSController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Samples\EarthViewController.cs" />
     <Compile Include="Samples\EarthViewController.designer.cs">
       <DependentUpon>EarthViewController.cs</DependentUpon>

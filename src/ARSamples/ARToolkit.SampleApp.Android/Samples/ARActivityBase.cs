@@ -87,12 +87,13 @@ namespace ARToolkit.SampleApp.Samples
             return FindViewById<Esri.ArcGISRuntime.ARToolkit.ARSceneView>(Resource.Id.sceneView1);
         }
 
+        protected Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode TrackingMode { get; set; } = Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore;
         protected override void OnResume()
         {
             base.OnResume();
             try
             {
-                _ = this.arView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+                _ = this.arView.StartTrackingAsync(TrackingMode);
                 if (ARView.IsUsingARCore)
                 {
                     OnPlanesDetected(false);
@@ -119,15 +120,6 @@ namespace ARToolkit.SampleApp.Samples
             {
                 Window.AddFlags(Android.Views.WindowManagerFlags.KeepScreenOn);
             }
-        }
-
-        private void ShowLookingForSurfaces()
-        {
-            this.RunOnUiThread(() =>
-            {
-                var statusView = FindViewById<TextView>(Resource.Id.trackingStatus);
-                if (statusView != null) statusView.Visibility = ViewStates.Visible;
-            });
         }
 
         protected virtual void OnPlanesDetected(bool detected)
