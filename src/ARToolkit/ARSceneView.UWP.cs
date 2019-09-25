@@ -48,6 +48,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             base.OnApplyTemplate();
             var elm = GetTemplateChild("MapSurface") as FrameworkElement;
+
             if (elm != null && elm.Parent is Panel parent)
             {
                 _cameraView = new CaptureElement()
@@ -89,6 +90,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _isTracking = false;
         }
 
+        private void OnResetTracking()
+        {
+        }
+
         private void ARSceneView_Loaded(object sender, RoutedEventArgs e)
         {
             _isLoaded = true;
@@ -100,7 +105,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void InitializeTracker()
         {
-            if(UseCompass)
+            if(NorthAlign)
             {
                 _sensor = OrientationSensor.GetDefault(SensorReadingType.Absolute, SensorOptimizationGoal.Precision);
             }
@@ -208,7 +213,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <remarks>
         /// Note that the accuracy of the compass can heavily affect the quality of alignment.
         /// </remarks>
-        public bool UseCompass { get; set; } = false;
+        public bool NorthAlign { get; set; } = true;
     }
 }
 #endif

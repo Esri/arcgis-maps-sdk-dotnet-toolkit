@@ -78,6 +78,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 if (ARControl != null) //This is null during dispose clean-up, but we already unsubscribed during dispose
                 {
                     ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
+                    ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
                 }
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "StopTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "ResetTracking");
@@ -89,22 +90,25 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                 var elm = (ARSceneView)e.NewElement;
                 ARControl.TranslationFactor = elm.TranslationFactor;
                 ARControl.RenderVideoFeed = elm.RenderVideoFeed;
-                ARControl.UseCompass = elm.UseCompass;
-#if __ANDROID__
-                ARControl.UseARCore = elm.UseCameraTracking;
-#elif __IOS__
-                ARControl.UseARKit = elm.UseCameraTracking;
-#endif
+                ARControl.NorthAlign = elm.NorthAlign;
+                ARControl.LocationDataSource = elm.LocationDataSource;
+                SetPlaneRendering(elm.RenderPlanes);
                 if (elm.OriginCamera != null)
                 {
                     ARControl.OriginCamera = elm.OriginCamera;
                 }
                 elm.CameraController = ARControl.CameraController; //Ensure we use the native view's camera controller
                 ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
+                ARControl.PlanesDetectedChanged += ARControl_PlanesDetectedChanged;
                 MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl.ResetTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl.SetInitialTransformation(a), elm);
             }
+        }
+
+        private void ARControl_PlanesDetectedChanged(object sender, bool planesDetected)
+        {
+            ARElement?.RaisePlanesDetectedChanged(planesDetected);
         }
 
         private void ARControl_OriginCameraChanged(object sender, System.EventArgs e)
@@ -128,24 +132,38 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 ARControl.RenderVideoFeed = ARElement.RenderVideoFeed;
             }
-            else if (e.PropertyName == ARSceneView.UseCompassProperty.PropertyName)
+            else if (e.PropertyName == ARSceneView.NorthAlignProperty.PropertyName)
             {
-                ARControl.UseCompass = ARElement.UseCompass;
+                ARControl.NorthAlign = ARElement.NorthAlign;
             }
-            else if (e.PropertyName == ARSceneView.UseCameraTrackingProperty.PropertyName)
+            else if (e.PropertyName == ARSceneView.RenderPlanesProperty.PropertyName)
             {
-#if __ANDROID__
-                ARControl.UseARCore = ARElement.UseCameraTracking;
-#elif __IOS__
-                ARControl.UseARKit = ARElement.UseCameraTracking;
-#endif
+                SetPlaneRendering(ARElement.RenderPlanes);
+            }
+            else if (e.PropertyName == ARSceneView.LocationDataSourceProperty.PropertyName)
+            {
+                ARControl.LocationDataSource = ARElement.LocationDataSource;
             }
         }
+
+        private void SetPlaneRendering(bool on)
+        {
+#if __ANDROID__
+            ARControl.ArSceneView.PlaneRenderer.Enabled = on;
+            ARControl.ArSceneView.PlaneRenderer.Visible = on;
+#elif __IOS__
+            ARControl.RenderPlanes = true;
+#elif NETFX_CORE
+            //Not supported on UWP
+#endif
+        }
+
 
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
+            ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
             ARControl.StopTracking();
             base.Dispose(disposing);
         }

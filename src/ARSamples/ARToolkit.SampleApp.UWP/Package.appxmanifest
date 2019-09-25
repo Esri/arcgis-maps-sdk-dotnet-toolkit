@@ -15,7 +15,7 @@
 
   <Properties>
     <DisplayName>ARToolkit.SampleApp</DisplayName>
-    <PublisherDisplayName>mort5161</PublisherDisplayName>
+    <PublisherDisplayName>ESRI Inc.</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

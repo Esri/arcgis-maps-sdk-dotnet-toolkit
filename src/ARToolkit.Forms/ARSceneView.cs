@@ -96,10 +96,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="UseCompass"/> bindable property.
+        /// Identifies the <see cref="NorthAlign"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty UseCompassProperty =
-            BindableProperty.Create(nameof(UseCompass), typeof(bool), typeof(ARSceneView), false, BindingMode.TwoWay, null);
+        public static readonly BindableProperty NorthAlignProperty =
+            BindableProperty.Create(nameof(NorthAlign), typeof(bool), typeof(ARSceneView), false, BindingMode.TwoWay, null);
 
         /// <summary>
         /// Gets or sets a value indicating whether the scene should attempt to use the device compass to align the scene towards north.
@@ -107,42 +107,52 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// <remarks>
         /// Note that the accuracy of the compass can heavily affect the quality of alignment.
         /// </remarks>
-        public bool UseCompass
+        public bool NorthAlign
         {
-            get { return (bool)GetValue(UseCompassProperty); }
-            set { SetValue(UseCompassProperty, value); }
+            get { return (bool)GetValue(NorthAlignProperty); }
+            set { SetValue(NorthAlignProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="UseCameraTracking"/> bindable property.
+        /// Identifies the <see cref="RenderPlanes"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty UseCameraTrackingProperty =
-            BindableProperty.Create(nameof(UseCameraTracking), typeof(bool), typeof(ARSceneView), true, BindingMode.TwoWay, null);
+        public static readonly BindableProperty RenderPlanesProperty =
+            BindableProperty.Create(nameof(RenderPlanes), typeof(bool), typeof(ARSceneView), false, BindingMode.TwoWay, null);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the camera should be used for device movement tracking by for instance utilizing ARCore on Android, or ARKit on iOS.
+        /// Gets or sets a value indicating whether to render planes that's been detected
         /// </summary>
-        /// <remarks>
-        /// This value should be set prior to starting to track, and disabled if the device doesn't support 
-        /// ARCore / 6-degrees of freedom tracking (see <see cref="SupportLevel"/>).
-        /// </remarks>
-        /// <seealso cref="SupportLevel"/>
-
-        public bool UseCameraTracking
+        public bool RenderPlanes
         {
-            get { return (bool)GetValue(UseCameraTrackingProperty); }
-            set { SetValue(UseCameraTrackingProperty, value); }
+            get { return (bool)GetValue(RenderPlanesProperty); }
+            set { SetValue(RenderPlanesProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="LocationDataSource"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty LocationDataSourceProperty =
+            BindableProperty.Create(nameof(LocationDataSource), typeof(LocationDataSource), typeof(ARSceneView), null, BindingMode.TwoWay, null);
+
+        /// <summary>
+        /// The data source used to get device location.
+        /// Used either in conjuction with device camera tracking data or when device camera tracking is not present or not being used.
+        /// </summary>
+        public LocationDataSource LocationDataSource
+        {
+            get { return (LocationDataSource)GetValue(LocationDataSourceProperty); }
+            set { SetValue(LocationDataSourceProperty, value); }
         }
 
         /// <summary>
         /// Starts device tracking.
         /// </summary>
-        public System.Threading.Tasks.Task StartTrackingAsync()
+        public System.Threading.Tasks.Task StartTrackingAsync(ARLocationTrackingMode locationTrackingMode = ARLocationTrackingMode.Ignore)
         {
 #if !NETSTANDARD2_0
             if (NativeARSceneView() == null)
                 throw new InvalidOperationException("Cannot start tracking before the view has appeared");
-            return NativeARSceneView().StartTrackingAsync();
+            return NativeARSceneView().StartTrackingAsync(locationTrackingMode);
 #else
             throw new PlatformNotSupportedException();
 #endif
@@ -225,6 +235,16 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
             }
         }
 
+        /// <summary>
+        /// Raises an event indicating whether horizontal planes are currently detected or not
+        /// </summary>
+        public event EventHandler<bool> PlanesDetectedChanged;
+
+        internal void RaisePlanesDetectedChanged(bool planesDetected)
+        {
+            PlanesDetectedChanged?.Invoke(this, planesDetected);
+        }
+
 #if !NETSTANDARD
         private Esri.ArcGISRuntime.ARToolkit.ARSceneView NativeARSceneView()
         {
@@ -282,16 +302,5 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
             }
         }
 #endif
-        public static DeviceSupport SupportLevel
-        {
-            get
-            {
-#if !NETSTANDARD2_0
-                return Esri.ArcGISRuntime.ARToolkit.ARSceneView.SupportLevel;
-#else
-                return DeviceSupport.NotSupported;
-#endif
-            }
-        }
     }
 }

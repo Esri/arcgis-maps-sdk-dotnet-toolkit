@@ -20,8 +20,8 @@
     <Compile Update="Samples\LookAroundSample.xaml.cs">
       <DependentUpon>LookAroundSample.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Samples\FullScaleARSample.xaml.cs">
-      <DependentUpon>FullScaleARSample.xaml</DependentUpon>
+    <Compile Update="Samples\ContinuousGPSSample.xaml.cs">
+      <DependentUpon>ContinuousGPSSample.xaml</DependentUpon>
     </Compile>
     <Compile Update="Samples\TapToPlaceSample.xaml.cs">
       <DependentUpon>TapToPlaceSample.xaml</DependentUpon>

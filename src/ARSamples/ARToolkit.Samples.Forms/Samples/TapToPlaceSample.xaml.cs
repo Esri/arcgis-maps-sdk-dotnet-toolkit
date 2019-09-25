@@ -45,6 +45,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 ARView.SetInitialTransformation(TransformationMatrix.Create(0, 0, 0, 1, 0, .5, 1.5));
                 //Listend for double-tap to place
                 ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
+                ARView.RenderPlanes = true;
             }
             catch (System.Exception ex)
             {
@@ -63,7 +64,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ARView.StartTrackingAsync();
+            ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
         }
 
         protected override void OnDisappearing()

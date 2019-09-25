@@ -16,6 +16,7 @@
 
 #if __IOS__
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ARKit;
 using CoreMedia;
@@ -23,6 +24,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using Foundation;
+using SceneKit;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.ARToolkit
@@ -30,66 +32,67 @@ namespace Esri.ArcGISRuntime.ARToolkit
     public partial class ARSceneView : SceneView
     {
         private bool _created;
-        private ARSCNView _arview;
         private ArSessionDel _delegate;
 
         private void Initialize()
         {
             _delegate = new ArSessionDel(this);
-            IsManualRendering = true;
-
+            
             // Each session has to be configured.
             //  We will use ARWorldTrackingConfiguration to have full access to device orientation,
             // rear camera, device position and to detect real-world flat surfaces:
             _arConfiguration = new ARWorldTrackingConfiguration
             {
                 PlaneDetection = ARPlaneDetection.Horizontal,
-                WorldAlignment = ARWorldAlignment.Gravity,
+                WorldAlignment = ARWorldAlignment.GravityAndHeading,
                 LightEstimationEnabled = false
             };
 
-            _arview = new ARSCNView() { TranslatesAutoresizingMaskIntoConstraints = false };
-            _delegate.FrameUpdated += FrameUpdated;
-            _delegate.CameraTrackingStateChanged += CameraTrackingStateChanged;
+            if (DeviceSupportsARKit)
+            {
+                ARSCNView = new ARSCNView() { TranslatesAutoresizingMaskIntoConstraints = false };
+                ARSCNView.Delegate = new ARDelegate(this);
+                _delegate.FrameUpdated += FrameUpdated;
+                _delegate.CameraTrackingStateChanged += CameraTrackingStateChanged;
+            }
+            IsUsingARKit = DeviceSupportsARKit;
+            // Tell the SceneView we will be calling `RenderFrame()` manually if we're using ARKit.
+            IsManualRendering = IsUsingARKit;
         }
 
         /// <summary>
         /// Gets a reference to the ARKit SceneView child control
         /// </summary>
-        public ARSCNView ARSCNView
-        {
-            get => _arview;
-        }
+        public ARSCNView ARSCNView { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether ARKit should be used for tracking the device movements
+        /// Gets a value indicating whether ARKit should be used for tracking the device movements
         /// </summary>
-        /// <remarks>
-        /// This value should be set prior to starting to track, and disabled if the device doesn't support 
-        /// ARCore / 6-degrees of freedom tracking (see <see cref="SupportLevel"/>).
-        /// </remarks>
-        /// <seealso cref="SupportLevel"/>
-        public bool UseARKit { get; set; }
+        public bool IsUsingARKit { get; private set; }
 
         /// <inheritdoc />
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
             if (!_created)
-            {	
-                Subviews[0].BackgroundColor = UIColor.Clear;
+            {
+                var sceneviewSurface = Subviews[0];
+                sceneviewSurface.BackgroundColor = UIColor.Clear;
 
                 _created = true;
-                InsertSubview(_arview, 0);
-                _arview.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
-                _arview.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
-                _arview.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
-                _arview.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
+                if (DeviceSupportsARKit)
+                {
+                    InsertSubview(ARSCNView, 0);
+                    ARSCNView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
+                    ARSCNView.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
+                    ARSCNView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
+                    ARSCNView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
+                }
             }
 
             if (_isStarted)
             {
-                StartTrackingAsync();
+                OnStartTracking();
             }
         }
 
@@ -140,7 +143,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             if (_tracking)
             {
-                var pov = _arview.PointOfView;
+                var pov = ARSCNView.PointOfView;
                 if (pov != null)
                 {
                     var c = Camera;
@@ -179,17 +182,34 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void OnStartTracking()
         {
             _isStarted = true;
-
-            // Once we have our configuration we need to run session with it.
-            // ResetTracking will just reset tracking by session to start it again from scratch:
-            _arview.Session.Delegate = _delegate;
-            _arview.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
+            if (IsUsingARKit)
+            {
+                // Once we have our configuration we need to run session with it.
+                // ResetTracking will just reset tracking by session to start it again from scratch:
+                ARSCNView.Session.Delegate = _delegate;
+                ARSCNView.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
+            }
         }
 
         private void OnStopTracking()
         {
-            _arview.Session.Pause();
-            _arview.Session.Delegate = null;
+            if (IsUsingARKit)
+            {
+                ARSCNView.Session.Pause();
+                ARSCNView.Session.Delegate = null;
+                if (ARSCNView.Delegate is ARDelegate ard)
+                {
+                    ard.OnStop();
+                }
+            }
+        }
+
+        private void OnResetTracking()
+        {
+            if (IsUsingARKit)
+            {
+                ARSCNView.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking | ARSessionRunOptions.RemoveExistingAnchors);
+            }
         }
 
         private ARConfiguration _arConfiguration;
@@ -210,15 +230,15 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 if (value != _arConfiguration)
                 {
                     _arConfiguration = value;
-                    if (IsTracking)
+                    if (IsTracking && IsUsingARKit)
                     {
-                        ResetTracking();
+                        ARSCNView.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
                     }
                 }
             }
         }
 
-        private bool useCompass;
+        private bool _northAlign = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether the scene should attempt to the device compass to align the scene towards north
@@ -227,23 +247,31 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Note that the accuracy of the compass can heavily affect the quality of alignment.
         /// The property updates the WorldAlignment property on the ARWorldTrackingConfiguration to either GravityAndHeading or Gravity.
         /// </remarks>.
-        public bool UseCompass
+        public bool NorthAlign
         {
-            get { return useCompass; }
+            get { return _northAlign; }
             set
             {
-                useCompass = value;
-                if(ARConfiguration is ARWorldTrackingConfiguration w)
+                if (_northAlign != value)
                 {
-                    w.WorldAlignment = value ? ARWorldAlignment.GravityAndHeading : ARWorldAlignment.Gravity;
+                    _northAlign = value;
+                    if (ARConfiguration is ARWorldTrackingConfiguration w)
+                    {
+                        w.WorldAlignment = value ? ARWorldAlignment.GravityAndHeading : ARWorldAlignment.Gravity;
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// We implement <see cref="ARKit.ARSCNViewDelegate"/> methods, but will use <see cref="ARSCNViewDelegate"/> to
+        /// forward them to clients.
+        /// </summary>
+        public ARSCNViewDelegate ARSCNViewDelegate { get; set; }
 
         private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
         {
-            var hit = _arview.HitTest(screenPoint, type);
+            var hit = ARSCNView.HitTest(screenPoint, type);
             // Get the worldTransform from the first result; if there's no worldTransform, return null.
             var t = hit?.FirstOrDefault()?.WorldTransform;
             if (t != null)
@@ -252,6 +280,130 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
 
             return null;
+        }
+
+        private static bool DeviceSupportsARKit => ARWorldTrackingConfiguration.IsSupported;
+
+        private bool _renderPlanes;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to render the detected horizontal planes using a default simple rendering
+        /// </summary>
+        /// <remarks>
+        /// You can also render your own planes using the <see cref="ARSCNViewDelegate"/> delegate.
+        /// </remarks>
+        public bool RenderPlanes
+        {
+            get => _renderPlanes;
+            set
+            {
+                if (_renderPlanes != value)
+                {
+                    _renderPlanes = value;
+                    if(ARSCNView.Delegate is ARDelegate ard)
+                    {
+                        ard.TogglePlanes(_renderPlanes);
+                    }
+                }
+            }
+        }
+
+        private class ARDelegate : ARSCNViewDelegate
+        {
+            private ARSceneView _sceneView;
+            private Dictionary<NSUuid, Plane> _planes = new Dictionary<NSUuid, Plane>();
+
+            public ARDelegate(ARSceneView sceneView)
+            {
+                _sceneView = sceneView;
+            }
+
+            public override void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
+            {
+                if (anchor is ARPlaneAnchor planeAnchor)
+                {
+                    var plane = new Plane(planeAnchor) { Hidden = !_sceneView.RenderPlanes };
+                    _planes[planeAnchor.Identifier] = plane;
+                        node.AddChildNode(plane);
+                    if (_planes.Count == 1)
+                        _sceneView?.RaisePlanesDetectedChanged(true);
+                }
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.DidAddNode(renderer, node, anchor);
+            }
+
+            public override void WillUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
+            {
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.WillUpdateNode(renderer, node, anchor);
+            }
+
+            public override void DidUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
+            {
+                if (_sceneView.RenderPlanes && anchor is ARPlaneAnchor planeAnchor && _planes.ContainsKey(anchor.Identifier))
+                {
+                    var plane = _planes[anchor.Identifier];
+                    plane.Update(planeAnchor);
+                }
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.DidUpdateNode(renderer, node, anchor);
+            }
+
+            public override void DidRemoveNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
+            {
+                if (_sceneView.RenderPlanes && anchor is ARPlaneAnchor planeAnchor && _planes.ContainsKey(anchor.Identifier))
+                {
+                    _planes.Remove(anchor.Identifier, out Plane plane);
+                    if (_planes.Count == 0)
+                        _sceneView?.RaisePlanesDetectedChanged(false);
+                }
+                if (_sceneView.ARSCNViewDelegate != null)
+                    _sceneView?.ARSCNViewDelegate?.DidRemoveNode(renderer, node, anchor);
+            }
+
+            internal void OnStop()
+            {
+                if (_planes.Count > 0)
+                    _sceneView?.RaisePlanesDetectedChanged(false);
+                _planes.Clear();
+            }
+
+            internal void TogglePlanes(bool renderPlanes)
+            {
+                foreach (var plane in _planes.Values.ToArray())
+                {
+                    plane.Hidden = !renderPlanes;
+                }
+            }
+
+            private class Plane : SCNNode
+            {
+                private SCNNode node;
+                private SCNPlane planeGeometry;
+                public Plane(ARPlaneAnchor anchor)
+                {
+                    planeGeometry = new SCNPlane() { Width = anchor.Extent.X, Height = anchor.Extent.Z };
+                    node = new SCNNode() { Geometry = planeGeometry };
+                    node.Position = new SCNVector3(anchor.Center.X, anchor.Center.Y, anchor.Center.Z);
+                    // `SCNPlane` is vertically oriented in its local coordinate space, so
+                    // rotate it to match the orientation of `ARPlaneAnchor`.
+                    node.EulerAngles = new SCNVector3((float)(node.EulerAngles.X - Math.PI / 2), node.EulerAngles.Y, node.EulerAngles.Z);
+                    node.Opacity = .6f;
+                    var material = node.Geometry?.FirstMaterial;
+                    UIImage img = UIImage.FromResource(typeof(Plane).Assembly, "Esri.ArcGISRuntime.ARToolkit.GridDot.png");
+                    material.Diffuse.Contents = img;
+                    material.Diffuse.ContentsTransform = SCNMatrix4.Scale(32, 32, 0);
+                    material.Diffuse.WrapS = SCNWrapMode.Repeat;
+                    material.Diffuse.WrapT = SCNWrapMode.Repeat;
+                    AddChildNode(node);
+                }
+
+                public void Update(ARPlaneAnchor anchor)
+                {
+                    planeGeometry.Width = anchor.Extent.X;
+                    planeGeometry.Height = anchor.Extent.Z;
+                }
+            }
         }
 
         private class ArSessionDel : ARSessionDelegate
@@ -266,7 +418,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera) => CameraTrackingStateChanged?.Invoke(session, camera);
 
             public override void DidUpdateFrame(ARSession session, ARFrame frame)
-            {
+            {   
                 FrameUpdated?.Invoke(this, frame);
                 frame.Dispose(); // Must dispose frame after this. See https://xamarin.github.io/bugzilla-archives/60/60393/bug.html
             }
@@ -308,6 +460,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             public event EventHandler<ARCamera> CameraTrackingStateChanged;
         }
+
     }
 }
 #endif

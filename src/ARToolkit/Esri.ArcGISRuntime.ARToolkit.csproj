@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.43">
   
   <PropertyGroup>
     <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
@@ -30,12 +30,23 @@
   <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
+ 
+
+  <ItemGroup>
+    <None Remove="Resources\**\*.*" />
+  </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
-    <PackageReference Include="Xamarin.Google.ARCore" Version="1.9.0" />
+    <PackageReference Include="Xamarin.Google.ARCore" Version="1.11.0" />
+    <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
+    <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.11.0" />
     <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.1" />
-    <AndroidResource Include="Resources\**\*.*" />
+
+    <AndroidResource Include="Resources\**\*.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
@@ -47,9 +58,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="GridDot.png" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+    <EmbeddedResource Include="GridDot.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="ARSceneView.*.cs">
       <DependentUpon>ARSceneView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
+   <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
+    <ItemGroup>
+      <_FakeOutputPath Include="$(OutputPath)\$(AssemblyName).dll" />
+    </ItemGroup>
+  </Target>
 </Project>

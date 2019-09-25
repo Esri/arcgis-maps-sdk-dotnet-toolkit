@@ -27,7 +27,6 @@ namespace ARToolkit.SampleApp.Samples
     public partial class TapToPlaceViewController : UIViewController
     {
         ARSceneView ARView;
-        UIView bg;
         UILabel lbl;
         
         public TapToPlaceViewController() : base()
@@ -46,9 +45,11 @@ namespace ARToolkit.SampleApp.Samples
             // Add the ARSceneView to the Subview
             View.AddSubview(ARView);
 
-            lbl = new UILabel();
-            lbl.Text = "Initializing...";
+            lbl = new UILabel() { TranslatesAutoresizingMaskIntoConstraints = false };
+            lbl.Text = "Move the device in a circular motion to detect surfaces...";
             View.AddSubview(lbl);
+            lbl.TopAnchor.ConstraintEqualTo(this.View.TopAnchor, 0).Active = true;
+            lbl.LeftAnchor.ConstraintEqualTo(this.View.LeftAnchor, 0).Active = true;
 
             var p = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             var path = System.IO.Path.Combine(p, "philadelphia.mspk");
@@ -67,8 +68,8 @@ namespace ARToolkit.SampleApp.Samples
             ARView.SetInitialTransformation(TransformationMatrix.Create(0, 0, 0, 1, 0, .5, 1.5));
             //Listend for double-tap to place
             ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
-
-            ARView.ARSCNView.DebugOptions = ARSCNDebugOptions.ShowFeaturePoints;
+            ARView.NorthAlign = false;
+            ARView.RenderPlanes = true;
 
             UISwitch sw = new UISwitch() { TranslatesAutoresizingMaskIntoConstraints = false };
             sw.ValueChanged += Sw_ValueChanged;
@@ -78,13 +79,22 @@ namespace ARToolkit.SampleApp.Samples
             sw.WidthAnchor.ConstraintEqualTo(100);
             sw.HeightAnchor.ConstraintEqualTo(30);
 
+            ARView.PlanesDetectedChanged += ARView_PlanesDetectedChanged;
             _ = ARView.StartTrackingAsync();
+        }
+
+        private void ARView_PlanesDetectedChanged(object sender, bool planesDetected)
+        {
+            CoreFoundation.DispatchQueue.MainQueue.DispatchSync(() =>
+            {
+                lbl.Text = planesDetected ? "" : "Move the device in a circular motion to detect surfaces...";
+            });
         }
 
         private void Sw_ValueChanged(object sender, EventArgs e)
         {
             var isOn = ((UISwitch)sender).On;
-            ARView.ARSCNView.DebugOptions = isOn ? ARSCNDebugOptions.ShowFeaturePoints : SceneKit.SCNDebugOptions.None;
+            ARView.RenderPlanes = isOn;
         }
 
         private void ArView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)

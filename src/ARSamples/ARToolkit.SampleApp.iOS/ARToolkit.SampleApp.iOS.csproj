@@ -53,7 +53,7 @@
     <MtouchArch>ARM64</MtouchArch>
     <CodesignEntitlements>
     </CodesignEntitlements>
-    <CodesignKey>iPhone Developer: Morten Nielsen (H3C94A9V4R)</CodesignKey>
+    <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignProvision>.NET Dev Demo</CodesignProvision>
     <CodesignExtraArgs />
@@ -83,6 +83,14 @@
     <Compile Include="SamplesViewController.cs" />
     <Compile Include="SamplesViewController.designer.cs">
       <DependentUpon>SamplesViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\ManualCalibrationController.cs" />
+    <Compile Include="Samples\ManualCalibrationController.designer.cs">
+      <DependentUpon>ManualCalibrationController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\ContinousGPSController.cs" />
+    <Compile Include="Samples\ContinousGPSController.designer.cs">
+      <DependentUpon>ContinousGPSController.cs</DependentUpon>
     </Compile>
     <Compile Include="Samples\EarthViewController.cs" />
     <Compile Include="Samples\EarthViewController.designer.cs">

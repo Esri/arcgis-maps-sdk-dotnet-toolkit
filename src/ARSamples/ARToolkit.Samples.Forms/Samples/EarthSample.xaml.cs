@@ -28,7 +28,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 var scene = new Scene(Basemap.CreateImagery());
                 scene.BaseSurface = new Surface();
                 scene.BaseSurface.BackgroundGrid.IsVisible = false;
-                scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+                scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
                 scene.BaseSurface.ElevationExaggeration = 10;
                 scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
                 ARView.TranslationFactor = 100000000;

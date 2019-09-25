@@ -37,7 +37,12 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             ARView = arView = SetContentView();
             arView.GeoViewTapped += ARView_GeoViewTapped;
-            ARView.DrawBegin += ARView_DrawBegin;
+            ARView.PlanesDetectedChanged += ARView_PlanesDetectedChanged;
+        }
+
+        private void ARView_PlanesDetectedChanged(object sender, bool planesDetected)
+        {
+            OnPlanesDetected(planesDetected);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -62,49 +67,9 @@ namespace ARToolkit.SampleApp.Samples
 
         protected void ToggleRenderPlanes(bool turnOn)
         {
+            ARView.ArSceneView.PlaneRenderer.Enabled = turnOn;
+            ARView.ArSceneView.PlaneRenderer.Visible = turnOn;
             renderPlanes = turnOn;
-        }
-
-        private Renderers.PlaneRenderer pr = null;
-
-        private void ARView_DrawBegin(object sender, Esri.ArcGISRuntime.ARToolkit.DrawEventArgs e)
-        {
-            if (!ARView.UseARCore) return;
-            bool planesDetected = false;
-            if (renderPlanes)
-            {
-                // Use a custom renderer to render the planes
-                // prior to rendering the scene
-                if (pr == null)
-                {
-                    pr = new Renderers.PlaneRenderer();
-                    pr.CreateOnGlThread(/*context=*/this, "trigrid.png");
-                }
-                var camera = e.Frame.Camera;
-                float[] projmtx = new float[16];
-                camera.GetProjectionMatrix(projmtx, 0, 0.1f, 100.0f);
-                var planes = new List<Plane>();
-                foreach (var p in e.Session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))))
-                {
-                    var plane = (Plane)p;
-                    if(plane.TrackingState == TrackingState.Tracking)
-                        planes.Add(plane);
-                }
-                if (planes.Count > 0)
-                {
-                    pr.DrawPlanes(planes, camera.DisplayOrientedPose, projmtx);
-                    planesDetected = true;
-                }
-            }
-            else if(!isSurfaceDetectionComplete)
-            {
-                planesDetected = e.Session.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))).OfType<Plane>().Where(p => p.TrackingState == TrackingState.Tracking).Any();
-            }
-            if (!isSurfaceDetectionComplete && planesDetected)
-            {
-                OnPlanesDetected();
-                isSurfaceDetectionComplete = true;
-            }
         }
 
         private async void ARView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
@@ -121,17 +86,17 @@ namespace ARToolkit.SampleApp.Samples
             SetContentView(Resource.Layout.simplearview);
             return FindViewById<Esri.ArcGISRuntime.ARToolkit.ARSceneView>(Resource.Id.sceneView1);
         }
-        bool isSurfaceDetectionComplete;
+
+        protected Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode TrackingMode { get; set; } = Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore;
         protected override void OnResume()
         {
             base.OnResume();
             try
             {
-                isSurfaceDetectionComplete = false;
-                this.arView.StartTrackingAsync();
-                if(ARView.UseARCore)
+                _ = this.arView.StartTrackingAsync(TrackingMode);
+                if (ARView.IsUsingARCore)
                 {
-                    ShowLookingForSurfaces();
+                    OnPlanesDetected(false);
                 }
             }
             catch(System.Exception ex)
@@ -157,21 +122,12 @@ namespace ARToolkit.SampleApp.Samples
             }
         }
 
-        private void ShowLookingForSurfaces()
+        protected virtual void OnPlanesDetected(bool detected)
         {
             this.RunOnUiThread(() =>
             {
                 var statusView = FindViewById<TextView>(Resource.Id.trackingStatus);
-                if (statusView != null) statusView.Visibility = ViewStates.Visible;
-            });
-        }
-
-        protected virtual void OnPlanesDetected()
-        {
-            this.RunOnUiThread(() =>
-            {
-                var statusView = FindViewById<TextView>(Resource.Id.trackingStatus);
-                if(statusView != null) statusView.Visibility = ViewStates.Gone;
+                if(statusView != null) statusView.Visibility = detected ? ViewStates.Gone : ViewStates.Visible;
             });
         }
     }
