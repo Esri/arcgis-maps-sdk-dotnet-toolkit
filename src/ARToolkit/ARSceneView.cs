@@ -156,7 +156,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             if (e.IsLastKnown)
                 return;
             var locationPoint = e.Position;
-            if (_locationTrackingMode == ARLocationTrackingMode.Initial && !_initialLocationSet)
+            if (_locationTrackingMode == ARLocationTrackingMode.Initial || !_initialLocationSet)
             {
                 // if location has altitude, use that else use a default value
                 var newCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : 1, 0, 90, 0);
