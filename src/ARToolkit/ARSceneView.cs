@@ -169,7 +169,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 // if location has altitude, use that else the previous value
                 OriginCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : originCamera.Location.Z, originCamera.Heading, originCamera.Pitch, originCamera.Roll);
             }
-            OnResetTracking();
+            if(IsTracking)
+                OnResetTracking();
             InitialTransformation = Mapping.TransformationMatrix.Identity;
             if (_locationTrackingMode != ARLocationTrackingMode.Continuous)
             {
