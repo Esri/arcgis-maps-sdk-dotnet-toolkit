@@ -20,12 +20,6 @@
         android:layout_centerHorizontal="true"
         android:background="#ffffdede">
         <Button
-            android:onClick="btnGpsClick"
-            android:minWidth="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="GPS"/>
-        <Button
             android:onClick="btnSurfaceClick"
             android:minWidth="10dp"
             android:layout_width="wrap_content"

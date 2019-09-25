@@ -68,8 +68,8 @@
     <Compile Include="SampleScreenAdapter.cs" />
     <Compile Include="Samples\ARActivityBase.cs" />
     <Compile Include="Samples\LookAroundSample.cs" />
-    <Compile Include="Samples\ManualCalibration.cs" />
-    <Compile Include="Samples\FullScaleAR.cs" />
+    <Compile Include="Samples\ManualCalibrationSample.cs" />
+    <Compile Include="Samples\ContinuousGPSSample.cs" />
     <Compile Include="Samples\EarthSample.cs" />
     <Compile Include="Samples\TapToPlaceSample.cs" />
     <Compile Include="Utilities.cs" />
@@ -161,6 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\raw\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\fullscalear.xml" />
   </ItemGroup>
   <Import Project="..\SampleHelpers\SampleHelpers.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

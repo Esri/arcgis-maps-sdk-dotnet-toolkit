@@ -58,8 +58,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="GridDot.png" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+    <EmbeddedResource Include="GridDot.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="ARSceneView.*.cs">
       <DependentUpon>ARSceneView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
+
+   <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
+    <ItemGroup>
+      <_FakeOutputPath Include="$(OutputPath)\$(AssemblyName).dll" />
+    </ItemGroup>
+  </Target>
 </Project>

@@ -46,10 +46,12 @@ namespace ARToolkit.SampleApp.Samples
                 {
                     new UIBarButtonItem("Up", UIBarButtonItemStyle.Plain, (s,e) => MoveVertical(1d)),
                     new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
+                    new UIBarButtonItem("Snap", UIBarButtonItemStyle.Plain, (s,e) => SnapToSurface(ARView.Camera?.Location)),
+                    new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
                     new UIBarButtonItem("Down", UIBarButtonItemStyle.Plain, (s,e) => MoveVertical(-1d))
                 }
             };
-
+            ARView.RenderPlanes = true;
             View.AddSubviews(ARView, toolbar);
 
             NSLayoutConstraint.ActivateConstraints(new[]
@@ -68,7 +70,7 @@ namespace ARToolkit.SampleApp.Samples
             scene.Basemap.BaseLayers[0].Opacity = .5;
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
-            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
             ARView.TranslationFactor = 1;
 
@@ -89,6 +91,31 @@ namespace ARToolkit.SampleApp.Samples
         {
             var l = ARView.OriginCamera.Location;
             ARView.OriginCamera = ARView.OriginCamera.MoveTo(new MapPoint(l.X, l.Y, l.Z + offset, l.SpatialReference));
+        }
+
+        private async void SnapToSurface(MapPoint location)
+        {
+            if (location == null) return;
+            if (ARView?.Scene?.Basemap?.LoadStatus == Esri.ArcGISRuntime.LoadStatus.Loaded)
+            {
+                try
+                {
+                    double deviceElevationAboveTerrain = 1.5;
+                    // Perform hittest at center of screen against detected surfaces to estimate device elevation above terrain
+                    var mp = ARView.ARScreenToLocation(new CoreGraphics.CGPoint(ARView.Frame.Width * .5, ARView.Frame.Height * .5));
+                    if (mp != null)
+                        deviceElevationAboveTerrain = ARView.Camera.Location.Z - mp.Z;
+
+                    double elevation = await ARView?.Scene.BaseSurface.GetElevationAsync(location);
+                    location = new MapPoint(location.X, location.Y, elevation + deviceElevationAboveTerrain, location.SpatialReference);
+                    ARView.OriginCamera = ARView.OriginCamera.MoveTo(location);
+                    ARView.ResetTracking();
+                }
+                catch (System.Exception ex)
+                {
+                    //Failed to snap location to terrain
+                }
+            }
         }
     }
 }

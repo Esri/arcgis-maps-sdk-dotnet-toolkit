@@ -21,7 +21,7 @@ using ARKit;
 namespace ARToolkit.SampleApp.Samples
 {
 
-    [SampleInfo(DisplayName = "GPS/Compass-based Full-scale AR", Description = "Uses the device's GPS to continously snap the origin to your current location. Best results are achieved with a very high-accuracy GPS, and a good compass alignment.")]
+    [SampleInfo(DisplayName = "Continuous GPS Full-scale AR", Description = "Uses the device's GPS to continously snap the origin to your current location. Best results are achieved with a very high-accuracy GPS, and a good compass alignment.")]
     public partial class ContinousGPSController : UIViewController
     {
         ARSceneView ARView;
@@ -68,7 +68,7 @@ namespace ARToolkit.SampleApp.Samples
             scene.Basemap.BaseLayers[0].Opacity = .5;
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
-            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
+            scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
             ARView.TranslationFactor = 1;
 
@@ -87,7 +87,7 @@ namespace ARToolkit.SampleApp.Samples
 
         private void MoveVertical(double offset)
         {
-            ARView.SetInitialTransformation(ARView.InitialTransformation + TransformationMatrix.Create(0, 0, 0, 1, 0, offset*10, 0));
+            ARView.SetInitialTransformation(ARView.InitialTransformation + TransformationMatrix.Create(0, 0, 0, 1, 0, -offset, 0));
         }
     }
 }

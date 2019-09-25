@@ -121,7 +121,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             InitialTransformation = Mapping.TransformationMatrix.Identity;
             _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
             _initialLocationSet = false;
-            OriginCamera = null;
 #if __ANDROID__
             _initialHeading = null;
 #endif

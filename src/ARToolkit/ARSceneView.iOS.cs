@@ -379,28 +379,29 @@ namespace Esri.ArcGISRuntime.ARToolkit
             private class Plane : SCNNode
             {
                 private SCNNode node;
-
+                private SCNPlane planeGeometry;
                 public Plane(ARPlaneAnchor anchor)
                 {
-                    var extent = new SCNPlane() { Width = anchor.Extent.X, Height = anchor.Extent.Z };
-                    node = new SCNNode() { Geometry = extent };
+                    planeGeometry = new SCNPlane() { Width = anchor.Extent.X, Height = anchor.Extent.Z };
+                    node = new SCNNode() { Geometry = planeGeometry };
                     node.Position = new SCNVector3(anchor.Center.X, anchor.Center.Y, anchor.Center.Z);
                     // `SCNPlane` is vertically oriented in its local coordinate space, so
                     // rotate it to match the orientation of `ARPlaneAnchor`.
                     node.EulerAngles = new SCNVector3((float)(node.EulerAngles.X - Math.PI / 2), node.EulerAngles.Y, node.EulerAngles.Z);
                     node.Opacity = .6f;
                     var material = node.Geometry?.FirstMaterial;
-                    material.Diffuse.Contents = UIKit.UIColor.White;
+                    UIImage img = UIImage.FromResource(typeof(Plane).Assembly, "Esri.ArcGISRuntime.ARToolkit.GridDot.png");
+                    material.Diffuse.Contents = img;
+                    material.Diffuse.ContentsTransform = SCNMatrix4.Scale(32, 32, 0);
+                    material.Diffuse.WrapS = SCNWrapMode.Repeat;
+                    material.Diffuse.WrapT = SCNWrapMode.Repeat;
                     AddChildNode(node);
                 }
 
                 public void Update(ARPlaneAnchor anchor)
                 {
-                    if (node.Geometry is SCNPlane extentGeometry)
-                    {
-                        extentGeometry.Width = anchor.Extent.X;
-                        extentGeometry.Height = anchor.Extent.Z;
-                    }
+                    planeGeometry.Width = anchor.Extent.X;
+                    planeGeometry.Height = anchor.Extent.Z;
                 }
             }
         }
