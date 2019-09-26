@@ -401,7 +401,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     planeGeometry.Update(anchor.Geometry);
                     node = SCNNode.FromGeometry(planeGeometry);
                     node.Geometry = planeGeometry;
-                    node.Opacity = .6f;
+                    node.Opacity = 1f;
                     material = new SCNMaterial()
                     {
                         DoubleSided = false
@@ -427,7 +427,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 private void UpdateMaterial(ARPlaneAnchor anchor)
                 {
                     // Scale the material to be 10x10cm
-                    material.Diffuse.ContentsTransform = SCNMatrix4.Scale(anchor.Extent.X / .1f, anchor.Extent.Z / .1f, 0);
+                    // Texture used is 1.732x taller than wide
+                    material.Diffuse.ContentsTransform = SCNMatrix4.Scale(anchor.Extent.X / .1f, anchor.Extent.Z / .1f / 1.732f, 0);
                 }
             }
         }
