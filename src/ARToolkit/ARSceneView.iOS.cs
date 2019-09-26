@@ -267,7 +267,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// We implement <see cref="ARKit.ARSCNViewDelegate"/> methods, but will use <see cref="ARSCNViewDelegate"/> to
         /// forward them to clients.
         /// </summary>
-        public ARSCNViewDelegate ARSCNViewDelegate { get; set; }
+        public IARSCNViewDelegate ARSCNViewDelegate { get; set; }
 
         private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
         {
@@ -328,13 +328,15 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     if (_planes.Count == 1)
                         _sceneView?.RaisePlanesDetectedChanged(true);
                 }
-                if (_sceneView.ARSCNViewDelegate != null)
+                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(DidAddNode)))
+                {
                     _sceneView?.ARSCNViewDelegate?.DidAddNode(renderer, node, anchor);
+                }
             }
 
             public override void WillUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
             {
-                if (_sceneView.ARSCNViewDelegate != null)
+                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(WillUpdateNode)))
                     _sceneView?.ARSCNViewDelegate?.WillUpdateNode(renderer, node, anchor);
             }
 
@@ -345,7 +347,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     var plane = _planes[anchor.Identifier];
                     plane.Update(planeAnchor);
                 }
-                if (_sceneView.ARSCNViewDelegate != null)
+                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(DidUpdateNode)))
                     _sceneView?.ARSCNViewDelegate?.DidUpdateNode(renderer, node, anchor);
             }
 
@@ -357,8 +359,19 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     if (_planes.Count == 0)
                         _sceneView?.RaisePlanesDetectedChanged(false);
                 }
-                if (_sceneView.ARSCNViewDelegate != null)
+                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(DidRemoveNode)))
                     _sceneView?.ARSCNViewDelegate?.DidRemoveNode(renderer, node, anchor);
+            }
+
+            public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera)
+            {
+                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(CameraDidChangeTrackingState)))
+                    _sceneView?.ARSCNViewDelegate?.CameraDidChangeTrackingState(session, camera);
+            }
+
+            private bool IsOverridden(string name)
+            {
+                return _sceneView.ARSCNViewDelegate.GetType().GetMethod(name).DeclaringType != typeof(ARSCNViewDelegate);
             }
 
             internal void OnStop()
@@ -415,7 +428,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 _view = view;
             }
 
-            public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera) => CameraTrackingStateChanged?.Invoke(session, camera);
+            public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera)
+            {
+                CameraTrackingStateChanged?.Invoke(session, camera);
+            }
 
             public override void DidUpdateFrame(ARSession session, ARFrame frame)
             {   
