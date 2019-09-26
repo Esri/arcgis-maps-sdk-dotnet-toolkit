@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - AR Toolkit Xamarin.Forms</Title>
     <Description>ArcGIS Runtime Augmented Reality controls and utilities for Xamarin.Forms apps</Description>
     <PackageTags>AR Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
