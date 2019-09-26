@@ -29,18 +29,19 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 scene.BaseSurface = new Surface();
                 scene.BaseSurface.BackgroundGrid.IsVisible = false;
                 scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
-                scene.BaseSurface.ElevationExaggeration = 10;
+                scene.BaseSurface.ElevationExaggeration = 50;
                 scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
-                ARView.TranslationFactor = 100000000;
+                ARView.TranslationFactor = 50000000;
                 // Set pitch to 0 so looking forward looks "down" on earth from space
-                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84), 0, 0, 0);
+                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(0, 0, 10000000, SpatialReferences.Wgs84), 0, 0, 0);
 
                 await scene.LoadAsync();
                 ARView.Scene = scene;
             }
             catch (System.Exception ex)
             {
-                //Toast.MakeText(this, "Failed to load scene: \n" + ex.Message, ToastLength.Long).Show();
+                await DisplayAlert("Failed to load scene", ex.Message, "OK");
+                await Navigation.PopAsync();
             }
         }
 

@@ -152,7 +152,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             ARControl.ArSceneView.PlaneRenderer.Enabled = on;
             ARControl.ArSceneView.PlaneRenderer.Visible = on;
 #elif __IOS__
-            ARControl.RenderPlanes = true;
+            ARControl.RenderPlanes = on;
 #elif NETFX_CORE
             //Not supported on UWP
 #endif

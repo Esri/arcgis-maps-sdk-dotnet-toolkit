@@ -26,7 +26,6 @@ namespace ARToolkit.SampleApp.Forms.Samples
         {
             try
             {
-                ARView.RenderVideoFeed = false;
                 ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
 
                 Surface sceneSurface = new Surface();
@@ -36,10 +35,12 @@ namespace ARToolkit.SampleApp.Forms.Samples
                     BaseSurface = sceneSurface
                 };
                 ARView.Scene = scene;
+                await scene.LoadAsync();
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                //Toast.MakeText(this, "Failed to load scene: \n" + ex.Message, ToastLength.Long).Show();
+                await DisplayAlert("Failed to load scene", ex.Message, "OK");
+                await Navigation.PopAsync();
             }
         }
 

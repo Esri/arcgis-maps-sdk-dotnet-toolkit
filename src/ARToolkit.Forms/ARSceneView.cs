@@ -99,7 +99,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// Identifies the <see cref="NorthAlign"/> bindable property.
         /// </summary>
         public static readonly BindableProperty NorthAlignProperty =
-            BindableProperty.Create(nameof(NorthAlign), typeof(bool), typeof(ARSceneView), false, BindingMode.TwoWay, null);
+            BindableProperty.Create(nameof(NorthAlign), typeof(bool), typeof(ARSceneView), true, BindingMode.TwoWay, null);
 
         /// <summary>
         /// Gets or sets a value indicating whether the scene should attempt to use the device compass to align the scene towards north.

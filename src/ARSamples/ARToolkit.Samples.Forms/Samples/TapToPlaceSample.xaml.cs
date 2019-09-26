@@ -45,7 +45,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 ARView.SetInitialTransformation(TransformationMatrix.Create(0, 0, 0, 1, 0, .5, 1.5));
                 //Listend for double-tap to place
                 ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
-                ARView.RenderPlanes = true;
+                scene.OperationalLayers[0].Opacity = .5;
             }
             catch (System.Exception ex)
             {
@@ -55,9 +55,12 @@ namespace ARToolkit.SampleApp.Forms.Samples
         }
         private void ArView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)
         {
+            if (ARView.Scene?.LoadStatus != Esri.ArcGISRuntime.LoadStatus.Loaded)
+                return;
             if (ARView.SetInitialTransformation(e.Position))
             {
                 //Scene placed successfully
+                ARView.Scene.OperationalLayers[0].Opacity = 1;
             }
         }
 
