@@ -154,6 +154,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 return;
             if (e.IsLastKnown)
                 return;
+            if (!IsTracking)
+                return;
             lock (locationLock)
             {
                 if (_locationTrackingMode == ARLocationTrackingMode.Initial && _initialLocationSet)
