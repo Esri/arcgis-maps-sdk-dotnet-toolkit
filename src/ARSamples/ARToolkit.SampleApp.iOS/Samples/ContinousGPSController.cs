@@ -29,8 +29,15 @@ namespace ARToolkit.SampleApp.Samples
         public ContinousGPSController() : base()
         {
         }
+
         public ContinousGPSController(IntPtr handle) : base(handle)
         {
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            ARView.StopTracking();
+            base.ViewDidDisappear(animated);
         }
 
         public async override void ViewDidLoad()
@@ -82,7 +89,7 @@ namespace ARToolkit.SampleApp.Samples
             await scene.LoadAsync();
             ARView.Scene = scene;
             ARView.LocationDataSource = new SystemLocationDataSource();
-            _ = ARView.StartTrackingAsync(ARLocationTrackingMode.Continuous);
+            await ARView.StartTrackingAsync(ARLocationTrackingMode.Continuous);
         }
 
         private void MoveVertical(double offset)

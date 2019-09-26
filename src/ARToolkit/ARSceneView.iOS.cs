@@ -191,6 +191,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            OnStopTracking();
+            base.Dispose(disposing);
+        }
+
         private void OnStopTracking()
         {
             if (IsUsingARKit)

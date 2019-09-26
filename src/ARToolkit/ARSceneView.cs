@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             var currentTrackingValue = IsTracking;
             OnStartTracking();
             IsTracking = true;
-            if(!currentTrackingValue)
+            if (!currentTrackingValue)
                 IsTrackingStateChanged?.Invoke(this, true);
         }
 
@@ -174,11 +174,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
             _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
-                if (_locationTrackingMode != ARLocationTrackingMode.Continuous)
-                {
-                    _ = LocationDataSource.StopAsync();
-                }
+            if (_locationTrackingMode != ARLocationTrackingMode.Continuous)
+            {
+                _ = LocationDataSource.StopAsync();
             }
+        }
 
         /// <summary>
         /// Gets or sets translation factor used to support a table top AR experience.
