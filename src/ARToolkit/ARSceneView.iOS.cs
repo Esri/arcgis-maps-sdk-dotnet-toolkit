@@ -282,7 +282,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             return null;
         }
 
-        private static bool DeviceSupportsARKit => ARWorldTrackingConfiguration.IsSupported;
+        private static bool DeviceSupportsARKit => ARConfiguration.IsSupported;
 
         private bool _renderPlanes;
 
@@ -322,7 +322,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 if (anchor is ARPlaneAnchor planeAnchor)
                 {
-                    var plane = new Plane(planeAnchor) { Hidden = !_sceneView.RenderPlanes };
+                    var plane = new Plane(planeAnchor, renderer) { Hidden = !_sceneView.RenderPlanes };
                     _planes[planeAnchor.Identifier] = plane;
                         node.AddChildNode(plane);
                     if (_planes.Count == 1)
@@ -345,7 +345,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 if (_sceneView.RenderPlanes && anchor is ARPlaneAnchor planeAnchor && _planes.ContainsKey(anchor.Identifier))
                 {
                     var plane = _planes[anchor.Identifier];
-                    plane.Update(planeAnchor);
+                    plane.Update(planeAnchor, renderer);
                 }
                 if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(DidUpdateNode)))
                     _sceneView?.ARSCNViewDelegate?.DidUpdateNode(renderer, node, anchor);
@@ -392,29 +392,42 @@ namespace Esri.ArcGISRuntime.ARToolkit
             private class Plane : SCNNode
             {
                 private SCNNode node;
-                private SCNPlane planeGeometry;
-                public Plane(ARPlaneAnchor anchor)
+                private SCNMaterial material;
+                private static UIImage img = UIImage.FromResource(typeof(Plane).Assembly, "Esri.ArcGISRuntime.ARToolkit.GridDot.png");
+
+                public Plane(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
-                    planeGeometry = new SCNPlane() { Width = anchor.Extent.X, Height = anchor.Extent.Z };
-                    node = new SCNNode() { Geometry = planeGeometry };
-                    node.Position = new SCNVector3(anchor.Center.X, anchor.Center.Y, anchor.Center.Z);
-                    // `SCNPlane` is vertically oriented in its local coordinate space, so
-                    // rotate it to match the orientation of `ARPlaneAnchor`.
-                    node.EulerAngles = new SCNVector3((float)(node.EulerAngles.X - Math.PI / 2), node.EulerAngles.Y, node.EulerAngles.Z);
+                    var planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
+                    planeGeometry.Update(anchor.Geometry);
+                    node = SCNNode.FromGeometry(planeGeometry);
+                    node.Geometry = planeGeometry;
                     node.Opacity = .6f;
-                    var material = node.Geometry?.FirstMaterial;
-                    UIImage img = UIImage.FromResource(typeof(Plane).Assembly, "Esri.ArcGISRuntime.ARToolkit.GridDot.png");
+                    material = new SCNMaterial()
+                    {
+                        DoubleSided = false
+                    };
                     material.Diffuse.Contents = img;
-                    material.Diffuse.ContentsTransform = SCNMatrix4.Scale(32, 32, 0);
                     material.Diffuse.WrapS = SCNWrapMode.Repeat;
                     material.Diffuse.WrapT = SCNWrapMode.Repeat;
+                    planeGeometry.Materials = new[] { material };
+                    UpdateMaterial(anchor);
                     AddChildNode(node);
                 }
 
-                public void Update(ARPlaneAnchor anchor)
+                public void Update(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
-                    planeGeometry.Width = anchor.Extent.X;
-                    planeGeometry.Height = anchor.Extent.Z;
+                    ARPlaneGeometry geometry = anchor.Geometry;
+                    ARSCNPlaneGeometry planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
+                    planeGeometry.Update(geometry);
+                    planeGeometry.Materials = new[] { material };
+                    UpdateMaterial(anchor);
+                    node.Geometry = planeGeometry;
+                }
+
+                private void UpdateMaterial(ARPlaneAnchor anchor)
+                {
+                    // Scale the material to be 10x10cm
+                    material.Diffuse.ContentsTransform = SCNMatrix4.Scale(anchor.Extent.X / .1f, anchor.Extent.Z / .1f, 0);
                 }
             }
         }
