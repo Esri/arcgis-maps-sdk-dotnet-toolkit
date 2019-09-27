@@ -32,12 +32,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
     public partial class ARSceneView : SceneView
     {
         private bool _created;
-        private ArSessionDel _delegate;
+        private ARDelegate _delegate;
 
         private void Initialize()
         {
-            _delegate = new ArSessionDel(this);
-            
+            _delegate = new ARDelegate(this);
+
             // Each session has to be configured.
             //  We will use ARWorldTrackingConfiguration to have full access to device orientation,
             // rear camera, device position and to detect real-world flat surfaces:
@@ -50,10 +50,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             if (DeviceSupportsARKit)
             {
-                ARSCNView = new ARSCNView() { TranslatesAutoresizingMaskIntoConstraints = false };
-                ARSCNView.Delegate = new ARDelegate(this);
-                _delegate.FrameUpdated += FrameUpdated;
-                _delegate.CameraTrackingStateChanged += CameraTrackingStateChanged;
+                ARSCNView = new ARSCNView2(_delegate) { TranslatesAutoresizingMaskIntoConstraints = false };
             }
             IsUsingARKit = DeviceSupportsARKit;
             // Tell the SceneView we will be calling `RenderFrame()` manually if we're using ARKit.
@@ -98,7 +95,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private bool _tracking;
 
-        private void CameraTrackingStateChanged(object sender, ARCamera camera)
+        private void OnCameraDidChangeTrackingState(ARSession session, ARCamera camera)
         {
             var state = string.Empty;
             var reason = string.Empty;
@@ -134,12 +131,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                     break;
             }
-
-            // TODO: Do something with this
-            System.Diagnostics.Debug.WriteLine($"CameraTrackingStateChanged: {camera.TrackingState} : {reason}");
+            ARSCNViewCameraDidChangeTrackingState?.Invoke(this, new ARSCNViewCameraTrackingStateChangedEventArgs(session, camera));
         }
 
-        private void FrameUpdated(object sender, ARFrame frame)
+        private void OnWillRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds)
         {
             if (_tracking)
             {
@@ -152,9 +147,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
                         var q = pov.WorldOrientation;
                         var t = pov.Transform;
                         _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
-                        var intrinsics = frame.Camera.Intrinsics;
-                        var imageResolution = frame.Camera.ImageResolution;
+                        var frame = this.ARSCNView.Session.CurrentFrame;
+                        var camera = frame?.Camera;
+                        var intrinsics = camera.Intrinsics;
+                        var imageResolution = camera.ImageResolution;
                         SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
+                        frame.Dispose();
                     }
                 }
             }
@@ -163,6 +161,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 RenderFrame();
             }
+            ARSCNViewWillRenderScene?.Invoke(this, new ARSCNViewRenderSceneEventArgs(renderer, scene, timeInSeconds));
         }
 
         private DeviceOrientation GetDeviceOrientation()
@@ -186,11 +185,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 // Once we have our configuration we need to run session with it.
                 // ResetTracking will just reset tracking by session to start it again from scratch:
-                ARSCNView.Session.Delegate = _delegate;
                 ARSCNView.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
             }
         }
 
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             OnStopTracking();
@@ -269,12 +268,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
-        /// <summary>
-        /// We implement <see cref="ARKit.ARSCNViewDelegate"/> methods, but will use <see cref="ARSCNViewDelegate"/> to
-        /// forward them to clients.
-        /// </summary>
-        public IARSCNViewDelegate ARSCNViewDelegate { get; set; }
-
         private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
         {
             var hit = ARSCNView.HitTest(screenPoint, type);
@@ -314,6 +307,64 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.WillUpdateNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewWillUpdateNode;
+
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.DidAddNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewDidAddNode;
+
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.DidUpdateNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewDidUpdateNode;
+
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.DidRemoveNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewDidRemoveNode;
+
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.CameraDidChangeTrackingState(ARSession, ARCamera)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler<ARSCNViewCameraTrackingStateChangedEventArgs> ARSCNViewCameraDidChangeTrackingState;
+
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.WillRenderScene(ISCNSceneRenderer, SCNScene, double)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler<ARSCNViewRenderSceneEventArgs> ARSCNViewWillRenderScene;
+
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.DidRenderScene(ISCNSceneRenderer, SCNScene, double)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler<ARSCNViewRenderSceneEventArgs> ARSCNViewDidRenderScene;
+
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.WasInterrupted(ARSession)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler ARSCNViewWasInterrupted;
+        
+        /// <summary>
+        /// Triggered when the <see cref="ARSCNViewDelegate.InterruptionEnded(ARSession)"/> delegate method gets invoked.
+        /// </summary>
+        public event EventHandler ARSCNViewInterruptionEnded;
+
+        /// <summary>
+        /// Custom version of ARSCNView that prevents setting the delegate that we rely on (use the provided events instead)
+        /// </summary>
+        private class ARSCNView2 : ARSCNView
+        {
+            internal ARSCNView2(IARSCNViewDelegate del)
+            {
+                base.Delegate = del;
+            }
+
+            public override IARSCNViewDelegate Delegate { get => base.Delegate; set => throw new NotSupportedException(); }
+        }
+
         private class ARDelegate : ARSCNViewDelegate
         {
             private ARSceneView _sceneView;
@@ -324,27 +375,24 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 _sceneView = sceneView;
             }
 
+            public override void WillRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds) =>  _sceneView.OnWillRenderScene(renderer, scene, timeInSeconds);
+
+            public override void DidRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds) => _sceneView?.ARSCNViewWillRenderScene?.Invoke(this, new ARSCNViewRenderSceneEventArgs(renderer, scene, timeInSeconds));
+
             public override void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
             {
                 if (anchor is ARPlaneAnchor planeAnchor)
                 {
                     var plane = new Plane(planeAnchor, renderer) { Hidden = !_sceneView.RenderPlanes };
                     _planes[planeAnchor.Identifier] = plane;
-                        node.AddChildNode(plane);
+                    node.AddChildNode(plane);
                     if (_planes.Count == 1)
                         _sceneView?.RaisePlanesDetectedChanged(true);
                 }
-                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(DidAddNode)))
-                {
-                    _sceneView?.ARSCNViewDelegate?.DidAddNode(renderer, node, anchor);
-                }
+                _sceneView?.ARSCNViewDidAddNode?.Invoke(_sceneView, new ARSCNViewNodeEventArgs(renderer, node, anchor));
             }
 
-            public override void WillUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
-            {
-                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(WillUpdateNode)))
-                    _sceneView?.ARSCNViewDelegate?.WillUpdateNode(renderer, node, anchor);
-            }
+            public override void WillUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor) => _sceneView?.ARSCNViewWillUpdateNode?.Invoke(_sceneView, new ARSCNViewNodeEventArgs(renderer, node, anchor));
 
             public override void DidUpdateNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
             {
@@ -353,8 +401,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     var plane = _planes[anchor.Identifier];
                     plane.Update(planeAnchor, renderer);
                 }
-                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(DidUpdateNode)))
-                    _sceneView?.ARSCNViewDelegate?.DidUpdateNode(renderer, node, anchor);
+                _sceneView?.ARSCNViewDidUpdateNode?.Invoke(_sceneView, new ARSCNViewNodeEventArgs(renderer, node, anchor));
             }
 
             public override void DidRemoveNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
@@ -365,20 +412,15 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     if (_planes.Count == 0)
                         _sceneView?.RaisePlanesDetectedChanged(false);
                 }
-                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(DidRemoveNode)))
-                    _sceneView?.ARSCNViewDelegate?.DidRemoveNode(renderer, node, anchor);
+                _sceneView?.ARSCNViewDidRemoveNode?.Invoke(_sceneView, new ARSCNViewNodeEventArgs(renderer, node, anchor));
             }
 
-            public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera)
-            {
-                if (_sceneView.ARSCNViewDelegate != null && IsOverridden(nameof(CameraDidChangeTrackingState)))
-                    _sceneView?.ARSCNViewDelegate?.CameraDidChangeTrackingState(session, camera);
-            }
+            public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera) => _sceneView?.OnCameraDidChangeTrackingState(session, camera);
 
-            private bool IsOverridden(string name)
-            {
-                return _sceneView.ARSCNViewDelegate.GetType().GetMethod(name).DeclaringType != typeof(ARSCNViewDelegate);
-            }
+            public override void WasInterrupted(ARSession session) => _sceneView?.ARSCNViewWasInterrupted?.Invoke(_sceneView, EventArgs.Empty);
+
+            public override void InterruptionEnded(ARSession session) => _sceneView?.ARSCNViewInterruptionEnded?.Invoke(_sceneView, EventArgs.Empty);
+
 
             internal void OnStop()
             {
@@ -438,65 +480,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
         }
-
-        private class ArSessionDel : ARSessionDelegate
-        {
-            private readonly ARSceneView _view;
-
-            public ArSessionDel(ARSceneView view)
-            {
-                _view = view;
-            }
-
-            public override void CameraDidChangeTrackingState(ARSession session, ARCamera camera)
-            {
-                CameraTrackingStateChanged?.Invoke(session, camera);
-            }
-
-            public override void DidUpdateFrame(ARSession session, ARFrame frame)
-            {   
-                FrameUpdated?.Invoke(this, frame);
-                frame.Dispose(); // Must dispose frame after this. See https://xamarin.github.io/bugzilla-archives/60/60393/bug.html
-            }
-
-            public override void DidAddAnchors(ARSession session, ARAnchor[] anchors)
-            {
-            }
-
-            public override void DidFail(ARSession session, NSError error)
-            {
-            }
-
-            public override void DidRemoveAnchors(ARSession session, ARAnchor[] anchors)
-            {
-            }
-
-            public override void DidUpdateAnchors(ARSession session, ARAnchor[] anchors)
-            {
-            }
-
-            public override void DidOutputAudioSampleBuffer(ARSession session, CMSampleBuffer audioSampleBuffer)
-            {
-            }
-
-            public override void WasInterrupted(ARSession session)
-            {
-            }
-
-            public override void InterruptionEnded(ARSession session)
-            {
-            }
-
-            public override bool ShouldAttemptRelocalization(ARSession session)
-            {
-                return false;
-            }
-
-            public event EventHandler<ARFrame> FrameUpdated;
-
-            public event EventHandler<ARCamera> CameraTrackingStateChanged;
-        }
-
     }
 }
 #endif
