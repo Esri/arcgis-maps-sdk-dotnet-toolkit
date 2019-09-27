@@ -109,9 +109,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
     /// <summary>
     /// Event arguments for the <see cref="ARSCNViewDelegate.CameraDidChangeTrackingState(ARSession, ARCamera)"/> delegate method.
     /// </summary>
-    public class ARSCNViewCameraTrackingStateChangedEventArgs : EventArgs
+    public class ARSCNViewCameraTrackingStateEventArgs : EventArgs
     {
-        internal ARSCNViewCameraTrackingStateChangedEventArgs(ARSession session, ARCamera camera)
+        internal ARSCNViewCameraTrackingStateEventArgs(ARSession session, ARCamera camera)
         {
             Session = session;
             Camera = camera;

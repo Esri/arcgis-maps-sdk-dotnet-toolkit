@@ -131,7 +131,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                     break;
             }
-            ARSCNViewCameraDidChangeTrackingState?.Invoke(this, new ARSCNViewCameraTrackingStateChangedEventArgs(session, camera));
+            ARSCNViewCameraDidChangeTrackingState?.Invoke(this, new ARSCNViewCameraTrackingStateEventArgs(session, camera));
         }
 
         private void OnWillRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds)
@@ -330,7 +330,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.CameraDidChangeTrackingState(ARSession, ARCamera)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewCameraTrackingStateChangedEventArgs> ARSCNViewCameraDidChangeTrackingState;
+        public event EventHandler<ARSCNViewCameraTrackingStateEventArgs> ARSCNViewCameraDidChangeTrackingState;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.WillRenderScene(ISCNSceneRenderer, SCNScene, double)"/> delegate method gets invoked.
