@@ -377,7 +377,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             public override void WillRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds) =>  _sceneView.OnWillRenderScene(renderer, scene, timeInSeconds);
 
-            public override void DidRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds) => _sceneView?.ARSCNViewWillRenderScene?.Invoke(this, new ARSCNViewRenderSceneEventArgs(renderer, scene, timeInSeconds));
+            public override void DidRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds) => _sceneView?.ARSCNViewDidRenderScene?.Invoke(this, new ARSCNViewRenderSceneEventArgs(renderer, scene, timeInSeconds));
 
             public override void DidAddNode(ISCNSceneRenderer renderer, SCNNode node, ARAnchor anchor)
             {
