@@ -147,12 +147,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
                         var q = pov.WorldOrientation;
                         var t = pov.Transform;
                         _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
-                        var frame = this.ARSCNView.Session.CurrentFrame;
+                        using (var frame = ARSCNView.Session.CurrentFrame)
+                        {
                         var camera = frame?.Camera;
+                            if (camera != null)
+                            {
                         var intrinsics = camera.Intrinsics;
                         var imageResolution = camera.ImageResolution;
                         SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
-                        frame.Dispose();
+                            }
+                        }
                     }
                 }
             }
