@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// Raised when the <see cref="OriginCamera"/> has changed
         /// </summary>
         /// <seealso cref="OriginCamera"/>
-        public event EventHandler OriginCameraChanged;
+        public event EventHandler? OriginCameraChanged;
 
         internal void RaiseOriginCameraChanged()
         {
@@ -179,10 +179,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// </summary>
         /// <param name="screenPoint"> The point in screen coordinates.</param>
         /// <returns>The map point corresponding to screenPoint.</returns>
-        public Geometry.MapPoint ARScreenToLocation(Point screenPoint)
+        public Geometry.MapPoint? ARScreenToLocation(Point screenPoint)
         {
 #if NETSTANDARD2_0
-            return null;
+            throw new PlatformNotSupportedException();
 #else
             return NativeARSceneView()?.ARScreenToLocation(ToNativePoint(screenPoint));
 #endif
@@ -238,7 +238,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// <summary>
         /// Raises an event indicating whether horizontal planes are currently detected or not
         /// </summary>
-        public event EventHandler<bool> PlanesDetectedChanged;
+        public event EventHandler<bool>? PlanesDetectedChanged;
 
         internal void RaisePlanesDetectedChanged(bool planesDetected)
         {
@@ -246,7 +246,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         }
 
 #if !NETSTANDARD
-        private Esri.ArcGISRuntime.ARToolkit.ARSceneView NativeARSceneView()
+        private Esri.ArcGISRuntime.ARToolkit.ARSceneView? NativeARSceneView()
         {
 #if __ANDROID__
             return (global::Xamarin.Forms.Platform.Android.Platform.GetRenderer(this) as Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android.ARSceneViewRenderer).Control as ARToolkit.ARSceneView;
@@ -276,7 +276,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         }
 
         // Screen coordinates for native Android is in physical pixels, but XF works in DIPs so apply the factor on conversion
-        private static Android.Views.IWindowManager _windowManager;
+        private static Android.Views.IWindowManager? _windowManager;
 
         internal static float SystemPixelToDipsFactor
         {

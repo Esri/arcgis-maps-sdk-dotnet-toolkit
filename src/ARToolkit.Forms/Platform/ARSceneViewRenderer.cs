@@ -46,9 +46,9 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
     /// </summary>
     public class ARSceneViewRenderer : SceneViewRenderer
     {
-        private ARToolkit.ARSceneView ARControl => Control as ARToolkit.ARSceneView;
+        private ARToolkit.ARSceneView? ARControl => Control as ARToolkit.ARSceneView;
 
-        private ARSceneView ARElement => Element as ARSceneView;
+        private ARSceneView? ARElement => Element as ARSceneView;
 
 #if __ANDROID__
         /// <summary>
@@ -88,21 +88,24 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             if (e.NewElement != null)
             {
                 var elm = (ARSceneView)e.NewElement;
-                ARControl.TranslationFactor = elm.TranslationFactor;
-                ARControl.RenderVideoFeed = elm.RenderVideoFeed;
-                ARControl.NorthAlign = elm.NorthAlign;
-                ARControl.LocationDataSource = elm.LocationDataSource;
-                SetPlaneRendering(elm.RenderPlanes);
-                if (elm.OriginCamera != null)
+                if (ARControl != null)
                 {
-                    ARControl.OriginCamera = elm.OriginCamera;
+                    ARControl.TranslationFactor = elm.TranslationFactor;
+                    ARControl.RenderVideoFeed = elm.RenderVideoFeed;
+                    ARControl.NorthAlign = elm.NorthAlign;
+                    ARControl.LocationDataSource = elm.LocationDataSource;
+                    SetPlaneRendering(elm.RenderPlanes);
+                    if (elm.OriginCamera != null)
+                    {
+                        ARControl.OriginCamera = elm.OriginCamera;
+                    }
+                    elm.CameraController = ARControl.CameraController; //Ensure we use the native view's camera controller
+                    ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
+                    ARControl.PlanesDetectedChanged += ARControl_PlanesDetectedChanged;
                 }
-                elm.CameraController = ARControl.CameraController; //Ensure we use the native view's camera controller
-                ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
-                ARControl.PlanesDetectedChanged += ARControl_PlanesDetectedChanged;
-                MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl.StopTracking(), elm);
-                MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl.ResetTracking(), elm);
-                MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl.SetInitialTransformation(a), elm);
+                MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl?.StopTracking(), elm);
+                MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl?.ResetTracking(), elm);
+                MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl?.SetInitialTransformation(a), elm);
             }
         }
 
@@ -120,6 +123,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
+            if (ARControl == null || ARElement == null)
+                return;
             if (e.PropertyName == ARSceneView.TranslationFactorProperty.PropertyName)
             {
                 ARControl.TranslationFactor = ARElement.TranslationFactor;
@@ -148,14 +153,20 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
 
         private void SetPlaneRendering(bool on)
         {
+            if (ARControl != null)
+            {
 #if __ANDROID__
-            ARControl.ArSceneView.PlaneRenderer.Enabled = on;
-            ARControl.ArSceneView.PlaneRenderer.Visible = on;
+                if (ARControl.ArSceneView != null)
+                {
+                    ARControl.ArSceneView.PlaneRenderer.Enabled = on;
+                    ARControl.ArSceneView.PlaneRenderer.Visible = on;
+                }
 #elif __IOS__
-            ARControl.RenderPlanes = on;
+                ARControl.RenderPlanes = on;
 #elif NETFX_CORE
-            //Not supported on UWP
+                //Not supported on UWP
 #endif
+            }
         }
 
 
