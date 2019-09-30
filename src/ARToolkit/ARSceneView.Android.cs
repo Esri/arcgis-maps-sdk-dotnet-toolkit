@@ -18,14 +18,12 @@
 using System;
 using System.Threading.Tasks;
 using Android.Content;
-using Android.Opengl;
 using Android.Runtime;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 using Google.AR.Core;
-using Javax.Microedition.Khronos.Opengles;
 
 namespace Esri.ArcGISRuntime.ARToolkit
 {
@@ -47,7 +45,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private class OrientationListener : Android.Views.OrientationEventListener
         {
             private readonly Context _context;
-            private Android.Views.IWindowManager _windowManager;
+            private Android.Views.IWindowManager? _windowManager;
             private UI.DeviceOrientation _currentOrientation = UI.DeviceOrientation.Portrait;
             
             public UI.DeviceOrientation CurrentOrientation
@@ -105,13 +103,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 
             }
 
-            public event EventHandler<UI.DeviceOrientation> OrientationChanged;
+            public event EventHandler<UI.DeviceOrientation>? OrientationChanged;
         }
 
-        private OrientationListener _orientationListener;
-        private UpdateListener _updateListener;
+        private OrientationListener? _orientationListener;
+        private UpdateListener? _updateListener;
         private UI.DeviceOrientation _screenOrientation;
-        private CompassOrientationHelper _compassListener; //Used for getting heading, and orientation if ARCore is disabled
+        private CompassOrientationHelper? _compassListener; //Used for getting heading, and orientation if ARCore is disabled
         private double? _initialHeading;
         private int _planesCount = 0;
 
@@ -123,6 +121,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             : base(context)
         {
             InitializeCommon();
+            Initialize();
         }
 
         /// <summary>
@@ -134,6 +133,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             : base(context, attr)
         {
             InitializeCommon();
+            Initialize();
             if (!IsDesignTime)
             {
                 using (var style = context.Theme.ObtainStyledAttributes(attr, Resource.Styleable.ArcGISARSceneView, 0, 0))
@@ -146,12 +146,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private bool IsDesignTime => IsInEditMode;
 
-        Google.AR.Sceneform.ArSceneView _arSceneView;
         private void Initialize()
         {
             if (IsDesignTime)
                 return;
-            CheckArCoreAvailability();
+
+            ArCoreAvailability = ArCoreApk.Instance.CheckAvailability(Context);
             _updateListener = new UpdateListener(OnFrameUpdated);
             _orientationListener = new OrientationListener(Context);
             _orientationListener.OrientationChanged += (s, orientation) => _screenOrientation = orientation;
@@ -159,7 +159,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _compassListener.OrientationChanged += OrientationHelper_OrientationChanged;
 
             _arSceneView = new Google.AR.Sceneform.ArSceneView(Context);
-            AddViewInLayout(_arSceneView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
+            AddViewInLayout(ArSceneView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
             // Tell the SceneView we will be calling `RenderFrame()` manually if we're using ARCore.
             IsManualRendering = IsUsingARCore;
         }
@@ -184,7 +184,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
 
-            if (!IsUsingARCore)
+            if (!IsUsingARCore && _controller != null)
             {
                 // Use orientation sensor instead of ARCore
                 var m = e.Transformation;
@@ -201,7 +201,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             if (!IsDesignTime)
             {
-                _arSceneView.Layout(left, top, right, bottom);
+                ArSceneView?.Layout(left, top, right, bottom);
             }
             base.OnLayout(changed, left, top, right, bottom);
         }
@@ -211,10 +211,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public bool IsUsingARCore { get; private set; } = true;
 
+        private Google.AR.Sceneform.ArSceneView? _arSceneView;
+
         /// <summary>
         /// Gets the AR SurfaceView that integrates with ARCore and renders a scene.
         /// </summary>
-        public Google.AR.Sceneform.ArSceneView ArSceneView => _arSceneView;
+        public Google.AR.Sceneform.ArSceneView? ArSceneView => _arSceneView;
         
         /// <summary>
         /// Gets or sets a value indicating whether the scene should attempt to use the device compass to align the scene towards north.
@@ -253,9 +255,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 return;
             }
 
-            if (IsUsingARCore)
+            if (IsUsingARCore && ArSceneView != null)
             {
-                if (_arSceneView?.Session == null)
+                if (ArSceneView.Session == null)
                 {
                     // Create the session
                     var session = new Session(Context);
@@ -263,23 +265,23 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     config.SetUpdateMode(Config.UpdateMode.LatestCameraImage);
                     config.SetFocusMode(Config.FocusMode.Auto);
                     session.Configure(config);
-                    _arSceneView.SetupSession(session);
+                    ArSceneView.SetupSession(session);
                 }
 
                 // ensure that OnUpdateListener is added on the UI thread to prevent threading issues with ARCore
-                Post(() => _arSceneView.Scene.AddOnUpdateListener(_updateListener));
-                _arSceneView.Resume();
+                Post(() => ArSceneView.Scene.AddOnUpdateListener(_updateListener));
+                ArSceneView.Resume();
             }
         }
 
         private void OnStopTracking()
         {
-            _orientationListener.Disable();
+            _orientationListener?.Disable();
             _compassListener?.Pause();
-            if (_arSceneView != null)
+            if (ArSceneView != null)
             {
-                Post(() => _arSceneView.Scene.RemoveOnUpdateListener(_updateListener));
-                _arSceneView.Pause();
+                Post(() => ArSceneView.Scene.RemoveOnUpdateListener(_updateListener));
+                ArSceneView.Pause();
             }
             if (_planesCount > 0)
                 PlanesDetectedChanged?.Invoke(this, false);
@@ -290,8 +292,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private void OnStartTracking()
         {
             _initialHeading = null;
-            _orientationListener.Enable();
-            _compassListener.Resume();
+            _orientationListener?.Enable();
+            _compassListener?.Resume();
             if (IsUsingARCore)
             {
                 StartArCoreSession();
@@ -308,8 +310,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnFrameUpdated(Google.AR.Sceneform.FrameTime obj)
         {
-            var arCamera = _arSceneView?.ArFrame?.Camera;
-            if (arCamera != null && IsTracking)
+            var arCamera = ArSceneView?.ArFrame?.Camera;
+            if (arCamera != null && IsTracking && _controller != null)
             {
                 var rot = arCamera.DisplayOrientedPose.GetRotationQuaternion();
                 var tr = arCamera.DisplayOrientedPose.GetTranslation();
@@ -327,20 +329,20 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                 if(_planesCount == 0)
                 {
-                    _planesCount = _arSceneView?.Session?.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))).Count ?? 0;
+                    _planesCount = ArSceneView?.Session?.GetAllTrackables(Java.Lang.Class.FromType(typeof(Plane))).Count ?? 0;
                     if (_planesCount > 0)
                         RaisePlanesDetectedChanged(true);
                 }
             }
         }
 
-        private TransformationMatrix HitTest(Android.Graphics.PointF screenPoint)
+        private TransformationMatrix? HitTest(Android.Graphics.PointF screenPoint)
         {
             if (!IsUsingARCore)
                 throw new InvalidOperationException("HitTest not supported when ARCore is disabled");
-            var frame = _arSceneView?.ArFrame;
+            var frame = ArSceneView?.ArFrame;
             var camera = frame?.Camera;
-            if (camera != null && camera.TrackingState == TrackingState.Tracking)
+            if (frame != null && camera != null && camera.TrackingState == TrackingState.Tracking)
             {
                 var hitResults = frame.HitTest(screenPoint.X, screenPoint.Y);
                 foreach (var item in hitResults)
@@ -359,12 +361,6 @@ namespace Esri.ArcGISRuntime.ARToolkit
         }
 
 #region ARCore Checkers/Install
-
-
-        private void CheckArCoreAvailability()
-        {
-            ArCoreAvailability = ArCoreApk.Instance.CheckAvailability(Context);
-        }
 
         /// <summary>
         /// A value defining whether a request for ARCore has been made. Used when requesting installation of ARCore.
@@ -389,7 +385,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
-        private ArCoreApk.Availability _ArCoreAvailability;
+        private ArCoreApk.Availability _ArCoreAvailability = ArCoreApk.Availability.UnknownChecking;
 
         private ArCoreApk.Availability ArCoreAvailability
         {
@@ -407,10 +403,10 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     {
                         IsUsingARCore = true;
                     }
-                    else if (newValue == ArCoreApk.Availability.SupportedNotInstalled ||
-                        newValue == ArCoreApk.Availability.SupportedApkTooOld)
+                    else if ((newValue == ArCoreApk.Availability.SupportedNotInstalled ||
+                        newValue == ArCoreApk.Availability.SupportedApkTooOld) && Context is Android.App.Activity activity)
                     {
-                        RequestArCoreInstall(Context as Android.App.Activity);
+                        RequestArCoreInstall(activity);
                     }
                     else
                     {
@@ -420,7 +416,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
-        private Task _checkArCoreJob;
+        private Task? _checkArCoreJob;
 
         /// <summary>
         /// A background task used to poll ArCoreApk to set the value of ARCore availability for the current device.

@@ -11,12 +11,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
 {
     internal sealed class CompassOrientationHelper : Java.Lang.Object, ISensorEventListener
     {
-        private SensorManager _sensorManager;
-        private readonly IWindowManager _windowManager;
+        private SensorManager? _sensorManager;
+        private readonly IWindowManager? _windowManager;
 
-        private Sensor _rotationSensor;
-        private Sensor _accelerometer;
-        private Sensor _magnetometer;
+        private Sensor? _rotationSensor;
+        private Sensor? _accelerometer;
+        private Sensor? _magnetometer;
 
         public CompassOrientationHelper(Context context)
         {
@@ -80,8 +80,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _isStarted = false;
         }
 
-        private float[] _lastAccelerometer = new float[3];
-        private float[] _lastMagnetometer = new float[3];
+        private float[]? _lastAccelerometer;
+        private float[]? _lastMagnetometer;
 
         SensorStatus _currentAccuracy;
 
@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         void ISensorEventListener.OnSensorChanged(SensorEvent e)
         {
-            float[] rotationMatrix = null;
+            float[]? rotationMatrix = null;
 
             if (e.Sensor == _rotationSensor)
             {
@@ -119,7 +119,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             if(rotationMatrix != null)
             {
                 Android.Hardware.Axis ax, ay;
-                switch (_windowManager.DefaultDisplay.Rotation)
+                switch (_windowManager?.DefaultDisplay?.Rotation)
                 {
                     case SurfaceOrientation.Rotation90:
                         ax = Android.Hardware.Axis.Z;
@@ -153,7 +153,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 });
             }
         }
-        public event EventHandler<CompassOrientationEventArgs> OrientationChanged;
+        public event EventHandler<CompassOrientationEventArgs>? OrientationChanged;
     }
 
     internal struct CompassOrientationEventArgs

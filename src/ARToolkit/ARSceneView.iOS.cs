@@ -19,7 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ARKit;
-using CoreMedia;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
@@ -34,8 +33,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private bool _created;
         private ARDelegate _delegate;
 
-        private void Initialize()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ARSceneView"/> class.
+        /// </summary>
+        public ARSceneView() : base()
         {
+            InitializeCommon();
+       
             _delegate = new ARDelegate(this);
 
             // Each session has to be configured.
@@ -52,6 +56,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 ARSCNView = new ARSCNView2(_delegate) { TranslatesAutoresizingMaskIntoConstraints = false };
             }
+
             IsUsingARKit = DeviceSupportsARKit;
             // Tell the SceneView we will be calling `RenderFrame()` manually if we're using ARKit.
             IsManualRendering = IsUsingARKit;
@@ -60,7 +65,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Gets a reference to the ARKit SceneView child control
         /// </summary>
-        public ARSCNView ARSCNView { get; private set; }
+        public ARSCNView? ARSCNView { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether ARKit should be used for tracking the device movements
@@ -77,7 +82,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 sceneviewSurface.BackgroundColor = UIColor.Clear;
 
                 _created = true;
-                if (DeviceSupportsARKit)
+                if (ARSCNView != null)
                 {
                     InsertSubview(ARSCNView, 0);
                     ARSCNView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
@@ -136,7 +141,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnWillRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds)
         {
-            if (_tracking)
+            if (_tracking && ARSCNView != null)
             {
                 var pov = ARSCNView.PointOfView;
                 if (pov != null)
@@ -146,15 +151,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     {
                         var q = pov.WorldOrientation;
                         var t = pov.Transform;
-                        _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
+                        if(_controller != null)
+                            _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
                         using (var frame = ARSCNView.Session.CurrentFrame)
                         {
-                        var camera = frame?.Camera;
+                            var camera = frame?.Camera;
                             if (camera != null)
                             {
-                        var intrinsics = camera.Intrinsics;
-                        var imageResolution = camera.ImageResolution;
-                        SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
+                                var intrinsics = camera.Intrinsics;
+                                var imageResolution = camera.ImageResolution;
+                                SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
                             }
                         }
                     }
@@ -189,7 +195,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 // Once we have our configuration we need to run session with it.
                 // ResetTracking will just reset tracking by session to start it again from scratch:
-                ARSCNView.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
+                ARSCNView?.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
             }
         }
 
@@ -202,14 +208,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnStopTracking()
         {
-            if (IsUsingARKit)
+            if (IsUsingARKit && ARSCNView != null)
             {
                 ARSCNView.Session.Pause();
                 ARSCNView.Session.Delegate = null;
-                if (ARSCNView.Delegate is ARDelegate ard)
-                {
-                    ard.OnStop();
-                }
+                _delegate.OnStop();
             }
         }
 
@@ -217,7 +220,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             if (IsUsingARKit)
             {
-                ARSCNView.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking | ARSessionRunOptions.RemoveExistingAnchors);
+                ARSCNView?.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking | ARSessionRunOptions.RemoveExistingAnchors);
             }
         }
 
@@ -241,7 +244,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     _arConfiguration = value;
                     if (IsTracking && IsUsingARKit)
                     {
-                        ARSCNView.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
+                        ARSCNView?.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
                     }
                 }
             }
@@ -272,9 +275,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
-        private TransformationMatrix HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
+        private TransformationMatrix? HitTest(CoreGraphics.CGPoint screenPoint, ARHitTestResultType type = ARHitTestResultType.EstimatedHorizontalPlane)
         {
-            var hit = ARSCNView.HitTest(screenPoint, type);
+            var hit = ARSCNView?.HitTest(screenPoint, type);
             // Get the worldTransform from the first result; if there's no worldTransform, return null.
             var t = hit?.FirstOrDefault()?.WorldTransform;
             if (t != null)
@@ -303,7 +306,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 if (_renderPlanes != value)
                 {
                     _renderPlanes = value;
-                    if(ARSCNView.Delegate is ARDelegate ard)
+                    if(ARSCNView?.Delegate is ARDelegate ard)
                     {
                         ard.TogglePlanes(_renderPlanes);
                     }
@@ -314,47 +317,47 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.WillUpdateNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewWillUpdateNode;
+        public event EventHandler<ARSCNViewNodeEventArgs>? ARSCNViewWillUpdateNode;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.DidAddNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewDidAddNode;
+        public event EventHandler<ARSCNViewNodeEventArgs>? ARSCNViewDidAddNode;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.DidUpdateNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewDidUpdateNode;
+        public event EventHandler<ARSCNViewNodeEventArgs>? ARSCNViewDidUpdateNode;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.DidRemoveNode(ISCNSceneRenderer, SCNNode, ARAnchor)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewNodeEventArgs> ARSCNViewDidRemoveNode;
+        public event EventHandler<ARSCNViewNodeEventArgs>? ARSCNViewDidRemoveNode;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.CameraDidChangeTrackingState(ARSession, ARCamera)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewCameraTrackingStateEventArgs> ARSCNViewCameraDidChangeTrackingState;
+        public event EventHandler<ARSCNViewCameraTrackingStateEventArgs>? ARSCNViewCameraDidChangeTrackingState;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.WillRenderScene(ISCNSceneRenderer, SCNScene, double)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewRenderSceneEventArgs> ARSCNViewWillRenderScene;
+        public event EventHandler<ARSCNViewRenderSceneEventArgs>? ARSCNViewWillRenderScene;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.DidRenderScene(ISCNSceneRenderer, SCNScene, double)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler<ARSCNViewRenderSceneEventArgs> ARSCNViewDidRenderScene;
+        public event EventHandler<ARSCNViewRenderSceneEventArgs>? ARSCNViewDidRenderScene;
 
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.WasInterrupted(ARSession)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler ARSCNViewWasInterrupted;
+        public event EventHandler? ARSCNViewWasInterrupted;
         
         /// <summary>
         /// Triggered when the <see cref="ARSCNViewDelegate.InterruptionEnded(ARSession)"/> delegate method gets invoked.
         /// </summary>
-        public event EventHandler ARSCNViewInterruptionEnded;
+        public event EventHandler? ARSCNViewInterruptionEnded;
 
         /// <summary>
         /// Custom version of ARSCNView that prevents setting the delegate that we rely on (use the provided events instead)

@@ -34,13 +34,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private bool _isLoaded;
         private bool _isTracking;
 
-        private void Initialize()
+		  /// <summary>
+        /// Initializes a new instance of the <see cref="ARSceneView"/> class.
+        /// </summary>
+        public ARSceneView() : base()
         {
+            InitializeCommon();
             _isTracking = false;
             Loaded += ARSceneView_Loaded;
             Unloaded += ARSceneView_Unloaded;
-            IsManualRendering = false;
-            
+            IsManualRendering = false;            
         }
 
         /// <inheritdoc />

@@ -38,20 +38,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
     /// </summary>
     public partial class ARSceneView : SceneView
     {
-        private TransformationMatrixCameraController _controller;
+        private TransformationMatrixCameraController? _controller;  // Only null in design mode
         private bool _initialLocationSet = false; // Denotes whether we've received our initial location from the data source.
         private ARLocationTrackingMode _locationTrackingMode = ARLocationTrackingMode.Ignore; // The tracking mode controlling how the locations generated from the location data source are used during AR tracking.
-        private LocationDataSource _locationDataSource;
+        private LocationDataSource? _locationDataSource;
 
 #if !__ANDROID__
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ARSceneView"/> class.
-        /// </summary>
-        public ARSceneView() : base()
-        {
-            InitializeCommon();
-        }
-
         private bool IsDesignTime { get; } = false;
 #endif
 
@@ -61,13 +53,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 SpaceEffect = UI.SpaceEffect.None;
                 AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
-                InitialTransformation = Mapping.TransformationMatrix.Identity;
+                _initialTransformation = Mapping.TransformationMatrix.Identity;
                 _controller = new TransformationMatrixCameraController() { TranslationFactor = 1 };
                 _controller.OriginCameraChanged += Controller_OriginCameraChanged;
                 LocationDataSource = new SystemLocationDataSource();
             }
-
-            Initialize();
         }
 
         private void Controller_OriginCameraChanged(object sender, EventArgs e) => OriginCameraChanged?.Invoke(this, e);
@@ -118,8 +108,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         public void ResetTracking()
         {
-            InitialTransformation = Mapping.TransformationMatrix.Identity;
-            _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
+            _initialTransformation = Mapping.TransformationMatrix.Identity;
+            if(_controller != null)
+                _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
             _initialLocationSet = false;
 #if __ANDROID__
             _initialHeading = null;
@@ -131,7 +122,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// The data source used to get device location.
         /// Used either in conjuction with device camera tracking data or when device camera tracking is not present or not being used.
         /// </summary>
-        public LocationDataSource LocationDataSource
+        public LocationDataSource? LocationDataSource
         {
             get => _locationDataSource;
             set
@@ -147,6 +138,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
         }
+
         private object locationLock = new object();
         private void LocationDataSource_LocationChanged(object sender, Location.Location e)
         {
@@ -175,8 +167,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     OriginCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : originCamera.Location.Z, originCamera.Heading, originCamera.Pitch, originCamera.Roll);
                 }
             }
-            _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
-            if (_locationTrackingMode != ARLocationTrackingMode.Continuous)
+            if (_controller != null)
+                _controller.TransformationMatrix = Mapping.TransformationMatrix.Identity;
+            if (_locationTrackingMode != ARLocationTrackingMode.Continuous && LocationDataSource != null)
             {
                 _ = LocationDataSource.StopAsync();
             }
@@ -188,8 +181,12 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <remarks>A value of 1 means if the device 1 meter in the real world, it'll move 1 m in the AR world. Set this to 1000 to make 1 m meter 1km in the AR world.</remarks>
         public double TranslationFactor
         {
-            get => _controller.TranslationFactor;
-            set => _controller.TranslationFactor = value;
+            get => _controller?.TranslationFactor ?? 1d;
+            set
+            {
+                if (_controller == null) throw new InvalidOperationException();
+                _controller.TranslationFactor = value;
+            }
         }
 
         private bool _renderVideoFeed = true;
@@ -244,7 +241,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <seealso cref="IsTracking"/>
         /// <seealso cref="StartTrackingAsync"/>
         /// <seealso cref="StopTracking"/>
-        public event EventHandler<bool> IsTrackingStateChanged;
+        public event EventHandler<bool>? IsTrackingStateChanged;
 
         /// <summary>
         /// Gets or sets the viewpoint camera used to set the initial view of the sceneView instead of the device's GPS location via the location data source.
@@ -252,29 +249,35 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <seealso cref="OriginCameraChanged"/>
         public Mapping.Camera OriginCamera
         {
-            get => _controller.OriginCamera;
-            set => _controller.OriginCamera = value;
+            get => _controller?.OriginCamera ?? throw new InvalidOperationException();  // Only null in design mode
+            set
+            {
+                if (_controller != null) 
+                    _controller.OriginCamera = value;
+            }
         }
 
         /// <summary>
         /// Raised when the <see cref="OriginCamera"/> has changed
         /// </summary>
         /// <seealso cref="OriginCamera"/>
-        public event EventHandler OriginCameraChanged;
+        public event EventHandler? OriginCameraChanged;
+
+        private Mapping.TransformationMatrix? _initialTransformation; // Only null in design mode
 
         /// <summary>
         /// Gets the initial transformation used for a table top experience.  Defaults to the Identity Matrix.
         /// </summary>
         /// <seealso cref="SetInitialTransformation(Mapping.TransformationMatrix)"/>
         /// <seealso cref="SetInitialTransformation(Point)"/>
-        public Mapping.TransformationMatrix InitialTransformation { get; private set; }
+        public Mapping.TransformationMatrix InitialTransformation { get => _initialTransformation ?? throw new InvalidOperationException(); }
 
         /// <summary>
         /// Determines the map point for the given screen point hittesting any surface in the scene.
         /// </summary>
         /// <param name="screenPoint"> The point in screen coordinates.</param>
         /// <returns>The map point corresponding to screenPoint.</returns>
-        public Geometry.MapPoint ARScreenToLocation(Point screenPoint)
+        public Geometry.MapPoint? ARScreenToLocation(Point screenPoint)
         {
             var matrix = HitTest(screenPoint);
             if (matrix == null)
@@ -299,7 +302,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 throw new ArgumentNullException(nameof(transformationMatrix));
             }
 
-            InitialTransformation = transformationMatrix;
+            _initialTransformation = transformationMatrix;
         }
 
         /// <summary>
@@ -317,14 +320,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 return false;
             }
 
-            InitialTransformation = Mapping.TransformationMatrix.Identity - origin;
+            _initialTransformation = Mapping.TransformationMatrix.Identity - origin;
             return true;
         }
 
         /// <summary>
         /// Raises an event indicating whether horizontal planes are currently detected or not
         /// </summary>
-        public event EventHandler<bool> PlanesDetectedChanged;
+        public event EventHandler<bool>? PlanesDetectedChanged;
 
         internal void RaisePlanesDetectedChanged(bool planesDetected)
         {
