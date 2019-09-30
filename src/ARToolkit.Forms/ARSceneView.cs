@@ -150,9 +150,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         public System.Threading.Tasks.Task StartTrackingAsync(ARLocationTrackingMode locationTrackingMode = ARLocationTrackingMode.Ignore)
         {
 #if !NETSTANDARD2_0
-            if (NativeARSceneView() == null)
+            var nativeView = NativeARSceneView();
+            if (nativeView == null)
                 throw new InvalidOperationException("Cannot start tracking before the view has appeared");
-            return NativeARSceneView().StartTrackingAsync(locationTrackingMode);
+            return nativeView.StartTrackingAsync(locationTrackingMode);
 #else
             throw new PlatformNotSupportedException();
 #endif
@@ -249,12 +250,12 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         private Esri.ArcGISRuntime.ARToolkit.ARSceneView? NativeARSceneView()
         {
 #if __ANDROID__
-            return (global::Xamarin.Forms.Platform.Android.Platform.GetRenderer(this) as Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android.ARSceneViewRenderer).Control as ARToolkit.ARSceneView;
+            return (global::Xamarin.Forms.Platform.Android.Platform.GetRenderer(this) as Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android.ARSceneViewRenderer)?.Control as ARToolkit.ARSceneView;
 #elif __IOS__
-            return (global::Xamarin.Forms.Platform.iOS.Platform.GetRenderer(this) as Esri.ArcGISRuntime.ARToolkit.Forms.Platform.iOS.ARSceneViewRenderer).Control as ARToolkit.ARSceneView;
+            return (global::Xamarin.Forms.Platform.iOS.Platform.GetRenderer(this) as Esri.ArcGISRuntime.ARToolkit.Forms.Platform.iOS.ARSceneViewRenderer)?.Control as ARToolkit.ARSceneView;
 #elif NETFX_CORE
             var r = global::Xamarin.Forms.Platform.UWP.VisualElementExtensions.GetOrCreateRenderer(this);
-            return r.GetNativeElement() as ARToolkit.ARSceneView;
+            return r?.GetNativeElement() as ARToolkit.ARSceneView;
 #endif
         }
 #endif
