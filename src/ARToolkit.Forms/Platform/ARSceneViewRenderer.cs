@@ -173,9 +173,12 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
         /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
-            ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
-            ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
-            ARControl.StopTracking();
+            if (ARControl != null)
+            {
+                ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
+                ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
+                ARControl.StopTracking();
+            }
             base.Dispose(disposing);
         }
 
