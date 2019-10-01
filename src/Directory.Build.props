@@ -6,6 +6,7 @@
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
     <PackageReleaseNotes>v$(ArcGISRuntimeToolkitPackageVersion): https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v$(ArcGISRuntimeToolkitPackageVersion)</PackageReleaseNotes>
@@ -20,6 +21,7 @@
 
     <!--Project type identifiers-->
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
+	<IsSampleProject Condition="'$(IsSampleProject)'!='true'">$(MSBuildProjectName.Contains('.SampleApp.'))</IsSampleProject>
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
     <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true'">false</IsToolkitLibrary>
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
@@ -38,6 +40,7 @@
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
+    <NoWarn>$(NoWarn);NU5105</NoWarn>
   </PropertyGroup>
 
   <Choose>
@@ -66,6 +69,14 @@
   <ItemGroup Condition="'$(VersionOverride)'!='true'">
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.26" PrivateAssets="all" />
   </ItemGroup>
+  
+  <ItemGroup Condition="$(IsToolkitLibrary)">
+    <None Include="$(MSBuildThisFileDirectory)..\build\icon.png" Pack="true" PackagePath="\">
+      <Link>icon.png</Link>
+	  <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+
    
     <!--
     // This task disable doc warnings in the auto-generated XamlTypeInfo.g.cs file,
