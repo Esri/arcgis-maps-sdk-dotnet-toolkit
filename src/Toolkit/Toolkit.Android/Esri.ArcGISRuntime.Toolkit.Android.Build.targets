@@ -37,7 +37,7 @@
             }
             else
             {
-                Log.LogError("Auto-generated file not found at path " + ResourceFilePath);
+                Log.LogWarning("Auto-generated file not found at path " + ResourceFilePath);
                 return false;
             }
         }
