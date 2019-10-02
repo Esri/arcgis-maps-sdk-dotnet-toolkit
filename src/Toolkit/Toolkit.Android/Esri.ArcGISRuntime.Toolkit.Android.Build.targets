@@ -38,7 +38,7 @@
             else
             {
                 Log.LogWarning("Auto-generated file not found at path " + ResourceFilePath);
-                return false;
+                return true;
             }
         }
         catch (Exception ex)
