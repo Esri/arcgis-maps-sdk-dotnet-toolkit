@@ -96,6 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             context.StrokeEllipseInRect(r);
 
             var path = new CGPath();
+            
             // create geometry
             path.AddLines(new CGPoint[]
             {
@@ -133,6 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 SetVisibility(Heading != 0);
             }
+
             SetNeedsDisplay();
         }
 
