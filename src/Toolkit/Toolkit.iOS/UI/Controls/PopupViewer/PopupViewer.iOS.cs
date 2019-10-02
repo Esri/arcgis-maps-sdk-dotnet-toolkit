@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_intrinsicContentSize == CGSize.Empty)
             {
                 var height = _editSummary.IntrinsicContentSize.Height + _customHtmlDescription.IntrinsicContentSize.Height + _detailsList.ContentSize.Height + UIFont.LabelFontSize;
-                var maxWidth = Superview.Frame.GetMaxY() - Superview.Frame.GetMinY();
+                var maxWidth = Bounds.Width;
                 if (maxWidth == 0)
                 {
                     maxWidth = (nfloat)Math.Max(Math.Max(_editSummary.IntrinsicContentSize.Width, _customHtmlDescription.IntrinsicContentSize.Width), _detailsList.ContentSize.Width);
@@ -176,8 +176,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _editSummary.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
                 _editSummary.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-                _editSummary.WidthAnchor.ConstraintEqualTo(Superview.Bounds.Width).Active = true;
-                _editSummary.BottomAnchor.ConstraintEqualTo(bottomAnchor).Active = true;
+                _editSummary.LeftAnchor.ConstraintEqualTo(margin.LeftAnchor).Active = true;
+                _editSummary.RightAnchor.ConstraintEqualTo(margin.RightAnchor).Active = true;
             }
             else
             {
@@ -189,13 +189,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _customHtmlDescription.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
                 _customHtmlDescription.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-                _customHtmlDescription.WidthAnchor.ConstraintEqualTo(Superview.Bounds.Width).Active = true;
+                _customHtmlDescription.LeftAnchor.ConstraintEqualTo(margin.LeftAnchor).Active = true;
+                _customHtmlDescription.RightAnchor.ConstraintEqualTo(margin.RightAnchor).Active = true;
             }
             else
             {
                 _detailsList.TopAnchor.ConstraintEqualTo(topAnchor).Active = true;
                 _detailsList.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor).Active = true;
-                _detailsList.WidthAnchor.ConstraintEqualTo(Superview.Bounds.Width).Active = true;
+                _detailsList.LeftAnchor.ConstraintEqualTo(margin.LeftAnchor).Active = true;
+                _detailsList.RightAnchor.ConstraintEqualTo(margin.RightAnchor).Active = true;
                 _detailsList.BottomAnchor.ConstraintEqualTo(margin.BottomAnchor, -5).Active = true;
             }
         }

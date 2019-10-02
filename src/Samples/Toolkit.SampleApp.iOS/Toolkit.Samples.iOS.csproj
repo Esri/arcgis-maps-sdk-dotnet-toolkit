@@ -66,6 +66,7 @@
     <Compile Include="SamplesViewController.designer.cs">
       <DependentUpon>SamplesViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Samples\LayerLegendViewController.cs" />
     <Compile Include="Samples\LegendViewController.cs" />
     <Compile Include="Samples\ScaleLineViewController.cs" />
     <Compile Include="Samples\CompassSceneViewController.cs" />

@@ -16,7 +16,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
     public partial class PopupViewController : UIViewController
     {
         private MapView mapView;
-        private PopupViewer popupViewer;
 
         public PopupViewController()
         {
@@ -40,23 +39,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             };
             this.View.AddSubview(mapView);
 
-            popupViewer = new PopupViewer()
-            {
-                Frame = new CoreGraphics.CGRect(0, 0, 414, 736),
-                BackgroundColor = UIColor.White,
-                ContentStretch = new CoreGraphics.CGRect(0, 0, 1, 1),
-                TranslatesAutoresizingMaskIntoConstraints = false,
-                Hidden = true
-            };
-            this.View.AddSubview(popupViewer);
-
             mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
             mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
             mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
             mapView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
-            popupViewer.TopAnchor.ConstraintEqualTo(View.TopAnchor).Active = true;
-            popupViewer.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
-
+            
             // Used in Callout to see feature details in PopupViewer
             InfoIcon = await UIImage.FromBundle("info.png")?.ToRuntimeImageAsync();
             mapView.GeoViewTapped += mapView_GeoViewTapped;
@@ -80,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 // Retrieves or builds Popup from IdentifyLayerResult
                 var popup = GetPopup(result);
 
-                // Displays callout and updates visibility of PopupViewer
+                // Displays callout and on (i) button click shows PopupViewer in it's own view controller
                 if (popup != null)
                 {
                     var callout = new CalloutDefinition(popup.GeoElement);
@@ -88,15 +75,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                     callout.ButtonImage = InfoIcon;
                     callout.OnButtonClick = new Action<object>((s) =>
                     {
-                        popupViewer.Hidden = false;
-                        popupViewer.PopupManager = new PopupManager(popup);
+                        var pvc = new PopupInfoViewController(popup);
+                        this.PresentModalViewController(pvc, true);
                     });
                     mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
-                }
-                else
-                {
-                    popupViewer.PopupManager = null;
-                    popupViewer.Hidden = true;
                 }
             }
             catch (Exception ex)
@@ -167,6 +149,50 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             }
 
             return null;
+        }
+
+        // Separate view controller for just showing the popup contents in its own view.
+        private partial class PopupInfoViewController : UIViewController
+        {
+            private Popup popup;
+            private PopupViewer popupViewer;
+
+            public PopupInfoViewController(Popup popup)
+            {
+                ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
+                this.popup = popup;
+            }
+
+            public override void ViewDidLoad()
+            {
+                base.ViewDidLoad();
+                UIButton button = new UIButton(UIButtonType.System)
+                {
+                    TranslatesAutoresizingMaskIntoConstraints = false
+                };
+                button.SetTitle("Done", UIControlState.Normal);
+                button.TouchUpInside += (s, e) =>
+                {
+                    this.DismissModalViewController(true);
+                };
+                this.View.AddSubview(button);
+
+                popupViewer = new PopupViewer()
+                {
+                    Frame = new CoreGraphics.CGRect(0, 0, 414, 736),
+                    BackgroundColor = UIColor.White,
+                    ContentStretch = new CoreGraphics.CGRect(0, 0, 1, 1),
+                    TranslatesAutoresizingMaskIntoConstraints = false
+                };
+                popupViewer.PopupManager = new PopupManager(popup);
+                this.View.AddSubview(popupViewer);
+                button.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
+                button.LeftAnchor.ConstraintEqualTo(View.LayoutMarginsGuide.LeftAnchor).Active = true;
+                popupViewer.TopAnchor.ConstraintEqualTo(button.BottomAnchor).Active = true;
+                popupViewer.LeftAnchor.ConstraintEqualTo(View.LeftAnchor).Active = true;
+                popupViewer.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor).Active = true;
+                popupViewer.RightAnchor.ConstraintEqualTo(View.RightAnchor).Active = true;
+            }
         }
     }
 }

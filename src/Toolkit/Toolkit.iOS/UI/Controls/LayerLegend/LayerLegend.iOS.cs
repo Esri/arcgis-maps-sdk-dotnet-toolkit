@@ -27,7 +27,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Category("ArcGIS Runtime Controls")]
     public partial class LayerLegend : IComponent
     {
-        private UIStackView _rootStackView;
         private UITableView _listView;
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
@@ -64,15 +63,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Hidden = true;
             }
 
-            _rootStackView = new UIStackView()
-            {
-                Axis = UILayoutConstraintAxis.Vertical,
-                Alignment = UIStackViewAlignment.Leading,
-                Distribution = UIStackViewDistribution.Fill,
-                TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
-            };
-
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
             {
                 ClipsToBounds = true,
@@ -86,14 +76,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 EstimatedRowHeight = SymbolDisplay.MaxSize,
             };
             _listView.RegisterClassForCellReuse(typeof(LayerLegendItemCell), LayerLegendTableSource.CellId);
-            _rootStackView.AddSubview(_listView);
+            AddSubview(_listView);
 
-            AddSubview(_rootStackView);
-
-            _listView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
+            _listView.LeftAnchor.ConstraintEqualTo(LeftAnchor).Active = true;
             _listView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
-            _listView.TrailingAnchor.ConstraintEqualTo(TrailingAnchor).Active = true;
-            _listView.HeightAnchor.ConstraintEqualTo(HeightAnchor).Active = true;
+            _listView.RightAnchor.ConstraintEqualTo(RightAnchor).Active = true;
+            _listView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
 
             InvalidateIntrinsicContentSize();
         }

@@ -1,7 +1,7 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/1.6.68">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework)</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit (Preview)</Title>
     <Description>Preview package containing new features under development in the Toolkit for ArcGIS Runtime SDK for .NET.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
@@ -18,7 +18,6 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
 
@@ -26,6 +25,10 @@
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
   
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'">
+    <UseWpf>true</UseWpf>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
     <Reference Include="System.Security" />
     <Reference Include="System.Xaml" />
@@ -76,6 +79,7 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'" />
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
