@@ -80,7 +80,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                     ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
                     ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
                 }
-                MessagingCenter.Unsubscribe<ARSceneView>(this, "StopTracking");
                 MessagingCenter.Unsubscribe<ARSceneView>(this, "ResetTracking");
                 MessagingCenter.Unsubscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation");
             }
@@ -103,7 +102,6 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
                     ARControl.OriginCameraChanged += ARControl_OriginCameraChanged;
                     ARControl.PlanesDetectedChanged += ARControl_PlanesDetectedChanged;
                 }
-                MessagingCenter.Subscribe<ARSceneView>(this, "StopTracking", (s) => ARControl?.StopTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView>(this, "ResetTracking", (s) => ARControl?.ResetTracking(), elm);
                 MessagingCenter.Subscribe<ARSceneView, Mapping.TransformationMatrix>(this, "SetInitialTransformation", (s, a) => ARControl?.SetInitialTransformation(a), elm);
             }
@@ -177,7 +175,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
                 ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
-                ARControl.StopTracking();
+                ARControl.StopTrackingAsync();
             }
             base.Dispose(disposing);
         }

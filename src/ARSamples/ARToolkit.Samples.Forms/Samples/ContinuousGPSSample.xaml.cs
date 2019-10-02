@@ -68,7 +68,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            ARView.StopTracking();
+            ARView.StopTrackingAsync();
         }
 
         private void CompassOffset_ValueChanged(object sender, ValueChangedEventArgs e)

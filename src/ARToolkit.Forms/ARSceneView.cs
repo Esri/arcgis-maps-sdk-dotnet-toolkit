@@ -162,9 +162,16 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         /// <summary>
         /// Suspends device tracking.
         /// </summary>
-        public void StopTracking()
+        public System.Threading.Tasks.Task StopTrackingAsync()
         {
-            MessagingCenter.Send(this, "StopTracking");
+#if !NETSTANDARD2_0
+            var nativeView = NativeARSceneView();
+            if (nativeView == null)
+                throw new InvalidOperationException("Cannot stop tracking before the view has appeared");
+            return nativeView.StopTrackingAsync();
+#else
+            throw new PlatformNotSupportedException();
+#endif
         }
 
         /// <summary>

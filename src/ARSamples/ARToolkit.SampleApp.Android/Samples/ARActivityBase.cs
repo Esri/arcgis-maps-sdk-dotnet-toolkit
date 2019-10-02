@@ -109,7 +109,7 @@ namespace ARToolkit.SampleApp.Samples
         protected override void OnPause()
         {
             base.OnPause();
-            arView.StopTracking();
+            arView.StopTrackingAsync();
         }
 
         public override void OnWindowFocusChanged(bool hasFocus)

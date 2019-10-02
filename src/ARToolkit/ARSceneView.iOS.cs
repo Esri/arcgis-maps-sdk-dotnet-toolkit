@@ -190,13 +190,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnStartTracking()
         {
-            _isStarted = true;
-            if (IsUsingARKit)
+            CoreFoundation.DispatchQueue.MainQueue.DispatchAsync(() =>
             {
-                // Once we have our configuration we need to run session with it.
-                // ResetTracking will just reset tracking by session to start it again from scratch:
-                ARSCNView?.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
-            }
+                _isStarted = true;
+                if (IsUsingARKit)
+                {
+                    // Once we have our configuration we need to run session with it.
+                    // ResetTracking will just reset tracking by session to start it again from scratch:
+                    ARSCNView?.Session.Run(ARConfiguration, ARSessionRunOptions.ResetTracking);
+                }
+            });
         }
 
         /// <inheritdoc />
@@ -210,9 +213,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
         {
             if (IsUsingARKit && ARSCNView != null)
             {
-                ARSCNView.Session.Pause();
-                ARSCNView.Session.Delegate = null;
                 _delegate.OnStop();
+                ARSCNView.Session.Pause();
             }
         }
 

@@ -36,7 +36,7 @@ namespace ARToolkit.SampleApp.Samples
 
         public override void ViewDidDisappear(bool animated)
         {
-            ARView.StopTracking();
+            ARView.StopTrackingAsync();
             base.ViewDidDisappear(animated);
         }
 

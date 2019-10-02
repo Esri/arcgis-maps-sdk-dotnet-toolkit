@@ -91,10 +91,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Suspends device tracking.
         /// </summary>
-        public void StopTracking()
+        public async Task StopTrackingAsync()
         {
+            if(LocationDataSource != null)
+                await LocationDataSource.StopAsync();
             OnStopTracking();
-            _ = LocationDataSource?.StopAsync();
 
             if (IsTracking)
             {
@@ -232,7 +233,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Gets a value indicating whether tracking of location and angles is currently active
         /// </summary>
         /// <seealso cref="StartTrackingAsync"/>
-        /// <seealso cref="StopTracking"/>
+        /// <seealso cref="StopTrackingAsync"/>
         public bool IsTracking { get; private set; }
 
         /// <summary>
@@ -240,7 +241,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         /// <seealso cref="IsTracking"/>
         /// <seealso cref="StartTrackingAsync"/>
-        /// <seealso cref="StopTracking"/>
+        /// <seealso cref="StopTrackingAsync"/>
         public event EventHandler<bool>? IsTrackingStateChanged;
 
         /// <summary>
