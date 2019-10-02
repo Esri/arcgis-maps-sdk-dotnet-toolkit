@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.43">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
   
   <PropertyGroup>
     <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
