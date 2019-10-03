@@ -29,7 +29,7 @@ steps:
     
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '.\Output\NuGet\Release\*.nupkg'
+    SourceFolder: '.\Output\NuGet\Release\'
     Contents: '*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true
