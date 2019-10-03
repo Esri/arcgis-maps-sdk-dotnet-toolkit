@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.ARToolkit.Forms;assembly=Esri.ArcGISRuntime.ARToolkit.Forms"
+             x:Class="ARToolkit.SampleApp.Forms.Samples.ContinuousGPSSample">
+    <Grid>
+        <esri:ARSceneView x:Name="ARView" />
+
+        <Grid HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="#55ffffff" x:Name="CalibrationSettings" IsVisible="True">
+            <StackLayout Margin="20">
+                <Label Text="Compass offset:" />
+                <Slider Minimum="0" Maximum="360" x:Name="CompassOffset" ValueChanged="CompassOffset_ValueChanged" />
+                <Label Text="Vertical offset:" />
+                <Slider Minimum="0" Maximum="100" x:Name="VerticalOffset" ValueChanged="VerticalOffset_ValueChanged" />
+                <Button Text="Toggle Basemap" Clicked="ToggleBasemap_Click" />
+            </StackLayout>
+            
+            <Button HorizontalOptions="End" VerticalOptions="Start"
+                Text="X" Clicked="CalibrateButton_Click" BackgroundColor="Transparent" />
+            
+        </Grid>
+
+        <Button HorizontalOptions="End" VerticalOptions="Start"
+                Text="Calibrate..." Clicked="CalibrateButton_Click" />
+
+        <Label Text="" x:Name="HeadingReadout"
+               HorizontalOptions="Center" VerticalOptions="End" Margin="10"
+               FontSize="Medium"
+               />
+    </Grid>
+</ContentPage>

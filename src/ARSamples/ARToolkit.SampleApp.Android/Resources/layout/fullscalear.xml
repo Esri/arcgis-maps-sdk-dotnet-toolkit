@@ -1,0 +1,62 @@
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Esri.ArcGISRuntime.ARToolkit.ARSceneView         
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/sceneView1"/>
+   
+         <LinearLayout
+        android:id="@+id/settingsView"
+        android:orientation="horizontal"
+        android:backgroundTint="#ccdddd"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffdede">
+        <Button
+            android:onClick="btnSurfaceClick"
+            android:minWidth="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Surface"/>
+        <Button
+            android:onClick="btnUpClick"
+            android:text="Move Up"
+            android:minWidth="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:onClick="btnDownClick"
+            android:text="Move Down"
+            android:minWidth="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/headingText"
+        android:text="Heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff"
+        android:textSize="20dp"/>
+
+     <TextView android:visibility="invisible"
+            android:id="@+id/trackingStatus"
+            android:text="Looking for surfaces. Move the device in a circular motion to detect surfaces..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#ffffff"
+            android:padding="20dp"
+            android:textSize="24dp"/>
+</RelativeLayout>

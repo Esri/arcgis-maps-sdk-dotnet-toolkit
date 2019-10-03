@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>2e0d0f5f-0515-465b-8161-59ef1e020b48</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SampleHelpers</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ARTestScenes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DownloadManager\FileDownloadTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SampleDataAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SampleDatasource.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SampleInfoAttribute.cs" />
+  </ItemGroup>
+</Project>

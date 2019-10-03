@@ -1,0 +1,39 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+  
+  <PropertyGroup>
+    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
+    <iOSTargetFramework>xamarinios10</iOSTargetFramework>
+    <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
+    <Title>ArcGIS Runtime SDK for .NET - AR Toolkit Xamarin.Forms</Title>
+    <Description>ArcGIS Runtime Augmented Reality controls and utilities for Xamarin.Forms apps</Description>
+    <PackageTags>AR Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
+    <RootNamespace>Esri.ArcGISRuntime.ARToolkit.Forms</RootNamespace>
+    <AssemblyName>Esri.ArcGISRuntime.ARToolkit.Forms</AssemblyName>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Company>Esri Inc.</Company>
+    <Authors>Esri Inc.</Authors>
+    <Copyright>Copyright © 2018-2019 Esri.</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
+  </ItemGroup>
+
+</Project>

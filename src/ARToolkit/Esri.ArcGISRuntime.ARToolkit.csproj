@@ -1,0 +1,79 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+  
+  <PropertyGroup>
+    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
+    <iOSTargetFramework>xamarinios10</iOSTargetFramework>
+    <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
+    <Title>ArcGIS Runtime SDK for .NET - AR Toolkit Xamarin.Forms</Title>
+    <Description>ArcGIS Runtime Augmented Reality controls and utilities for Universal Windows Platform (UWP), Xamarin.Android, and Xamarin.iOS apps.</Description>
+    <PackageTags>AR Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
+    <RootNamespace>Esri.ArcGISRuntime.ARToolkit</RootNamespace>
+    <AssemblyName>Esri.ArcGISRuntime.ARToolkit</AssemblyName>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Copyright>Copyright © 2018-2019 Esri.</Copyright>
+    <Authors>Esri Inc.</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\**\*.*" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Xamarin.Google.ARCore" Version="1.11.0" />
+    <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
+    <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.11.0" />
+    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.1" />
+
+    <AndroidResource Include="Resources\**\*.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
+
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="$(ArcGISRuntimePackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+     <PackageReference Include="Esri.ArcGISRuntime" Version="$(ArcGISRuntimePackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="GridDot.png" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+    <EmbeddedResource Include="GridDot.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ARSceneView.*.cs">
+      <DependentUpon>ARSceneView.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+   <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
+    <ItemGroup>
+      <_FakeOutputPath Include="$(OutputPath)\$(AssemblyName).dll" />
+    </ItemGroup>
+  </Target>
+</Project>

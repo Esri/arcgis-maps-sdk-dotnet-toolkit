@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ARToolkit.SampleApp.Forms"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.ARToolkit.Forms;assembly=Esri.ArcGISRuntime.ARToolkit.Forms"
+             x:Class="ARToolkit.SampleApp.Forms.MainPage" Title="Xamarin.Forms ARToolkit Samples">
+
+    <Grid>
+
+    <ListView x:Name="samples" ItemSelected="Samples_ItemSelected" Margin="20" RowHeight="100">
+        <ListView.ItemTemplate>
+            <DataTemplate >
+                    <ViewCell>
+                        <StackLayout Margin="0,5,0,0">
+                            <Label Text="{Binding Name}" FontSize="16" TextColor="Black" FontAttributes="Bold" />
+                            <Label Text="{Binding Description}" TextColor="Black" />
+                        </StackLayout>
+                    </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+
+        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="20" BackgroundColor="White" x:Name="dataDialog" IsVisible="False">
+            <Label Text="Downloading data..." />
+            <Label x:Name="status" />
+        </StackLayout>
+        
+    </Grid>
+
+</ContentPage>
