@@ -24,6 +24,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class Compass : System.ComponentModel.INotifyPropertyChanged
     {
+        private bool _resetOnClick;
+
+        private bool ResetOnClickImpl
+        {
+            get => _resetOnClick;
+            set
+            {
+                if (_resetOnClick != value)
+                {
+                    if (value)
+                    {
+
+                        CompassClicked += OnResetRotation;
+                    }
+                    else
+                    {
+                        CompassClicked -= OnResetRotation;
+                    }
+
+                    _resetOnClick = value;
+                    OnPropertyChanged(nameof(ResetOnClick));
+                }
+            }
+        }
+
         private double _heading;
 
         private double HeadingImpl

@@ -65,6 +65,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     ctrl.GeoView = Element.GeoView?.GetNativeGeoView();
                     ctrl.Heading = Element.Heading;
                     ctrl.AutoHide = Element.AutoHide;
+                    ctrl.ResetOnClick = Element.ResetOnClick;
+                    ctrl.CompassClicked += (s, args) => Element.RaiseCompassClickedEvent();
 
 #if NETFX_CORE
                     ctrl.Margin = new Windows.UI.Xaml.Thickness(0, 0, 1, 0);
@@ -140,6 +142,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 else if (e.PropertyName == Compass.AutoHideProperty.PropertyName)
                 {
                     Control.AutoHide = Element.AutoHide;
+                }
+
+                else if (e.PropertyName == Compass.AutoHideProperty.PropertyName)
+                {
+                    Control.ResetOnClick = Element.ResetOnClick;
                 }
             }
 

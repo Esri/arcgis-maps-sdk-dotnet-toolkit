@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -36,16 +37,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        public Compass(Context context)
-            : base(context) => Initialize();
+        public Compass(Context context) : base(context)
+        {
+            ResetOnClick = true;
+
+            Initialize();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
         /// <param name="attr">The attributes of the AXML element declaring the view</param>
-        public Compass(Context context, IAttributeSet attr)
-            : base(context, attr) => Initialize();
+        public Compass(Context context, IAttributeSet attr) : base(context, attr)
+        {
+            ResetOnClick = true;
+
+            Initialize();
+        }
 
         /// <inheritdoc />
         protected override LayoutParams GenerateDefaultLayoutParams()
@@ -61,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
             AddView(_northArrow);
             UpdateCompassRotation(false);
-            _northArrow.Click += (s, e) => ResetRotation();
+            _northArrow.Click += (s, e) => CompassClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void UpdateCompassRotation(bool transition)

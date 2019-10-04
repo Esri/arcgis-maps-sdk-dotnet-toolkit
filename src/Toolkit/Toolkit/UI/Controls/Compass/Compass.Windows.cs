@@ -56,16 +56,54 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         protected override void OnTapped(TappedRoutedEventArgs e)
         {
             base.OnTapped(e);
-            ResetRotation();
+            CompassClicked?.Invoke(this, EventArgs.Empty);
         }
 #else
         /// <inheritdoc />
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            ResetRotation();
+            CompassClicked?.Invoke(this, EventArgs.Empty);
         }
 #endif
+
+        /// <summary>
+        /// Gets or sets the platform-specific implementation of the <see cref="ResetOnClickProperty"/> property
+        /// </summary>
+        private bool ResetOnClickImpl
+        {
+            get { return (bool)GetValue(ResetOnClickProperty); }
+            set { SetValue(ResetOnClickProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ResetOnClick"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ResetOnClickProperty =
+            DependencyProperty.Register(nameof(ResetOnClick), typeof(bool), typeof(Compass), new PropertyMetadata(false, OnResetOnClickPropertyChanged));
+
+        /// <summary>
+        /// The property changed event that is raised when the value of ResetOnClick property changes.
+        /// </summary>
+        /// <param name="d">Compass</param>
+        /// <param name="e">Contains information related to the change to the Heading property.</param>
+        private static void OnResetOnClickPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var compass = (Compass)d;
+
+            if ((bool)e.OldValue != (bool)e.NewValue)
+            {
+                if ((bool)e.NewValue)
+                {
+
+                    compass.CompassClicked += compass.OnResetRotation;
+                }
+                else
+                {
+                    compass.CompassClicked -= compass.OnResetRotation;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the platform-specific implementation of the <see cref="HeadingProperty"/> property

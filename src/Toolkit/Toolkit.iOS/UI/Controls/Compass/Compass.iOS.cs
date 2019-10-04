@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnTapped()
         {
-            ResetRotation();
+            CompassClicked?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc />

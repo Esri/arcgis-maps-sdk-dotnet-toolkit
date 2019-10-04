@@ -31,10 +31,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public Compass()
         {
+            ResetOnClick = true;
+
             HorizontalOptions = LayoutOptions.End;
             VerticalOptions = LayoutOptions.Start;
             WidthRequest = 30;
             HeightRequest = 30;
+        }
+
+        /// <summary>
+        /// Gets called, when the Compass is clicked
+        /// </summary>
+        public event EventHandler CompassClicked;
+
+        /// <summary>
+        /// Identifies the <see cref="ResetOnClick"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty ResetOnClickProperty =
+            BindableProperty.Create(nameof(ResetOnClick), typeof(bool), typeof(Compass), false, BindingMode.OneWay, null);
+
+        /// <summary>
+        /// Enables or disables the rotation of the <see cref="GeoView"/> if the compass is clicked.
+        /// </summary>
+        public bool ResetOnClick
+        {
+            get { return (bool)GetValue(ResetOnClickProperty); }
+            set { SetValue(ResetOnClickProperty, value); }
         }
 
         /// <summary>
@@ -82,5 +104,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, null);
+
+        public void RaiseCompassClickedEvent()
+        {
+            CompassClicked?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

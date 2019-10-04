@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.UI.Controls;
 
@@ -44,9 +45,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Compass()
             : base()
         {
+            ResetOnClick = true;
             Initialize();
         }
 #endif
+
+        /// <summary>
+        /// Gets called, when the Compass is clicked
+        /// </summary>
+        public event EventHandler CompassClicked;
+
+        /// <summary>
+        /// Enables or disables the rotation of the <see cref="GeoView"/> if the compass is clicked.
+        /// </summary>
+        public bool ResetOnClick
+        {
+            get => ResetOnClickImpl;
+            set => ResetOnClickImpl = value;
+        }
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
@@ -103,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _headingSetByGeoView = false;
         }
 
-        private void ResetRotation()
+        public void OnResetRotation(object sender, EventArgs args)
         {
             var view = GeoView;
             if (view is MapView)
