@@ -105,6 +105,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, null);
 
+        /// <summary>
+        /// Raises the <see cref="CompassClicked"/> event
+        /// </summary>
         public void RaiseCompassClickedEvent()
         {
             CompassClicked?.Invoke(this, EventArgs.Empty);

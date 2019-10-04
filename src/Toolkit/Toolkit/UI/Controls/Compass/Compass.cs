@@ -119,6 +119,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _headingSetByGeoView = false;
         }
 
+        /// <summary>
+        /// The method called when the Compass gets clicked and the <see cref="ResetOnClick"/> property is set to true
+        /// </summary>
+        /// <param name="sender">Sender of the event</param>
+        /// <param name="args">Arguments of the event</param>
         public void OnResetRotation(object sender, EventArgs args)
         {
             var view = GeoView;
