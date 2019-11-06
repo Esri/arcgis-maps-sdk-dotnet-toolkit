@@ -114,7 +114,11 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
 
         private void ARControl_OriginCameraChanged(object sender, System.EventArgs e)
         {
-            ARElement?.RaiseOriginCameraChanged();
+            if (ARControl != null && ARElement != null)
+            {
+                ARElement.OriginCamera = ARControl.OriginCamera;
+                ARElement.RaiseOriginCameraChanged();
+            }
         }
 
         /// <inheritdoc />
