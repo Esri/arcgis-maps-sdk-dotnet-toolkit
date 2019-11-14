@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private BookmarkItemViewModel ViewModel = new BookmarkItemViewModel();
 
-#if !__ANDROID__ && !__IOS__
+#if !__ANDROID__
         public Bookmarks()
             : base()
         {

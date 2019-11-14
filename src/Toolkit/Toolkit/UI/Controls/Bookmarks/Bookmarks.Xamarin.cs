@@ -34,6 +34,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Refresh()
         {
         }
+
+        private void Initialize() 
+        {
+        }
+
 #endif
     }
 }

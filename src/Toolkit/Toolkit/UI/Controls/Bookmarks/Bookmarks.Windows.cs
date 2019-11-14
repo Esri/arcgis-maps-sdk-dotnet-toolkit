@@ -29,10 +29,33 @@ using System.Windows.Data;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+#if !__NETFX_CORE__
     [TemplatePart(Name = "List", Type = typeof(ListView))]
+#endif
     public partial class Bookmarks
     {
         private void Initialize() => DefaultStyleKey = typeof(Bookmarks);
+
+#if NETFX_CORE
+        protected override void OnApplyTemplate()
+#elif !XAMARIN
+        public override void OnApplyTemplate()
+#endif
+        {
+            base.OnApplyTemplate();
+            Refresh();
+        }
+
+        internal void Refresh()
+        {
+            ListView = GetTemplateChild("List") as ListView;
+            if (ListView == null)
+            {
+                return;
+            }
+
+            ListView.ItemsSource = ViewModel.Bookmarks;
+        }
 
         private ListView _listView;
 
@@ -74,15 +97,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
         }
 
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#elif !XAMARIN
-        public override void OnApplyTemplate()
-#endif
-        {
-            base.OnApplyTemplate();
-            Refresh();
-        }
 
         public DataTemplate ItemTemplate
         {
@@ -110,17 +124,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty ItemsPanelProperty =
             DependencyProperty.Register(nameof(ItemsPanel), typeof(ItemsPanelTemplate), typeof(Bookmarks), new PropertyMetadata(null));
-
-        internal void Refresh()
-        {
-            ListView = GetTemplateChild("List") as ListView;
-            if (ListView == null)
-            {
-                return;
-            }
-
-            ListView.ItemsSource = ViewModel.Bookmarks;
-        }
 
         private void ListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
