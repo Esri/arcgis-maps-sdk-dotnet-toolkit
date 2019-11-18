@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2018 Esri
+//  * Copyright 2012-2019 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -55,14 +55,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _listView = new ListView(Context)
             {
                 ClipToOutline = true,
-                Clickable = false,
-                ChoiceMode = ChoiceMode.None,
                 LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
                 ScrollingCacheEnabled = false,
                 PersistentDrawingCache = PersistentDrawingCaches.NoCache,
             };
 
+            _listView.ItemClick += _listView_ItemClick;
+
             AddView(_listView);
+        }
+
+        private void _listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        {
+            NavigateToBookmark(ViewModel.Bookmarks[e.Position]);
+
+            _listView.SetSelection(-1);
         }
 
         private void Refresh()
@@ -72,19 +79,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if ((GeoView as MapView)?.Map == null && (GeoView as SceneView)?.Scene == null)
-            {
-                _listView.Adapter = null;
-                return;
-            }
-
             if (ViewModel.Bookmarks == null)
             {
                 _listView.Adapter = null;
                 return;
             }
 
-            UpdateControlFromGeoView(GeoView);
             _listView.Adapter = new BookmarksAdapter(Context, ViewModel.Bookmarks.ToList());
             _listView.SetHeightBasedOnChildren();
         }

@@ -23,7 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class BookmarkItemView : LinearLayout
     {
-        private readonly SymbolDisplay _symbolDisplay;
+
         private readonly TextView _textView;
 
         internal BookmarkItemView(Context context)
@@ -33,13 +33,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
             SetGravity(GravityFlags.Top);
 
-            _symbolDisplay = new SymbolDisplay(context)
-            {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.MatchParent)
-            };
-            _symbolDisplay.SetMaxHeight(40);
-            _symbolDisplay.SetMaxWidth(40);
-            AddView(_symbolDisplay);
 
             _textView = new TextView(context)
             {

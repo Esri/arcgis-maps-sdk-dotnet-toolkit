@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 convertView = new BookmarkItemView(_context);
             }
 
-            (convertView as BookmarkItemView)?.Update(bookmark);
+            ((BookmarkItemView)convertView).Update(bookmark);
             return convertView;
         }
     }
