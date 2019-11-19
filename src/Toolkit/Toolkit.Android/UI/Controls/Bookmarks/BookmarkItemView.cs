@@ -14,7 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Android.App;
 using Android.Content;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
@@ -23,29 +25,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class BookmarkItemView : LinearLayout
     {
-
         private readonly TextView _textView;
 
         internal BookmarkItemView(Context context)
             : base(context)
         {
             Orientation = Orientation.Horizontal;
-            LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
-            SetGravity(GravityFlags.Top);
-
+            LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent);
+            SetGravity(GravityFlags.CenterVertical | GravityFlags.FillHorizontal);
 
             _textView = new TextView(context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.MatchParent)
+                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
             };
-            _textView.Gravity = GravityFlags.CenterVertical;
+
+            TypedValue listItemHeightValue = new TypedValue();
+            ((Activity)Context).Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemHeight, listItemHeightValue, true);
+            SetMinimumHeight((int)listItemHeightValue.GetDimension(Resources.DisplayMetrics));
+
+            TypedValue listItemLeftMarginValue = new TypedValue();
+            ((Activity)Context).Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingStart, listItemLeftMarginValue, true);
+
+            TypedValue listItemRightMarginValue = new TypedValue();
+            ((Activity)Context).Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingEnd, listItemRightMarginValue, true);
+
+            SetPadding((int)listItemLeftMarginValue.GetDimension(Resources.DisplayMetrics), 0, (int)listItemRightMarginValue.GetDimension(Resources.DisplayMetrics), 0);
+
+            _textView.Gravity = GravityFlags.CenterVertical | GravityFlags.FillHorizontal;
             AddView(_textView);
             RequestLayout();
         }
 
         internal void Update(Bookmark info)
         {
-            //_symbolDisplay.Symbol = info?.Symbol; TODO - bookmark symbol/icon
             _textView.Text = info?.Name;
         }
     }

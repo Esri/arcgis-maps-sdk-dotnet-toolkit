@@ -22,6 +22,7 @@ using Android.Widget;
 using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
+using System;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -55,17 +56,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _listView = new ListView(Context)
             {
                 ClipToOutline = true,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
+                Clickable = true,
+                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
                 ScrollingCacheEnabled = false,
                 PersistentDrawingCache = PersistentDrawingCaches.NoCache,
             };
 
-            _listView.ItemClick += _listView_ItemClick;
+            _listView.ItemClick += ListView_ItemClick;
 
             AddView(_listView);
         }
 
-        private void _listView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        private void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             NavigateToBookmark(ViewModel.Bookmarks[e.Position]);
 
@@ -85,8 +87,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _listView.Adapter = new BookmarksAdapter(Context, ViewModel.Bookmarks.ToList());
-            _listView.SetHeightBasedOnChildren();
+            try
+            {
+                _listView.Adapter = new BookmarksAdapter(Context, ViewModel.Bookmarks.ToList());
+                _listView.SetHeightBasedOnChildren();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Happens when navigating away on Forms Android - GeoView is disposed before bookmarks control
+                _listView.Adapter = null;
+                return;
+            }
         }
 
         /// <inheritdoc />
