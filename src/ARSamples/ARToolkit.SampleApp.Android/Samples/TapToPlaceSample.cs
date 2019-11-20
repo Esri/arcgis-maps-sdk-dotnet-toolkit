@@ -49,6 +49,8 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(39.9579126, -75.1705827, 9.64, 0, 90, 0);
                 ARView.TranslationFactor = 1000; // By increasing the translation factor, the scene appears as if it's at scale 1:1000
                 ARView.NorthAlign = false;
+                //Set the clipping distance to only render a circular area around the origin
+                ARView.ClippingDistance = 350;
                 //Set the initial location 1.5 meter in front of and .5m above the scene
                 ARView.SetInitialTransformation(TransformationMatrix.Create(0, 0, 0, 1, 0, .5, 1.5));
                 //Listen for double-tap to place
