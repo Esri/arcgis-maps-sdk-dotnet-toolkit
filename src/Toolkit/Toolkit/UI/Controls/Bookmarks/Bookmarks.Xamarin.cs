@@ -28,18 +28,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-
-#if __IOS__
-
-        private void Refresh()
-        {
-        }
-
-        private void Initialize() 
-        {
-        }
-
-#endif
     }
 }
 #endif
