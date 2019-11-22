@@ -101,15 +101,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (sender is SceneView sv)
             {
-                sv.Scene.LoadStatusChanged -= Loadable_LoadStatusChanged;
-                UpdateControlFromGeoView(sv);
-                sv.Scene.LoadStatusChanged += Loadable_LoadStatusChanged;
+                if (sv.Scene != null)
+                {
+                    sv.Scene.LoadStatusChanged -= Loadable_LoadStatusChanged;
+                    UpdateControlFromGeoView(sv);
+                    sv.Scene.LoadStatusChanged += Loadable_LoadStatusChanged;
+
+                    var incc = sv.Scene as INotifyPropertyChanged;
+                    var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(incc);
+                    listener.OnEventAction = (instance, source, eventArgs) => { Map_PropertyChanged(source, eventArgs); };
+                    listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
+                    incc.PropertyChanged += listener.OnEvent;
+                }
             }
         }
 
         private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Map.Bookmarks))
+            if (e.PropertyName == nameof(Map.Bookmarks) || e.PropertyName == nameof(Scene.Bookmarks))
             {
                 UpdateControlFromGeoView(GeoView);
             }

@@ -13,15 +13,15 @@ using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    [SampleInfoAttribute(Category = "Bookmarks", DisplayName = "Bookmarks", Description = "Shows bookmarks with a map")]
-    public partial class BookmarksViewController : UIViewController
+    [SampleInfoAttribute(Category = "Bookmarks", DisplayName = "Bookmarks Map Split", Description = "Shows bookmarks with a map; persistent")]
+    public partial class BookmarksMapViewController : UIViewController
     {
         private Bookmarks bookmarks;
         private MapView mapView;
 
         private const string _mapUrl = "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee";
 
-        public BookmarksViewController()
+        public BookmarksMapViewController()
         {
         }
 
