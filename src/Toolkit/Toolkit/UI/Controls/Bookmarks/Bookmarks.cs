@@ -146,6 +146,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             GeoView?.SetViewpoint(bookmark.Viewpoint);
+
+            BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(bookmark));
+        }
+
+        public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
+
+        public class BookmarkSelectedEventArgs
+        {
+            public Bookmark Bookmark { get; set; }
+
+            public BookmarkSelectedEventArgs(Bookmark bookmark)
+            {
+                Bookmark = bookmark;
+            }
         }
     }
 }
