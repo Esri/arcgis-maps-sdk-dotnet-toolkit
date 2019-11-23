@@ -97,7 +97,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
         }
 
-
         public DataTemplate ItemTemplate
         {
             get { return (DataTemplate)GetValue(ItemTemplateProperty); }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -36,6 +37,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
+        /// Gets or sets a value indicating whether bookmarks should be shown from the map/scene or the explicitly set bookmark list.
+        /// When true, the control only shows the bookmarks explicitly set through the <see cref="BookmarksList" /> property.
+        /// Bookmarks from the Map or Scene are ignored, even if the map or scene is changed in the associated MapView/SceneView
+        /// or the Map or Scene load status changes.
+        /// </summary>
+        public bool PrefersBookmarksList { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
         /// </summary>
         /// <seealso cref="MapView"/>
@@ -44,6 +53,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get => GeoViewImpl;
             set => GeoViewImpl = value;
+        }
+
+        // TODO - What you get is what you set?
+        public IList<Bookmark> BookmarkList
+        {
+            get
+            {
+                return ViewModel?.Bookmarks?.ToList();
+            }
+
+            set
+            {
+                ViewModel.Bookmarks = value;
+                Refresh();
+            }
         }
 
         private void OnViewChanged(GeoView oldView, GeoView newView)
@@ -68,16 +92,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #elif __ANDROID__
             ((Activity)Context).RunOnUiThread(()=> //TODO make this not assume context is activity
 #elif __IOS__
-            InvokeOnMainThread(()=>
+                InvokeOnMainThread(() =>
 #else
             Dispatcher.Invoke(() =>
 #endif
-            {
-                if (e.Status == LoadStatus.Loaded)
                 {
-                    UpdateControlFromGeoView(GeoView);
-                }
-            });
+                    if (e.Status == LoadStatus.Loaded)
+                    {
+                        UpdateControlFromGeoView(GeoView);
+                    }
+                });
         }
 
         private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -126,13 +150,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void UpdateControlFromGeoView(GeoView view)
         {
-            if (view is MapView mapView && mapView.Map != null)
+            if (!PrefersBookmarksList)
             {
-                ViewModel.Bookmarks = mapView.Map.Bookmarks;
-            }
-            else if (view is SceneView sceneView && sceneView.Scene != null)
-            {
-                ViewModel.Bookmarks = sceneView.Scene.Bookmarks;
+                if (view is MapView mapView && mapView.Map != null)
+                {
+                    ViewModel.Bookmarks = mapView.Map.Bookmarks;
+                }
+                else if (view is SceneView sceneView && sceneView.Scene != null)
+                {
+                    ViewModel.Bookmarks = sceneView.Scene.Bookmarks;
+                }
             }
 
             Refresh();
