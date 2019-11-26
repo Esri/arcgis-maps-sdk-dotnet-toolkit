@@ -17,10 +17,12 @@
 #if !XAMARIN
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
-
+using System.Collections.Generic;
+using System.Linq;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.Foundation;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -54,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            ListView.ItemsSource = ViewModel.Bookmarks;
+            ListView.ItemsSource = GetCurrentBookmarkList();
         }
 
         private ListView _listView;
@@ -88,13 +90,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set { SetValue(GeoViewProperty, value); }
         }
 
+        private IList<Bookmark> BookmarkListImpl
+        {
+            get { return (IList<Bookmark>)GetValue(BookmarkListProperty); }
+            set { SetValue(BookmarkListProperty, value); }
+        }
+
+        private bool PrefersBookmarkListImpl
+        {
+            get => (bool)GetValue(PrefersBookmarksListProperty);
+            set { SetValue(PrefersBookmarksListProperty, value); }
+        }
+
         public static readonly DependencyProperty GeoViewProperty =
             DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(Bookmarks), new PropertyMetadata(null, OnGeoViewPropertyChanged));
+
+        public static readonly DependencyProperty PrefersBookmarksListProperty =
+            DependencyProperty.Register(nameof(PrefersBookmarksList), typeof(bool), typeof(Bookmarks), new PropertyMetadata(false, OnPrefersBookmarksListPropertyChanged));
+
+        public static readonly DependencyProperty BookmarkListProperty =
+            DependencyProperty.Register(nameof(BookmarkList), typeof(IList<Bookmark>), typeof(Bookmarks), new PropertyMetadata(null, OnBookmarkListPropertyChanged));
 
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var contents = (Bookmarks)d;
             contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
+        }
+
+        private static void OnPrefersBookmarksListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var bm = (Bookmarks)d;
+            bm.PrefersBookmarksList = (bool)e.NewValue;
+        }
+
+        private static void OnBookmarkListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var bm = (Bookmarks)d;
+            bm.BookmarkList = (IList<Bookmark>)e.NewValue;
         }
 
         public DataTemplate ItemTemplate

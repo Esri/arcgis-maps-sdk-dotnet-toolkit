@@ -24,10 +24,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// and TableOfContents control is used to display symbology and description for a set of <see cref="Layer"/>s
     /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/>.
     /// </summary>
-    public partial class Bookmarks : Control
+    public partial class Bookmarks : Control, INotifyPropertyChanged
     {
-        private BookmarkItemViewModel ViewModel = new BookmarkItemViewModel();
-
 #if !__ANDROID__
         public Bookmarks()
             : base()
@@ -36,13 +34,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
+        public IList<Bookmark> BookmarkList
+        {
+            get => BookmarkListImpl;
+            set
+            {
+                BookmarkListImpl = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BookmarkList)));
+                Refresh();
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether bookmarks should be shown from the map/scene or the explicitly set bookmark list.
         /// When true, the control only shows the bookmarks explicitly set through the <see cref="BookmarksList" /> property.
         /// Bookmarks from the Map or Scene are ignored, even if the map or scene is changed in the associated MapView/SceneView
         /// or the Map or Scene load status changes.
         /// </summary>
-        public bool PrefersBookmarksList { get; set; } = false;
+        public bool PrefersBookmarksList
+        {
+            get => PrefersBookmarkListImpl;
+            set
+            {
+                PrefersBookmarkListImpl = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrefersBookmarksList)));
+                Refresh();
+            }
+        }
 
         /// <summary>
         /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
@@ -53,21 +71,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get => GeoViewImpl;
             set => GeoViewImpl = value;
-        }
-
-        // TODO - What you get is what you set?
-        public IList<Bookmark> BookmarkList
-        {
-            get
-            {
-                return ViewModel?.Bookmarks?.ToList();
-            }
-
-            set
-            {
-                ViewModel.Bookmarks = value;
-                Refresh();
-            }
         }
 
         private void OnViewChanged(GeoView oldView, GeoView newView)
@@ -82,7 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 (newView as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
             }
 
-            UpdateControlFromGeoView(newView);
+            Refresh();
         }
 
         private async void Loadable_LoadStatusChanged(object sender, LoadStatusEventArgs e)
@@ -99,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     if (e.Status == LoadStatus.Loaded)
                     {
-                        UpdateControlFromGeoView(GeoView);
+                        Refresh();
                     }
                 });
         }
@@ -111,58 +114,63 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (mv.Map != null)
                 {
                     mv.Map.LoadStatusChanged -= Loadable_LoadStatusChanged;
-                    UpdateControlFromGeoView(mv);
+                    Refresh();
                     mv.Map.LoadStatusChanged += Loadable_LoadStatusChanged;
                     //
                     var incc = mv.Map as INotifyPropertyChanged;
                     var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(incc);
-                    listener.OnEventAction = (instance, source, eventArgs) => { Map_PropertyChanged(source, eventArgs); };
+                    listener.OnEventAction = (instance, source, eventArgs) => { Document_PropertyChanged(source, eventArgs); };
                     listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
                     incc.PropertyChanged += listener.OnEvent;
                 }
-
-                UpdateControlFromGeoView(GeoView);
             }
             else if (sender is SceneView sv)
             {
                 if (sv.Scene != null)
                 {
                     sv.Scene.LoadStatusChanged -= Loadable_LoadStatusChanged;
-                    UpdateControlFromGeoView(sv);
+                    Refresh();
                     sv.Scene.LoadStatusChanged += Loadable_LoadStatusChanged;
 
                     var incc = sv.Scene as INotifyPropertyChanged;
                     var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(incc);
-                    listener.OnEventAction = (instance, source, eventArgs) => { Map_PropertyChanged(source, eventArgs); };
+                    listener.OnEventAction = (instance, source, eventArgs) => { Document_PropertyChanged(source, eventArgs); };
                     listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
                     incc.PropertyChanged += listener.OnEvent;
                 }
             }
+
+            Refresh();
         }
 
-        private void Map_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Map.Bookmarks) || e.PropertyName == nameof(Scene.Bookmarks))
             {
-                UpdateControlFromGeoView(GeoView);
+                Refresh();
             }
         }
 
-        private void UpdateControlFromGeoView(GeoView view)
+        private IList<Bookmark> GetCurrentBookmarkList()
         {
-            if (!PrefersBookmarksList)
+            if (PrefersBookmarksList)
             {
-                if (view is MapView mapView && mapView.Map != null)
+                if (BookmarkList != null)
                 {
-                    ViewModel.Bookmarks = mapView.Map.Bookmarks;
-                }
-                else if (view is SceneView sceneView && sceneView.Scene != null)
-                {
-                    ViewModel.Bookmarks = sceneView.Scene.Bookmarks;
+                    return BookmarkList;
                 }
             }
 
-            Refresh();
+            if (GeoView is MapView mv && mv.Map is Map m)
+            {
+                return m.Bookmarks;
+            }
+            else if (GeoView is SceneView sv && sv.Scene is Scene s)
+            {
+                return s.Bookmarks;
+            }
+
+            return new List<Bookmark>();
         }
 
         private void NavigateToBookmark(Bookmark bookmark)
@@ -178,6 +186,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public class BookmarkSelectedEventArgs
         {

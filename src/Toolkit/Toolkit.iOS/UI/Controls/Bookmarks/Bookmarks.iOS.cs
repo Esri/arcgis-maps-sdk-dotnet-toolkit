@@ -115,7 +115,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (ViewModel?.Bookmarks == null)
+            var currentList = GetCurrentBookmarkList();
+
+            if (currentList == null)
             {
                 _listView.Source = null;
                 _listView.ReloadData();
@@ -123,7 +125,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var source = new BookmarksTableSource(ViewModel.Bookmarks);
+            var source = new BookmarksTableSource(currentList);
             _listView.Source = source;
             source.CollectionChanged += (a, b) => InvokeOnMainThread(() =>
             {

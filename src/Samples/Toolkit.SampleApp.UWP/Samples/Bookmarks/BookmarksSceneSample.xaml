@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks.BookmarksSample"
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks.BookmarksSceneSample"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks"
@@ -16,9 +16,9 @@
             <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
 
-        <esri:MapView x:Name="MyMapView"
+        <esri:SceneView x:Name="MySceneView"
                       Grid.Column="0" HorizontalAlignment="Stretch">
-        </esri:MapView>
-        <esri1:Bookmarks GeoView="{Binding ElementName=MyMapView}" Grid.Column="1"></esri1:Bookmarks>
+        </esri:SceneView>
+        <esri1:Bookmarks GeoView="{Binding ElementName=MySceneView}" Grid.Column="1" />
     </Grid>
 </Page>

@@ -23,12 +23,15 @@ using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
+using Esri.ArcGISRuntime.Mapping;
+using System.Collections.Generic;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class Bookmarks
     {
         private ListView _listView;
+        private List<Bookmark> _currentBookmarkList;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Bookmarks"/> class.
@@ -69,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            NavigateToBookmark(ViewModel.Bookmarks[e.Position]);
+            NavigateToBookmark(_currentBookmarkList[e.Position]);
 
             _listView.SetSelection(-1);
         }
@@ -81,7 +84,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (ViewModel.Bookmarks == null)
+            _currentBookmarkList = GetCurrentBookmarkList().ToList();
+
+            if (_currentBookmarkList == null)
             {
                 _listView.Adapter = null;
                 return;
@@ -89,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                _listView.Adapter = new BookmarksAdapter(Context, ViewModel.Bookmarks.ToList());
+                _listView.Adapter = new BookmarksAdapter(Context, _currentBookmarkList);
                 _listView.SetHeightBasedOnChildren();
             }
             catch (ObjectDisposedException)

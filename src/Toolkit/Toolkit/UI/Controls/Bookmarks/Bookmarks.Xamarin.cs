@@ -1,7 +1,9 @@
 ﻿#if XAMARIN
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -28,6 +30,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
+
+        private IList<Bookmark> BookmarkListImpl { get; set; }
+
+        private bool PrefersBookmarkListImpl { get; set; } = false;
     }
 }
 #endif

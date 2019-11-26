@@ -56,10 +56,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     ctrl.GeoView = Element.GeoView?.GetNativeGeoView();
 
                     SetNativeControl(ctrl);
-#if NETFX_CORE
-                    ctrl.SizeChanged += OnNativeSizeChanged;
-#endif
-
 #if __IOS__
                     SetNeedsDisplay();
 #elif __ANDROID__
@@ -67,7 +63,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #elif NETFX_CORE
                     InvalidateArrange();
 #endif
-
                 }
             }
         }
@@ -80,35 +75,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 {
                     Control.GeoView = Element.GeoView?.GetNativeGeoView();
                 }
+                else if (e.PropertyName == Bookmarks.BookmarkListProperty.PropertyName)
+                {
+                    Control.BookmarkList = Element.BookmarkList;
+                }
+                else if (e.PropertyName == Bookmarks.PrefersBookmarkListProperty.PropertyName)
+                {
+                    Control.PrefersBookmarksList = Element.PrefersBookmarkList;
+                }
             }
 
             base.OnElementPropertyChanged(sender, e);
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-#if NETFX_CORE
-            if (Control != null)
-            {
-                Control.SizeChanged -= OnNativeSizeChanged;
-            }
-#endif
-        }
-
-#if NETFX_CORE
-        private void OnNativeSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Element.Layout(new Rectangle(0, 0, e.NewSize.Width, e.NewSize.Height));
-        }
-
-        /// <inheritdoc />
-        protected override Windows.Foundation.Size MeasureOverride(Windows.Foundation.Size availableSize)
-        {
-            Control.Measure(availableSize);
-            return Control.DesiredSize;
-        }
-#endif
     }
 }
 #endif

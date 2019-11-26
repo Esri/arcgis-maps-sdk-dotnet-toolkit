@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Xamarin.Forms;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -40,6 +41,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(Bookmarks), null, BindingMode.OneWay, null);
+
+        public static readonly BindableProperty BookmarkListProperty =
+            BindableProperty.Create(nameof(BookmarkList), typeof(IList<Bookmark>), typeof(Bookmarks), null, BindingMode.OneWay, null);
+
+        public static readonly BindableProperty PrefersBookmarkListProperty =
+            BindableProperty.Create(nameof(PrefersBookmarkList), typeof(bool), typeof(Bookmarks), false, BindingMode.OneWay, null);
+
+        public bool PrefersBookmarkList
+        {
+            get { return (bool)GetValue(PrefersBookmarkListProperty); }
+            set { SetValue(PrefersBookmarkListProperty, value); }
+        }
+
+        public IList<Bookmark> BookmarkList
+        {
+            get { return (IList<Bookmark>)GetValue(BookmarkListProperty); }
+            set { SetValue(BookmarkListProperty, value); }
+        }
 
         /// <summary>
         /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
