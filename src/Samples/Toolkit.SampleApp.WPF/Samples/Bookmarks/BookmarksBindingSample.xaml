@@ -28,6 +28,7 @@
             <Button x:Name="ShowObservableList" Content="Set observable list" Click="ShowObservableList_Click" />
             <Button x:Name="RemoveFromObservableButton" Content="Remove from observable" Click="RemoveFromObservableButton_Click" />
             <Button x:Name="AddToObservableButton" Content="Add to observable" Click="AddToObservableButton_Click" />
+            <Button x:Name="SwitchMapButton" Content="Switch Map" Click="SwitchMapButton_Click" />
             <esri:Bookmarks x:Name="MyBookmarks" Grid.Column="2"
                         GeoView="{Binding ElementName=MyMapView}"
                         PrefersBookmarksList="{Binding ElementName=PrefersListCheckbox, Path=IsChecked, Mode=TwoWay}"/>

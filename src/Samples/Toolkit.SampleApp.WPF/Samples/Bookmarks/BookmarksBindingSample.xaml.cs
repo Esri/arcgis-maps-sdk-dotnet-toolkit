@@ -23,7 +23,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks
     [SampleInfoAttribute(Category = "Bookmarks", DisplayName = "Bookmarks - Binding tests", Description = "Tools for testing various binding scenarios.")]
     public partial class BookmarksBindingSample : UserControl
     {
-        private const string _mapUrl = "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee";
+        private readonly string[] _mapUrl = new[] 
+        { 
+            "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee",
+            "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2",
+            "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=e50fafe008ac4ce4ad2236de7fd149c3"
+        };
+        private int _mapIndex = 0;
 
         private ObservableCollection<Bookmark> _bookmarksObservable = new ObservableCollection<Bookmark>();
         private List<Bookmark> _bookmarksStatic = new List<Bookmark>();
@@ -31,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks
         public BookmarksBindingSample()
         {
             InitializeComponent();
-            MyMapView.Map = new Map(new Uri(_mapUrl));
+            MyMapView.Map = new Map(new Uri(_mapUrl[0]));
             InitializeLists();
         }
 
@@ -80,6 +86,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks
             Viewpoint vp5 = new Viewpoint(47.787947, 16.755135, 1300, new Camera(47.787947, 16.755135, 3000, 100, 35, 0));
 
             _bookmarksObservable.Add(new Bookmark($"O: {_bookmarksObservable.Count}", vp5));
+        }
+
+        private void SwitchMapButton_Click(object sender, RoutedEventArgs e)
+        {
+            _mapIndex++;
+            MyMapView.Map = new Map(new Uri(_mapUrl[_mapIndex % _mapUrl.Length]));
         }
     }
 }
