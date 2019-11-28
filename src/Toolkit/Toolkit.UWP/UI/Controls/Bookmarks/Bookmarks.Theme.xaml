@@ -14,11 +14,10 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="controls:Bookmarks">
-          <StackPanel>
             <ListView x:Name="List"
-                ItemTemplate="{TemplateBinding ItemTemplate}" />
-          </StackPanel>
-
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollMode="Enabled"
+                      ItemTemplate="{TemplateBinding ItemTemplate}" />
         </ControlTemplate>
       </Setter.Value>
     </Setter>

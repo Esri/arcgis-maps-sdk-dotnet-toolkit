@@ -13,21 +13,29 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
 
         <esri:MapView x:Name="MyMapView"
                       Grid.Column="0" HorizontalAlignment="Stretch">
         </esri:MapView>
-        <StackPanel Orientation="Vertical" Grid.Column="1">
-            <CheckBox x:Name="PrefersListCheckbox" IsChecked="{Binding ElementName=MyBookmarks, Path=PrefersBookmarksList, Mode=TwoWay}" Content="Prefers manual list"  />
-            <Button x:Name="ToggleListCheckbox" Content="Toggle prefers list programmatically" Click="ToggleListCheckbox_Click" />
-            <Button x:Name="ShowStaticList" Content="Set static list" Click="ShowStaticList_Click" />
-            <Button x:Name="ShowObservableList" Content="Set observable list" Click="ShowObservableList_Click" />
-            <Button x:Name="RemoveFromObservableButton" Content="Remove from observable" Click="RemoveFromObservableButton_Click" />
-            <Button x:Name="AddToObservableButton" Content="Add to observable" Click="AddToObservableButton_Click" />
-            <Button x:Name="SwitchMapButton" Content="Switch Map" Click="SwitchMapButton_Click" />
-            <esri1:Bookmarks x:Name="MyBookmarks" GeoView="{Binding ElementName=MyMapView}"/>
-        </StackPanel>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0">
+                <CheckBox x:Name="PrefersListCheckbox" IsChecked="{Binding ElementName=MyBookmarks, Path=PrefersBookmarksList, Mode=TwoWay}" Content="Prefers manual list"  />
+                <Button x:Name="ToggleListCheckbox" Content="Toggle prefers list programmatically" Click="ToggleListCheckbox_Click" />
+                <Button x:Name="ShowStaticList" Content="Set static list" Click="ShowStaticList_Click" />
+                <Button x:Name="ShowObservableList" Content="Set observable list" Click="ShowObservableList_Click" />
+                <Button x:Name="RemoveFromObservableButton" Content="Remove from observable" Click="RemoveFromObservableButton_Click" />
+                <Button x:Name="AddToObservableButton" Content="Add to observable" Click="AddToObservableButton_Click" />
+                <Button x:Name="SwitchMapButton" Content="Switch Map" Click="SwitchMapButton_Click" />
+            </StackPanel>
+            <esri1:Bookmarks x:Name="MyBookmarks"
+                             Grid.Row="1"
+                             GeoView="{Binding ElementName=MyMapView}"/>
+        </Grid>
     </Grid>
 </Page>

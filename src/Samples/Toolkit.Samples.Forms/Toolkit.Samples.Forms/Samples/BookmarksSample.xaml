@@ -12,11 +12,26 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
-            <esri:MapView x:Name="MyMapView" Grid.Row="0" />
-            <toolkit:Bookmarks Grid.Row="1" GeoView="{x:Reference MyMapView}" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <esri:MapView x:Name="MyMapView" Grid.Row="0" Grid.Column="0" />
+            <toolkit:Bookmarks x:Name="MyBookmarks" Grid.Row="0" Grid.Column="1"
+                                   PrefersBookmarksList="{Binding Source={x:Reference PrefersListCheckbox}, Path=IsToggled, Mode=TwoWay}"
+                                   GeoView="{x:Reference MyMapView}" />
+            <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <Label Text="Prefers manual list:" />
+                <Switch x:Name="PrefersListCheckbox" />
+                <Button x:Name="ToggleListCheckbox" Text="Toggle prefers list programmatically" Clicked="ToggleListCheckbox_Click" />
+                <Button x:Name="ShowStaticList" Text="Set static list" Clicked="ShowStaticList_Click" />
+                <Button x:Name="ShowObservableList" Text="Set observable list" Clicked="ShowObservableList_Click" />
+                <Button x:Name="RemoveFromObservableButton" Text="Remove from observable" Clicked="RemoveFromObservableButton_Click" />
+                <Button x:Name="AddToObservableButton" Text="Add to observable" Clicked="AddToObservableButton_Click" />
+                <Button x:Name="SwitchMapButton" Text="Switch Map" Clicked="SwitchMapButton_Click" />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

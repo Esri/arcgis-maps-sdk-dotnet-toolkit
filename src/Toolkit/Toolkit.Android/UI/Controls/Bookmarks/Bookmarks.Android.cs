@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class Bookmarks
     {
         private ListView _listView;
-        private List<Bookmark> _currentBookmarkList;
+        private IList<Bookmark> _currentBookmarkList;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Bookmarks"/> class.
@@ -84,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _currentBookmarkList = GetCurrentBookmarkList().ToList();
+            _currentBookmarkList = GetCurrentBookmarkList();
 
             if (_currentBookmarkList == null)
             {
@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                _listView.Adapter = new BookmarksAdapter(Context, _currentBookmarkList);
+                _listView.Adapter = new BookmarksAdapter(Context, (IReadOnlyList<Bookmark>)_currentBookmarkList);
                 _listView.SetHeightBasedOnChildren();
             }
             catch (ObjectDisposedException)
