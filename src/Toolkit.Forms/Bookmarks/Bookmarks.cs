@@ -32,8 +32,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public Bookmarks()
         {
-            HorizontalOptions = LayoutOptions.Start;
-            VerticalOptions = LayoutOptions.Start;
+            HorizontalOptions = LayoutOptions.FillAndExpand;
+            VerticalOptions = LayoutOptions.FillAndExpand;
+
+            MinimumHeightRequest = 50;
+            MinimumWidthRequest = 100;
         }
 
         /// <summary>
@@ -45,13 +48,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty BookmarkListProperty =
             BindableProperty.Create(nameof(BookmarkList), typeof(IList<Bookmark>), typeof(Bookmarks), null, BindingMode.OneWay, null);
 
-        public static readonly BindableProperty PrefersBookmarkListProperty =
-            BindableProperty.Create(nameof(PrefersBookmarkList), typeof(bool), typeof(Bookmarks), false, BindingMode.OneWay, null);
+        public static readonly BindableProperty PrefersBookmarksListProperty =
+            BindableProperty.Create(nameof(PrefersBookmarksList), typeof(bool), typeof(Bookmarks), false, BindingMode.OneWay, null);
 
-        public bool PrefersBookmarkList
+        public bool PrefersBookmarksList
         {
-            get { return (bool)GetValue(PrefersBookmarkListProperty); }
-            set { SetValue(PrefersBookmarkListProperty, value); }
+            get { return (bool)GetValue(PrefersBookmarksListProperty); }
+            set { SetValue(PrefersBookmarksListProperty, value); }
         }
 
         public IList<Bookmark> BookmarkList

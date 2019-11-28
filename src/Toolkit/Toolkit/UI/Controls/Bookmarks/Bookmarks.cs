@@ -109,12 +109,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (sender is MapView mv)
+            if (sender is MapView mv) //TODO - make specific to the map property
             {
                 if (mv.Map != null)
                 {
                     mv.Map.LoadStatusChanged -= Loadable_LoadStatusChanged;
-                    Refresh();
                     mv.Map.LoadStatusChanged += Loadable_LoadStatusChanged;
                     //
                     var incc = mv.Map as INotifyPropertyChanged;
@@ -129,7 +128,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (sv.Scene != null)
                 {
                     sv.Scene.LoadStatusChanged -= Loadable_LoadStatusChanged;
-                    Refresh();
                     sv.Scene.LoadStatusChanged += Loadable_LoadStatusChanged;
 
                     var incc = sv.Scene as INotifyPropertyChanged;
@@ -138,6 +136,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
                     incc.PropertyChanged += listener.OnEvent;
                 }
+            }
+            else
+            {
+                return;
             }
 
             Refresh();

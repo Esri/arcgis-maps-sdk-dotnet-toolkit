@@ -24,6 +24,7 @@ using Xamarin.Forms.Platform.iOS;
 #elif NETFX_CORE
 using Windows.UI.Xaml;
 using Xamarin.Forms.Platform.UWP;
+using Windows.Foundation;
 #endif
 
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
@@ -44,6 +45,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             base.OnElementChanged(e);
 
+            if (e.OldElement != null)
+            {
+
+            }
+
             if (e.NewElement != null)
             {
                 if (Control == null)
@@ -54,12 +60,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     UI.Controls.Bookmarks ctrl = new UI.Controls.Bookmarks();
 #endif
                     ctrl.GeoView = Element.GeoView?.GetNativeGeoView();
+                    ctrl.PrefersBookmarksList = Element.PrefersBookmarksList;
+                    ctrl.BookmarkList = Element.BookmarkList;
 
                     SetNativeControl(ctrl);
+
 #if __IOS__
-                    SetNeedsDisplay();
+            SetNeedsDisplay();
 #elif __ANDROID__
-                    Invalidate();
+            Invalidate();
 #elif NETFX_CORE
                     InvalidateArrange();
 #endif
@@ -79,9 +88,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 {
                     Control.BookmarkList = Element.BookmarkList;
                 }
-                else if (e.PropertyName == Bookmarks.PrefersBookmarkListProperty.PropertyName)
+                else if (e.PropertyName == Bookmarks.PrefersBookmarksListProperty.PropertyName)
                 {
-                    Control.PrefersBookmarksList = Element.PrefersBookmarkList;
+                    Control.PrefersBookmarksList = Element.PrefersBookmarksList;
                 }
             }
 
