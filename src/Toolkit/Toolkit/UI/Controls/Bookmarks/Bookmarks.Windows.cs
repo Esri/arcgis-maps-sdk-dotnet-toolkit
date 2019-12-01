@@ -172,21 +172,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(Bookmarks), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Gets or sets the Items Panel Template
-        /// </summary>
-        public ItemsPanelTemplate ItemsPanel
-        {
-            get { return (ItemsPanelTemplate)GetValue(ItemsPanelProperty); }
-            set { SetValue(ItemsPanelProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ItemsPanel"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ItemsPanelProperty =
-            DependencyProperty.Register(nameof(ItemsPanel), typeof(ItemsPanelTemplate), typeof(Bookmarks), new PropertyMetadata(null));
     }
 }
 #endif
