@@ -281,195 +281,179 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			global::Esri.ArcGISRuntime.Toolkit.Resource.Styleable.LinearConstraintLayout_android_orientation = global::Esri.ArcGISRuntime.Toolkit.SampleApp.Resource.Styleable.LinearConstraintLayout_android_orientation;
 		}
 		
-		public partial class Array
-		{
-			
-			// aapt resource value: 0x7F010000
-			public const int sports_array = 2130771968;
-			
-			static Array()
-			{
-				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
-			}
-			
-			private Array()
-			{
-			}
-		}
-		
 		public partial class Attribute
 		{
 			
-			// aapt resource value: 0x7F020000
-			public const int barrierAllowsGoneWidgets = 2130837504;
+			// aapt resource value: 0x7F010000
+			public const int barrierAllowsGoneWidgets = 2130771968;
 			
-			// aapt resource value: 0x7F020001
-			public const int barrierDirection = 2130837505;
+			// aapt resource value: 0x7F010001
+			public const int barrierDirection = 2130771969;
 			
-			// aapt resource value: 0x7F020002
-			public const int chainUseRtl = 2130837506;
+			// aapt resource value: 0x7F010002
+			public const int chainUseRtl = 2130771970;
 			
-			// aapt resource value: 0x7F020003
-			public const int constraintSet = 2130837507;
+			// aapt resource value: 0x7F010003
+			public const int constraintSet = 2130771971;
 			
-			// aapt resource value: 0x7F020004
-			public const int constraint_referenced_ids = 2130837508;
+			// aapt resource value: 0x7F010004
+			public const int constraint_referenced_ids = 2130771972;
 			
-			// aapt resource value: 0x7F020005
-			public const int content = 2130837509;
+			// aapt resource value: 0x7F010005
+			public const int content = 2130771973;
 			
-			// aapt resource value: 0x7F020006
-			public const int emptyVisibility = 2130837510;
+			// aapt resource value: 0x7F010006
+			public const int emptyVisibility = 2130771974;
 			
-			// aapt resource value: 0x7F020007
-			public const int layout_constrainedHeight = 2130837511;
+			// aapt resource value: 0x7F010007
+			public const int layout_constrainedHeight = 2130771975;
 			
-			// aapt resource value: 0x7F020008
-			public const int layout_constrainedWidth = 2130837512;
+			// aapt resource value: 0x7F010008
+			public const int layout_constrainedWidth = 2130771976;
 			
-			// aapt resource value: 0x7F020009
-			public const int layout_constraintBaseline_creator = 2130837513;
+			// aapt resource value: 0x7F010009
+			public const int layout_constraintBaseline_creator = 2130771977;
 			
-			// aapt resource value: 0x7F02000A
-			public const int layout_constraintBaseline_toBaselineOf = 2130837514;
+			// aapt resource value: 0x7F01000A
+			public const int layout_constraintBaseline_toBaselineOf = 2130771978;
 			
-			// aapt resource value: 0x7F02000B
-			public const int layout_constraintBottom_creator = 2130837515;
+			// aapt resource value: 0x7F01000B
+			public const int layout_constraintBottom_creator = 2130771979;
 			
-			// aapt resource value: 0x7F02000C
-			public const int layout_constraintBottom_toBottomOf = 2130837516;
+			// aapt resource value: 0x7F01000C
+			public const int layout_constraintBottom_toBottomOf = 2130771980;
 			
-			// aapt resource value: 0x7F02000D
-			public const int layout_constraintBottom_toTopOf = 2130837517;
+			// aapt resource value: 0x7F01000D
+			public const int layout_constraintBottom_toTopOf = 2130771981;
 			
-			// aapt resource value: 0x7F02000E
-			public const int layout_constraintCircle = 2130837518;
+			// aapt resource value: 0x7F01000E
+			public const int layout_constraintCircle = 2130771982;
 			
-			// aapt resource value: 0x7F02000F
-			public const int layout_constraintCircleAngle = 2130837519;
+			// aapt resource value: 0x7F01000F
+			public const int layout_constraintCircleAngle = 2130771983;
 			
-			// aapt resource value: 0x7F020010
-			public const int layout_constraintCircleRadius = 2130837520;
+			// aapt resource value: 0x7F010010
+			public const int layout_constraintCircleRadius = 2130771984;
 			
-			// aapt resource value: 0x7F020011
-			public const int layout_constraintDimensionRatio = 2130837521;
+			// aapt resource value: 0x7F010011
+			public const int layout_constraintDimensionRatio = 2130771985;
 			
-			// aapt resource value: 0x7F020012
-			public const int layout_constraintEnd_toEndOf = 2130837522;
+			// aapt resource value: 0x7F010012
+			public const int layout_constraintEnd_toEndOf = 2130771986;
 			
-			// aapt resource value: 0x7F020013
-			public const int layout_constraintEnd_toStartOf = 2130837523;
+			// aapt resource value: 0x7F010013
+			public const int layout_constraintEnd_toStartOf = 2130771987;
 			
-			// aapt resource value: 0x7F020014
-			public const int layout_constraintGuide_begin = 2130837524;
+			// aapt resource value: 0x7F010014
+			public const int layout_constraintGuide_begin = 2130771988;
 			
-			// aapt resource value: 0x7F020015
-			public const int layout_constraintGuide_end = 2130837525;
+			// aapt resource value: 0x7F010015
+			public const int layout_constraintGuide_end = 2130771989;
 			
-			// aapt resource value: 0x7F020016
-			public const int layout_constraintGuide_percent = 2130837526;
+			// aapt resource value: 0x7F010016
+			public const int layout_constraintGuide_percent = 2130771990;
 			
-			// aapt resource value: 0x7F020017
-			public const int layout_constraintHeight_default = 2130837527;
+			// aapt resource value: 0x7F010017
+			public const int layout_constraintHeight_default = 2130771991;
 			
-			// aapt resource value: 0x7F020018
-			public const int layout_constraintHeight_max = 2130837528;
+			// aapt resource value: 0x7F010018
+			public const int layout_constraintHeight_max = 2130771992;
 			
-			// aapt resource value: 0x7F020019
-			public const int layout_constraintHeight_min = 2130837529;
+			// aapt resource value: 0x7F010019
+			public const int layout_constraintHeight_min = 2130771993;
 			
-			// aapt resource value: 0x7F02001A
-			public const int layout_constraintHeight_percent = 2130837530;
+			// aapt resource value: 0x7F01001A
+			public const int layout_constraintHeight_percent = 2130771994;
 			
-			// aapt resource value: 0x7F02001B
-			public const int layout_constraintHorizontal_bias = 2130837531;
+			// aapt resource value: 0x7F01001B
+			public const int layout_constraintHorizontal_bias = 2130771995;
 			
-			// aapt resource value: 0x7F02001C
-			public const int layout_constraintHorizontal_chainStyle = 2130837532;
+			// aapt resource value: 0x7F01001C
+			public const int layout_constraintHorizontal_chainStyle = 2130771996;
 			
-			// aapt resource value: 0x7F02001D
-			public const int layout_constraintHorizontal_weight = 2130837533;
+			// aapt resource value: 0x7F01001D
+			public const int layout_constraintHorizontal_weight = 2130771997;
 			
-			// aapt resource value: 0x7F02001E
-			public const int layout_constraintLeft_creator = 2130837534;
+			// aapt resource value: 0x7F01001E
+			public const int layout_constraintLeft_creator = 2130771998;
 			
-			// aapt resource value: 0x7F02001F
-			public const int layout_constraintLeft_toLeftOf = 2130837535;
+			// aapt resource value: 0x7F01001F
+			public const int layout_constraintLeft_toLeftOf = 2130771999;
 			
-			// aapt resource value: 0x7F020020
-			public const int layout_constraintLeft_toRightOf = 2130837536;
+			// aapt resource value: 0x7F010020
+			public const int layout_constraintLeft_toRightOf = 2130772000;
 			
-			// aapt resource value: 0x7F020021
-			public const int layout_constraintRight_creator = 2130837537;
+			// aapt resource value: 0x7F010021
+			public const int layout_constraintRight_creator = 2130772001;
 			
-			// aapt resource value: 0x7F020022
-			public const int layout_constraintRight_toLeftOf = 2130837538;
+			// aapt resource value: 0x7F010022
+			public const int layout_constraintRight_toLeftOf = 2130772002;
 			
-			// aapt resource value: 0x7F020023
-			public const int layout_constraintRight_toRightOf = 2130837539;
+			// aapt resource value: 0x7F010023
+			public const int layout_constraintRight_toRightOf = 2130772003;
 			
-			// aapt resource value: 0x7F020024
-			public const int layout_constraintStart_toEndOf = 2130837540;
+			// aapt resource value: 0x7F010024
+			public const int layout_constraintStart_toEndOf = 2130772004;
 			
-			// aapt resource value: 0x7F020025
-			public const int layout_constraintStart_toStartOf = 2130837541;
+			// aapt resource value: 0x7F010025
+			public const int layout_constraintStart_toStartOf = 2130772005;
 			
-			// aapt resource value: 0x7F020026
-			public const int layout_constraintTop_creator = 2130837542;
+			// aapt resource value: 0x7F010026
+			public const int layout_constraintTop_creator = 2130772006;
 			
-			// aapt resource value: 0x7F020027
-			public const int layout_constraintTop_toBottomOf = 2130837543;
+			// aapt resource value: 0x7F010027
+			public const int layout_constraintTop_toBottomOf = 2130772007;
 			
-			// aapt resource value: 0x7F020028
-			public const int layout_constraintTop_toTopOf = 2130837544;
+			// aapt resource value: 0x7F010028
+			public const int layout_constraintTop_toTopOf = 2130772008;
 			
-			// aapt resource value: 0x7F020029
-			public const int layout_constraintVertical_bias = 2130837545;
+			// aapt resource value: 0x7F010029
+			public const int layout_constraintVertical_bias = 2130772009;
 			
-			// aapt resource value: 0x7F02002A
-			public const int layout_constraintVertical_chainStyle = 2130837546;
+			// aapt resource value: 0x7F01002A
+			public const int layout_constraintVertical_chainStyle = 2130772010;
 			
-			// aapt resource value: 0x7F02002B
-			public const int layout_constraintVertical_weight = 2130837547;
+			// aapt resource value: 0x7F01002B
+			public const int layout_constraintVertical_weight = 2130772011;
 			
-			// aapt resource value: 0x7F02002C
-			public const int layout_constraintWidth_default = 2130837548;
+			// aapt resource value: 0x7F01002C
+			public const int layout_constraintWidth_default = 2130772012;
 			
-			// aapt resource value: 0x7F02002D
-			public const int layout_constraintWidth_max = 2130837549;
+			// aapt resource value: 0x7F01002D
+			public const int layout_constraintWidth_max = 2130772013;
 			
-			// aapt resource value: 0x7F02002E
-			public const int layout_constraintWidth_min = 2130837550;
+			// aapt resource value: 0x7F01002E
+			public const int layout_constraintWidth_min = 2130772014;
 			
-			// aapt resource value: 0x7F02002F
-			public const int layout_constraintWidth_percent = 2130837551;
+			// aapt resource value: 0x7F01002F
+			public const int layout_constraintWidth_percent = 2130772015;
 			
-			// aapt resource value: 0x7F020030
-			public const int layout_editor_absoluteX = 2130837552;
+			// aapt resource value: 0x7F010030
+			public const int layout_editor_absoluteX = 2130772016;
 			
-			// aapt resource value: 0x7F020031
-			public const int layout_editor_absoluteY = 2130837553;
+			// aapt resource value: 0x7F010031
+			public const int layout_editor_absoluteY = 2130772017;
 			
-			// aapt resource value: 0x7F020032
-			public const int layout_goneMarginBottom = 2130837554;
+			// aapt resource value: 0x7F010032
+			public const int layout_goneMarginBottom = 2130772018;
 			
-			// aapt resource value: 0x7F020033
-			public const int layout_goneMarginEnd = 2130837555;
+			// aapt resource value: 0x7F010033
+			public const int layout_goneMarginEnd = 2130772019;
 			
-			// aapt resource value: 0x7F020034
-			public const int layout_goneMarginLeft = 2130837556;
+			// aapt resource value: 0x7F010034
+			public const int layout_goneMarginLeft = 2130772020;
 			
-			// aapt resource value: 0x7F020035
-			public const int layout_goneMarginRight = 2130837557;
+			// aapt resource value: 0x7F010035
+			public const int layout_goneMarginRight = 2130772021;
 			
-			// aapt resource value: 0x7F020036
-			public const int layout_goneMarginStart = 2130837558;
+			// aapt resource value: 0x7F010036
+			public const int layout_goneMarginStart = 2130772022;
 			
-			// aapt resource value: 0x7F020037
-			public const int layout_goneMarginTop = 2130837559;
+			// aapt resource value: 0x7F010037
+			public const int layout_goneMarginTop = 2130772023;
 			
-			// aapt resource value: 0x7F020038
-			public const int layout_optimizationLevel = 2130837560;
+			// aapt resource value: 0x7F010038
+			public const int layout_optimizationLevel = 2130772024;
 			
 			static Attribute()
 			{
@@ -484,35 +468,35 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public partial class Drawable
 		{
 			
-			// aapt resource value: 0x7F030000
-			public const int esri = 2130903040;
+			// aapt resource value: 0x7F020000
+			public const int esri = 2130837504;
 			
-			// aapt resource value: 0x7F030001
-			public const int NextPreviousButton = 2130903041;
+			// aapt resource value: 0x7F020001
+			public const int NextPreviousButton = 2130837505;
 			
-			// aapt resource value: 0x7F030002
-			public const int NextPreviousFill = 2130903042;
+			// aapt resource value: 0x7F020002
+			public const int NextPreviousFill = 2130837506;
 			
-			// aapt resource value: 0x7F030003
-			public const int NextPreviousOutline = 2130903043;
+			// aapt resource value: 0x7F020003
+			public const int NextPreviousOutline = 2130837507;
 			
-			// aapt resource value: 0x7F030004
-			public const int PauseFill = 2130903044;
+			// aapt resource value: 0x7F020004
+			public const int PauseFill = 2130837508;
 			
-			// aapt resource value: 0x7F030005
-			public const int PauseOutline = 2130903045;
+			// aapt resource value: 0x7F020005
+			public const int PauseOutline = 2130837509;
 			
-			// aapt resource value: 0x7F030006
-			public const int PlayPauseButton = 2130903046;
+			// aapt resource value: 0x7F020006
+			public const int PlayPauseButton = 2130837510;
 			
-			// aapt resource value: 0x7F030007
-			public const int Thumb = 2130903047;
+			// aapt resource value: 0x7F020007
+			public const int Thumb = 2130837511;
 			
-			// aapt resource value: 0x7F030008
-			public const int TriangleFill = 2130903048;
+			// aapt resource value: 0x7F020008
+			public const int TriangleFill = 2130837512;
 			
-			// aapt resource value: 0x7F030009
-			public const int TriangleOutline = 2130903049;
+			// aapt resource value: 0x7F020009
+			public const int TriangleOutline = 2130837513;
 			
 			static Drawable()
 			{
@@ -527,200 +511,200 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7F040000
-			public const int AddToObservableButton = 2130968576;
+			// aapt resource value: 0x7F030000
+			public const int AddToObservableButton = 2130903040;
 			
-			// aapt resource value: 0x7F04001C
-			public const int angleSlider = 2130968604;
+			// aapt resource value: 0x7F03001C
+			public const int angleSlider = 2130903068;
 			
-			// aapt resource value: 0x7F04001D
-			public const int barrier = 2130968605;
+			// aapt resource value: 0x7F03001D
+			public const int barrier = 2130903069;
 			
-			// aapt resource value: 0x7F04001E
-			public const int bookmarksView = 2130968606;
+			// aapt resource value: 0x7F03001E
+			public const int bookmarksView = 2130903070;
 			
-			// aapt resource value: 0x7F04001F
-			public const int bottom = 2130968607;
+			// aapt resource value: 0x7F03001F
+			public const int bottom = 2130903071;
 			
-			// aapt resource value: 0x7F040020
-			public const int chains = 2130968608;
+			// aapt resource value: 0x7F030020
+			public const int chains = 2130903072;
 			
-			// aapt resource value: 0x7F040021
-			public const int checkboxVisibleRangeOnly = 2130968609;
+			// aapt resource value: 0x7F030021
+			public const int checkboxVisibleRangeOnly = 2130903073;
 			
-			// aapt resource value: 0x7F040022
-			public const int compass = 2130968610;
+			// aapt resource value: 0x7F030022
+			public const int compass = 2130903074;
 			
-			// aapt resource value: 0x7F040001
-			public const int CurrentExtentEndTimeLabel = 2130968577;
+			// aapt resource value: 0x7F030001
+			public const int CurrentExtentEndTimeLabel = 2130903041;
 			
-			// aapt resource value: 0x7F040002
-			public const int CurrentExtentFill = 2130968578;
+			// aapt resource value: 0x7F030002
+			public const int CurrentExtentFill = 2130903042;
 			
-			// aapt resource value: 0x7F040003
-			public const int CurrentExtentStartTimeLabel = 2130968579;
+			// aapt resource value: 0x7F030003
+			public const int CurrentExtentStartTimeLabel = 2130903043;
 			
-			// aapt resource value: 0x7F040023
-			public const int dimensions = 2130968611;
+			// aapt resource value: 0x7F030023
+			public const int dimensions = 2130903075;
 			
-			// aapt resource value: 0x7F040024
-			public const int direct = 2130968612;
+			// aapt resource value: 0x7F030024
+			public const int direct = 2130903076;
 			
-			// aapt resource value: 0x7F040025
-			public const int end = 2130968613;
+			// aapt resource value: 0x7F030025
+			public const int end = 2130903077;
 			
-			// aapt resource value: 0x7F040004
-			public const int FullExtentEndGuide = 2130968580;
+			// aapt resource value: 0x7F030004
+			public const int FullExtentEndGuide = 2130903044;
 			
-			// aapt resource value: 0x7F040005
-			public const int FullExtentEndTimeLabel = 2130968581;
+			// aapt resource value: 0x7F030005
+			public const int FullExtentEndTimeLabel = 2130903045;
 			
-			// aapt resource value: 0x7F040006
-			public const int FullExtentEndTimeTickmark = 2130968582;
+			// aapt resource value: 0x7F030006
+			public const int FullExtentEndTimeTickmark = 2130903046;
 			
-			// aapt resource value: 0x7F040007
-			public const int FullExtentStartGuide = 2130968583;
+			// aapt resource value: 0x7F030007
+			public const int FullExtentStartGuide = 2130903047;
 			
-			// aapt resource value: 0x7F040008
-			public const int FullExtentStartTimeLabel = 2130968584;
+			// aapt resource value: 0x7F030008
+			public const int FullExtentStartTimeLabel = 2130903048;
 			
-			// aapt resource value: 0x7F040009
-			public const int FullExtentStartTimeTickmark = 2130968585;
+			// aapt resource value: 0x7F030009
+			public const int FullExtentStartTimeTickmark = 2130903049;
 			
-			// aapt resource value: 0x7F040026
-			public const int gone = 2130968614;
+			// aapt resource value: 0x7F030026
+			public const int gone = 2130903078;
 			
-			// aapt resource value: 0x7F040027
-			public const int invisible = 2130968615;
+			// aapt resource value: 0x7F030027
+			public const int invisible = 2130903079;
 			
-			// aapt resource value: 0x7F040028
-			public const int layerLegend = 2130968616;
+			// aapt resource value: 0x7F030028
+			public const int layerLegend = 2130903080;
 			
-			// aapt resource value: 0x7F040029
-			public const int left = 2130968617;
+			// aapt resource value: 0x7F030029
+			public const int left = 2130903081;
 			
-			// aapt resource value: 0x7F04002A
-			public const int legend = 2130968618;
+			// aapt resource value: 0x7F03002A
+			public const int legend = 2130903082;
 			
-			// aapt resource value: 0x7F04002B
-			public const int mapView = 2130968619;
+			// aapt resource value: 0x7F03002B
+			public const int mapView = 2130903083;
 			
-			// aapt resource value: 0x7F04000A
-			public const int MaxThumb = 2130968586;
+			// aapt resource value: 0x7F03000A
+			public const int MaxThumb = 2130903050;
 			
-			// aapt resource value: 0x7F04000B
-			public const int MaxThumbCenter = 2130968587;
+			// aapt resource value: 0x7F03000B
+			public const int MaxThumbCenter = 2130903051;
 			
-			// aapt resource value: 0x7F04000C
-			public const int MinThumb = 2130968588;
+			// aapt resource value: 0x7F03000C
+			public const int MinThumb = 2130903052;
 			
-			// aapt resource value: 0x7F04000D
-			public const int MinThumbCenter = 2130968589;
+			// aapt resource value: 0x7F03000D
+			public const int MinThumbCenter = 2130903053;
 			
-			// aapt resource value: 0x7F04000E
-			public const int NextButton = 2130968590;
+			// aapt resource value: 0x7F03000E
+			public const int NextButton = 2130903054;
 			
-			// aapt resource value: 0x7F04000F
-			public const int NextButtonOutline = 2130968591;
+			// aapt resource value: 0x7F03000F
+			public const int NextButtonOutline = 2130903055;
 			
-			// aapt resource value: 0x7F04002C
-			public const int none = 2130968620;
+			// aapt resource value: 0x7F03002C
+			public const int none = 2130903084;
 			
-			// aapt resource value: 0x7F04002D
-			public const int packed = 2130968621;
+			// aapt resource value: 0x7F03002D
+			public const int packed = 2130903085;
 			
-			// aapt resource value: 0x7F04002E
-			public const int parent = 2130968622;
+			// aapt resource value: 0x7F03002E
+			public const int parent = 2130903086;
 			
-			// aapt resource value: 0x7F040010
-			public const int PauseButtonOutline = 2130968592;
+			// aapt resource value: 0x7F030010
+			public const int PauseButtonOutline = 2130903056;
 			
-			// aapt resource value: 0x7F04002F
-			public const int percent = 2130968623;
+			// aapt resource value: 0x7F03002F
+			public const int percent = 2130903087;
 			
-			// aapt resource value: 0x7F040011
-			public const int PinnedMaxThumb = 2130968593;
+			// aapt resource value: 0x7F030011
+			public const int PinnedMaxThumb = 2130903057;
 			
-			// aapt resource value: 0x7F040012
-			public const int PinnedMinThumb = 2130968594;
+			// aapt resource value: 0x7F030012
+			public const int PinnedMinThumb = 2130903058;
 			
-			// aapt resource value: 0x7F040013
-			public const int PlayButtonOutline = 2130968595;
+			// aapt resource value: 0x7F030013
+			public const int PlayButtonOutline = 2130903059;
 			
-			// aapt resource value: 0x7F040014
-			public const int PlayPauseButton = 2130968596;
+			// aapt resource value: 0x7F030014
+			public const int PlayPauseButton = 2130903060;
 			
-			// aapt resource value: 0x7F040030
-			public const int popupViewer = 2130968624;
+			// aapt resource value: 0x7F030030
+			public const int popupViewer = 2130903088;
 			
-			// aapt resource value: 0x7F040031
-			public const int prefersManualListCheckbox = 2130968625;
+			// aapt resource value: 0x7F030031
+			public const int prefersManualListCheckbox = 2130903089;
 			
-			// aapt resource value: 0x7F040015
-			public const int PreviousButton = 2130968597;
+			// aapt resource value: 0x7F030015
+			public const int PreviousButton = 2130903061;
 			
-			// aapt resource value: 0x7F040016
-			public const int PreviousButtonOutline = 2130968598;
+			// aapt resource value: 0x7F030016
+			public const int PreviousButtonOutline = 2130903062;
 			
-			// aapt resource value: 0x7F040017
-			public const int RemoveFromObservableButton = 2130968599;
+			// aapt resource value: 0x7F030017
+			public const int RemoveFromObservableButton = 2130903063;
 			
-			// aapt resource value: 0x7F040032
-			public const int right = 2130968626;
+			// aapt resource value: 0x7F030032
+			public const int right = 2130903090;
 			
-			// aapt resource value: 0x7F040033
-			public const int scaleLine = 2130968627;
+			// aapt resource value: 0x7F030033
+			public const int scaleLine = 2130903091;
 			
-			// aapt resource value: 0x7F040034
-			public const int sceneView = 2130968628;
+			// aapt resource value: 0x7F030034
+			public const int sceneView = 2130903092;
 			
-			// aapt resource value: 0x7F040035
-			public const int setObservableListButton = 2130968629;
+			// aapt resource value: 0x7F030035
+			public const int setObservableListButton = 2130903093;
 			
-			// aapt resource value: 0x7F040036
-			public const int setStaticListButton = 2130968630;
+			// aapt resource value: 0x7F030036
+			public const int setStaticListButton = 2130903094;
 			
-			// aapt resource value: 0x7F040037
-			public const int sizeSlider = 2130968631;
+			// aapt resource value: 0x7F030037
+			public const int sizeSlider = 2130903095;
 			
-			// aapt resource value: 0x7F040018
-			public const int SliderTrack = 2130968600;
+			// aapt resource value: 0x7F030018
+			public const int SliderTrack = 2130903064;
 			
-			// aapt resource value: 0x7F040019
-			public const int SliderTrackOutline = 2130968601;
+			// aapt resource value: 0x7F030019
+			public const int SliderTrackOutline = 2130903065;
 			
-			// aapt resource value: 0x7F040038
-			public const int spread = 2130968632;
+			// aapt resource value: 0x7F030038
+			public const int spread = 2130903096;
 			
-			// aapt resource value: 0x7F040039
-			public const int spread_inside = 2130968633;
+			// aapt resource value: 0x7F030039
+			public const int spread_inside = 2130903097;
 			
-			// aapt resource value: 0x7F04003A
-			public const int standard = 2130968634;
+			// aapt resource value: 0x7F03003A
+			public const int standard = 2130903098;
 			
-			// aapt resource value: 0x7F04003B
-			public const int start = 2130968635;
+			// aapt resource value: 0x7F03003B
+			public const int start = 2130903099;
 			
-			// aapt resource value: 0x7F04003C
-			public const int styleSelector = 2130968636;
+			// aapt resource value: 0x7F03003C
+			public const int styleSelector = 2130903100;
 			
-			// aapt resource value: 0x7F04003D
-			public const int swapMapButton = 2130968637;
+			// aapt resource value: 0x7F03003D
+			public const int swapMapButton = 2130903101;
 			
-			// aapt resource value: 0x7F04003E
-			public const int symbolDisplay = 2130968638;
+			// aapt resource value: 0x7F03003E
+			public const int symbolDisplay = 2130903102;
 			
-			// aapt resource value: 0x7F04001A
-			public const int ThumbGuideStart = 2130968602;
+			// aapt resource value: 0x7F03001A
+			public const int ThumbGuideStart = 2130903066;
 			
-			// aapt resource value: 0x7F04001B
-			public const int Tickmarks = 2130968603;
+			// aapt resource value: 0x7F03001B
+			public const int Tickmarks = 2130903067;
 			
-			// aapt resource value: 0x7F04003F
-			public const int top = 2130968639;
+			// aapt resource value: 0x7F03003F
+			public const int top = 2130903103;
 			
-			// aapt resource value: 0x7F040040
-			public const int wrap = 2130968640;
+			// aapt resource value: 0x7F030040
+			public const int wrap = 2130903104;
 			
 			static Id()
 			{
@@ -735,35 +719,35 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public partial class Layout
 		{
 			
-			// aapt resource value: 0x7F050000
-			public const int BookmarksSample = 2131034112;
+			// aapt resource value: 0x7F040000
+			public const int BookmarksSample = 2130968576;
 			
-			// aapt resource value: 0x7F050001
-			public const int CompassMapViewSample = 2131034113;
+			// aapt resource value: 0x7F040001
+			public const int CompassMapViewSample = 2130968577;
 			
-			// aapt resource value: 0x7F050002
-			public const int CompassSceneViewSample = 2131034114;
+			// aapt resource value: 0x7F040002
+			public const int CompassSceneViewSample = 2130968578;
 			
-			// aapt resource value: 0x7F050003
-			public const int LayerLegendSample = 2131034115;
+			// aapt resource value: 0x7F040003
+			public const int LayerLegendSample = 2130968579;
 			
-			// aapt resource value: 0x7F050004
-			public const int LegendSample = 2131034116;
+			// aapt resource value: 0x7F040004
+			public const int LegendSample = 2130968580;
 			
-			// aapt resource value: 0x7F050005
-			public const int Main = 2131034117;
+			// aapt resource value: 0x7F040005
+			public const int Main = 2130968581;
 			
-			// aapt resource value: 0x7F050006
-			public const int PopupViewerSample = 2131034118;
+			// aapt resource value: 0x7F040006
+			public const int PopupViewerSample = 2130968582;
 			
-			// aapt resource value: 0x7F050007
-			public const int ScaleLineSample = 2131034119;
+			// aapt resource value: 0x7F040007
+			public const int ScaleLineSample = 2130968583;
 			
-			// aapt resource value: 0x7F050008
-			public const int SymbolEditorSample = 2131034120;
+			// aapt resource value: 0x7F040008
+			public const int SymbolEditorSample = 2130968584;
 			
-			// aapt resource value: 0x7F050009
-			public const int TimeSlider = 2131034121;
+			// aapt resource value: 0x7F040009
+			public const int TimeSlider = 2130968585;
 			
 			static Layout()
 			{
@@ -778,8 +762,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7F060000
-			public const int app_name = 2131099648;
+			// aapt resource value: 0x7F050000
+			public const int app_name = 2131034112;
 			
 			static String()
 			{
@@ -794,68 +778,68 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public partial class Styleable
 		{
 			
-			// aapt resource value: { 0x10100C4,0x101011F,0x1010120,0x101013F,0x1010140,0x7F020000,0x7F020001,0x7F020002,0x7F020003,0x7F020004,0x7F020007,0x7F020008,0x7F020009,0x7F02000A,0x7F02000B,0x7F02000C,0x7F02000D,0x7F02000E,0x7F02000F,0x7F020010,0x7F020011,0x7F020012,0x7F020013,0x7F020014,0x7F020015,0x7F020016,0x7F020017,0x7F020018,0x7F020019,0x7F02001A,0x7F02001B,0x7F02001C,0x7F02001D,0x7F02001E,0x7F02001F,0x7F020020,0x7F020021,0x7F020022,0x7F020023,0x7F020024,0x7F020025,0x7F020026,0x7F020027,0x7F020028,0x7F020029,0x7F02002A,0x7F02002B,0x7F02002C,0x7F02002D,0x7F02002E,0x7F02002F,0x7F020030,0x7F020031,0x7F020032,0x7F020033,0x7F020034,0x7F020035,0x7F020036,0x7F020037,0x7F020038 }
+			// aapt resource value: { 0x10100C4,0x101011F,0x1010120,0x101013F,0x1010140,0x7F010000,0x7F010001,0x7F010002,0x7F010003,0x7F010004,0x7F010007,0x7F010008,0x7F010009,0x7F01000A,0x7F01000B,0x7F01000C,0x7F01000D,0x7F01000E,0x7F01000F,0x7F010010,0x7F010011,0x7F010012,0x7F010013,0x7F010014,0x7F010015,0x7F010016,0x7F010017,0x7F010018,0x7F010019,0x7F01001A,0x7F01001B,0x7F01001C,0x7F01001D,0x7F01001E,0x7F01001F,0x7F010020,0x7F010021,0x7F010022,0x7F010023,0x7F010024,0x7F010025,0x7F010026,0x7F010027,0x7F010028,0x7F010029,0x7F01002A,0x7F01002B,0x7F01002C,0x7F01002D,0x7F01002E,0x7F01002F,0x7F010030,0x7F010031,0x7F010032,0x7F010033,0x7F010034,0x7F010035,0x7F010036,0x7F010037,0x7F010038 }
 			public static int[] ConstraintLayout_Layout = new int[] {
 					16842948,
 					16843039,
 					16843040,
 					16843071,
 					16843072,
-					2130837504,
-					2130837505,
-					2130837506,
-					2130837507,
-					2130837508,
-					2130837511,
-					2130837512,
-					2130837513,
-					2130837514,
-					2130837515,
-					2130837516,
-					2130837517,
-					2130837518,
-					2130837519,
-					2130837520,
-					2130837521,
-					2130837522,
-					2130837523,
-					2130837524,
-					2130837525,
-					2130837526,
-					2130837527,
-					2130837528,
-					2130837529,
-					2130837530,
-					2130837531,
-					2130837532,
-					2130837533,
-					2130837534,
-					2130837535,
-					2130837536,
-					2130837537,
-					2130837538,
-					2130837539,
-					2130837540,
-					2130837541,
-					2130837542,
-					2130837543,
-					2130837544,
-					2130837545,
-					2130837546,
-					2130837547,
-					2130837548,
-					2130837549,
-					2130837550,
-					2130837551,
-					2130837552,
-					2130837553,
-					2130837554,
-					2130837555,
-					2130837556,
-					2130837557,
-					2130837558,
-					2130837559,
-					2130837560};
+					2130771968,
+					2130771969,
+					2130771970,
+					2130771971,
+					2130771972,
+					2130771975,
+					2130771976,
+					2130771977,
+					2130771978,
+					2130771979,
+					2130771980,
+					2130771981,
+					2130771982,
+					2130771983,
+					2130771984,
+					2130771985,
+					2130771986,
+					2130771987,
+					2130771988,
+					2130771989,
+					2130771990,
+					2130771991,
+					2130771992,
+					2130771993,
+					2130771994,
+					2130771995,
+					2130771996,
+					2130771997,
+					2130771998,
+					2130771999,
+					2130772000,
+					2130772001,
+					2130772002,
+					2130772003,
+					2130772004,
+					2130772005,
+					2130772006,
+					2130772007,
+					2130772008,
+					2130772009,
+					2130772010,
+					2130772011,
+					2130772012,
+					2130772013,
+					2130772014,
+					2130772015,
+					2130772016,
+					2130772017,
+					2130772018,
+					2130772019,
+					2130772020,
+					2130772021,
+					2130772022,
+					2130772023,
+					2130772024};
 			
 			// aapt resource value: 2
 			public const int ConstraintLayout_Layout_android_maxHeight = 2;
@@ -1037,10 +1021,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 59
 			public const int ConstraintLayout_Layout_layout_optimizationLevel = 59;
 			
-			// aapt resource value: { 0x7F020005,0x7F020006 }
+			// aapt resource value: { 0x7F010005,0x7F010006 }
 			public static int[] ConstraintLayout_placeholder = new int[] {
-					2130837509,
-					2130837510};
+					2130771973,
+					2130771974};
 			
 			// aapt resource value: 0
 			public const int ConstraintLayout_placeholder_content = 0;
@@ -1048,7 +1032,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 1
 			public const int ConstraintLayout_placeholder_emptyVisibility = 1;
 			
-			// aapt resource value: { 0x10100C4,0x10100D0,0x10100DC,0x10100F4,0x10100F5,0x10100F7,0x10100F8,0x10100F9,0x10100FA,0x101031F,0x1010320,0x1010321,0x1010322,0x1010323,0x1010324,0x1010325,0x1010326,0x1010327,0x1010328,0x10103B5,0x10103B6,0x10103FA,0x1010440,0x7F020007,0x7F020008,0x7F020009,0x7F02000A,0x7F02000B,0x7F02000C,0x7F02000D,0x7F02000E,0x7F02000F,0x7F020010,0x7F020011,0x7F020012,0x7F020013,0x7F020014,0x7F020015,0x7F020016,0x7F020017,0x7F020018,0x7F020019,0x7F02001A,0x7F02001B,0x7F02001C,0x7F02001D,0x7F02001E,0x7F02001F,0x7F020020,0x7F020021,0x7F020022,0x7F020023,0x7F020024,0x7F020025,0x7F020026,0x7F020027,0x7F020028,0x7F020029,0x7F02002A,0x7F02002B,0x7F02002C,0x7F02002D,0x7F02002E,0x7F02002F,0x7F020030,0x7F020031,0x7F020032,0x7F020033,0x7F020034,0x7F020035,0x7F020036,0x7F020037 }
+			// aapt resource value: { 0x10100C4,0x10100D0,0x10100DC,0x10100F4,0x10100F5,0x10100F7,0x10100F8,0x10100F9,0x10100FA,0x101031F,0x1010320,0x1010321,0x1010322,0x1010323,0x1010324,0x1010325,0x1010326,0x1010327,0x1010328,0x10103B5,0x10103B6,0x10103FA,0x1010440,0x7F010007,0x7F010008,0x7F010009,0x7F01000A,0x7F01000B,0x7F01000C,0x7F01000D,0x7F01000E,0x7F01000F,0x7F010010,0x7F010011,0x7F010012,0x7F010013,0x7F010014,0x7F010015,0x7F010016,0x7F010017,0x7F010018,0x7F010019,0x7F01001A,0x7F01001B,0x7F01001C,0x7F01001D,0x7F01001E,0x7F01001F,0x7F010020,0x7F010021,0x7F010022,0x7F010023,0x7F010024,0x7F010025,0x7F010026,0x7F010027,0x7F010028,0x7F010029,0x7F01002A,0x7F01002B,0x7F01002C,0x7F01002D,0x7F01002E,0x7F01002F,0x7F010030,0x7F010031,0x7F010032,0x7F010033,0x7F010034,0x7F010035,0x7F010036,0x7F010037 }
 			public static int[] ConstraintSet = new int[] {
 					16842948,
 					16842960,
@@ -1073,55 +1057,55 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 					16843702,
 					16843770,
 					16843840,
-					2130837511,
-					2130837512,
-					2130837513,
-					2130837514,
-					2130837515,
-					2130837516,
-					2130837517,
-					2130837518,
-					2130837519,
-					2130837520,
-					2130837521,
-					2130837522,
-					2130837523,
-					2130837524,
-					2130837525,
-					2130837526,
-					2130837527,
-					2130837528,
-					2130837529,
-					2130837530,
-					2130837531,
-					2130837532,
-					2130837533,
-					2130837534,
-					2130837535,
-					2130837536,
-					2130837537,
-					2130837538,
-					2130837539,
-					2130837540,
-					2130837541,
-					2130837542,
-					2130837543,
-					2130837544,
-					2130837545,
-					2130837546,
-					2130837547,
-					2130837548,
-					2130837549,
-					2130837550,
-					2130837551,
-					2130837552,
-					2130837553,
-					2130837554,
-					2130837555,
-					2130837556,
-					2130837557,
-					2130837558,
-					2130837559};
+					2130771975,
+					2130771976,
+					2130771977,
+					2130771978,
+					2130771979,
+					2130771980,
+					2130771981,
+					2130771982,
+					2130771983,
+					2130771984,
+					2130771985,
+					2130771986,
+					2130771987,
+					2130771988,
+					2130771989,
+					2130771990,
+					2130771991,
+					2130771992,
+					2130771993,
+					2130771994,
+					2130771995,
+					2130771996,
+					2130771997,
+					2130771998,
+					2130771999,
+					2130772000,
+					2130772001,
+					2130772002,
+					2130772003,
+					2130772004,
+					2130772005,
+					2130772006,
+					2130772007,
+					2130772008,
+					2130772009,
+					2130772010,
+					2130772011,
+					2130772012,
+					2130772013,
+					2130772014,
+					2130772015,
+					2130772016,
+					2130772017,
+					2130772018,
+					2130772019,
+					2130772020,
+					2130772021,
+					2130772022,
+					2130772023};
 			
 			// aapt resource value: 9
 			public const int ConstraintSet_android_alpha = 9;

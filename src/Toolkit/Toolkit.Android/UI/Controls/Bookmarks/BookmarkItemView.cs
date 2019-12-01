@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Android.App;
 using Android.Content;
 using Android.Util;
 using Android.Views;
@@ -23,31 +22,35 @@ using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// View class used to render the individual entry for a <see cref="Bookmark" /> shown by <see cref="BookmarksAdapter" />.
+    /// </summary>
     internal class BookmarkItemView : LinearLayout
     {
+        // View that renders the bookmark's title.
         private readonly TextView _textView;
 
         internal BookmarkItemView(Context context)
             : base(context)
         {
             Orientation = Orientation.Horizontal;
-            LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+            LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
             SetGravity(GravityFlags.CenterVertical | GravityFlags.FillHorizontal);
 
             _textView = new TextView(context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent)
+                LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent)
             };
 
             TypedValue listItemHeightValue = new TypedValue();
-            Application.Context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemHeight, listItemHeightValue, true);
+            context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemHeight, listItemHeightValue, true);
             SetMinimumHeight((int)listItemHeightValue.GetDimension(Resources.DisplayMetrics));
 
             TypedValue listItemLeftMarginValue = new TypedValue();
-            Application.Context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingStart, listItemLeftMarginValue, true);
+            context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingStart, listItemLeftMarginValue, true);
 
             TypedValue listItemRightMarginValue = new TypedValue();
-            Application.Context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingEnd, listItemRightMarginValue, true);
+            context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingEnd, listItemRightMarginValue, true);
 
             SetPadding((int)listItemLeftMarginValue.GetDimension(Resources.DisplayMetrics), 0, (int)listItemRightMarginValue.GetDimension(Resources.DisplayMetrics), 0);
 
@@ -55,9 +58,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             AddView(_textView);
         }
 
-        internal void Update(Bookmark info)
+        /// <summary>
+        /// Enables cell reuse.
+        /// </summary>
+        /// <param name="bookmark">Bookmark to be shown in the updated cell.</param>
+        internal void Update(Bookmark bookmark)
         {
-            _textView.Text = info?.Name;
+            _textView.Text = bookmark?.Name;
         }
     }
 }

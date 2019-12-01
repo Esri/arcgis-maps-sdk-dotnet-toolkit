@@ -23,9 +23,13 @@ using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// Data source for showing a bookmark list in a <see cref="UITableView" /> with <see cref="BookmarkSelected" /> event.
+    /// </summary>
     internal class BookmarksTableSource : UITableViewSource, INotifyCollectionChanged
     {
         private readonly IList<Bookmark> _bookmarks;
+
         internal static readonly NSString CellId = new NSString(nameof(UITableViewCell));
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -69,16 +73,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(_bookmarks[indexPath.Row]));
+            BookmarkSelected?.Invoke(this, new Bookmarks.BookmarkSelectedEventArgs(_bookmarks[indexPath.Row]));
         }
 
-        public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
-
-        public class BookmarkSelectedEventArgs : EventArgs
-        {
-            public Bookmark Bookmark { get; set; }
-
-            public BookmarkSelectedEventArgs(Bookmark bookmark) { Bookmark = bookmark; }
-        }
+        public event EventHandler<Bookmarks.BookmarkSelectedEventArgs> BookmarkSelected;
     }
 }

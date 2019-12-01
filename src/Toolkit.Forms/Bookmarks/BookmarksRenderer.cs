@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2019 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -22,16 +22,16 @@ using Xamarin.Forms.Platform.Android;
 #elif __IOS__
 using Xamarin.Forms.Platform.iOS;
 #elif NETFX_CORE
-using Windows.UI.Xaml;
 using Xamarin.Forms.Platform.UWP;
-using Windows.Foundation;
 #endif
-
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Bookmarks), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.BookmarksRenderer))]
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
+    /// <summary>
+    /// Renders the native <see cref="Bookmarks" /> control for the native platform.
+    /// </summary>
     internal class BookmarksRenderer : ViewRenderer<Bookmarks, UI.Controls.Bookmarks>
     {
 #if __ANDROID__
@@ -44,11 +44,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         protected override void OnElementChanged(ElementChangedEventArgs<Bookmarks> e)
         {
             base.OnElementChanged(e);
-
-            if (e.OldElement != null)
-            {
-
-            }
 
             if (e.NewElement != null)
             {
@@ -70,7 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #elif __ANDROID__
             Invalidate();
 #elif NETFX_CORE
-                    InvalidateArrange();
+            InvalidateArrange();
 #endif
                 }
             }

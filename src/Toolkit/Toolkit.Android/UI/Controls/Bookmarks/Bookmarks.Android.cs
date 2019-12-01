@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2019 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -15,16 +15,12 @@
 //  ******************************************************************************/
 
 #if __ANDROID__
+using System;
+using System.Collections.Generic;
 using Android.Content;
 using Android.Util;
-using Android.Views;
 using Android.Widget;
-using System.Linq;
-using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI.Controls;
-using System;
 using Esri.ArcGISRuntime.Mapping;
-using System.Collections.Generic;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -62,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
-            NavigateToBookmark(_currentBookmarkList[e.Position]);
+            SelectAndNavigateToBookmark(_currentBookmarkList[e.Position]);
 
             SetSelection(-1);
         }

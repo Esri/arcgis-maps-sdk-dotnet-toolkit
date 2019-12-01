@@ -1,5 +1,5 @@
 ﻿// /*******************************************************************************
-//  * Copyright 2012-2019 Esri
+//  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
 //  *  you may not use this file except in compliance with the License.
@@ -15,15 +15,12 @@
 //  ******************************************************************************/
 
 #if !XAMARIN
+using System.Collections.Generic;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.Foundation;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -41,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
 #if NETFX_CORE
         protected override void OnApplyTemplate()
-#elif !XAMARIN
+#else
         public override void OnApplyTemplate()
 #endif
         {
@@ -85,6 +82,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        private void ListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                if (e.AddedItems[0] is Bookmark bm)
+                {
+                    SelectAndNavigateToBookmark(bm);
+                }
+            }
+
+            ((ListView)sender).SelectedItem = null;
+        }
+
         private GeoView GeoViewImpl
         {
             get { return (GeoView)GetValue(GeoViewProperty); }
@@ -103,33 +113,54 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set { SetValue(PrefersBookmarksListProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="GeoView" /> dependency property.
+        /// </summary>
         public static readonly DependencyProperty GeoViewProperty =
             DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(Bookmarks), new PropertyMetadata(null, OnGeoViewPropertyChanged));
 
+        /// <summary>
+        /// Identifies the <see cref="PrefersBookmarksList" /> dependency property.
+        /// </summary>
         public static readonly DependencyProperty PrefersBookmarksListProperty =
             DependencyProperty.Register(nameof(PrefersBookmarksList), typeof(bool), typeof(Bookmarks), new PropertyMetadata(false, OnPrefersBookmarksListPropertyChanged));
 
+        /// <summary>
+        /// Identifies the <see cref="BookmarkList" /> dependency property.
+        /// </summary>
         public static readonly DependencyProperty BookmarkListProperty =
             DependencyProperty.Register(nameof(BookmarkList), typeof(IList<Bookmark>), typeof(Bookmarks), new PropertyMetadata(null, OnBookmarkListPropertyChanged));
 
+        /// <summary>
+        /// Sets <see cref="GeoView" /> when the <see cref="GeoViewProperty" /> changes.
+        /// </summary>
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var contents = (Bookmarks)d;
             contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
         }
 
+        /// <summary>
+        /// Sets <see cref="PrefersBookmarksList" /> when the <see cref="PrefersBookmarksListProperty" /> changes.
+        /// </summary>
         private static void OnPrefersBookmarksListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var bm = (Bookmarks)d;
             bm.PrefersBookmarksList = (bool)e.NewValue;
         }
 
+        /// <summary>
+        /// Sets <see cref="BookmarkList" /> when the <see cref="BookmarkListProperty" /> changes.
+        /// </summary>
         private static void OnBookmarkListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var bm = (Bookmarks)d;
             bm.BookmarkList = (IList<Bookmark>)e.NewValue;
         }
 
+        /// <summary>
+        /// Gets or sets the item template used to render bookmark entries in the list.
+        /// </summary>
         public DataTemplate ItemTemplate
         {
             get { return (DataTemplate)GetValue(ItemTemplateProperty); }
@@ -156,19 +187,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty ItemsPanelProperty =
             DependencyProperty.Register(nameof(ItemsPanel), typeof(ItemsPanelTemplate), typeof(Bookmarks), new PropertyMetadata(null));
-
-        private void ListSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count > 0)
-            {
-                if (e.AddedItems[0] is Bookmark bm)
-                {
-                    NavigateToBookmark(bm);
-                }
-            }
-
-            ((ListView)sender).SelectedItem = null;
-        }
     }
 }
 #endif

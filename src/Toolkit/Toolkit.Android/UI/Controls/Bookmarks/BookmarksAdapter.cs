@@ -23,6 +23,9 @@ using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// Creates the UI for the list items in the associated list of <see cref="Bookmark" />.
+    /// </summary>
     internal class BookmarksAdapter : BaseAdapter<Bookmark>
     {
         private IList<Bookmark> _bookmarks;
@@ -34,12 +37,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SetList(bookmarks);
         }
 
+        /// <summary>
+        /// Sets the list used by the adapter. Avoids re-drawing if the <paramref name="bookmarks"/> list
+        /// is the same as what has already been shown.
+        /// </summary>
+        /// <param name="bookmarks">List of bookmarks to display.</param>
         public void SetList(IList<Bookmark> bookmarks)
         {
             if (bookmarks == _bookmarks)
             {
                 return;
             }
+
             _bookmarks = bookmarks;
             if (_bookmarks is INotifyCollectionChanged)
             {
@@ -52,20 +61,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     },
                     OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
                 };
+
                 incc.CollectionChanged += listener.OnEvent;
             }
+
             NotifyDataSetChanged();
         }
 
+        /// <inheritdoc />
         public override Bookmark this[int position] => _bookmarks[position];
 
+        /// <inheritdoc />
         public override int Count => _bookmarks.Count;
 
+        /// <inheritdoc />
         public override long GetItemId(int position)
         {
             return position;
         }
 
+        /// <inheritdoc />
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             var bookmark = _bookmarks[position];

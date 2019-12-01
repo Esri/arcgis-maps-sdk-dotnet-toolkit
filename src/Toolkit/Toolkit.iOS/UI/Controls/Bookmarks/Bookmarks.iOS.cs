@@ -15,10 +15,8 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CoreGraphics;
-using Esri.ArcGISRuntime.Mapping;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -31,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
         /// <summary>
-        /// Internal use only.  Invoked by the Xamarin iOS designer.
+        /// Internal use only. Invoked by the Xamarin iOS designer.
         /// </summary>
         /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
 #pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
@@ -125,21 +123,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            var source = new BookmarksTableSource(currentList);
-            _listView.Source = source;
-            source.CollectionChanged += (a, b) => InvokeOnMainThread(() =>
+            if (_listView.Source is BookmarksTableSource oldTableSource)
+            {
+                oldTableSource.CollectionChanged -= UpdateSourceCollection;
+                oldTableSource.BookmarkSelected -= HandleBookmarkSelected;
+            }
+
+            var newTableSource = new BookmarksTableSource(currentList);
+            _listView.Source = newTableSource;
+            newTableSource.CollectionChanged += UpdateSourceCollection;
+            newTableSource.BookmarkSelected += HandleBookmarkSelected;
+
+            _listView.ReloadData();
+            InvalidateIntrinsicContentSize();
+            SetNeedsUpdateConstraints();
+            UpdateConstraints();
+        }
+
+        private void HandleBookmarkSelected(object sender, BookmarkSelectedEventArgs e)
+        {
+            SelectAndNavigateToBookmark(e.Bookmark);
+        }
+
+        private void UpdateSourceCollection(object sender, EventArgs e)
+        {
+            InvokeOnMainThread(() =>
             {
                 _listView.ReloadData();
                 InvalidateIntrinsicContentSize();
                 SetNeedsUpdateConstraints();
                 UpdateConstraints();
             });
-            source.BookmarkSelected += (sndr, args) => NavigateToBookmark(args.Bookmark);
-            _listView.ReloadData();
-            InvalidateIntrinsicContentSize();
-            SetNeedsUpdateConstraints();
-            UpdateConstraints();
-            Hidden = false;
         }
     }
 }
