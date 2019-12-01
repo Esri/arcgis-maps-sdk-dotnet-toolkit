@@ -31,29 +31,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             : base(context)
         {
             Orientation = Orientation.Horizontal;
-            LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent);
+            LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
             SetGravity(GravityFlags.CenterVertical | GravityFlags.FillHorizontal);
 
             _textView = new TextView(context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent)
             };
 
             TypedValue listItemHeightValue = new TypedValue();
-            ((Activity)Context).Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemHeight, listItemHeightValue, true);
+            Application.Context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemHeight, listItemHeightValue, true);
             SetMinimumHeight((int)listItemHeightValue.GetDimension(Resources.DisplayMetrics));
 
             TypedValue listItemLeftMarginValue = new TypedValue();
-            ((Activity)Context).Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingStart, listItemLeftMarginValue, true);
+            Application.Context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingStart, listItemLeftMarginValue, true);
 
             TypedValue listItemRightMarginValue = new TypedValue();
-            ((Activity)Context).Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingEnd, listItemRightMarginValue, true);
+            Application.Context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingEnd, listItemRightMarginValue, true);
 
             SetPadding((int)listItemLeftMarginValue.GetDimension(Resources.DisplayMetrics), 0, (int)listItemRightMarginValue.GetDimension(Resources.DisplayMetrics), 0);
 
             _textView.Gravity = GravityFlags.CenterVertical | GravityFlags.FillHorizontal;
             AddView(_textView);
-            RequestLayout();
         }
 
         internal void Update(Bookmark info)

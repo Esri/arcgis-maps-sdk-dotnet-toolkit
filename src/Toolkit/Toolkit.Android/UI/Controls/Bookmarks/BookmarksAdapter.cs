@@ -25,12 +25,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class BookmarksAdapter : BaseAdapter<Bookmark>
     {
-        private IReadOnlyList<Bookmark> _bookmarks;
+        private IList<Bookmark> _bookmarks;
         private readonly Context _context;
 
-        internal BookmarksAdapter(Context context, IReadOnlyList<Bookmark> bookmarks)
+        internal BookmarksAdapter(Context context, IList<Bookmark> bookmarks)
         {
             _context = context;
+            SetList(bookmarks);
+        }
+
+        public void SetList(IList<Bookmark> bookmarks)
+        {
+            if (bookmarks == _bookmarks)
+            {
+                return;
+            }
             _bookmarks = bookmarks;
             if (_bookmarks is INotifyCollectionChanged)
             {
@@ -45,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 };
                 incc.CollectionChanged += listener.OnEvent;
             }
+            NotifyDataSetChanged();
         }
 
         public override Bookmark this[int position] => _bookmarks[position];

@@ -30,7 +30,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class Bookmarks
     {
-        private ListView _listView;
         private IList<Bookmark> _currentBookmarkList;
 
         /// <summary>
@@ -56,79 +55,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void Initialize()
         {
-            _listView = new ListView(Context)
-            {
-                ClipToOutline = true,
-                Clickable = true,
-                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
-                ScrollingCacheEnabled = false,
-                PersistentDrawingCache = PersistentDrawingCaches.NoCache,
-            };
+            VerticalScrollBarEnabled = true;
 
-            _listView.ItemClick += ListView_ItemClick;
-
-            AddView(_listView);
+            ItemClick += ListView_ItemClick;
         }
 
         private void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             NavigateToBookmark(_currentBookmarkList[e.Position]);
 
-            _listView.SetSelection(-1);
+            SetSelection(-1);
         }
 
         private void Refresh()
         {
-            if (_listView == null)
-            {
-                return;
-            }
-
-            _currentBookmarkList = GetCurrentBookmarkList();
-
-            if (_currentBookmarkList == null)
-            {
-                _listView.Adapter = null;
-                return;
-            }
-
             try
             {
-                _listView.Adapter = new BookmarksAdapter(Context, (IReadOnlyList<Bookmark>)_currentBookmarkList);
-                _listView.SetHeightBasedOnChildren();
+                _currentBookmarkList = GetCurrentBookmarkList();
+                if (_currentBookmarkList == null)
+                {
+                    Adapter = null;
+                    return;
+                }
+
+                if (Adapter == null)
+                {
+                    Adapter = new BookmarksAdapter(Context, _currentBookmarkList);
+                }
+                else
+                {
+                    ((BookmarksAdapter)Adapter).SetList(_currentBookmarkList);
+                }
             }
             catch (ObjectDisposedException)
             {
-                // Happens when navigating away on Forms Android - GeoView is disposed before bookmarks control
-                _listView.Adapter = null;
+                // Happens when navigating away on Forms Android
                 return;
             }
-        }
-
-        /// <inheritdoc />
-        protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
-        {
-            base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
-
-            // Initialize dimensions of root layout
-            MeasureChild(_listView, widthMeasureSpec, MeasureSpec.MakeMeasureSpec(MeasureSpec.GetSize(heightMeasureSpec), MeasureSpecMode.AtMost));
-
-            // Calculate the ideal width and height for the view
-            var desiredWidth = PaddingLeft + PaddingRight + _listView.MeasuredWidth;
-            var desiredHeight = PaddingTop + PaddingBottom + _listView.MeasuredHeight;
-
-            // Get the width and height of the view given any width and height constraints indicated by the width and height spec values
-            var width = ResolveSize(desiredWidth, widthMeasureSpec);
-            var height = ResolveSize(desiredHeight, heightMeasureSpec);
-
-            SetMeasuredDimension(width, height);
-        }
-
-        /// <inheritdoc />
-        protected override void OnLayout(bool changed, int l, int t, int r, int b)
-        {
-            // Forward layout call to the root layout
-            _listView.Layout(PaddingLeft, PaddingTop, _listView.MeasuredWidth + PaddingLeft, _listView.MeasuredHeight + PaddingBottom);
         }
     }
 }

@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
- <Esri.ArcGISRuntime.UI.Controls.MapView
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+    <Esri.ArcGISRuntime.UI.Controls.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -13,6 +14,41 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:id="@+id/bookmarksView" />
+    <LinearLayout android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@android:color/white">
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Prefers manual list"
+            android:id="@+id/prefersManualListCheckbox" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@android:color/white">
+        <Button android:text="Set O"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:id="@+id/setObservableListButton"/>
+        <Button android:text="Set S"
+            android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+            android:id="@+id/setStaticListButton" />
+        <Button android:text="Swap map" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/swapMapButton" />
+        <Button android:text="+"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/AddToObservableButton" />
+        <Button android:text="-"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/RemoveFromObservableButton" />
+    </LinearLayout>
 	<!--<TextView android:text="Size" />
 	<CheckBox android:id="@+id/autoHideCheckbox" />-->
 </LinearLayout>
