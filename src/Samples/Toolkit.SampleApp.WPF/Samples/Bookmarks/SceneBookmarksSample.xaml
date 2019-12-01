@@ -22,8 +22,6 @@
 
         </GridSplitter>
         <esri:Bookmarks Grid.Column="2"
-                        GeoView="{Binding ElementName=MySceneView}" Background="Orange"
-            >
-        </esri:Bookmarks>
+                        GeoView="{Binding ElementName=MySceneView}" Background="Orange" />
     </Grid>
 </UserControl>

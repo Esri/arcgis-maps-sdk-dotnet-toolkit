@@ -22,8 +22,14 @@
 
         </GridSplitter>
         <esri:Bookmarks Grid.Column="2"
-                        GeoView="{Binding ElementName=MyMapView}" Background="Orange"
-            >
+                        GeoView="{Binding ElementName=MyMapView}">
+            <esri:Bookmarks.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Right">
+                        <TextBlock HorizontalAlignment="Right" TextAlignment="Center" Text="{Binding Name}" Background="SlateBlue" />
+                    </Grid>
+                </DataTemplate>
+            </esri:Bookmarks.ItemTemplate>
         </esri:Bookmarks>
     </Grid>
 </UserControl>
