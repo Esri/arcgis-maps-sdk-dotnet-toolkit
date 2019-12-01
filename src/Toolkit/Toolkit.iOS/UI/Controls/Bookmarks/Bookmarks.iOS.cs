@@ -102,8 +102,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         event EventHandler IComponent.Disposed
         {
-            add { _disposed += value; }
-            remove { _disposed -= value; }
+            add => _disposed += value;
+            remove => _disposed -= value;
         }
 
         private void Refresh()

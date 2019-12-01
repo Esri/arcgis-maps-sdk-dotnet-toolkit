@@ -17,9 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
+using System.Linq;
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 #elif __IOS__
@@ -247,7 +247,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="bookmark"/> is <code>null</code>.</exception>
         private void SelectAndNavigateToBookmark(Bookmark bookmark)
         {
-            if (bookmark == null || bookmark.Viewpoint == null)
+            if (bookmark?.Viewpoint == null)
             {
                 throw new ArgumentNullException("Bookmark or bookmark viewpoint is null");
             }

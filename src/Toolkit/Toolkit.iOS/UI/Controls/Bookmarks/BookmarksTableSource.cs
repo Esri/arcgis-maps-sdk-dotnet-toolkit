@@ -35,12 +35,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public BookmarksTableSource(IList<Bookmark> bookmarks)
-            : base()
         {
             _bookmarks = bookmarks;
-            if (_bookmarks is INotifyCollectionChanged)
+            if (_bookmarks is INotifyCollectionChanged incc)
             {
-                var incc = _bookmarks as INotifyCollectionChanged;
                 var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                 {
                     OnEventAction = (instance, source, eventArgs) =>

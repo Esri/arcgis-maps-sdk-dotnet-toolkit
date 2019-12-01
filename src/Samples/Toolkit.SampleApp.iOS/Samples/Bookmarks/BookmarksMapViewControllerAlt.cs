@@ -23,10 +23,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 
         private const string _mapUrl = "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee";
 
-        public BookmarksMapViewControllerAlt()
-        {
-        }
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

@@ -49,6 +49,4 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/RemoveFromObservableButton" />
     </LinearLayout>
-	<!--<TextView android:text="Size" />
-	<CheckBox android:id="@+id/autoHideCheckbox" />-->
 </LinearLayout>

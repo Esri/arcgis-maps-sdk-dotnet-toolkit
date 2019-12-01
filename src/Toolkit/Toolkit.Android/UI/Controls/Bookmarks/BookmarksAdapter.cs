@@ -44,15 +44,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="bookmarks">List of bookmarks to display.</param>
         public void SetList(IList<Bookmark> bookmarks)
         {
-            if (bookmarks == _bookmarks)
+            if (ReferenceEquals(bookmarks, _bookmarks))
             {
                 return;
             }
 
             _bookmarks = bookmarks;
-            if (_bookmarks is INotifyCollectionChanged)
+            if (_bookmarks is INotifyCollectionChanged incc)
             {
-                var incc = _bookmarks as INotifyCollectionChanged;
                 var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                 {
                     OnEventAction = (instance, source, eventArgs) =>

@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
   <Style TargetType="{x:Type controls:Bookmarks}" >
+    <!-- Default item template can be overriden by the user. -->
     <Setter Property="ItemTemplate">
       <Setter.Value>
         <DataTemplate>

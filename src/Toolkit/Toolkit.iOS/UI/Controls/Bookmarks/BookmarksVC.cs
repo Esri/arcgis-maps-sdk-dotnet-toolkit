@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class BookmarksVC : UIViewController
     {
-        private Bookmarks _bookmarksView;
+        private readonly Bookmarks _bookmarksView;
         private UIBarButtonItem _closeButton;
 
         /// <summary>
@@ -35,18 +35,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="bookmarksView">The already-created bookmarks view.</param>
         public BookmarksVC(Bookmarks bookmarksView)
-            : base()
         {
-            if (bookmarksView == null)
-            {
-                throw new ArgumentNullException(nameof(bookmarksView), "Must supply bookmarks view.");
-            }
+            _bookmarksView = bookmarksView ?? throw new ArgumentNullException(nameof(bookmarksView), "Must supply bookmarks view.");
 
             Title = "Bookmarks";
-            _bookmarksView = bookmarksView;
             ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
         }
 
+        /// <inheritdoc />
         public override void LoadView()
         {
             base.LoadView();
@@ -79,6 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DismissViewController(true, null);
         }
 
+        /// <inheritdoc />
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
@@ -96,6 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        /// <inheritdoc />
         public override void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);
