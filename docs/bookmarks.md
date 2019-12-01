@@ -172,4 +172,140 @@ public class BookmarksSampleActivity : Activity
 
 ### Xamarin Forms
 
+On Xamarin Forms, there are two ways to configure the `Bookmarks` control:
+
+* Binding in XAML
+* Setting properties in code
+
+The following properties support binding:
+
+* `PrefersBookmarksList`
+* `BookmarkList`
+* `GeoView`
+
+Binding example:
+
+```xml
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+             x:Class="Toolkit.Samples.Forms.Samples.BookmarksSample">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <esri:MapView x:Name="MyMapView" Grid.Column="0" />
+            <toolkit:Bookmarks Grid.Column="1"
+                               GeoView="{x:Reference MyMapView}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
+```
+
+The above will automatically support showing the list of bookmarks and navigating to the selected bookmark.
+
 ### WPF & UWP
+
+On WPF and UWP, the bookmarks control supports configuration through binding or by setting properties in code. Additionally, `Bookmarks` supports customization of bookmark display via the `ItemTemplate` property.
+
+Binding example (WPF):
+
+```xml
+<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks.MapBookmarksSample"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <esri:MapView x:Name="MyMapView" Grid.Column="0" />
+        <esri:Bookmarks Grid.Column="1"
+                        GeoView="{Binding ElementName=MyMapView}" />
+    </Grid>
+</UserControl>
+```
+
+Binding example (UWP):
+
+```xml
+<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks.BookmarksMapSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <esri:MapView x:Name="MyMapView" Grid.Column="0" />
+        <toolkit:Bookmarks GeoView="{Binding ElementName=MyMapView}" Grid.Column="1" />
+    </Grid>
+</Page>
+```
+
+List customization example (WPF):
+
+```xml
+<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks.MapBookmarksSample"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <esri:MapView x:Name="MyMapView" Grid.Column="0" />
+        <esri:Bookmarks Grid.Column="1"
+                        GeoView="{Binding ElementName=MyMapView}">
+            <esri:Bookmarks.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Name}" Foreground="Red" />
+                    </Grid>
+                </DataTemplate>
+            </esri:Bookmarks.ItemTemplate>
+        </esri:Bookmarks>
+    </Grid>
+</UserControl>
+```
+
+List customization example (UWP):
+
+```xml
+<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks.BookmarksMapSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <esri:MapView x:Name="MyMapView" Grid.Column="0" />
+        <toolkit:Bookmarks GeoView="{Binding ElementName=MyMapView}" Grid.Column="1">
+            <toolkit:Bookmarks.ItemTemplate>
+                <DataTemplate x:DataType="mapping:Bookmark">
+                    <TextBlock Text="{Binding Name}" Foreground="Red" />
+                </DataTemplate>
+            </toolkit:Bookmarks.ItemTemplate>
+        </toolkit:Bookmarks>
+    </Grid>
+</Page>
+```

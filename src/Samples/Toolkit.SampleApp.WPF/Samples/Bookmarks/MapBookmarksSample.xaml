@@ -1,32 +1,25 @@
 ﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks.MapBookmarksSample"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800">
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
-        <esri:MapView x:Name="MyMapView"
-                      Grid.Column="0" HorizontalAlignment="Stretch">
-        </esri:MapView>
-        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch">
-
-        </GridSplitter>
+        <esri:MapView x:Name="MyMapView" Grid.Column="0" />
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
         <esri:Bookmarks Grid.Column="2"
                         GeoView="{Binding ElementName=MyMapView}">
             <esri:Bookmarks.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Right">
-                        <TextBlock HorizontalAlignment="Right" TextAlignment="Center" Text="{Binding Name}" Background="SlateBlue" />
+                    <Grid>
+                        <TextBlock Text="{Binding Name}" Foreground="Red" />
                     </Grid>
                 </DataTemplate>
             </esri:Bookmarks.ItemTemplate>

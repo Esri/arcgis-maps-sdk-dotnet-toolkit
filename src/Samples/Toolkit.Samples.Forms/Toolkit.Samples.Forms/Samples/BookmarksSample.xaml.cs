@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -49,25 +48,13 @@ namespace Toolkit.Samples.Forms.Samples
             _bookmarksObservable.Add(new Bookmark("O: Nationalpark Neusiedler See - Seewinkel Informationszentrum", vp4));
         }
 
-        private void ToggleListCheckbox_Click(object sender, EventArgs e)
-        {
-            MyBookmarks.PrefersBookmarksList = !MyBookmarks.PrefersBookmarksList;
-        }
+        private void ToggleListCheckbox_Click(object sender, EventArgs e) => MyBookmarks.PrefersBookmarksList = !MyBookmarks.PrefersBookmarksList;
 
-        private void ShowStaticList_Click(object sender, EventArgs e)
-        {
-            MyBookmarks.BookmarkList = _bookmarksStatic;
-        }
+        private void ShowStaticList_Click(object sender, EventArgs e) => MyBookmarks.BookmarkList = _bookmarksStatic;
 
-        private void ShowObservableList_Click(object sender, EventArgs e)
-        {
-            MyBookmarks.BookmarkList = _bookmarksObservable;
-        }
+        private void ShowObservableList_Click(object sender, EventArgs e) => MyBookmarks.BookmarkList = _bookmarksObservable;
 
-        private void RemoveFromObservableButton_Click(object sender, EventArgs e)
-        {
-            _bookmarksObservable.RemoveAt(0);
-        }
+        private void RemoveFromObservableButton_Click(object sender, EventArgs e) => _bookmarksObservable.RemoveAt(0);
 
         private void AddToObservableButton_Click(object sender, EventArgs e)
         {

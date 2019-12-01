@@ -2,18 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks
 {
@@ -61,25 +51,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks
             _bookmarksObservable.Add(new Bookmark("O: Nationalpark Neusiedler See - Seewinkel Informationszentrum", vp4));
         }
 
-        private void ToggleListCheckbox_Click(object sender, RoutedEventArgs e)
-        {
-            MyBookmarks.PrefersBookmarksList = !MyBookmarks.PrefersBookmarksList;
-        }
+        private void ToggleListCheckbox_Click(object sender, RoutedEventArgs e) => MyBookmarks.PrefersBookmarksList = !MyBookmarks.PrefersBookmarksList;
 
-        private void ShowStaticList_Click(object sender, RoutedEventArgs e)
-        {
-            MyBookmarks.BookmarkList = _bookmarksStatic;
-        }
+        private void ShowStaticList_Click(object sender, RoutedEventArgs e) => MyBookmarks.BookmarkList = _bookmarksStatic;
 
-        private void ShowObservableList_Click(object sender, RoutedEventArgs e)
-        {
-            MyBookmarks.BookmarkList = _bookmarksObservable;
-        }
+        private void ShowObservableList_Click(object sender, RoutedEventArgs e) => MyBookmarks.BookmarkList = _bookmarksObservable;
 
-        private void RemoveFromObservableButton_Click(object sender, RoutedEventArgs e)
-        {
-            _bookmarksObservable.RemoveAt(0);
-        }
+        private void RemoveFromObservableButton_Click(object sender, RoutedEventArgs e) => _bookmarksObservable.RemoveAt(0);
 
         private void AddToObservableButton_Click(object sender, RoutedEventArgs e)
         {

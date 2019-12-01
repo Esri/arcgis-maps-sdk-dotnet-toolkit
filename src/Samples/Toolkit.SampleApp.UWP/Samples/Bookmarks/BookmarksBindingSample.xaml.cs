@@ -1,20 +1,9 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -63,25 +52,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks
             _bookmarksObservable.Add(new Bookmark("O: Nationalpark Neusiedler See - Seewinkel Informationszentrum", vp4));
         }
 
-        private void ToggleListCheckbox_Click(object sender, RoutedEventArgs e)
-        {
-            MyBookmarks.PrefersBookmarksList = !MyBookmarks.PrefersBookmarksList;
-        }
+        private void ToggleListCheckbox_Click(object sender, RoutedEventArgs e) => MyBookmarks.PrefersBookmarksList = !MyBookmarks.PrefersBookmarksList;
 
-        private void ShowStaticList_Click(object sender, RoutedEventArgs e)
-        {
-            MyBookmarks.BookmarkList = _bookmarksStatic;
-        }
+        private void ShowStaticList_Click(object sender, RoutedEventArgs e) => MyBookmarks.BookmarkList = _bookmarksStatic;
 
-        private void ShowObservableList_Click(object sender, RoutedEventArgs e)
-        {
-            MyBookmarks.BookmarkList = _bookmarksObservable;
-        }
+        private void ShowObservableList_Click(object sender, RoutedEventArgs e) => MyBookmarks.BookmarkList = _bookmarksObservable;
 
-        private void RemoveFromObservableButton_Click(object sender, RoutedEventArgs e)
-        {
-            _bookmarksObservable.RemoveAt(0);
-        }
+        private void RemoveFromObservableButton_Click(object sender, RoutedEventArgs e) => _bookmarksObservable.RemoveAt(0);
 
         private void AddToObservableButton_Click(object sender, RoutedEventArgs e)
         {

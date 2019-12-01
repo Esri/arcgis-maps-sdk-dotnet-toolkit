@@ -9,16 +9,12 @@
     xmlns:esri1="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
-
-        <esri:MapView x:Name="MyMapView"
-                      Grid.Column="0" HorizontalAlignment="Stretch">
-        </esri:MapView>
+        <esri:MapView x:Name="MyMapView" Grid.Column="0" />
         <esri1:Bookmarks GeoView="{Binding ElementName=MyMapView}" Grid.Column="1">
             <esri1:Bookmarks.ItemTemplate>
                 <DataTemplate x:DataType="mapping:Bookmark">

@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:layout_height="match_parent">
     <Esri.ArcGISRuntime.UI.Controls.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,8 +15,7 @@
         android:id="@+id/bookmarksView" />
     <LinearLayout android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="@android:color/white">
+        android:layout_width="match_parent">
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,8 +24,7 @@
     </LinearLayout>
     <LinearLayout android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="@android:color/white">
+        android:layout_width="match_parent">
         <Button android:text="Set O"
             android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
