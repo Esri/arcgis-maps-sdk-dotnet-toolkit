@@ -3,13 +3,13 @@
 The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).
 
 You can use the Toolkit in your projects by:
+
 1. Building the source code available in this repo (see instructions below)
-2. Installing the latest stable release or pre-release from NuGet
-    - Stable: [![NuGet](https://img.shields.io/nuget/v/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
-    - Absolute latest: [![NuGet](https://img.shields.io/nuget/vpre/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)   
+2. Installing the latest stable release or pre-release from [NuGet](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
 
 ## Features
 
+- Bookmarks: Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
 - Compass: Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
 - FeatureDataField: Displays and optionally allows editing of a single field attribute of a feature.
 - Legend: Displays a legend for a single layer in your map (and optionally for its sub layers).
@@ -28,6 +28,7 @@ You can use the Toolkit in your projects by:
 
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
+|[Bookmarks](docs/bookmarks.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
 |Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
@@ -69,10 +70,6 @@ You can use the Toolkit in your projects by:
         - Add the nuget package using the standard Nuget package manager dialog in Visual Studio.
         - See [Setting Up Local NuGet Feeds](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds) for more information.
 
-## Master branch NuGet Server
-If you want the latest greatest version of the toolkit, you can always get the latest NuGet packages that matches what is currently in the Master branch. These NuGet packages are automatically updated each time a pull request is merged into master. The NuGet server is available at: `https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet`.
-For more information about configuring extra NuGet servers, see the [Package Manager UI](https://docs.microsoft.com/en-us/nuget/tools/package-manager-ui#package-sources) documentation.
-
 ## System Requirements
 
 * Requirements for development and deployment: 
@@ -102,7 +99,7 @@ Go to the 10.2.7 tag: https://github.com/Esri/arcgis-toolkit-dotnet/tree/v10.2.7
 
 ## Licensing
 
-Copyright © 2014-2018 Esri.
+Copyright © 2014-2019 Esri.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
