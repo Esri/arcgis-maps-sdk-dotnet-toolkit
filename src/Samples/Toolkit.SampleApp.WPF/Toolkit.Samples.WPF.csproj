@@ -60,20 +60,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="SampleDatasource.cs" />
-    <Compile Include="Samples\Bookmarks\BookmarksBindingSample.xaml.cs">
-      <DependentUpon>BookmarksBindingSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Bookmarks\MapBookmarksListSample.xaml.cs">
-      <DependentUpon>MapBookmarksListSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Bookmarks\SceneBookmarksListSample.xaml.cs">
-      <DependentUpon>SceneBookmarksListSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Bookmarks\SceneBookmarksSample.xaml.cs">
-      <DependentUpon>SceneBookmarksSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Bookmarks\MapBookmarksSample.xaml.cs">
-      <DependentUpon>MapBookmarksSample.xaml</DependentUpon>
+    <Compile Include="Samples\BookmarksView\BookmarksViewSample.xaml.cs">
+      <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
     </Compile>
     <Compile Include="Samples\Compass\SceneViewCompassSample.xaml.cs">
       <DependentUpon>SceneViewCompassSample.xaml</DependentUpon>
@@ -108,25 +96,9 @@
     <Compile Include="Samples\ToC\TableOfContentsSample.xaml.cs">
       <DependentUpon>TableOfContentsSample.xaml</DependentUpon>
     </Compile>
-    <Page Include="Samples\Bookmarks\BookmarksBindingSample.xaml">
+    <Page Include="Samples\BookmarksView\BookmarksViewSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\Bookmarks\MapBookmarksListSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\Bookmarks\SceneBookmarksListSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\Bookmarks\SceneBookmarksSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\Bookmarks\MapBookmarksSample.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Samples\Compass\SceneViewCompassSample.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -22,7 +22,7 @@ using Xamarin.Forms;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
-    /// The Bookmarks view presents bookmarks, either from a list defined by <see cref="BookmarkList" /> or
+    /// The BookmarksView view presents bookmarks, either from a list defined by <see cref="BookmarkList" /> or
     /// the Map or Scene shown in the associated <see cref="GeoView" />.
     /// </summary>
     public class Bookmarks : View
@@ -41,28 +41,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether bookmarks should be shown from the map/scene or the explicitly set bookmark list.
-        /// When true, the control only shows the bookmarks explicitly set through the <see cref="BookmarkList" /> property.
-        /// Bookmarks from the Map or Scene are ignored, even if the map or scene is changed in the associated <see cref="GeoView" />.
-        /// </summary>
-        /// <seealso cref="PrefersBookmarksListProperty" />
-        public bool PrefersBookmarksList
-        {
-            get { return (bool)GetValue(PrefersBookmarksListProperty); }
-            set { SetValue(PrefersBookmarksListProperty, value); }
-        }
-
-        /// <summary>
         /// Gets or sets the list of bookmarks to display.
-        /// These bookmarks will only be shown if <see cref="PrefersBookmarksList" /> is <code>True</code>.
         /// Otherwise, the bookmarks from the Map or Scene shown in the associated <see cref="GeoView" /> are displayed.
         /// </summary>
         /// <remarks>If set to a <see cref="System.Collections.Specialized.INotifyCollectionChanged" />, the view will be updated with collection changes.</remarks>
-        /// <seealso cref="BookmarkListProperty" />
-        public IList<Bookmark> BookmarkList
+        /// <seealso cref="BookmarksOverrideProperty" />
+        public IList<Bookmark> BookmarksOverride
         {
-            get { return (IList<Bookmark>)GetValue(BookmarkListProperty); }
-            set { SetValue(BookmarkListProperty, value); }
+            get { return (IList<Bookmark>)GetValue(BookmarksOverrideProperty); }
+            set { SetValue(BookmarksOverrideProperty, value); }
         }
 
         /// <summary>
@@ -84,15 +71,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(Bookmarks), null, BindingMode.OneWay, null);
 
         /// <summary>
-        /// Identifies the <see cref="BookmarkList"/> bindable property.
+        /// Identifies the <see cref="BookmarksOverride"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty BookmarkListProperty =
-            BindableProperty.Create(nameof(BookmarkList), typeof(IList<Bookmark>), typeof(Bookmarks), null, BindingMode.OneWay, null);
-
-        /// <summary>
-        /// Identifies the <see cref="PrefersBookmarksList"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty PrefersBookmarksListProperty =
-            BindableProperty.Create(nameof(PrefersBookmarksList), typeof(bool), typeof(Bookmarks), false, BindingMode.OneWay, null);
+        public static readonly BindableProperty BookmarksOverrideProperty =
+            BindableProperty.Create(nameof(BookmarksOverride), typeof(IList<Bookmark>), typeof(Bookmarks), null, BindingMode.OneWay, null);
     }
 }

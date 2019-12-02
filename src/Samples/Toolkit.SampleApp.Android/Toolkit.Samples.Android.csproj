@@ -62,7 +62,7 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleScreenAdapter.cs" />
-    <Compile Include="Samples\BookmarksSample.cs" />
+    <Compile Include="Samples\BookmarksViewSample.cs" />
     <Compile Include="Samples\CompassSceneViewSample.cs" />
     <Compile Include="Samples\LayerLegendSample.cs" />
     <Compile Include="Samples\LegendSample.cs" />
@@ -141,7 +141,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\BookmarksSample.axml">
+    <AndroidResource Include="Resources\layout\BookmarksViewSample.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

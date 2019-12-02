@@ -44,7 +44,7 @@
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: Nathan Castle (8Q5N24J5G5)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
@@ -66,11 +66,9 @@
     <Compile Include="SamplesViewController.designer.cs">
       <DependentUpon>SamplesViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Samples\Bookmarks\BookmarksMapViewControllerAlt.cs" />
-    <Compile Include="Samples\Bookmarks\BookmarksMapEventTestController.cs" />
-    <Compile Include="Samples\Bookmarks\BookmarksSceneViewWithListController.cs" />
-    <Compile Include="Samples\Bookmarks\BookmarksSceneViewController.cs" />
-    <Compile Include="Samples\Bookmarks\BookmarksMapViewController.cs" />
+    <Compile Include="Samples\BookmarksView\BookmarksViewMapViewViewControllerAlt.cs" />
+    <Compile Include="Samples\BookmarksView\BookmarksMapEventTestController.cs" />
+    <Compile Include="Samples\BookmarksView\BookmarksViewSceneViewViewController.cs" />
     <Compile Include="Samples\LayerLegendViewController.cs" />
     <Compile Include="Samples\LegendViewController.cs" />
     <Compile Include="Samples\ScaleLineViewController.cs" />

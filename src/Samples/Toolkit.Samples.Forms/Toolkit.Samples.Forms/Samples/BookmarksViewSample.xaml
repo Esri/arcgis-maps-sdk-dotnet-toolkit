@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+             mc:Ignorable="d"
+             Title="Bookmarks - MapView"
+             x:Class="Toolkit.Samples.Forms.Samples.BookmarksViewSample">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <esri:MapView x:Name="MyMapView" Grid.Row="0" Grid.Column="0" />
+            <toolkit:Bookmarks x:Name="MyBookmarks" Grid.Row="0" Grid.Column="1"
+                                   GeoView="{x:Reference MyMapView}" />
+            <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <Button x:Name="ShowObservableList" Text="Set observable list" Clicked="ShowObservableList_Click" />
+                <Button x:Name="ClearListButton" Text="Remove list" Clicked="ClearListButton_Clicked" />
+                <Button x:Name="RemoveFromObservableButton" Text="Remove from observable" Clicked="RemoveFromObservableButton_Click" />
+                <Button x:Name="AddToObservableButton" Text="Add to observable" Clicked="AddToObservableButton_Click" />
+                <Button x:Name="SwitchMapButton" Text="Switch Map" Clicked="SwitchMapButton_Click" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

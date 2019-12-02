@@ -637,9 +637,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7F030030
 			public const int popupViewer = 2130903088;
 			
-			// aapt resource value: 0x7F030031
-			public const int prefersManualListCheckbox = 2130903089;
-			
 			// aapt resource value: 0x7F030015
 			public const int PreviousButton = 2130903061;
 			
@@ -648,6 +645,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			
 			// aapt resource value: 0x7F030017
 			public const int RemoveFromObservableButton = 2130903063;
+			
+			// aapt resource value: 0x7F030031
+			public const int removeListButton = 2130903089;
 			
 			// aapt resource value: 0x7F030032
 			public const int right = 2130903090;
@@ -662,10 +662,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			public const int setObservableListButton = 2130903093;
 			
 			// aapt resource value: 0x7F030036
-			public const int setStaticListButton = 2130903094;
-			
-			// aapt resource value: 0x7F030037
-			public const int sizeSlider = 2130903095;
+			public const int sizeSlider = 2130903094;
 			
 			// aapt resource value: 0x7F030018
 			public const int SliderTrack = 2130903064;
@@ -673,26 +670,26 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7F030019
 			public const int SliderTrackOutline = 2130903065;
 			
+			// aapt resource value: 0x7F030037
+			public const int spread = 2130903095;
+			
 			// aapt resource value: 0x7F030038
-			public const int spread = 2130903096;
+			public const int spread_inside = 2130903096;
 			
 			// aapt resource value: 0x7F030039
-			public const int spread_inside = 2130903097;
+			public const int standard = 2130903097;
 			
 			// aapt resource value: 0x7F03003A
-			public const int standard = 2130903098;
+			public const int start = 2130903098;
 			
 			// aapt resource value: 0x7F03003B
-			public const int start = 2130903099;
+			public const int styleSelector = 2130903099;
 			
 			// aapt resource value: 0x7F03003C
-			public const int styleSelector = 2130903100;
+			public const int swapMapButton = 2130903100;
 			
 			// aapt resource value: 0x7F03003D
-			public const int swapMapButton = 2130903101;
-			
-			// aapt resource value: 0x7F03003E
-			public const int symbolDisplay = 2130903102;
+			public const int symbolDisplay = 2130903101;
 			
 			// aapt resource value: 0x7F03001A
 			public const int ThumbGuideStart = 2130903066;
@@ -700,11 +697,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 			// aapt resource value: 0x7F03001B
 			public const int Tickmarks = 2130903067;
 			
-			// aapt resource value: 0x7F03003F
-			public const int top = 2130903103;
+			// aapt resource value: 0x7F03003E
+			public const int top = 2130903102;
 			
-			// aapt resource value: 0x7F030040
-			public const int wrap = 2130903104;
+			// aapt resource value: 0x7F03003F
+			public const int wrap = 2130903103;
 			
 			static Id()
 			{
@@ -720,7 +717,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		{
 			
 			// aapt resource value: 0x7F040000
-			public const int BookmarksSample = 2130968576;
+			public const int BookmarksViewSample = 2130968576;
 			
 			// aapt resource value: 0x7F040001
 			public const int CompassMapViewSample = 2130968577;

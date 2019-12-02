@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// <summary>
     /// Renders the native <see cref="Bookmarks" /> control for the native platform.
     /// </summary>
-    internal class BookmarksRenderer : ViewRenderer<Bookmarks, UI.Controls.Bookmarks>
+    internal class BookmarksRenderer : ViewRenderer<Bookmarks, UI.Controls.BookmarksView>
     {
 #if __ANDROID__
         public BookmarksRenderer(Android.Content.Context context)
@@ -50,13 +50,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 if (Control == null)
                 {
 #if __ANDROID__
-                    UI.Controls.Bookmarks ctrl = new UI.Controls.Bookmarks(Context);
+                    UI.Controls.BookmarksView ctrl = new UI.Controls.BookmarksView(Context);
 #else
-                    UI.Controls.Bookmarks ctrl = new UI.Controls.Bookmarks();
+                    UI.Controls.BookmarksView ctrl = new UI.Controls.BookmarksView();
 #endif
                     ctrl.GeoView = Element.GeoView?.GetNativeGeoView();
-                    ctrl.PrefersBookmarksList = Element.PrefersBookmarksList;
-                    ctrl.BookmarkList = Element.BookmarkList;
+                    ctrl.BookmarksOverride = Element.BookmarksOverride;
 
                     SetNativeControl(ctrl);
 
@@ -79,13 +78,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 {
                     Control.GeoView = Element.GeoView?.GetNativeGeoView();
                 }
-                else if (e.PropertyName == Bookmarks.BookmarkListProperty.PropertyName)
+                else if (e.PropertyName == Bookmarks.BookmarksOverrideProperty.PropertyName)
                 {
-                    Control.BookmarkList = Element.BookmarkList;
-                }
-                else if (e.PropertyName == Bookmarks.PrefersBookmarksListProperty.PropertyName)
-                {
-                    Control.PrefersBookmarksList = Element.PrefersBookmarksList;
+                    Control.BookmarksOverride = Element.BookmarksOverride;
                 }
             }
 
