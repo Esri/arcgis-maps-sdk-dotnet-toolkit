@@ -54,15 +54,15 @@ namespace Toolkit.Samples.Forms.Samples
             _bookmarksObservable.Add(new Bookmark($"O: {_bookmarksObservable.Count}", vp5));
         }
 
-        private void SwitchMapButton_Click(object sender, EventArgs e)
+        private void AddToMapButton_Click(object sender, EventArgs e)
         {
-            _mapIndex++;
-            MyMapView.Map = new Map(new Uri(_mapUrl[_mapIndex % _mapUrl.Length]));
+            Viewpoint vp5 = new Viewpoint(47.787947, 16.755135, 1300, new Camera(47.787947, 16.755135, 3000, 100, 35, 0));
+
+            MyMapView.Map.Bookmarks.Add(new Bookmark($"M: {MyMapView.Map.Bookmarks.Count}", vp5));
         }
 
-        private void ClearListButton_Clicked(object sender, EventArgs e)
-        {
-            MyBookmarks.BookmarksOverride = null;
-        }
+        private void SwitchMapButton_Click(object sender, EventArgs e) => MyMapView.Map = new Map(new Uri(_mapUrl[++_mapIndex % _mapUrl.Length]));
+
+        private void ClearListButton_Clicked(object sender, EventArgs e) => MyBookmarks.BookmarksOverride = null;
     }
 }

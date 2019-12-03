@@ -40,6 +40,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/swapMapButton" />
+        <Button android:text="Add to map" 
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addToMapButton" />
 
     </LinearLayout>
 </LinearLayout>

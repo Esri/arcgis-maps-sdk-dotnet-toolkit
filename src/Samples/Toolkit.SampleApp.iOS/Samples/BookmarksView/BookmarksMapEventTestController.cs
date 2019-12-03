@@ -123,7 +123,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
         {
             Viewpoint vp5 = new Viewpoint(47.787947, 16.755135, 1300, new Camera(47.787947, 16.755135, 3000, 100, 35, 0));
 
-            _mapView.Map.Bookmarks.Add(new Bookmark($"O: {_mapView.Map.Bookmarks.Count}", vp5));
+            _mapView.Map.Bookmarks.Add(new Bookmark($"M: {_mapView.Map.Bookmarks.Count}", vp5));
         }
 
         private void SwitchMapButton_Click(object sender, EventArgs e) => _mapView.Map = new Map(new Uri(_mapUrl[++_mapIndex % _mapUrl.Length]));

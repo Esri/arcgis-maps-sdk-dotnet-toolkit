@@ -26,6 +26,7 @@
                 <Button x:Name="ClearListButton" Text="Remove list" Clicked="ClearListButton_Clicked" />
                 <Button x:Name="RemoveFromObservableButton" Text="Remove from observable" Clicked="RemoveFromObservableButton_Click" />
                 <Button x:Name="AddToObservableButton" Text="Add to observable" Clicked="AddToObservableButton_Click" />
+                <Button x:Name="AddToMapButton" Text="Add to Map" Clicked="AddToMapButton_Click" />
                 <Button x:Name="SwitchMapButton" Text="Switch Map" Clicked="SwitchMapButton_Click" />
             </StackLayout>
         </Grid>
