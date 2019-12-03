@@ -59,5 +59,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView
         private void SwitchMapButton_Click(object sender, RoutedEventArgs e) => MyMapView.Map = new Map(new Uri(_mapUrl[++_mapIndex % _mapUrl.Length]));
 
         private void RemoveListButton_Click(object sender, RoutedEventArgs e) => MyBookmarks.BookmarksOverride = null;
+
+        private void AddMapBookmarkButton_Click(object sender, RoutedEventArgs e)
+        {
+            Viewpoint vp5 = new Viewpoint(47.787947, 16.755135, 1300, new Camera(47.787947, 16.755135, 3000, 100, 35, 0));
+
+            MyMapView.Map.Bookmarks.Add(new Bookmark($"M: {MyMapView.Map.Bookmarks.Count}", vp5));
+        }
     }
 }

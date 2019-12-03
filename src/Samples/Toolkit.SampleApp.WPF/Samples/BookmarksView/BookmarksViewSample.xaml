@@ -26,6 +26,7 @@
                 <Button x:Name="RemoveFromObservableButton" Content="Remove from observable" Click="RemoveFromObservableButton_Click" />
                 <Button x:Name="AddToObservableButton" Content="Add to observable" Click="AddToObservableButton_Click" />
                 <Button x:Name="SwitchMapButton" Content="Switch Map" Click="SwitchMapButton_Click" />
+                <Button x:Name="AddMapBookmarkButton" Content="Add bookmark directly to map" Click="AddMapBookmarkButton_Click" />
             </StackPanel>
             <esri:BookmarksView x:Name="MyBookmarks" Grid.Row="1"
                         GeoView="{Binding ElementName=MyMapView}">

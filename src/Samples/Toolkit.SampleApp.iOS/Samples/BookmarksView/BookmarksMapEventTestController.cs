@@ -17,6 +17,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
         private UIBarButtonItem _switchMapButton;
         private UIBarButtonItem _setListObservableButton;
         private UIBarButtonItem _clearListButton;
+        private UIBarButtonItem _addToMapBookmarksButton;
 
         private readonly string[] _mapUrl = new[]
         {
@@ -62,15 +63,17 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             _switchMapButton = new UIBarButtonItem(UIBarButtonSystemItem.FastForward);
             _setListObservableButton = new UIBarButtonItem("Set list", UIBarButtonItemStyle.Plain, ShowObservableList_Click);
             _clearListButton = new UIBarButtonItem("Clear list", UIBarButtonItemStyle.Plain, ClearList_Click);
+            _addToMapBookmarksButton = new UIBarButtonItem(UIBarButtonSystemItem.Bookmarks);
 
             toolbar.Items = new[]
             {
                 new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
-                _setListObservableButton, _clearListButton, _AddItemButton, _removeItemButton, _switchMapButton
+                _setListObservableButton, _clearListButton, _AddItemButton, _removeItemButton, _addToMapBookmarksButton, _switchMapButton
             };
             _AddItemButton.Clicked += AddToObservableButton_Click;
             _removeItemButton.Clicked += RemoveFromObservableButton_Click;
             _switchMapButton.Clicked += SwitchMapButton_Click;
+            _addToMapBookmarksButton.Clicked += AddBookmarkToMap_Click;
 
             _mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
             _mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
@@ -114,6 +117,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             Viewpoint vp5 = new Viewpoint(47.787947, 16.755135, 1300, new Camera(47.787947, 16.755135, 3000, 100, 35, 0));
 
             _bookmarksObservable.Add(new Bookmark($"O: {_bookmarksObservable.Count}", vp5));
+        }
+
+        private void AddBookmarkToMap_Click(object sender, EventArgs e)
+        {
+            Viewpoint vp5 = new Viewpoint(47.787947, 16.755135, 1300, new Camera(47.787947, 16.755135, 3000, 100, 35, 0));
+
+            _mapView.Map.Bookmarks.Add(new Bookmark($"O: {_mapView.Map.Bookmarks.Count}", vp5));
         }
 
         private void SwitchMapButton_Click(object sender, EventArgs e) => _mapView.Map = new Map(new Uri(_mapUrl[++_mapIndex % _mapUrl.Length]));
