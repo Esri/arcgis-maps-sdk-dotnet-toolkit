@@ -41,12 +41,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
+
+            ListView = GetTemplateChild("List") as ListView;
+
             Refresh();
         }
 
         internal void Refresh()
         {
-            ListView = GetTemplateChild("List") as ListView;
             if (ListView == null)
             {
                 return;
@@ -101,16 +103,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private IEnumerable<Bookmark> BookmarksOverrideImpl
         {
-            get
-            {
-                return (IEnumerable<Bookmark>)GetValue(BookmarksOverrideProperty);
-            }
-
-            set
-            {
-                SetValue(BookmarksOverrideProperty, value);
-                Refresh();
-            }
+            get { return (IEnumerable<Bookmark>)GetValue(BookmarksOverrideProperty); }
+            set { SetValue(BookmarksOverrideProperty, value); }
         }
 
         /// <summary>
@@ -123,7 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="BookmarksOverride" /> dependency property.
         /// </summary>
         public static readonly DependencyProperty BookmarksOverrideProperty =
-            DependencyProperty.Register(nameof(BookmarksOverride), typeof(IList<Bookmark>), typeof(BookmarksView), new PropertyMetadata(null, OnBookmarkListPropertyChanged));
+            DependencyProperty.Register(nameof(BookmarksOverride), typeof(IList<Bookmark>), typeof(BookmarksView), new PropertyMetadata(null, OnBookmarksOverridePropertyChanged));
 
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -131,10 +125,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
         }
 
-        private static void OnBookmarkListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnBookmarksOverridePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var bm = (BookmarksView)d;
             bm.BookmarksOverride = (IEnumerable<Bookmark>)e.NewValue;
+            bm.Refresh();
         }
 
         /// <summary>
