@@ -43,6 +43,12 @@
     <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Bookmarks\BookmarkItemTemplate.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
     <ItemGroup>

@@ -7,7 +7,7 @@
              xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
              mc:Ignorable="d"
              Title="Bookmarks - MapView"
-             x:Class="Toolkit.Samples.Forms.Samples.BookmarksViewSample">
+             x:Class="Toolkit.Samples.Forms.Samples.BookmarksViewTemplatedSample">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -20,15 +20,13 @@
             </Grid.ColumnDefinitions>
             <esri:MapView x:Name="MyMapView" Grid.Row="0" Grid.Column="0" />
             <toolkit:BookmarksView x:Name="MyBookmarks" Grid.Row="0" Grid.Column="1"
-                                   GeoView="{x:Reference MyMapView}" />
-            <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                <Button x:Name="ShowObservableList" Text="Set observable list" Clicked="ShowObservableList_Click" />
-                <Button x:Name="ClearListButton" Text="Remove list" Clicked="ClearListButton_Clicked" />
-                <Button x:Name="RemoveFromObservableButton" Text="Remove from observable" Clicked="RemoveFromObservableButton_Click" />
-                <Button x:Name="AddToObservableButton" Text="Add to observable" Clicked="AddToObservableButton_Click" />
-                <Button x:Name="AddToMapButton" Text="Add to Map" Clicked="AddToMapButton_Click" />
-                <Button x:Name="SwitchMapButton" Text="Switch Map" Clicked="SwitchMapButton_Click" />
-            </StackLayout>
+                                   GeoView="{x:Reference MyMapView}">
+                <toolkit:BookmarksView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Name}" Detail="Custom bookmark template" />
+                    </DataTemplate>
+                </toolkit:BookmarksView.ItemTemplate>
+            </toolkit:BookmarksView>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

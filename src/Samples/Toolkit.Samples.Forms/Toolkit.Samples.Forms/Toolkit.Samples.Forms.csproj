@@ -14,6 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Samples\BookmarksViewTemplatedSample.xaml.cs">
+      <DependentUpon>BookmarksViewTemplatedSample.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Samples\BookmarksViewSample.xaml.cs">
       <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
     </Compile>
