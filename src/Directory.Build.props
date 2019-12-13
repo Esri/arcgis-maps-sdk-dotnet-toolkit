@@ -36,7 +36,7 @@
     <NetCoreTargetFramework>netcoreapp3.0</NetCoreTargetFramework>
 
     <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.7.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.1.0.555618</XamarinFormsPackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.3.0.991211</XamarinFormsPackageVersion>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
