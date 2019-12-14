@@ -1,0 +1,35 @@
+on:
+  push:
+    branches:
+    - master
+    - release/*
+  pull_request:
+    branches:
+    - master
+    
+jobs:
+  build:
+
+    runs-on: windows-latest
+    
+    steps:
+    - name: Clone source code
+      uses: actions/checkout@v1
+    
+    - name: Build Toolkit
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
+        msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release 
+      
+    - name: Build ARToolkit
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
+        msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Release 
+
+    - name: Upload NuGet artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+         # Artifact name
+        name: NuGet Packages
+        # Directory containing files to upload
+        path: Output/NuGet/Release
