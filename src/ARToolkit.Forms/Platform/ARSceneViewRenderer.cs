@@ -114,7 +114,12 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
 
         private void ARControl_OriginCameraChanged(object sender, System.EventArgs e)
         {
-            ARElement?.RaiseOriginCameraChanged();
+            if (ARControl != null && ARElement != null)
+            {
+                if (!ReferenceEquals(ARElement.OriginCamera, ARControl.OriginCamera))
+                    ARElement.OriginCamera = ARControl.OriginCamera;
+                ARElement.RaiseOriginCameraChanged();
+            }
         }
 
         /// <inheritdoc />
@@ -129,7 +134,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             }
             else if (e.PropertyName == ARSceneView.OriginCameraProperty.PropertyName)
             {
-                ARControl.OriginCamera = ARElement.OriginCamera;
+                if (!ReferenceEquals(ARElement.OriginCamera, ARControl.OriginCamera))
+                    ARControl.OriginCamera = ARElement.OriginCamera;
             }
             else if (e.PropertyName == ARSceneView.RenderVideoFeedProperty.PropertyName)
             {
