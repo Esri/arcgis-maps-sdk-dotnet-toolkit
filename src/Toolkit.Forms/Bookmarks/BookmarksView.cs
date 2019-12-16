@@ -117,14 +117,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             BookmarksView bookmarkView = (BookmarksView)sender;
 
-            if (oldValue is GeoView oldGeoView)
+            if (oldValue is INotifyPropertyChanged oldInpc)
             {
-                oldGeoView.PropertyChanged -= bookmarkView.GeoViewPropertyChanged;
+                oldInpc.PropertyChanged -= bookmarkView.GeoViewPropertyChanged;
             }
 
-            if (newValue is GeoView newGeoView)
+            if (newValue is INotifyPropertyChanged newInpc)
             {
-                newGeoView.PropertyChanged += bookmarkView.GeoViewPropertyChanged;
+                newInpc.PropertyChanged += bookmarkView.GeoViewPropertyChanged;
             }
 
             bookmarkView.Refresh();
@@ -239,7 +239,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 throw new ArgumentNullException("Bookmark or bookmark viewpoint is null");
             }
 
-            GeoView?.SetViewpoint(bookmark.Viewpoint);
+            GeoView?.SetViewpointAsync(bookmark.Viewpoint);
 
             BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(bookmark));
         }

@@ -222,7 +222,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 throw new ArgumentNullException("Bookmark or bookmark viewpoint is null");
             }
 
-            GeoView?.SetViewpoint(bookmark.Viewpoint);
+            GeoView?.SetViewpointAsync(bookmark.Viewpoint);
 
             BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(bookmark));
         }
