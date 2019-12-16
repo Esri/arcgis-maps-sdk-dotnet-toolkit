@@ -41,7 +41,7 @@
     <PackageReference Include="Xamarin.Google.ARCore" Version="1.11.0" />
     <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
     <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.11.0" />
-    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.1" />
+    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
 
     <AndroidResource Include="Resources\**\*.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
