@@ -25,16 +25,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// Show <see cref="BookmarksView" /> directly in your view if you want to
     /// lay out and manage the display of the bookmarks list yourself.
     /// </summary>
-    public class BookmarksVC : UIViewController
+    public class BookmarksViewController : UIViewController
     {
         private readonly BookmarksView _bookmarksView;
         private UIBarButtonItem _closeButton;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BookmarksVC"/> class for showing the <see cref="BookmarksView" /> modally.
+        /// Initializes a new instance of the <see cref="BookmarksViewController"/> class for showing the <see cref="BookmarksView" /> modally.
         /// </summary>
         /// <param name="bookmarksView">The already-created bookmarks view.</param>
-        public BookmarksVC(BookmarksView bookmarksView)
+        public BookmarksViewController(BookmarksView bookmarksView)
         {
             _bookmarksView = bookmarksView ?? throw new ArgumentNullException(nameof(bookmarksView), "Must supply bookmarks view.");
 
@@ -65,7 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void BookmarkSelected(object sender, BookmarksView.BookmarkSelectedEventArgs e) => DismissViewController(true, null);
+        private void BookmarkSelected(object sender, BookmarkSelectedEventArgs e) => DismissViewController(true, null);
 
         private void CloseClicked(object sender, EventArgs e) => DismissViewController(true, null);
 

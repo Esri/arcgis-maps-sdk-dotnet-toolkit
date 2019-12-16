@@ -10,7 +10,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
     public partial class BookmarksViewMapViewViewControllerAlt : UIViewController
     {
         private BookmarksView _bookmarksView;
-        private BookmarksVC _bookmarksVC;
+        private BookmarksViewController _bookmarksVC;
         private MapView _mapView;
         private UIBarButtonItem _showBookmarksButton;
 
@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
         {
             if (_bookmarksVC == null)
             {
-                _bookmarksVC = new BookmarksVC(_bookmarksView);
+                _bookmarksVC = new BookmarksViewController(_bookmarksView);
             }
             PresentModalViewController(new UINavigationController(_bookmarksVC), true);
         }

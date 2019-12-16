@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -264,26 +265,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Raised whenever a bookmark is selected.
         /// </summary>
         public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
-
-        /// <summary>
-        /// Event arguments for bookmark selection.
-        /// </summary>
-        public class BookmarkSelectedEventArgs
-        {
-            /// <summary>
-            /// Gets or sets the selected bookmark.
-            /// </summary>
-            public Bookmark Bookmark { get; set; }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="BookmarkSelectedEventArgs"/> class
-            /// for the specified bookmark.
-            /// </summary>
-            /// <param name="bookmark">The selected bookmark</param>
-            public BookmarkSelectedEventArgs(Bookmark bookmark)
-            {
-                Bookmark = bookmark;
-            }
-        }
     }
 }
