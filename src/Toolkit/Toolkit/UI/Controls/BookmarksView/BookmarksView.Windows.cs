@@ -34,6 +34,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private void Initialize() => DefaultStyleKey = typeof(BookmarksView);
 
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
 #if NETFX_CORE
         protected override void OnApplyTemplate()
 #else
