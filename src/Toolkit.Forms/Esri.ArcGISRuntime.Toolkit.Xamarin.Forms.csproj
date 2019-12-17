@@ -47,7 +47,7 @@
     <EmbeddedResource Update="Bookmarks\BookmarkItemTemplate.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Bookmarks\BookmarksControlTemplate.xaml">
+    <EmbeddedResource Update="Bookmarks\BookmarksView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

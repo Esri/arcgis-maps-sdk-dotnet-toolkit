@@ -13,15 +13,14 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI;
-using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Bookmarks;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
@@ -29,17 +28,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// The BookmarksView view presents bookmarks, either from a list defined by <see cref="BookmarksOverride" /> or
     /// the Map or Scene shown in the associated <see cref="GeoView" />.
     /// </summary>
-    public class BookmarksView : TemplatedView
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class BookmarksView : TemplatedView
     {
         private ListView _presentingView;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BookmarksView"/> class, which shows bookmarks and handles
-        /// <see cref="GeoView" /> navigation to the selected bookmark.
-        /// </summary>
         public BookmarksView()
         {
-            ControlTemplate = new ControlTemplate(typeof(BookmarksControlTemplate));
+            InitializeComponent();
         }
 
         protected override void OnApplyTemplate()

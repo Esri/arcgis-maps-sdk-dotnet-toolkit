@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TemplatedView xmlns="http://xamarin.com/schemas/2014/forms"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               mc:Ignorable="d"
+               x:Class="Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.BookmarksView"
+               MinimumHeightRequest="50"
+               MinimumWidthRequest="100"
+               VerticalOptions="FillAndExpand"
+               HorizontalOptions="FillAndExpand">
+    <TemplatedView.ControlTemplate>
+        <ControlTemplate >
+            <ListView x:Name="PresentingView"
+                      HorizontalOptions="FillAndExpand"
+                      VerticalOptions="FillAndExpand" 
+                      ItemTemplate="{TemplateBinding ItemTemplate, Mode=OneWay}" />
+        </ControlTemplate>
+    </TemplatedView.ControlTemplate>
+</TemplatedView>

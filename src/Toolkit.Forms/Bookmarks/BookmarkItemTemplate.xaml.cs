@@ -25,6 +25,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BookmarkItemTemplate : ViewCell
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookmarkItemTemplate"/> class.
+        /// </summary>
         public BookmarkItemTemplate()
         {
             InitializeComponent();
