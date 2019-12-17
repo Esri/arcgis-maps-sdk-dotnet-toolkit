@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Bookmarks;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -28,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// The BookmarksView view presents bookmarks, either from a list defined by <see cref="BookmarksOverride" /> or
     /// the Map or Scene shown in the associated <see cref="GeoView" />.
     /// </summary>
-    public class BookmarksView : ContentView
+    public class BookmarksView : TemplatedView
     {
         private ListView _presentingView;
 
@@ -38,18 +39,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public BookmarksView()
         {
-            HorizontalOptions = LayoutOptions.FillAndExpand;
-            VerticalOptions = LayoutOptions.FillAndExpand;
-            MinimumHeightRequest = 50;
-            MinimumWidthRequest = 100;
+            ControlTemplate = new ControlTemplate(typeof(BookmarksControlTemplate));
+        }
 
-            _presentingView = new ListView();
-            _presentingView.HorizontalOptions = LayoutOptions.FillAndExpand;
-            _presentingView.VerticalOptions = LayoutOptions.FillAndExpand;
-            _presentingView.ItemSelected += Internal_bookmarkSelected;
-            _presentingView.ItemTemplate = ItemTemplate;
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
 
-            Content = _presentingView;
+            if (_presentingView != null)
+            {
+                _presentingView.ItemSelected -= Internal_bookmarkSelected;
+            }
+
+            _presentingView = GetTemplateChild("PresentingView") as ListView;
+
+            if (_presentingView != null)
+            {
+                _presentingView.ItemSelected += Internal_bookmarkSelected;
+                _presentingView.ItemTemplate = ItemTemplate;
+            }
         }
 
         /// <summary>
@@ -136,7 +144,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         private void GeoViewPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (sender is MapView mv)
+            if (sender is MapView mv && e.PropertyName == nameof(mv.Map))
             {
                 mv.Map.PropertyChanged -= Document_PropertyChanged;
                 mv.Map.LoadStatusChanged -= Document_LoadStatusChanged;
@@ -144,7 +152,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 mv.Map.PropertyChanged += Document_PropertyChanged;
                 mv.Map.LoadStatusChanged += Document_LoadStatusChanged;
             }
-            else if (sender is SceneView sv)
+            else if (sender is SceneView sv && e.PropertyName == nameof(sv.Scene))
             {
                 sv.Scene.PropertyChanged -= Document_PropertyChanged;
                 sv.Scene.LoadStatusChanged -= Document_LoadStatusChanged;

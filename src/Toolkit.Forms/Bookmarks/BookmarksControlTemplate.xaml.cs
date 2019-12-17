@@ -13,19 +13,15 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Bookmarks
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BookmarkItemTemplate"/> class.
-    /// </summary>
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BookmarkItemTemplate : ViewCell
+    public partial class BookmarksControlTemplate : Grid
     {
-        public BookmarkItemTemplate()
+        public BookmarksControlTemplate()
         {
             InitializeComponent();
         }

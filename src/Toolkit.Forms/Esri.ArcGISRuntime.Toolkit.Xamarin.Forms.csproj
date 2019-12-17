@@ -47,6 +47,9 @@
     <EmbeddedResource Update="Bookmarks\BookmarkItemTemplate.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Bookmarks\BookmarksControlTemplate.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
