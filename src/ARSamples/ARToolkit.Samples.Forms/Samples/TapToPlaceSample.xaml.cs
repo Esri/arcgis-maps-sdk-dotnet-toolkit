@@ -43,6 +43,8 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 ARView.TranslationFactor = 1000; // By increasing the translation factor, the scene appears as if it's at scale 1:1000
                 //Set the initial location 1.5 meter in front of and .5m above the scene
                 ARView.SetInitialTransformation(TransformationMatrix.Create(0, 0, 0, 1, 0, .5, 1.5));
+                //Set the clipping distance to only render a circular area around the origin
+                ARView.ClippingDistance = 350;
                 //Listend for double-tap to place
                 ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
                 scene.OperationalLayers[0].Opacity = .5;
