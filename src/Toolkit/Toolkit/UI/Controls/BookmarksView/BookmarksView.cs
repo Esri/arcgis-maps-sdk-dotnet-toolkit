@@ -39,10 +39,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class BookmarksView : Control
     {
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="BookmarksView"/> class.
         /// </summary>
-#if !__ANDROID__
         public BookmarksView()
             : base()
         {
