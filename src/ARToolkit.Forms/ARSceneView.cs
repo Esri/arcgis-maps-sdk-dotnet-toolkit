@@ -37,6 +37,25 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
         }
 
         /// <summary>
+        /// Identifies the <see cref="ClippingDistance"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty ClippingDistanceProperty =
+            BindableProperty.Create(nameof(ClippingDistance), typeof(double), typeof(ARSceneView), 0.0, BindingMode.OneWay, null);
+
+        /// <summary>
+        /// Gets or sets the clipping distance from the origin camera, beyond which data will not be displayed.
+        /// Defaults to 0.0. When set to 0.0, there is no clipping distance; all data is displayed.
+        /// </summary>
+        /// <remarks>
+        /// You can use clipping distance to limit the display of data in world-scale AR or clip data for tabletop AR.
+        /// </remarks>
+        public double ClippingDistance
+        {
+            get { return (double)GetValue(ClippingDistanceProperty); }
+            set { SetValue(ClippingDistanceProperty, value); }
+        }
+
+        /// <summary>
         /// Identifies the <see cref="TranslationFactor"/> bindable property.
         /// </summary>
         public static readonly BindableProperty TranslationFactorProperty =

@@ -153,6 +153,10 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 ARControl.LocationDataSource = ARElement.LocationDataSource;
             }
+            else if (e.PropertyName == ARSceneView.ClippingDistanceProperty.PropertyName)
+            {
+                ARControl.ClippingDistance = ARElement.ClippingDistance;
+            }
         }
 
         private void SetPlaneRendering(bool on)
