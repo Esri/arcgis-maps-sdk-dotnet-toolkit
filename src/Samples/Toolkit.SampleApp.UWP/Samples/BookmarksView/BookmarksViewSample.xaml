@@ -9,34 +9,89 @@
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="ItemTemplateOne" x:DataType="mapping:Bookmark">
+            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Foreground="Red" />
+        </DataTemplate>
+        <DataTemplate x:Key="ItemTemplateTwo" x:DataType="mapping:Bookmark">
+            <Grid Background="Red">
+                <TextBlock Foreground="White" Text="{Binding Name}" HorizontalTextAlignment="Center" HorizontalAlignment="Stretch" />
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="0, 0, 5, 0" />
+        </Style>
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
-        <esri:MapView x:Name="MyMapView" Grid.Column="0" />
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0">
-                <Button x:Name="ShowObservableList" Content="Set observable list" Click="ShowObservableList_Click" />
-                <Button x:Name="RemoveListOverrideButton" Content="Remove list override" Click="RemoveListOverrideButton_Click" />
-                <Button x:Name="RemoveFromObservableButton" Content="Remove from observable" Click="RemoveFromObservableButton_Click" />
-                <Button x:Name="AddToObservableButton" Content="Add to observable" Click="AddToObservableButton_Click" />
-                <Button x:Name="SwitchMapButton" Content="Switch Map" Click="SwitchMapButton_Click" />
-                <Button x:Name="AddMapBookmarkButton" Content="Add bookmark to map" Click="AddMapBookmarkButton_Click" />
-            </StackPanel>
-            <toolkit:BookmarksView x:Name="MyBookmarks"
-                             Grid.Row="1"
-                             GeoView="{Binding ElementName=MyMapView}">
-                <toolkit:BookmarksView.ItemTemplate>
-                    <DataTemplate x:DataType="mapping:Bookmark">
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </toolkit:BookmarksView.ItemTemplate>
-            </toolkit:BookmarksView>
-        </Grid>
+        <esri:SceneView x:Name="MySceneView" 
+                        Grid.Column="0" Visibility="Collapsed" />
+        <esri:MapView x:Name="MyMapView" 
+                      Grid.Column="0" />
+        <toolkit:BookmarksView x:Name="BookmarksView"
+                            Grid.Column="1"
+                            GeoView="{Binding ElementName=MyMapView}" />
+        <Border Grid.Column="0" 
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Width="375"
+                Padding="10"
+                Margin="0,15, 15, 0"
+                Background="White" BorderBrush="Black" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Labels -->
+                    <ColumnDefinition Width="*" />
+                    <!-- First option -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Second option -->
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <!-- 0: switch between map and scene views -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 1: switch map in geoview -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 2: set/clear override list -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 3: Add to override list or add to map/scene -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 4: Switch Item template -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 5: Set or clear selection listener -->
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="GeoView:" Grid.Row="0" Grid.Column="0" />
+                <TextBlock Text="Document:" Grid.Row="1" Grid.Column="0" />
+                <TextBlock Text="Override list:" Grid.Row="2" Grid.Column="0" />
+                <TextBlock Text="Add to:" Grid.Row="3" Grid.Column="0" />
+                <TextBlock Text="Set template:" Grid.Row="4" Grid.Column="0" />
+                <TextBlock Text="Selection listener:" Grid.Row="5" Grid.Column="0" />
+
+                <Button Content="MapView" Grid.Row="0" Grid.Column="1" Click="SetMapViewBinding_Click" />
+                <Button Content="SceneView" Grid.Row="0" Grid.Column="2" Click="SetSceneViewBinding_Click" />
+                <Button Content="Doc 1" Grid.Row="1" Grid.Column="1" Click="SetDocumentOne_Click" />
+                <Button Content="Doc 2" Grid.Row="1" Grid.Column="2" Click="SetDocumentTwo_Click" />
+                <Button Content="Set list" Grid.Row="2" Grid.Column="1" Click="SetOverrideList_Click" />
+                <Button Content="Clear list" Grid.Row="2" Grid.Column="2" Click="ClearOverrideList_Click" />
+                <Button Content="Override list" Grid.Row="3" Grid.Column="1" Click="AddToOverrideList_Click" />
+                <Button Content="Map/Scene" Grid.Row="3" Grid.Column="2" Click="AddToMapScene_Click" />
+                <Button Content="Red fore" Grid.Row="4" Grid.Column="1" Click="SetItemTemplateOne_Click" />
+                <Button Content="Red back" Grid.Row="4" Grid.Column="2" Click="SetItemTemplateTwo_Click" />
+                <Button Content="Add" Grid.Row="5" Grid.Column="1" Click="AddSelectionListener_Click" />
+                <Button Content="Remove" Grid.Row="5" Grid.Column="2" Click="RemoveSelectionListener_Click" />
+            </Grid>
+        </Border>
     </Grid>
 </Page>
