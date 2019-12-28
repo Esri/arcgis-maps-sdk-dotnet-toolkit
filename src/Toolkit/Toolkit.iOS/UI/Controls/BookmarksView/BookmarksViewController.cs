@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _bookmarksView = bookmarksView ?? throw new ArgumentNullException(nameof(bookmarksView), "Must supply bookmarks view.");
 
-            Title = "BookmarksView";
+            Title = "Bookmarks";
             ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
         }
 
