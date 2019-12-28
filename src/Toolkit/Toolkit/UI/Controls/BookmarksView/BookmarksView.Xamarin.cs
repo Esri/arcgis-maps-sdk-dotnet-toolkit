@@ -17,6 +17,7 @@
 #if XAMARIN
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 
@@ -57,6 +58,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Refresh();
                 }
             }
+        }
+
+        /// <summary>
+        /// Configures events and updates display when the <see cref="GeoView" /> property changes.
+        /// </summary>
+        /// <param name="oldView">The previously set view.</param>
+        /// <param name="newView">The new view.</param>
+        private void OnViewChanged(GeoView oldView, GeoView newView)
+        {
+            if (oldView != null)
+            {
+                (oldView as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
+            }
+
+            if (newView != null)
+            {
+                (newView as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
+            }
+
+            Refresh();
+        }
+
+        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is MapView mv && e.PropertyName == nameof(mv.Map))
+            {
+                ConfigureGeoDocEvents(mv);
+            }
+            else if (sender is SceneView sv && e.PropertyName == nameof(sv.Scene))
+            {
+                ConfigureGeoDocEvents(sv);
+            }
+            Refresh();
         }
     }
 }

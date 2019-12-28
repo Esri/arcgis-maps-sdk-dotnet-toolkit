@@ -16,11 +16,13 @@
 
 #if !XAMARIN
 using System.Collections.Generic;
+using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -33,6 +35,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class BookmarksView
     {
         private void Initialize() => DefaultStyleKey = typeof(BookmarksView);
+
+        private void GeoDoc_PropertyChange(object sender, PropertyChangedEventArgs e)
+        {
+            ConfigureGeoDocEvents(GeoView);
+        }
 
         /// <summary>
         /// <inheritdoc />
@@ -122,11 +129,73 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty BookmarksOverrideProperty =
             DependencyProperty.Register(nameof(BookmarksOverride), typeof(IList<Bookmark>), typeof(BookmarksView), new PropertyMetadata(null, OnBookmarksOverridePropertyChanged));
 
+#if NETFX_CORE
+        // Token used for unregistering GeoView Map/Scene property change callbacks
+        private long _lasttoken;
+#endif
+
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var contents = (BookmarksView)d;
-            contents.OnViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
+#if NETFX_CORE
+            if (e.OldValue is MapView oldMapView)
+            {
+                oldMapView.UnregisterPropertyChangedCallback(MapView.MapProperty, contents._lasttoken);
+            }
+            else if (e.OldValue is SceneView oldSceneView)
+            {
+                oldSceneView.UnregisterPropertyChangedCallback(SceneView.SceneProperty, contents._lasttoken);
+            }
+
+            if (e.NewValue is MapView newMapView)
+            {
+                contents._lasttoken = newMapView.RegisterPropertyChangedCallback(MapView.MapProperty, contents.GeoView_PropertyChanged);
+            }
+            else if (e.NewValue is SceneView newSceneView)
+            {
+                contents._lasttoken = newSceneView.RegisterPropertyChangedCallback(SceneView.SceneProperty, contents.GeoView_PropertyChanged);
+            }
+#else
+            if (e.OldValue is MapView oldMapView)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(MapView.MapProperty, typeof(MapView))
+                    .RemoveValueChanged(oldMapView, contents.GeoView_PropertyChanged);
+            }
+            else if (e.OldValue is SceneView oldSceneView)
+            {
+                DependencyPropertyDescriptor
+                    .FromProperty(SceneView.SceneProperty, typeof(SceneView))
+                    .RemoveValueChanged(oldSceneView, contents.GeoView_PropertyChanged);
+            }
+
+            if (e.NewValue is MapView newMapView)
+            {
+                DependencyPropertyDescriptor
+                .FromProperty(MapView.MapProperty, typeof(MapView))
+                .AddValueChanged(newMapView, contents.GeoView_PropertyChanged);
+            }
+            else if (e.NewValue is SceneView newSceneView)
+            {
+                DependencyPropertyDescriptor
+                .FromProperty(SceneView.SceneProperty, typeof(SceneView))
+                .AddValueChanged(newSceneView, contents.GeoView_PropertyChanged);
+            }
+#endif
+            contents.Refresh();
         }
+
+#if NETFX_CORE
+        private void GeoView_PropertyChanged(DependencyObject sender, DependencyProperty property)
+        {
+            ConfigureGeoDocEvents(GeoView);
+        }
+#else
+        private void GeoView_PropertyChanged(object sender, System.EventArgs e)
+        {
+            ConfigureGeoDocEvents(GeoView);
+        }
+#endif
 
         private static void OnBookmarksOverridePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

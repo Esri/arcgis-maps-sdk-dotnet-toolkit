@@ -75,26 +75,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Configures events and updates display when the <see cref="GeoView" /> property changes.
-        /// </summary>
-        /// <param name="oldView">The previously set view.</param>
-        /// <param name="newView">The new view.</param>
-        private void OnViewChanged(GeoView oldView, GeoView newView)
-        {
-            if (oldView != null)
-            {
-                (oldView as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
-            }
-
-            if (newView != null)
-            {
-                (newView as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
-            }
-
-            Refresh();
-        }
-
-        /// <summary>
         /// Refreshes the view when the Map or Scene has finished loading.
         /// </summary>
         /// <param name="sender">Sending object</param>
@@ -141,16 +121,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Handles <see cref="GeoView" /> property changes, primarily to handle Map and Scene changes.
         /// </summary>
-        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ConfigureGeoDocEvents(GeoView gv)
         {
-            if (sender is MapView mv)
+            if (gv is MapView mv)
             {
                 // Future - check for map property changes specifically; currently will raise multiple times for map change
                 if (mv.Map != null)
                 {
-                    mv.Map.LoadStatusChanged -= Loadable_LoadStatusChanged;
-                    mv.Map.LoadStatusChanged += Loadable_LoadStatusChanged;
+                    // Map load status change
+                    var loadableListener = new Internal.WeakEventListener<ILoadable, object, LoadStatusEventArgs>(mv.Map);
+                    loadableListener.OnEventAction = (instance, source, eventArgs) => { Loadable_LoadStatusChanged(source, eventArgs); };
+                    loadableListener.OnDetachAction = (instance, weakEventListener) => instance.LoadStatusChanged -= weakEventListener.OnEvent;
+                    mv.Map.LoadStatusChanged += loadableListener.OnEvent;
 
+                    // Map property change
                     var incc = mv.Map as INotifyPropertyChanged;
                     var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(incc);
                     listener.OnEventAction = (instance, source, eventArgs) => { Document_PropertyChanged(source, eventArgs); };
@@ -158,12 +142,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     incc.PropertyChanged += listener.OnEvent;
                 }
             }
-            else if (sender is SceneView sv)
+            else if (gv is SceneView sv)
             {
                 if (sv.Scene != null)
                 {
-                    sv.Scene.LoadStatusChanged -= Loadable_LoadStatusChanged;
-                    sv.Scene.LoadStatusChanged += Loadable_LoadStatusChanged;
+                    // Map load status change
+                    var loadableListener = new Internal.WeakEventListener<ILoadable, object, LoadStatusEventArgs>(sv.Scene);
+                    loadableListener.OnEventAction = (instance, source, eventArgs) => { Loadable_LoadStatusChanged(source, eventArgs); };
+                    loadableListener.OnDetachAction = (instance, weakEventListener) => instance.LoadStatusChanged -= weakEventListener.OnEvent;
+                    sv.Scene.LoadStatusChanged += loadableListener.OnEvent;
 
                     var incc = sv.Scene as INotifyPropertyChanged;
                     var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(incc);
