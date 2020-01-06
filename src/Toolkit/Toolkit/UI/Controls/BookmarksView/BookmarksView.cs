@@ -26,7 +26,7 @@ using Control = UIKit.UIView;
 #elif __ANDROID__
 using Android.App;
 using Android.Views;
-using Control = Android.Widget.ListView;
+using Control = Android.Widget.FrameLayout;
 #else
 using System.Windows.Controls;
 #endif

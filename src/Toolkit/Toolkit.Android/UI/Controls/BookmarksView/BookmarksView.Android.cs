@@ -27,6 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class BookmarksView
     {
+        private ListView _internalListView;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BookmarksView"/> class.
         /// </summary>
@@ -50,16 +52,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void Initialize()
         {
+            _internalListView = new ListView(Context);
+
+            AddView(_internalListView);
+
             VerticalScrollBarEnabled = true;
 
-            ItemClick += ListView_ItemClick;
+            _internalListView.ItemClick += ListView_ItemClick;
         }
 
         private void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             SelectAndNavigateToBookmark(CurrentBookmarkList.ElementAt(e.Position));
 
-            SetSelection(-1);
+            _internalListView.SetSelection(-1);
         }
 
         private void Refresh()
@@ -68,17 +74,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (CurrentBookmarkList == null)
                 {
-                    Adapter = null;
+                    _internalListView.Adapter = null;
                     return;
                 }
 
-                if (Adapter == null)
+                if (_internalListView.Adapter == null)
                 {
-                    Adapter = new BookmarksAdapter(Context, CurrentBookmarkList);
+                    _internalListView.Adapter = new BookmarksAdapter(Context, CurrentBookmarkList);
                 }
                 else
                 {
-                    ((BookmarksAdapter)Adapter).SetList(CurrentBookmarkList);
+                    ((BookmarksAdapter)_internalListView.Adapter).SetList(CurrentBookmarkList);
                 }
             }
             catch (ObjectDisposedException)
