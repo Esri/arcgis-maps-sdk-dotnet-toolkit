@@ -28,16 +28,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class BookmarkItemView : LinearLayout
     {
         // View that renders the bookmark's title.
-        private readonly TextView _textView;
+        internal readonly TextView BookmarkLabel;
 
         internal BookmarkItemView(Context context)
             : base(context)
         {
             Orientation = Orientation.Horizontal;
-            LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+            LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             SetGravity(GravityFlags.CenterVertical | GravityFlags.FillHorizontal);
 
-            _textView = new TextView(context)
+            BookmarkLabel = new TextView(context)
             {
                 LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent)
             };
@@ -54,13 +54,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             SetPadding((int)listItemLeftMarginValue.GetDimension(Resources.DisplayMetrics), 0, (int)listItemRightMarginValue.GetDimension(Resources.DisplayMetrics), 0);
 
-            _textView.Gravity = GravityFlags.CenterVertical | GravityFlags.FillHorizontal;
-            AddView(_textView);
+            BookmarkLabel.Gravity = GravityFlags.CenterVertical | GravityFlags.FillHorizontal;
+            AddView(BookmarkLabel);
         }
 
         internal void Update(Bookmark bookmark)
         {
-            _textView.Text = bookmark?.Name;
+            BookmarkLabel.Text = bookmark?.Name;
         }
     }
 }

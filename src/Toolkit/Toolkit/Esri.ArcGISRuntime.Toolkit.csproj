@@ -36,6 +36,7 @@
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.2" />
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Xamarin.Android.Support.v7.RecyclerView" Version="28.0.0.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">

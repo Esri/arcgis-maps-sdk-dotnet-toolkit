@@ -14,10 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Android.Content;
+using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
@@ -27,15 +29,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Creates the UI for the list items in the associated list of bookmarks.
     /// </summary>
-    internal class BookmarksAdapter : BaseAdapter<Bookmark>
+    internal class BookmarksAdapter : RecyclerView.Adapter
     {
         private IEnumerable<Bookmark> _bookmarks;
         private readonly Context _context;
 
-        internal BookmarksAdapter(Context context, IEnumerable<Bookmark> bookmarks)
+        internal BookmarksAdapter(Context context)
         {
             _context = context;
-            SetList(bookmarks);
         }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                     {
+                        // TODO - be more specific about data changes; current approach causes crashes
                         NotifyDataSetChanged();
                     },
                     OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
@@ -65,29 +67,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 incc.CollectionChanged += listener.OnEvent;
             }
 
+            // TODO - be more specific about data changes; current approach causes crashes
             NotifyDataSetChanged();
         }
 
-        /// <inheritdoc />
-        public override Bookmark this[int position] => _bookmarks?.ElementAt(position);
-
-        /// <inheritdoc />
-        public override int Count => _bookmarks?.Count() ?? 0;
+        public override int ItemCount => _bookmarks?.Count() ?? 0;
 
         /// <inheritdoc />
         public override long GetItemId(int position) => position;
 
-        /// <inheritdoc />
-        public override View GetView(int position, View convertView, ViewGroup parent)
-        {
-            var bookmark = _bookmarks.ElementAt(position);
-            if (convertView == null)
-            {
-                convertView = new BookmarkItemView(_context);
-            }
+        // TODO - implement click events
+        public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
 
-            ((BookmarkItemView)convertView).Update(bookmark);
-            return convertView;
+        public void ClearList()
+        {
+            _bookmarks = null;
+        }
+
+        public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
+        {
+            BookmarkItemViewHolder bookmarkHolder = holder as BookmarkItemViewHolder;
+            if (_bookmarks != null && _bookmarks.Count() > position)
+            {
+                bookmarkHolder.BookmarkLabel.Text = _bookmarks.ElementAt(position).Name;
+            }
+        }
+
+        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
+        {
+            View itemView = new BookmarkItemView(_context);
+
+            BookmarkItemViewHolder holder = new BookmarkItemViewHolder(itemView);
+            return holder;
         }
     }
 }

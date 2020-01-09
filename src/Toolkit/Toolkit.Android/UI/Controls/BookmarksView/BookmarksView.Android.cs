@@ -19,7 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
+using Android.Support.V7.Widget;
 using Android.Util;
+using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
 
@@ -27,7 +29,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class BookmarksView
     {
-        private ListView _internalListView;
+        private RecyclerView _internalListView;
+        private BookmarksAdapter _adapter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BookmarksView"/> class.
@@ -52,20 +55,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void Initialize()
         {
-            _internalListView = new ListView(Context);
+            _internalListView = new RecyclerView(Context);
+            _internalListView.SetLayoutManager(new LinearLayoutManager(Context));
+            _adapter = new BookmarksAdapter(Context);
+            _internalListView.SetAdapter(_adapter);
 
             AddView(_internalListView);
-
-            VerticalScrollBarEnabled = true;
-
-            _internalListView.ItemClick += ListView_ItemClick;
         }
 
-        private void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        protected override void OnAttachedToWindow()
         {
-            SelectAndNavigateToBookmark(CurrentBookmarkList.ElementAt(e.Position));
+            base.OnAttachedToWindow();
 
-            _internalListView.SetSelection(-1);
+            if (_adapter != null)
+            {
+                _adapter.BookmarkSelected += ListView_ItemClick;
+            }
+        }
+
+        protected override void OnDetachedFromWindow()
+        {
+            base.OnDetachedFromWindow();
+
+            if (_adapter != null)
+            {
+                _adapter.BookmarkSelected -= ListView_ItemClick;
+            }
+        }
+
+        private void ListView_ItemClick(object sender, BookmarkSelectedEventArgs e)
+        {
+            SelectAndNavigateToBookmark(e.Bookmark);
         }
 
         private void Refresh()
@@ -74,18 +94,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (CurrentBookmarkList == null)
                 {
-                    _internalListView.Adapter = null;
+                    _adapter?.ClearList();
                     return;
                 }
 
-                if (_internalListView.Adapter == null)
-                {
-                    _internalListView.Adapter = new BookmarksAdapter(Context, CurrentBookmarkList);
-                }
-                else
-                {
-                    ((BookmarksAdapter)_internalListView.Adapter).SetList(CurrentBookmarkList);
-                }
+                _adapter?.SetList(CurrentBookmarkList);
             }
             catch (ObjectDisposedException)
             {
