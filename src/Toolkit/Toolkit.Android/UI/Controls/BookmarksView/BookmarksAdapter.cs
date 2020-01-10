@@ -97,8 +97,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             View itemView = new BookmarkItemView(_context);
 
-            BookmarkItemViewHolder holder = new BookmarkItemViewHolder(itemView);
+            BookmarkItemViewHolder holder = new BookmarkItemViewHolder(itemView, OnBookmarkClicked);
             return holder;
+        }
+
+        private void OnBookmarkClicked(int position)
+        {
+            BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(_bookmarks.ElementAt(position)));
         }
     }
 }

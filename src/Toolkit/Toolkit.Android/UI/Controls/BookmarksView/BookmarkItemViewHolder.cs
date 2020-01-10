@@ -17,6 +17,7 @@
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using System;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -24,14 +25,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         public TextView BookmarkLabel { get; private set; }
 
-        public BookmarkItemViewHolder(View itemView)
+        public BookmarkItemViewHolder(View itemView, Action<int> listener)
             : base(itemView)
         {
-            // Locate and cache view references:
             if (itemView is BookmarkItemView bmView)
             {
                 BookmarkLabel = bmView.BookmarkLabel;
             }
+
+            itemView.Click += (o,e) => listener(LayoutPosition);
         }
     }
 }

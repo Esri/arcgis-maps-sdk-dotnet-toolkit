@@ -36,6 +36,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Orientation = Orientation.Horizontal;
             LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             SetGravity(GravityFlags.CenterVertical | GravityFlags.FillHorizontal);
+            
+            Clickable = true;
 
             BookmarkLabel = new TextView(context)
             {
@@ -56,11 +58,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             BookmarkLabel.Gravity = GravityFlags.CenterVertical | GravityFlags.FillHorizontal;
             AddView(BookmarkLabel);
-        }
-
-        internal void Update(Bookmark bookmark)
-        {
-            BookmarkLabel.Text = bookmark?.Name;
         }
     }
 }
