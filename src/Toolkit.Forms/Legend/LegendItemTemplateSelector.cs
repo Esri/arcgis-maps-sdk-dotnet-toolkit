@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (item is Layer)
+            if (item is Layer && LayerTemplate != null)
             {
                 return LayerTemplate;
             }
