@@ -24,11 +24,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
     /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
     /// </summary>
-    public class Legend : ListView
+    public class Legend : TemplatedView
     {
         private static DataTemplate s_DefaultLayerItemTemplate;
         private static DataTemplate s_DefaultSublayerItemTemplate;
         private static DataTemplate s_DefaultLegendInfoItemTemplate;
+        private static ControlTemplate s_DefaultControlTemplate;
 
         static Legend()
         {
@@ -56,8 +57,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 nameLabel.SetBinding(Label.TextProperty, nameof(LegendInfo.Name));
                 sl.Children.Add(nameLabel);
                 return new ViewCell() { View = sl };
-
             });
+
+            string template = "<ControlTemplate xmlns=\"http://xamarin.com/schemas/2014/forms\" xmlns:x=\"http://schemas.microsoft.com/winfx/2009/xaml\" xmlns:esriTK=\"clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\"><ListView x:Name=\"ListView\" HorizontalOptions=\"Fill\" VerticalOptions=\"Fill\" SelectionMode=\"None\" ><x:Arguments><ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy></x:Arguments></ListView></ControlTemplate>";
+            s_DefaultControlTemplate = global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml<ControlTemplate>(new ControlTemplate(), template);
         }
 
         private readonly LegendDataSource _datasource = new LegendDataSource(null);
@@ -69,12 +72,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             HorizontalOptions = LayoutOptions.Fill;
             VerticalOptions = LayoutOptions.Fill;
-            ItemTemplate = new LegendItemTemplateSelector(this);
             LayerItemTemplate = s_DefaultLayerItemTemplate;
             SublayerItemTemplate = s_DefaultSublayerItemTemplate;
             LegendInfoItemTemplate = s_DefaultLegendInfoItemTemplate;
-            SelectionMode = ListViewSelectionMode.None;
-            ItemsSource = _datasource;
+            ControlTemplate = s_DefaultControlTemplate;
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            var list = GetTemplateChild("ListView") as ItemsView<Cell>;
+            if (list != null)
+            {
+                list.ItemTemplate = new LegendItemTemplateSelector(this);
+                list.ItemsSource = _datasource;
+            }
+
+            base.OnApplyTemplate();
         }
 
         /// <summary>
