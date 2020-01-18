@@ -17,19 +17,10 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ScrollViewer>
-                <esriToolkit:Legend Grid.Row="0"
-                                    x:Name="legend"
-                                    GeoView="{Binding ElementName=mapView}"
-                                    ReverseLayerOrder="False"
-                                    FilterByVisibleScaleRange="True" />
-            </ScrollViewer>
-            <CheckBox Content="Filter By Visible Scale Range"
-                      IsChecked="{Binding FilterByVisibleScaleRange, ElementName=legend, Mode=TwoWay}"
-                      Grid.Row="1" />
-            <CheckBox Content="Reverse Layer Order"
-                      IsChecked="{Binding ReverseLayerOrder, ElementName=legend, Mode=TwoWay}"
-                      Grid.Row="2" />
+            <esriToolkit:Legend Grid.Row="0"
+                                x:Name="legend"
+                                GeoView="{x:Bind mapView}"/>
+         
         </Grid>
         <esri:MapView Map="{x:Bind Map}"
                       x:Name="mapView"

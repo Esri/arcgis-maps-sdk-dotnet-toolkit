@@ -15,7 +15,7 @@
 //  ******************************************************************************/
 
 #if !XAMARIN
-using System.Linq;
+using Esri.ArcGISRuntime.Mapping;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,25 +29,49 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Determines which DataTemplate to use for a given layer content item in a Legend control.
     /// </summary>
+
     internal class LegendItemTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate LeafItemTemplate { get; set; }
+        private Legend _owner;
 
-        public DataTemplate BranchItemTemplate { get; set; }
+        public LegendItemTemplateSelector(Legend owner)
+        {
+            _owner = owner;
+        }
 
 #if NETFX_CORE
-            protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+            protected override DataTemplate SelectTemplateCore(object item)
 #else
-            public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
 #endif
         {
-            if ((item as LayerContentViewModel)?.Sublayers?.Any() ?? false)
+            if (item is Layer)
             {
-                return BranchItemTemplate;
+                return LayerTemplate;
             }
 
-            return LeafItemTemplate;
+            if (item is ILayerContent)
+            {
+                return SublayerTemplate;
+            }
+
+            if (item is LegendInfo)
+            {
+                return LegendInfoTemplate;
+            }
+
+#if NETFX_CORE
+            return base.SelectTemplateCore(item);
+#else
+            return base.SelectTemplate(item, container);
+#endif
         }
+
+        public DataTemplate LayerTemplate => _owner.LayerItemTemplate;
+
+        public DataTemplate SublayerTemplate => _owner.SublayerItemTemplate;
+
+        public DataTemplate LegendInfoTemplate => _owner.LegendInfoItemTemplate;
     }
 }
 #endif

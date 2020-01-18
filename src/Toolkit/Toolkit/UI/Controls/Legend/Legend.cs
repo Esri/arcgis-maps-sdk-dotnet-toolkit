@@ -14,25 +14,63 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Text;
+using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 
+#if NETFX_CORE
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+#elif __IOS__
+using Control = UIKit.UIView;
+#elif __ANDROID__
+using Control = Android.Views.ViewGroup;
+#else
+using System.Windows;
+using System.Windows.Controls;
+#endif
+
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
-    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
-    /// </summary>
-    public partial class Legend : LayerList
+    public partial class Legend
     {
+        private readonly LegendDataSource _datasource = new LegendDataSource(null);
+
 #if !__ANDROID__
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Legend"/> class.
-        /// </summary>
         public Legend()
-            : base()
         {
+#if !XAMARIN
+            DefaultStyleKey = typeof(Legend);
+            ItemTemplateSelector = new LegendItemTemplateSelector(this);
+#endif
         }
 #endif
+
+#if XAMARIN
+        private GeoView _geoView;
+#endif
+
+        public GeoView GeoView
+        {
+#if XAMARIN
+            get { return _geoView; }
+            set
+            { 
+                if(_geoView != value) 
+                {
+                    var oldView = _geoView;
+                    _geoView = value; 
+                    _datasource.SetGeoView(value);
+                }
+            }
+#else
+            get { return (GeoView)GetValue(GeoViewProperty); }
+            set { SetValue(GeoViewProperty, value); }
+#endif
+        }
     }
 }

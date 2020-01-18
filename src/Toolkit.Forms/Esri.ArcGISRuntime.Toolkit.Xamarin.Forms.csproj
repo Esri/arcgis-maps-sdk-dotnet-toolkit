@@ -9,6 +9,7 @@
     <RootNamespace>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</RootNamespace>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <DefineConstants>$(DefineConstants);XAMARIN_FORMS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
@@ -41,6 +42,7 @@
 
   <ItemGroup>
     <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\Controls\Legend2\LegendDataSource.cs" Link="Legend\LegendDataSource.cs" />
   </ItemGroup>
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
