@@ -42,7 +42,7 @@
 
   <ItemGroup>
     <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
-    <Compile Include="..\Toolkit\Toolkit\UI\Controls\Legend2\LegendDataSource.cs" Link="Legend\LegendDataSource.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\Controls\Legend\LegendDataSource.cs" Link="Legend\LegendDataSource.cs" />
   </ItemGroup>
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->

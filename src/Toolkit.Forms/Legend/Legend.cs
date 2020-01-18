@@ -24,22 +24,69 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
     /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
     /// </summary>
-    public class Legend : View
+    public class Legend : ListView
     {
+        private static DataTemplate s_DefaultLayerItemTemplate;
+        private static DataTemplate s_DefaultSublayerItemTemplate;
+        private static DataTemplate s_DefaultLegendInfoItemTemplate;
+
+        static Legend()
+        {
+            s_DefaultLayerItemTemplate = new DataTemplate(() =>
+            {
+                var nameLabel = new Label { FontAttributes = FontAttributes.Bold, FontSize = 24 };
+                nameLabel.SetBinding(Label.TextProperty, nameof(Layer.Name));
+                return new ViewCell() { View = nameLabel };
+            });
+
+            s_DefaultSublayerItemTemplate = new DataTemplate(() =>
+            {
+                var nameLabel = new Label { FontSize = 18 };
+                nameLabel.SetBinding(Label.TextProperty, nameof(ILayerContent.Name));
+                return new ViewCell() { View = nameLabel };
+            });
+
+            s_DefaultLegendInfoItemTemplate = new DataTemplate(() =>
+            {
+                StackLayout sl = new StackLayout() { Orientation = StackOrientation.Horizontal };
+                var symbol = new SymbolDisplay { WidthRequest = 40, HeightRequest = 40, VerticalOptions = LayoutOptions.Center };
+                symbol.SetBinding(SymbolDisplay.SymbolProperty, nameof(LegendInfo.Symbol));
+                sl.Children.Add(symbol);
+                var nameLabel = new Label { FontSize = 11, VerticalOptions = LayoutOptions.Center };
+                nameLabel.SetBinding(Label.TextProperty, nameof(LegendInfo.Name));
+                sl.Children.Add(nameLabel);
+                return new ViewCell() { View = sl };
+
+            });
+        }
+
+        private readonly LegendDataSource _datasource = new LegendDataSource(null);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Legend"/> class
         /// </summary>
         public Legend()
         {
-            HorizontalOptions = LayoutOptions.Start;
-            VerticalOptions = LayoutOptions.Start;
+            HorizontalOptions = LayoutOptions.Fill;
+            VerticalOptions = LayoutOptions.Fill;
+            ItemTemplate = new LegendItemTemplateSelector(this);
+            LayerItemTemplate = s_DefaultLayerItemTemplate;
+            SublayerItemTemplate = s_DefaultSublayerItemTemplate;
+            LegendInfoItemTemplate = s_DefaultLegendInfoItemTemplate;
+            SelectionMode = ListViewSelectionMode.None;
+            ItemsSource = _datasource;
         }
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> bindable property.
         /// </summary>
         public static readonly BindableProperty GeoViewProperty =
-            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(Legend), null, BindingMode.OneWay, null);
+            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(Legend), null, BindingMode.OneWay, propertyChanged: OnGeoViewPropertyChanged);
+
+        private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            ((Legend)bindable)._datasource.SetGeoView(newValue as GeoView);
+        }
 
         /// <summary>
         /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
@@ -54,44 +101,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="FilterByVisibleScaleRange"/> bindable property.
+        /// Identifies the <see cref="LayerItemTemplate"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty FilterByVisibleScaleRangeProperty =
-            BindableProperty.Create(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null);
+        public static readonly BindableProperty LayerItemTemplateProperty =
+            BindableProperty.Create(nameof(LayerItemTemplate), typeof(DataTemplate), typeof(Legend), s_DefaultLayerItemTemplate, BindingMode.OneWay, null);
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
-        /// are used to determine when legend for layer is displayed.
-        /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
-        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
-        /// </remarks>
-        /// <seealso cref="FilterByVisibleScaleRangeProperty"/>
-        public bool FilterByVisibleScaleRange
+        public DataTemplate LayerItemTemplate
         {
-            get { return (bool)GetValue(FilterByVisibleScaleRangeProperty); }
-            set { SetValue(FilterByVisibleScaleRangeProperty, value); }
+            get { return (DataTemplate)GetValue(LayerItemTemplateProperty); }
+            set { SetValue(LayerItemTemplateProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="ReverseLayerOrder"/> bindable property.
+        /// Identifies the <see cref="SublayerItemTemplate"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty ReverseLayerOrderProperty =
-            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), false, BindingMode.OneWay, null);
+        public static readonly BindableProperty SublayerItemTemplateProperty =
+            BindableProperty.Create(nameof(SublayerItemTemplate), typeof(DataTemplate), typeof(Legend), s_DefaultSublayerItemTemplate, BindingMode.OneWay, null);
+
+        public DataTemplate SublayerItemTemplate
+        {
+            get { return (DataTemplate)GetValue(SublayerItemTemplateProperty); }
+            set { SetValue(SublayerItemTemplateProperty, value); }
+        }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
+        /// Identifies the <see cref="LegendInfoItemTemplate"/> bindable property.
         /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layers is displayed from top to bottom order;
-        /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
-        /// </remarks>
-        /// <seealso cref="ReverseLayerOrderProperty"/>
-        public bool ReverseLayerOrder
+        public static readonly BindableProperty LegendInfoItemTemplateProperty =
+            BindableProperty.Create(nameof(LegendInfoItemTemplate), typeof(DataTemplate), typeof(Legend), s_DefaultLegendInfoItemTemplate, BindingMode.OneWay, null);
+
+        public DataTemplate LegendInfoItemTemplate
         {
-            get { return (bool)GetValue(ReverseLayerOrderProperty); }
-            set { SetValue(ReverseLayerOrderProperty, value); }
+            get { return (DataTemplate)GetValue(LegendInfoItemTemplateProperty); }
+            set { SetValue(LegendInfoItemTemplateProperty, value); }
         }
     }
 }

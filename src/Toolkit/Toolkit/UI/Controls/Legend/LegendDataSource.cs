@@ -29,7 +29,11 @@ using Esri.ArcGISRuntime.Xamarin.Forms;
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
 
+#if XAMARIN_FORMS
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
