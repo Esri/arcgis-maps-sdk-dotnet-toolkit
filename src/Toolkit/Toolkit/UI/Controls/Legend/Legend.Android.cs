@@ -18,6 +18,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Android.Content;
+using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
@@ -59,13 +60,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Adapter = new LegendAdapter(Context, _datasource);
         }
 
-      /*  protected override void OnLayout(bool changed, int l, int t, int r, int b)
-        {
-            // TODO
-        }*/
-
-
-
         internal class LegendAdapter : BaseAdapter<object>
         {
             private readonly IList<object> _layers;
@@ -94,40 +88,81 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             public override int Count => _layers.Count;
 
-            public override long GetItemId(int position)
-            {
-                return position;
-            }
+            public override long GetItemId(int position) => position;
 
             public override View GetView(int position, View convertView, ViewGroup parent)
             {
                 var layerLegend = _layers[position];
                 if (convertView == null)
                 {
-                    convertView = new Android.Widget.TextView(_context);
+                    convertView = new LegendItemView(_context);
                 }
 
-                var tv = (convertView as TextView);
+                var tv = convertView as LegendItemView;
                 if (tv != null)
                 {
-                    if (layerLegend is Layer l)
-                    {
-                        tv.Text = l.Name;
-                        tv.SetTextSize(ComplexUnitType.Dip, 20);
-                    }
-                    else if(layerLegend is ILayerContent il)
-                    {
-                        tv.Text = il.Name;
-                        tv.SetTextSize(ComplexUnitType.Dip, 14);
-                    }
-                    else if (layerLegend is LegendInfo li)
-                    {
-                        tv.Text = li.Name;
-                        tv.SetTextSize(ComplexUnitType.Dip, 12);
-                    }
+                    tv.Update(layerLegend);
                 }
 
                 return convertView;
+            }
+
+            private class LegendItemView : LinearLayout
+            {
+                private readonly TextView _textView;
+                private readonly SymbolDisplay _symbol;
+
+                internal LegendItemView(Context context)
+                    : base(context)
+                {
+                    Orientation = Orientation.Horizontal;
+                    LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
+                    SetGravity(GravityFlags.Top);
+
+                    _textView = new TextView(context)
+                    {
+                        LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
+                    };
+
+                    _symbol = new SymbolDisplay(context)
+                    {
+                        LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
+                    };
+                    _symbol.SetMaxHeight(40);
+                    _symbol.SetMaxWidth(40);
+                    AddView(_symbol);
+                    AddView(_textView);
+                    RequestLayout();
+                }
+
+                internal void Update(object layeritem)
+                {
+                    if (layeritem is Layer layer)
+                    {
+                        _textView.Text = layer.Name;
+                        _textView.SetTextSize(ComplexUnitType.Dip, 20);
+                        _textView.SetTypeface(null, TypefaceStyle.Bold);
+                        _symbol.Visibility = ViewStates.Gone;
+                        _symbol.Symbol = null;
+
+                    }
+                    else if (layeritem is ILayerContent layerContent)
+                    {
+                        _textView.Text = layerContent.Name;
+                        _textView.SetTextSize(ComplexUnitType.Dip, 18);
+                        _textView.SetTypeface(null, TypefaceStyle.Normal);
+                        _symbol.Visibility = ViewStates.Gone;
+                        _symbol.Symbol = null;
+                    }
+                    else if (layeritem is LegendInfo legendInfo)
+                    {
+                        _textView.Text = legendInfo.Name;
+                        _textView.SetTextSize(ComplexUnitType.Dip, 18);
+                        _textView.SetTypeface(null, TypefaceStyle.Normal);
+                        _symbol.Visibility = ViewStates.Visible;
+                        _symbol.Symbol = legendInfo.Symbol;
+                    }
+                }
             }
         }
     }
