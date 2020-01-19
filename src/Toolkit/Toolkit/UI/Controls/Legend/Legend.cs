@@ -43,10 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if !__ANDROID__
         public Legend()
         {
-#if !XAMARIN
-            DefaultStyleKey = typeof(Legend);
-            ItemTemplateSelector = new LegendItemTemplateSelector(this);
-#endif
+            Initialize();
         }
 #endif
 

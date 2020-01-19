@@ -30,6 +30,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class Legend : Control
     {
+        private void Initialize()
+        {
+            DefaultStyleKey = typeof(Legend);
+            ItemTemplateSelector = new LegendItemTemplateSelector(this);
+        }
+
 #if NETFX_CORE
         protected override void OnApplyTemplate()
 #else
