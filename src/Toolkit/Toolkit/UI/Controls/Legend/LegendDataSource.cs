@@ -349,7 +349,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         continue;
                     }
-                    else if (_filterByVisibleScaleRange && !double.IsNaN(_currentScale) && _currentScale > 0 && ilc.IsVisibleAtScale(_currentScale))
+                    else if (_filterByVisibleScaleRange && !double.IsNaN(_currentScale) && _currentScale > 0 && !ilc.IsVisibleAtScale(_currentScale))
                     {
                         continue;
                     }

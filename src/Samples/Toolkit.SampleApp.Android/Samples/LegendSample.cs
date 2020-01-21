@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             var checkbox = FindViewById<CheckBox>(Resource.Id.checkboxVisibleRangeOnly);
             checkbox.CheckedChange += (s, e) =>
             {
-                //legend.FilterByVisibleScaleRange = e.IsChecked;
+                legend.FilterByVisibleScaleRange = e.IsChecked;
             };
         }
 
