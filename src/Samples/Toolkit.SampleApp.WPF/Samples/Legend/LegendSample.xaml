@@ -23,6 +23,13 @@
             <esri:Legend Grid.Row="0"
                       x:Name="legend"
                       GeoView="{Binding ElementName=mapView}" />
+
+            <StackPanel Grid.Row="1">
+                <CheckBox IsChecked="{Binding ShowOutOfScaleLayers, ElementName=legend, Mode=TwoWay}"
+                          Content="Filter out-of-scale layers" />
+                <CheckBox IsChecked="{Binding ShowHiddenLayers, ElementName=legend, Mode=TwoWay}"
+                          Content="Filter non-visible layers" />
+            </StackPanel>
             
         </Grid>
         <GridSplitter Grid.Column="1"

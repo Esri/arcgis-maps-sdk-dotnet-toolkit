@@ -50,7 +50,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Identifies the <see cref="ShowOutOfScaleLayers"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowOutOfScaleLayersProperty =
+            DependencyProperty.Register(nameof(ShowOutOfScaleLayers), typeof(bool), typeof(Legend), new PropertyMetadata(false, OnShowOutOfScaleLayersPropertyChanged));
+
+        private static void OnShowOutOfScaleLayersPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((Legend)d)._datasource.ShowOutOfScaleLayers = (bool)e.NewValue;
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ShowHiddenLayers"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ShowHiddenLayersProperty =
+            DependencyProperty.Register(nameof(ShowHiddenLayers), typeof(bool), typeof(Legend), new PropertyMetadata(false, OnShowHiddenLayersPropertyChanged));
+
+        private static void OnShowHiddenLayersPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((Legend)d)._datasource.ShowHiddenLayers = (bool)e.NewValue;
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="GeoView"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty GeoViewProperty =
             DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(Legend), new PropertyMetadata(null, OnGeoViewPropertyChanged));
 

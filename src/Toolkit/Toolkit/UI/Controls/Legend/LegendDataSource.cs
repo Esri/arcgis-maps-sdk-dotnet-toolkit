@@ -16,10 +16,11 @@
 
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Text;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
@@ -27,6 +28,9 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 #else
 using Esri.ArcGISRuntime.UI.Controls;
+#if NETFX_CORE
+using Windows.UI.Core;
+#endif
 #endif
 
 #if XAMARIN_FORMS
@@ -35,20 +39,51 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
+
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
 #endif
     internal class LegendDataSource : IList<object>, INotifyCollectionChanged, INotifyPropertyChanged, IList
     {
+        private readonly ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>> _legendInfoTasks = new ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>>();
+
         private List<object> _items = new List<object>();
         private GeoView _geoview;
         private CancellationTokenSource _cancellationTokenSource;
+        private bool _showOutOfScaleLayers = false;
+        private bool _showHiddenLayers = false;
 
         public LegendDataSource(GeoView geoview)
         {
             if (geoview != null)
             {
                 SetGeoView(geoview);
+            }
+        }
+
+        public bool ShowOutOfScaleLayers
+        {
+            get => _showOutOfScaleLayers;
+            set 
+            {
+                if (_showOutOfScaleLayers != value)
+                {
+                    _showOutOfScaleLayers = value;
+                    MarkCollectionDirty();
+                }
+            }
+        }
+
+        public bool ShowHiddenLayers
+        {
+            get => _showHiddenLayers;
+            set
+            {
+                if (_showHiddenLayers != value)
+                {
+                    _showHiddenLayers = value;
+                    MarkCollectionDirty();
+                }
             }
         }
 
@@ -63,15 +98,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 (_geoview as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
                 _geoview.LayerViewStateChanged -= GeoView_LayerViewStateChanged;
-                _geoview.ViewpointChanged -= GeoView_ViewpointChanged;
             }
 
             _geoview = geoview;
+            _currentScale = double.NaN;
             if (_geoview != null)
             {
                 (_geoview as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
                 _geoview.LayerViewStateChanged += GeoView_LayerViewStateChanged;
-                _geoview.ViewpointChanged += GeoView_ViewpointChanged;
+
+                if (_geoview is MapView mv)
+                {
+                    _currentScale = mv.MapScale;
+                }
             }
 
             UpdateItemsSource();
@@ -79,13 +118,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void UpdateItemsSource()
         {
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Cancel();
-            }
-
-            _cancellationTokenSource = new CancellationTokenSource();
-            var token = _cancellationTokenSource.Token;
+            _legendInfoTasks.Clear();
+            _items = new List<object>();
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             IEnumerable<Layer> layers = null;
             if (_geoview is MapView mv)
             {
@@ -93,7 +128,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     try
                     {
-                        await mv.Map.LoadAsync();
+                        await mv.Map.LoadAsync(); // TODO: Don't force-load
                         layers = mv.Map.OperationalLayers;
                     }
                     catch { }
@@ -105,49 +140,180 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     try
                     {
-                        await sv.Scene.LoadAsync();
+                        await sv.Scene.LoadAsync(); // TODO: Don't force-load
                         layers = sv.Scene.OperationalLayers;
                     }
                     catch { }
                 }
             }
 
-            if (token.IsCancellationRequested)
+            _items = new List<object>();
+            if (layers is INotifyCollectionChanged incc)
             {
-                return;
+                incc.CollectionChanged += Layers_CollectionChanged; // TODO: Make weak
             }
 
-            _items = (await BuildLegendList(layers, token)) ?? new List<object>();
-            if (token.IsCancellationRequested)
-            {
-                return;
-            }
+            TrackLayers(layers);
 
+            _items = BuildLegendList(layers) ?? new List<object>();
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            _cancellationTokenSource = null;
         }
 
-        private void GeoView_ViewpointChanged(object sender, EventArgs e)
+        private IEnumerable<Layer> _currentLayers;
+
+        private void TrackLayers(IEnumerable<Layer> layers)
         {
-            // TODO
+            if (_currentLayers != null)
+            {
+                foreach (var layer in _currentLayers)
+                {
+                    layer.PropertyChanged -= Layer_PropertyChanged;
+                }
+            }
+
+            _currentLayers = layers;
+            if (_currentLayers != null)
+            {
+                foreach (var layer in _currentLayers)
+                {
+                    layer.PropertyChanged += Layer_PropertyChanged;
+                }
+            }
+
+            // TODO: Remove _legendInfoTasks no longer being tracked
         }
 
-        private void GeoView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e)
+        private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            // TODO
+            var layer = sender as Layer;
+            if ((e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded) ||
+                (e.PropertyName == nameof(layer.IsVisible) && !_showHiddenLayers) || e.PropertyName == nameof(layer.ShowInLegend))
+            {
+                MarkCollectionDirty();
+            }
         }
+
+        private void Layers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            TrackLayers(sender as IEnumerable<Layer>);
+            MarkCollectionDirty();
+        }
+
+        private bool _isCollectionDirty;
+        private object _dirtyLock = new object();
+
+        private void MarkCollectionDirty()
+        {
+            lock (_dirtyLock)
+            {
+                if (_isCollectionDirty)
+                {
+                    return;
+                }
+
+                _isCollectionDirty = true;
+            }
+
+#if XAMARIN_FORMS
+            global::Xamarin.Forms.Device.BeginInvokeOnMainThread(RebuildCollection);
+#elif __IOS__
+            _geoview.InvokeOnMainThread(RebuildCollection);
+#elif __ANDROID__
+            _geoview.PostDelayed(RebuildCollection, 500);
+#elif NETFX_CORE
+            _ = _geoview.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RebuildCollection);
+#else
+            _geoview.Dispatcher.Invoke(RebuildCollection);
+#endif
+        }
+
+        private void RebuildCollection()
+        {
+            //await Task.Delay(500); // Delay rebuilding a bit so we don't do it too often.
+            lock (_dirtyLock)
+            {
+                _isCollectionDirty = false;
+            }
+
+            var newItems = BuildLegendList(_currentLayers) ?? new List<object>();
+            if (newItems.Count == 0 && _items.Count == 0)
+            {
+                return;
+            }
+
+            if (newItems.Count == 0 || _items.Count == 0)
+            {
+                _items = newItems;
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                return;
+            }
+            int i = 0;
+            for (; i < newItems.Count || i < _items.Count; i++)
+            {
+
+                var changedObjects = new List<object>();
+                var newItem = i < newItems.Count ? newItems[i] : null;
+                var oldItem = i < _items.Count ? _items[i] : null;
+                if (newItem == oldItem)
+                {
+                    continue;
+                }
+
+                if (newItem == null)
+                {
+                    // Item was removed from the end
+                    var removedItem = oldItem;
+                    _items.RemoveAt(i);
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItem, i));
+                    i--;
+                }
+                else if (!_items.Contains(newItem))
+                {
+                    // Item was added
+                    _items.Insert(i, newItem);
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newItem, i));
+                }
+                else
+                {
+                    // Item was removed (or moved)
+                    var removedItem = oldItem;
+                    _items.RemoveAt(i);
+                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItem, i));
+                    i--;
+                }
+            }
+#if DEBUG
+            // Validate the calculated collection is in sync
+            System.Diagnostics.Debug.Assert(newItems.Count == _items.Count, "Legend entry count doesn't match");
+            for (i = 0; i < newItems.Count; i++)
+            {
+                System.Diagnostics.Debug.Assert(newItems[i] == _items[i], $"Legend entry {i} doesn't match");
+            }
+#endif
+            _items = newItems;
+        }
+
+        private void GeoView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e) => MarkCollectionDirty();
 
         private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
                 (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
             {
+                _currentScale = double.NaN;
                 UpdateItemsSource();
+            }
+
+            if (e.PropertyName == nameof(MapView.MapScale) && sender is MapView mv)
+            {
+                _currentScale = mv.MapScale;
+                MarkCollectionDirty();
             }
         }
 
+        private double _currentScale = double.NaN;
 
-        private async Task<List<object>> BuildLegendList(IEnumerable<ILayerContent> layers, CancellationToken token)
+        private List<object> BuildLegendList(IEnumerable<ILayerContent> layers)
         {
             if (layers == null)
             {
@@ -157,54 +323,73 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             List<object> data = new List<object>();
             foreach (var layer in layers)
             {
-                if (!layer.ShowInLegend)
+                if (!layer.ShowInLegend || !layer.IsVisible)
                 {
                     continue;
                 }
 
-                if (layer is ILoadable loadable)
+                if (layer is Layer l)
                 {
-                    if (loadable.LoadStatus != LoadStatus.Loaded && loadable.LoadStatus != LoadStatus.FailedToLoad)
+                    var state = _geoview.GetLayerViewState(l);
+                    if (state.Status == LayerViewStatus.NotVisible && !_showHiddenLayers)
                     {
-                        try
-                        {
-                            await loadable.LoadAsync();
-                            if (token.IsCancellationRequested)
-                            {
-                                return data;
-                            }
-                        }
-                        catch
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
+
+                    if (state.Status == LayerViewStatus.OutOfScale && !_showOutOfScaleLayers)
+                    {
+                        continue;
                     }
                 }
-
-                if (!layer.ShowInLegend)
+                else if (layer is ILayerContent ilc)
                 {
-                    // This could have changed after load
-                    continue;
+                    if (!ilc.IsVisible && !_showHiddenLayers)
+                    {
+                        continue;
+                    }
+                    else if (!_showOutOfScaleLayers && !double.IsNaN(_currentScale) && _currentScale > 0 && ilc.IsVisibleAtScale(_currentScale))
+                    {
+                        continue;
+                    }
                 }
 
                 data.Add(layer);
-                var infos = await layer.GetLegendInfosAsync();
-                if (token.IsCancellationRequested)
+                if (layer is ILoadable loadable && loadable.LoadStatus == LoadStatus.Loaded)
                 {
-                    return data;
+                    if (!_legendInfoTasks.ContainsKey(layer))
+                    {
+                        var task = LoadLegend(layer);
+                        _legendInfoTasks[layer] = task;
+                    }
+                    else
+                    {
+                        var task = _legendInfoTasks[layer];
+                        if (task.Status == TaskStatus.RanToCompletion)
+                        {
+                            var legends = _legendInfoTasks[layer].Result;
+                            data.AddRange(legends);
+                        }
+                    }
                 }
-                data.AddRange(infos);
+
                 if (layer.SublayerContents != null)
                 {
-                    data.AddRange(await BuildLegendList(layer.SublayerContents, token));
-                    if (token.IsCancellationRequested)
-                    {
-                        return data;
-                    }
+                    data.AddRange(BuildLegendList(layer.SublayerContents));
                 }
             }
 
             return data;
+        }
+
+        private async Task<IReadOnlyList<LegendInfo>> LoadLegend(ILayerContent layer)
+        {
+            var result = await layer.GetLegendInfosAsync().ConfigureAwait(false);
+            if (result.Count > 0)
+            {
+                MarkCollectionDirty();
+            }
+
+            return result;
         }
 
 #region IList<T>

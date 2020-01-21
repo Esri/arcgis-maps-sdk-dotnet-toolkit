@@ -69,5 +69,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set { SetValue(GeoViewProperty, value); }
 #endif
         }
+
+        public bool ShowOutOfScaleLayers
+        {
+#if XAMARIN
+            get => _datasource.ShowOutOfScaleLayers;
+            set => _datasource.ShowOutOfScaleLayers = value;
+#else
+            get { return (bool)GetValue(ShowOutOfScaleLayersProperty); }
+            set { SetValue(ShowOutOfScaleLayersProperty, value); }
+#endif
+        }
+
+        public bool ShowHiddenLayers
+        {
+#if XAMARIN
+            get => _datasource.ShowHiddenLayers;
+            set => _datasource.ShowHiddenLayers = value;
+#else
+            get { return (bool)GetValue(ShowHiddenLayersProperty); }
+            set { SetValue(ShowHiddenLayersProperty, value); }
+#endif
+        }
     }
 }
