@@ -39,6 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             {
                 GeoView = mapView,
                 TranslatesAutoresizingMaskIntoConstraints = false,
+                FilterHiddenLayers = true,
+                FilterByVisibleScaleRange = true
             };
             this.View.AddSubview(legend);
 

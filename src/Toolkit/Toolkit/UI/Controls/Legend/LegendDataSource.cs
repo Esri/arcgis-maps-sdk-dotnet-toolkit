@@ -50,8 +50,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private List<object> _items = new List<object>();
         private GeoView _geoview;
         private CancellationTokenSource _cancellationTokenSource;
-        private bool _showOutOfScaleLayers = false;
-        private bool _showHiddenLayers = false;
+        private bool _filterByVisibleScaleRange = true;
+        private bool _filterHiddenLayers = true;
 
         public LegendDataSource(GeoView geoview)
         {
@@ -61,27 +61,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        public bool ShowOutOfScaleLayers
+        public bool FilterByVisibleScaleRange
         {
-            get => _showOutOfScaleLayers;
+            get => _filterByVisibleScaleRange;
             set 
             {
-                if (_showOutOfScaleLayers != value)
+                if (_filterByVisibleScaleRange != value)
                 {
-                    _showOutOfScaleLayers = value;
+                    _filterByVisibleScaleRange = value;
                     MarkCollectionDirty();
                 }
             }
         }
 
-        public bool ShowHiddenLayers
+        public bool FilterHiddenLayers
         {
-            get => _showHiddenLayers;
+            get => _filterHiddenLayers;
             set
             {
-                if (_showHiddenLayers != value)
+                if (_filterHiddenLayers != value)
                 {
-                    _showHiddenLayers = value;
+                    _filterHiddenLayers = value;
                     MarkCollectionDirty();
                 }
             }
@@ -188,7 +188,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var layer = sender as Layer;
             if ((e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded) ||
-                (e.PropertyName == nameof(layer.IsVisible) && !_showHiddenLayers) || e.PropertyName == nameof(layer.ShowInLegend))
+                (e.PropertyName == nameof(layer.IsVisible) && _filterHiddenLayers) || e.PropertyName == nameof(layer.ShowInLegend))
             {
                 MarkCollectionDirty();
             }
@@ -332,23 +332,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (layer is Layer l)
                 {
                     var state = _geoview.GetLayerViewState(l);
-                    if (state.Status == LayerViewStatus.NotVisible && !_showHiddenLayers)
+                    if (state.Status == LayerViewStatus.NotVisible && _filterHiddenLayers)
                     {
                         continue;
                     }
 
-                    if (state.Status == LayerViewStatus.OutOfScale && !_showOutOfScaleLayers)
+                    if (state.Status == LayerViewStatus.OutOfScale && _filterByVisibleScaleRange)
                     {
                         continue;
                     }
                 }
                 else if (layer is ILayerContent ilc)
                 {
-                    if (!ilc.IsVisible && !_showHiddenLayers)
+                    if (!ilc.IsVisible && _filterHiddenLayers)
                     {
                         continue;
                     }
-                    else if (!_showOutOfScaleLayers && !double.IsNaN(_currentScale) && _currentScale > 0 && ilc.IsVisibleAtScale(_currentScale))
+                    else if (_filterByVisibleScaleRange && !double.IsNaN(_currentScale) && _currentScale > 0 && ilc.IsVisibleAtScale(_currentScale))
                     {
                         continue;
                     }

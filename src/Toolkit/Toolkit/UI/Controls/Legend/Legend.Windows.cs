@@ -51,25 +51,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Identifies the <see cref="ShowOutOfScaleLayers"/> dependency property.
+        /// Identifies the <see cref="FilterByVisibleScaleRange"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowOutOfScaleLayersProperty =
-            DependencyProperty.Register(nameof(ShowOutOfScaleLayers), typeof(bool), typeof(Legend), new PropertyMetadata(false, OnShowOutOfScaleLayersPropertyChanged));
+        public static readonly DependencyProperty FilterByVisibleScaleRangeProperty =
+            DependencyProperty.Register(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnFilterByVisibleScaleRangePropertyChanged));
 
-        private static void OnShowOutOfScaleLayersPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnFilterByVisibleScaleRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((Legend)d)._datasource.ShowOutOfScaleLayers = (bool)e.NewValue;
+            ((Legend)d)._datasource.FilterByVisibleScaleRange = (bool)e.NewValue;
         }
 
         /// <summary>
-        /// Identifies the <see cref="ShowHiddenLayers"/> dependency property.
+        /// Identifies the <see cref="FilterHiddenLayers"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowHiddenLayersProperty =
-            DependencyProperty.Register(nameof(ShowHiddenLayers), typeof(bool), typeof(Legend), new PropertyMetadata(false, OnShowHiddenLayersPropertyChanged));
+        public static readonly DependencyProperty FilterHiddenLayersProperty =
+            DependencyProperty.Register(nameof(FilterHiddenLayers), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnFilterHiddenLayersPropertyChanged));
 
-        private static void OnShowHiddenLayersPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnFilterHiddenLayersPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((Legend)d)._datasource.ShowHiddenLayers = (bool)e.NewValue;
+            ((Legend)d)._datasource.FilterHiddenLayers = (bool)e.NewValue;
         }
 
         /// <summary>

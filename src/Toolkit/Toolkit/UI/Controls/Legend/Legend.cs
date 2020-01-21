@@ -70,25 +70,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         }
 
-        public bool ShowOutOfScaleLayers
+        public bool FilterByVisibleScaleRange
         {
 #if XAMARIN
-            get => _datasource.ShowOutOfScaleLayers;
-            set => _datasource.ShowOutOfScaleLayers = value;
+            get => _datasource.FilterByVisibleScaleRange;
+            set => _datasource.FilterByVisibleScaleRange = value;
 #else
-            get { return (bool)GetValue(ShowOutOfScaleLayersProperty); }
-            set { SetValue(ShowOutOfScaleLayersProperty, value); }
+            get { return (bool)GetValue(FilterByVisibleScaleRangeProperty); }
+            set { SetValue(FilterByVisibleScaleRangeProperty, value); }
 #endif
         }
 
-        public bool ShowHiddenLayers
+        public bool FilterHiddenLayers
         {
 #if XAMARIN
-            get => _datasource.ShowHiddenLayers;
-            set => _datasource.ShowHiddenLayers = value;
+            get => _datasource.FilterHiddenLayers;
+            set => _datasource.FilterHiddenLayers = value;
 #else
-            get { return (bool)GetValue(ShowHiddenLayersProperty); }
-            set { SetValue(ShowHiddenLayersProperty, value); }
+            get { return (bool)GetValue(FilterHiddenLayersProperty); }
+            set { SetValue(FilterHiddenLayersProperty, value); }
 #endif
         }
     }
