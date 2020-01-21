@@ -92,15 +92,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                _listView.InsertRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+                for (int i = e.NewStartingIndex; i < e.NewItems.Count + e.NewStartingIndex; i++)
+                {
+                    _listView.InsertRows(new NSIndexPath[] { NSIndexPath.FromRowSection(i, 0) }, UITableViewRowAnimation.Automatic);
+                }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.OldStartingIndex, e.OldItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+                for (int i = e.OldStartingIndex; i < e.OldItems.Count + e.OldStartingIndex; i++)
+                {
+                    _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(e.OldStartingIndex, 0) }, UITableViewRowAnimation.Automatic);
+                }
             }
             else if (e.Action == NotifyCollectionChangedAction.Replace)
             {
-                _listView.ReloadRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+                _listView.ReloadRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.Automatic);
             }
             else if (e.Action == NotifyCollectionChangedAction.Move)
             {

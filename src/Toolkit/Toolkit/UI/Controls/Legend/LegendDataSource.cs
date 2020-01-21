@@ -120,7 +120,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _legendInfoTasks.Clear();
             _items = new List<object>();
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             IEnumerable<Layer> layers = null;
             if (_geoview is MapView mv)
             {
@@ -128,6 +127,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     try
                     {
+                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                         await mv.Map.LoadAsync(); // TODO: Don't force-load
                         layers = mv.Map.OperationalLayers;
                     }
@@ -140,6 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     try
                     {
+                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                         await sv.Scene.LoadAsync(); // TODO: Don't force-load
                         layers = sv.Scene.OperationalLayers;
                     }
