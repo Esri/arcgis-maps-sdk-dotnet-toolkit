@@ -144,7 +144,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _textView.SetTypeface(null, TypefaceStyle.Bold);
                         _symbol.Visibility = ViewStates.Gone;
                         _symbol.Symbol = null;
-
                     }
                     else if (layeritem is ILayerContent layerContent)
                     {

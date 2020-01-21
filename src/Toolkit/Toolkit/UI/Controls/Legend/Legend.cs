@@ -36,11 +36,18 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
+    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
+    /// </summary>
     public partial class Legend
     {
         private readonly LegendDataSource _datasource = new LegendDataSource(null);
 
 #if !__ANDROID__
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Legend"/> class.
+        /// </summary>
         public Legend()
         {
             Initialize();
@@ -51,16 +58,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeoView _geoView;
 #endif
 
+        /// <summary>
+        /// Gets or sets the geoview that contain the layers whose symbology and description will be displayed.
+        /// </summary>
+        /// <seealso cref="MapView"/>
+        /// <seealso cref="SceneView"/>
         public GeoView GeoView
         {
 #if XAMARIN
-            get { return _geoView; }
+            get => _geoView;
             set
-            { 
-                if(_geoView != value) 
+            {
+                if (_geoView != value)
                 {
                     var oldView = _geoView;
-                    _geoView = value; 
+                    _geoView = value;
                     _datasource.SetGeoView(value);
                 }
             }
@@ -70,6 +82,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
+        /// are used to determine when legend for layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
+        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
+        /// </remarks>
         public bool FilterByVisibleScaleRange
         {
 #if XAMARIN
@@ -81,6 +101,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the visibility of a <see cref="Layer"/>
+        /// is used to determine when the legend for the layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layer is displayed only when the layer's <see cref="Layer.IsVisible"/> property is true.
+        /// </remarks>
         public bool FilterHiddenLayers
         {
 #if XAMARIN

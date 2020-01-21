@@ -37,8 +37,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if NETFX_CORE
+        /// <inheritdoc />
         protected override void OnApplyTemplate()
 #else
+        /// <inheritdoc />
         public override void OnApplyTemplate()
 #endif
         {

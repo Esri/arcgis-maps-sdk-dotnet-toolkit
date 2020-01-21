@@ -39,7 +39,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
-
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
 #endif
@@ -49,7 +48,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private List<object> _items = new List<object>();
         private GeoView _geoview;
-        private CancellationTokenSource _cancellationTokenSource;
         private bool _filterByVisibleScaleRange = true;
         private bool _filterHiddenLayers = true;
 
@@ -64,7 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool FilterByVisibleScaleRange
         {
             get => _filterByVisibleScaleRange;
-            set 
+            set
             {
                 if (_filterByVisibleScaleRange != value)
                 {
@@ -131,7 +129,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         await mv.Map.LoadAsync(); // TODO: Don't force-load
                         layers = mv.Map.OperationalLayers;
                     }
-                    catch { }
+                    catch
+                    {
+                    }
                 }
             }
             else if (_geoview is SceneView sv)
@@ -144,7 +144,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         await sv.Scene.LoadAsync(); // TODO: Don't force-load
                         layers = sv.Scene.OperationalLayers;
                     }
-                    catch { }
+                    catch
+                    {
+                    }
                 }
             }
 
@@ -230,7 +232,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void RebuildCollection()
         {
-            //await Task.Delay(500); // Delay rebuilding a bit so we don't do it too often.
             lock (_dirtyLock)
             {
                 _isCollectionDirty = false;
@@ -248,10 +249,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                 return;
             }
+
             int i = 0;
             for (; i < newItems.Count || i < _items.Count; i++)
             {
-
                 var changedObjects = new List<object>();
                 var newItem = i < newItems.Count ? newItems[i] : null;
                 var oldItem = i < _items.Count ? _items[i] : null;
