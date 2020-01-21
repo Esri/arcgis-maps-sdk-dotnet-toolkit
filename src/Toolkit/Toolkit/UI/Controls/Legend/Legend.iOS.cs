@@ -15,13 +15,13 @@
 //  *
 
 #if __IOS__
-using Esri.ArcGISRuntime.Mapping;
-using Foundation;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Text;
+using System.Linq;
+using Esri.ArcGISRuntime.Mapping;
+using Foundation;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -31,6 +31,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Legend")]
     public partial class Legend : UIKit.UIView
     {
+        private UITableView _listView;
+
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
         /// <summary>
         /// Internal use only.  Invoked by the Xamarin iOS designer.
@@ -54,8 +56,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
-        private UITableView _listView;
-
         private void Initialize()
         {
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
@@ -71,6 +71,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 EstimatedRowHeight = 100,
             };
             _listView.RegisterClassForCellReuse(typeof(LegendTableViewCell), LegendTableSource.CellId);
+            var source = new LegendTableSource(_datasource);
+            _listView.Source = source;
+            source.CollectionChanged += Source_CollectionChanged;
             AddSubview(_listView);
 
             _listView.LeadingAnchor.ConstraintEqualTo(LeadingAnchor).Active = true;
@@ -81,14 +84,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidateIntrinsicContentSize();
         }
 
+        private void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                _listView.ReloadData();
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                _listView.InsertRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.OldStartingIndex, e.OldItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Replace)
+            {
+                _listView.ReloadRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.OldStartingIndex, e.OldItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+                _listView.InsertRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+            }
+        }
+
         private class LegendTableSource : UITableViewSource, INotifyCollectionChanged
         {
-            private readonly IReadOnlyList<object> _legends;
+            private readonly IList<object> _legends;
             internal static readonly NSString CellId = new NSString(nameof(LegendTableViewCell));
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-            public LegendTableSource(IReadOnlyList<object> legends)
+            public LegendTableSource(IList<object> legends)
                 : base()
             {
                 _legends = legends;
@@ -146,8 +174,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 };
                 _symbol = new SymbolDisplay()
                 {
+                    TranslatesAutoresizingMaskIntoConstraints = false
                 };
-                ContentView.AddSubviews(_textLabel /*, _symbol*/);
+
+                ContentView.AddSubviews(_symbol, _textLabel);
+                _symbol.LeadingAnchor.ConstraintEqualTo(ContentView.LeadingAnchor, 10).Active = true;
+                _symbol.CenterYAnchor.ConstraintEqualTo(ContentView.CenterYAnchor).Active = true;
+                _textLabel.LeadingAnchor.ConstraintEqualTo(_symbol.TrailingAnchor).Active = true;
+                _textLabel.CenterYAnchor.ConstraintEqualTo(ContentView.CenterYAnchor).Active = true;
             }
 
             internal void Update(object layeritem)
@@ -155,26 +189,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (layeritem is Layer layer)
                 {
                     _textLabel.Text = layer.Name;
-                    // _textLabel.SetTextSize(ComplexUnitType.Dip, 20);
-                    // _textLabel.SetTypeface(null, TypefaceStyle.Bold);
-                    // _symbol.Visibility = ViewStates.Gone;
-                    // _symbol.Symbol = null;
+                    _textLabel.Font = UIFont.SystemFontOfSize(20);
+                    _symbol.Symbol = null;
                 }
                 else if (layeritem is ILayerContent layerContent)
                 {
                     _textLabel.Text = layerContent.Name;
-                    // _textLabel.SetTextSize(ComplexUnitType.Dip, 18);
-                    // _textLabel.SetTypeface(null, TypefaceStyle.Normal);
-                    // _symbol.Visibility = ViewStates.Gone;
-                    // _symbol.Symbol = null;
+                    _textLabel.Font = UIFont.SystemFontOfSize(18);
+                    _symbol.Symbol = null;
                 }
                 else if (layeritem is LegendInfo legendInfo)
                 {
                     _textLabel.Text = legendInfo.Name;
-                    // _textLabel.SetTextSize(ComplexUnitType.Dip, 18);
-                    // _textLabel.SetTypeface(null, TypefaceStyle.Normal);
-                    // _symbol.Visibility = ViewStates.Visible;
-                    // _symbol.Symbol = legendInfo.Symbol;
+                    _textLabel.Font = UIFont.SystemFontOfSize(12);
+                    _symbol.Symbol = legendInfo.Symbol;
                 }
             }
         }
