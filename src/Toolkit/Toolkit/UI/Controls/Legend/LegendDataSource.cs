@@ -114,43 +114,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateItemsSource();
         }
 
-        private async void UpdateItemsSource()
+        private void UpdateItemsSource()
         {
             _legendInfoTasks.Clear();
-            _items = new List<object>();
             IEnumerable<Layer> layers = null;
             if (_geoview is MapView mv)
             {
-                if (mv.Map != null && mv.Map.LoadStatus != LoadStatus.Loaded)
+                if (mv.Map != null && mv.Map.OperationalLayers == null)
                 {
-                    try
-                    {
-                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                        await mv.Map.LoadAsync(); // TODO: Don't force-load
-                        layers = mv.Map.OperationalLayers;
-                    }
-                    catch
-                    {
-                    }
+                    mv.Map.Loaded += (s, e) => RunOnUIThread(UpdateItemsSource); // TODO: Make weak
+                }
+                else
+                {
+                    layers = mv.Map?.OperationalLayers;
                 }
             }
             else if (_geoview is SceneView sv)
             {
-                if (sv.Scene != null && sv.Scene.LoadStatus != LoadStatus.Loaded)
+                if (sv.Scene != null && sv.Scene.OperationalLayers == null)
                 {
-                    try
-                    {
-                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                        await sv.Scene.LoadAsync(); // TODO: Don't force-load
-                        layers = sv.Scene.OperationalLayers;
-                    }
-                    catch
-                    {
-                    }
+                    sv.Scene.Loaded += (s, e) => RunOnUIThread(UpdateItemsSource); // TODO: Make weak
+                }
+                else
+                {
+                    layers = sv.Scene?.OperationalLayers;
                 }
             }
 
-            _items = new List<object>();
             if (layers is INotifyCollectionChanged incc)
             {
                 incc.CollectionChanged += Layers_CollectionChanged; // TODO: Make weak
@@ -158,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             TrackLayers(layers);
 
-            _items = BuildLegendList(layers) ?? new List<object>();
+            _items = BuildLegendList(layers?.Reverse()) ?? new List<object>();
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -217,16 +207,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isCollectionDirty = true;
             }
 
+            RunOnUIThread(RebuildCollection);
+        }
+
+        private void RunOnUIThread(Action action)
+        {
 #if XAMARIN_FORMS
-            global::Xamarin.Forms.Device.BeginInvokeOnMainThread(RebuildCollection);
+            global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
 #elif __IOS__
-            _geoview.InvokeOnMainThread(RebuildCollection);
+            _geoview.InvokeOnMainThread(action);
 #elif __ANDROID__
-            _geoview.PostDelayed(RebuildCollection, 500);
+            _geoview.PostDelayed(action, 500);
 #elif NETFX_CORE
-            _ = _geoview.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, RebuildCollection);
+            _ = _geoview.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #else
-            _geoview.Dispatcher.Invoke(RebuildCollection);
+            _geoview.Dispatcher.Invoke(action);
 #endif
         }
 
@@ -237,7 +232,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isCollectionDirty = false;
             }
 
-            var newItems = BuildLegendList(_currentLayers) ?? new List<object>();
+            var newItems = BuildLegendList(_currentLayers?.Reverse()) ?? new List<object>();
             if (newItems.Count == 0 && _items.Count == 0)
             {
                 return;
