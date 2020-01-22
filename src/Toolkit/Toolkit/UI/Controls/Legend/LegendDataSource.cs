@@ -344,7 +344,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             List<object> data = new List<object>();
             foreach (var layer in layers)
             {
-                if (!layer.ShowInLegend || !layer.IsVisible)
+                if (!layer.ShowInLegend || (!layer.IsVisible && _filterHiddenLayers))
                 {
                     continue;
                 }
