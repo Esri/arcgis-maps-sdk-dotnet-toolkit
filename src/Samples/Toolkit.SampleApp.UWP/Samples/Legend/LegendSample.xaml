@@ -20,7 +20,10 @@
             <esriToolkit:Legend Grid.Row="0"
                                 x:Name="legend"
                                 GeoView="{x:Bind mapView}"/>
-         
+            <CheckBox Content="Filter By Visible Scale Range"	
+                      IsChecked="{x:Bind legend.FilterByVisibleScaleRange, Mode=TwoWay}"	
+                      Grid.Row="1" />
+
         </Grid>
         <esri:MapView Map="{x:Bind Map}"
                       x:Name="mapView"
