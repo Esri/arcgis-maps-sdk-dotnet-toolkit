@@ -464,7 +464,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (layerContent is ILayerContent ilc)
                 {
-                    if (!ilc.IsVisible && _filterHiddenLayers)
+                    if (!ilc.IsVisible && _filterHiddenLayers && !(layerContent is WmsSublayer))
                     {
                         continue;
                     }
