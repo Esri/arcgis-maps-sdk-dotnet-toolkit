@@ -351,8 +351,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 data.Add(layer);
-                if (layer is ILoadable loadable && loadable.LoadStatus == LoadStatus.Loaded)
+                if (!(layer is Layer) || ((Layer)layer).LoadStatus == LoadStatus.Loaded)
                 {
+                    // Generate the legend infos
+                    // For layers, we'll wait with entering here, until the GeoView decides to load them before generating the legend
                     if (!_legendInfoTasks.ContainsKey(layer))
                     {
                         var task = LoadLegend(layer);

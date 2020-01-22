@@ -1,4 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Security;
@@ -28,11 +29,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 
             mapView = new MapView()
             {
-                Map = new Map(new Uri("https://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213")),
-                TranslatesAutoresizingMaskIntoConstraints = false
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                Map = CreateMap()
             };
-            mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
-            mapView.Map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer")));
             this.View.AddSubview(mapView);
 
             legend = new Legend()
@@ -53,6 +52,17 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             legend.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
             legend.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
             legend.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
+        }
+
+        private Map CreateMap()
+        {
+            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            {
+                InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
+            };
+            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer")));
+            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0")));
+            return map;
         }
     }
 }
