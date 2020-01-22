@@ -187,25 +187,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _textLabel.CenterYAnchor.ConstraintEqualTo(ContentView.CenterYAnchor).Active = true;
             }
 
-            internal void Update(object layeritem)
+            internal void Update(object item)
             {
-                if (layeritem is Layer layer)
+                if (item is LegendEntry entry)
                 {
-                    _textLabel.Text = layer.Name;
-                    _textLabel.Font = UIFont.SystemFontOfSize(18);
-                    _symbol.Symbol = null;
-                }
-                else if (layeritem is ILayerContent layerContent)
-                {
-                    _textLabel.Text = layerContent.Name;
-                    _textLabel.Font = UIFont.SystemFontOfSize(14);
-                    _symbol.Symbol = null;
-                }
-                else if (layeritem is LegendInfo legendInfo)
-                {
-                    _textLabel.Text = legendInfo.Name;
-                    _textLabel.Font = UIFont.SystemFontOfSize(12);
-                    _symbol.Symbol = legendInfo.Symbol;
+                    if (entry.Content is Layer layer)
+                    {
+                        _textLabel.Text = layer.Name;
+                        _textLabel.Font = UIFont.SystemFontOfSize(18);
+                        _symbol.Symbol = null;
+                    }
+                    else if (entry.Content is ILayerContent layerContent)
+                    {
+                        _textLabel.Text = layerContent.Name;
+                        _textLabel.Font = UIFont.SystemFontOfSize(14);
+                        _symbol.Symbol = null;
+                    }
+                    else if (entry.Content is LegendInfo legendInfo)
+                    {
+                        _textLabel.Text = legendInfo.Name;
+                        _textLabel.Font = UIFont.SystemFontOfSize(12);
+                        _symbol.Symbol = legendInfo.Symbol;
+                    }
                 }
             }
         }

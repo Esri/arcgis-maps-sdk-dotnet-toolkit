@@ -8,14 +8,14 @@
     <Setter Property="LayerItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <TextBlock Text="{Binding Name}" FontSize="18" />
+          <TextBlock Text="{Binding Content.Name}" FontSize="18" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
     <Setter Property="SublayerItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <TextBlock Text="{Binding Name}" FontSize="14" />
+          <TextBlock Text="{Binding Content.Name}" FontSize="14" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -23,8 +23,8 @@
       <Setter.Value>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
-            <controls:SymbolDisplay Symbol="{Binding Symbol}" MaxHeight="40" Width="40" Margin="0,0,5,0" />
-            <TextBlock Text="{Binding Name}" FontSize="12" />
+            <controls:SymbolDisplay Symbol="{Binding Content.Symbol}" MaxHeight="40" Width="40" Margin="0,0,5,0" />
+            <TextBlock Text="{Binding Content.Name}" FontSize="12" />
           </StackPanel>
         </DataTemplate>
       </Setter.Value>

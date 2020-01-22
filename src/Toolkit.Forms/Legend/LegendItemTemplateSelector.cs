@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -33,19 +34,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (item is Layer && LayerTemplate != null)
+            if (item is LegendEntry entry)
             {
-                return LayerTemplate;
-            }
+                if (entry.Content is Layer && LayerTemplate != null)
+                {
+                    return LayerTemplate;
+                }
 
-            if (item is ILayerContent)
-            {
-                return SublayerTemplate;
-            }
+                if (entry.Content is ILayerContent)
+                {
+                    return SublayerTemplate;
+                }
 
-            if (item is LegendInfo)
-            {
-                return LegendInfoTemplate;
+                if (entry.Content is LegendInfo)
+                {
+                    return LegendInfoTemplate;
+                }
             }
 
             return null;

@@ -24,6 +24,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.UI;
 #if XAMARIN_FORMS
 using Esri.ArcGISRuntime.Xamarin.Forms;
 #else
@@ -42,11 +43,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
 #endif
-    internal class LegendDataSource : IList<object>, INotifyCollectionChanged, INotifyPropertyChanged, IList
+    internal class LegendDataSource : IList<LegendEntry>, INotifyCollectionChanged, INotifyPropertyChanged, IList
     {
         private readonly ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>> _legendInfoTasks = new ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>>();
 
-        private List<object> _items = new List<object>();
+        private List<LegendEntry> _items = new List<LegendEntry>();
         private GeoView _geoview;
         private bool _filterByVisibleScaleRange = true;
         private bool _filterHiddenLayers = true;
@@ -117,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#if NETFX_CORE
+#if NETFX_CORE && !XAMARIN_FORMS
         private long _propertyChangedCallbackToken = 0;
 #endif
 
@@ -244,7 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             TrackLayers(layers);
 
-            _items = BuildLegendList(layers, _reverseLayerOrder) ?? new List<object>();
+            _items = BuildLegendList(layers, _reverseLayerOrder) ?? new List<LegendEntry>();
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -346,7 +347,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isCollectionDirty = false;
             }
 
-            var newItems = BuildLegendList(_currentLayers, _reverseLayerOrder) ?? new List<object>();
+            var newItems = BuildLegendList(_currentLayers, _reverseLayerOrder) ?? new List<LegendEntry>();
             if (newItems.Count == 0 && _items.Count == 0)
             {
                 return;
@@ -362,10 +363,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             int i = 0;
             for (; i < newItems.Count || i < _items.Count; i++)
             {
-                var changedObjects = new List<object>();
                 var newItem = i < newItems.Count ? newItems[i] : null;
                 var oldItem = i < _items.Count ? _items[i] : null;
-                if (newItem == oldItem)
+                if (newItem?.Content == oldItem?.Content)
                 {
                     continue;
                 }
@@ -398,10 +398,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             System.Diagnostics.Debug.Assert(newItems.Count == _items.Count, "Legend entry count doesn't match");
             for (i = 0; i < newItems.Count; i++)
             {
-                System.Diagnostics.Debug.Assert(newItems[i] == _items[i], $"Legend entry {i} doesn't match");
+                System.Diagnostics.Debug.Assert(newItems[i].Content == _items[i].Content, $"Legend entry {i} doesn't match");
             }
 #endif
-            _items = newItems;
         }
 
         private void GeoView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e) => MarkCollectionDirty();
@@ -424,7 +423,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private double _currentScale = double.NaN;
 
-        private List<object> BuildLegendList(IEnumerable<ILayerContent> layers, bool reverse)
+        private List<LegendEntry> BuildLegendList(IEnumerable<ILayerContent> layers, bool reverse)
         {
             if (layers == null)
             {
@@ -442,9 +441,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return BuildLegendListLocked(layers, reverse);
         }
 
-        private List<object> BuildLegendListLocked(IEnumerable<ILayerContent> layers, bool reverse)
+        private List<LegendEntry> BuildLegendListLocked(IEnumerable<ILayerContent> layers, bool reverse)
         {
-            List<object> data = new List<object>();
+            List<LegendEntry> data = new List<LegendEntry>();
             foreach (var layerContent in reverse ? layers.Reverse() : layers)
             {
                 if (!layerContent.ShowInLegend || (!layerContent.IsVisible && _filterHiddenLayers))
@@ -499,26 +498,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     if (!_filterEmptyLayers || legendInfos?.Count > 0)
                     {
-                        data.Add(layerContent);
+                        data.Add(new LegendEntry(layerContent));
                     }
                 }
 
                 if (legendInfos != null)
                 {
-                    data.AddRange(legendInfos);
+                    data.AddRange(legendInfos.Select(s => new LegendEntry(s)));
                 }
 
                 if (layerContent.SublayerContents != null)
                 {
                     var sublayers = layerContent.SublayerContents;
-                    // This might seem counter-intuitive, but sublayers are already top-to-bottom, as opposed to the layer collection...
-                    bool reverseSublayers = !_reverseLayerOrder;
-                    // ...however two layer types are not:
-                    if ((layerContent is ArcGISMapImageLayer) || (layerContent is GroupLayer))
-                    {
-                        reverseSublayers = !reverseSublayers;
-                    }
 
+                    // This might seem counter-intuitive, but sublayers are already top-to-bottom, as opposed to the layer collection...
+                    bool reverseSublayers = (layerContent is GroupLayer) ? _reverseLayerOrder : !_reverseLayerOrder;
                     data.AddRange(BuildLegendList(layerContent.SublayerContents, reverseSublayers));
                 }
             }
@@ -549,37 +543,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public object SyncRoot => (_items as ICollection)?.SyncRoot;
 
-        public object this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
+        public LegendEntry this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
 
-        public void Insert(int index, object item) => throw new NotSupportedException();
+        public void Insert(int index, LegendEntry item) => throw new NotSupportedException();
 
         public void RemoveAt(int index) => throw new NotSupportedException();
 
-        public void Add(object item) => throw new NotSupportedException();
+        public void Add(LegendEntry item) => throw new NotSupportedException();
 
         public void Clear() => throw new NotSupportedException();
 
-        public bool Contains(object item) => _items.Contains(item);
+        public bool Contains(LegendEntry item) => _items.Contains(item);
 
-        public void CopyTo(object[] array, int arrayIndex) => _items.CopyTo(array, arrayIndex);
+        public void CopyTo(LegendEntry[] array, int arrayIndex) => _items.CopyTo(array, arrayIndex);
 
-        public bool Remove(object item) => throw new NotSupportedException();
+        public bool Remove(LegendEntry item) => throw new NotSupportedException();
 
-        public IEnumerator<object> GetEnumerator() => _items.GetEnumerator();
+        public IEnumerator<LegendEntry> GetEnumerator() => _items.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
-        public int IndexOf(object item) => _items.IndexOf(item);
+        public int IndexOf(LegendEntry item) => _items.IndexOf(item);
 
-#endregion
+        #endregion
 
 #region List
+
+        object IList.this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
 
         int IList.Add(object value) => throw new NotSupportedException();
 
         void IList.Remove(object value) => throw new NotSupportedException();
 
         void ICollection.CopyTo(Array array, int index) => ((ICollection)_items).CopyTo(array, index);
+
+        bool IList.Contains(object value) => ((IList)_items).Contains(value);
+
+        int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
+
+        void IList.Insert(int index, object value) => throw new NotSupportedException();
 
 #endregion
 

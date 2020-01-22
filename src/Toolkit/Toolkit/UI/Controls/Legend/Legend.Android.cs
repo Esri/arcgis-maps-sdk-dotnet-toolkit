@@ -63,10 +63,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal class LegendAdapter : BaseAdapter<object>
         {
-            private readonly IList<object> _layers;
+            private readonly IList<LegendEntry> _layers;
             private readonly Context _context;
 
-            internal LegendAdapter(Context context, IList<object> layers)
+            internal LegendAdapter(Context context, IList<LegendEntry> layers)
             {
                 _context = context;
                 _layers = layers;
@@ -136,31 +136,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     RequestLayout();
                 }
 
-                internal void Update(object layeritem)
+                internal void Update(object item)
                 {
-                    if (layeritem is Layer layer)
+                    if (item is LegendEntry entry)
                     {
-                        _textView.Text = layer.Name;
-                        _textView.SetTextSize(ComplexUnitType.Dip, 18);
-                        _textView.SetPadding(0, 0, 0, 0);
-                        _symbol.Visibility = ViewStates.Gone;
-                        _symbol.Symbol = null;
-                    }
-                    else if (layeritem is ILayerContent layerContent)
-                    {
-                        _textView.Text = layerContent.Name;
-                        _textView.SetTextSize(ComplexUnitType.Dip, 14);
-                        _textView.SetPadding(0, 0, 0, 0);
-                        _symbol.Visibility = ViewStates.Gone;
-                        _symbol.Symbol = null;
-                    }
-                    else if (layeritem is LegendInfo legendInfo)
-                    {
-                        _textView.Text = legendInfo.Name;
-                        _textView.SetTextSize(ComplexUnitType.Dip, 12);
-                        _textView.SetPadding(5, 0, 0, 0);
-                        _symbol.Visibility = ViewStates.Visible;
-                        _symbol.Symbol = legendInfo.Symbol;
+                        if (entry.Content is Layer layer)
+                        {
+                            _textView.Text = layer.Name;
+                            _textView.SetTextSize(ComplexUnitType.Dip, 18);
+                            _textView.SetPadding(0, 0, 0, 0);
+                            _symbol.Visibility = ViewStates.Gone;
+                            _symbol.Symbol = null;
+                        }
+                        else if (entry.Content is ILayerContent layerContent)
+                        {
+                            _textView.Text = layerContent.Name;
+                            _textView.SetTextSize(ComplexUnitType.Dip, 14);
+                            _textView.SetPadding(0, 0, 0, 0);
+                            _symbol.Visibility = ViewStates.Gone;
+                            _symbol.Symbol = null;
+                        }
+                        else if (entry.Content is LegendInfo legendInfo)
+                        {
+                            _textView.Text = legendInfo.Name;
+                            _textView.SetTextSize(ComplexUnitType.Dip, 12);
+                            _textView.SetPadding(5, 0, 0, 0);
+                            _symbol.Visibility = ViewStates.Visible;
+                            _symbol.Symbol = legendInfo.Symbol;
+                        }
                     }
                 }
             }

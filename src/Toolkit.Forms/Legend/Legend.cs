@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -36,14 +37,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             s_DefaultLayerItemTemplate = new DataTemplate(() =>
             {
                 var nameLabel = new Label { FontSize = 18, VerticalOptions = LayoutOptions.Center };
-                nameLabel.SetBinding(Label.TextProperty, nameof(Layer.Name));
+                nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(Layer.Name)}");
                 return new ViewCell() { View = nameLabel };
             });
 
             s_DefaultSublayerItemTemplate = new DataTemplate(() =>
             {
                 var nameLabel = new Label { FontSize = 14, VerticalOptions = LayoutOptions.Center };
-                nameLabel.SetBinding(Label.TextProperty, nameof(ILayerContent.Name));
+                nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(ILayerContent.Name)}");
                 return new ViewCell() { View = nameLabel };
             });
 
@@ -51,10 +52,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 StackLayout sl = new StackLayout() { Orientation = StackOrientation.Horizontal };
                 var symbol = new SymbolDisplay { WidthRequest = 40, HeightRequest = 40, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 5, 0) };
-                symbol.SetBinding(SymbolDisplay.SymbolProperty, nameof(LegendInfo.Symbol));
+                symbol.SetBinding(SymbolDisplay.SymbolProperty, $"{nameof(LegendEntry.Content)}.{nameof(LegendInfo.Symbol)}");
                 sl.Children.Add(symbol);
                 var nameLabel = new Label { FontSize = 12, VerticalOptions = LayoutOptions.Center };
-                nameLabel.SetBinding(Label.TextProperty, nameof(LegendInfo.Name));
+                nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(LegendInfo.Name)}");
                 sl.Children.Add(nameLabel);
                 return new ViewCell() { View = sl };
             });
@@ -84,6 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             ControlTemplate = s_DefaultControlTemplate;
         }
 
+        /// <inheritdoc />
         protected override void OnApplyTemplate()
         {
             var list = GetTemplateChild("ListView") as ItemsView<Cell>;

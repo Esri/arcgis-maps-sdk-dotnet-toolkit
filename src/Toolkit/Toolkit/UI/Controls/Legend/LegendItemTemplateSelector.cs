@@ -44,19 +44,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
 #endif
         {
-            if (item is Layer)
+            if (item is LegendEntry entry)
             {
-                return LayerTemplate;
-            }
+                if (entry.Content is Layer)
+                {
+                    return LayerTemplate;
+                }
 
-            if (item is ILayerContent)
-            {
-                return SublayerTemplate;
-            }
+                if (entry.Content is ILayerContent)
+                {
+                    return SublayerTemplate;
+                }
 
-            if (item is LegendInfo)
-            {
-                return LegendInfoTemplate;
+                if (entry.Content is LegendInfo)
+                {
+                    return LegendInfoTemplate;
+                }
             }
 
 #if NETFX_CORE
