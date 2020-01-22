@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\Legend\LegendDataSource.cs" Link="Legend\LegendDataSource.cs" />
+    <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
   </ItemGroup>
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->

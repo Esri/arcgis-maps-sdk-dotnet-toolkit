@@ -114,6 +114,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateItemsSource();
         }
 
+        private void RefreshOnLoad(ILoadable loadable)
+        {
+            var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(loadable)
+            {
+                OnEventAction = (instance, source, eventArgs) => RunOnUIThread(UpdateItemsSource),
+                OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent
+            };
+            loadable.Loaded += listener.OnEvent;
+        }
+
         private void UpdateItemsSource()
         {
             _legendInfoTasks.Clear();
@@ -122,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (mv.Map != null && mv.Map.OperationalLayers == null)
                 {
-                    mv.Map.Loaded += (s, e) => RunOnUIThread(UpdateItemsSource); // TODO: Make weak
+                    RefreshOnLoad(mv.Map);
                 }
                 else
                 {
@@ -133,7 +143,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (sv.Scene != null && sv.Scene.OperationalLayers == null)
                 {
-                    sv.Scene.Loaded += (s, e) => RunOnUIThread(UpdateItemsSource); // TODO: Make weak
+                    RefreshOnLoad(sv.Scene);
                 }
                 else
                 {
@@ -143,7 +153,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (layers is INotifyCollectionChanged incc)
             {
-                incc.CollectionChanged += Layers_CollectionChanged; // TODO: Make weak
+                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                {
+                    OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
+                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                };
+                incc.CollectionChanged += listener.OnEvent;
             }
 
             TrackLayers(layers);
@@ -328,12 +343,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (layer is Layer l)
                 {
                     var state = _geoview.GetLayerViewState(l);
-                    if (state.Status == LayerViewStatus.NotVisible && _filterHiddenLayers)
-                    {
-                        continue;
-                    }
-
-                    if (state.Status == LayerViewStatus.OutOfScale && _filterByVisibleScaleRange)
+                    if (state != null &&
+                        ((state.Status == LayerViewStatus.NotVisible && _filterHiddenLayers) ||
+                        (state.Status == LayerViewStatus.OutOfScale && _filterByVisibleScaleRange)))
                     {
                         continue;
                     }

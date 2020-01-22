@@ -17,7 +17,11 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
+#if XAMARIN_FORMS
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
+#else
 namespace Esri.ArcGISRuntime.Toolkit.Internal
+#endif
 {
     /// <summary>
     /// Implements a weak event listener that allows the owner to be garbage
