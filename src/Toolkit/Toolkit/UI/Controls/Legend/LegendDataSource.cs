@@ -85,6 +85,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+#if NETFX_CORE
+        private long _propertyChangedCallbackToken = 0;
+#endif
+
         public void SetGeoView(GeoView geoview)
         {
             if (geoview == _geoview)
@@ -94,17 +98,52 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_geoview != null)
             {
-                (_geoview as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
                 _geoview.LayerViewStateChanged -= GeoView_LayerViewStateChanged;
+                (_geoview as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
+#if !XAMARIN && !XAMARIN_FORMS
+                if (_geoview is MapView mapview)
+                {
+#if NETFX_CORE
+                    mapview.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
+#else
+                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(mapview, GeoViewDocumentChanged);
+#endif
+                }
+                else if (_geoview is SceneView sceneview)
+                {
+#if NETFX_CORE
+                    sceneview.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
+#else
+                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, GeoViewDocumentChanged);
+#endif
+                }
+#endif
             }
 
             _geoview = geoview;
             _currentScale = double.NaN;
             if (_geoview != null)
             {
-                (_geoview as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
                 _geoview.LayerViewStateChanged += GeoView_LayerViewStateChanged;
-
+                (_geoview as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
+#if !XAMARIN && !XAMARIN_FORMS
+                if (_geoview is MapView mapview)
+                {
+#if NETFX_CORE
+                    _propertyChangedCallbackToken = mapview.RegisterPropertyChangedCallback(MapView.MapProperty, GeoViewDocumentChanged);
+#else
+                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(mapview, GeoViewDocumentChanged);
+#endif
+                }
+                else if (_geoview is SceneView sceneview)
+                {
+#if NETFX_CORE
+                    _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, GeoViewDocumentChanged);
+#else
+                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(MapView)).AddValueChanged(sceneview, GeoViewDocumentChanged);
+#endif
+                }
+#endif
                 if (_geoview is MapView mv)
                 {
                     _currentScale = mv.MapScale;
@@ -113,6 +152,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             UpdateItemsSource();
         }
+
+#if !XAMARIN && !XAMARIN_FORMS
+        private void GeoViewDocumentChanged(object sender, object e)
+        {
+            UpdateItemsSource();
+        }
+#endif
 
         private void RefreshOnLoad(ILoadable loadable)
         {
@@ -128,6 +174,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _legendInfoTasks.Clear();
             IEnumerable<Layer> layers = null;
+            _currentScale = double.NaN;
             if (_geoview is MapView mv)
             {
                 if (mv.Map != null && mv.Map.OperationalLayers == null)
@@ -138,6 +185,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     layers = mv.Map?.OperationalLayers;
                 }
+
+                _currentScale = mv.MapScale;
             }
             else if (_geoview is SceneView sv)
             {
@@ -318,13 +367,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+#if XAMARIN || XAMARIN_FORMS
             if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
                 (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
             {
-                _currentScale = double.NaN;
                 UpdateItemsSource();
             }
-
+#endif
             if (e.PropertyName == nameof(MapView.MapScale) && sender is MapView mv)
             {
                 _currentScale = mv.MapScale;
