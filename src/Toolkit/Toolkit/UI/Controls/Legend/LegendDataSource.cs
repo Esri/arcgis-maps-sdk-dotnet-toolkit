@@ -237,7 +237,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
 
-            // TODO: Remove _legendInfoTasks no longer being tracked
+            // TODO: Remove entries in _legendInfoTasks that are no longer needed
+            // This does happen when the items source gets replaced, but we could be a bit more aggressive
         }
 
         private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
