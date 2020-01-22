@@ -114,6 +114,55 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
+        /// Identifies the <see cref="FilterByVisibleScaleRange"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty FilterByVisibleScaleRangeProperty =
+            BindableProperty.Create(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), true, BindingMode.OneWay, propertyChanged: OnFilterByVisibleScaleRangePropertyChanged);
+
+        private static void OnFilterByVisibleScaleRangePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            ((Legend)bindable)._datasource.FilterByVisibleScaleRange = (bool)newValue;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
+        /// are used to determine when legend for layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
+        /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
+        /// </remarks>
+        public bool FilterByVisibleScaleRange
+        {
+            get { return (bool)GetValue(FilterByVisibleScaleRangeProperty); }
+            set { SetValue(FilterByVisibleScaleRangeProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="FilterHiddenLayers"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty FilterHiddenLayersProperty =
+            BindableProperty.Create(nameof(FilterHiddenLayers), typeof(bool), typeof(Legend), true, BindingMode.OneWay, propertyChanged: OnFilterHiddenLayersPropertyChanged);
+
+        private static void OnFilterHiddenLayersPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            ((Legend)bindable)._datasource.FilterHiddenLayers = (bool)newValue;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the visibility of a <see cref="Layer"/>
+        /// is used to determine when the legend for the layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layer is displayed only when the layer's <see cref="Layer.IsVisible"/> property is true.
+        /// </remarks>
+        public bool FilterHiddenLayers
+        {
+            get { return (bool)GetValue(FilterHiddenLayersProperty); }
+            set { SetValue(FilterHiddenLayersProperty, value); }
+        }
+
+        /// <summary>
         /// Identifies the <see cref="LayerItemTemplate"/> bindable property.
         /// </summary>
         public static readonly BindableProperty LayerItemTemplateProperty =
