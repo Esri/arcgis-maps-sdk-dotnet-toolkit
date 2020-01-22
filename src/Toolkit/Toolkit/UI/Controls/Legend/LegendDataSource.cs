@@ -67,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_filterByVisibleScaleRange != value)
                 {
                     _filterByVisibleScaleRange = value;
-                    MarkCollectionDirty();
+                    MarkCollectionDirty(false);
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_filterHiddenLayers != value)
                 {
                     _filterHiddenLayers = value;
-                    MarkCollectionDirty();
+                    MarkCollectionDirty(false);
                 }
             }
         }
@@ -194,10 +194,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var layer = sender as Layer;
-            if ((e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded) ||
-                (e.PropertyName == nameof(layer.IsVisible) && _filterHiddenLayers) || e.PropertyName == nameof(layer.ShowInLegend))
+            if (e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded)
             {
                 MarkCollectionDirty();
+            }
+            else if ((e.PropertyName == nameof(layer.IsVisible) && _filterHiddenLayers) || e.PropertyName == nameof(layer.ShowInLegend))
+            {
+                MarkCollectionDirty(false);
             }
         }
 
@@ -210,7 +213,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isCollectionDirty;
         private object _dirtyLock = new object();
 
-        private void MarkCollectionDirty()
+        private async void MarkCollectionDirty(bool delay = true)
         {
             lock (_dirtyLock)
             {
@@ -220,6 +223,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 _isCollectionDirty = true;
+            }
+
+            if (delay)
+            {
+                // Delay update in case of frequent events to reduce load
+                await Task.Delay(250).ConfigureAwait(false);
             }
 
             RunOnUIThread(RebuildCollection);
