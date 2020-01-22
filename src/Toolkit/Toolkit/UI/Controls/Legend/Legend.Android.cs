@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
     /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
     /// </summary>
-    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.egend")]
+    [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend")]
     public partial class Legend : Android.Widget.ListView
     {
         /// <summary>
@@ -58,6 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize()
         {
             Adapter = new LegendAdapter(Context, _datasource);
+            DividerHeight = 0;
         }
 
         internal class LegendAdapter : BaseAdapter<object>
@@ -121,15 +122,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     _textView = new TextView(context)
                     {
-                        LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
+                        LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.CenterVertical | GravityFlags.Left }
                     };
-
+                    var maxSize = (int)(Resources.DisplayMetrics.Density * 40);
                     _symbol = new SymbolDisplay(context)
                     {
-                        LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
+                        LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.Center, Width = maxSize }
                     };
-                    _symbol.SetMaxHeight(40);
-                    _symbol.SetMaxWidth(40);
+                    _symbol.SetMaxHeight(maxSize);
+                    _symbol.SetMaxWidth(maxSize);
                     AddView(_symbol);
                     AddView(_textView);
                     RequestLayout();
