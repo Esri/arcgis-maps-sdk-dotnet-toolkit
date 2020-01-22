@@ -69,10 +69,6 @@ You can use the Toolkit in your projects by:
         - Add the nuget package using the standard Nuget package manager dialog in Visual Studio.
         - See [Setting Up Local NuGet Feeds](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds) for more information.
 
-## Master branch NuGet Server
-If you want the latest greatest version of the toolkit, you can always get the latest NuGet packages that matches what is currently in the Master branch. These NuGet packages are automatically updated each time a pull request is merged into master. The NuGet server is available at: `https://ci.appveyor.com/nuget/arcgis-toolkit-dotnet`.
-For more information about configuring extra NuGet servers, see the [Package Manager UI](https://docs.microsoft.com/en-us/nuget/tools/package-manager-ui#package-sources) documentation.
-
 ## System Requirements
 
 * Requirements for development and deployment: 
@@ -93,12 +89,6 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 ## Contributing
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
-
-## v10.2.7
-
-Looking for the Toolkit for ArcGIS Runtime SDK for .NET v10.2.7?
-
-Go to the 10.2.7 tag: https://github.com/Esri/arcgis-toolkit-dotnet/tree/v10.2.7
 
 ## Licensing
 
