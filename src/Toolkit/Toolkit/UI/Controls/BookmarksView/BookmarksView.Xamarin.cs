@@ -90,6 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 ConfigureGeoDocEvents(sv);
             }
+
             Refresh();
         }
     }

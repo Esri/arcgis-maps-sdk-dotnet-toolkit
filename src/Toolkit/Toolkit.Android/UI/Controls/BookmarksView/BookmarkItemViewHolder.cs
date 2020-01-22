@@ -14,13 +14,16 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
-using System;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// Used to enable ViewHolder pattern used by RecyclerView.
+    /// </summary>
     internal class BookmarkItemViewHolder : RecyclerView.ViewHolder
     {
         public TextView BookmarkLabel { get; private set; }
@@ -33,7 +36,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 BookmarkLabel = bmView.BookmarkLabel;
             }
 
-            itemView.Click += (o,e) => listener(LayoutPosition);
+            var weakEventHandler = new Internal.WeakEventListener<View, object, EventArgs>(itemView)
+            {
+                OnEventAction = (instance, source, eventArgs) =>
+                {
+                    listener(LayoutPosition);
+                },
+                OnDetachAction = (instance, weakEventListener) => instance.Click -= weakEventListener.OnEvent
+            };
+
+            itemView.Click += weakEventHandler.OnEvent;
         }
     }
 }

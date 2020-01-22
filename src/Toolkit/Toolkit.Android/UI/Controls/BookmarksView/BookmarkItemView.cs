@@ -28,15 +28,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class BookmarkItemView : LinearLayout
     {
         // View that renders the bookmark's title.
-        internal readonly TextView BookmarkLabel;
+        public TextView BookmarkLabel { get; set; }
 
         internal BookmarkItemView(Context context)
             : base(context)
         {
             Orientation = Orientation.Horizontal;
-            LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
+            LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent);
             SetGravity(GravityFlags.CenterVertical | GravityFlags.FillHorizontal);
-            
+
             Clickable = true;
 
             BookmarkLabel = new TextView(context)
@@ -44,19 +44,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent)
             };
 
-            TypedValue listItemHeightValue = new TypedValue();
+            // Height
+            var listItemHeightValue = new TypedValue();
             context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemHeight, listItemHeightValue, true);
             SetMinimumHeight((int)listItemHeightValue.GetDimension(Resources.DisplayMetrics));
 
-            TypedValue listItemLeftMarginValue = new TypedValue();
+            // Left and right margin
+            var listItemLeftMarginValue = new TypedValue();
             context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingStart, listItemLeftMarginValue, true);
 
-            TypedValue listItemRightMarginValue = new TypedValue();
+            var listItemRightMarginValue = new TypedValue();
             context.Theme.ResolveAttribute(Android.Resource.Attribute.ListPreferredItemPaddingEnd, listItemRightMarginValue, true);
-
             SetPadding((int)listItemLeftMarginValue.GetDimension(Resources.DisplayMetrics), 0, (int)listItemRightMarginValue.GetDimension(Resources.DisplayMetrics), 0);
 
             BookmarkLabel.Gravity = GravityFlags.CenterVertical | GravityFlags.FillHorizontal;
+
+            // Selection animation on hover
+            var selectableBackground = new TypedValue();
+            context.Theme.ResolveAttribute(Android.Resource.Attribute.SelectableItemBackground, selectableBackground, true);
+            SetBackgroundResource(selectableBackground.ResourceId);
+
             AddView(BookmarkLabel);
         }
     }

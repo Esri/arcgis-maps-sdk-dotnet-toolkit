@@ -21,7 +21,6 @@ using System.Linq;
 using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Android.Widget;
 using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -52,23 +51,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             _bookmarks = bookmarks;
+            NotifyDataSetChanged();
+
             if (_bookmarks is INotifyCollectionChanged incc)
             {
                 var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                     {
-                        // TODO - be more specific about data changes; current approach causes crashes
-                        NotifyDataSetChanged();
+                        switch (eventArgs.Action)
+                        {
+                            case NotifyCollectionChangedAction.Add:
+                                NotifyItemInserted(eventArgs.NewStartingIndex);
+                                break;
+                            case NotifyCollectionChangedAction.Remove:
+                                NotifyItemRemoved(eventArgs.OldStartingIndex);
+                                break;
+                            case NotifyCollectionChangedAction.Reset:
+                                NotifyDataSetChanged();
+                                break;
+                            case NotifyCollectionChangedAction.Move:
+                                NotifyItemMoved(eventArgs.OldStartingIndex, eventArgs.NewStartingIndex);
+                                break;
+                            case NotifyCollectionChangedAction.Replace:
+                                NotifyItemChanged(eventArgs.OldStartingIndex);
+                                break;
+                        }
                     },
                     OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
                 };
 
                 incc.CollectionChanged += listener.OnEvent;
             }
-
-            // TODO - be more specific about data changes; current approach causes crashes
-            NotifyDataSetChanged();
         }
 
         public override int ItemCount => _bookmarks?.Count() ?? 0;
@@ -76,12 +90,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override long GetItemId(int position) => position;
 
-        // TODO - implement click events
         public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
 
         public void ClearList()
         {
             _bookmarks = null;
+            NotifyDataSetChanged();
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)

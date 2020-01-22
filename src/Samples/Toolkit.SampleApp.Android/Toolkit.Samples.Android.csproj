@@ -99,6 +99,9 @@
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android">
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat">
+      <Version>28.0.0.3</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\info.png" />

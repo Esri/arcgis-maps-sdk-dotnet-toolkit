@@ -14,16 +14,10 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __ANDROID__
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Util;
-using Android.Views;
-using Android.Widget;
-using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -59,10 +53,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _internalListView.SetLayoutManager(new LinearLayoutManager(Context));
             _adapter = new BookmarksAdapter(Context);
             _internalListView.SetAdapter(_adapter);
-
             AddView(_internalListView);
         }
 
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
         protected override void OnAttachedToWindow()
         {
             base.OnAttachedToWindow();
@@ -73,6 +69,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
         protected override void OnDetachedFromWindow()
         {
             base.OnDetachedFromWindow();
@@ -102,10 +101,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             catch (ObjectDisposedException)
             {
-                // Happens when navigating away on Forms Android
+                // Used to happen when navigating away on Forms Android
                 return;
             }
         }
     }
 }
-#endif
