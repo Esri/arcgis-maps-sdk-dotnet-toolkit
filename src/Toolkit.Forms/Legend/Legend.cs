@@ -35,14 +35,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             s_DefaultLayerItemTemplate = new DataTemplate(() =>
             {
-                var nameLabel = new Label { FontSize = 18 };
+                var nameLabel = new Label { FontSize = 18, VerticalOptions = LayoutOptions.Center };
                 nameLabel.SetBinding(Label.TextProperty, nameof(Layer.Name));
                 return new ViewCell() { View = nameLabel };
             });
 
             s_DefaultSublayerItemTemplate = new DataTemplate(() =>
             {
-                var nameLabel = new Label { FontSize = 14 };
+                var nameLabel = new Label { FontSize = 14, VerticalOptions = LayoutOptions.Center };
                 nameLabel.SetBinding(Label.TextProperty, nameof(ILayerContent.Name));
                 return new ViewCell() { View = nameLabel };
             });
@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             s_DefaultLegendInfoItemTemplate = new DataTemplate(() =>
             {
                 StackLayout sl = new StackLayout() { Orientation = StackOrientation.Horizontal };
-                var symbol = new SymbolDisplay { WidthRequest = 40, HeightRequest = 40, VerticalOptions = LayoutOptions.Center };
+                var symbol = new SymbolDisplay { WidthRequest = 40, HeightRequest = 40, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 5, 0) };
                 symbol.SetBinding(SymbolDisplay.SymbolProperty, nameof(LegendInfo.Symbol));
                 sl.Children.Add(symbol);
                 var nameLabel = new Label { FontSize = 12, VerticalOptions = LayoutOptions.Center };
@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 return new ViewCell() { View = sl };
             });
 
-            string template = "<ControlTemplate xmlns=\"http://xamarin.com/schemas/2014/forms\" xmlns:x=\"http://schemas.microsoft.com/winfx/2009/xaml\" xmlns:esriTK=\"clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\"><ListView x:Name=\"ListView\" HorizontalOptions=\"Fill\" VerticalOptions=\"Fill\" SelectionMode=\"None\" ><x:Arguments><ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy></x:Arguments></ListView></ControlTemplate>";
+            string template = "<ControlTemplate xmlns=\"http://xamarin.com/schemas/2014/forms\" xmlns:x=\"http://schemas.microsoft.com/winfx/2009/xaml\" xmlns:esriTK=\"clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\"><ListView x:Name=\"ListView\" HorizontalOptions=\"Fill\" VerticalOptions=\"Fill\" SelectionMode=\"None\" SeparatorVisibility=\"None\" ><x:Arguments><ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy></x:Arguments></ListView></ControlTemplate>";
             s_DefaultControlTemplate = global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml<ControlTemplate>(new ControlTemplate(), template);
         }
 

@@ -195,13 +195,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (layeritem is Layer layer)
                 {
                     _textLabel.Text = layer.Name;
-                    _textLabel.Font = UIFont.SystemFontOfSize(20);
+                    _textLabel.Font = UIFont.SystemFontOfSize(18);
                     _symbol.Symbol = null;
                 }
                 else if (layeritem is ILayerContent layerContent)
                 {
                     _textLabel.Text = layerContent.Name;
-                    _textLabel.Font = UIFont.SystemFontOfSize(18);
+                    _textLabel.Font = UIFont.SystemFontOfSize(14);
                     _symbol.Symbol = null;
                 }
                 else if (layeritem is LegendInfo legendInfo)

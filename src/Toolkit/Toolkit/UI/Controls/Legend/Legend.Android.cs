@@ -140,24 +140,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (layeritem is Layer layer)
                     {
                         _textView.Text = layer.Name;
-                        _textView.SetTextSize(ComplexUnitType.Dip, 20);
-                        _textView.SetTypeface(null, TypefaceStyle.Bold);
+                        _textView.SetTextSize(ComplexUnitType.Dip, 18);
+                        _textView.SetPadding(0, 0, 0, 0);
                         _symbol.Visibility = ViewStates.Gone;
                         _symbol.Symbol = null;
                     }
                     else if (layeritem is ILayerContent layerContent)
                     {
                         _textView.Text = layerContent.Name;
-                        _textView.SetTextSize(ComplexUnitType.Dip, 18);
-                        _textView.SetTypeface(null, TypefaceStyle.Normal);
+                        _textView.SetTextSize(ComplexUnitType.Dip, 14);
+                        _textView.SetPadding(0, 0, 0, 0);
                         _symbol.Visibility = ViewStates.Gone;
                         _symbol.Symbol = null;
                     }
                     else if (layeritem is LegendInfo legendInfo)
                     {
                         _textView.Text = legendInfo.Name;
-                        _textView.SetTextSize(ComplexUnitType.Dip, 18);
-                        _textView.SetTypeface(null, TypefaceStyle.Normal);
+                        _textView.SetTextSize(ComplexUnitType.Dip, 12);
+                        _textView.SetPadding(5, 0, 0, 0);
                         _symbol.Visibility = ViewStates.Visible;
                         _symbol.Symbol = legendInfo.Symbol;
                     }
