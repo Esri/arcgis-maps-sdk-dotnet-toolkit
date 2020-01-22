@@ -118,5 +118,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set { SetValue(FilterHiddenLayersProperty, value); }
 #endif
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
+        /// is used to determine when the legend for the layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layers is displayed from top to bottom order;
+        /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
+        /// </remarks>
+        public bool ReverseLayerOrder
+        {
+#if XAMARIN
+            get => _datasource.ReverseLayerOrder;
+            set => _datasource.ReverseLayerOrder = value;
+#else
+            get { return (bool)GetValue(ReverseLayerOrderProperty); }
+            set { SetValue(ReverseLayerOrderProperty, value); }
+#endif
+        }
     }
 }

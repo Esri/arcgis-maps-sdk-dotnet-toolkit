@@ -163,6 +163,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
+        /// Identifies the <see cref="ReverseLayerOrder"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty ReverseLayerOrderProperty =
+            BindableProperty.Create(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), true, BindingMode.OneWay, propertyChanged: OnReverseLayerOrderPropertyChanged);
+
+        private static void OnReverseLayerOrderPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            ((Legend)bindable)._datasource.ReverseLayerOrder = (bool)newValue;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
+        /// is used to determine when the legend for the layer is displayed.
+        /// </summary>
+        /// <remarks>
+        /// If <c>true</c>, legend for layers is displayed from top to bottom order;
+        /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
+        /// </remarks>
+        public bool ReverseLayerOrder
+        {
+            get { return (bool)GetValue(ReverseLayerOrderProperty); }
+            set { SetValue(ReverseLayerOrderProperty, value); }
+        }
+
+        /// <summary>
         /// Identifies the <see cref="LayerItemTemplate"/> bindable property.
         /// </summary>
         public static readonly BindableProperty LayerItemTemplateProperty =

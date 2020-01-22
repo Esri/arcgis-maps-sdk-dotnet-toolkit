@@ -50,6 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeoView _geoview;
         private bool _filterByVisibleScaleRange = true;
         private bool _filterHiddenLayers = true;
+        private bool _reverseLayerOrder = true;
 
         public LegendDataSource(GeoView geoview)
         {
@@ -80,6 +81,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_filterHiddenLayers != value)
                 {
                     _filterHiddenLayers = value;
+                    MarkCollectionDirty(false);
+                }
+            }
+        }
+
+        public bool ReverseLayerOrder
+        {
+            get => _reverseLayerOrder;
+            set
+            {
+                if (_reverseLayerOrder != value)
+                {
+                    _reverseLayerOrder = value;
                     MarkCollectionDirty(false);
                 }
             }
@@ -212,7 +226,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             TrackLayers(layers);
 
-            _items = BuildLegendList(layers?.Reverse()) ?? new List<object>();
+            _items = BuildLegendList(_reverseLayerOrder ? layers?.Reverse() : layers) ?? new List<object>();
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -306,7 +320,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isCollectionDirty = false;
             }
 
-            var newItems = BuildLegendList(_currentLayers?.Reverse()) ?? new List<object>();
+            var newItems = BuildLegendList(_reverseLayerOrder ? _currentLayers?.Reverse() : _currentLayers) ?? new List<object>();
             if (newItems.Count == 0 && _items.Count == 0)
             {
                 return;
@@ -444,7 +458,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 if (layer.SublayerContents != null)
                 {
-                    data.AddRange(BuildLegendList(layer.SublayerContents));
+                    data.AddRange(BuildLegendList(_reverseLayerOrder ? layer.SublayerContents : layer.SublayerContents?.Reverse() )); // This might seem counter-intuitive, but sublayers are already top-to-bottom, as opposed to the layer collection
                 }
             }
 

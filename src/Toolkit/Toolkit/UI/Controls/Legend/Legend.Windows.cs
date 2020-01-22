@@ -75,6 +75,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
+        /// Identifies the <see cref="ReverseLayerOrder"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ReverseLayerOrderProperty =
+            DependencyProperty.Register(nameof(ReverseLayerOrder), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnReverseLayerOrderPropertyChanged));
+
+        private static void OnReverseLayerOrderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((Legend)d)._datasource.ReverseLayerOrder = (bool)e.NewValue;
+        }
+
+        /// <summary>
         /// Identifies the <see cref="GeoView"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty GeoViewProperty =
