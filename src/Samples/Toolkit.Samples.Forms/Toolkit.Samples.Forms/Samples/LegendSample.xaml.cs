@@ -60,10 +60,5 @@ namespace Toolkit.Samples.Forms.Samples
                 Grid.SetRowSpan(legend, 1);
             }
         }
-
-        private void FilterByScaleRange_Toggled(object sender, ToggledEventArgs e)
-        {
-
-        }
     }
 }

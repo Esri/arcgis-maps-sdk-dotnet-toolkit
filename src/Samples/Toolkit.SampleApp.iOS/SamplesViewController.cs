@@ -15,7 +15,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         {
         }
 
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -50,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 Sample item = _data[indexPath.Row];
                 cell.TextLabel.Text = item.Name;
                 cell.DetailTextLabel.Text = item.Description;
-                cell.DetailTextLabel.TextColor = UIColor.Gray;
+                cell.DetailTextLabel.TextColor = UIColor.SecondaryLabelColor;
                 cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
                 return cell;
             }

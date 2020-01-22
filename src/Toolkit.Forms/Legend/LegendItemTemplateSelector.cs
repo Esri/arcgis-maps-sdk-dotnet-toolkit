@@ -14,17 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
 using Esri.ArcGISRuntime.Mapping;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-#else
-using System.Windows;
-using System.Windows.Controls;
-#endif
+using Esri.ArcGISRuntime.Toolkit.UI;
+using Xamarin.Forms;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
     /// Determines which DataTemplate to use for a given layer content item in a Legend control.
@@ -38,15 +32,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _owner = owner;
         }
 
-#if NETFX_CORE
-            protected override DataTemplate SelectTemplateCore(object item)
-#else
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
-#endif
+        protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
             if (item is LegendEntry entry)
             {
-                if (entry.Content is Layer)
+                if (entry.Content is Layer && LayerTemplate != null)
                 {
                     return LayerTemplate;
                 }
@@ -62,11 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
 
-#if NETFX_CORE
-            return base.SelectTemplateCore(item);
-#else
-            return base.SelectTemplate(item, container);
-#endif
+            return null;
         }
 
         public DataTemplate LayerTemplate => _owner.LayerItemTemplate;
@@ -76,4 +62,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public DataTemplate LegendInfoTemplate => _owner.LegendInfoItemTemplate;
     }
 }
-#endif

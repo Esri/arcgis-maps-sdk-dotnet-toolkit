@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend")]
     public partial class LayerLegend
     {
-        private ListView _listView;        
+        private ListView _listView;
         private Android.OS.Handler _uithread;
 
         /// <summary>
