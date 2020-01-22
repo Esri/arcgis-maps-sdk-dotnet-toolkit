@@ -51,6 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _filterByVisibleScaleRange = true;
         private bool _filterHiddenLayers = true;
         private bool _reverseLayerOrder = true;
+        private bool _filterEmptyLayers = false;
 
         public LegendDataSource(GeoView geoview)
         {
@@ -60,6 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        // Hides any layer contents that are out of scale range
         public bool FilterByVisibleScaleRange
         {
             get => _filterByVisibleScaleRange;
@@ -73,6 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        // Hides any layer contents where the IsVisible property is false.
         public bool FilterHiddenLayers
         {
             get => _filterHiddenLayers;
@@ -86,6 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        // Reverses the layer order to be top-to-bottom
         public bool ReverseLayerOrder
         {
             get => _reverseLayerOrder;
@@ -94,6 +98,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_reverseLayerOrder != value)
                 {
                     _reverseLayerOrder = value;
+                    MarkCollectionDirty(false);
+                }
+            }
+        }
+
+        // Set to true to not show layer contents that have no legends to display
+        public bool FilterEmptyLayers
+        {
+            get => _filterEmptyLayers;
+            set
+            {
+                if (_filterEmptyLayers != value)
+                {
+                    _filterEmptyLayers = value;
                     MarkCollectionDirty(false);
                 }
             }
@@ -226,7 +244,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             TrackLayers(layers);
 
-            _items = BuildLegendList(_reverseLayerOrder ? layers?.Reverse() : layers) ?? new List<object>();
+            _items = BuildLegendList(layers, _reverseLayerOrder) ?? new List<object>();
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
@@ -258,11 +276,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var layer = sender as Layer;
-            if (e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded)
+            if (!layer.ShowInLegend && e.PropertyName != nameof(layer.ShowInLegend))
+            {
+                return;
+            }
+            else if (e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded)
             {
                 MarkCollectionDirty();
             }
             else if ((e.PropertyName == nameof(layer.IsVisible) && _filterHiddenLayers) || e.PropertyName == nameof(layer.ShowInLegend))
+            {
+                MarkCollectionDirty(false);
+            }
+            else if (e.PropertyName == nameof(FeatureLayer.Renderer))
             {
                 MarkCollectionDirty(false);
             }
@@ -320,7 +346,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isCollectionDirty = false;
             }
 
-            var newItems = BuildLegendList(_reverseLayerOrder ? _currentLayers?.Reverse() : _currentLayers) ?? new List<object>();
+            var newItems = BuildLegendList(_currentLayers, _reverseLayerOrder) ?? new List<object>();
             if (newItems.Count == 0 && _items.Count == 0)
             {
                 return;
@@ -398,32 +424,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private double _currentScale = double.NaN;
 
-        private List<object> BuildLegendList(IEnumerable<ILayerContent> layers)
+        private List<object> BuildLegendList(IEnumerable<ILayerContent> layers, bool reverse)
         {
             if (layers == null)
             {
                 return null;
             }
 
-            List<object> data = new List<object>();
-            foreach (var layer in layers)
+            if (layers is ICollection ic && ic.IsSynchronized)
             {
-                if (!layer.ShowInLegend || (!layer.IsVisible && _filterHiddenLayers))
+                lock (ic.SyncRoot)
+                {
+                    return BuildLegendListLocked(layers, reverse);
+                }
+            }
+
+            return BuildLegendListLocked(layers, reverse);
+        }
+
+        private List<object> BuildLegendListLocked(IEnumerable<ILayerContent> layers, bool reverse)
+        {
+            List<object> data = new List<object>();
+            foreach (var layerContent in reverse ? layers.Reverse() : layers)
+            {
+                if (!layerContent.ShowInLegend || (!layerContent.IsVisible && _filterHiddenLayers))
                 {
                     continue;
                 }
 
-                if (layer is Layer l)
+                if (layerContent is Layer l)
                 {
                     var state = _geoview.GetLayerViewState(l);
                     if (state != null &&
-                        ((state.Status == LayerViewStatus.NotVisible && _filterHiddenLayers) ||
+                        ((state.Status == LayerViewStatus.NotVisible && _filterHiddenLayers && !(l is GroupLayer)) ||
                         (state.Status == LayerViewStatus.OutOfScale && _filterByVisibleScaleRange)))
                     {
                         continue;
                     }
                 }
-                else if (layer is ILayerContent ilc)
+                else if (layerContent is ILayerContent ilc)
                 {
                     if (!ilc.IsVisible && _filterHiddenLayers)
                     {
@@ -435,30 +474,52 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                 }
 
-                data.Add(layer);
-                if (!(layer is Layer) || ((Layer)layer).LoadStatus == LoadStatus.Loaded)
+                IReadOnlyList<LegendInfo> legendInfos = null;
+                if (!(layerContent is Layer) || (((Layer)layerContent).LoadStatus == LoadStatus.Loaded && !(layerContent is GroupLayer)))
                 {
                     // Generate the legend infos
                     // For layers, we'll wait with entering here, until the GeoView decides to load them before generating the legend
-                    if (!_legendInfoTasks.ContainsKey(layer))
+                    if (!_legendInfoTasks.ContainsKey(layerContent))
                     {
-                        var task = LoadLegend(layer);
-                        _legendInfoTasks[layer] = task;
+                        var task = LoadLegend(layerContent);
+                        _legendInfoTasks[layerContent] = task;
                     }
                     else
                     {
-                        var task = _legendInfoTasks[layer];
+                        var task = _legendInfoTasks[layerContent];
                         if (task.Status == TaskStatus.RanToCompletion)
                         {
-                            var legends = _legendInfoTasks[layer].Result;
-                            data.AddRange(legends);
+                            legendInfos = _legendInfoTasks[layerContent].Result;
                         }
                     }
                 }
 
-                if (layer.SublayerContents != null)
+                // Only add the entry if it has a name
+                if (!string.IsNullOrEmpty(layerContent.Name))
                 {
-                    data.AddRange(BuildLegendList(_reverseLayerOrder ? layer.SublayerContents : layer.SublayerContents?.Reverse() )); // This might seem counter-intuitive, but sublayers are already top-to-bottom, as opposed to the layer collection
+                    if (!_filterEmptyLayers || legendInfos?.Count > 0)
+                    {
+                        data.Add(layerContent);
+                    }
+                }
+
+                if (legendInfos != null)
+                {
+                    data.AddRange(legendInfos);
+                }
+
+                if (layerContent.SublayerContents != null)
+                {
+                    var sublayers = layerContent.SublayerContents;
+                    // This might seem counter-intuitive, but sublayers are already top-to-bottom, as opposed to the layer collection...
+                    bool reverseSublayers = !_reverseLayerOrder;
+                    // ...however two layer types are not:
+                    if ((layerContent is ArcGISMapImageLayer) || (layerContent is GroupLayer))
+                    {
+                        reverseSublayers = !reverseSublayers;
+                    }
+
+                    data.AddRange(BuildLegendList(layerContent.SublayerContents, reverseSublayers));
                 }
             }
 
@@ -482,11 +543,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public bool IsReadOnly => true;
 
-        public bool IsFixedSize => throw new NotImplementedException();
+        public bool IsFixedSize => false;
 
-        public bool IsSynchronized => throw new NotImplementedException();
+        public bool IsSynchronized => (_items as ICollection)?.IsSynchronized ?? false;
 
-        public object SyncRoot => throw new NotImplementedException();
+        public object SyncRoot => (_items as ICollection)?.SyncRoot;
 
         public object this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
 

@@ -97,8 +97,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the item template for each layer content entry
+        /// Gets or sets the item template for each <see cref="Layer" /> entry.
         /// </summary>
+        /// <remarks>
+        /// If this is set to null, the <see cref="SublayerItemTemplate"/> will be used instead.
+        /// </remarks>
+        /// <seealso cref="SublayerItemTemplate"/>
+        /// <seealso cref="LegendInfoItemTemplate"/>
         public DataTemplate LayerItemTemplate
         {
             get { return (DataTemplate)GetValue(LayerItemTemplateProperty); }
@@ -108,12 +113,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Identifies the <see cref="LayerItemTemplate"/> dependency property.
         /// </summary>
+        /// <remarks>
+        /// If this is set to null, the <see cref="SublayerItemTemplate"/> will be used instead.
+        /// </remarks>
         public static readonly DependencyProperty LayerItemTemplateProperty =
             DependencyProperty.Register(nameof(LayerItemTemplate), typeof(DataTemplate), typeof(Legend), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the item template for each layer content entry
+        /// Gets or sets the item template for each <see cref="ILayerContent"/> entry that is not a <see cref="Layer"/>.
         /// </summary>
+        /// <seealso cref="LegendInfoItemTemplate"/>
+        /// <seealso cref="LayerItemTemplate"/>
         public DataTemplate SublayerItemTemplate
         {
             get { return (DataTemplate)GetValue(SublayerItemTemplateProperty); }
@@ -127,8 +137,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 DependencyProperty.Register(nameof(SublayerItemTemplate), typeof(DataTemplate), typeof(Legend), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the item template for each layer content entry
+        /// Gets or sets the item template for each <see cref="LegendInfo"/> content entry.
         /// </summary>
+        /// <seealso cref="SublayerItemTemplate"/>
+        /// <seealso cref="LayerItemTemplate"/>
         public DataTemplate LegendInfoItemTemplate
         {
             get { return (DataTemplate)GetValue(LegendInfoItemTemplateProperty); }
@@ -142,8 +154,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 DependencyProperty.Register(nameof(LegendInfoItemTemplate), typeof(DataTemplate), typeof(Legend), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the item template for each layer content entry
+        /// Gets or sets the template selector used for selecting templates for each entry in the list.
         /// </summary>
+        /// <remarks>
+        /// If the default template selector is overridden, the item templates will not apply.
+        /// </remarks>
         public DataTemplateSelector ItemTemplateSelector
         {
             get { return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty); }

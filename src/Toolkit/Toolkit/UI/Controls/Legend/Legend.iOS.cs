@@ -117,33 +117,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private class LegendTableSource : UITableViewSource, INotifyCollectionChanged
         {
-            private readonly IList<object> _legends;
+            private readonly LegendDataSource _legends;
             internal static readonly NSString CellId = new NSString(nameof(LegendTableViewCell));
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-            public LegendTableSource(IList<object> legends)
+            public LegendTableSource(LegendDataSource legends)
                 : base()
             {
                 _legends = legends;
-                if (_legends is INotifyCollectionChanged)
+                var incc = _legends as INotifyCollectionChanged;
+                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                 {
-                    var incc = _legends as INotifyCollectionChanged;
-                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                    OnEventAction = (instance, source, eventArgs) =>
                     {
-                        OnEventAction = (instance, source, eventArgs) =>
-                        {
-                            CollectionChanged?.Invoke(this, eventArgs);
-                        },
-                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
-                    };
-                    incc.CollectionChanged += listener.OnEvent;
-                }
+                        CollectionChanged?.Invoke(this, eventArgs);
+                    },
+                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                };
+                incc.CollectionChanged += listener.OnEvent;
             }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                return _legends?.Count ?? 0;
+                return _legends.Count;
             }
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)

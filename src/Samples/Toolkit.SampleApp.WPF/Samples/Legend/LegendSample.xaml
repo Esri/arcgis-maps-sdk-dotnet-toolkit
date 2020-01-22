@@ -29,8 +29,8 @@
                           Content="Filter out-of-scale layers" />
                 <CheckBox IsChecked="{Binding FilterHiddenLayers, ElementName=legend, Mode=TwoWay}"
                           Content="Filter non-visible layers" />
-                <CheckBox IsChecked="{Binding ReverseLayerOrder, ElementName=legend, Mode=TwoWay}"	 
-                          Content="Reverse Layer Order"	/>
+                <CheckBox IsChecked="{Binding ReverseLayerOrder, ElementName=legend, Mode=TwoWay}"
+                          Content="Reverse Layer Order" />
             </StackPanel>
             
         </Grid>

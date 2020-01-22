@@ -86,10 +86,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
         /// are used to determine when legend for layer is displayed.
         /// </summary>
-        /// <remarks>
+        /// <value>
         /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
         /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
-        /// </remarks>
+        /// </value>
         public bool FilterByVisibleScaleRange
         {
 #if XAMARIN
@@ -105,9 +105,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets a value indicating whether the visibility of a <see cref="Layer"/>
         /// is used to determine when the legend for the layer is displayed.
         /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layer is displayed only when the layer's <see cref="Layer.IsVisible"/> property is true.
-        /// </remarks>
+        /// <value>
+        /// If <c>true</c>, legend for the layer and sublayers is displayed only when the layer's <see cref="ILayerContent.IsVisible"/> property is true.
+        /// </value>
         public bool FilterHiddenLayers
         {
 #if XAMARIN
@@ -120,13 +120,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
-        /// is used to determine when the legend for the layer is displayed.
+        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/> are displayed top to bottom.
         /// </summary>
-        /// <remarks>
+        /// <value>
         /// If <c>true</c>, legend for layers is displayed from top to bottom order;
         /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
-        /// </remarks>
+        /// </value>
         public bool ReverseLayerOrder
         {
 #if XAMARIN

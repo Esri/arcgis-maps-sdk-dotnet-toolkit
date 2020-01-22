@@ -59,7 +59,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 return new ViewCell() { View = sl };
             });
 
-            string template = "<ControlTemplate xmlns=\"http://xamarin.com/schemas/2014/forms\" xmlns:x=\"http://schemas.microsoft.com/winfx/2009/xaml\" xmlns:esriTK=\"clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms\"><ListView x:Name=\"ListView\" HorizontalOptions=\"Fill\" VerticalOptions=\"Fill\" SelectionMode=\"None\" SeparatorVisibility=\"None\" ><x:Arguments><ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy></x:Arguments></ListView></ControlTemplate>";
+            string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
+                                    <ListView x:Name=""ListView"" HorizontalOptions=""Fill"" VerticalOptions=""Fill"" SelectionMode=""None"" SeparatorVisibility=""None"" >
+                                        <x:Arguments>
+                                            <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+                                        </x:Arguments>
+                                    </ListView>
+                                </ControlTemplate>";
             s_DefaultControlTemplate = global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml<ControlTemplate>(new ControlTemplate(), template);
         }
 
@@ -128,10 +134,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Gets or sets a value indicating whether the scale of <see cref="GeoView"/> and any scale ranges on the <see cref="Layer"/>s
         /// are used to determine when legend for layer is displayed.
         /// </summary>
-        /// <remarks>
+        /// <value>
         /// If <c>true</c>, legend for layer is displayed only when layer is in visible scale range;
         /// otherwise, <c>false</c>, legend for layer is displayed regardless of its scale range.
-        /// </remarks>
+        /// </value>
         public bool FilterByVisibleScaleRange
         {
             get { return (bool)GetValue(FilterByVisibleScaleRangeProperty); }
@@ -153,9 +159,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Gets or sets a value indicating whether the visibility of a <see cref="Layer"/>
         /// is used to determine when the legend for the layer is displayed.
         /// </summary>
-        /// <remarks>
-        /// If <c>true</c>, legend for layer is displayed only when the layer's <see cref="Layer.IsVisible"/> property is true.
-        /// </remarks>
+        /// <value>
+        /// If <c>true</c>, legend for the layer and sublayers is displayed only when the layer's <see cref="ILayerContent.IsVisible"/> property is true.
+        /// </value>
         public bool FilterHiddenLayers
         {
             get { return (bool)GetValue(FilterHiddenLayersProperty); }
@@ -174,13 +180,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/>, top to bottom, is used.
-        /// is used to determine when the legend for the layer is displayed.
+        /// Gets or sets a value indicating whether the order of layers in the <see cref="GeoView"/> are displayed top to bottom.
         /// </summary>
-        /// <remarks>
+        /// <value>
         /// If <c>true</c>, legend for layers is displayed from top to bottom order;
         /// otherwise, <c>false</c>, legend for layers is displayed from bottom to top order.
-        /// </remarks>
+        /// </value>
         public bool ReverseLayerOrder
         {
             get { return (bool)GetValue(ReverseLayerOrderProperty); }
@@ -193,6 +198,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty LayerItemTemplateProperty =
             BindableProperty.Create(nameof(LayerItemTemplate), typeof(DataTemplate), typeof(Legend), s_DefaultLayerItemTemplate, BindingMode.OneWay, null);
 
+        /// <summary>
+        /// Gets or sets the item template for each <see cref="Layer" /> entry.
+        /// </summary>
+        /// <remarks>
+        /// If this is set to null, the <see cref="SublayerItemTemplate"/> will be used instead.
+        /// </remarks>
+        /// <seealso cref="SublayerItemTemplate"/>
+        /// <seealso cref="LegendInfoItemTemplate"/>
         public DataTemplate LayerItemTemplate
         {
             get { return (DataTemplate)GetValue(LayerItemTemplateProperty); }
@@ -205,6 +218,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty SublayerItemTemplateProperty =
             BindableProperty.Create(nameof(SublayerItemTemplate), typeof(DataTemplate), typeof(Legend), s_DefaultSublayerItemTemplate, BindingMode.OneWay, null);
 
+        /// <summary>
+        /// Gets or sets the item template for each <see cref="ILayerContent"/> entry that is not a <see cref="Layer"/>.
+        /// </summary>
+        /// <seealso cref="LegendInfoItemTemplate"/>
+        /// <seealso cref="LayerItemTemplate"/>
         public DataTemplate SublayerItemTemplate
         {
             get { return (DataTemplate)GetValue(SublayerItemTemplateProperty); }
@@ -217,6 +235,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty LegendInfoItemTemplateProperty =
             BindableProperty.Create(nameof(LegendInfoItemTemplate), typeof(DataTemplate), typeof(Legend), s_DefaultLegendInfoItemTemplate, BindingMode.OneWay, null);
 
+        /// <summary>
+        /// Gets or sets the item template for each <see cref="LegendInfo"/> content entry.
+        /// </summary>
+        /// <seealso cref="SublayerItemTemplate"/>
+        /// <seealso cref="LayerItemTemplate"/>
         public DataTemplate LegendInfoItemTemplate
         {
             get { return (DataTemplate)GetValue(LegendInfoItemTemplateProperty); }
