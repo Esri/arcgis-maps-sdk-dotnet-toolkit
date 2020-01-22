@@ -33,8 +33,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     {
         private ListView _presentingView;
 
+        private static readonly DataTemplate DefaultDataTemplate;
+
+        static BookmarksView()
+        {
+            DefaultDataTemplate = new DataTemplate(() =>
+            {
+                var defaultCell = new TextCell();
+                defaultCell.SetBinding(TextCell.TextProperty, nameof(Bookmark.Name));
+                return defaultCell;
+            });
+        }
+
         public BookmarksView()
         {
+            ItemTemplate = DefaultDataTemplate;
+
             InitializeComponent();
         }
 
@@ -52,7 +66,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (_presentingView != null)
             {
                 _presentingView.ItemSelected += Internal_bookmarkSelected;
-                _presentingView.ItemTemplate = ItemTemplate;
             }
         }
 
@@ -105,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="ItemTemplate" /> bindable property.
         /// </summary>
         public static readonly BindableProperty ItemTemplateProperty =
-            BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), new DataTemplate(typeof(BookmarkItemTemplate)), BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+            BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(BookmarksView), DefaultDataTemplate, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
 
         /// <summary>
         /// Handles property changes for the <see cref="BookmarksOverride" /> bindable property.
@@ -193,7 +206,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             BookmarksView bookmarkView = (BookmarksView)sender;
 
-            bookmarkView._presentingView.ItemTemplate = (DataTemplate)newValue;
+            if (bookmarkView?._presentingView != null)
+            {
+                bookmarkView._presentingView.ItemTemplate = (DataTemplate)newValue;
+            }
+
         }
 
         /// <summary>
