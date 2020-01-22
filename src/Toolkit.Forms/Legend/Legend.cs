@@ -35,14 +35,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             s_DefaultLayerItemTemplate = new DataTemplate(() =>
             {
-                var nameLabel = new Label { FontAttributes = FontAttributes.Bold, FontSize = 24 };
+                var nameLabel = new Label { FontSize = 18 };
                 nameLabel.SetBinding(Label.TextProperty, nameof(Layer.Name));
                 return new ViewCell() { View = nameLabel };
             });
 
             s_DefaultSublayerItemTemplate = new DataTemplate(() =>
             {
-                var nameLabel = new Label { FontSize = 18 };
+                var nameLabel = new Label { FontSize = 14 };
                 nameLabel.SetBinding(Label.TextProperty, nameof(ILayerContent.Name));
                 return new ViewCell() { View = nameLabel };
             });
@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 var symbol = new SymbolDisplay { WidthRequest = 40, HeightRequest = 40, VerticalOptions = LayoutOptions.Center };
                 symbol.SetBinding(SymbolDisplay.SymbolProperty, nameof(LegendInfo.Symbol));
                 sl.Children.Add(symbol);
-                var nameLabel = new Label { FontSize = 11, VerticalOptions = LayoutOptions.Center };
+                var nameLabel = new Label { FontSize = 12, VerticalOptions = LayoutOptions.Center };
                 nameLabel.SetBinding(Label.TextProperty, nameof(LegendInfo.Name));
                 sl.Children.Add(nameLabel);
                 return new ViewCell() { View = sl };
