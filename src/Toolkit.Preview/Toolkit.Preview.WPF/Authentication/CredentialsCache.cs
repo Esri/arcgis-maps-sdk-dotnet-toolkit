@@ -57,8 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
             }
             else
             {
-                var name = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
-                return name + "|";
+                return System.Reflection.Assembly.GetEntryAssembly().GetName().Name + "|";
             }
         }
 
