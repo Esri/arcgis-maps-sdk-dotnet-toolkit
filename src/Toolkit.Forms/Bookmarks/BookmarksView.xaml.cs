@@ -66,6 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (_presentingView != null)
             {
                 _presentingView.ItemSelected += Internal_bookmarkSelected;
+                _presentingView.ItemTemplate = ItemTemplate;
             }
         }
 
