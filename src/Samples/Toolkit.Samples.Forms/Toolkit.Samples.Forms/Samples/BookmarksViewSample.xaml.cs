@@ -129,9 +129,9 @@ namespace Toolkit.Samples.Forms.Samples
             BookmarksView.BookmarkSelected -= BookmarkSelected;
         }
 
-        private void BookmarkSelected(object sender, BookmarkSelectedEventArgs e)
+        private void BookmarkSelected(object sender, Bookmark bookmark)
         {
-            DisplayAlert("Bookmark selected", $"Selected {e.Bookmark.Name}", "Ok");
+            DisplayAlert("Bookmark selected", $"Selected {bookmark.Name}", "Ok");
         }
     }
 }

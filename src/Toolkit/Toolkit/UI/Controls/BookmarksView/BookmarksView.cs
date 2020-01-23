@@ -214,12 +214,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             GeoView?.SetViewpointAsync(bookmark.Viewpoint);
 
-            BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(bookmark));
+            BookmarkSelected?.Invoke(this, bookmark);
         }
 
         /// <summary>
         /// Raised whenever a bookmark is selected.
         /// </summary>
-        public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
+        public event EventHandler<Bookmark> BookmarkSelected;
     }
 }

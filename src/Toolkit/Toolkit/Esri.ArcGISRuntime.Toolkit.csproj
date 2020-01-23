@@ -78,7 +78,6 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <EmbeddedResource Remove="**\*.*" />
     <Compile Remove="**\*.cs" />
-    <Compile Include="UI\Controls\BookmarksView\BookmarkSelectedEventArgs.cs" />
     <Compile Include="UI\Controls\TimeSlider\LoopMode.cs" />
     <Compile Include="UI\Controls\TimeSlider\PlaybackDirection.cs" />
     <Compile Include="UI\Controls\TimeSlider\TimeExtentChangedEventArgs.cs" />

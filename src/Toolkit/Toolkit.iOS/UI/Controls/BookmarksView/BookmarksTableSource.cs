@@ -72,9 +72,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(_bookmarks.ElementAt(indexPath.Row)));
+            BookmarkSelected?.Invoke(this, _bookmarks.ElementAt(indexPath.Row));
         }
 
-        public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
+        public event EventHandler<Bookmark> BookmarkSelected;
     }
 }

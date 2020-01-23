@@ -134,9 +134,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BookmarksView
             BookmarksView.BookmarkSelected -= BookmarkSelected;
         }
 
-        private async void BookmarkSelected(object sender, UI.BookmarkSelectedEventArgs e)
+        private async void BookmarkSelected(object sender, Bookmark bookmark)
         {
-            await new MessageDialog($"{e.Bookmark.Name} Selected!").ShowAsync();
+            await new MessageDialog($"{bookmark.Name} Selected!").ShowAsync();
         }
     }
 }

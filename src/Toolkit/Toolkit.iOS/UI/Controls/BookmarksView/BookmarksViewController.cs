@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Esri.ArcGISRuntime.Mapping;
 using System;
 using UIKit;
 
@@ -65,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void BookmarkSelected(object sender, BookmarkSelectedEventArgs e) => DismissViewController(true, null);
+        private void BookmarkSelected(object sender, Bookmark bookmark) => DismissViewController(true, null);
 
         private void CloseClicked(object sender, EventArgs e) => DismissViewController(true, null);
 

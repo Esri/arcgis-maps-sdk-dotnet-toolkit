@@ -142,9 +142,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView
             BookmarksView.BookmarkSelected -= BookmarkSelected;
         }
 
-        private void BookmarkSelected(object sender, UI.BookmarkSelectedEventArgs e)
+        private void BookmarkSelected(object sender, Bookmark bookmark)
         {
-            MessageBox.Show($"{e.Bookmark.Name} Selected!");
+            MessageBox.Show($"{bookmark.Name} Selected!");
         }
     }
 }

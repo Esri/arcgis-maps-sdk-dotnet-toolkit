@@ -263,7 +263,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             GeoView?.SetViewpointAsync(bookmark.Viewpoint);
 
-            BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(bookmark));
+            BookmarkSelected?.Invoke(this, bookmark);
         }
 
         /// <summary>
@@ -285,6 +285,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Raised whenever a bookmark is selected.
         /// </summary>
-        public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
+        public event EventHandler<Bookmark> BookmarkSelected;
     }
 }

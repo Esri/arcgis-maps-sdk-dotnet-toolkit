@@ -18,6 +18,7 @@ using System;
 using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Util;
+using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -82,9 +83,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void ListView_ItemClick(object sender, BookmarkSelectedEventArgs e)
+        private void ListView_ItemClick(object sender, Bookmark bookmark)
         {
-            SelectAndNavigateToBookmark(e.Bookmark);
+            SelectAndNavigateToBookmark(bookmark);
         }
 
         private void Refresh()

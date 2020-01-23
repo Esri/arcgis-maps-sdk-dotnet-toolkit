@@ -17,6 +17,7 @@
 using System;
 using System.ComponentModel;
 using CoreGraphics;
+using Esri.ArcGISRuntime.Mapping;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -132,7 +133,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateConstraints();
         }
 
-        private void HandleBookmarkSelected(object sender, BookmarkSelectedEventArgs e) => SelectAndNavigateToBookmark(e.Bookmark);
+        private void HandleBookmarkSelected(object sender, Bookmark bookmark) => SelectAndNavigateToBookmark(bookmark);
 
         private void UpdateSourceCollection(object sender, EventArgs e)
         {

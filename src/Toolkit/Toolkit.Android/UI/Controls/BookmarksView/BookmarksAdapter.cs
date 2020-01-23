@@ -90,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override long GetItemId(int position) => position;
 
-        public event EventHandler<BookmarkSelectedEventArgs> BookmarkSelected;
+        public event EventHandler<Bookmark> BookmarkSelected;
 
         public void ClearList()
         {
@@ -117,7 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnBookmarkClicked(int position)
         {
-            BookmarkSelected?.Invoke(this, new BookmarkSelectedEventArgs(_bookmarks.ElementAt(position)));
+            BookmarkSelected?.Invoke(this, _bookmarks.ElementAt(position));
         }
     }
 }
