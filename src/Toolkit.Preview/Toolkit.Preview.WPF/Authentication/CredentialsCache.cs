@@ -51,7 +51,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 
         private static string AppNamePrefix()
         {
-            return System.Windows.Application.Current.GetType().FullName + "|";
+            if (System.Windows.Application.Current != null)
+            {
+                return System.Windows.Application.Current.GetType().FullName + "|";
+            }
+            else
+            {
+                var name = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
+                return name + "|";
+            }
         }
 
         /// <summary>
