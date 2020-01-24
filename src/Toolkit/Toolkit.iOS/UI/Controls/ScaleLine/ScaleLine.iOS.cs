@@ -81,11 +81,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var font = UIFont.SystemFontOfSize(11);
             _combinedScaleLine = new RectangleView(200, 2) { BackgroundColor = ForegroundColor };
             _metricScaleLine = new RectangleView(200, 2);
-            _metricValue = new UILabel() { Text = "100", Font = font };
-            _metricUnit = new UILabel() { Text = "m", Font = font };
+            _metricValue = new UILabel() { Text = "100", Font = font, TextColor = ForegroundColor };
+            _metricUnit = new UILabel() { Text = "m", Font = font, TextColor = ForegroundColor };
             _usScaleLine = new RectangleView(_metricScaleLine.Width * .9144, 2);
-            _usValue = new UILabel() { Text = "300", Font = font };
-            _usUnit = new UILabel() { Text = "ft", Font = font };
+            _usValue = new UILabel() { Text = "300", Font = font, TextColor = ForegroundColor };
+            _usUnit = new UILabel() { Text = "ft", Font = font, TextColor = ForegroundColor };
 
             // Listen for width updates on metric and imperial scale lines to update the combined scale line
             _metricScaleLine.PropertyChanged += ScaleLine_PropertyChanged;
@@ -223,7 +223,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.InvalidateIntrinsicContentSize();
         }
 
-        private UIColor _foregroundColor = UIColor.Black;
+        private UIColor _foregroundColor = UIColor.LabelColor;
 
         /// <summary>
         /// Gets or sets the color of the foreground elements of the <see cref="ScaleLine"/>

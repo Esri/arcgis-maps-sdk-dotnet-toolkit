@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _textLabel = new UILabel()
             {
                 Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
-                TextColor = UIColor.Black,
+                TextColor = UIColor.LabelColor,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.Center,
                 TextAlignment = UITextAlignment.Left,

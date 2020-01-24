@@ -161,7 +161,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="FilterByVisibleScaleRange"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty FilterByVisibleScaleRangeProperty =
-            DependencyProperty.Register(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(Legend), new PropertyMetadata(true, OnFilterByVisibleScaleRangePropertyChanged));
+            DependencyProperty.Register(nameof(FilterByVisibleScaleRange), typeof(bool), typeof(LayerList), new PropertyMetadata(true, OnFilterByVisibleScaleRangePropertyChanged));
 
         private static void OnFilterByVisibleScaleRangePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

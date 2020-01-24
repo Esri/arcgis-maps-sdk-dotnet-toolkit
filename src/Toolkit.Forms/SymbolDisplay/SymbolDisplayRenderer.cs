@@ -63,6 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 Control.Symbol = Element.Symbol;
             }
+
             base.OnElementPropertyChanged(sender, e);
         }
     }

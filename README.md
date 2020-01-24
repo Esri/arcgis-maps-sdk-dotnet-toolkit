@@ -91,12 +91,6 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
-## v10.2.7
-
-Looking for the Toolkit for ArcGIS Runtime SDK for .NET v10.2.7?
-
-Go to the 10.2.7 tag: https://github.com/Esri/arcgis-toolkit-dotnet/tree/v10.2.7
-
 ## Licensing
 
 Copyright © 2014-2019 Esri.

@@ -180,7 +180,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 popupViewer = new PopupViewer()
                 {
                     Frame = new CoreGraphics.CGRect(0, 0, 414, 736),
-                    BackgroundColor = UIColor.White,
+                    BackgroundColor = UIColor.SystemBackgroundColor,
                     ContentStretch = new CoreGraphics.CGRect(0, 0, 1, 1),
                     TranslatesAutoresizingMaskIntoConstraints = false
                 };

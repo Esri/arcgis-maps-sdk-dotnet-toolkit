@@ -82,6 +82,7 @@
     <Compile Include="UI\Controls\TimeSlider\PlaybackDirection.cs" />
     <Compile Include="UI\Controls\TimeSlider\TimeExtentChangedEventArgs.cs" />
     <Compile Include="UI\Controls\TimeSlider\TimeSliderLabelMode.cs" />
+    <Compile Include="UI\Controls\Legend\LegendEntry.cs" />
   </ItemGroup>
   
   <ItemGroup>

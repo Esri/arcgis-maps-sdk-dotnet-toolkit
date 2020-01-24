@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private readonly IReadOnlyList<PopupFieldValue> _displayFields;
         internal static readonly NSString CellId = new NSString(nameof(DetailsItemCell));
-        private UIColor _foregroundColor = UIColor.Black;
+        private UIColor _foregroundColor = UIColor.LabelColor;
 
         public PopupViewerTableSource(IEnumerable<PopupFieldValue> displayFields, UIColor foregroundColor)
             : base()

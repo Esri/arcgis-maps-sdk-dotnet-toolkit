@@ -69,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 ClipsToBounds = true,
-                TextColor = UIColor.Black,
+                TextColor = UIColor.LabelColor,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
                 ClipsToBounds = true,
-                TextColor = UIColor.Black,
+                TextColor = UIColor.LabelColor,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
@@ -265,7 +265,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Hidden = false;
         }
 
-        private UIColor _foregroundColor = UIColor.Black;
+        private UIColor _foregroundColor = UIColor.LabelColor;
 
         /// <summary>
         /// Gets or sets the color of the foreground elements of the <see cref="PopupViewer"/>
