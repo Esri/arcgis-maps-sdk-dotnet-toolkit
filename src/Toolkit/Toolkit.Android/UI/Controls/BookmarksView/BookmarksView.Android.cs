@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _internalListView = new RecyclerView(Context);
             _internalListView.SetLayoutManager(new LinearLayoutManager(Context));
-            _adapter = new BookmarksAdapter(Context);
+            _adapter = new BookmarksAdapter(Context, _dataSource);
             _internalListView.SetAdapter(_adapter);
             AddView(_internalListView);
         }
@@ -86,25 +86,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ListView_ItemClick(object sender, Bookmark bookmark)
         {
             SelectAndNavigateToBookmark(bookmark);
-        }
-
-        private void Refresh()
-        {
-            try
-            {
-                if (CurrentBookmarkList == null)
-                {
-                    _adapter?.ClearList();
-                    return;
-                }
-
-                _adapter?.SetList(CurrentBookmarkList);
-            }
-            catch (ObjectDisposedException)
-            {
-                // Used to happen when navigating away on Forms Android
-                return;
-            }
         }
     }
 }

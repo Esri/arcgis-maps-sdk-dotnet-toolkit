@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Android.Content;
@@ -30,80 +29,56 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     internal class BookmarksAdapter : RecyclerView.Adapter
     {
-        private IEnumerable<Bookmark> _bookmarks;
+        private BookmarksViewDataSource _dataSource;
         private readonly Context _context;
 
-        internal BookmarksAdapter(Context context)
+        internal BookmarksAdapter(Context context, BookmarksViewDataSource dataSource)
         {
             _context = context;
-        }
+            _dataSource = dataSource;
 
-        /// <summary>
-        /// Sets the list used by the adapter. Avoids re-drawing if the <paramref name="bookmarks"/> list
-        /// is the same as what has already been shown.
-        /// </summary>
-        /// <param name="bookmarks">List of bookmarks to display.</param>
-        public void SetList(IEnumerable<Bookmark> bookmarks)
-        {
-            if (ReferenceEquals(bookmarks, _bookmarks))
+            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(dataSource)
             {
-                return;
-            }
-
-            _bookmarks = bookmarks;
-            NotifyDataSetChanged();
-
-            if (_bookmarks is INotifyCollectionChanged incc)
-            {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                OnEventAction = (instance, source, eventArgs) =>
                 {
-                    OnEventAction = (instance, source, eventArgs) =>
+                    switch (eventArgs.Action)
                     {
-                        switch (eventArgs.Action)
-                        {
-                            case NotifyCollectionChangedAction.Add:
-                                NotifyItemInserted(eventArgs.NewStartingIndex);
-                                break;
-                            case NotifyCollectionChangedAction.Remove:
-                                NotifyItemRemoved(eventArgs.OldStartingIndex);
-                                break;
-                            case NotifyCollectionChangedAction.Reset:
-                                NotifyDataSetChanged();
-                                break;
-                            case NotifyCollectionChangedAction.Move:
-                                NotifyItemMoved(eventArgs.OldStartingIndex, eventArgs.NewStartingIndex);
-                                break;
-                            case NotifyCollectionChangedAction.Replace:
-                                NotifyItemChanged(eventArgs.OldStartingIndex);
-                                break;
-                        }
-                    },
-                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
-                };
+                        case NotifyCollectionChangedAction.Add:
+                            NotifyItemInserted(eventArgs.NewStartingIndex);
+                            break;
+                        case NotifyCollectionChangedAction.Remove:
+                            NotifyItemRemoved(eventArgs.OldStartingIndex);
+                            break;
+                        case NotifyCollectionChangedAction.Reset:
+                            NotifyDataSetChanged();
+                            break;
+                        case NotifyCollectionChangedAction.Move:
+                            NotifyItemMoved(eventArgs.OldStartingIndex, eventArgs.NewStartingIndex);
+                            break;
+                        case NotifyCollectionChangedAction.Replace:
+                            NotifyItemChanged(eventArgs.OldStartingIndex);
+                            break;
+                    }
+                },
+                OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+            };
 
-                incc.CollectionChanged += listener.OnEvent;
-            }
+            dataSource.CollectionChanged += listener.OnEvent;
         }
 
-        public override int ItemCount => _bookmarks?.Count() ?? 0;
+        public override int ItemCount => _dataSource?.Count() ?? 0;
 
         /// <inheritdoc />
         public override long GetItemId(int position) => position;
 
         public event EventHandler<Bookmark> BookmarkSelected;
 
-        public void ClearList()
-        {
-            _bookmarks = null;
-            NotifyDataSetChanged();
-        }
-
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             BookmarkItemViewHolder bookmarkHolder = holder as BookmarkItemViewHolder;
-            if (_bookmarks != null && _bookmarks.Count() > position)
+            if (_dataSource != null && _dataSource.Count() > position)
             {
-                bookmarkHolder.BookmarkLabel.Text = _bookmarks.ElementAt(position).Name;
+                bookmarkHolder.BookmarkLabel.Text = _dataSource.ElementAt(position).Name;
             }
         }
 
@@ -117,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnBookmarkClicked(int position)
         {
-            BookmarkSelected?.Invoke(this, _bookmarks.ElementAt(position));
+            BookmarkSelected?.Invoke(this, _dataSource.ElementAt(position));
         }
     }
 }

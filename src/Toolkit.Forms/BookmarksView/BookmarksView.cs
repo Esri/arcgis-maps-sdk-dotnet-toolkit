@@ -15,9 +15,7 @@
 //  ******************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -28,12 +26,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// The BookmarksView view presents bookmarks, either from a list defined by <see cref="BookmarksOverride" /> or
     /// the Map or Scene shown in the associated <see cref="GeoView" />.
     /// </summary>
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class BookmarksView : TemplatedView
+    public class BookmarksView : TemplatedView
     {
         private ListView _presentingView;
+        private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
 
         private static readonly DataTemplate DefaultDataTemplate;
+        private static readonly ControlTemplate DefaultControlTemplate;
 
         static BookmarksView()
         {
@@ -43,13 +42,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 defaultCell.SetBinding(TextCell.TextProperty, nameof(Bookmark.Name));
                 return defaultCell;
             });
+
+            string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
+                                    <ListView x:Name=""PresentingView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"">
+                                        <x:Arguments>
+                                            <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+                                        </x:Arguments>
+                                    </ListView>
+                                </ControlTemplate>";
+            DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
         }
 
         public BookmarksView()
         {
             ItemTemplate = DefaultDataTemplate;
 
-            InitializeComponent();
+            ControlTemplate = DefaultControlTemplate;
         }
 
         protected override void OnApplyTemplate()
@@ -67,6 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 _presentingView.ItemSelected += Internal_bookmarkSelected;
                 _presentingView.ItemTemplate = ItemTemplate;
+                _presentingView.ItemsSource = _dataSource;
             }
         }
 
@@ -126,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         private static void BookmarksOverrideChanged(BindableObject sender, object oldValue, object newValue)
         {
-            ((BookmarksView)sender).Refresh();
+            ((BookmarksView)sender)._dataSource.SetOverrideList(newValue as IEnumerable<Bookmark>);
         }
 
         /// <summary>
@@ -136,68 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             BookmarksView bookmarkView = (BookmarksView)sender;
 
-            if (oldValue is INotifyPropertyChanged oldInpc)
-            {
-                oldInpc.PropertyChanged -= bookmarkView.GeoViewPropertyChanged;
-            }
-
-            if (newValue is INotifyPropertyChanged newInpc)
-            {
-                newInpc.PropertyChanged += bookmarkView.GeoViewPropertyChanged;
-            }
-
-            bookmarkView.Refresh();
-        }
-
-        /// <summary>
-        /// Manages event subscription and unsubcription for the GeoView.
-        /// </summary>
-        private void GeoViewPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (sender is MapView mv && e.PropertyName == nameof(mv.Map))
-            {
-                mv.Map.PropertyChanged -= Document_PropertyChanged;
-                mv.Map.LoadStatusChanged -= Document_LoadStatusChanged;
-
-                mv.Map.PropertyChanged += Document_PropertyChanged;
-                mv.Map.LoadStatusChanged += Document_LoadStatusChanged;
-            }
-            else if (sender is SceneView sv && e.PropertyName == nameof(sv.Scene))
-            {
-                sv.Scene.PropertyChanged -= Document_PropertyChanged;
-                sv.Scene.LoadStatusChanged -= Document_LoadStatusChanged;
-
-                sv.Scene.PropertyChanged += Document_PropertyChanged;
-                sv.Scene.LoadStatusChanged += Document_LoadStatusChanged;
-            }
-            else
-            {
-                return;
-            }
-
-            Refresh();
-        }
-
-        /// <summary>
-        /// Handles property changes to the Map or Scene associated with the <see cref="GeoView" />.
-        /// </summary>
-        private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Map.Bookmarks) || e.PropertyName == nameof(Scene.Bookmarks))
-            {
-                Refresh();
-            }
-        }
-
-        /// <summary>
-        /// Handles load status changes on the Map or Scene associated with the <see cref="GeoView" />.
-        /// </summary>
-        private void Document_LoadStatusChanged(object sender, LoadStatusEventArgs e)
-        {
-            if (e.Status == LoadStatus.Loaded)
-            {
-                Device.BeginInvokeOnMainThread(Refresh);
-            }
+            bookmarkView._dataSource.SetGeoView(newValue as GeoView);
         }
 
         /// <summary>
@@ -212,42 +160,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 bookmarkView._presentingView.ItemTemplate = (DataTemplate)newValue;
             }
 
-        }
-
-        /// <summary>
-        /// Gets the list of bookmarks as it should be shown in the view.
-        /// </summary>
-        private IEnumerable<Bookmark> CurrentBookmarkList
-        {
-            get
-            {
-                if (BookmarksOverride != null)
-                {
-                    return BookmarksOverride;
-                }
-
-                if (GeoView is MapView mv && mv.Map is Map m)
-                {
-                    return m.Bookmarks;
-                }
-                else if (GeoView is SceneView sv && sv.Scene is Scene s)
-                {
-                    return s.Bookmarks;
-                }
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Updates the list view with the latest bookmark list.
-        /// </summary>
-        private void Refresh()
-        {
-            if (_presentingView != null)
-            {
-                _presentingView.ItemsSource = CurrentBookmarkList;
-            }
         }
 
         /// <summary>

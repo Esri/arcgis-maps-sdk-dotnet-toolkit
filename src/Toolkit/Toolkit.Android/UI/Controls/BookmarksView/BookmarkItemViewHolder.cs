@@ -38,10 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var weakEventHandler = new Internal.WeakEventListener<View, object, EventArgs>(itemView)
             {
-                OnEventAction = (instance, source, eventArgs) =>
-                {
-                    listener(LayoutPosition);
-                },
+                OnEventAction = (instance, source, eventArgs) => listener(LayoutPosition),
                 OnDetachAction = (instance, weakEventListener) => instance.Click -= weakEventListener.OnEvent
             };
 

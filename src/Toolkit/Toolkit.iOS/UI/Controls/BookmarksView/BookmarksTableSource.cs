@@ -29,15 +29,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     internal class BookmarksTableSource : UITableViewSource, INotifyCollectionChanged
     {
-        private readonly IEnumerable<Bookmark> _bookmarks;
+        private readonly BookmarksViewDataSource _bookmarks;
 
         internal static readonly NSString CellId = new NSString(nameof(UITableViewCell));
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public BookmarksTableSource(IEnumerable<Bookmark> bookmarks)
+        public BookmarksTableSource(BookmarksViewDataSource dataSource)
         {
-            _bookmarks = bookmarks;
+            _bookmarks = dataSource;
             if (_bookmarks is INotifyCollectionChanged incc)
             {
                 var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)

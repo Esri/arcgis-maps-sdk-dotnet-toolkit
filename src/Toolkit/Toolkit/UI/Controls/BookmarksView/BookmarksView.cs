@@ -22,7 +22,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 #elif __IOS__
-using Control = UIKit.UIView;
+using Control = UIKit.UIViewController;
 #elif __ANDROID__
 using Android.App;
 using Android.Views;
@@ -39,16 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class BookmarksView : Control
     {
-#if !__ANDROID__
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BookmarksView"/> class.
-        /// </summary>
-        public BookmarksView()
-            : base()
-        {
-            Initialize();
-        }
-#endif
+        private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
 
         /// <summary>
         /// Gets or sets the list of bookmarks to display.
@@ -74,137 +65,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => GeoViewImpl = value;
         }
 
-        /// <summary>
-        /// Refreshes the view when the Map or Scene has finished loading.
-        /// </summary>
-        /// <param name="sender">Sending object</param>
-        /// <param name="e">Updated load status</param>
-#if NETFX_CORE
-        private async void Loadable_LoadStatusChanged(object sender, LoadStatusEventArgs e)
-#else
-        private void Loadable_LoadStatusChanged(object sender, LoadStatusEventArgs e)
-#endif
-        {
-            if (e.Status != LoadStatus.Loaded)
-            {
-                return;
-            }
-#if __ANDROID__
-            Activity activity = null;
-            if (Context is Activity contextActivity)
-            {
-                activity = contextActivity;
-            }
-            else if (Context is ContextThemeWrapper wrapper)
-            {
-                if (wrapper.BaseContext is Activity wrappedActivity)
-                {
-                    activity = wrappedActivity;
-                }
-            }
-#endif
-
-#if NETFX_CORE
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-#elif __ANDROID__
-            activity.RunOnUiThread(() =>
-#elif __IOS__
-            InvokeOnMainThread(() =>
-#else
-            Dispatcher.Invoke(() =>
-#endif
-                {
-                    Refresh();
-                });
-        }
-
-        /// <summary>
-        /// Handles <see cref="GeoView" /> property changes, primarily to handle Map and Scene changes.
-        /// </summary>
-        private void ConfigureGeoDocEvents(GeoView gv)
-        {
-            if (gv is MapView mv)
-            {
-                // Future - check for map property changes specifically; currently will raise multiple times for map change
-                if (mv.Map != null)
-                {
-                    // Map load status change
-                    var loadableListener = new Internal.WeakEventListener<ILoadable, object, LoadStatusEventArgs>(mv.Map);
-                    loadableListener.OnEventAction = (instance, source, eventArgs) => { Loadable_LoadStatusChanged(source, eventArgs); };
-                    loadableListener.OnDetachAction = (instance, weakEventListener) => instance.LoadStatusChanged -= weakEventListener.OnEvent;
-                    mv.Map.LoadStatusChanged += loadableListener.OnEvent;
-
-                    // Map property change
-                    var incc = mv.Map as INotifyPropertyChanged;
-                    var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(incc);
-                    listener.OnEventAction = (instance, source, eventArgs) => { Document_PropertyChanged(source, eventArgs); };
-                    listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
-                    incc.PropertyChanged += listener.OnEvent;
-                }
-            }
-            else if (gv is SceneView sv)
-            {
-                if (sv.Scene != null)
-                {
-                    // Map load status change
-                    var loadableListener = new Internal.WeakEventListener<ILoadable, object, LoadStatusEventArgs>(sv.Scene);
-                    loadableListener.OnEventAction = (instance, source, eventArgs) => { Loadable_LoadStatusChanged(source, eventArgs); };
-                    loadableListener.OnDetachAction = (instance, weakEventListener) => instance.LoadStatusChanged -= weakEventListener.OnEvent;
-                    sv.Scene.LoadStatusChanged += loadableListener.OnEvent;
-
-                    var incc = sv.Scene as INotifyPropertyChanged;
-                    var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(incc);
-                    listener.OnEventAction = (instance, source, eventArgs) => { Document_PropertyChanged(source, eventArgs); };
-                    listener.OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent;
-                    incc.PropertyChanged += listener.OnEvent;
-                }
-            }
-            else
-            {
-                return;
-            }
-
-            Refresh();
-        }
-
-        /// <summary>
-        /// Handles property changes to the Map or Scene associated with the <see cref="GeoView" />.
-        /// </summary>
-        private void Document_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Map.Bookmarks) || e.PropertyName == nameof(Scene.Bookmarks))
-            {
-                Refresh();
-            }
-        }
-
-        private IEnumerable<Bookmark> CurrentBookmarkList
-        {
-            get
-            {
-                if (BookmarksOverride != null)
-                {
-                    return BookmarksOverride;
-                }
-
-                if (GeoView is MapView mv && mv.Map is Map m)
-                {
-                    return m.Bookmarks;
-                }
-                else if (GeoView is SceneView sv && sv.Scene is Scene s)
-                {
-                    return s.Bookmarks;
-                }
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Selects the bookmark and navigates to it in the associated <see cref="GeoView" />.
-        /// </summary>
-        /// <param name="bookmark">Bookmark to navigate to. Must be non-null with a valid viewpoint.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bookmark"/> is <code>null</code>.</exception>
         private void SelectAndNavigateToBookmark(Bookmark bookmark)
         {
             if (bookmark?.Viewpoint == null)
@@ -217,9 +77,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             BookmarkSelected?.Invoke(this, bookmark);
         }
 
-        /// <summary>
-        /// Raised whenever a bookmark is selected.
-        /// </summary>
         public event EventHandler<Bookmark> BookmarkSelected;
     }
 }

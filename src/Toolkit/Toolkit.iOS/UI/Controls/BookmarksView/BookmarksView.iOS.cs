@@ -14,47 +14,29 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using CoreGraphics;
+using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
+using Foundation;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [DisplayName("BookmarksView")]
     [Category("ArcGIS Runtime Controls")]
-    public partial class BookmarksView : IComponent
+    public partial class BookmarksView
     {
         private UITableView _listView;
-
-#pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
-        /// <summary>
-        /// Internal use only. Invoked by the Xamarin iOS designer.
-        /// </summary>
-        /// <param name="handle">A platform-specific type that is used to represent a pointer or a handle.</param>
-#pragma warning restore SA1642 // Constructor summary documentation must begin with standard text
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public BookmarksView(IntPtr handle)
-            : base(handle)
-        {
-            Initialize();
-        }
+        private UIBarButtonItem _closeButton;
 
         /// <inheritdoc />
-        public override void AwakeFromNib()
+        public override void LoadView()
         {
-            var component = (IComponent)this;
-            DesignTime.IsDesignMode = component.Site != null && component.Site.DesignMode;
+            base.LoadView();
 
-            Initialize();
-
-            base.AwakeFromNib();
-        }
-
-        private void Initialize()
-        {
-            BackgroundColor = UIColor.Clear;
+            // Create views
+            View = new UIView();
 
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
             {
@@ -66,84 +48,72 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 RowHeight = UITableView.AutomaticDimension
             };
             _listView.RegisterClassForCellReuse(typeof(UITableViewCell), BookmarksTableSource.CellId);
-            AddSubview(_listView);
 
-            _listView.LeftAnchor.ConstraintEqualTo(LeftAnchor).Active = true;
-            _listView.TopAnchor.ConstraintEqualTo(TopAnchor).Active = true;
-            _listView.RightAnchor.ConstraintEqualTo(RightAnchor).Active = true;
-            _listView.BottomAnchor.ConstraintEqualTo(BottomAnchor).Active = true;
+            // Set up the list view source
+            var tableSource = new BookmarksTableSource(_dataSource);
+            tableSource.BookmarkSelected += HandleBookmarkSelected;
+            _listView.Source = tableSource;
 
-            InvalidateIntrinsicContentSize();
-        }
-
-        /// <inheritdoc />
-        public override CGSize IntrinsicContentSize => _listView.ContentSize;
-
-        /// <inheritdoc />
-        public override CGSize SizeThatFits(CGSize size)
-        {
-            var widthThatFits = Math.Min(size.Width, IntrinsicContentSize.Width);
-            var heightThatFits = Math.Min(size.Height, IntrinsicContentSize.Height);
-            return new CGSize(widthThatFits, heightThatFits);
-        }
-
-        /// <inheritdoc cref="IComponent.Site" />
-        ISite IComponent.Site { get; set; }
-
-        private EventHandler _disposed;
-
-        /// <summary>
-        /// Internal use only
-        /// </summary>
-        event EventHandler IComponent.Disposed
-        {
-            add => _disposed += value;
-            remove => _disposed -= value;
-        }
-
-        private void Refresh()
-        {
-            if (_listView == null)
+            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(tableSource)
             {
-                return;
+                OnEventAction = (instance, source, eventArgs) =>
+                {
+                    Source_CollectionChanged(this, eventArgs);
+                },
+                OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+            };
+            tableSource.CollectionChanged += listener.OnEvent;
+
+            // Show and lay out views
+            View.AddSubview(_listView);
+
+            NSLayoutConstraint.ActivateConstraints(new[]
+            {
+                _listView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor),
+                _listView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor),
+                _listView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor),
+                _listView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor)
+            });
+
+            if (NavigationItem != null)
+            {
+                _closeButton = new UIBarButtonItem("Close", UIBarButtonItemStyle.Plain, null);
+                NavigationItem.RightBarButtonItem = _closeButton;
+                Title = "Bookmarks";
             }
+        }
 
-            if (CurrentBookmarkList == null)
+        private void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                _listView.Source = null;
                 _listView.ReloadData();
-                InvalidateIntrinsicContentSize();
-                return;
             }
-
-            if (_listView.Source is BookmarksTableSource oldTableSource)
+            else if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                oldTableSource.CollectionChanged -= UpdateSourceCollection;
-                oldTableSource.BookmarkSelected -= HandleBookmarkSelected;
+                for (int i = e.NewStartingIndex; i < e.NewItems.Count + e.NewStartingIndex; i++)
+                {
+                    _listView.InsertRows(new NSIndexPath[] { NSIndexPath.FromRowSection(i, 0) }, UITableViewRowAnimation.Automatic);
+                }
             }
-
-            var newTableSource = new BookmarksTableSource(CurrentBookmarkList);
-            _listView.Source = newTableSource;
-            newTableSource.CollectionChanged += UpdateSourceCollection;
-            newTableSource.BookmarkSelected += HandleBookmarkSelected;
-
-            _listView.ReloadData();
-            InvalidateIntrinsicContentSize();
-            SetNeedsUpdateConstraints();
-            UpdateConstraints();
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                for (int i = e.OldStartingIndex; i < e.OldItems.Count + e.OldStartingIndex; i++)
+                {
+                    _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(e.OldStartingIndex, 0) }, UITableViewRowAnimation.Automatic);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Replace)
+            {
+                _listView.ReloadRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.Automatic);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.OldStartingIndex, e.OldItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+                _listView.InsertRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+            }
         }
 
         private void HandleBookmarkSelected(object sender, Bookmark bookmark) => SelectAndNavigateToBookmark(bookmark);
-
-        private void UpdateSourceCollection(object sender, EventArgs e)
-        {
-            InvokeOnMainThread(() =>
-            {
-                _listView.ReloadData();
-                InvalidateIntrinsicContentSize();
-                SetNeedsUpdateConstraints();
-                UpdateConstraints();
-            });
-        }
     }
 }

@@ -34,11 +34,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "List", Type = typeof(ListView))]
     public partial class BookmarksView
     {
-        private void Initialize() => DefaultStyleKey = typeof(BookmarksView);
-
-        private void GeoDoc_PropertyChange(object sender, PropertyChangedEventArgs e)
+        public BookmarksView()
         {
-            ConfigureGeoDocEvents(GeoView);
+            DefaultStyleKey = typeof(BookmarksView);
         }
 
         /// <summary>
@@ -54,17 +52,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             ListView = GetTemplateChild("List") as ListView;
 
-            Refresh();
-        }
-
-        internal void Refresh()
-        {
-            if (ListView == null)
+            if (ListView != null)
             {
-                return;
+                ListView.ItemsSource = _dataSource;
             }
-
-            ListView.ItemsSource = CurrentBookmarkList;
         }
 
         private ListView _listView;
@@ -79,7 +70,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (_listView != null)
                     {
                         _listView.SelectionChanged -= ListSelectionChanged;
-                        _listView = value;
                     }
 
                     _listView = value;
@@ -94,12 +84,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void ListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0)
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is Bookmark bm)
             {
-                if (e.AddedItems[0] is Bookmark bm)
-                {
-                    SelectAndNavigateToBookmark(bm);
-                }
+                SelectAndNavigateToBookmark(bm);
             }
 
             ((ListView)sender).SelectedItem = null;
@@ -129,79 +116,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty BookmarksOverrideProperty =
             DependencyProperty.Register(nameof(BookmarksOverride), typeof(IList<Bookmark>), typeof(BookmarksView), new PropertyMetadata(null, OnBookmarksOverridePropertyChanged));
 
-#if NETFX_CORE
-        // Token used for unregistering GeoView Map/Scene property change callbacks
-        private long _lasttoken;
-#endif
-
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var contents = (BookmarksView)d;
-#if NETFX_CORE
-            if (e.OldValue is MapView oldMapView)
-            {
-                oldMapView.UnregisterPropertyChangedCallback(MapView.MapProperty, contents._lasttoken);
-            }
-            else if (e.OldValue is SceneView oldSceneView)
-            {
-                oldSceneView.UnregisterPropertyChangedCallback(SceneView.SceneProperty, contents._lasttoken);
-            }
-
-            if (e.NewValue is MapView newMapView)
-            {
-                contents._lasttoken = newMapView.RegisterPropertyChangedCallback(MapView.MapProperty, contents.GeoView_PropertyChanged);
-            }
-            else if (e.NewValue is SceneView newSceneView)
-            {
-                contents._lasttoken = newSceneView.RegisterPropertyChangedCallback(SceneView.SceneProperty, contents.GeoView_PropertyChanged);
-            }
-#else
-            if (e.OldValue is MapView oldMapView)
-            {
-                DependencyPropertyDescriptor
-                    .FromProperty(MapView.MapProperty, typeof(MapView))
-                    .RemoveValueChanged(oldMapView, contents.GeoView_PropertyChanged);
-            }
-            else if (e.OldValue is SceneView oldSceneView)
-            {
-                DependencyPropertyDescriptor
-                    .FromProperty(SceneView.SceneProperty, typeof(SceneView))
-                    .RemoveValueChanged(oldSceneView, contents.GeoView_PropertyChanged);
-            }
-
-            if (e.NewValue is MapView newMapView)
-            {
-                DependencyPropertyDescriptor
-                .FromProperty(MapView.MapProperty, typeof(MapView))
-                .AddValueChanged(newMapView, contents.GeoView_PropertyChanged);
-            }
-            else if (e.NewValue is SceneView newSceneView)
-            {
-                DependencyPropertyDescriptor
-                .FromProperty(SceneView.SceneProperty, typeof(SceneView))
-                .AddValueChanged(newSceneView, contents.GeoView_PropertyChanged);
-            }
-#endif
-            contents.Refresh();
+            ((BookmarksView)d)._dataSource.SetGeoView(e.NewValue as GeoView);
         }
-
-#if NETFX_CORE
-        private void GeoView_PropertyChanged(DependencyObject sender, DependencyProperty property)
-        {
-            ConfigureGeoDocEvents(GeoView);
-        }
-#else
-        private void GeoView_PropertyChanged(object sender, System.EventArgs e)
-        {
-            ConfigureGeoDocEvents(GeoView);
-        }
-#endif
 
         private static void OnBookmarksOverridePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var bm = (BookmarksView)d;
-            bm.BookmarksOverride = (IEnumerable<Bookmark>)e.NewValue;
-            bm.Refresh();
+            ((BookmarksView)d)._dataSource.SetOverrideList(e.NewValue as IEnumerable<Bookmark>);
         }
 
         /// <summary>
