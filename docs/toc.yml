@@ -1,5 +1,8 @@
-- name: Articles
-  href: articles/
-- name: Api Documentation
-  href: api/
-  homepage: api/index.md
+- name: Home
+  href: index.md
+- name: Getting Started
+  href: concepts/index.md
+- name: API Reference
+  href: api/index.md
+- name: GitHub
+  href: https://github.com/Esri/arcgis-toolkit-dotnet

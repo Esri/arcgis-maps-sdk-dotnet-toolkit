@@ -1,51 +1,80 @@
 {
-  "metadata": [
+  "metadata": [    
     {
       "src": [
         {
-          "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-          ],
-          "src":"../src",
-          "properties": { "TargetFramework": "net461" },
-          "disableGitFeatures": false,
-          "disableDefaultFilter": false
+          "files": [ "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj" ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src" : "../src/",
         }
       ],
       "dest": "../output/docs/api/netfx",
+      "properties": { "TargetFramework": "net461" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
-    },	
+    },    
+    {
+      "src": [
+        {
+          "files": [ "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj" ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src" : "../src/",
+        }
+      ],
+      "dest": "../output/docs/api/netcore",
+      "properties": { "TargetFramework": "netcoreapp3.1" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
     {
       "src": [
         {
           "files": [
             "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
           ],
-          "src":"../src",
-          "properties": { "TargetFramework": "netcoreapp3.1" },
-          "disableGitFeatures": false,
-          "disableDefaultFilter": false
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src" : "../src/",
         }
       ],
-      "dest": "../output/docs/api/netcore",
+      "dest": "../output/docs/api/android",
+      "properties": { "TargetFramework": "monoandroid81" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{
+    {
+      "src": [
+        {
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
+          ],
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src" : "../src/",
+        }
+      ],
+      "dest": "../output/docs/api/ios",
+      "properties": { "TargetFramework": "xamarinios10" },
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+    {
       "src": [
         {
           "files": [
             "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
             "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj"
           ],
-          "src":"../src",
-          "properties": { "TargetFramework": "uap10.0.16299" },
-          "disableGitFeatures": false,
-          "disableDefaultFilter": false
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src" : "../src/",
         }
       ],
       "dest": "../output/docs/api/uwp",
+      "properties": { "TargetFramework": "uap10.0.16299" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -58,63 +87,29 @@
             "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
             "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
           ],
-          "src":"../src",
-          "properties": { "TargetFramework": "xamarinios10" },
-          "disableGitFeatures": false,
-          "disableDefaultFilter": false
-        }
-      ],
-      "dest": "../output/docs/api/ios",
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    },
-	{
-      "src": [
-        {
-          "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
-          ],
-          "src":"../src",
-          "properties": { "TargetFramework": "monoandroid81" },
-          "disableGitFeatures": false,
-          "disableDefaultFilter": false
-        }
-      ],
-      "dest": "../output/docs/api/android",
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    },
-	{
-      "src": [
-        {
-          "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
-          ],
-          "src":"../src",
-          "properties": { "TargetFramework": "netstandard2.0" },
-          "disableGitFeatures": false,
-          "disableDefaultFilter": false
+          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "src" : "../src/",
         }
       ],
       "dest": "../output/docs/api/netstd",
+      "properties": { "TargetFramework": "netstandard2.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
-    },
+    }
   ],
   "build": {
     "content": [
       {
         "files": [
-          "api/**.yml",
           "api/**/index.md"
+        ]
+      },
+      {
+        "files": [
+          "api/**.yml",
+          "api/**/toc.yml"
         ],
-        "src":"../output/docs"
+        "src" : "../output/docs"
       },
       {
         "files": [
@@ -128,22 +123,27 @@
     "resource": [
       {
         "files": [
-          "images/**"
-        ]
+          "images/**",
+		  "logo.svg",
+		  "favicon.ico"
+        ],
       }
     ],
     "overwrite": [
       {
         "files": [
           "apidoc/**.md"
-        ],
-        "exclude": [
-          "obj/**",
-          "..\\Output\\site/**"
         ]
       }
     ],
-    "dest": "../Output/docs/site",
+    "globalMetadata": {
+      "_appLogoPath": "images/logo.png",
+      "_gitContribute": {
+        "branch": "master",
+        "apiSpecFolder": "docs/apidoc"
+      }
+    },
+    "dest": "../Output/docs_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
