@@ -1,0 +1,159 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+          ],
+          "src":"../src",
+          "properties": { "TargetFramework": "net461" },
+          "disableGitFeatures": false,
+          "disableDefaultFilter": false
+        }
+      ],
+      "dest": "../output/docs/api/netfx",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },	
+    {
+      "src": [
+        {
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+          ],
+          "src":"../src",
+          "properties": { "TargetFramework": "netcoreapp3.1" },
+          "disableGitFeatures": false,
+          "disableDefaultFilter": false
+        }
+      ],
+      "dest": "../output/docs/api/netcore",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+	{
+      "src": [
+        {
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj"
+          ],
+          "src":"../src",
+          "properties": { "TargetFramework": "uap10.0.16299" },
+          "disableGitFeatures": false,
+          "disableDefaultFilter": false
+        }
+      ],
+      "dest": "../output/docs/api/uwp",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+	{
+      "src": [
+        {
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
+          ],
+          "src":"../src",
+          "properties": { "TargetFramework": "xamarinios10" },
+          "disableGitFeatures": false,
+          "disableDefaultFilter": false
+        }
+      ],
+      "dest": "../output/docs/api/ios",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+	{
+      "src": [
+        {
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
+          ],
+          "src":"../src",
+          "properties": { "TargetFramework": "monoandroid81" },
+          "disableGitFeatures": false,
+          "disableDefaultFilter": false
+        }
+      ],
+      "dest": "../output/docs/api/android",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+	{
+      "src": [
+        {
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
+          ],
+          "src":"../src",
+          "properties": { "TargetFramework": "netstandard2.0" },
+          "disableGitFeatures": false,
+          "disableDefaultFilter": false
+        }
+      ],
+      "dest": "../output/docs/api/netstd",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false
+    },
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "api/**.yml",
+          "api/**/index.md"
+        ],
+        "src":"../output/docs"
+      },
+      {
+        "files": [
+          "concepts/**.md",
+          "concepts/**/toc.yml",
+          "toc.yml",
+          "*.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "overwrite": [
+      {
+        "files": [
+          "apidoc/**.md"
+        ],
+        "exclude": [
+          "obj/**",
+          "..\\Output\\site/**"
+        ]
+      }
+    ],
+    "dest": "../Output/docs/site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": [
+      "default"
+    ],
+    "postProcessors": [],
+    "markdownEngineName": "markdig",
+    "noLangKeyword": false,
+    "keepFileLink": false,
+    "cleanupCacheHistory": false,
+    "disableGitFeatures": false
+  }
+}
