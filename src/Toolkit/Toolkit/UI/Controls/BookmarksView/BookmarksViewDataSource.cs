@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
-    public class BookmarksViewDataSource : IList<Bookmark>, INotifyCollectionChanged, INotifyPropertyChanged, IList
+    internal class BookmarksViewDataSource : IList<Bookmark>, INotifyCollectionChanged, INotifyPropertyChanged, IList
     {
         private GeoView _geoView;
         private IList<Bookmark> _overrideList;
