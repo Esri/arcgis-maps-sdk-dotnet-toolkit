@@ -59,10 +59,53 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Sets the override bookmark list that will be shown instead of the Map's bookmark list.
+        /// </summary>
+        /// <param name="bookmarks">List of bookmarks to show</param>
+        public void SetOverrideList(IEnumerable<Bookmark> bookmarks)
+        {
+            // Skip if collection is the same
+            if (_overrideList == bookmarks)
+            {
+                return;
+            }
+
+            // Set new list
+            if (bookmarks == null)
+            {
+                _overrideList = null;
+            }
+            else if (bookmarks is IList<Bookmark> listOfBookmarks)
+            {
+                _overrideList = listOfBookmarks;
+            }
+            else
+            {
+                _overrideList = bookmarks.ToList();
+            }
+
+            // Refresh
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+
+            // Subscribe to events if applicable
+            if (bookmarks is INotifyCollectionChanged iCollectionChanged)
+            {
+                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(iCollectionChanged);
+                listener.OnEventAction = (instance, source, eventArgs) => HandleOverrideListCollectionChanged(source, eventArgs);
+                listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
+                iCollectionChanged.CollectionChanged += listener.OnEvent;
+            }
+        }
+
 #if NETFX_CORE && !XAMARIN_FORMS
         private long _propertyChangedCallbackToken = 0;
 #endif
 
+        /// <summary>
+        /// Sets the GeoView from which bookmarks will be shown.
+        /// </summary>
+        /// <param name="view">The view from which to get Map/Scene bookmarks</param>
         public void SetGeoView(GeoView view)
         {
             if (_geoView == view)
@@ -216,41 +259,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_overrideList != null)
             {
                 OnCollectionChanged(e);
-            }
-        }
-
-        public void SetOverrideList(IEnumerable<Bookmark> bookmarks)
-        {
-            // Skip if collection is the same
-            if (_overrideList == bookmarks)
-            {
-                return;
-            }
-
-            // Set new list
-            if (bookmarks == null)
-            {
-                _overrideList = null;
-            }
-            else if (bookmarks is IList<Bookmark> listOfBookmarks)
-            {
-                _overrideList = listOfBookmarks;
-            }
-            else
-            {
-                _overrideList = bookmarks.ToList();
-            }
-
-            // Refresh
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-
-            // Subscribe to events if applicable
-            if (bookmarks is INotifyCollectionChanged iCollectionChanged)
-            {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(iCollectionChanged);
-                listener.OnEventAction = (instance, source, eventArgs) => HandleOverrideListCollectionChanged(source, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
-                iCollectionChanged.CollectionChanged += listener.OnEvent;
             }
         }
 

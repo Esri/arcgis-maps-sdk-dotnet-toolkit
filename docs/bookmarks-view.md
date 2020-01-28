@@ -7,7 +7,6 @@ Features:
 * Navigates the associated `GeoView` to the selected bookmark.
 * Customize the display of the list with the `ItemTemplate` property on UWP and WPF.
 * Supports observable collections for `BookmarksOverride` and handles changes to the `Map`/`Scene` properties.
-* On iOS, an additional `BookmarksVC` view controller is provided to facilitate modal presentation.
 
 ## Platform-specific usage
 
@@ -15,113 +14,58 @@ Features:
 
 ### iOS
 
-There are two ways to use the bookmarks view on iOS:
-
-* As a view; you specify the layout of the view within your view hierarchy
-* As a view controller; you create `BookmarksVC` with a configured instance of `BookmarksView` and present it modally.
+On iOS, `BookmarksView` is a UIViewController, which can be shown directly, or added as a child view controller to show its view.
 
 As a view:
 
 ```csharp
-public partial class BookmarksMapViewController : UIViewController
-{
-    private BookmarksView _bookmarks;
-    private MapView _mapView;
-
-    private const string _mapUrl = "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee";
-
-    public override void ViewDidLoad()
+public partial class BookmarksMapEventTestController : UIViewController
     {
-        base.ViewDidLoad();
+        private BookmarksView _bookmarksView;
+        private MapView _mapView;
 
-        _mapView = new MapView()
+        private readonly string _mapUrl = "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee";
+
+        private ObservableCollection<Bookmark> _bookmarksObservable = new ObservableCollection<Bookmark>();
+
+        public override void ViewDidAppear(bool animated)
         {
-            Map = new Map(new Uri(_mapUrl)),
-            TranslatesAutoresizingMaskIntoConstraints = false
-        };
-
-            this.View.AddSubview(_mapView);
-
-        // Create the bookmarks view, referencing the mapview.
-        _bookmarks = new BookmarksView()
-        {
-            GeoView = _mapView,
-            TranslatesAutoresizingMaskIntoConstraints = false
-        };
-        this.View.AddSubview(_bookmarks);
-
-        _mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
-        _mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
-        _mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
-        _mapView.BottomAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
-
-        _bookmarks.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
-        _bookmarks.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
-        _bookmarks.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
-        _bookmarks.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
-    }
-}
-```
-
-As a modally-presented view controller:
-
-```csharp
-public partial class BookmarksMapViewControllerAlt : UIViewController
-{
-    private BookmarksView _bookmarks;
-    private BookmarksVC _bookmarksVC;
-
-    private MapView _mapView;
-    private UIBarButtonItem _showBookmarksButton;
-
-    private const string _mapUrl = "https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee";
-
-    public override void ViewDidLoad()
-    {
-        base.ViewDidLoad();
-
-        // Create the base view.
-        View = new UIView { BackgroundColor = UIColor.SystemBackgroundColor };
-
-        // Configure and show the mapview.
-        _mapView = new MapView()
-        {
-            Map = new Map(new Uri(_mapUrl)),
-            TranslatesAutoresizingMaskIntoConstraints = false
-        };
-
-            this.View.AddSubview(_mapView);
-
-        // Create the bookmarks view, referencing the existing map view.
-        _bookmarks = new BookmarksView()
-        {
-            GeoView = _mapView,
-            TranslatesAutoresizingMaskIntoConstraints = false
-        };
-
-        // Only the map view is shown here; presentation of the bookmarks control is handled by _bookmarksVC.
-        _mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
-        _mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
-        _mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
-        _mapView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
-
-        // Button added in the navigation bar to show the bookmarks control.
-        _showBookmarksButton = new UIBarButtonItem("Bookmarks", UIBarButtonItemStyle.Plain, ShowBookmarksClicked);
-        NavigationItem.SetRightBarButtonItem(_showBookmarksButton, false);
-    }
-
-    private void ShowBookmarksClicked(object sender, EventArgs e)
-    {
-        // Lazily create the view controller only when its needed.
-        if (_bookmarksVC == null)
-        {
-            // The bookmarks view controller must be created with an existing bookmarks view.
-            _bookmarksVC = new BookmarksVC(_bookmarks);
+            base.ViewDidAppear(animated);
+            configureManualList();
         }
-        // Show the bookmarks view controller.
-        PresentModalViewController(new UINavigationController(_bookmarksVC), true);
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            _mapView = new MapView()
+            {
+                Map = new Map(new Uri(_mapUrl)),
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
+
+            View.AddSubview(_mapView);
+
+            _bookmarksView = new BookmarksView()
+            {
+                GeoView = _mapView
+            };
+
+            AddChildViewController(_bookmarksView);
+            _bookmarksView.View.TranslatesAutoresizingMaskIntoConstraints = false;
+            View.AddSubview(_bookmarksView.View);
+
+            _mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+            _mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
+            _mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
+            _mapView.BottomAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
+
+            _bookmarksView.View.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+            _bookmarksView.View.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
+            _bookmarksView.View.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
+            _bookmarksView.View.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
+        }
     }
-}
 ```
 
 ### Android

@@ -159,7 +159,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 bookmarkView._presentingView.ItemTemplate = (DataTemplate)newValue;
             }
-
         }
 
         /// <summary>
