@@ -16,9 +16,7 @@
 
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
-using Foundation;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -58,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 OnEventAction = (instance, source, eventArgs) =>
                 {
-                    Source_CollectionChanged(this, eventArgs);
+                    _listView.ReloadData();
                 },
                 OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
             };
@@ -84,38 +82,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Do initial data reload
             _listView.ReloadData();
-        }
-
-        private void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    for (int i = e.NewStartingIndex; i < e.NewItems.Count + e.NewStartingIndex; i++)
-                    {
-                        _listView.InsertRows(new NSIndexPath[] { NSIndexPath.FromRowSection(i, 0) }, UITableViewRowAnimation.Automatic);
-                    }
-
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    for (int i = e.OldStartingIndex; i < e.OldItems.Count + e.OldStartingIndex; i++)
-                    {
-                        _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(e.OldStartingIndex, 0) }, UITableViewRowAnimation.Automatic);
-                    }
-
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    _listView.ReloadRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.Automatic);
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                    _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.OldStartingIndex, e.OldItems.Count).ToArray()) }, UITableViewRowAnimation.None);
-                    _listView.InsertRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                default:
-                    _listView.ReloadData();
-                    break;
-            }
         }
 
         private void HandleBookmarkSelected(object sender, Bookmark bookmark) => SelectAndNavigateToBookmark(bookmark);
