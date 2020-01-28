@@ -16,7 +16,6 @@
 
 #if !XAMARIN
 using System.Collections.Generic;
-using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
@@ -26,7 +25,6 @@ using Windows.UI.Xaml.Data;
 #else
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -34,6 +32,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "List", Type = typeof(ListView))]
     public partial class BookmarksView
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookmarksView"/> class.
+        /// </summary>
         public BookmarksView()
         {
             DefaultStyleKey = typeof(BookmarksView);

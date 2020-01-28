@@ -132,7 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if XAMARIN || XAMARIN_FORMS
         private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-
             if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
                 (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
             {
@@ -143,26 +142,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void GeoViewDocumentChanged(object sender, object e)
         {
-            if (_geoView is MapView mv)
+            if (_geoView is MapView mv && mv.Map is ILoadable mapLoadable)
             {
                 // Listen for load completion
-                var iloadable = mv.Map as ILoadable;
-                var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(iloadable);
+                var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(mapLoadable);
                 listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
-                iloadable.Loaded += listener.OnEvent;
+                mapLoadable.Loaded += listener.OnEvent;
 
                 // Ensure event is raised even if already loaded
                 _ = mv.Map.RetryLoadAsync();
             }
-            else if (_geoView is SceneView sv)
+            else if (_geoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
             {
                 // Listen for load completion
-                var iloadable = sv.Scene as ILoadable;
-                var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(iloadable);
+                var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(sceneLoadable);
                 listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
-                iloadable.Loaded += listener.OnEvent;
+                sceneLoadable.Loaded += listener.OnEvent;
 
                 // Ensure event is raised even if already loaded
                 _ = sv.Scene.RetryLoadAsync();
@@ -343,8 +340,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
         public event NotifyCollectionChangedEventHandler CollectionChanged;
     }
 }

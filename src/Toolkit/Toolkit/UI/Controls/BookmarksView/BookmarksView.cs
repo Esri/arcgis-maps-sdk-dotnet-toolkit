@@ -77,6 +77,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             BookmarkSelected?.Invoke(this, bookmark);
         }
 
+        /// <summary>
+        /// Event raised when the user selects a bookmark.
+        /// </summary>
         public event EventHandler<Bookmark> BookmarkSelected;
     }
 }
