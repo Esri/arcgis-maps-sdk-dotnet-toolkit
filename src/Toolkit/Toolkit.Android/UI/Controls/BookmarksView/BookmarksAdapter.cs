@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Android.Content;
@@ -31,6 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private BookmarksViewDataSource _dataSource;
         private readonly Context _context;
+        private List<Bookmark> _shadowList = new List<Bookmark>();
 
         internal BookmarksAdapter(Context context, BookmarksViewDataSource dataSource)
         {
@@ -44,18 +46,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     switch (eventArgs.Action)
                     {
                         case NotifyCollectionChangedAction.Add:
+                            _shadowList.InsertRange(eventArgs.NewStartingIndex, eventArgs.NewItems.OfType<Bookmark>());
                             NotifyItemInserted(eventArgs.NewStartingIndex);
                             break;
                         case NotifyCollectionChangedAction.Remove:
+                            _shadowList.RemoveRange(eventArgs.OldStartingIndex, eventArgs.OldItems.Count);
                             NotifyItemRemoved(eventArgs.OldStartingIndex);
                             break;
                         case NotifyCollectionChangedAction.Reset:
+                            _shadowList = _dataSource.ToList();
                             NotifyDataSetChanged();
                             break;
                         case NotifyCollectionChangedAction.Move:
-                            NotifyItemMoved(eventArgs.OldStartingIndex, eventArgs.NewStartingIndex);
+                            _shadowList = _dataSource.ToList();
+                            NotifyDataSetChanged();
                             break;
                         case NotifyCollectionChangedAction.Replace:
+                            _shadowList[eventArgs.OldStartingIndex] = (Bookmark)eventArgs.NewItems[0];
                             NotifyItemChanged(eventArgs.OldStartingIndex);
                             break;
                     }
@@ -66,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             dataSource.CollectionChanged += listener.OnEvent;
         }
 
-        public override int ItemCount => _dataSource?.Count() ?? 0;
+        public override int ItemCount => _shadowList?.Count() ?? 0;
 
         /// <inheritdoc />
         public override long GetItemId(int position) => position;
@@ -76,9 +83,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             BookmarkItemViewHolder bookmarkHolder = holder as BookmarkItemViewHolder;
-            if (_dataSource != null && _dataSource.Count() > position)
+            if (_shadowList != null && _shadowList.Count() > position)
             {
-                bookmarkHolder.BookmarkLabel.Text = _dataSource.ElementAt(position).Name;
+                bookmarkHolder.BookmarkLabel.Text = _shadowList.ElementAt(position).Name;
             }
         }
 
@@ -90,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void OnBookmarkClicked(int position)
         {
-            BookmarkSelected?.Invoke(this, _dataSource.ElementAt(position));
+            BookmarkSelected?.Invoke(this, _shadowList.ElementAt(position));
         }
     }
 }
