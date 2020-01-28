@@ -47,12 +47,6 @@
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Bookmarks\BookmarksView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
     <ItemGroup>
