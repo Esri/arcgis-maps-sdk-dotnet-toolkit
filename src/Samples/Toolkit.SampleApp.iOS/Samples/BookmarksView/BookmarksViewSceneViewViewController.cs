@@ -31,19 +31,20 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             _bookmarksView = new BookmarksView()
             {
                 GeoView = _sceneView,
-                TranslatesAutoresizingMaskIntoConstraints = false
             };
-            this.View.AddSubview(_bookmarksView);
+            _bookmarksView.View.TranslatesAutoresizingMaskIntoConstraints = false;
+            AddChildViewController(_bookmarksView);
+            View.AddSubview(_bookmarksView.View);
 
             _sceneView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
             _sceneView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
             _sceneView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
             _sceneView.BottomAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
 
-            _bookmarksView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
-            _bookmarksView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
-            _bookmarksView.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
-            _bookmarksView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
+            _bookmarksView.View.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+            _bookmarksView.View.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
+            _bookmarksView.View.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
+            _bookmarksView.View.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
         }
 
         private async void configureSlides()

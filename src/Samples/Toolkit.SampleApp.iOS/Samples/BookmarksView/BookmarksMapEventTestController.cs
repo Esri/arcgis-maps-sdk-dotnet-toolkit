@@ -49,10 +49,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 
             _bookmarksView = new BookmarksView()
             {
-                GeoView = _mapView,
-                TranslatesAutoresizingMaskIntoConstraints = false
+                GeoView = _mapView
             };
-            View.AddSubview(_bookmarksView);
+            AddChildViewController(_bookmarksView);
+            _bookmarksView.View.TranslatesAutoresizingMaskIntoConstraints = false;
+            View.AddSubview(_bookmarksView.View);
 
             UIToolbar toolbar = new UIToolbar();
             toolbar.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -80,10 +81,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             _mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
             _mapView.BottomAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
 
-            _bookmarksView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
-            _bookmarksView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
-            _bookmarksView.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
-            _bookmarksView.BottomAnchor.ConstraintEqualTo(toolbar.TopAnchor).Active = true;
+            _bookmarksView.View.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+            _bookmarksView.View.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
+            _bookmarksView.View.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
+            _bookmarksView.View.BottomAnchor.ConstraintEqualTo(toolbar.TopAnchor).Active = true;
 
             toolbar.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor).Active = true;
             toolbar.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
