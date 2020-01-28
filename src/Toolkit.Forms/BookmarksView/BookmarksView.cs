@@ -53,6 +53,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookmarksView"/> class.
+        /// </summary>
         public BookmarksView()
         {
             ItemTemplate = DefaultDataTemplate;
@@ -60,6 +63,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             ControlTemplate = DefaultControlTemplate;
         }
 
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
