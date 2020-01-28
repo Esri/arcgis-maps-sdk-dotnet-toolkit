@@ -38,6 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             _context = context;
             _dataSource = dataSource;
+            _shadowList = dataSource.ToList();
 
             var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(dataSource)
             {
