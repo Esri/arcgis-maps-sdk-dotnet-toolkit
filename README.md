@@ -6,9 +6,11 @@ You can use the Toolkit in your projects by:
 
 1. Building the source code available in this repo (see instructions below)
 2. Installing the latest stable release or pre-release from [NuGet](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
+    * `ARSceneView` is included as part of the [AR Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit/) package.
 
 ## Features
 
+- ARSceneView: Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
 - Bookmarks: Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
 - Compass: Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
 - FeatureDataField: Displays and optionally allows editing of a single field attribute of a feature.
@@ -28,6 +30,7 @@ You can use the Toolkit in your projects by:
 
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
+|[ARSceneView](docs/ar.md)   | ❌ | ❌ | ✔ | ✔ | ✔ |
 |[BookmarksView](docs/bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
