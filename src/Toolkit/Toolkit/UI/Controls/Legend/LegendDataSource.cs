@@ -173,7 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if NETFX_CORE
                     _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, GeoViewDocumentChanged);
 #else
-                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(MapView)).AddValueChanged(sceneview, GeoViewDocumentChanged);
+                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, GeoViewDocumentChanged);
 #endif
                 }
 #endif

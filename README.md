@@ -4,10 +4,13 @@ The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can 
 
 You can use the Toolkit in your projects by:
 
-1. Building the source code available in this repo (see instructions below)
-2. Installing the latest stable release or pre-release from [NuGet](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
-    * `ARSceneView` is included as part of the [AR Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit/) package.
-
+1. Building the source code available in this repo ([see instructions](docs/buildingtoolkit.md))
+2. Installing the latest stable release or pre-release from NuGet:
+   - [Esri.ArcGISRuntime.Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
+	- [Esri.ArcGISRuntime.Toolkit.Xamarin.Forms](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms)
+	- [Esri.ArcGISRuntime.ARToolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit)
+	- [Esri.ArcGISRuntime.ARToolkit.Forms](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit.Forms)
+   
 ## Features
 
 - ARSceneView: Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
@@ -28,10 +31,10 @@ You can use the Toolkit in your projects by:
 
 ## Resources
 
-- [Documentation](docs/index.md)
-- [List of controls](docs/controls.md)
-- [Building the SDK](docs/buildingtoolkit.md)
-- [System Requirements](docs/requirements.md)
+- [Documentation](https://esri.github.io/arcgis-toolkit-dotnet/)
+- [List of controls](https://esri.github.io/arcgis-toolkit-dotnet/controls.html)
+- [Building the SDK](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html)
+- [System Requirements](https://esri.github.io/arcgis-toolkit-dotnet/requirements.html)
 - [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
 
 ## Issues
