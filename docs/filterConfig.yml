@@ -1,0 +1,13 @@
+apiRules:
+- exclude:
+    uidRegex: ^Esri\.ArcGISRuntime\.Toolkit\.Esri_ArcGISRuntime_Toolkit_XamlTypeInfo
+    type: Namespace
+- exclude:
+    uidRegex: ^Esri\.ArcGISRuntime\.Toolkit\.Esri_ArcGISRuntime_Toolkit_XamlTypeInfo\.XamlMetaDataProvider
+    type: Type
+- exclude:
+    uidRegex: ^Esri\.ArcGISRuntime\.Toolkit\.Xamarin\.Forms\.Esri_ArcGISRuntime_Toolkit_Xamarin_Forms_XamlTypeInfo
+    type: Namespace
+- exclude:
+    uidRegex: ^Esri\.ArcGISRuntime\.Toolkit\.Xamarin\.Forms\.Esri_ArcGISRuntime_Toolkit_Xamarin_Forms_XamlTypeInfo\.XamlMetaDataProvider
+    type: Type

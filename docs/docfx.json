@@ -75,6 +75,7 @@
       ],
       "dest": "../output/docs/api/uwp",
       "properties": { "TargetFramework": "uap10.0.16299" },
+	  "filter": "filterConfig.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -123,9 +124,7 @@
     "resource": [
       {
         "files": [
-          "images/**",
-		  "logo.svg",
-		  "favicon.ico"
+          "images/**"
         ],
       }
     ],
@@ -147,7 +146,7 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default"
+      "default", "template-override"
     ],
     "postProcessors": [],
     "markdownEngineName": "markdig",

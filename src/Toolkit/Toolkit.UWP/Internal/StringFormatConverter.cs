@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using System;
+using System.ComponentModel;
 using Windows.UI.Xaml.Data;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
@@ -22,6 +23,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// *FOR INTERNAL USE* Allows converting an object to a formatted string representation
     /// </summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
     public class StringFormatConverter : IValueConverter
     {
         /// <inheritdoc cref="IValueConverter.Convert(object, Type, object, string)" />
