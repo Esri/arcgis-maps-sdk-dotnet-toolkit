@@ -12,4 +12,15 @@ IF NOT EXIST "%DocFxFolder%\v%DocFXVersion%\docfx.exe" (
    DEL "%DocFxFolder%\docfx_v%DocFXVersion%.zip" /Q
 )
 REM Build the output site (HTML) from the generated metadata and input files (uses configuration in docfx.json in this folder)
-%DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json --serve
+%DocFxFolder%\v%DocFXVersion%\docfx.exe %~dp0\docfx.json
+ECHO Fixing API Reference Links
+powershell -ExecutionPolicy ByPass -command "%~dp0FixApiRefLinks" -Path %~dp0..\Output\docs_site\api\
+start http://localhost:8080
+%DocFxFolder%\v%DocFXVersion%\docfx.exe serve %~dp0..\Output\docs_site\
+
+REM Publishing doc:
+REM cd %~dp0..\Output\docs_site
+REM git init
+REM git add .
+REM git commit -m "Update doc"
+REM git push --force https://github.com/Esri/arcgis-toolkit-dotnet.git master:gh-pages
