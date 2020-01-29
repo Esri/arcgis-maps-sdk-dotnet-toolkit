@@ -1,6 +1,6 @@
-# Docs: BookmarksView
+# BookmarksView
 
-Features:
+### Features:
 
 * Associate the bookmarks control with a `MapView` or `SceneView` (`GeoView` property), through binding on supported platforms (WPF, UWP, Forms) or plain properties otherwise.
 * Display a list of bookmarks, defined by the `Map` or `Scene` from the associated `GeoView` or the `BookmarksOverride` if set.
