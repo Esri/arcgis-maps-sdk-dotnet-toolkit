@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView.BookmarksViewSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate x:Key="ItemTemplateOne" DataType="{x:Type esri:Bookmark}">
+            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Foreground="Red" />
+        </DataTemplate>
+        <DataTemplate x:Key="ItemTemplateTwo" DataType="{x:Type esri:Bookmark}">
+            <TextBlock Background="Red" Foreground="White" Text="{Binding Name}" HorizontalAlignment="Center" />
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="250" />
+        </Grid.ColumnDefinitions>
+        <esri:SceneView x:Name="MySceneView" 
+                        Grid.Column="0" Visibility="Hidden" />
+        <esri:MapView x:Name="MyMapView" 
+                      Grid.Column="0" />
+        <controls:BookmarksView x:Name="BookmarksView"
+                            Grid.Column="1"
+                            GeoView="{Binding ElementName=MyMapView}" />
+        <Border Grid.Column="0" 
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Width="300"
+                Padding="10"
+                Margin="0,15, 15, 0"
+                Background="White" BorderBrush="Black" BorderThickness="1">
+            <Border.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontWeight" Value="SemiBold" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="Padding" Value="0, 0, 5, 0" />
+                </Style>
+            </Border.Resources>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Labels -->
+                    <ColumnDefinition Width="*" />
+                    <!-- First option -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Second option -->
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <!-- 0: switch between map and scene views -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 1: switch map in geoview -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 2: set/clear override list -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 3: Add to override list or add to map/scene -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 4: Switch Item template -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 5: Set or clear selection listener -->
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="GeoView:" Grid.Row="0" Grid.Column="0" />
+                <TextBlock Text="Document:" Grid.Row="1" Grid.Column="0" />
+                <TextBlock Text="Override list:" Grid.Row="2" Grid.Column="0" />
+                <TextBlock Text="Add to:" Grid.Row="3" Grid.Column="0" />
+                <TextBlock Text="Set template:" Grid.Row="4" Grid.Column="0" />
+                <TextBlock Text="Selection listener:" Grid.Row="5" Grid.Column="0" />
+
+                <Button Content="MapView" Grid.Row="0" Grid.Column="1" Click="SetMapViewBinding_Click" />
+                <Button Content="SceneView" Grid.Row="0" Grid.Column="2" Click="SetSceneViewBinding_Click" />
+                <Button Content="Doc 1" Grid.Row="1" Grid.Column="1" Click="SetDocumentOne_Click" />
+                <Button Content="Doc 2" Grid.Row="1" Grid.Column="2" Click="SetDocumentTwo_Click" />
+                <Button Content="Set list" Grid.Row="2" Grid.Column="1" Click="SetOverrideList_Click" />
+                <Button Content="Clear list" Grid.Row="2" Grid.Column="2" Click="ClearOverrideList_Click" />
+                <Button Content="Override list" Grid.Row="3" Grid.Column="1" Click="AddToOverrideList_Click" />
+                <Button Content="Map/Scene" Grid.Row="3" Grid.Column="2" Click="AddToMapScene_Click" />
+                <Button Content="Red fore" Grid.Row="4" Grid.Column="1" Click="SetItemTemplateOne_Click" />
+                <Button Content="Red back" Grid.Row="4" Grid.Column="2" Click="SetItemTemplateTwo_Click" />
+                <Button Content="Add" Grid.Row="5" Grid.Column="1" Click="AddSelectionListener_Click" />
+                <Button Content="Remove" Grid.Row="5" Grid.Column="2" Click="RemoveSelectionListener_Click" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

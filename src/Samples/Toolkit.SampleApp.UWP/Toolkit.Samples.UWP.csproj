@@ -124,6 +124,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SampleDatasource.cs" />
+    <Compile Include="Samples\BookmarksView\BookmarksViewSample.xaml.cs">
+      <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\Compass\MapViewCompassSample.xaml.cs">
       <DependentUpon>MapViewCompassSample.xaml</DependentUpon>
     </Compile>
@@ -185,6 +188,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\BookmarksView\BookmarksViewSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
