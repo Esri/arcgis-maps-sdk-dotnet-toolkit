@@ -60,6 +60,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="SampleDatasource.cs" />
+    <Compile Include="Samples\BookmarksView\BookmarksViewSample.xaml.cs">
+      <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\Compass\SceneViewCompassSample.xaml.cs">
       <DependentUpon>SceneViewCompassSample.xaml</DependentUpon>
     </Compile>
@@ -93,6 +96,10 @@
     <Compile Include="Samples\ToC\TableOfContentsSample.xaml.cs">
       <DependentUpon>TableOfContentsSample.xaml</DependentUpon>
     </Compile>
+    <Page Include="Samples\BookmarksView\BookmarksViewSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Samples\Compass\SceneViewCompassSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -3,21 +3,21 @@
 The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).
 
 You can use the Toolkit in your projects by:
+
 1. Building the source code available in this repo (see instructions below)
-2. Installing the latest stable release or pre-release from NuGet
-    - Stable: [![NuGet](https://img.shields.io/nuget/v/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
-    - Absolute latest: [![NuGet](https://img.shields.io/nuget/vpre/Esri.ArcGISRuntime.Toolkit.svg)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/absolutelatest)   
+2. Installing the latest stable release or pre-release from [NuGet](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
 
 ## Features
 
+- Bookmarks: Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
 - Compass: Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
 - FeatureDataField: Displays and optionally allows editing of a single field attribute of a feature.
 - Legend: Displays a legend for a single layer in your map (and optionally for its sub layers).
 - MeasureToolbar: Allows measurement of distances and areas on the map view.
 - PopupViewer: Display details and media, edit attributes, geometry and related records, and manage the attachments of features and graphics (popups are defined in the popup property of features and graphics).
-- ScaleLine: Displays current scale reference. 
+- ScaleLine: Displays current scale reference.
 - SymbolDisplay: Renders a symbol in a control.
-- TimeSlider: Allows interactively defining a temporal range (i.e. time extent) and animating time moving forward or backward.  Can be used to manipulate the time extent in a MapView or SceneView. 
+- TimeSlider: Allows interactively defining a temporal range (i.e. time extent) and animating time moving forward or backward.  Can be used to manipulate the time extent in a MapView or SceneView.
 
 ### Features in Preview
 
@@ -28,6 +28,7 @@ You can use the Toolkit in your projects by:
 
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
+|[BookmarksView](docs/bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
 |Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
@@ -56,7 +57,7 @@ You can use the Toolkit in your projects by:
    - [Xamarin.Forms (Android, iOS, and UWP)](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
 3. Fork and then clone the repo or download the .zip file.
 4. Include (i) or reference (ii) the Toolkit in your projects:
-* Note the Toolkit references [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) by Nuget package. The package is automatically downloaded when you build the solution for the first time.
+    > Note the Toolkit references [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) by Nuget package. The package is automatically downloaded when you build the solution for the first time.
     1. Include the appropriate platform Projects in your Solution.
         - WPF (src\Esri.ArcGISRuntime.Toolkit\WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj)
         - UWP (\src\Esri.ArcGISRuntime.Toolkit\UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj)
@@ -71,16 +72,16 @@ You can use the Toolkit in your projects by:
 
 ## System Requirements
 
-* Requirements for development and deployment: 
-  * [Windows Desktop](https://developers.arcgis.com/net/latest/wpf/guide/system-requirements.htm)
-  * [Universal Windows Platform (UWP)](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
-  * [Xamarin.Android](https://developers.arcgis.com/net/latest/android/guide/system-requirements.htm)
-  * [Xamarin.iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
-  * [Xamarin.Forms](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
+- Requirements for development and deployment:
+  - [Windows Desktop](https://developers.arcgis.com/net/latest/wpf/guide/system-requirements.htm)
+  - [Universal Windows Platform (UWP)](https://developers.arcgis.com/net/latest/uwp/guide/system-requirements.htm)
+  - [Xamarin.Android](https://developers.arcgis.com/net/latest/android/guide/system-requirements.htm)
+  - [Xamarin.iOS](https://developers.arcgis.com/net/latest/ios/guide/system-requirements.htm)
+  - [Xamarin.Forms](https://developers.arcgis.com/net/latest/forms/guide/system-requirements.htm)
 
 ## Resources
 
-* [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
+- [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
 
 ## Issues
 
@@ -92,7 +93,7 @@ Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
 ## Licensing
 
-Copyright © 2014-2018 Esri.
+Copyright © 2014-2020 Esri.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
