@@ -1,2 +1,6 @@
 - name: Getting Started
   href: index.md
+- name: Bookmarks View
+  href: ../bookmarks-view.md
+- name: Augmented Reality View
+  href: ../ar.md
