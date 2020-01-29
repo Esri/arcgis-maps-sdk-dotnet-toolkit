@@ -31,10 +31,10 @@ You can use the Toolkit in your projects by:
 
 ## Resources
 
-- [Documentation](docs/index.md)
-- [List of controls](docs/controls.md)
-- [Building the SDK](docs/buildingtoolkit.md)
-- [System Requirements](docs/requirements.md)
+- [Documentation](https://esri.github.io/arcgis-toolkit-dotnet/)
+- [List of controls](https://esri.github.io/arcgis-toolkit-dotnet/controls.html)
+- [Building the SDK](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html)
+- [System Requirements](https://esri.github.io/arcgis-toolkit-dotnet/requirements.html)
 - [ArcGIS Runtime SDK for .NET](http://esriurl/dotnetsdk)
 
 ## Issues
