@@ -1,0 +1,17 @@
+- name: Getting Started
+  href: index.md
+- name: Building the SDK
+  href: ../buildingtoolkit.md
+- name: System Requirements
+  href: ../requirements.md
+- name: Controls
+  href: ../controls.md
+  items:
+  - name: List of controls
+    href: ../controls.md
+  - name: Bookmarks View
+    href: ../bookmarks-view.md
+  - name: Augmented Reality View
+    href: ../ar.md
+- name: API Reference
+  href: ../api/index.md
