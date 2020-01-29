@@ -14,7 +14,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <Copyright>Copyright © 2014-2019 Esri.</Copyright>
+    <Copyright>Copyright © 2014-2020 Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
     <LangVersion>7.2</LangVersion>

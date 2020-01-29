@@ -14,6 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Samples\BookmarksViewTemplatedSample.xaml.cs">
+      <DependentUpon>BookmarksViewTemplatedSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Samples\BookmarksViewSample.xaml.cs">
+      <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Samples\CompassSceneViewSample.xaml.cs">
       <DependentUpon>CompassSceneViewSample.xaml</DependentUpon>
     </Compile>
@@ -32,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Samples\BookmarksViewSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Samples\CompassMapViewSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
