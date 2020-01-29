@@ -30,6 +30,8 @@ The ArcGIS Runtime templates for AR provide project templates that are usable ou
 
 ## Configure your project for AR
 
+The first step is to install the toolkit package from [Nuget](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit/). Next, configure your app projects:
+
 ### Configuration for iOS
 
 1. Ensure that the camera and location strings are set in **Info.plist**. You must provide values for *Privacy - Camera Usage Description* and *Privacy - Location When In Use Usage Description*.
