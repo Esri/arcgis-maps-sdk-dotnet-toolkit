@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

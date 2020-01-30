@@ -278,7 +278,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new CGSize(widthThatFits, heightThatFits);
         }
 
-        /// <inheritdoc cref="IComponent.Site" />
+        /// <inheritdoc />
         ISite IComponent.Site { get; set; }
 
         private EventHandler _disposed;

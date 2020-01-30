@@ -23,11 +23,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// *FOR INTERNAL USE* Allows converting an object to a formatted string representation
     /// </summary>
-	[EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class StringFormatConverter : IValueConverter
     {
-        /// <inheritdoc cref="IValueConverter.Convert(object, Type, object, string)" />
-        public object Convert(object value, Type targetType, object parameter, string language)
+        /// <inheritdoc />
+        object IValueConverter.Convert(object value, Type targetType, object parameter, string language)
         {
             if (value != null && parameter is string formatString)
             {
@@ -47,8 +47,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        /// <inheritdoc cref="IValueConverter.ConvertBack(object, Type, object, string)" />
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        /// <inheritdoc />
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotSupportedException();
         }

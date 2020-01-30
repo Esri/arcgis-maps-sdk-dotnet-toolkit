@@ -96,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             context.StrokeEllipseInRect(r);
 
             var path = new CGPath();
-            
+
             // create geometry
             path.AddLines(new CGPoint[]
             {
@@ -147,12 +147,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        /// <inheritdoc cref="IComponent.Site" />
+        /// <inheritdoc />
         ISite IComponent.Site { get; set; }
 
         private EventHandler _disposed;
 
-        /// <inheritdoc cref="IComponent.Disposed" />
+        /// <inheritdoc />
         event EventHandler IComponent.Disposed
         {
             add { _disposed += value; }

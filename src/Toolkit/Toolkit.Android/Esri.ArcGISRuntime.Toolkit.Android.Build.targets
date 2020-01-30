@@ -50,7 +50,7 @@
     </Task>
   </UsingTask>
   <Target Name="MakeAndroidResourcesInternal" AfterTargets="_UpdateAndroidResgen">
-    <MakeAndroidResourcesInternalTask ResourceFilePath="$(ProjectDir)$(AndroidResgenFile)">
+    <MakeAndroidResourcesInternalTask ResourceFilePath="$(_AndroidResourceDesignerFile)">
     </MakeAndroidResourcesInternalTask>
   </Target>
 </Project>

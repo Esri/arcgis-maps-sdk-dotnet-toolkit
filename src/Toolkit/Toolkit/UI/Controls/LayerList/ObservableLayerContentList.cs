@@ -237,20 +237,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if !NETFX_CORE
-        /// <inheritdoc cref="IReadOnlyList{T}.this"/>
+        /// <inheritdoc />
         public LayerContentViewModel this[int index]
         {
             get { return _activeLayers[index]; }
             set { throw new InvalidOperationException("ReadOnly"); }
         }
 
-        /// <inheritdoc cref="IReadOnlyCollection{T}.Count"/>
+        /// <inheritdoc />
         public int Count
         {
             get { return _activeLayers.Count; }
         }
 
-        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator"/>
+        /// <inheritdoc />
         public IEnumerator<LayerContentViewModel> GetEnumerator()
         {
             for (int i = 0; i < _activeLayers.Count; i++)
@@ -259,17 +259,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<LayerContentViewModel>)this).GetEnumerator();
         }
 #endif
 
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged"/>
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <inheritdoc cref="INotifyCollectionChanged.CollectionChanged"/>
+        /// <inheritdoc />
         public event NotifyCollectionChangedEventHandler CollectionChanged;
     }
 }

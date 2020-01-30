@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return new CGSize(widthThatFits, heightThatFits);
         }
 
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)

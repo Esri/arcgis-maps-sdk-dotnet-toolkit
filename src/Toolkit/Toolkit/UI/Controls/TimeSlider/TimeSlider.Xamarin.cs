@@ -643,7 +643,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidateMeasureAndArrange();
         }
 
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

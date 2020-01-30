@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)

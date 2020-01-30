@@ -33,12 +33,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public class VisibilityConverter : IValueConverter
     {
-#if NETFX_CORE
-        /// <inheritdoc cref="IValueConverter.Convert(object, Type, object, string)" />
-#else
-        /// <inheritdoc cref="IValueConverter.Convert(object, Type, object, CultureInfo)" />
-#endif
-        public object Convert(object value, Type targetType, object parameter,
+        /// <inheritdoc />
+        object IValueConverter.Convert(object value, Type targetType, object parameter,
 #if NETFX_CORE
             string language)
 #else
@@ -61,12 +57,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             return isVisible ? Visibility.Visible : Visibility.Collapsed;
         }
 
-#if NETFX_CORE
-        /// <inheritdoc cref="IValueConverter.ConvertBack(object, Type, object, string)" />
-#else
-        /// <inheritdoc cref="IValueConverter.ConvertBack(object, Type, object, CultureInfo)" />
-#endif
-        public object ConvertBack(object value, Type targetType, object parameter,
+        /// <inheritdoc />
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter,
 #if NETFX_CORE
             string language)
 #else

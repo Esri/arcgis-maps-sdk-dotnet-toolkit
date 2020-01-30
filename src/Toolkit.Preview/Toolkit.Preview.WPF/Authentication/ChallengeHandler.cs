@@ -48,8 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// </summary>
         public Style SignInFormStyle { get; set; }
 
-        /// <inheritdoc cref="Esri.ArcGISRuntime.Security.IChallengeHandler.CreateCredentialAsync(CredentialRequestInfo)" />
-        public Task<Credential> CreateCredentialAsync(CredentialRequestInfo info)
+        /// <inheritdoc />
+        Task<Credential> IChallengeHandler.CreateCredentialAsync(CredentialRequestInfo info)
         {
             TaskCompletionSource<Credential> tcs = new TaskCompletionSource<Credential>();
             _dispatcher.InvokeAsync(() =>

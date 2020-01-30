@@ -554,7 +554,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         #region IComponent
 
-        /// <inheritdoc cref="IComponent.Site" />
+        /// <inheritdoc />
         ISite IComponent.Site { get; set; }
 
         private EventHandler _disposed;
