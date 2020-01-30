@@ -35,6 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BookmarksView
         public BookmarksViewSample()
         {
             InitializeComponent();
+
+            MyMapView.Map = new Map(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2"));
         }
 
         private void SetMapViewBinding_Click(object sender, RoutedEventArgs e)

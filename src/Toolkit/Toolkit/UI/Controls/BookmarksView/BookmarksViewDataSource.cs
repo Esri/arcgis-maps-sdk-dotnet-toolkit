@@ -164,11 +164,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
                 }
 #else
-                // Handle case where geoview loads map while events are being set up
-                GeoViewDocumentChanged(null, null);
 
                 (_geoView as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
 #endif
+                // Handle case where geoview loads map while events are being set up
+                GeoViewDocumentChanged(null, null);
             }
         }
 
