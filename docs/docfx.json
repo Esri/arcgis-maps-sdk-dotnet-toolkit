@@ -41,6 +41,7 @@
       ],
       "dest": "../output/docs/api/android",
       "properties": { "TargetFramework": "monoandroid81" },
+	  "filter": "filterConfig.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
