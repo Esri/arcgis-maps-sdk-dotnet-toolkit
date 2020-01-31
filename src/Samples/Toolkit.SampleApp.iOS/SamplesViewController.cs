@@ -49,7 +49,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 Sample item = _data[indexPath.Row];
                 cell.TextLabel.Text = item.Name;
                 cell.DetailTextLabel.Text = item.Description;
-                cell.DetailTextLabel.TextColor = UIColor.SecondaryLabelColor;
+                if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+                {
+                    cell.DetailTextLabel.TextColor = UIColor.SecondaryLabelColor;
+                }
+                else
+                {
+                    cell.DetailTextLabel.TextColor = UIColor.Gray;
+                }
+                
                 cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
                 return cell;
             }
