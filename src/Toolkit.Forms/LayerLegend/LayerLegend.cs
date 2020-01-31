@@ -22,6 +22,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// <summary>
     /// The Legend Control that generates a list of Legend Items for a Layer
     /// </summary>
+    [System.Obsolete("Deprecated in favor of Legend control")]
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public class LayerLegend : View
     {
         /// <summary>

@@ -32,6 +32,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// The Legend Control that generates a list of Legend Items for a Layer
     /// </summary>
+    [System.Obsolete("Deprecated in favor of Legend control")]
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public partial class LayerLegend : Control
     {
 #if !__ANDROID__

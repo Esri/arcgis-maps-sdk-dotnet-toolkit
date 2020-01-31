@@ -37,6 +37,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// and TableOfContents control is used to display symbology and description for a set of <see cref="Layer"/>s
     /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="Esri.ArcGISRuntime.UI.Controls.GeoView"/>.
     /// </summary>
+    [System.Obsolete("Deprecated in favor of Legend control")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public partial class LayerList : Control
     {
         private bool _isScaleSet = false;
