@@ -223,7 +223,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.InvalidateIntrinsicContentSize();
         }
 
-        private UIColor _foregroundColor = UIColor.LabelColor;
+        private UIColor _foregroundColor = UIColorHelper.LabelColor;
 
         /// <summary>
         /// Gets or sets the color of the foreground elements of the <see cref="ScaleLine"/>

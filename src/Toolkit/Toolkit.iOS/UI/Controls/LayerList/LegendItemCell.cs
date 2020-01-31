@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 LineBreakMode = UILineBreakMode.TailTruncation,
                 Font = UIFont.SystemFontOfSize(UIFont.LabelFontSize),
-                TextColor = UIColor.LabelColor,
+                TextColor = UIColorHelper.LabelColor,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.Center,
                 TextAlignment = UITextAlignment.Left,

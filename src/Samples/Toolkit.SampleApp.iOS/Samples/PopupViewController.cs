@@ -180,10 +180,17 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 popupViewer = new PopupViewer()
                 {
                     Frame = new CoreGraphics.CGRect(0, 0, 414, 736),
-                    BackgroundColor = UIColor.SystemBackgroundColor,
                     ContentStretch = new CoreGraphics.CGRect(0, 0, 1, 1),
                     TranslatesAutoresizingMaskIntoConstraints = false
                 };
+                if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+                {
+                    popupViewer.BackgroundColor = UIColor.SystemBackgroundColor;
+                }
+                else
+                {
+                    popupViewer.BackgroundColor = UIColor.White;
+                }
                 popupViewer.PopupManager = new PopupManager(popup);
                 this.View.AddSubview(popupViewer);
                 button.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
