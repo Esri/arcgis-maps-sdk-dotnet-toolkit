@@ -66,6 +66,7 @@
     <Compile Include="SamplesViewController.designer.cs">
       <DependentUpon>SamplesViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Samples\BookmarksView\BookmarksModalSampleViewController.cs" />
     <Compile Include="Samples\BookmarksView\BookmarksMapEventTestController.cs" />
     <Compile Include="Samples\BookmarksView\BookmarksViewSceneViewViewController.cs" />
     <Compile Include="Samples\LayerLegendViewController.cs" />
