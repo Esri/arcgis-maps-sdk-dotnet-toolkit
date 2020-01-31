@@ -73,10 +73,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _listView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor)
             });
 
-            if (NavigationItem != null)
+            // Set a title if not already set
+            if (NavigationItem != null && string.IsNullOrEmpty(Title))
             {
-                _closeButton = new UIBarButtonItem("Close", UIBarButtonItemStyle.Plain, null);
-                NavigationItem.RightBarButtonItem = _closeButton;
                 Title = "Bookmarks";
             }
 
