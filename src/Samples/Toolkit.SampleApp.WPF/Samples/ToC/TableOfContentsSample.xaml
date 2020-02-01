@@ -22,16 +22,14 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <esri:TableOfContents Grid.Row="0" x:Name="toc"
-                  LayerContentContextMenuOpening="toc_LayerContentContextMenuOpening"
-                              GeoView="{Binding ElementName=mapView}" ShowLegend="False" />
+                  GeoView="{Binding ElementName=mapView}"
+                  TableOfContentContextMenuOpening="toc_LayerContentContextMenuOpening" />
 
             <CheckBox Content="Show Legend" IsChecked="{Binding ShowLegend, ElementName=toc, Mode=TwoWay}" Grid.Row="1" />
-            <CheckBox Content="Reverse Layer Order" IsChecked="{Binding ReverseLayerOrder, ElementName=toc, Mode=TwoWay}" Grid.Row="2" />
         </Grid>
-
 
         <GridSplitter Grid.Column="1" Background="LightGray" HorizontalAlignment="Stretch" Grid.Row="1" />
 
-        <esri:MapView Map="http://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213" x:Name="mapView" Grid.Column="2" />
+        <esri:MapView x:Name="mapView" Grid.Column="2" />
     </Grid>
 </UserControl>

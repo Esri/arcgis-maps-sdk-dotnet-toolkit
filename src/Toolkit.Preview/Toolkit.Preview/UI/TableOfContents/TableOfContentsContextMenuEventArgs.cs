@@ -14,19 +14,20 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE
 using System.Windows;
 using System.Windows.Controls;
 using Esri.ArcGISRuntime.Mapping;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
 {
     /// <summary>
-    /// Event argument fired by the <see cref="LayerList"/> when right-clicking an item
+    /// Event argument fired by the <see cref="TableOfContents"/> when right-clicking an item
     /// </summary>
-    /// <seealso cref="LayerList.LayerContentContextMenuOpening"/>
-    public class LayerContentContextMenuEventArgs : RoutedEventArgs
+    /// <seealso cref="TableOfContents.TableOfContentContextMenuOpening"/>
+    public class TableOfContentsContextMenuEventArgs : RoutedEventArgs
     {
-        internal LayerContentContextMenuEventArgs(object source, ContextMenuEventArgs args)
+        internal TableOfContentsContextMenuEventArgs(object source, ContextMenuEventArgs args)
             : base(args.RoutedEvent, source)
         {
         }
@@ -34,7 +35,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the layer content instance that was clicked
         /// </summary>
-        public ILayerContent LayerContent { get; internal set; }
+        public object TableOfContentItem { get; internal set; }
+
+        /// <summary>
+        /// Gets the LegendInfo that was clicked (if any)
+        /// </summary>
+        public LegendInfo LegendInfo { get; internal set; }
 
         /// <summary>
         /// Gets a reference to the context menu that will be displayed
@@ -47,3 +53,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public System.Collections.Generic.IList<MenuItem> MenuItems { get; internal set; }
     }
 }
+#endif
