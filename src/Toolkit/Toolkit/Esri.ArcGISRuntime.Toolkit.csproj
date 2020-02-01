@@ -45,11 +45,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)">
-      <ExcludeAssets>contentFiles;build</ExcludeAssets>
-      <IncludeAssets>compile</IncludeAssets>
-      <PrivateAssets></PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -57,11 +53,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)">
-      <ExcludeAssets>contentFiles;build</ExcludeAssets>
-      <IncludeAssets>compile</IncludeAssets>
-      <PrivateAssets></PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
