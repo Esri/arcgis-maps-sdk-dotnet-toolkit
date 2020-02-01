@@ -16,16 +16,14 @@
 
 #if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0
 
-using System;
 using System.Windows;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #else
 using System.Windows.Controls;
-using Esri.ArcGISRuntime.Mapping;
 #endif
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
@@ -117,7 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the item template for each <see cref="Layer" /> entry.
+        /// Gets or sets the item template for each <see cref="ILayerContent" /> entry.
         /// </summary>
         /// <remarks>
         /// If this is set to null, the <see cref="SublayerItemTemplate"/> will be used instead.
@@ -217,7 +215,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         {
             (sender as FrameworkElement).ContextMenu = null;
             var vm = (e.OriginalSource as FrameworkElement)?.DataContext;
-            TocEntry entry = null;
+            TocItem item = null;
             LegendInfo info = null;
             if (vm is LegendInfo li)
             {
@@ -225,18 +223,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
                 var parent = System.Windows.Media.VisualTreeHelper.GetParent(e.OriginalSource as DependencyObject) as FrameworkElement;
                 while (parent != null)
                 {
-                    if (parent.DataContext is TocEntry legendEntry)
+                    if (parent.DataContext is TocItem tocItem)
                     {
-                        entry = legendEntry;
+                        item = tocItem;
                         break;
                     }
+
                     parent = System.Windows.Media.VisualTreeHelper.GetParent(parent) as FrameworkElement;
                 }
             }
 
-            if (vm is TocEntry te)
+            if (vm is TocItem ti)
             {
-                entry = te;
+                item = ti;
             }
 
             if (vm != null)
@@ -246,7 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
                     var args = new TableOfContentsContextMenuEventArgs(sender, e)
                     {
                         MenuItems = new System.Collections.Generic.List<MenuItem>(),
-                        TableOfContentItem = entry?.Content,
+                        TableOfContentItem = item?.Content,
                         LegendInfo = info
                     };
                     args.Menu = new ContextMenu() { ItemsSource = args.MenuItems };
@@ -261,7 +260,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         }
 
         /// <summary>
-        /// Event fired by the <see cref="LayerList"/> when right-clicking an item
+        /// Event fired by the <see cref="TableOfContents"/> when right-clicking an item
         /// </summary>
         public event System.EventHandler<TableOfContentsContextMenuEventArgs> TableOfContentContextMenuOpening;
 #endif

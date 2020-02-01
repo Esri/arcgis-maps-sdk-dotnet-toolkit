@@ -43,13 +43,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
 #endif
-    internal class TocDataSource : IList<TocEntry>, INotifyCollectionChanged, INotifyPropertyChanged, IList
+    internal class TocDataSource : IList<TocItem>, INotifyCollectionChanged, INotifyPropertyChanged, IList
     {
-        //private TocEntryCollection _items;
-        private List<TocEntry> _items = new List<TocEntry>();
+        private List<TocItem> _items = new List<TocItem>();
         private GeoView _geoview;
         private DependencyObject _owner;
-        private TocEntry _basemap;
 
         public TocDataSource(DependencyObject owner)
         {
@@ -171,38 +169,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         {
             if (propertyName == nameof(Map.Basemap))
             {
-                /*var oldBasemap = _basemap;
-                _basemap = null;
-                if (oldBasemap != null)
-                {
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, _basemap, Count));
-                }
-
-                if (sender is Map map && map.Basemap != null)
-                {
-                    _basemap = new TocEntry(map.Basemap, false);
-                }
-                else if (sender is Scene scene && scene.Basemap != null)
-                {
-                    _basemap = new TocEntry(scene.Basemap, false);
-                }
-
-                if (_basemap != null)
-                {
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, _basemap, Count - 1));
-                }*/
                 MarkCollectionDirty(false);
             }
             else if (propertyName == nameof(Map.OperationalLayers))
             {
-                //OnLayersChanged();
                 MarkCollectionDirty(false);
             }
         }
 
         private void OnDocumentChanged()
         {
-            _basemap = null;
             if (_geoview is MapView mv)
             {
                 if (mv.Map != null)
@@ -217,38 +193,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     SubscribeToDocument(sv.Scene);
                 }
             }
-
-            MarkCollectionDirty(false);
-            //OnLayersChanged();
-        }
-
-        private void OnLayersChanged()
-        {
-            //IEnumerable<Layer> layers = null;
-            //Basemap basemap = null;
-
-            //if (_geoview is MapView mv)
-            //{
-            //    layers = mv.Map?.OperationalLayers;
-            //    basemap = mv.Map?.Basemap;
-            //}
-            //else if (_geoview is SceneView sv)
-            //{
-            //    layers = sv.Scene?.OperationalLayers;
-            //    basemap = sv.Scene?.Basemap;
-            //}
-
-            //if (layers != null)
-            //{
-            //    _items = new TocEntryCollection(layers, _showLegend);
-            //}
-
-            //if (basemap != null)
-            //{
-            //    _basemap = new TocEntry(basemap, false);
-            //}
-
-            //OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
             MarkCollectionDirty(false);
         }
@@ -284,7 +228,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                 _isCollectionDirty = false;
             }
 
-            var newItems = BuildTocList() ?? new List<TocEntry>();
+            var newItems = BuildTocList() ?? new List<TocItem>();
             if (newItems.Count == 0 && _items.Count == 0)
             {
                 return;
@@ -340,7 +284,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 #endif
         }
 
-        private List<TocEntry> BuildTocList()
+        private List<TocItem> BuildTocList()
         {
             IEnumerable<Layer> layers = null;
             Basemap basemap = null;
@@ -356,15 +300,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                 basemap = sv.Scene?.Basemap;
             }
 
-            var result = new List<TocEntry>();
+            var result = new List<TocItem>();
             if (layers != null)
             {
-                result.AddRange(layers.Reverse().Select(l => new TocEntry(l, _showLegend)));
+                result.AddRange(layers.Reverse().Select(l => new TocItem(l, _showLegend)));
             }
 
             if (basemap != null)
             {
-                result.Add(new TocEntry(basemap, false));
+                result.Add(new TocItem(basemap, false));
             }
 
             return result;
@@ -397,27 +341,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
         public object SyncRoot => (_items as ICollection)?.SyncRoot;
 
-        public TocEntry this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
+        public TocItem this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
 
-        public void Insert(int index, TocEntry item) => throw new NotSupportedException();
+        public void Insert(int index, TocItem item) => throw new NotSupportedException();
 
         public void RemoveAt(int index) => throw new NotSupportedException();
 
-        public void Add(TocEntry item) => throw new NotSupportedException();
+        public void Add(TocItem item) => throw new NotSupportedException();
 
         public void Clear() => throw new NotSupportedException();
 
-        public bool Contains(TocEntry item) => _items.Contains(item);
+        public bool Contains(TocItem item) => _items.Contains(item);
 
-        public void CopyTo(TocEntry[] array, int arrayIndex) => throw new NotImplementedException();
+        public void CopyTo(TocItem[] array, int arrayIndex) => throw new NotImplementedException();
 
-        public bool Remove(TocEntry item) => throw new NotSupportedException();
+        public bool Remove(TocItem item) => throw new NotSupportedException();
 
-        public IEnumerator<TocEntry> GetEnumerator() => _items.GetEnumerator();
+        public IEnumerator<TocItem> GetEnumerator() => _items.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public int IndexOf(TocEntry item) => _items.IndexOf(item);
+        public int IndexOf(TocItem item) => _items.IndexOf(item);
 
 #endregion
 
@@ -451,10 +395,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <inheritdoc />
         public event NotifyCollectionChangedEventHandler CollectionChanged;
-
     }
 }
 

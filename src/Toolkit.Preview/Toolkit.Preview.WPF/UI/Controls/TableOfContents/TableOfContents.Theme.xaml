@@ -14,7 +14,7 @@
       <Setter Property="BasemapItemTemplate">
         <Setter.Value>
           <DataTemplate>
-            <TextBlock Text="{Binding Content.Name}" FontWeight="Bold" FontSize="20" />
+            <TextBlock Text="{Binding Content.Name}" FontSize="12" />
           </DataTemplate>
         </Setter.Value>
       </Setter>
@@ -22,7 +22,7 @@
         <Setter.Value>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <controls:SymbolDisplay Symbol="{Binding Symbol}" MaxHeight="40" Width="40" Margin="0,0,5,0" />
+              <controls:SymbolDisplay Symbol="{Binding Symbol}" MaxHeight="40" Width="40" Margin="0,5,5,0" />
               <TextBlock Text="{Binding Name}" FontSize="12" />
             </StackPanel>
           </DataTemplate>
@@ -68,7 +68,7 @@
                           </TextBlock.Style>-->
                         </TextBlock>
                       <!-- Legend Infos: -->
-                      <ItemsControl Grid.Row="1" Grid.Column="2" 
+                      <ItemsControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
                                     ItemTemplate="{Binding RelativeSource={RelativeSource AncestorType=preview:TableOfContents}, Path=LegendInfoItemTemplate}" ItemsSource="{Binding LegendInfos}" />
 
                     </Grid>

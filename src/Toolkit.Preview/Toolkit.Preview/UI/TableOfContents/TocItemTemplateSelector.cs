@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
 #endif
         {
-            if (item is TocEntry entry)
+            if (item is TocItem entry)
             {
                 if (entry.Content is Basemap)
                 {

@@ -26,50 +26,25 @@ using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 {
-#if NETFX_CORE
-    [Windows.UI.Xaml.Data.Bindable]
-#endif
-    internal class TocEntryCollection : ObservableCollection<TocEntry>
-    {
-        private IEnumerable<ILayerContent> _sublayerContents;
-        private Action<Action> _uithreadDelegate;
-        public TocEntryCollection(IEnumerable<ILayerContent> sublayerContents, bool showLegend, Action<Action> uithreadDelegate = null)
-            : base(sublayerContents.Select(s => new TocEntry(s, showLegend)))
-        {
-            _uithreadDelegate = uithreadDelegate;
-            _sublayerContents = sublayerContents;
-
-            if (sublayerContents is INotifyCollectionChanged incc)
-            {
-                //var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
-                //{
-                //    OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
-                //    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
-                //};
-                //incc.CollectionChanged += listener.OnEvent;
-            }
-        }
-    }
-
     /// <summary>
     /// Class used to represent an entry in the Legend control
     /// </summary>
     /// <remarks>
     /// The <see cref="Content"/> property will contain the actual object it represents, mainly <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
     /// </remarks>
-
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
 #endif
-    public class TocEntry : INotifyPropertyChanged
+    public class TocItem : INotifyPropertyChanged
     {
         private System.Threading.Tasks.Task<IReadOnlyList<LegendInfo>> _legendInfoLoadTask;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TocEntry"/> class.
+        /// Initializes a new instance of the <see cref="TocItem"/> class.
         /// </summary>
         /// <param name="content">The object this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.</param>
-        public TocEntry(object content, bool showLegend)
+        /// <param name="showLegend">Whether the legend should be shown or not</param>
+        internal TocItem(object content, bool showLegend)
         {
             Content = content;
             _showLegend = showLegend;
@@ -88,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
         private void SetChildren()
         {
-            Children = new TocEntryCollection((Content as ILayerContent).SublayerContents, _showLegend);
+            Children = new List<TocItem>((Content as ILayerContent).SublayerContents.Select(s => new TocItem(s, _showLegend)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
         }
 
@@ -115,6 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                             return;
                         }
                     }
+
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LegendInfos)));
                 }
             }
@@ -139,7 +115,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             }
         }
 
-        public IEnumerable<TocEntry> Children { get; private set; }
+        /// <summary>
+        /// Gets the child entries for this TOC Entry
+        /// </summary>
+        public IEnumerable<TocItem> Children { get; private set; }
 
         /// <inheritdoc />
         public override int GetHashCode()
@@ -152,6 +131,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             return base.GetHashCode();
         }
 
+        /// <summary>
+        /// Gets the legend infos for this entry
+        /// </summary>
         public IEnumerable<LegendInfo> LegendInfos
         {
             get
@@ -173,8 +155,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => obj is TocEntry le && ReferenceEquals(Content, le.Content);
+        public override bool Equals(object obj) => obj is TocItem le && ReferenceEquals(Content, le.Content);
 
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }
