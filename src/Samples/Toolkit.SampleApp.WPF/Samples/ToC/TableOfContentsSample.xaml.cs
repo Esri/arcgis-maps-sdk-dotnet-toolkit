@@ -1,4 +1,5 @@
-﻿using Esri.ArcGISRuntime.Mapping;
+﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
         public TableOfContentsSample()
         {
             InitializeComponent();
+            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            {
+                InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
+            };
+
+            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer")));
+            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0")));
+
+            mapView.Map = map;
         }
 
         private void toc_LayerContentContextMenuOpening(object sender, Preview.UI.Controls.TableOfContentsContextMenuEventArgs args)

@@ -92,6 +92,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     }
 
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LegendInfos)));
+                    if (Children != null)
+                    {
+                        foreach (var item in Children)
+                        {
+                            item.ShowLegend = value;
+                        }
+                    }
                 }
             }
         }
