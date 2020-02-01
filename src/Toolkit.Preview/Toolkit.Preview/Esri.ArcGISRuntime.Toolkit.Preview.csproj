@@ -64,6 +64,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
+  </ItemGroup>
  
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
