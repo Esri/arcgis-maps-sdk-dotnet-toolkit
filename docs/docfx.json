@@ -3,7 +3,10 @@
     {
       "src": [
         {
-          "files": [ "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj" ],
+          "files": [ 
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj" 
+          ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/",
         }
@@ -16,7 +19,9 @@
     {
       "src": [
         {
-          "files": [ "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj" ],
+          "files": [
+            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
+            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj" ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/",
         }
@@ -32,8 +37,9 @@
           "files": [
             "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
             "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj",
             "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/",
@@ -41,7 +47,7 @@
       ],
       "dest": "../output/docs/api/android",
       "properties": { "TargetFramework": "monoandroid81" },
-	  "filter": "filterConfig.yml",
+      "filter": "filterConfig.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -51,8 +57,9 @@
           "files": [
             "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
             "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj",
             "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/",
@@ -68,7 +75,8 @@
         {
           "files": [
             "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj"
+            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/",
@@ -76,18 +84,19 @@
       ],
       "dest": "../output/docs/api/uwp",
       "properties": { "TargetFramework": "uap10.0.16299" },
-	  "filter": "filterConfig.yml",
+      "filter": "filterConfig.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
-	{
+    {
       "src": [
         {
           "files": [
             "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
             "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
+            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj",
             "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj",
+            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/",
@@ -149,7 +158,7 @@
     "template": [
       "default", "template-override"
     ],
-	"xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ],
+    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
