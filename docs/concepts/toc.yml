@@ -1,10 +1,12 @@
-- name: Getting Started
+- name: Get started
   href: index.md
-- name: Building the SDK
+- name: Install toolkit without building
+  href: ../installtoolkit.md
+- name: Build the toolkit
   href: ../buildingtoolkit.md
 - name: System Requirements
   href: ../requirements.md
-- name: Controls
+- name: Controls guide
   href: ../controls.md
   items:
   - name: List of controls
@@ -13,5 +15,5 @@
     href: ../bookmarks-view.md
   - name: Augmented Reality View
     href: ../ar.md
-- name: API Reference
+- name: API reference
   href: ../api/index.md

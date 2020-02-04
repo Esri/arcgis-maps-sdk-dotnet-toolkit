@@ -1,3 +1,7 @@
+---
+uid:B1CCBC8A-91A2-485A-97E0-CF2B9F692B26
+---
+
 # BookmarksView
 
 ## Features

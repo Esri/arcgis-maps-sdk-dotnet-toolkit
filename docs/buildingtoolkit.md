@@ -1,4 +1,10 @@
-# Instructions for Building the toolkit
+---
+uid: 3CCE1627-57F9-4ECB-A650-6D4D2E343337
+---
+
+# Build the toolkit
+
+These instructions apply to both toolkit and AR toolkit.
 
 1. Confirm that your system meets the requirements for compiling the Toolkit:
     - Visual Studio 2019 Update 4 (or later) with the following workloads:

@@ -1,6 +1,10 @@
+---
+uid: D07D974D-8587-428E-BC75-EF531108515B
+---
+
 # AR Toolkit
 
-[Augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extents `SceneView` to display GIS data on top of a camera feed showing the physical world.
+**Augmented reality** experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extents `SceneView` to display GIS data on top of a camera feed showing the physical world.
 
 ## AR patterns
 
@@ -26,7 +30,8 @@ There is a significant amount of configuration needed to get iOS and Android pro
 
 The ArcGIS Runtime templates for AR provide project templates that are usable out-of-the-box. You can download the templates from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Esri.EsriArcGISRuntimeARTemplates).
 
-> **NOTE**: These templates are completely optional for using AR. See steps below if you're working with an existing project or prefer manual configuration.
+> [!NOTE]
+> These templates are completely optional for using AR. See steps below if you're working with an existing project or prefer manual configuration.
 
 ## Configure your project for AR
 
@@ -46,7 +51,8 @@ The first step is to install the toolkit package from [Nuget](https://www.nuget.
 
 ### Configuration for Android
 
-> **NOTE**: The device must support ARCore for `ARSceneView` to work on Android. Google maintains a [list of supported devices](https://developers.google.com/ar/discover/supported-devices). ARCore is a separate installable component delivered via Google Play. 
+> [!NOTE]
+> The device must support ARCore for `ARSceneView` to work on Android. Google maintains a [list of supported devices](https://developers.google.com/ar/discover/supported-devices). ARCore is a separate installable component delivered via Google Play. 
 
 1. Ensure that `android.permission.CAMERA` and `android.permission.ACCESS_FINE_LOCATION` are specified in **AndroidManifest.xml**.
 2. Specify that ARCore is a required or optional component of the app in **AndroidManifest.xml**. This will cause Google Play to download ARCore alongside your app automatically.
@@ -72,7 +78,7 @@ The first step is to install the toolkit package from [Nuget](https://www.nuget.
 
 ## Usage
 
-See [Display scenes in augmented reality]() for a full walkthrough for using ArcGIS for AR, with step-by-step tutorials for world-scale, flyover, and tabletop AR.
+See [Display scenes in augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) for a full walkthrough for using ArcGIS for AR, with step-by-step tutorials for world-scale, flyover, and tabletop AR.
 
 The first step to using AR is to enable and disable AR tracking with the appropriate lifecycle methods. 
 
