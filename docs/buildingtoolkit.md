@@ -1,7 +1,3 @@
----
-uid: 3CCE1627-57F9-4ECB-A650-6D4D2E343337
----
-
 # Build the toolkit
 
 These instructions apply to both toolkit and AR toolkit.

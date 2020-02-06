@@ -1,10 +1,6 @@
----
-uid: D07D974D-8587-428E-BC75-EF531108515B
----
-
 # AR Toolkit
 
-**Augmented reality** experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extents `SceneView` to display GIS data on top of a camera feed showing the physical world.
+**Augmented reality** experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
 
 ## AR patterns
 

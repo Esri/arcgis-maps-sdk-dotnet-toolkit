@@ -1,6 +1,6 @@
 # ArcGIS Runtime SDK for .NET - Toolkit
 
-[![Install toolkit](https://img.shields.io/badge/Install-Toolkit-blue)](https://esri.github.io/arcgis-toolkit-dotnet/installtoolkit.html#install-toolkit) [![Install AR Toolkit](https://img.shields.io/badge/Install-AR_Toolkit-blue)](https://esri.github.io/arcgis-toolkit-dotnet/installtoolkit.html#install-ar-toolkit) [![oc](https://img.shields.io/badge/Doc-purple)](https://esri.github.io/arcgis-toolkit-dotnet/controls.html) [![API reference](https://img.shields.io/badge/API_Ref-Android-lime)](https://esri.github.io/arcgis-toolkit-dotnet/api/android/index.html) [![API reference](https://img.shields.io/badge/API_Ref-iOS-darkblue)](https://esri.github.io/arcgis-toolkit-dotnet/api/ios/index.html) [![API reference](https://img.shields.io/badge/API_Ref-UWP-skyblue)](https://esri.github.io/arcgis-toolkit-dotnet/api/uwp/index.html) [![API reference](https://img.shields.io/badge/API_Ref-Forms-blue)](https://esri.github.io/arcgis-toolkit-dotnet/api/netstd/index.html) [![API reference](https://img.shields.io/badge/API_Ref-WPF-blueviolet)](https://esri.github.io/arcgis-toolkit-dotnet/api/netfx/index.html)
+[![Install toolkit](https://img.shields.io/badge/Install-Toolkit-blue)](https://esri.github.io/arcgis-toolkit-dotnet/installtoolkit.html#install-toolkit) [![Install AR Toolkit](https://img.shields.io/badge/Install-AR_Toolkit-blue)](https://esri.github.io/arcgis-toolkit-dotnet/installtoolkit.html#install-ar-toolkit) <br />[![oc](https://img.shields.io/badge/Doc-purple)](https://esri.github.io/arcgis-toolkit-dotnet/controls.html) [![API reference](https://img.shields.io/badge/API_Ref-Android-lime)](https://esri.github.io/arcgis-toolkit-dotnet/api/android/index.html) [![API reference](https://img.shields.io/badge/API_Ref-iOS-darkblue)](https://esri.github.io/arcgis-toolkit-dotnet/api/ios/index.html) [![API reference](https://img.shields.io/badge/API_Ref-UWP-skyblue)](https://esri.github.io/arcgis-toolkit-dotnet/api/uwp/index.html) [![API reference](https://img.shields.io/badge/API_Ref-Forms-blue)](https://esri.github.io/arcgis-toolkit-dotnet/api/netstd/index.html) [![API reference](https://img.shields.io/badge/API_Ref-WPF-blueviolet)](https://esri.github.io/arcgis-toolkit-dotnet/api/netfx/index.html)
 
 The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).
 
@@ -17,8 +17,8 @@ You can use the Toolkit in your projects by:
 
 > See [the doc](https://esri.github.io/arcgis-toolkit-dotnet/controls.html) for a full list of controls with screenshots
 
-- [ARSceneView](https://esri.github.io/arcgis-toolkit-dotnet/ar.html): Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
-- [Bookmarks](https://esri.github.io/arcgis-toolkit-dotnet/bookmarks-view.html): Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
+- **[ARSceneView](https://esri.github.io/arcgis-toolkit-dotnet/ar.html)**: Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
+- **[Bookmarks](https://esri.github.io/arcgis-toolkit-dotnet/bookmarks-view.html)**: Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
 - **Compass**: Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
 - **FeatureDataField**: Displays and optionally allows editing of a single field attribute of a feature.
 - **Legend**: Displays a legend for a single layer in your map (and optionally for its sub layers).

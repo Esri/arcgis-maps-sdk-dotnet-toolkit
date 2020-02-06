@@ -1,7 +1,3 @@
----
-uid:65F8FFAC-CD1F-4304-BDFF-423936F0B08A
----
-
 # List of controls
 
 ### ARSceneView
