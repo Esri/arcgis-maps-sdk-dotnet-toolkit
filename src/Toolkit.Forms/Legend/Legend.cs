@@ -70,13 +70,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             s_DefaultControlTemplate = global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml<ControlTemplate>(new ControlTemplate(), template);
         }
 
-        private readonly LegendDataSource _datasource = new LegendDataSource(null);
+        private readonly LegendDataSource _datasource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Legend"/> class
         /// </summary>
         public Legend()
         {
+            _datasource = new LegendDataSource(this);
             HorizontalOptions = LayoutOptions.Fill;
             VerticalOptions = LayoutOptions.Fill;
             LayerItemTemplate = s_DefaultLayerItemTemplate;

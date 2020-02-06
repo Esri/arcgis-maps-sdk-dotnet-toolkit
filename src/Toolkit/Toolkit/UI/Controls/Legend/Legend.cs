@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class Legend
     {
-        private readonly LegendDataSource _datasource = new LegendDataSource(null);
+        private readonly LegendDataSource _datasource;
 
 #if !__ANDROID__
         /// <summary>
@@ -50,6 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public Legend()
         {
+            _datasource = new LegendDataSource(this);
             Initialize();
         }
 #endif

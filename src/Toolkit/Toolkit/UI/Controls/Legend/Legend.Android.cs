@@ -41,6 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Legend(Context context)
             : base(context)
         {
+            _datasource = new LegendDataSource(this);
             Initialize();
         }
 
@@ -52,6 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Legend(Context context, IAttributeSet attr)
             : base(context, attr)
         {
+            _datasource = new LegendDataSource(this);
             Initialize();
         }
 

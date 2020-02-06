@@ -49,17 +49,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private List<LegendEntry> _items = new List<LegendEntry>();
         private GeoView _geoview;
+        private Legend _owner;
         private bool _filterByVisibleScaleRange = true;
         private bool _filterHiddenLayers = true;
         private bool _reverseLayerOrder = true;
         private bool _filterEmptyLayers = false;
 
-        public LegendDataSource(GeoView geoview)
+        public LegendDataSource(Legend owner)
         {
-            if (geoview != null)
-            {
-                SetGeoView(geoview);
-            }
+            _owner = owner;
         }
 
         // Hides any layer contents that are out of scale range
@@ -329,14 +327,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
 #if XAMARIN_FORMS
             global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
-#elif __IOS__
-            _geoview.InvokeOnMainThread(action);
-#elif __ANDROID__
-            _geoview.PostDelayed(action, 500);
-#elif NETFX_CORE
-            _ = _geoview.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #else
-            _geoview.Dispatcher.Invoke(action);
+            if (_owner == null)
+            {
+                action();
+                return;
+            }
+#if __IOS__
+            _owner.InvokeOnMainThread(action);
+#elif __ANDROID__
+            _owner.PostDelayed(action, 500);
+#elif NETFX_CORE
+            _ = _owner.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
+#else
+            _owner.Dispatcher.Invoke(action);
+#endif
 #endif
         }
 
