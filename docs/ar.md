@@ -1,6 +1,6 @@
 # AR Toolkit
 
-[Augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extents `SceneView` to display GIS data on top of a camera feed showing the physical world.
+[Augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
 
 ## AR patterns
 
@@ -72,7 +72,7 @@ The first step is to install the toolkit package from [Nuget](https://www.nuget.
 
 ## Usage
 
-See [Display scenes in augmented reality]() for a full walkthrough for using ArcGIS for AR, with step-by-step tutorials for world-scale, flyover, and tabletop AR.
+See [Display scenes in augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) for a full walkthrough for using ArcGIS for AR, with step-by-step tutorials for world-scale, flyover, and tabletop AR.
 
 The first step to using AR is to enable and disable AR tracking with the appropriate lifecycle methods. 
 
