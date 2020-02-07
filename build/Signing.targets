@@ -1,0 +1,122 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ 
+  <!-- Signing outputs -->
+  <PropertyGroup>
+    <Certificate256TimeStampService>http://timestamp.digicert.com</Certificate256TimeStampService>
+    <SignToolPath>$(ProgramFiles)\Windows Kits\10\bin\x64\signtool.exe</SignToolPath>
+    <SignToolPath Condition="!Exists($(SignToolPath))">$(ProgramFiles)\Windows Kits\10\bin\x86\signtool.exe</SignToolPath>
+    <SignToolPath Condition="!Exists($(SignToolPath))">$(ProgramFiles)\Windows Kits\10\bin\10.0.16299.0\x64\signtool.exe</SignToolPath>    
+    <SignToolPath Condition="!Exists($(SignToolPath))">$(WindowsSDK80Path)bin\x64\signtool.exe</SignToolPath>
+    <SignToolPath Condition="!Exists($(SignToolPath))">signtool.exe</SignToolPath> <!-- fallback to use PATH environment -->  
+    
+    <PFXSignatureFile Condition="'$(PFXSignatureFile)'==''"></PFXSignatureFile>
+    <PFXSignaturePassword Condition="'$(PFXSignaturePassword)'==''"></PFXSignaturePassword>
+    <CodeSignCertificateStore Condition="'$(CodeSignCertificateStore)'==''"></CodeSignCertificateStore>
+    <CodeSignCertificateName Condition="'$(CodeSignCertificateName)'==''"></CodeSignCertificateName>
+    
+    <CodeSignFromStore Condition="'$(CodeSignCertificateStore)' != '' AND '$(CodeSignCertificateName)' != ''">true</CodeSignFromStore>
+    <CodeSignFromFile Condition="Exists($(CodeSignSignatureFile))">true</CodeSignFromFile>
+      <SignAssemblyCommand Condition="'$(CodeSignFromStore)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /s "$(CodeSignCertificateStore)" /n "$(CodeSignCertificateName)" /tr $(Certificate256TimeStampService) /td SHA256 </SignAssemblyCommand>
+    <SignAssemblyCommand Condition="'$(CodeSignFromFile)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /f "$(CodeSignSignatureFile)" /p "$(CodeSignSignaturePassword)" /tr $(Certificate256TimeStampService) /td SHA256 </SignAssemblyCommand>
+    <NuGetExePath>$(MSBuildThisFileDirectory)..\.tools\NuGet.exe</NuGetExePath>
+    <SignNugetCommand Condition="'$(CodeSignFromStore)' == 'true'">-CertificateStoreName "$(CodeSignCertificateStore)" -CertificateSubjectName "$(CodeSignCertificateName)" -Timestamper $(Certificate256TimeStampService)</SignNugetCommand>
+    <SignNugetCommand Condition="'$(CodeSignFromFile)' == 'true'">"-CertificatePath "$(PFXSignatureFile)" -CertificatePassword "$(PFXSignaturePassword)" -Timestamper $(Certificate256TimeStampService)</SignNugetCommand>
+  </PropertyGroup>
+  
+  <Target Name="SignAssembly" Condition="'$(SignAssemblyCommand)' != ''" BeforeTargets="CopyFilesToOutputDirectory" DependsOnTargets="ComputeIntermediateSatelliteAssemblies"> 
+    <ItemGroup>
+      <FilesToSign Include="@(IntermediateAssembly)" />
+      <FilesToSign Include="@(IntermediateRefAssembly)" />
+      <FilesToSign Include="@(IntermediateSatelliteAssembliesWithTargetPath)" />
+    </ItemGroup>
+    <ItemGroup>
+      <FilesToSignFiltered Include="@(FilesToSign)" Condition="Exists(%(FilesToSign.Identity))" />
+      <FilesToSignFiltered Condition="'@(FilesToSignFiltered->Count())' == 0" Include="$(TargetPath)" /> <!-- used by C++ projects -->
+    </ItemGroup>
+    <Exec Condition="'@(FilesToSignFiltered->Count())' > 0" Command="$(SignAssemblyCommand) &quot;%(FilesToSignFiltered.Identity)&quot;"
+          WorkingDirectory="$(ProjectDir)" EchoOff="true" />
+  </Target>
+  
+  <Target Name="SignNuGet" Condition="'$(SignNugetCommand)' != ''" AfterTargets="Pack" DependsOnTargets="DownloadNuGetExe">
+   <PropertyGroup>
+      <NugetPackageFileName>$(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg</NugetPackageFileName>
+   </PropertyGroup>
+    <Exec Command="&quot;$(NuGetExePath)&quot; sign &quot;$(NugetPackageFileName)&quot; $(SignNugetCommand)" />
+  </Target> 
+  
+  <Target Name="DownloadNuGetExe">
+    <DownloadNuGet OutputFilename="$(NuGetExePath)" Condition="!Exists('$(NuGetExePath)')" />
+  </Target>
+  
+  <UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <OutputFilename ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Core" />
+      <Reference Include="System.Xml" />
+      <Reference Include="WindowsBase" />
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.IO.Packaging" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Net" />
+      <Using Namespace="System.Xml" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Using Namespace="Microsoft.Build.Utilities" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+                string zipTempPath = null;
+                try {
+                    OutputFilename = Path.GetFullPath(OutputFilename);
+                    if (File.Exists(OutputFilename)) {
+                        Log.LogMessage("NuGet command line utility already present at " + OutputFilename);
+                        return true;
+                    }
+                    var info = new FileInfo(OutputFilename);
+                    if(!info.Directory.Exists)
+                      info.Directory.Create();
+                    Log.LogMessage("Determining latest version of NuGet.CommandLine...");
+                    WebClient webClient = new WebClient();
+                    XmlDocument xml = new XmlDocument();
+                    xml.LoadXml(webClient.DownloadString("http://nuget.org/v1/FeedService.svc/Packages()?$filter=tolower(Id)%20eq%20'nuget.commandline'&$top=1&$orderby=Version%20desc"));
+                    XmlNamespaceManager xns = new XmlNamespaceManager(xml.NameTable);
+                    xns.AddNamespace("atom", "http://www.w3.org/2005/Atom");
+                    xns.AddNamespace("d", "http://schemas.microsoft.com/ado/2007/08/dataservices");
+                    xns.AddNamespace("m", "http://schemas.microsoft.com/ado/2007/08/dataservices/metadata");
+                    string version = xml.SelectSingleNode("//atom:entry/m:properties/d:Version", xns).InnerText;
+                    string zipUrl = xml.SelectSingleNode("//atom:entry/atom:content", xns).Attributes["src"].Value;
+                    Log.LogMessage("Downloading NuGet.CommandLine v{0}...", version);
+                    zipTempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+                    webClient.DownloadFile(zipUrl, zipTempPath);
+                    Log.LogMessage("Copying to {0}...", OutputFilename);
+                    using (Package package = Package.Open(zipTempPath)) {
+                        PackagePart exePart = package.GetParts().Where(p => p.Uri.ToString().ToLowerInvariant() == "/tools/nuget.exe").Single();
+                        using (Stream inputStream = exePart.GetStream(FileMode.Open, FileAccess.Read))
+                        using (Stream outputStream = File.Create(OutputFilename)) {
+                            byte[] buffer = new byte[16384];
+                            while (true) {
+                                int read = inputStream.Read(buffer, 0, buffer.Length);
+                                if (read == 0) {
+                                    break;
+                                }
+                                outputStream.Write(buffer, 0, read);
+                            }
+                        }
+                    }
+                    return true;
+                }
+                catch (Exception ex) {
+                    Log.LogErrorFromException(ex);
+                    return false;
+                }
+                finally {
+                    if (zipTempPath != null) File.Delete(zipTempPath);
+                }
+            ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+
+</Project>

@@ -131,4 +131,8 @@
                     BeforeTargets="CoreCompile">
         <XamlTypeInfoBuildTask InputFilename="$(IntermediateOutputPath)\XamlTypeInfo.g.cs" />
     </Target>
+
+	
+    <Import Project="$(MSBuildThisFileDirectory)..\build\Signing.targets" />
+
 </Project>
