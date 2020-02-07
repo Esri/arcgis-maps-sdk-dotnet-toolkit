@@ -39,8 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             : this(new UI.Controls.ScaleLine())
 #endif
         {
-            HorizontalOptions = LayoutOptions.End;
-            VerticalOptions = LayoutOptions.Start;
+            HorizontalOptions = LayoutOptions.Start;
+            VerticalOptions = LayoutOptions.End;
         }
 
         internal ScaleLine(UI.Controls.ScaleLine nativeScaleLine)
