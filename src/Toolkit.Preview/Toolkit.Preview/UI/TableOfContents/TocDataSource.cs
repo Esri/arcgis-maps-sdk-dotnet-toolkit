@@ -179,23 +179,86 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
         private void OnDocumentChanged()
         {
+            IEnumerable<Layer> layers = null;
             if (_geoview is MapView mv)
             {
-                if (mv.Map != null)
+                if (mv.Map != null && mv.Map.OperationalLayers == null)
                 {
                     SubscribeToDocument(mv.Map);
+                }
+                else
+                {
+                    layers = mv.Map?.OperationalLayers;
                 }
             }
             else if (_geoview is SceneView sv)
             {
-                if (sv.Scene != null)
+                if (sv.Scene != null && sv.Scene.OperationalLayers == null)
                 {
                     SubscribeToDocument(sv.Scene);
                 }
+                else
+                {
+                    layers = sv.Scene?.OperationalLayers;
+                }
             }
+
+            if (layers is INotifyCollectionChanged incc)
+            {
+                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                {
+                    OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
+                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                };
+                incc.CollectionChanged += listener.OnEvent;
+            }
+
+            TrackLayers(layers);
 
             MarkCollectionDirty(false);
         }
+
+        private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var layer = sender as Layer;
+            if (e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded)
+            {
+                MarkCollectionDirty();
+            }
+            else if (e.PropertyName == nameof(FeatureLayer.Renderer))
+            {
+                MarkCollectionDirty(false);
+            }
+        }
+
+        private void Layers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            TrackLayers(sender as IEnumerable<Layer>);
+            MarkCollectionDirty();
+        }
+
+        private IEnumerable<Layer> _currentLayers;
+
+        private void TrackLayers(IEnumerable<Layer> layers)
+        {
+            if (_currentLayers != null)
+            {
+                foreach (var layer in _currentLayers)
+                {
+                    layer.PropertyChanged -= Layer_PropertyChanged;
+                }
+            }
+
+            _currentLayers = layers;
+            if (_currentLayers != null)
+            {
+                foreach (var layer in _currentLayers)
+                {
+                    layer.PropertyChanged += Layer_PropertyChanged;
+                }
+            }
+        }
+
 
         private bool _isCollectionDirty;
         private object _dirtyLock = new object();
