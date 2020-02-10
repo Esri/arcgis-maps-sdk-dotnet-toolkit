@@ -125,7 +125,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if !XAMARIN_FORMS
             if (DesignTime.IsDesignMode)
             {
-                GenerateDesignData(geoview);
+                _geoview = geoview;
+                GenerateDesignData();
                 return;
             }
 #endif
@@ -193,10 +194,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if !XAMARIN_FORMS
-        private void GenerateDesignData(GeoView geoview)
+        private void GenerateDesignData()
         {
             _items = new List<LegendEntry>();
-            if (geoview != null)
+            if (_geoview != null)
             {
                 _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 1" }));
                 _items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer A")));
@@ -207,8 +208,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _items.Add(new LegendEntry(new DesignLegendInfo("Small", new Symbology.SimpleMarkerSymbol() { Size = 5 })));
                 _items.Add(new LegendEntry(new DesignLegendInfo("Medium", new Symbology.SimpleMarkerSymbol() { Size = 10 })));
                 _items.Add(new LegendEntry(new DesignLegendInfo("Large", new Symbology.SimpleMarkerSymbol() { Size = 15 })));
-                _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 2" }));
-                _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 3" }));
+                if (!FilterEmptyLayers)
+                {
+                    _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 2" }));
+                    _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 3" }));
+                }
             }
 
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
@@ -408,7 +412,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if !XAMARIN_FORMS
             if (DesignTime.IsDesignMode)
             {
-                GenerateDesignData(_geoview);
+                GenerateDesignData();
                 return;
             }
 #endif
