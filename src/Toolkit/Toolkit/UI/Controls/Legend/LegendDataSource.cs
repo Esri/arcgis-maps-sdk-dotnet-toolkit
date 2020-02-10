@@ -122,6 +122,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public void SetGeoView(GeoView geoview)
         {
+#if !XAMARIN_FORMS
+            if (DesignTime.IsDesignMode)
+            {
+                GenerateDesignData(geoview);
+                return;
+            }
+#endif
+
             if (geoview == _geoview)
             {
                 return;
@@ -183,6 +191,50 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             UpdateItemsSource();
         }
+
+#if !XAMARIN_FORMS
+        private void GenerateDesignData(GeoView geoview)
+        {
+            _items = new List<LegendEntry>();
+            if (geoview != null)
+            {
+                _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 1" }));
+                _items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer A")));
+                _items.Add(new LegendEntry(new DesignLegendInfo("Symbol 1", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Red })));
+                _items.Add(new LegendEntry(new DesignLegendInfo("Symbol 2", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Green })));
+                _items.Add(new LegendEntry(new DesignLegendInfo("Symbol 3", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Blue })));
+                _items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer B")));
+                _items.Add(new LegendEntry(new DesignLegendInfo("Small", new Symbology.SimpleMarkerSymbol() { Size = 5 })));
+                _items.Add(new LegendEntry(new DesignLegendInfo("Medium", new Symbology.SimpleMarkerSymbol() { Size = 10 })));
+                _items.Add(new LegendEntry(new DesignLegendInfo("Large", new Symbology.SimpleMarkerSymbol() { Size = 15 })));
+                _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 2" }));
+                _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 3" }));
+            }
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        private class DesigntimeSublayer : ILayerContent
+        {
+            internal DesigntimeSublayer(string name)
+            {
+                Name = name;
+            }
+
+            public bool CanChangeVisibility => true;
+
+            public bool IsVisible { get; set; }
+
+            public string Name { get; }
+
+            public bool ShowInLegend { get; set; }
+
+            public IReadOnlyList<ILayerContent> SublayerContents { get; }
+
+            public Task<IReadOnlyList<LegendInfo>> GetLegendInfosAsync() => throw new NotImplementedException();
+
+            public bool IsVisibleAtScale(double scale) => true;
+        }
+#endif
 
 #if !XAMARIN && !XAMARIN_FORMS
         private void GeoViewDocumentChanged(object sender, object e)
@@ -351,6 +403,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _isCollectionDirty = false;
             }
+
+#if !XAMARIN_FORMS
+            if (DesignTime.IsDesignMode)
+            {
+                GenerateDesignData(_geoview);
+                return;
+            }
+#endif
 
             var newItems = BuildLegendList(_currentLayers, _reverseLayerOrder) ?? new List<LegendEntry>();
             if (newItems.Count == 0 && _items.Count == 0)
@@ -570,7 +630,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public int IndexOf(LegendEntry item) => _items.IndexOf(item);
 
-        #endregion
+#endregion
 
 #region List
 
