@@ -32,17 +32,15 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="controls:Legend">
-          <Border BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}"
-                  Background="{TemplateBinding Background}">
             <ListView x:Name="List"
-                                Foreground="{TemplateBinding Foreground}"
-                                ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                Margin="{TemplateBinding Padding}"
-                                BorderThickness="0"
-                                Padding="0">
+                  Foreground="{TemplateBinding Foreground}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Background="{TemplateBinding Background}"
+                  ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                  Margin="{TemplateBinding Padding}"
+                  Padding="0">
             </ListView>
-          </Border>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
