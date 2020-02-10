@@ -210,6 +210,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 2" }));
                 _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 3" }));
             }
+
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
