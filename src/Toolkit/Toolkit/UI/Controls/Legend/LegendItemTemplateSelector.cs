@@ -56,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     return SublayerTemplate;
                 }
 
-                if (entry.Content is LegendInfo)
+                if (entry.Content is LegendInfo || entry.Content is DesignLegendInfo)
                 {
                     return LegendInfoTemplate;
                 }
