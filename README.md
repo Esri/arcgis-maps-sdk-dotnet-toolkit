@@ -4,7 +4,7 @@
 
 The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).
 
-You can use the Toolkit in your projects by:
+There are two ways to add Toolkit to your project:
 
 1. **Install from Nuget** - the fastest way to get toolkit into your app
     - [Esri.ArcGISRuntime.Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
