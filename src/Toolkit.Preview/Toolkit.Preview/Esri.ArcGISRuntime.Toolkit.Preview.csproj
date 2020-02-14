@@ -66,6 +66,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Include="..\..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="UI\TableOfContents\LayerContentDataSource.cs" />
     <Compile Include="..\..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
   </ItemGroup>
  

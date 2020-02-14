@@ -44,6 +44,7 @@
     <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\Legend\LegendDataSource.cs" Link="Legend\LegendDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BookmarksView\BookmarksViewDataSource.cs" Link="BookmarksView\BookmarksViewDataSource.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="LayerContentDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
   </ItemGroup>
 

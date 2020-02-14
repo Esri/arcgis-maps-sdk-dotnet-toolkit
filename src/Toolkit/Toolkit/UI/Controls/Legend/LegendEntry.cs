@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <remarks>
     /// The <see cref="Content"/> property will contain the actual object it represents, mainly <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
     /// </remarks>
-    public class LegendEntry
+    public class LegendEntry : object, ILayerContentItem
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LegendEntry"/> class.

@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
 #endif
-    public class TocItem : INotifyPropertyChanged
+    public class TocItem : INotifyPropertyChanged, Toolkit.UI.ILayerContentItem
     {
         private System.Threading.Tasks.Task<IReadOnlyList<LegendInfo>> _legendInfoLoadTask;
 
@@ -63,8 +63,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
         private void SetChildren()
         {
-            Children = new List<TocItem>((Content as ILayerContent).SublayerContents.Select(s => new TocItem(s, _showLegend)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
+            if (Content is ILayerContent ilc && ilc.SublayerContents != null)
+            {
+                RefreshChildren();
+                if (ilc.SublayerContents is INotifyCollectionChanged incc)
+                {
+                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                    {
+                        OnEventAction = (instance, source, eventArgs) => RefreshChildren(),
+                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                    };
+                    incc.CollectionChanged += listener.OnEvent;
+                }
+            }
+        }
+
+        private void RefreshChildren()
+        {
+            if (Content is ILayerContent ilc && ilc.SublayerContents != null)
+            {
+                var selector = ilc.SublayerContents.Select(s => new TocItem(s, _showLegend));
+                if (ilc is FeatureCollectionLayer || ilc is GroupLayer)
+                {
+                    selector = selector.Reverse();
+                }
+
+                Children = new List<TocItem>(selector);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
+            }
         }
 
         /// <summary>

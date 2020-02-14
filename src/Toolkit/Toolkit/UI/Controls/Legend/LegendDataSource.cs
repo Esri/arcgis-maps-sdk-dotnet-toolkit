@@ -43,21 +43,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if NETFX_CORE
     [Windows.UI.Xaml.Data.Bindable]
 #endif
-    internal class LegendDataSource : IList<LegendEntry>, INotifyCollectionChanged, INotifyPropertyChanged, IList
+    internal class LegendDataSource : LayerContentDataSource<LegendEntry>
     {
         private readonly ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>> _legendInfoTasks = new ConcurrentDictionary<ILayerContent, Task<IReadOnlyList<LegendInfo>>>();
 
-        private List<LegendEntry> _items = new List<LegendEntry>();
-        private GeoView _geoview;
-        private Legend _owner;
         private bool _filterByVisibleScaleRange = true;
         private bool _filterHiddenLayers = true;
         private bool _reverseLayerOrder = true;
         private bool _filterEmptyLayers = false;
 
         public LegendDataSource(Legend owner)
+            : base(owner)
         {
-            _owner = owner;
         }
 
         // Hides any layer contents that are out of scale range
@@ -120,102 +117,35 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private long _propertyChangedCallbackToken = 0;
 #endif
 
-        public void SetGeoView(GeoView geoview)
+        protected override void OnGeoViewChanged(GeoView oldGeoview, GeoView newGeoview)
         {
-#if !XAMARIN_FORMS
-            if (DesignTime.IsDesignMode)
-            {
-                _geoview = geoview;
-                GenerateDesignData();
-                return;
-            }
-#endif
-
-            if (geoview == _geoview)
-            {
-                return;
-            }
-
-            if (_geoview != null)
-            {
-                _geoview.LayerViewStateChanged -= GeoView_LayerViewStateChanged;
-                (_geoview as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
-#if !XAMARIN && !XAMARIN_FORMS
-                if (_geoview is MapView mapview)
-                {
-#if NETFX_CORE
-                    mapview.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
-#else
-                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(mapview, GeoViewDocumentChanged);
-#endif
-                }
-                else if (_geoview is SceneView sceneview)
-                {
-#if NETFX_CORE
-                    sceneview.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
-#else
-                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, GeoViewDocumentChanged);
-#endif
-                }
-#endif
-            }
-
-            _geoview = geoview;
-            _currentScale = double.NaN;
-            if (_geoview != null)
-            {
-                _geoview.LayerViewStateChanged += GeoView_LayerViewStateChanged;
-                (_geoview as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
-#if !XAMARIN && !XAMARIN_FORMS
-                if (_geoview is MapView mapview)
-                {
-#if NETFX_CORE
-                    _propertyChangedCallbackToken = mapview.RegisterPropertyChangedCallback(MapView.MapProperty, GeoViewDocumentChanged);
-#else
-                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(mapview, GeoViewDocumentChanged);
-#endif
-                }
-                else if (_geoview is SceneView sceneview)
-                {
-#if NETFX_CORE
-                    _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, GeoViewDocumentChanged);
-#else
-                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, GeoViewDocumentChanged);
-#endif
-                }
-#endif
-                if (_geoview is MapView mv)
-                {
-                    _currentScale = mv.MapScale;
-                }
-            }
-
-            UpdateItemsSource();
+            base.OnGeoViewChanged(oldGeoview, newGeoview);
+            _currentScale = (newGeoview as MapView)?.MapScale ?? double.NaN;
         }
 
 #if !XAMARIN_FORMS
-        private void GenerateDesignData()
+        private List<LegendEntry> GenerateDesignData()
         {
-            _items = new List<LegendEntry>();
-            if (_geoview != null)
+            var items = new List<LegendEntry>();
+            if (GeoView != null)
             {
-                _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 1" }));
-                _items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer A")));
-                _items.Add(new LegendEntry(new DesignLegendInfo("Symbol 1", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Red })));
-                _items.Add(new LegendEntry(new DesignLegendInfo("Symbol 2", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Green })));
-                _items.Add(new LegendEntry(new DesignLegendInfo("Symbol 3", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Blue })));
-                _items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer B")));
-                _items.Add(new LegendEntry(new DesignLegendInfo("Small", new Symbology.SimpleMarkerSymbol() { Size = 5 })));
-                _items.Add(new LegendEntry(new DesignLegendInfo("Medium", new Symbology.SimpleMarkerSymbol() { Size = 10 })));
-                _items.Add(new LegendEntry(new DesignLegendInfo("Large", new Symbology.SimpleMarkerSymbol() { Size = 15 })));
+                items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 1" }));
+                items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer A")));
+                items.Add(new LegendEntry(new DesignLegendInfo("Symbol 1", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Red })));
+                items.Add(new LegendEntry(new DesignLegendInfo("Symbol 2", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Green })));
+                items.Add(new LegendEntry(new DesignLegendInfo("Symbol 3", new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Blue })));
+                items.Add(new LegendEntry(new DesigntimeSublayer("Sublayer B")));
+                items.Add(new LegendEntry(new DesignLegendInfo("Small", new Symbology.SimpleMarkerSymbol() { Size = 5 })));
+                items.Add(new LegendEntry(new DesignLegendInfo("Medium", new Symbology.SimpleMarkerSymbol() { Size = 10 })));
+                items.Add(new LegendEntry(new DesignLegendInfo("Large", new Symbology.SimpleMarkerSymbol() { Size = 15 })));
                 if (!FilterEmptyLayers)
                 {
-                    _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 2" }));
-                    _items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 3" }));
+                    items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 2" }));
+                    items.Add(new LegendEntry(new ArcGISTiledLayer() { Name = "Layer 3" }));
                 }
             }
 
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            return items;
         }
 
         private class DesigntimeSublayer : ILayerContent
@@ -241,250 +171,64 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
-#if !XAMARIN && !XAMARIN_FORMS
-        private void GeoViewDocumentChanged(object sender, object e)
+        protected override void OnDocumentReset()
         {
-            UpdateItemsSource();
-        }
-#endif
-
-        private void RefreshOnLoad(ILoadable loadable)
-        {
-            var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(loadable)
-            {
-                OnEventAction = (instance, source, eventArgs) => RunOnUIThread(UpdateItemsSource),
-                OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent
-            };
-            loadable.Loaded += listener.OnEvent;
-        }
-
-        private void UpdateItemsSource()
-        {
-            _legendInfoTasks.Clear();
-            IEnumerable<Layer> layers = null;
             _currentScale = double.NaN;
-            if (_geoview is MapView mv)
+            if (GeoView is MapView mv)
             {
-                if (mv.Map != null && mv.Map.OperationalLayers == null)
-                {
-                    RefreshOnLoad(mv.Map);
-                }
-                else
-                {
-                    layers = mv.Map?.OperationalLayers;
-                }
-
                 _currentScale = mv.MapScale;
             }
-            else if (_geoview is SceneView sv)
-            {
-                if (sv.Scene != null && sv.Scene.OperationalLayers == null)
-                {
-                    RefreshOnLoad(sv.Scene);
-                }
-                else
-                {
-                    layers = sv.Scene?.OperationalLayers;
-                }
-            }
 
-            if (layers is INotifyCollectionChanged incc)
-            {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
-                {
-                    OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
-                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
-                };
-                incc.CollectionChanged += listener.OnEvent;
-            }
-
-            TrackLayers(layers);
-
-            _items = BuildLegendList(layers, _reverseLayerOrder) ?? new List<LegendEntry>();
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            _legendInfoTasks.Clear();
+            base.OnDocumentReset();
         }
 
-        private IEnumerable<Layer> _currentLayers;
-
-        private void TrackLayers(IEnumerable<Layer> layers)
+        protected override void OnLayerPropertyChanged(ILayerContent layer, string propertyName)
         {
-            if (_currentLayers != null)
-            {
-                foreach (var layer in _currentLayers)
-                {
-                    layer.PropertyChanged -= Layer_PropertyChanged;
-                }
-            }
-
-            _currentLayers = layers;
-            if (_currentLayers != null)
-            {
-                foreach (var layer in _currentLayers)
-                {
-                    layer.PropertyChanged += Layer_PropertyChanged;
-                }
-            }
-
-            // TODO: Remove entries in _legendInfoTasks that are no longer needed
-            // This does happen when the items source gets replaced, but we could be a bit more aggressive
-        }
-
-        private void Layer_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var layer = sender as Layer;
-            if (!layer.ShowInLegend && e.PropertyName != nameof(layer.ShowInLegend))
+            if (!layer.ShowInLegend && propertyName != nameof(layer.ShowInLegend))
             {
                 return;
             }
-            else if (e.PropertyName == nameof(Layer.LoadStatus) && layer.LoadStatus == LoadStatus.Loaded)
-            {
-                MarkCollectionDirty();
-            }
-            else if ((e.PropertyName == nameof(layer.IsVisible) && _filterHiddenLayers) || e.PropertyName == nameof(layer.ShowInLegend))
+            else if ((propertyName == nameof(layer.IsVisible) && _filterHiddenLayers) || propertyName == nameof(layer.ShowInLegend))
             {
                 MarkCollectionDirty(false);
             }
-            else if (e.PropertyName == nameof(FeatureLayer.Renderer))
+            else if (propertyName == nameof(FeatureLayer.Renderer))
             {
                 MarkCollectionDirty(false);
             }
+
+            base.OnLayerPropertyChanged(layer, propertyName);
         }
 
-        private void Layers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        protected override List<LegendEntry> OnRebuildCollection()
         {
-            TrackLayers(sender as IEnumerable<Layer>);
-            MarkCollectionDirty();
-        }
-
-        private bool _isCollectionDirty;
-        private object _dirtyLock = new object();
-
-        private async void MarkCollectionDirty(bool delay = true)
-        {
-            lock (_dirtyLock)
-            {
-                if (_isCollectionDirty)
-                {
-                    return;
-                }
-
-                _isCollectionDirty = true;
-            }
-
-            if (delay)
-            {
-                // Delay update in case of frequent events to reduce load
-                await Task.Delay(250).ConfigureAwait(false);
-            }
-
-            RunOnUIThread(RebuildCollection);
-        }
-
-        private void RunOnUIThread(Action action)
-        {
-#if XAMARIN_FORMS
-            global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
-#else
-            if (_owner == null)
-            {
-                action();
-                return;
-            }
-#if __IOS__
-            _owner.InvokeOnMainThread(action);
-#elif __ANDROID__
-            _owner.PostDelayed(action, 500);
-#elif NETFX_CORE
-            _ = _owner.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
-#else
-            _owner.Dispatcher.Invoke(action);
-#endif
-#endif
-        }
-
-        private void RebuildCollection()
-        {
-            lock (_dirtyLock)
-            {
-                _isCollectionDirty = false;
-            }
-
 #if !XAMARIN_FORMS
             if (DesignTime.IsDesignMode)
             {
-                GenerateDesignData();
-                return;
+                return GenerateDesignData();
             }
 #endif
+            IEnumerable<Layer> layers = null;
 
-            var newItems = BuildLegendList(_currentLayers, _reverseLayerOrder) ?? new List<LegendEntry>();
-            if (newItems.Count == 0 && _items.Count == 0)
+            if (GeoView is MapView mv)
             {
-                return;
+                layers = mv.Map?.OperationalLayers;
+            }
+            else if (GeoView is SceneView sv)
+            {
+                layers = sv.Scene?.OperationalLayers;
             }
 
-            if (newItems.Count == 0 || _items.Count == 0)
-            {
-                _items = newItems;
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-                return;
-            }
-
-            int i = 0;
-            for (; i < newItems.Count || i < _items.Count; i++)
-            {
-                var newItem = i < newItems.Count ? newItems[i] : null;
-                var oldItem = i < _items.Count ? _items[i] : null;
-                if (newItem?.Content == oldItem?.Content)
-                {
-                    continue;
-                }
-
-                if (newItem == null)
-                {
-                    // Item was removed from the end
-                    var removedItem = oldItem;
-                    _items.RemoveAt(i);
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItem, i));
-                    i--;
-                }
-                else if (!_items.Contains(newItem))
-                {
-                    // Item was added
-                    _items.Insert(i, newItem);
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, newItem, i));
-                }
-                else
-                {
-                    // Item was removed (or moved)
-                    var removedItem = oldItem;
-                    _items.RemoveAt(i);
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, oldItem, i));
-                    i--;
-                }
-            }
-#if DEBUG
-            // Validate the calculated collection is in sync
-            System.Diagnostics.Debug.Assert(newItems.Count == _items.Count, "Legend entry count doesn't match");
-            for (i = 0; i < newItems.Count; i++)
-            {
-                System.Diagnostics.Debug.Assert(newItems[i].Content == _items[i].Content, $"Legend entry {i} doesn't match");
-            }
-#endif
+            return BuildLegendList(layers, _reverseLayerOrder) ?? new List<LegendEntry>();
         }
 
-        private void GeoView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e) => MarkCollectionDirty();
+        protected override void OnLayerViewStateChanged(Layer layer, LayerViewStateChangedEventArgs layerViewState) => MarkCollectionDirty();
 
-        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void OnGeoViewPropertyChanged(GeoView geoView, string propertyName)
         {
-#if XAMARIN || XAMARIN_FORMS
-            if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
-                (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
-            {
-                UpdateItemsSource();
-            }
-#endif
-            if (e.PropertyName == nameof(MapView.MapScale) && sender is MapView mv)
+            base.OnGeoViewPropertyChanged(geoView, propertyName);
+            if (propertyName == nameof(MapView.MapScale) && geoView is MapView mv)
             {
                 _currentScale = mv.MapScale;
                 MarkCollectionDirty();
@@ -523,7 +267,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 if (layerContent is Layer l)
                 {
-                    var state = _geoview.GetLayerViewState(l);
+                    var state = GeoView.GetLayerViewState(l);
                     if (state != null &&
                         ((state.Status == LayerViewStatus.NotVisible && _filterHiddenLayers && !(l is GroupLayer)) ||
                         (state.Status == LayerViewStatus.OutOfScale && _filterByVisibleScaleRange)))
@@ -600,75 +344,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             return result;
         }
-
-#region IList<T>
-
-        public int Count => _items.Count;
-
-        public bool IsReadOnly => true;
-
-        public bool IsFixedSize => false;
-
-        public bool IsSynchronized => (_items as ICollection)?.IsSynchronized ?? false;
-
-        public object SyncRoot => (_items as ICollection)?.SyncRoot;
-
-        public LegendEntry this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
-
-        public void Insert(int index, LegendEntry item) => throw new NotSupportedException();
-
-        public void RemoveAt(int index) => throw new NotSupportedException();
-
-        public void Add(LegendEntry item) => throw new NotSupportedException();
-
-        public void Clear() => throw new NotSupportedException();
-
-        public bool Contains(LegendEntry item) => _items.Contains(item);
-
-        public void CopyTo(LegendEntry[] array, int arrayIndex) => _items.CopyTo(array, arrayIndex);
-
-        public bool Remove(LegendEntry item) => throw new NotSupportedException();
-
-        public IEnumerator<LegendEntry> GetEnumerator() => _items.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
-
-        public int IndexOf(LegendEntry item) => _items.IndexOf(item);
-
-#endregion
-
-#region List
-
-        object IList.this[int index] { get => _items[index]; set => throw new NotSupportedException(); }
-
-        int IList.Add(object value) => throw new NotSupportedException();
-
-        void IList.Remove(object value) => throw new NotSupportedException();
-
-        void ICollection.CopyTo(Array array, int index) => ((ICollection)_items).CopyTo(array, index);
-
-        bool IList.Contains(object value) => ((IList)_items).Contains(value);
-
-        int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
-
-        void IList.Insert(int index, object value) => throw new NotSupportedException();
-
-#endregion
-
-        private void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
-        {
-            CollectionChanged?.Invoke(this, args);
-            OnPropertyChanged("Item[]");
-            if (args.Action != NotifyCollectionChangedAction.Move)
-            {
-                OnPropertyChanged(nameof(Count));
-            }
-        }
-
-        private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
     }
 }
