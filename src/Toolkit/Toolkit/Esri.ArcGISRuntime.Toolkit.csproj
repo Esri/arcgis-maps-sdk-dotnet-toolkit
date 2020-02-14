@@ -75,6 +75,7 @@
     <Compile Include="UI\Controls\TimeSlider\TimeExtentChangedEventArgs.cs" />
     <Compile Include="UI\Controls\TimeSlider\TimeSliderLabelMode.cs" />
     <Compile Include="UI\Controls\Legend\LegendEntry.cs" />
+    <Compile Include="UI\ILayerContentItem.cs" />
   </ItemGroup>
   
   <ItemGroup>
