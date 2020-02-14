@@ -326,7 +326,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var sublayers = layerContent.SublayerContents;
 
                     // This might seem counter-intuitive, but sublayers are already top-to-bottom, as opposed to the layer collection...
-                    bool reverseSublayers = (layerContent is GroupLayer) ? _reverseLayerOrder : !_reverseLayerOrder;
+                    bool reverseSublayers = !_reverseLayerOrder;
+
+                    if (layerContent is GroupLayer || layerContent is FeatureCollectionLayer)
+                    {
+                        // These layers have the sublayer content in the opposite order of other services
+                        reverseSublayers = !_reverseLayerOrder;
+                    }
+
                     data.AddRange(BuildLegendList(layerContent.SublayerContents, reverseSublayers));
                 }
             }
