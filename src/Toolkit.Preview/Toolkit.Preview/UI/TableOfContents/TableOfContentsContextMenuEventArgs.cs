@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <summary>
         /// Gets a set of menu items to display. If empty, no context menu will be displayed
         /// </summary>
-        public System.Collections.Generic.IList<MenuItem> MenuItems { get; internal set; }
+        public ItemCollection MenuItems { get; internal set; }
     }
 }
 #endif

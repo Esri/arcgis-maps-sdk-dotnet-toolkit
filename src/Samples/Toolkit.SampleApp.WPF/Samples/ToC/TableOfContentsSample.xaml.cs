@@ -65,6 +65,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
                     zoomTo.Click += (s, e) => mapView.SetViewpointGeometryAsync(layer.FullExtent);
                     args.MenuItems.Add(zoomTo);
                 }
+                if (args.MenuItems.Count > 0)
+                    args.MenuItems.Add(new Separator());
                 var remove = new MenuItem() { Header = "Remove" };
                 remove.Click += (s, e) =>
                 {
