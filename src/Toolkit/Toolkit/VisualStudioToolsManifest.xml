@@ -8,6 +8,8 @@
       <Item Type=" Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar" />
       <Item Type=" Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine" />
       <Item Type=" Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay" />
+      <Item Type=" Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider" />
+      <Item Type=" Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer" />
     </ToolboxItems>
   </File>
 </FileList>
