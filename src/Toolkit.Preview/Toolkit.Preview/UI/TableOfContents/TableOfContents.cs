@@ -242,13 +242,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
             {
                 if (TableOfContentContextMenuOpening != null)
                 {
+                    var ctm = new ContextMenu();
                     var args = new TableOfContentsContextMenuEventArgs(sender, e)
                     {
-                        MenuItems = new System.Collections.Generic.List<MenuItem>(),
+                        MenuItems = ctm.Items,
                         TableOfContentItem = item?.Content,
-                        LegendInfo = info
+                        LegendInfo = info,
+                        Menu = ctm
                     };
-                    args.Menu = new ContextMenu() { ItemsSource = args.MenuItems };
                     TableOfContentContextMenuOpening?.Invoke(this, args);
                     e.Handled = args.Handled;
                     if (args.MenuItems.Count > 0)
