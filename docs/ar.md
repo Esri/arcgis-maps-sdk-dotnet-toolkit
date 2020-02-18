@@ -1,5 +1,7 @@
 # AR Toolkit
 
+[![guide doc](https://img.shields.io/badge/Full_Developers_Guide-Doc-purple)](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) [![world-scale sample](https://img.shields.io/badge/World_Scale-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/) [![Tabletop sample](https://img.shields.io/badge/Tabletop-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/) [![Flyover sample](https://img.shields.io/badge/Flyover-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/)
+
 [Augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
 
 ## AR patterns
