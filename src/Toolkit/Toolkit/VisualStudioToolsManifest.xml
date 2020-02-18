@@ -4,7 +4,7 @@
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField" />
-      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay" />
