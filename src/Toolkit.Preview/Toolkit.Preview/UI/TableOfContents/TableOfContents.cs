@@ -123,9 +123,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <seealso cref="SublayerItemTemplate"/>
         /// <seealso cref="LegendInfoItemTemplate"/>
         /// <seealso cref="BasemapItemTemplate"/>
-        public DataTemplate LayerItemTemplate
+        public HierarchicalDataTemplate LayerItemTemplate
         {
-            get { return (DataTemplate)GetValue(LayerItemTemplateProperty); }
+            get { return (HierarchicalDataTemplate)GetValue(LayerItemTemplateProperty); }
             set { SetValue(LayerItemTemplateProperty, value); }
         }
 
@@ -136,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// If this is set to null, the <see cref="SublayerItemTemplate"/> will be used instead.
         /// </remarks>
         public static readonly DependencyProperty LayerItemTemplateProperty =
-            DependencyProperty.Register(nameof(LayerItemTemplate), typeof(DataTemplate), typeof(TableOfContents), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(LayerItemTemplate), typeof(HierarchicalDataTemplate), typeof(TableOfContents), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets the item template for each <see cref="ILayerContent"/> entry that is not a <see cref="Layer"/>.
@@ -144,9 +144,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <seealso cref="LegendInfoItemTemplate"/>
         /// <seealso cref="LayerItemTemplate"/>
         /// <seealso cref="BasemapItemTemplate"/>
-        public DataTemplate SublayerItemTemplate
+        public HierarchicalDataTemplate SublayerItemTemplate
         {
-            get { return (DataTemplate)GetValue(SublayerItemTemplateProperty); }
+            get { return (HierarchicalDataTemplate)GetValue(SublayerItemTemplateProperty); }
             set { SetValue(SublayerItemTemplateProperty, value); }
         }
 
@@ -154,7 +154,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// Identifies the <see cref="SublayerItemTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SublayerItemTemplateProperty =
-                DependencyProperty.Register(nameof(SublayerItemTemplate), typeof(DataTemplate), typeof(TableOfContents), new PropertyMetadata(null));
+                DependencyProperty.Register(nameof(SublayerItemTemplate), typeof(HierarchicalDataTemplate), typeof(TableOfContents), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets the item template for each <see cref="LegendInfo"/> content entry.
