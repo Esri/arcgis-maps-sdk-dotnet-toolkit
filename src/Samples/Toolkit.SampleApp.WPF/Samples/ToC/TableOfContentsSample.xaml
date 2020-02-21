@@ -23,7 +23,7 @@
             </Grid.RowDefinitions>
             <esri:TableOfContents Grid.Row="0" x:Name="toc"
                   GeoView="{Binding ElementName=mapView}"
-                  TableOfContentContextMenuOpening="toc_LayerContentContextMenuOpening" />
+                  TocItemContextMenuOpening="toc_LayerContentContextMenuOpening" />
 
             <CheckBox Content="Show Legend" IsChecked="{Binding ShowLegend, ElementName=toc, Mode=TwoWay}" Grid.Row="1" />
         </Grid>

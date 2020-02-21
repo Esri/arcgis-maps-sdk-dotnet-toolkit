@@ -155,11 +155,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                         };
                         incc.CollectionChanged += listener.OnEvent;
                     }
-
-                    if (ilc.SublayerContents.Count > 0)
-                    {
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
-                    }
                 }
             }
         }
@@ -168,13 +163,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         {
             if (Content is ILayerContent ilc && ilc.SublayerContents != null)
             {
-                var selector = ilc.SublayerContents.Select(s => new TocItem(s, _showLegend, Depth + 1, this));
+                var currentChildren = _children;
+                var selector = ilc.SublayerContents.Select(s => currentChildren?.Where(t => t.Content == s).FirstOrDefault() ?? new TocItem(s, _showLegend, Depth + 1, this));
                 if (ilc is FeatureCollectionLayer || ilc is GroupLayer)
                 {
                     selector = selector.Reverse();
                 }
 
                 _children = new List<TocItem>(selector);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
             }
         }
 

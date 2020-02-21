@@ -31,8 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
     /// <summary>
     /// A control that creates a table of content tree view from a <see cref="GeoView"/>.
     /// </summary>
-    [TemplatePart(Name = "TreeView", Type = typeof(ItemsControl))]
-    public class TableOfContents : Control
+    public class TableOfContents : TreeView
     {
         private readonly TocDataSource _datasource;
 
@@ -44,30 +43,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         {
             DefaultStyleKey = typeof(TableOfContents);
             _datasource = new TocDataSource(this);
-        }
-
-        /// <inheritdoc />
-#if NETFX_CORE
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
-#endif
-        {
-            base.OnApplyTemplate();
+            ItemsSource = _datasource;
             ItemTemplateSelector = new TocItemTemplateSelector(this);
-            UpdateDatasource();
-        }
-
-        private void UpdateDatasource()
-        {
-            var tree = GetTemplateChild("TreeView") as ItemsControl;
-            if (tree != null)
-            {
-                tree.ItemsSource = _datasource;
 #if !NETFX_CORE
-                ContextMenuService.AddContextMenuOpeningHandler(tree, ContextMenuEventHandler);
+            ContextMenuService.AddContextMenuOpeningHandler(this, ContextMenuEventHandler);
 #endif
-            }
         }
 
         /// <summary>
@@ -192,77 +172,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         public static readonly DependencyProperty BasemapItemTemplateProperty =
                 DependencyProperty.Register(nameof(BasemapItemTemplate), typeof(DataTemplate), typeof(TableOfContents), new PropertyMetadata(null));
 
-        /// <summary>
-        /// Gets or sets the template selector used for selecting templates for each entry in the list.
-        /// </summary>
-        /// <remarks>
-        /// If the default template selector is overridden, the item templates will not apply.
-        /// </remarks>
-        public DataTemplateSelector ItemTemplateSelector
-        {
-            get { return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty); }
-            set { SetValue(ItemTemplateSelectorProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ItemTemplateSelector"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ItemTemplateSelectorProperty =
-                DependencyProperty.Register(nameof(ItemTemplateSelector), typeof(DataTemplateSelector), typeof(TableOfContents), new PropertyMetadata(null));
-
 #if !NETFX_CORE
         private void ContextMenuEventHandler(object sender, ContextMenuEventArgs e)
         {
+            var s = new TreeView().ItemContainerStyle;
             (sender as FrameworkElement).ContextMenu = null;
             var vm = (e.OriginalSource as FrameworkElement)?.DataContext;
-            TocItem item = null;
-            LegendInfo info = null;
-            if (vm is LegendInfo li)
+            if (vm is TocItem item && TocItemContextMenuOpening != null)
             {
-                info = li;
-                var parent = System.Windows.Media.VisualTreeHelper.GetParent(e.OriginalSource as DependencyObject) as FrameworkElement;
-                while (parent != null)
+                var ctm = new ContextMenu();
+                var args = new TocItemContextMenuEventArgs(sender, e)
                 {
-                    if (parent.DataContext is TocItem tocItem)
-                    {
-                        item = tocItem;
-                        break;
-                    }
-
-                    parent = System.Windows.Media.VisualTreeHelper.GetParent(parent) as FrameworkElement;
-                }
-            }
-
-            if (vm is TocItem ti)
-            {
-                item = ti;
-            }
-
-            if (vm != null)
-            {
-                if (TableOfContentContextMenuOpening != null)
+                    MenuItems = ctm.Items,
+                    Item = item,
+                    Menu = ctm
+                };
+                TocItemContextMenuOpening?.Invoke(this, args);
+                e.Handled = args.Handled;
+                if (args.MenuItems.Count > 0)
                 {
-                    var ctm = new ContextMenu();
-                    var args = new TableOfContentsContextMenuEventArgs(sender, e)
-                    {
-                        MenuItems = ctm.Items,
-                        Item = item,
-                        Menu = ctm
-                    };
-                    TableOfContentContextMenuOpening?.Invoke(this, args);
-                    e.Handled = args.Handled;
-                    if (args.MenuItems.Count > 0)
-                    {
-                        (sender as FrameworkElement).ContextMenu = args.Menu;
-                    }
+                    (sender as FrameworkElement).ContextMenu = args.Menu;
                 }
             }
         }
 
         /// <summary>
-        /// Event fired by the <see cref="TableOfContents"/> when right-clicking an item
+        /// Event fired by the <see cref="TableOfContents"/> when right-clicking a <see cref="TocItem"/> in the tree
         /// </summary>
-        public event System.EventHandler<TableOfContentsContextMenuEventArgs> TableOfContentContextMenuOpening;
+        public event System.EventHandler<TocItemContextMenuEventArgs> TocItemContextMenuOpening;
 #endif
     }
 }

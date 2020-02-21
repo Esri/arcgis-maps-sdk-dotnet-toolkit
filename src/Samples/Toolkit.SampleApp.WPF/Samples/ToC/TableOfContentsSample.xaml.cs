@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
             mapView.Map = map;
         }
 
-        private void toc_LayerContentContextMenuOpening(object sender, Preview.UI.Controls.TableOfContentsContextMenuEventArgs args)
+        private void toc_LayerContentContextMenuOpening(object sender, Preview.UI.Controls.TocItemContextMenuEventArgs args)
         {
             var tocItem = args.Item;
             if (tocItem.Content is Mapping.Basemap)
