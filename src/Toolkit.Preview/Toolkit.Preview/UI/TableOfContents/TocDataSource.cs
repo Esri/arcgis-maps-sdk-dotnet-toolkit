@@ -115,12 +115,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             var result = new List<TocItem>();
             if (layers != null)
             {
-                result.AddRange(layers.Reverse().Select(l => new TocItem(l, _showLegend, 0) { IsExpanded = true }));
+                result.AddRange(layers.Reverse().Select(l => new TocItem(l, _showLegend, 0, null) { IsExpanded = true }));
             }
 
             if (basemap != null)
             {
-                result.Add(new TocItem(basemap, false, 0));
+                result.Add(new TocItem(basemap, false, 0, null));
             }
 
             return result;

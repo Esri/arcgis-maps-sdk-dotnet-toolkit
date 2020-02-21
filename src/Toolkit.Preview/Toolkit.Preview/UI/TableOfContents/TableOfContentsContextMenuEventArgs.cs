@@ -33,14 +33,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         }
 
         /// <summary>
-        /// Gets the layer content instance that was clicked
+        /// Gets the data for the content that was clicked
         /// </summary>
-        public object TableOfContentItem { get; internal set; }
+        public object Content => TableOfContentItem?.Content;
 
         /// <summary>
-        /// Gets the LegendInfo that was clicked (if any)
+        /// Gets a reference to the node that was clicked.
         /// </summary>
-        public LegendInfo LegendInfo { get; internal set; }
+        public TocItem TableOfContentItem { get; internal set; }
 
         /// <summary>
         /// Gets a reference to the context menu that will be displayed

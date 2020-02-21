@@ -246,8 +246,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
                     var args = new TableOfContentsContextMenuEventArgs(sender, e)
                     {
                         MenuItems = ctm.Items,
-                        TableOfContentItem = item?.Content,
-                        LegendInfo = info,
+                        TableOfContentItem = item,
                         Menu = ctm
                     };
                     TableOfContentContextMenuOpening?.Invoke(this, args);

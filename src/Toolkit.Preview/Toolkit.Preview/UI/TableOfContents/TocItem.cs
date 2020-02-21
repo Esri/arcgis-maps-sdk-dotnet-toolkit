@@ -39,6 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
     {
         private System.Threading.Tasks.Task<IList<TocItem>> _legendInfoLoadTask;
         private bool _isExpanded;
+        private WeakReference<TocItem> _parent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TocItem"/> class.
@@ -46,10 +47,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// <param name="content">The object this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.</param>
         /// <param name="showLegend">Whether the legend should be shown or not</param>
         /// <param name="depth">The depth of this item in the tree.</param>
-        internal TocItem(object content, bool showLegend, int depth)
+        /// <param name="parent">The parent to this item in the tree</param>
+        internal TocItem(object content, bool showLegend, int depth, TocItem parent)
         {
             Content = content;
             Depth = depth;
+            _parent = new WeakReference<TocItem>(parent);
             _showLegend = showLegend;
             if (content is ILayerContent)
             {
@@ -61,6 +64,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                 {
                     SetChildren();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets a reference to the parent of this tree item node
+        /// </summary>
+        public TocItem Parent
+        {
+            get
+            {
+                if (_parent != null && _parent.TryGetTarget(out TocItem parent) == true)
+                {
+                    return parent;
+                }
+
+                return null;
             }
         }
 
@@ -111,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         {
             if (Content is ILayerContent ilc && ilc.SublayerContents != null)
             {
-                var selector = ilc.SublayerContents.Select(s => new TocItem(s, _showLegend, Depth + 1));
+                var selector = ilc.SublayerContents.Select(s => new TocItem(s, _showLegend, Depth + 1, this));
                 if (ilc is FeatureCollectionLayer || ilc is GroupLayer)
                 {
                     selector = selector.Reverse();
@@ -183,7 +202,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         private async System.Threading.Tasks.Task<IList<TocItem>> GetLegendInfosAsync(ILayerContent lc)
         {
             var infos = await lc.GetLegendInfosAsync();
-            return new List<TocItem>(infos.Select(t => new TocItem(t, _showLegend, Depth + 1)));
+            return new List<TocItem>(infos.Select(t => new TocItem(t, _showLegend, Depth + 1, this)));
         }
 
         private IEnumerable<TocItem> _children;
