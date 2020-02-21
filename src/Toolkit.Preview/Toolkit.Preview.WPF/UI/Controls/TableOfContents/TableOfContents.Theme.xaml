@@ -21,9 +21,9 @@
       <Setter Property="LegendInfoItemTemplate">
         <Setter.Value>
           <DataTemplate>
-            <StackPanel Orientation="Horizontal">
-              <controls:SymbolDisplay Symbol="{Binding Content.Symbol}" MaxHeight="40" Width="40" Margin="0,5,5,0" VerticalAlignment="Center" />
-              <TextBlock Text="{Binding Content.Name}" FontSize="12" VerticalAlignment="Center" Margin="0,5,0,0" />
+            <StackPanel Orientation="Horizontal" Margin="0,2">
+              <controls:SymbolDisplay Symbol="{Binding Content.Symbol}" MaxHeight="40" Width="40" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding Content.Name}" FontSize="12" VerticalAlignment="Center" Margin="5,0" />
             </StackPanel>
           </DataTemplate>
         </Setter.Value>

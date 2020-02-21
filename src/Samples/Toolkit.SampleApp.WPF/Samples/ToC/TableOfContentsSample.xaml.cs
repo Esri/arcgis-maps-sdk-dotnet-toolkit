@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
 
         private void toc_LayerContentContextMenuOpening(object sender, Preview.UI.Controls.TableOfContentsContextMenuEventArgs args)
         {
-            if (args.TableOfContentItem is Mapping.Basemap)
+            if (args.Content is Mapping.Basemap)
             {
                 var item = new MenuItem() { Header = "Imagery" };
                 item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateImagery();
@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
                 args.MenuItems.Add(item);
 
             }
-            if (args.TableOfContentItem is Mapping.Layer layer)
+            if (args.Content is Mapping.Layer layer)
             {
                 if (layer.LoadStatus == LoadStatus.FailedToLoad)
                 {
