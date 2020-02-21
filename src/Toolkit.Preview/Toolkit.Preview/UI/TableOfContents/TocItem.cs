@@ -217,6 +217,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             }
         }
 
+        /// <summary>
+        /// Forces regeneration of the legend for this item
+        /// </summary>
+        public void RefreshLegend()
+        {
+            _legendInfoLoadTask = null;
+            if (ShowLegend)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
+            }
+        }
+
         private async void LoadLegend()
         {
             if (Content is ILayerContent lc)
