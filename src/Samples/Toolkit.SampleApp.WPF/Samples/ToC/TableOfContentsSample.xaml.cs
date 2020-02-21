@@ -35,7 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
 
         private void toc_LayerContentContextMenuOpening(object sender, Preview.UI.Controls.TableOfContentsContextMenuEventArgs args)
         {
-            if (args.Content is Mapping.Basemap)
+            var tocItem = args.Item;
+            if (tocItem.Content is Mapping.Basemap)
             {
                 var item = new MenuItem() { Header = "Imagery" };
                 item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateImagery();
@@ -50,28 +51,62 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
                 args.MenuItems.Add(item);
 
             }
-            if (args.Content is Mapping.Layer layer)
+            if (tocItem.Content is ILoadable loadable && loadable.LoadStatus == LoadStatus.FailedToLoad)
             {
-                if (layer.LoadStatus == LoadStatus.FailedToLoad)
+                var retry = new MenuItem() { Header = "Retry load", Icon = new TextBlock() { Text = "", FontFamily = new FontFamily("Segoe UI Symbol") } };
+                retry.Click += (s, e) => loadable.RetryLoadAsync();
+                args.MenuItems.Add(retry);
+                return;
+            }
+
+            if (!(tocItem.Content is LegendInfo))
+            {
+                Func<Task<Envelope>> getExtent = null;
+                if (tocItem.Layer?.FullExtent != null)
                 {
-                    var retry = new MenuItem() { Header = "Retry load" };
-                    retry.Click += (s, e) => layer.RetryLoadAsync();
-                    args.MenuItems.Add(retry);
-                    return;
+                    getExtent = () => Task.FromResult(tocItem.Layer?.FullExtent);
                 }
-                if(layer.FullExtent != null)
+                if(tocItem.Content is ArcGISSublayer sublayer)
                 {
-                    var zoomTo = new MenuItem() { Header = "Zoom To" };
-                    zoomTo.Click += (s, e) => mapView.SetViewpointGeometryAsync(layer.FullExtent);
+                    if (sublayer.LoadStatus == LoadStatus.NotLoaded || sublayer.LoadStatus == LoadStatus.Loading)
+                    {
+                        getExtent = async () =>
+                        {
+                            try
+                            {
+                                await sublayer.LoadAsync();
+                            }
+                            catch { return null; }
+                            return sublayer.MapServiceSublayerInfo?.Extent;
+                        };
+                    }
+                    else if(sublayer.MapServiceSublayerInfo?.Extent != null)
+                    {
+                        getExtent = () => Task.FromResult(sublayer.MapServiceSublayerInfo.Extent);
+                    }
+                }
+                if (getExtent != null)
+                {
+                    var zoomTo = new MenuItem() { Header = "Zoom To", Icon = new TextBlock() { Text = "", FontFamily = new FontFamily("Segoe UI Symbol") } };
+                    zoomTo.Click += async (s, e) =>
+                    {
+                        var extent = await getExtent();
+                        if (extent != null)
+                            _ = mapView.SetViewpointGeometryAsync(extent);
+                    };
                     args.MenuItems.Add(zoomTo);
                 }
-                if (args.MenuItems.Count > 0)
-                    args.MenuItems.Add(new Separator());
-                var remove = new MenuItem() { Header = "Remove" };
+            }
+
+            if (args.MenuItems.Count > 0)
+                args.MenuItems.Add(new Separator());
+            if (tocItem.Content is Layer layer)
+            {
+                var remove = new MenuItem() { Header = "Remove", Icon = new TextBlock() { Text = "", FontFamily = new FontFamily("Segoe UI Symbol") } };
                 remove.Click += (s, e) =>
                 {
                     var result = MessageBox.Show("Remove layer " + layer.Name + " ?", "Confirm", MessageBoxButton.OKCancel);
-                    if(result == MessageBoxResult.OK)
+                    if (result == MessageBoxResult.OK)
                     {
                         if (mapView.Map.OperationalLayers.Contains(layer))
                             mapView.Map.OperationalLayers.Remove(layer);

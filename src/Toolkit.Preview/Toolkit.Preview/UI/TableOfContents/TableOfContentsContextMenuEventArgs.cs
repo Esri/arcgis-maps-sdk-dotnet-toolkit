@@ -33,14 +33,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         }
 
         /// <summary>
-        /// Gets the data for the content that was clicked
-        /// </summary>
-        public object Content => TableOfContentItem?.Content;
-
-        /// <summary>
         /// Gets a reference to the node that was clicked.
         /// </summary>
-        public TocItem TableOfContentItem { get; internal set; }
+        public TocItem Item { get; internal set; }
 
         /// <summary>
         /// Gets a reference to the context menu that will be displayed

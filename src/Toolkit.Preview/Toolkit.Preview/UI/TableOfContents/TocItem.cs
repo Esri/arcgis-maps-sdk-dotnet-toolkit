@@ -84,6 +84,44 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <summary>
+        /// Gets the <see cref="ILayerContent"/> that this <see cref="TocItem"/> belongs to.
+        /// </summary>
+        /// <seealso cref="Layer"/>
+        /// <seealso cref="Content"/>
+        public ILayerContent LayerContent
+        {
+            get
+            {
+                var tocItem = this;
+                while (tocItem != null && !(tocItem.Content is ILayerContent))
+                {
+                    tocItem = Parent;
+                }
+
+                return tocItem?.Content as ILayerContent;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Layer"/> that this <see cref="TocItem"/> belongs to.
+        /// </summary>
+        /// <seealso cref="LayerContent"/>
+        /// <seealso cref="Content"/>
+        public Layer Layer
+        {
+            get
+            {
+                var tocItem = this;
+                while (tocItem != null && !(tocItem.Content is Layer))
+                {
+                    tocItem = tocItem.Parent;
+                }
+
+                return tocItem?.Content as Layer;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the item is expanded in the TreeView or not
         /// </summary>
         public bool IsExpanded
@@ -143,6 +181,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// <summary>
         /// Gets the content that this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
         /// </summary>
+        /// <seealso cref="LayerContent"/>
+        /// <seealso cref="Layer"/>
         public object Content { get; }
 
         private bool _showLegend;
