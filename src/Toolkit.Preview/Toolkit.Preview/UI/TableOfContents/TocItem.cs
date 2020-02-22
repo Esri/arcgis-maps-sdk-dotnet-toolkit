@@ -84,6 +84,44 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <summary>
+        /// Gets the <see cref="ILayerContent"/> that this <see cref="TocItem"/> belongs to.
+        /// </summary>
+        /// <seealso cref="Layer"/>
+        /// <seealso cref="Content"/>
+        public ILayerContent LayerContent
+        {
+            get
+            {
+                var tocItem = this;
+                while (tocItem != null && !(tocItem.Content is ILayerContent))
+                {
+                    tocItem = Parent;
+                }
+
+                return tocItem?.Content as ILayerContent;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Layer"/> that this <see cref="TocItem"/> belongs to.
+        /// </summary>
+        /// <seealso cref="LayerContent"/>
+        /// <seealso cref="Content"/>
+        public Layer Layer
+        {
+            get
+            {
+                var tocItem = this;
+                while (tocItem != null && !(tocItem.Content is Layer))
+                {
+                    tocItem = tocItem.Parent;
+                }
+
+                return tocItem?.Content as Layer;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the item is expanded in the TreeView or not
         /// </summary>
         public bool IsExpanded
@@ -117,11 +155,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                         };
                         incc.CollectionChanged += listener.OnEvent;
                     }
-
-                    if (ilc.SublayerContents.Count > 0)
-                    {
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
-                    }
                 }
             }
         }
@@ -130,19 +163,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         {
             if (Content is ILayerContent ilc && ilc.SublayerContents != null)
             {
-                var selector = ilc.SublayerContents.Select(s => new TocItem(s, _showLegend, Depth + 1, this));
+                var currentChildren = _children;
+                var selector = ilc.SublayerContents.Select(s => currentChildren?.Where(t => t.Content == s).FirstOrDefault() ?? new TocItem(s, _showLegend, Depth + 1, this));
                 if (ilc is FeatureCollectionLayer || ilc is GroupLayer)
                 {
                     selector = selector.Reverse();
                 }
 
                 _children = new List<TocItem>(selector);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
             }
         }
 
         /// <summary>
         /// Gets the content that this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
         /// </summary>
+        /// <seealso cref="LayerContent"/>
+        /// <seealso cref="Layer"/>
         public object Content { get; }
 
         private bool _showLegend;
@@ -177,6 +214,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Forces regeneration of the legend for this item
+        /// </summary>
+        public void RefreshLegend()
+        {
+            _legendInfoLoadTask = null;
+            if (ShowLegend)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
             }
         }
 

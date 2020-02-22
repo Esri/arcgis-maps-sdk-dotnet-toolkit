@@ -24,23 +24,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
     /// <summary>
     /// Event argument fired by the <see cref="TableOfContents"/> when right-clicking an item
     /// </summary>
-    /// <seealso cref="TableOfContents.TableOfContentContextMenuOpening"/>
-    public class TableOfContentsContextMenuEventArgs : RoutedEventArgs
+    /// <seealso cref="TableOfContents.TocItemContextMenuOpening"/>
+    public class TocItemContextMenuEventArgs : RoutedEventArgs
     {
-        internal TableOfContentsContextMenuEventArgs(object source, ContextMenuEventArgs args)
+        internal TocItemContextMenuEventArgs(object source, ContextMenuEventArgs args)
             : base(args.RoutedEvent, source)
         {
         }
 
         /// <summary>
-        /// Gets the data for the content that was clicked
-        /// </summary>
-        public object Content => TableOfContentItem?.Content;
-
-        /// <summary>
         /// Gets a reference to the node that was clicked.
         /// </summary>
-        public TocItem TableOfContentItem { get; internal set; }
+        public TocItem Item { get; internal set; }
 
         /// <summary>
         /// Gets a reference to the context menu that will be displayed
