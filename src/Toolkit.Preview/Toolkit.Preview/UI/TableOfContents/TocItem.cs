@@ -312,7 +312,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             }
         }
 
-
         /// <inheritdoc />
         public override int GetHashCode()
         {
