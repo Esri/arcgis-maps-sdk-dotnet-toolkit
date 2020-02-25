@@ -15,7 +15,7 @@
              <Setter Property="LayerItemTemplate">
             <Setter.Value>
               <DataTemplate>
-                <TextBlock Text="{Binding Content.Name}" FontSize="16" TextWrapping="Wrap" FontWeight="Semibold" />
+                <TextBlock Text="{Binding Content.Name}" FontSize="14" TextWrapping="Wrap" FontWeight="Semibold" />
               </DataTemplate>
             </Setter.Value>
         </Setter>
