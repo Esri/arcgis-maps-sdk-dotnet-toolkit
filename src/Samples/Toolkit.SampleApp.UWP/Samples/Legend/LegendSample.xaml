@@ -16,6 +16,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <esriToolkit:Legend Grid.Row="0"
                                 x:Name="legend"
@@ -23,9 +24,12 @@
             <CheckBox Content="Filter By Visible Scale Range"
                       IsChecked="{x:Bind legend.FilterByVisibleScaleRange, Mode=TwoWay}"	
                       Grid.Row="1" />
+            <CheckBox Content="Filter Hidden Layers"
+                      IsChecked="{x:Bind legend.FilterHiddenLayers, Mode=TwoWay}"	
+                      Grid.Row="2" />
             <CheckBox Content="Reverse Layer Order"
                       IsChecked="{x:Bind legend.ReverseLayerOrder, Mode=TwoWay}"
-                      Grid.Row="2" />
+                      Grid.Row="3" />
         </Grid>
         <esri:MapView Map="{x:Bind Map}"
                       x:Name="mapView"
