@@ -58,6 +58,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
                 args.MenuItems.Add(retry);
                 return;
             }
+            if(tocItem.Content is FeatureLayer fl)
+            {
+                var resetRenderer = new MenuItem() { Header = "Reset Renderer" };
+                resetRenderer.Click += (s, e) => fl.Renderer = new Symbology.SimpleRenderer(new Symbology.SimpleMarkerSymbol() { Color = System.Drawing.Color.Red });
+                args.MenuItems.Add(resetRenderer);
+            }
 
             if (!(tocItem.Content is LegendInfo))
             {

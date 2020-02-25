@@ -65,6 +65,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     SetChildren();
                 }
             }
+
+            if (content is INotifyPropertyChanged inpc)
+            {
+                var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc)
+                {
+                    OnEventAction = (instance, source, eventArgs) => ContentPropertyChanged(eventArgs.PropertyName),
+                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                };
+                inpc.PropertyChanged += listener.OnEvent;
+            }
+        }
+
+        private void ContentPropertyChanged(string propertyName)
+        {
+            if (Content is FeatureLayer && propertyName == nameof(FeatureLayer.Renderer))
+            {
+                RefreshLegend();
+            }
         }
 
         /// <summary>
@@ -250,7 +268,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
         private async System.Threading.Tasks.Task<IList<TocItem>> GetLegendInfosAsync(ILayerContent lc)
         {
-            var infos = await lc.GetLegendInfosAsync();
+            var task = lc.GetLegendInfosAsync();
+            if (task.IsCompleted)
+            {
+                // If the legend creation completes syncronously, add a small delay to give the UI a chance to react
+                // Otherwise the legend will often not update the first time
+                await System.Threading.Tasks.Task.Yield();
+            }
+
+            var infos = await task;
             return new List<TocItem>(infos.Select(t => new TocItem(t, _showLegend, Depth + 1, this)));
         }
 
@@ -271,11 +297,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     }
                 }
 
-                if (_showLegend && LegendInfos != null)
+                if (_showLegend)
                 {
-                    foreach (var item in LegendInfos)
+                    var infos = LegendInfos;
+                    if (infos != null)
                     {
-                        yield return item;
+                        foreach (var item in infos)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Returning legend info");
+                            yield return item;
+                        }
                     }
                 }
             }
