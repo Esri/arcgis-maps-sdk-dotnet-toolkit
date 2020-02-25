@@ -9,14 +9,18 @@
     <Setter Property="LayerItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <TextBlock Text="{Binding Content.Name}" FontSize="18" />
+          <TextBlock Text="{Binding Content.Name}" 
+                     FontSize="14" 
+                     TextWrapping="Wrap" 
+                     FontWeight="Semibold"
+                     Margin="0,0,0,5" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
     <Setter Property="SublayerItemTemplate">
       <Setter.Value>
         <DataTemplate>
-          <TextBlock Text="{Binding Content.Name}" FontSize="14" />
+          <TextBlock Text="{Binding Content.Name}" FontSize="14" TextWrapping="Wrap" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -25,7 +29,10 @@
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
             <controls:SymbolDisplay Symbol="{Binding Content.Symbol}" MaxHeight="40" Width="40" Margin="0,0,5,0" />
-            <TextBlock Text="{Binding Content.Name}" FontSize="12" />
+            <TextBlock Text="{Binding Content.Name}" 
+                       FontSize="12" 
+                       TextWrapping="Wrap"
+                       VerticalAlignment="Center" />
           </StackPanel>
         </DataTemplate>
       </Setter.Value>
@@ -33,15 +40,28 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="controls:Legend">
-            <ListView x:Name="List"
-                  Foreground="{TemplateBinding Foreground}"
-                  BorderBrush="{TemplateBinding BorderBrush}"
-                  BorderThickness="{TemplateBinding BorderThickness}"
-                  Background="{TemplateBinding Background}"
-                  ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                  Margin="{TemplateBinding Padding}"
-                  Padding="0">
-            </ListView>
+          <ListView x:Name="List"
+                Foreground="{TemplateBinding Foreground}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Background="{TemplateBinding Background}"
+                ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                Margin="{TemplateBinding Padding}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                Padding="5">
+            <ListView.ItemContainerStyle>
+              <Style TargetType="{x:Type ListViewItem}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                      <ContentPresenter />
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </ListView.ItemContainerStyle>
+          </ListView>
         </ControlTemplate>
       </Setter.Value>
     </Setter>
