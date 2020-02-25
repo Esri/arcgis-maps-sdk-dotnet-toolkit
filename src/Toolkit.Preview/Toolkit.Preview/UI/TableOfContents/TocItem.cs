@@ -304,7 +304,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     {
                         foreach (var item in infos)
                         {
-                            System.Diagnostics.Debug.WriteLine("Returning legend info");
                             yield return item;
                         }
                     }
