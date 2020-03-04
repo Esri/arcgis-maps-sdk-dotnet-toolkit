@@ -37,16 +37,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 #endif
     public class TocItem : INotifyPropertyChanged, Toolkit.UI.ILayerContentItem
     {
-        private System.Threading.Tasks.Task<IReadOnlyList<LegendInfo>> _legendInfoLoadTask;
+        private System.Threading.Tasks.Task<IList<TocItem>> _legendInfoLoadTask;
+        private bool _isExpanded;
+        private WeakReference<TocItem> _parent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TocItem"/> class.
         /// </summary>
         /// <param name="content">The object this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.</param>
         /// <param name="showLegend">Whether the legend should be shown or not</param>
-        internal TocItem(object content, bool showLegend)
+        /// <param name="depth">The depth of this item in the tree.</param>
+        /// <param name="parent">The parent to this item in the tree</param>
+        internal TocItem(object content, bool showLegend, int depth, TocItem parent)
         {
             Content = content;
+            Depth = depth;
+            _parent = new WeakReference<TocItem>(parent);
             _showLegend = showLegend;
             if (content is ILayerContent)
             {
@@ -59,21 +65,114 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     SetChildren();
                 }
             }
+
+            if (content is INotifyPropertyChanged inpc)
+            {
+                var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc)
+                {
+                    OnEventAction = (instance, source, eventArgs) => ContentPropertyChanged(eventArgs.PropertyName),
+                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                };
+                inpc.PropertyChanged += listener.OnEvent;
+            }
         }
+
+        private void ContentPropertyChanged(string propertyName)
+        {
+            if (Content is FeatureLayer && propertyName == nameof(FeatureLayer.Renderer))
+            {
+                RefreshLegend();
+            }
+        }
+
+        /// <summary>
+        /// Gets a reference to the parent of this tree item node
+        /// </summary>
+        public TocItem Parent
+        {
+            get
+            {
+                if (_parent != null && _parent.TryGetTarget(out TocItem parent) == true)
+                {
+                    return parent;
+                }
+
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ILayerContent"/> that this <see cref="TocItem"/> belongs to.
+        /// </summary>
+        /// <seealso cref="Layer"/>
+        /// <seealso cref="Content"/>
+        public ILayerContent LayerContent
+        {
+            get
+            {
+                var tocItem = this;
+                while (tocItem != null && !(tocItem.Content is ILayerContent))
+                {
+                    tocItem = Parent;
+                }
+
+                return tocItem?.Content as ILayerContent;
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Layer"/> that this <see cref="TocItem"/> belongs to.
+        /// </summary>
+        /// <seealso cref="LayerContent"/>
+        /// <seealso cref="Content"/>
+        public Layer Layer
+        {
+            get
+            {
+                var tocItem = this;
+                while (tocItem != null && !(tocItem.Content is Layer))
+                {
+                    tocItem = tocItem.Parent;
+                }
+
+                return tocItem?.Content as Layer;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the item is expanded in the TreeView or not
+        /// </summary>
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                _isExpanded = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsExpanded)));
+            }
+        }
+
+        /// <summary>
+        /// Gets the depth of this item in the TreeView
+        /// </summary>
+        public int Depth { get; }
 
         private void SetChildren()
         {
-            if (Content is ILayerContent ilc && ilc.SublayerContents != null)
+            if (Content is ILayerContent ilc)
             {
-                RefreshChildren();
-                if (ilc.SublayerContents is INotifyCollectionChanged incc)
+                if (ilc.SublayerContents != null)
                 {
-                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                    RefreshChildren();
+                    if (ilc.SublayerContents is INotifyCollectionChanged incc)
                     {
-                        OnEventAction = (instance, source, eventArgs) => RefreshChildren(),
-                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
-                    };
-                    incc.CollectionChanged += listener.OnEvent;
+                        var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                        {
+                            OnEventAction = (instance, source, eventArgs) => RefreshChildren(),
+                            OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                        };
+                        incc.CollectionChanged += listener.OnEvent;
+                    }
                 }
             }
         }
@@ -82,13 +181,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         {
             if (Content is ILayerContent ilc && ilc.SublayerContents != null)
             {
-                var selector = ilc.SublayerContents.Select(s => new TocItem(s, _showLegend));
+                var currentChildren = _children;
+                var selector = ilc.SublayerContents.Select(s => currentChildren?.Where(t => t.Content == s).FirstOrDefault() ?? new TocItem(s, _showLegend, Depth + 1, this));
                 if (ilc is FeatureCollectionLayer || ilc is GroupLayer)
                 {
                     selector = selector.Reverse();
                 }
 
-                Children = new List<TocItem>(selector);
+                _children = new List<TocItem>(selector);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
             }
         }
@@ -96,6 +196,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// <summary>
         /// Gets the content that this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
         /// </summary>
+        /// <seealso cref="LayerContent"/>
+        /// <seealso cref="Layer"/>
         public object Content { get; }
 
         private bool _showLegend;
@@ -108,6 +210,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                 if (_showLegend != value)
                 {
                     _showLegend = value;
+                    if (_children != null)
+                    {
+                        foreach (var item in _children)
+                        {
+                            item.ShowLegend = value;
+                        }
+                    }
+
                     if (value)
                     {
                         if (_legendInfoLoadTask == null)
@@ -117,15 +227,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                         }
                     }
 
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LegendInfos)));
-                    if (Children != null)
+                    if (_legendInfoLoadTask != null && _legendInfoLoadTask.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
                     {
-                        foreach (var item in Children)
-                        {
-                            item.ShowLegend = value;
-                        }
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Forces regeneration of the legend for this item
+        /// </summary>
+        public void RefreshLegend()
+        {
+            _legendInfoLoadTask = null;
+            if (ShowLegend)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
             }
         }
 
@@ -133,13 +251,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         {
             if (Content is ILayerContent lc)
             {
-                _legendInfoLoadTask = lc.GetLegendInfosAsync();
+                _legendInfoLoadTask = GetLegendInfosAsync(lc);
                 try
                 {
                     var result = await _legendInfoLoadTask;
                     if (result.Count > 0)
                     {
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LegendInfos)));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Children)));
                     }
                 }
                 catch
@@ -148,10 +266,50 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             }
         }
 
+        private async System.Threading.Tasks.Task<IList<TocItem>> GetLegendInfosAsync(ILayerContent lc)
+        {
+            var task = lc.GetLegendInfosAsync();
+            if (task.IsCompleted)
+            {
+                // If the legend creation completes syncronously, add a small delay to give the UI a chance to react
+                // Otherwise the legend will often not update the first time
+                await System.Threading.Tasks.Task.Yield();
+            }
+
+            var infos = await task;
+            return new List<TocItem>(infos.Select(t => new TocItem(t, _showLegend, Depth + 1, this)));
+        }
+
+        private IEnumerable<TocItem> _children;
+
         /// <summary>
         /// Gets the child entries for this TOC Entry
         /// </summary>
-        public IEnumerable<TocItem> Children { get; private set; }
+        public IEnumerable<TocItem> Children
+        {
+            get
+            {
+                if (_children != null)
+                {
+                    foreach (var item in _children)
+                    {
+                        yield return item;
+                    }
+                }
+
+                if (_showLegend)
+                {
+                    var infos = LegendInfos;
+                    if (infos != null)
+                    {
+                        foreach (var item in infos)
+                        {
+                            yield return item;
+                        }
+                    }
+                }
+            }
+        }
 
         /// <inheritdoc />
         public override int GetHashCode()
@@ -167,7 +325,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// <summary>
         /// Gets the legend infos for this entry
         /// </summary>
-        public IEnumerable<LegendInfo> LegendInfos
+        private IEnumerable<TocItem> LegendInfos
         {
             get
             {
