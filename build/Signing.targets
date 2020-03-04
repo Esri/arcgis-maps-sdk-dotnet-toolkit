@@ -15,12 +15,12 @@
     <CodeSignCertificateName Condition="'$(CodeSignCertificateName)'==''"></CodeSignCertificateName>
     
     <CodeSignFromStore Condition="'$(CodeSignCertificateStore)' != '' AND '$(CodeSignCertificateName)' != ''">true</CodeSignFromStore>
-    <CodeSignFromFile Condition="Exists($(CodeSignSignatureFile))">true</CodeSignFromFile>
-      <SignAssemblyCommand Condition="'$(CodeSignFromStore)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /s "$(CodeSignCertificateStore)" /n "$(CodeSignCertificateName)" /tr $(Certificate256TimeStampService) /td SHA256 </SignAssemblyCommand>
-    <SignAssemblyCommand Condition="'$(CodeSignFromFile)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /f "$(CodeSignSignatureFile)" /p "$(CodeSignSignaturePassword)" /tr $(Certificate256TimeStampService) /td SHA256 </SignAssemblyCommand>
+    <CodeSignFromFile Condition="Exists($(PFXSignatureFile))">true</CodeSignFromFile>
+    <SignAssemblyCommand Condition="'$(CodeSignFromStore)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /s "$(CodeSignCertificateStore)" /n "$(CodeSignCertificateName)" /tr $(Certificate256TimeStampService) /td SHA256 </SignAssemblyCommand>
+    <SignAssemblyCommand Condition="'$(CodeSignFromFile)' == 'true'">"$(SignToolPath)" sign /fd SHA256 /f "$(PFXSignatureFile)" /p "$(PFXSignaturePassword)" /tr $(Certificate256TimeStampService) /td SHA256 </SignAssemblyCommand>
     <NuGetExePath>$(MSBuildThisFileDirectory)..\.tools\NuGet.exe</NuGetExePath>
-    <SignNugetCommand Condition="'$(CodeSignFromStore)' == 'true'">-CertificateStoreName "$(CodeSignCertificateStore)" -CertificateSubjectName "$(CodeSignCertificateName)" -Timestamper $(Certificate256TimeStampService)</SignNugetCommand>
-    <SignNugetCommand Condition="'$(CodeSignFromFile)' == 'true'">"-CertificatePath "$(PFXSignatureFile)" -CertificatePassword "$(PFXSignaturePassword)" -Timestamper $(Certificate256TimeStampService)</SignNugetCommand>
+    <SignNugetCommand Condition="'$(CodeSignFromStore)' == 'true'">-CertificateStoreName &quot;$(CodeSignCertificateStore)&quot; -CertificateSubjectName &quot;$(CodeSignCertificateName)&quot; -Timestamper $(Certificate256TimeStampService)</SignNugetCommand>
+    <SignNugetCommand Condition="'$(CodeSignFromFile)' == 'true'">-CertificatePath &quot;$(PFXSignatureFile)&quot; -CertificatePassword &quot;$(PFXSignaturePassword)&quot; -Timestamper $(Certificate256TimeStampService)</SignNugetCommand>
   </PropertyGroup>
   
   <Target Name="SignAssembly" Condition="'$(SignAssemblyCommand)' != ''" BeforeTargets="CopyFilesToOutputDirectory" DependsOnTargets="ComputeIntermediateSatelliteAssemblies"> 
