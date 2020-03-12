@@ -267,6 +267,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return double.NaN;
             }
+#if __ANDROID__
+            // Need to convert the value to DIPs
+            unitsPerPixel /= Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 1, Internal.ViewExtensions.GetDisplayMetrics());
+#endif
 
             var center = visibleArea.Extent.GetCenter();
             var centerOnePixelOver = new Geometry.MapPoint(center.X + unitsPerPixel, center.Y, center.SpatialReference);
