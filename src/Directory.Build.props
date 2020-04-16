@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.7.1</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.8.0</ArcGISRuntimeToolkitPackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -27,16 +27,16 @@
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
 
     <!--Framework versions-->
-    <UWPTargetPlatformVersion>10.0.16299.0</UWPTargetPlatformVersion>
-    <UWPTargetPlatformMinVersion>10.0.16299.0</UWPTargetPlatformMinVersion>
-    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
+    <UWPTargetPlatformVersion>10.0.17134.0</UWPTargetPlatformVersion>
+    <UWPTargetPlatformMinVersion>10.0.17134.0</UWPTargetPlatformMinVersion>
+    <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
     <DotNetTargetFramework>net461</DotNetTargetFramework>
-    <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+    <UWPTargetFramework>uap10.0.17134.0</UWPTargetFramework>
     <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
 
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.7.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.3.0.991211</XamarinFormsPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.8.0</ArcGISRuntimePackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.5.0.356</XamarinFormsPackageVersion>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
