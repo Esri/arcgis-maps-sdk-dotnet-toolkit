@@ -1,9 +1,9 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
   
   <PropertyGroup>
-    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
+    <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-    <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+    <UWPTargetFramework>uap10.0.17134</UWPTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>

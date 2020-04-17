@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-    <UWPTargetFramework>uap10.0.16299</UWPTargetFramework>
+    <UWPTargetFramework>uap10.0.17134</UWPTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
