@@ -34,10 +34,9 @@ jobs:
       env:
         ACCESS_TOKEN: ${{ secrets.GH_PAT }}
         BRANCH: gh-pages
-        DOCSFOLDER: artifacts/docs_site
       shell: cmd
       run: |
-         cd  %DOCSFOLDER%
+         cd  artifacts\docs_site
          git init
          git config --local user.name "%GITHUB_ACTOR%"
          git config --local user.email "%GITHUB_ACTOR%@users.noreply.github.com"
