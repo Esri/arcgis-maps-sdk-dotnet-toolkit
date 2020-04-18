@@ -15,7 +15,7 @@ jobs:
 
     steps:
         
-    - name: Clone NmeaParser
+    - name: Clone Repo
       uses: actions/checkout@v1
 
     - name: Download DocFX
@@ -26,14 +26,10 @@ jobs:
       env:
         DOCFXVERSION: 2.48.1
 
-    - name: Install NuGet
-      uses: nuget/setup-nuget@v1
-    
     - name: Build Documentation
       env:         
         DOCFX_SOURCE_BRANCH_NAME: master
       run: |
-        nuget install memberpage -Version 2.48.1 -OutputDirectory docs
         .tools/docfx/docfx.exe docs/docfx.json
         powershell -ExecutionPolicy ByPass -command "docs\FixApiRefLinks" -Path artifacts\docs_site\api\
       
