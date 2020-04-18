@@ -24,7 +24,7 @@ jobs:
     
     - name: Setup Visual Studio Command Prompt
       uses: warrenbuckley/Setup-MSBuild@v1
-      
+       
     - name: Build
       run: |
         msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
