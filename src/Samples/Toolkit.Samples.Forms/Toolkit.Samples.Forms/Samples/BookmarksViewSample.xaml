@@ -26,10 +26,9 @@
                     <RowDefinition Height="200" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <esri:MapView x:Name="MyMapView" Grid.Row="0" />
-                <esri:SceneView x:Name="MySceneView" Grid.Row="0" IsVisible="False" />
-                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="1"
-                                   GeoView="{x:Reference MyMapView}" />
+
+                <Grid x:Name="_viewContainer" Grid.Row="0"/>
+                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="1"/>
                 <Grid Grid.Row="2"
                   BackgroundColor="White">
                     <Grid.ColumnDefinitions>
@@ -77,6 +76,6 @@
                 </Grid>
             </Grid>
         </ScrollView>
-        
+
     </ContentPage.Content>
 </ContentPage>
