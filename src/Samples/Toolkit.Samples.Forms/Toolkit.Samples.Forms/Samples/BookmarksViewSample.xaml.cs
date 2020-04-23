@@ -15,7 +15,8 @@ namespace Toolkit.Samples.Forms.Samples
         private const string webMapTwoUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2";
         private const string webSceneOne = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=6b6588041965408e84ba319e12d9d7ad";
         private const string webSceneTwo = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=c6e7476998c649b482849eb92b967761";
-
+        private MapView MyMapView;
+        private SceneView MySceneView;
         private Random _randomizer = new Random();
 
         private ObservableCollection<Bookmark> bookmarksOverride = new ObservableCollection<Bookmark>
@@ -30,12 +31,19 @@ namespace Toolkit.Samples.Forms.Samples
         public BookmarksViewSample()
         {
             InitializeComponent();
+            MyMapView = new MapView();
+            MySceneView = new SceneView();
+            BookmarksView.GeoView = MyMapView;
+            _viewContainer.Children.Add(MyMapView);
+            _viewContainer.Children.Add(MySceneView);
         }
 
         private void SetMapViewBinding_Click(object sender, EventArgs e)
         {
-            MyMapView.IsVisible = true;
-            MySceneView.IsVisible = false;
+            if (_viewContainer.Children.Contains(MyMapView) == false)
+                _viewContainer.Children.Add(MyMapView);
+            if (_viewContainer.Children.Contains(MySceneView))
+                _viewContainer.Children.Remove(MySceneView);
             Binding geoviewBinding = new Binding();
             geoviewBinding.Source = MyMapView;
             BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.BookmarksView.GeoViewProperty, geoviewBinding);
@@ -43,8 +51,10 @@ namespace Toolkit.Samples.Forms.Samples
 
         private void SetSceneViewBinding_Click(object sender, EventArgs e)
         {
-            MyMapView.IsVisible = false;
-            MySceneView.IsVisible = true;
+            if (_viewContainer.Children.Contains(MySceneView) == false)
+                _viewContainer.Children.Add(MySceneView);
+            if (_viewContainer.Children.Contains(MyMapView))
+                _viewContainer.Children.Remove(MyMapView);
             Binding geoviewBinding = new Binding();
             geoviewBinding.Source = MySceneView;
             BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.BookmarksView.GeoViewProperty, geoviewBinding);
