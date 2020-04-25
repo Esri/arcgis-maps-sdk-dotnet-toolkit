@@ -31,6 +31,8 @@
                           Content="Filter non-visible layers" />
                 <CheckBox IsChecked="{Binding ReverseLayerOrder, ElementName=legend, Mode=TwoWay}"
                           Content="Reverse Layer Order" />
+                <Button Content="Switch to original map" Click="SwitchToOriginalMap_Click" />
+                <Button Content="Switch to alternate map" Click="SwitchToAlternateMap_Click" />
             </StackPanel>
             
         </Grid>

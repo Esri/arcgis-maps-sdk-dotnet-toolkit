@@ -90,12 +90,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public void Detach()
         {
-            TInstance target = (TInstance)_weakInstance.Target;
-            if (OnDetachAction != null)
+            if (_weakInstance?.Target is TInstance target)
             {
-                OnDetachAction(target, this);
-                OnDetachAction = null;
+                OnDetachAction?.Invoke(target, this);
             }
+
+            OnDetachAction = null;
         }
     }
 
