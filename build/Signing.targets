@@ -39,7 +39,7 @@
   
   <Target Name="SignNuGet" Condition="'$(SignNugetCommand)' != ''" AfterTargets="Pack" DependsOnTargets="DownloadNuGetExe">
    <PropertyGroup>
-      <NugetPackageFileName>$(PackageOutputPath)$(PackageId).$(PackageVersion).nupkg</NugetPackageFileName>
+      <NugetPackageFileName>$(PackageOutputPath)\$(PackageId).$(PackageVersion).nupkg</NugetPackageFileName>
    </PropertyGroup>
     <Exec Command="&quot;$(NuGetExePath)&quot; sign &quot;$(NugetPackageFileName)&quot; $(SignNugetCommand)" />
   </Target> 
