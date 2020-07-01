@@ -41,7 +41,8 @@
                 <ControlTemplate TargetType="controls:Legend">
                     <Border BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}">
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
                       <ListView x:Name="List"
                                           Foreground="{TemplateBinding Foreground}"
                                           ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
