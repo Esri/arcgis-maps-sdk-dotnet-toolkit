@@ -10,7 +10,7 @@ This guide describes how you can contribute improvements to the ArcGIS Runtime T
     * Be descriptive.  Clearly describe the issue including steps to reproduce and, if possible, a sample.  If an enhancement, clearly describe the additional functionality and provide a good use case to support it.     
 3. [Fork](https://help.github.com/articles/fork-a-repo) the [ArcGIS Runtime Toolkit for .NET repo](https://github.com/Esri/arcgis-toolkit-dotnet/) on GitHub.
 4. Clone it to your local machine.
-5. Checkout the [master branch](https://github.com/Esri/arcgis-toolkit-dotnet/tree/master).
+5. Checkout the [main branch](https://github.com/Esri/arcgis-toolkit-dotnet/tree/main).
 6. Create a new feature branch on your local machine.  The name of the branch is not important.     
 7. Write code to add an enhancement or fix a problem.  
     * Follow the coding conventions already used in the source code.
@@ -21,7 +21,7 @@ This guide describes how you can contribute improvements to the ArcGIS Runtime T
 
 ### Submitting changes
 1. Push the changes in your feature branch to your repo.
-2. Submit a [pull request](https://help.github.com/articles/using-pull-requests) against the "master" branch. 
+2. Submit a [pull request](https://help.github.com/articles/using-pull-requests) against the "main" branch. 
 3. In the pull request comments, add a reference to the issue the pull request resolves.  For example, if the pull request resolves issue 45, add a comment to the pull request that includes "#45" (no quotes).    
 
 ### Code reviews
