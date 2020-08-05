@@ -11,10 +11,11 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
     <PackageReleaseNotes>v$(ArcGISRuntimeToolkitPackageVersion): https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v$(ArcGISRuntimeToolkitPackageVersion)</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <Copyright>Copyright © 2014-2020 Esri.</Copyright>
+    <Copyright>Copyright © 2014-$([System.DateTime]::Now.ToString('yyyy')) Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
     <LangVersion>7.2</LangVersion>
@@ -35,8 +36,8 @@
     <UWPTargetFramework>uap10.0.17134</UWPTargetFramework>
     <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
 
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.8.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.5.0.356</XamarinFormsPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.9.0</ArcGISRuntimePackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.7.0.968</XamarinFormsPackageVersion>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
