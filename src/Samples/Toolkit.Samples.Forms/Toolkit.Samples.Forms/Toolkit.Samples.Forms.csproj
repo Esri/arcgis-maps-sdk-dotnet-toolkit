@@ -9,8 +9,11 @@
     <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
     <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Xamarin.Forms" Version="$(ArcGISRuntimePackageVersion)"/>
   </ItemGroup>
 
   <ItemGroup>

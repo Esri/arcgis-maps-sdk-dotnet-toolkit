@@ -13,7 +13,13 @@
       <Version>$(XamarinFormsPackageVersion)</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
     <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.ARToolkit.Forms" Version="$(ArcGISRuntimePackageVersion)"/>
   </ItemGroup>
 
   <ItemGroup>

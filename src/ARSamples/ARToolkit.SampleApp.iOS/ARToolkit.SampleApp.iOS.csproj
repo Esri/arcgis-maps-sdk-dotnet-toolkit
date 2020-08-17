@@ -175,11 +175,14 @@
       <Visible>false</Visible>
     </ImageAsset>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
     <ProjectReference Include="..\..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj">
       <Project>{190a1f64-46a7-44b5-806f-d9633fa94783}</Project>
       <Name>Esri.ArcGISRuntime.ARToolkit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.ARToolkit" Version="$(ArcGISRuntimePackageVersion)"/>
   </ItemGroup>
   <Import Project="..\SampleHelpers\SampleHelpers.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

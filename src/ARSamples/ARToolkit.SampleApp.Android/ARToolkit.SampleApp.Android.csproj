@@ -141,11 +141,14 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
     <ProjectReference Include="..\..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj">
       <Project>{168467dc-6d2d-477a-9ac2-f1486fa67e0a}</Project>
       <Name>Esri.ArcGISRuntime.ARToolkit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.ARToolkit" Version="$(ArcGISRuntimePackageVersion)"/>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\fullscalear.axml">

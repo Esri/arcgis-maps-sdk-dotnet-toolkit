@@ -43,6 +43,9 @@
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
     <NoWarn>$(NoWarn);NU5105</NoWarn>
+	
+	<!-- Set to true to make sample apps use Toolkit nuget packages instead -->
+	<UseNugetReferences>false</UseNugetReferences>
   </PropertyGroup>
 
   <Choose>

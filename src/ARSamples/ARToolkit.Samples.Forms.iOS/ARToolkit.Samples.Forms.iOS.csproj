@@ -165,13 +165,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj">
-      <Project>{9cb71063-b6a7-4bca-b740-6eb9d3b4ece9}</Project>
-      <Name>Esri.ArcGISRuntime.ARToolkit.Forms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ARToolkit.Samples.Forms\ARToolkit.Samples.Forms.csproj">
       <Project>{3b4245f2-c20b-4dfb-87b5-1aec123be464}</Project>
       <Name>ARToolkit.Samples.Forms</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
+    <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.ARToolkit.Forms" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 </Project>

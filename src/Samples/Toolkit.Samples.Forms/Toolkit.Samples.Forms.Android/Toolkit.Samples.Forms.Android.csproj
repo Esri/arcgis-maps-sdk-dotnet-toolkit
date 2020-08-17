@@ -92,7 +92,7 @@
     <Folder Include="Resources\drawable-xxxhdpi\" />
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
     <ProjectReference Include="..\..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
@@ -100,7 +100,13 @@
     <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
       <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
-    </ProjectReference>
+    </ProjectReference>  
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.Toolkit" Version="$(ArcGISRuntimePackageVersion)"/>
+	<PackageReference Include="Esri.ArcGISRuntime.Toolkit.Xamarin.Forms" Version="$(ArcGISRuntimePackageVersion)"/>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Toolkit.Samples.Forms\Toolkit.Samples.Forms.csproj">
       <Project>{d7b89b7d-f360-4a68-aecb-c27caddc8118}</Project>
       <Name>Toolkit.Samples.Forms</Name>

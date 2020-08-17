@@ -196,7 +196,7 @@
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
     <ProjectReference Include="..\..\Toolkit.Preview\Toolkit.Preview\Esri.ArcGISRuntime.Toolkit.Preview.csproj">
       <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
@@ -205,6 +205,10 @@
       <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
       <Name>Esri.ArcGISRuntime.Toolkit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.Toolkit" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Preview" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Samples\PopupViewer\info.png" />

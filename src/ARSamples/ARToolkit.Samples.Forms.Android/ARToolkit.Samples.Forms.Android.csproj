@@ -105,18 +105,19 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj">
-      <Project>{43c278cb-f076-4519-b916-c267c15927a6}</Project>
-      <Name>Esri.ArcGISRuntime.ARToolkit.Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj">
-      <Project>{190a1f64-46a7-44b5-806f-d9633fa94783}</Project>
-      <Name>Esri.ArcGISRuntime.ARToolkit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ARToolkit.Samples.Forms\ARToolkit.Samples.Forms.csproj">
+      <ProjectReference Include="..\ARToolkit.Samples.Forms\ARToolkit.Samples.Forms.csproj">
       <Project>{3b4245f2-c20b-4dfb-87b5-1aec123be464}</Project>
       <Name>ARToolkit.Samples.Forms</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'!='true'">
+    <ProjectReference Include="..\..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />
+    <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseNugetReferences)'=='true'">
+    <PackageReference Include="Esri.ArcGISRuntime.ARToolkit" Version="$(ArcGISRuntimePackageVersion)"/>
+    <PackageReference Include="Esri.ArcGISRuntime.ARToolkit.Forms" Version="$(ArcGISRuntimePackageVersion)"/>
+  </ItemGroup>
+
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
