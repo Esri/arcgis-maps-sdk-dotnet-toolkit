@@ -10,14 +10,14 @@ using Xamarin.Forms.Xaml;
 
 namespace Toolkit.Samples.Forms.Samples
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfoAttribute(Category = "Compass", Description = "Compass used with a SceneView")]
     public partial class CompassSceneViewSample : ContentPage
-	{
-		public CompassSceneViewSample()
-		{
-			InitializeComponent();
-            sceneView.Scene = new Scene(Basemap.CreateLightGrayCanvasVector());
-		}
-	}
+    {
+        public CompassSceneViewSample()
+        {
+            InitializeComponent();
+            sceneView.Scene = new Scene(Basemap.CreateImagery());
+        }
+    }
 }
