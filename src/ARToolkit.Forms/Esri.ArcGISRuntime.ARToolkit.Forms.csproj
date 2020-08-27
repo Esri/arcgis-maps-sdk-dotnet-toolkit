@@ -15,13 +15,6 @@
     <AssemblyName>Esri.ArcGISRuntime.ARToolkit.Forms</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <Company>Esri Inc.</Company>
-    <Authors>Esri Inc.</Authors>
-    <Copyright>Copyright © 2018-2019 Esri.</Copyright>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
