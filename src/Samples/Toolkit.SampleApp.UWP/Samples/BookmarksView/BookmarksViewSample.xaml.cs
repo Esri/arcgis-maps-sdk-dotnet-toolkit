@@ -140,5 +140,16 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BookmarksView
         {
             await new MessageDialog($"{bookmark.Name} Selected!").ShowAsync();
         }
+
+        private void SelectDefaultItemContainer_Click(object sender, RoutedEventArgs e)
+        {
+            BookmarksView.ItemContainerStyle = null;
+        }
+
+        private void SelectCustomItemContainer_Click(object sender, RoutedEventArgs e)
+        {
+            Style style = (Style)Resources["AlternateItemContainerStyle"];
+            BookmarksView.ItemContainerStyle = style;
+        }
     }
 }

@@ -15,6 +15,58 @@
         <DataTemplate x:Key="ItemTemplateTwo" DataType="{x:Type esri:Bookmark}">
             <TextBlock Background="Red" Foreground="White" Text="{Binding Name}" HorizontalAlignment="Center" />
         </DataTemplate>
+        <Style TargetType="ListViewItem" x:Key="AlternateItemContainerStyle">
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Foreground" Value="DarkSlateGray" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border x:Name="Bd"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="SlateBlue" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive" Value="False" />
+                                    <Condition Property="IsSelected" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="SlateBlue" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive" Value="True" />
+                                    <Condition Property="IsSelected" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="LightGray" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="TextElement.Foreground" Value="LightGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -64,6 +116,8 @@
                     <!-- 4: Switch Item template -->
                     <RowDefinition Height="Auto" />
                     <!-- 5: Set or clear selection listener -->
+                    <RowDefinition Height="Auto" />
+                    <!-- 6: Switch item container style-->
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="GeoView:" Grid.Row="0" Grid.Column="0" />
@@ -72,6 +126,7 @@
                 <TextBlock Text="Add to:" Grid.Row="3" Grid.Column="0" />
                 <TextBlock Text="Set template:" Grid.Row="4" Grid.Column="0" />
                 <TextBlock Text="Selection listener:" Grid.Row="5" Grid.Column="0" />
+                <TextBlock Text="Container Style:" Grid.Row="6" Grid.Column="0" />
 
                 <Button Content="MapView" Grid.Row="0" Grid.Column="1" Click="SetMapViewBinding_Click" />
                 <Button Content="SceneView" Grid.Row="0" Grid.Column="2" Click="SetSceneViewBinding_Click" />
@@ -85,6 +140,8 @@
                 <Button Content="Red back" Grid.Row="4" Grid.Column="2" Click="SetItemTemplateTwo_Click" />
                 <Button Content="Add" Grid.Row="5" Grid.Column="1" Click="AddSelectionListener_Click" />
                 <Button Content="Remove" Grid.Row="5" Grid.Column="2" Click="RemoveSelectionListener_Click" />
+                <Button Content="Default" Grid.Row="6" Grid.Column="1" Click="SelectDefaultItemContainer_Click" />
+                <Button Content="Custom" Grid.Row="6" Grid.Column="2" Click="SelectCustomItemContainer_Click" />
             </Grid>
         </Border>
     </Grid>
