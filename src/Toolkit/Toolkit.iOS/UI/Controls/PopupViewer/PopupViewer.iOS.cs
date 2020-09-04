@@ -103,9 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 AllowsSelection = false,
                 Bounces = true,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                AutoresizingMask = UIViewAutoresizing.All,
                 RowHeight = UITableView.AutomaticDimension,
-                EstimatedRowHeight = (nfloat)(UIFont.LabelFontSize * 2.4),
             };
             _detailsList.RegisterClassForCellReuse(typeof(DetailsItemCell), PopupViewerTableSource.CellId);
             AddSubviews(_editSummary, _customHtmlDescription, _detailsList);
