@@ -155,7 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="ItemContainerStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ItemContainerStyleProperty =
-            DependencyProperty.Register(nameof(ItemContainerStyle), typeof(Style), typeof(BookmarksView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ItemContainerStyle), typeof(Style), typeof(BookmarksView), null);
     }
 }
 #endif
