@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.8.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.9.0</ArcGISRuntimeToolkitPackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
