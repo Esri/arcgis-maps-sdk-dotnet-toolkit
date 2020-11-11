@@ -638,7 +638,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.ThumbStrokeProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -669,7 +669,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.ThumbFillProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -700,7 +700,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.CurrentExtentFillProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -731,7 +731,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.FullExtentFillProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -762,7 +762,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.FullExtentStrokeProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -793,7 +793,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.TimeStepIntervalTickFillProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -824,7 +824,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.PlaybackButtonsFillProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -855,7 +855,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.PlaybackButtonsStrokeProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -886,7 +886,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.FullExtentLabelColorProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -917,7 +917,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.CurrentExtentLabelColorProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
@@ -948,7 +948,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var slider = (TimeSlider)bindable;
 #if NETFX_CORE
-                var nativeColor = new SolidColorBrush(((Color)newValue).ToNativeColor());
+                var nativeColor = new Windows.UI.Xaml.Media.SolidColorBrush(((Color)newValue).ToNativeColor());
                 slider._bindingProxy.SetValue(TimeSliderBindingProxy.TimeStepIntervalLabelColorProperty, nativeColor);
 #else
                 var nativeColor = ((Color)newValue).ToNativeColor();
