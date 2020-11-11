@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);net5.0-windows</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit (Preview)</Title>
     <Description>Preview package containing new features under development in the Toolkit for ArcGIS Runtime SDK for .NET.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
@@ -25,7 +25,7 @@
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == 'net5.0-windows'">
     <UseWpf>true</UseWpf>
   </PropertyGroup>
 
@@ -85,6 +85,7 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == 'net5.0-windows'" />
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">

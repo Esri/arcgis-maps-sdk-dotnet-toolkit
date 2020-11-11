@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.9.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.10.0</ArcGISRuntimeToolkitPackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -36,8 +36,8 @@
     <UWPTargetFramework>uap10.0.17134</UWPTargetFramework>
     <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
 
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.9.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.7.0.968</XamarinFormsPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.10.0</ArcGISRuntimePackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.8.0.1560</XamarinFormsPackageVersion>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
