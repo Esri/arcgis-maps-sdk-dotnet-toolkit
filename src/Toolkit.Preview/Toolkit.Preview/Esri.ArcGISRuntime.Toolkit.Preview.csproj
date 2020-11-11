@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
 
   <PropertyGroup>
     <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);net5.0-windows</TargetFrameworks>
@@ -40,7 +40,7 @@
   <ItemGroup> 
      <PackageReference Include="StyleCop.Analyzers">
 	  <PrivateAssets>all</PrivateAssets>
-      <Version>1.0.2</Version>
+      <Version>1.1.118</Version>
     </PackageReference>
   </ItemGroup>
   
