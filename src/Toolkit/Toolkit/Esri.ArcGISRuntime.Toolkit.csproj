@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);net5.0-windows;netstandard2.0</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit</Title>
     <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP), Windows Presentation Foundation (WPF), Xamarin.Android, and Xamarin.iOS apps.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
