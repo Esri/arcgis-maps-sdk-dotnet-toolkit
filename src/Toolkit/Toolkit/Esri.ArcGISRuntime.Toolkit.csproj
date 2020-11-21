@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);net5.0-windows;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework);netstandard2.0</TargetFrameworks>
     <Title>ArcGIS Runtime SDK for .NET - Toolkit</Title>
     <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP), Windows Presentation Foundation (WPF), Xamarin.Android, and Xamarin.iOS apps.</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
@@ -25,7 +25,7 @@
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == 'net5.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
     <UseWpf>true</UseWpf>
   </PropertyGroup>
 
@@ -52,7 +52,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == 'net5.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
@@ -107,6 +107,6 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == 'net5.0-windows'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)'" />
 
 </Project>

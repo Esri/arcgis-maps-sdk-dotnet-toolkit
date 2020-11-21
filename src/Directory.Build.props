@@ -35,9 +35,10 @@
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.17134</UWPTargetFramework>
     <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
+	<NetWindowsTargetFramework>net5.0-windows10.0.18362.0</NetWindowsTargetFramework>
 
     <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.10.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.8.0.1560</XamarinFormsPackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.8.0.1687</XamarinFormsPackageVersion>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
