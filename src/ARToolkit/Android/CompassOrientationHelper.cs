@@ -18,9 +18,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private Sensor? _accelerometer;
         private Sensor? _magnetometer;
 
-        public CompassOrientationHelper(Context context)
+        public CompassOrientationHelper(Context? context)
         {
-            _sensorManager = (SensorManager)context.GetSystemService(Context.SensorService);
+            _sensorManager = (SensorManager?)context?.GetSystemService(Context.SensorService);
             if (_sensorManager != null)
             {
                 _rotationSensor = _sensorManager.GetDefaultSensor(SensorType.RotationVector);
@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         public static bool IsSupported(Context context)
         {
-            var sensorManager = (SensorManager)context.GetSystemService(Context.SensorService);
+            var sensorManager = (SensorManager?)context.GetSystemService(Context.SensorService);
             if (sensorManager != null)
             {
                 if (sensorManager.GetDefaultSensor(SensorType.RotationVector) != null)
@@ -85,13 +85,15 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         SensorStatus _currentAccuracy;
 
-        void ISensorEventListener.OnAccuracyChanged(Sensor sensor, SensorStatus accuracy)
+        void ISensorEventListener.OnAccuracyChanged(Sensor? sensor, SensorStatus accuracy)
         {
             _currentAccuracy = accuracy;
         }
 
-        void ISensorEventListener.OnSensorChanged(SensorEvent e)
+        void ISensorEventListener.OnSensorChanged(SensorEvent? e)
         {
+            if (e is null)
+                return;
             float[]? rotationMatrix = null;
 
             if (e.Sensor == _rotationSensor)

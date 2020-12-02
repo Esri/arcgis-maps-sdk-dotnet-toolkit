@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private class OrientationListener : Android.Views.OrientationEventListener
         {
-            private readonly Context _context;
+            private readonly Context? _context;
             private Android.Views.IWindowManager? _windowManager;
             private UI.DeviceOrientation _currentOrientation = UI.DeviceOrientation.Portrait;
             
@@ -61,14 +61,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
 
-            public OrientationListener(Context context) : base(context, Android.Hardware.SensorDelay.Normal)
+            public OrientationListener(Context? context) : base(context, Android.Hardware.SensorDelay.Normal)
             {
                 _context = context;
             }
 
             public override void Enable()
             {
-                _windowManager = _context.GetSystemService(Context.WindowService).JavaCast<Android.Views.IWindowManager>();
+                _windowManager = _context?.GetSystemService(Context.WindowService).JavaCast<Android.Views.IWindowManager>();
                 CurrentOrientation = ToDeviceOrientation(WindowOrientation);
                 base.Enable();
             }
@@ -117,7 +117,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// Initializes a new instance of the <see cref="ARSceneView"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public ARSceneView(Android.Content.Context context)
+        public ARSceneView(Android.Content.Context? context)
             : base(context)
         {
             InitializeCommon();
@@ -129,17 +129,17 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// </summary>
         /// <param name="context"> The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public ARSceneView(Context context, Android.Util.IAttributeSet attr)
+        public ARSceneView(Context? context, Android.Util.IAttributeSet attr)
             : base(context, attr)
         {
             InitializeCommon();
             Initialize();
             if (!IsDesignTime)
             {
-                using (var style = context.Theme.ObtainStyledAttributes(attr, Resource.Styleable.ArcGISARSceneView, 0, 0))
+                using (var style = context?.Theme?.ObtainStyledAttributes(attr, Resource.Styleable.ArcGISARSceneView, 0, 0))
                 {
-                    RenderVideoFeed = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_renderVideoFeed, true);
-                    NorthAlign = style.GetBoolean(Resource.Styleable.ArcGISARSceneView_northAlign, true);
+                    RenderVideoFeed = style?.GetBoolean(Resource.Styleable.ArcGISARSceneView_renderVideoFeed, true) ?? true;
+                    NorthAlign = style?.GetBoolean(Resource.Styleable.ArcGISARSceneView_northAlign, true) ?? true;
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _compassListener = new CompassOrientationHelper(Context);
             _compassListener.OrientationChanged += OrientationHelper_OrientationChanged;
 
-            _arSceneView = new Google.AR.Sceneform.ArSceneView(Context);
+            _arSceneView = new Google.AR.Sceneform.ArSceneView(Context!);
             AddViewInLayout(ArSceneView, 0, new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent));
             // Tell the SceneView we will be calling `RenderFrame()` manually if we're using ARCore.
             IsManualRendering = IsUsingARCore;

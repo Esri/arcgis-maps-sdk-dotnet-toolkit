@@ -28,6 +28,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		ARSamples\SampleHelpers\SampleHelpers.projitems*{2e0d0f5f-0515-465b-8161-59ef1e020b48}*SharedItemsImports = 13
+		ARSamples\SampleHelpers\SampleHelpers.projitems*{3b4245f2-c20b-4dfb-87b5-1aec123be464}*SharedItemsImports = 5
 		ARSamples\SampleHelpers\SampleHelpers.projitems*{640fd0b6-bebd-40c3-9f0f-595c58fb8fb5}*SharedItemsImports = 4
 		ARSamples\SampleHelpers\SampleHelpers.projitems*{d6f5f6b4-d4e5-42c5-914d-a98ef1de3ded}*SharedItemsImports = 4
 	EndGlobalSection
