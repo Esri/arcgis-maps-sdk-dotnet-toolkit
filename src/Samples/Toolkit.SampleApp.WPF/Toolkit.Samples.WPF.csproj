@@ -196,16 +196,30 @@
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Toolkit.Preview\Toolkit.Preview\Esri.ArcGISRuntime.Toolkit.Preview.csproj">
-      <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\Toolkit.Preview\Toolkit.Preview\Esri.ArcGISRuntime.Toolkit.Preview.csproj">
+          <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Preview">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <Resource Include="Samples\PopupViewer\info.png" />
   </ItemGroup>

@@ -90,12 +90,6 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android">
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
@@ -150,4 +144,21 @@
     </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        </ProjectReference>
+      </ItemGroup>
+	</When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 </Project>
