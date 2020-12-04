@@ -13,8 +13,22 @@
       <Version>$(XamarinFormsPackageVersion)</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
-    <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj" />
   </ItemGroup>
+  
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\ARToolkit.Forms\Esri.ArcGISRuntime.ARToolkit.Forms.csproj" />
+      </ItemGroup>
+	</When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.ARToolkit.Forms">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 
   <ItemGroup>
     <Compile Update="Samples\LookAroundSample.xaml.cs">

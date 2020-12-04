@@ -168,12 +168,23 @@
       <Version>3.1.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj">
-      <Project>{190a1f64-46a7-44b5-806f-d9633fa94783}</Project>
-      <Name>Esri.ArcGISRuntime.ARToolkit</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj">
+          <Project>{190a1f64-46a7-44b5-806f-d9633fa94783}</Project>
+          <Name>Esri.ArcGISRuntime.ARToolkit</Name>
+        </ProjectReference>
+      </ItemGroup>
+	</When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.ARToolkit">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <Import Project="..\SampleHelpers\SampleHelpers.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
