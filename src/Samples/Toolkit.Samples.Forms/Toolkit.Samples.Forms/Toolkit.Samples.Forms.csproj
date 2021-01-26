@@ -9,9 +9,20 @@
     <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj" />
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj" />
+      </ItemGroup>
+	</When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Xamarin.Forms">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 
   <ItemGroup>
     <Compile Update="Samples\BookmarksViewTemplatedSample.xaml.cs">

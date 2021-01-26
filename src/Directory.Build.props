@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.9.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.10.0</ArcGISRuntimeToolkitPackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -35,14 +35,19 @@
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.17134</UWPTargetFramework>
     <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
+	<NetWindowsTargetFramework>net5.0-windows10.0.18362.0</NetWindowsTargetFramework>
 
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.9.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.7.0.968</XamarinFormsPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.10.0</ArcGISRuntimePackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">4.8.0.1687</XamarinFormsPackageVersion>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
 
     <NoWarn>$(NoWarn);NU5105</NoWarn>
+	
+	<!-- Set this to a Toolkit NuGet version like '100.10.0' to have samples use nuget packages 
+	     instead of project references. Leave blank for project reference. -->
+	<UseNugetPackage></UseNugetPackage>
   </PropertyGroup>
 
   <Choose>

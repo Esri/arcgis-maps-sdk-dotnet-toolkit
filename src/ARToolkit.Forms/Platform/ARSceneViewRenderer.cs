@@ -183,14 +183,14 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms.Platform.Android
             {
                 ARControl.OriginCameraChanged -= ARControl_OriginCameraChanged;
                 ARControl.PlanesDetectedChanged -= ARControl_PlanesDetectedChanged;
-                ARControl.StopTrackingAsync();
+                _ = ARControl.StopTrackingAsync();
             }
             base.Dispose(disposing);
         }
 
         /// <inheritdoc />
 #if __ANDROID__
-        protected override UI.Controls.SceneView CreateNativeElement(global::Android.Content.Context context) => new ARToolkit.ARSceneView(context);
+        protected override UI.Controls.SceneView CreateNativeElement(global::Android.Content.Context? context) => new ARToolkit.ARSceneView(context);
 #else
         protected override UI.Controls.SceneView CreateNativeElement() => new ARToolkit.ARSceneView();
 #endif

@@ -88,12 +88,23 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        </ProjectReference>
+      </ItemGroup>
+	</When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS">
       <Version>$(ArcGISRuntimePackageVersion)</Version>

@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
         internal static void SetForeground(this UI.Controls.ScaleLine scaleline, NativeColor color)
         {
 #if NETFX_CORE
-            scaleline.Foreground = new SolidColorBrush(color);
+            scaleline.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(color);
 #else
             scaleline.ForegroundColor = color;
 #endif
@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
         internal static void SetForeground(this UI.Controls.PopupViewer popupViewer, NativeColor color)
         {
 #if NETFX_CORE
-            popupViewer.Foreground = new SolidColorBrush(color);
+            popupViewer.Foreground = new Windows.UI.Xaml.Media.SolidColorBrush(color);
 #else
             popupViewer.ForegroundColor = color;
 #endif

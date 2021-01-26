@@ -324,7 +324,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Forms
                     return 1f;
                 }
 
-                _windowManager.DefaultDisplay.GetMetrics(displayMetrics);
+                _windowManager.DefaultDisplay?.GetMetrics(displayMetrics);
                 return displayMetrics?.Density ?? 1f;
             }
         }
