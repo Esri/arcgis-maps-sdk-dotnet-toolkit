@@ -1,8 +1,8 @@
 # AR Toolkit
 
-[![guide doc](https://img.shields.io/badge/Full_Developers_Guide-Doc-purple)](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) [![world-scale sample](https://img.shields.io/badge/World_Scale-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/) [![Tabletop sample](https://img.shields.io/badge/Tabletop-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/) [![Flyover sample](https://img.shields.io/badge/Flyover-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/)
+[![world-scale sample](https://img.shields.io/badge/World_Scale-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/) [![Tabletop sample](https://img.shields.io/badge/Tabletop-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/) [![Flyover sample](https://img.shields.io/badge/Flyover-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/)
 
-[Augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
+Augmented reality experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
 
 ## AR patterns
 
@@ -24,7 +24,7 @@ The AR toolkit component is comprised of one class: `ARSceneView`. This is a sub
 
 ## Visual Studio Templates
 
-There is a significant amount of configuration needed to get iOS and Android projects ready for AR. The full details are covered below and in our guide under *Configure privacy and permissions* in [Display scenes in augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.hm)
+There is a significant amount of configuration needed to get iOS and Android projects ready for AR. The full details are covered below.
 
 The ArcGIS Runtime templates for AR provide project templates that are usable out-of-the-box. You can download the templates from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Esri.EsriArcGISRuntimeARTemplates).
 
@@ -68,13 +68,12 @@ The first step is to install the toolkit package from [Nuget](https://www.nuget.
              For "AR Optional" apps remove this line.
         -->
     <application ...>
-        <uses-feature android:name="android.hardware.camera.ar" android:required="true" />
+        ...
     </application>
+    <uses-feature android:name="android.hardware.camera.ar" android:required="true" />
     ```
 
 ## Usage
-
-See [Display scenes in augmented reality](https://developers.arcgis.com/net/latest/forms/guide/display-scenes-in-augmented-reality.htm) for a full walkthrough for using ArcGIS for AR, with step-by-step tutorials for world-scale, flyover, and tabletop AR.
 
 The first step to using AR is to enable and disable AR tracking with the appropriate lifecycle methods. 
 
@@ -179,7 +178,6 @@ The first step to using AR is to enable and disable AR tracking with the appropr
 
 ## Next steps
 
-* See [Display scenes in augmented reality](https://developers.arcgis.com/net/latest/android/guide/display-scenes-in-augmented-reality.htm) for a comprehensive guide to working with augmented reality and ArcGIS Runtime
 * See the samples for working examples you can try today:
     * [Collect data in AR](https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/)
     * [Display scenes in tabletop AR](https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/)
