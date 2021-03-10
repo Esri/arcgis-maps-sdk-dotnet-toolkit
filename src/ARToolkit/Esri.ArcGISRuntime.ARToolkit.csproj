@@ -1,4 +1,8 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+  <PropertyGroup>
+    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
     <Description>ArcGIS Runtime Augmented Reality controls and utilities for Xamarin.Android and Xamarin.iOS apps.</Description>
