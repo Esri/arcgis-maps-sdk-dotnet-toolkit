@@ -1,4 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+  <PropertyGroup Condition="$(XamarinFormsPackageVersion.StartsWith('5.0'))">
+    <AndroidTargetFramework>monoandroid10.0</AndroidTargetFramework>
+  </PropertyGroup>
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>

@@ -1,4 +1,8 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+  <PropertyGroup Condition="$(XamarinFormsPackageVersion.StartsWith('5.0'))">
+    <AndroidTargetFramework>monoandroid10.0</AndroidTargetFramework>
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
     <Description>ArcGIS Runtime Augmented Reality controls and utilities for Xamarin.Forms Android and iOS apps</Description>
