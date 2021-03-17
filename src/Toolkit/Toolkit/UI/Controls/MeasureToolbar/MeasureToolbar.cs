@@ -77,20 +77,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         // Used for selecting measure mode
-        private ToggleButton _measureLengthButton;
-        private ToggleButton _measureAreaButton;
-        private ToggleButton _measureFeatureButton;
+        private ToggleButton? _measureLengthButton;
+        private ToggleButton? _measureAreaButton;
+        private ToggleButton? _measureFeatureButton;
 
         // Used for displaying and configuring measurement result
-        private TextBlock _measureResultTextBlock;
-        private UIElement _linearUnitsSelector;
-        private UIElement _areaUnitsSelector;
+        private TextBlock? _measureResultTextBlock;
+        private UIElement? _linearUnitsSelector;
+        private UIElement? _areaUnitsSelector;
 
         // Used for clearing map and measurement result
-        private ButtonBase _clearButton;
+        private ButtonBase? _clearButton;
 
         // Used for replacing measure editors
-        private SketchEditor _originalSketchEditor;
+        private SketchEditor? _originalSketchEditor;
 
         // Used for highlighting feature for measurement
         private readonly GraphicsOverlay _measureFeatureResultOverlay = new GraphicsOverlay();
@@ -129,8 +129,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 };
             LineSketchEditor = new SketchEditor();
             AreaSketchEditor = new SketchEditor();
-            SelectionLineSymbol = LineSketchEditor.Style.LineSymbol;
-            SelectionFillSymbol = AreaSketchEditor.Style.FillSymbol;
+            SelectionLineSymbol = LineSketchEditor.Style?.LineSymbol;
+            SelectionFillSymbol = AreaSketchEditor.Style?.FillSymbol;
         }
 
         /// <inheritdoc/>
@@ -185,15 +185,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (useMetric)
                 {
-                    SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Meters) ?
+                    SelectedLinearUnit = LinearUnits?.Any(u => u == Geometry.LinearUnits.Meters) == true ?
                     Geometry.LinearUnits.Meters :
-                    LinearUnits.FirstOrDefault();
+                    LinearUnits?.FirstOrDefault();
                 }
                 else
                 {
-                    SelectedLinearUnit = LinearUnits.Any(u => u == Geometry.LinearUnits.Feet) ?
+                    SelectedLinearUnit = LinearUnits?.Any(u => u == Geometry.LinearUnits.Feet) == true ?
                     Geometry.LinearUnits.Feet :
-                    LinearUnits.FirstOrDefault();
+                    LinearUnits?.FirstOrDefault();
                 }
             }
 
@@ -201,15 +201,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (useMetric)
                 {
-                    SelectedAreaUnit = AreaUnits.Any(u => u == Geometry.AreaUnits.SquareKilometers) ?
+                    SelectedAreaUnit = AreaUnits?.Any(u => u == Geometry.AreaUnits.SquareKilometers) == true ?
                     Geometry.AreaUnits.SquareKilometers :
-                    AreaUnits.FirstOrDefault();
+                    AreaUnits?.FirstOrDefault();
                 }
                 else
                 {
-                    SelectedAreaUnit = AreaUnits.Any(u => u == Geometry.AreaUnits.SquareMiles) ?
+                    SelectedAreaUnit = AreaUnits?.Any(u => u == Geometry.AreaUnits.SquareMiles) == true ?
                         Geometry.AreaUnits.SquareMiles :
-                        AreaUnits.FirstOrDefault();
+                        AreaUnits?.FirstOrDefault();
                 }
             }
 
@@ -240,7 +240,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     MapView.SketchEditor = sketchEditor;
                 }
 
-                MapView.SketchEditor.IsVisible = isMeasuringLength || isMeasuringArea;
+                if (MapView.SketchEditor != null)
+                {
+                    MapView.SketchEditor.IsVisible = isMeasuringLength || isMeasuringArea;
+                }
 
                 if (isMeasuringFeature)
                 {
@@ -283,7 +286,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (isMeasuringLength || isMeasuringArea)
                 {
-                    _clearButton.IsEnabled = MapView.SketchEditor.Geometry != null;
+                    _clearButton.IsEnabled = MapView?.SketchEditor?.Geometry != null;
                 }
                 else
                 {
@@ -296,7 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Updates visibility of unit selector based on geometry type.
         /// </summary>
         /// <param name="geometry">geometry to measure.</param>
-        private void PrepareUnitSelector(Geometry.Geometry geometry)
+        private void PrepareUnitSelector(Geometry.Geometry? geometry)
         {
             var isMeasuringArea = geometry is Polygon || geometry is Envelope;
             if (_linearUnitsSelector != null)
@@ -314,7 +317,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Displays the measurement result.
         /// </summary>
         /// <param name="geometry">geometry to measure.</param>
-        private void DisplayResult(Geometry.Geometry geometry = null)
+        private void DisplayResult(Geometry.Geometry? geometry = null)
         {
             if (_measureResultTextBlock != null)
             {
@@ -325,13 +328,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         case MeasureToolbarMode.Line:
                             {
-                                geometry = LineSketchEditor.Geometry;
+                                geometry = LineSketchEditor?.Geometry;
                                 break;
                             }
 
                         case MeasureToolbarMode.Area:
                             {
-                                geometry = AreaSketchEditor.Geometry;
+                                geometry = AreaSketchEditor?.Geometry;
                                 break;
                             }
 
@@ -378,7 +381,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
                toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
                MeasureToolbarMode.None;
-            if (MapView.SketchEditor.Geometry == null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
+            if (MapView?.SketchEditor != null && MapView.SketchEditor.Geometry == null && (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area))
             {
                 try
                 {
@@ -401,7 +404,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="sender">SketchEditor that raised GeometryChanged event.</param>
         /// <param name="e">Data for the GeometryChanged event.</param>
-        private void OnGeometryChanged(object sender, GeometryChangedEventArgs e)
+        private void OnGeometryChanged(object? sender, GeometryChangedEventArgs e)
         {
             if (_clearButton != null)
             {
@@ -416,9 +419,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="sender">MapView that raised GeoViewTapped event.</param>
         /// <param name="e">Data for the GeoViewTapped event.</param>
-        private async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
+        private async void OnMapViewTapped(object? sender, GeoViewInputEventArgs e)
         {
-            if (Mode != MeasureToolbarMode.Feature)
+            if (Mode != MeasureToolbarMode.Feature || MapView is null)
             {
                 return;
             }
@@ -432,7 +435,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             PrepareUnitSelector(geometry);
-            Symbology.Symbol symbol = null;
+            Symbology.Symbol? symbol = null;
             if (geometry is Polyline)
             {
                 symbol = SelectionLineSymbol;
@@ -459,7 +462,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DisplayResult(geometry);
         }
 
-        private void RemoveMeasureFeatureResultOverlay(MapView mapView)
+        private void RemoveMeasureFeatureResultOverlay(MapView? mapView)
         {
             if (mapView?.GraphicsOverlays != null && mapView.GraphicsOverlays.Contains(_measureFeatureResultOverlay))
             {
@@ -467,7 +470,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void AddMeasureFeatureResultOverlay(MapView mapView)
+        private void AddMeasureFeatureResultOverlay(MapView? mapView)
         {
             if (mapView == null || !_measureFeatureResultOverlay.Graphics.Any())
             {
@@ -490,7 +493,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="identifyLayerResults">Results returned from identifying layers.</param>
         /// <returns>the first polyline or polygon geometry.</returns>
-        private Geometry.Geometry GetGeometry(IEnumerable<IdentifyLayerResult> identifyLayerResults)
+        private Geometry.Geometry? GetGeometry(IEnumerable<IdentifyLayerResult> identifyLayerResults)
         {
             foreach (var result in identifyLayerResults)
             {
@@ -517,7 +520,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="identifyGraphicsOverlayResults">Results returned from identifying graphics.</param>
         /// <returns>the first polyline or polygon geometry.</returns>
-        private Geometry.Geometry GetGeometry(IEnumerable<IdentifyGraphicsOverlayResult> identifyGraphicsOverlayResults)
+        private Geometry.Geometry? GetGeometry(IEnumerable<IdentifyGraphicsOverlayResult> identifyGraphicsOverlayResults)
         {
             foreach (var result in identifyGraphicsOverlayResults)
             {
@@ -543,7 +546,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {
-                MapView.SketchEditor.ClearGeometry();
+                MapView?.SketchEditor?.ClearGeometry();
             }
             else if (Mode == MeasureToolbarMode.Feature)
             {
@@ -556,9 +559,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the map view where measuring distances and areas will be done.
         /// </summary>
-        public MapView MapView
+        public MapView? MapView
         {
-            get { return (MapView)GetValue(MapViewProperty); }
+            get { return GetValue(MapViewProperty) as MapView; }
             set { SetValue(MapViewProperty, value); }
         }
 
@@ -587,15 +590,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             newMapView.GeoViewTapped += toolbar.OnMapViewTapped;
             toolbar._originalSketchEditor = newMapView.SketchEditor;
-            toolbar.DisplayResult(newMapView.SketchEditor.Geometry);
+            toolbar.DisplayResult(newMapView.SketchEditor?.Geometry);
         }
 
         /// <summary>
         /// Gets or sets the sketch editor used for measuring distances.
         /// </summary>
-        public SketchEditor LineSketchEditor
+        public SketchEditor? LineSketchEditor
         {
-            get { return (SketchEditor)GetValue(LineSketchEditorProperty); }
+            get { return GetValue(LineSketchEditorProperty) as SketchEditor; }
             set { SetValue(LineSketchEditorProperty, value); }
         }
 
@@ -627,9 +630,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the sketch edtiro used for measuring areas.
         /// </summary>
-        public SketchEditor AreaSketchEditor
+        public SketchEditor? AreaSketchEditor
         {
-            get { return (SketchEditor)GetValue(AreaSketchEditorProperty); }
+            get { return GetValue(AreaSketchEditorProperty) as SketchEditor; }
             set { SetValue(AreaSketchEditorProperty, value); }
         }
 
@@ -661,9 +664,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the symbol used for highlighting the polyline feature or graphic whose geometry is measured for distance.
         /// </summary>
-        public Symbology.Symbol SelectionLineSymbol
+        public Symbology.Symbol? SelectionLineSymbol
         {
-            get { return (Symbology.Symbol)GetValue(SelectionLineSymbolProperty); }
+            get { return GetValue(SelectionLineSymbolProperty) as Symbology.Symbol; }
             set { SetValue(SelectionLineSymbolProperty, value); }
         }
 
@@ -687,9 +690,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the symbol used for highlighting the polygon feature or graphic whose geometry is measured for area.
         /// </summary>
-        public Symbology.Symbol SelectionFillSymbol
+        public Symbology.Symbol? SelectionFillSymbol
         {
-            get { return (Symbology.Symbol)GetValue(SelectionFillSymbolProperty); }
+            get { return GetValue(SelectionFillSymbolProperty) as Symbology.Symbol; }
             set { SetValue(SelectionFillSymbolProperty, value); }
         }
 
@@ -713,9 +716,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.LinearUnit"/> used to configure display for distance measurements.
         /// </summary>
-        public IList<LinearUnit> LinearUnits
+        public IList<LinearUnit>? LinearUnits
         {
-            get { return (IList<LinearUnit>)GetValue(LinearUnitsProperty); }
+            get { return GetValue(LinearUnitsProperty) as IList<LinearUnit>; }
             set { SetValue(LinearUnitsProperty, value); }
         }
 
@@ -728,9 +731,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the unit used to display for distance measurements.
         /// </summary>
-        public LinearUnit SelectedLinearUnit
+        public LinearUnit? SelectedLinearUnit
         {
-            get { return (LinearUnit)GetValue(SelectedLinearUnitProperty); }
+            get { return GetValue(SelectedLinearUnitProperty) as LinearUnit; }
             set { SetValue(SelectedLinearUnitProperty, value); }
         }
 
@@ -749,9 +752,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the collection of <see cref="Geometry.AreaUnit"/> used to configure display for area measurements.
         /// </summary>
-        public IList<AreaUnit> AreaUnits
+        public IList<AreaUnit>? AreaUnits
         {
-            get { return (IList<AreaUnit>)GetValue(AreaUnitsProperty); }
+            get { return GetValue(AreaUnitsProperty) as IList<AreaUnit>; }
             set { SetValue(AreaUnitsProperty, value); }
         }
 
@@ -764,9 +767,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the unit used to display for area measurements.
         /// </summary>
-        public AreaUnit SelectedAreaUnit
+        public AreaUnit? SelectedAreaUnit
         {
-            get { return (AreaUnit)GetValue(SelectedAreaUnitProperty); }
+            get { return GetValue(SelectedAreaUnitProperty) as AreaUnit; }
             set { SetValue(SelectedAreaUnitProperty, value); }
         }
 
