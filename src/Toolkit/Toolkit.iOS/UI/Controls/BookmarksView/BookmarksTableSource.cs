@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal static readonly NSString CellId = new NSString(nameof(UITableViewCell));
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public BookmarksTableSource(BookmarksViewDataSource dataSource)
         {
@@ -71,6 +71,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             BookmarkSelected?.Invoke(this, _bookmarks.ElementAt(indexPath.Row));
         }
 
-        public event EventHandler<Bookmark> BookmarkSelected;
+        public event EventHandler<Bookmark>? BookmarkSelected;
     }
 }

@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the data template that renders bookmark entries in the list.
         /// </summary>
-        public DataTemplate ItemTemplate
+        public DataTemplate? ItemTemplate
         {
             get { return (DataTemplate)GetValue(ItemTemplateProperty); }
             set { SetValue(ItemTemplateProperty, value); }
@@ -100,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         /// <remarks>If set to a <see cref="System.Collections.Specialized.INotifyCollectionChanged" />, the view will be updated with collection changes.</remarks>
         /// <seealso cref="BookmarksOverrideProperty" />
-        public IEnumerable<Bookmark> BookmarksOverride
+        public IEnumerable<Bookmark>? BookmarksOverride
         {
             get { return (IEnumerable<Bookmark>)GetValue(BookmarksOverrideProperty); }
             set { SetValue(BookmarksOverrideProperty, value); }
@@ -112,9 +112,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <seealso cref="MapView"/>
         /// <seealso cref="SceneView"/>
         /// <seealso cref="GeoViewProperty"/>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
-            get { return (GeoView)GetValue(GeoViewProperty); }
+            get { return GetValue(GeoViewProperty) as GeoView; }
             set { SetValue(GeoViewProperty, value); }
         }
 
@@ -139,7 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Handles property changes for the <see cref="BookmarksOverride" /> bindable property.
         /// </summary>
-        private static void BookmarksOverrideChanged(BindableObject sender, object oldValue, object newValue)
+        private static void BookmarksOverrideChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             ((BookmarksView)sender)._dataSource.SetOverrideList(newValue as IEnumerable<Bookmark>);
         }
@@ -147,7 +147,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Handles property changes for the <see cref="GeoView" /> bindable property.
         /// </summary>
-        private static void GeoViewChanged(BindableObject sender, object oldValue, object newValue)
+        private static void GeoViewChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             BookmarksView bookmarkView = (BookmarksView)sender;
 
@@ -157,7 +157,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Handles property changes for the <see cref="ItemTemplate" /> bindable property.
         /// </summary>
-        private static void ItemTemplateChanged(BindableObject sender, object oldValue, object newValue)
+        private static void ItemTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             BookmarksView bookmarkView = (BookmarksView)sender;
 
@@ -171,12 +171,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Selects the bookmark and navigates to it in the associated <see cref="GeoView" />.
         /// </summary>
         /// <param name="bookmark">Bookmark to navigate to. Must be non-null with a valid viewpoint.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bookmark"/> is <code>null</code>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="bookmark"/> is <c>null</c>.</exception>
         private void SelectAndNavigateToBookmark(Bookmark bookmark)
         {
-            if (bookmark?.Viewpoint == null)
+            if (bookmark.Viewpoint == null)
             {
-                throw new ArgumentNullException("Bookmark or bookmark viewpoint is null");
+                throw new ArgumentException("Bookmark viewpoint is null");
             }
 
             GeoView?.SetViewpointAsync(bookmark.Viewpoint);

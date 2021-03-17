@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Otherwise, the bookmarks from the Map or Scene shown in the associated <see cref="GeoView" /> are displayed.
         /// </summary>
         /// <remarks>If set to a <see cref="System.Collections.Specialized.INotifyCollectionChanged" />, the view will be updated with collection changes.</remarks>
-        public IEnumerable<Bookmark> BookmarksOverride
+        public IEnumerable<Bookmark>? BookmarksOverride
         {
             get => BookmarksOverrideImpl;
             set => BookmarksOverrideImpl = value;
@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <seealso cref="MapView"/>
         /// <seealso cref="SceneView"/>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
             get => GeoViewImpl;
             set => GeoViewImpl = value;
@@ -80,6 +80,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Event raised when the user selects a bookmark.
         /// </summary>
-        public event EventHandler<Bookmark> BookmarkSelected;
+        public event EventHandler<Bookmark>? BookmarkSelected;
     }
 }

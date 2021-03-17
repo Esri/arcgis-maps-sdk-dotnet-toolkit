@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     internal class BookmarkItemViewHolder : RecyclerView.ViewHolder
     {
-        public TextView BookmarkLabel { get; private set; }
+        public TextView? BookmarkLabel { get; private set; }
 
         public BookmarkItemViewHolder(View itemView, Action<int> listener)
             : base(itemView)

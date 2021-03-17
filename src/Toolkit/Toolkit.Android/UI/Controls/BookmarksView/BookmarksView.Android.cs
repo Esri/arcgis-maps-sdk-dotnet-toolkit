@@ -31,7 +31,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="BookmarksView"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public BookmarksView(Context context)
+#pragma warning disable CS8618 // _internalListView and  _adapter set in Initialize
+        public BookmarksView(Context? context)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
             : base(context)
         {
             Initialize();
@@ -42,7 +44,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public BookmarksView(Context context, IAttributeSet attr)
+#pragma warning disable CS8618 // _internalListView and  _adapter set in Initialize
+        public BookmarksView(Context? context, IAttributeSet? attr)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
             : base(context, attr)
         {
             Initialize();
