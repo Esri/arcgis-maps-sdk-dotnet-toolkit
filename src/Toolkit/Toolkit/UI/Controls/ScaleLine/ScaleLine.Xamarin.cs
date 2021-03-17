@@ -19,6 +19,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 #if __IOS__
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
 using TextBlock = UIKit.UILabel;
+
 #elif __ANDROID__
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
 using TextBlock = Android.Widget.TextView;

@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="..\..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="UI\TableOfContents\LayerContentDataSource.cs" />
     <Compile Include="..\..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
+    <Compile Include="..\..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
   </ItemGroup>
  
   <ItemGroup>

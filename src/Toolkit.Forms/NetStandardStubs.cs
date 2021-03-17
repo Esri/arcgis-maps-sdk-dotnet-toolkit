@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer) => throw new NotImplementedException();
         public bool StepForward(int timeSteps = 1) => throw new NotImplementedException();
         public bool StepBack(int timeSteps = 1) => throw new NotImplementedException();
-        public event EventHandler<TimeExtentChangedEventArgs> CurrentExtentChanged;
+        public event EventHandler<TimeExtentChangedEventArgs>? CurrentExtentChanged;
     }
 }
 
