@@ -56,12 +56,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private MapView _mapView;
+        private MapView? _mapView;
 
         /// <summary>
         /// Gets or sets the MapView for which the scale is displayed. This will accurately reflect the scale at the center of the MapView.
         /// </summary>
-        public MapView MapView
+        public MapView? MapView
         {
             get => _mapView;
 
@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private MapView GetMapView(ScaleLine scaleline) => scaleline.MapView;
+        private MapView? GetMapView(ScaleLine scaleline) => scaleline.MapView;
     }
 }
 #endif

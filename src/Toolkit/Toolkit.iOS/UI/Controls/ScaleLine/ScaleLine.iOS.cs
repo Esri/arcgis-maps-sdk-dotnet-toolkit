@@ -210,7 +210,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ScaleLine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Update the scale line to be the longer of the metric or imperial lines
-            _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
+            if (_combinedScaleLine != null && _metricScaleLine != null && _usScaleLine != null)
+            {
+                _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
+            }
             InvalidateIntrinsicContentSize();
         }
 
@@ -279,14 +282,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-        ISite IComponent.Site { get; set; }
+        ISite? IComponent.Site { get; set; }
 
-        private EventHandler _disposed;
+        private EventHandler? _disposed;
 
         /// <summary>
         /// Internal use only
         /// </summary>
-        event EventHandler IComponent.Disposed
+        event EventHandler? IComponent.Disposed
         {
             add { _disposed += value; }
             remove { _disposed -= value; }

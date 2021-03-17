@@ -206,7 +206,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void WireMapViewPropertyChanged(MapView oldMapView, MapView newMapView)
+        private void WireMapViewPropertyChanged(MapView? oldMapView, MapView? newMapView)
         {
             if (oldMapView is INotifyPropertyChanged inpc1)
             {
@@ -219,7 +219,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void MapView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void MapView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (sender is MapView view && (e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating)) && !view.IsNavigating)
             {
@@ -227,7 +227,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void UpdateScalelineFromMapView(MapView view)
+        private void UpdateScalelineFromMapView(MapView? view)
         {
             _scaleSetByMapView = true;
             if (view == null)
@@ -251,7 +251,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
         /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference.</param>
         /// <returns>The MapScale for the center of the view.</returns>
-        public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon visibleArea, double unitsPerPixel)
+        public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon? visibleArea, double unitsPerPixel)
         {
             if (visibleArea == null)
             {
@@ -277,7 +277,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Calculate the geodedetic distance between two points one 'pixel' apart
             var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
-            double distanceInInches = result.Distance;
+            double distanceInInches = result?.Distance ?? 0;
             return distanceInInches * 96;
         }
     }
