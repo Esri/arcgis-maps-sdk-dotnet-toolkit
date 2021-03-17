@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly SymbolDisplay _symbolDisplay;
         private readonly TextView _textView;
 
-        internal LayerLegendItemView(Context context)
+        internal LayerLegendItemView(Context? context)
             : base(context)
         {
             Orientation = Orientation.Horizontal;

@@ -52,6 +52,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => obj is LegendEntry le && ReferenceEquals(Content, le.Content);
+        public override bool Equals(object? obj) => obj is LegendEntry le && ReferenceEquals(Content, le.Content);
     }
 }

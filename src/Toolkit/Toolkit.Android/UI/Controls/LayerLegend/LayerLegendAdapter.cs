@@ -26,16 +26,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class LayerLegendAdapter : BaseAdapter<LegendInfo>
     {
         private readonly IReadOnlyList<LegendInfo> _layerLegends;
-        private readonly Context _context;
+        private readonly Context? _context;
 
-        internal LayerLegendAdapter(Context context, IReadOnlyList<LegendInfo> layerLegends)
+        internal LayerLegendAdapter(Context? context, IReadOnlyList<LegendInfo> layerLegends)
         {
             _context = context;
             _layerLegends = layerLegends;
-            if (_layerLegends is INotifyCollectionChanged)
+            if (_layerLegends is INotifyCollectionChanged incc)
             {
-                var incc = _layerLegends as INotifyCollectionChanged;
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                     {
@@ -56,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return position;
         }
 
-        public override View GetView(int position, View convertView, ViewGroup parent)
+        public override View? GetView(int position, View? convertView, ViewGroup? parent)
         {
             var layerLegend = _layerLegends[position];
             if (convertView == null)

@@ -59,13 +59,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Gets or sets the layer to display the legend for.
         /// </summary>
         /// <seealso cref="LayerContentProperty"/>
-        public ILayerContent LayerContent
+        public ILayerContent? LayerContent
         {
             get { return (ILayerContent)GetValue(LayerContentProperty); }
             set { SetValue(LayerContentProperty, value); }
         }
 
-        private static void OnLayerContentPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnLayerContentPropertyChanged(BindableObject bindable, object? oldValue, object? newValue)
         {
             var layerLegend = bindable as LayerLegend;
             if (layerLegend?.NativeLayerLegend != null)

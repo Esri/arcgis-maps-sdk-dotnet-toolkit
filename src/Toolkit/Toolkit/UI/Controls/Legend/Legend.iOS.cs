@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Foundation;
@@ -43,6 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Legend(IntPtr handle)
             : base(handle)
         {
+            _datasource = new LegendDataSource(this);
+            Initialize();
         }
 
         /// <inheritdoc />
@@ -56,6 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
+        [MemberNotNull(nameof(_listView))]
         private void Initialize()
         {
             _listView = new UITableView(UIScreen.MainScreen.Bounds)
@@ -120,7 +124,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private readonly LegendDataSource _legends;
             internal static readonly NSString CellId = new NSString(nameof(LegendTableViewCell));
 
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
+            public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
             public LegendTableSource(LegendDataSource legends)
                 : base()
@@ -148,8 +152,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var info = _legends[indexPath.Row];
                 var cell = tableView.DequeueReusableCell(CellId, indexPath);
                 (cell as LegendTableViewCell)?.Update(info);
-                cell?.SetNeedsUpdateConstraints();
-                cell?.UpdateConstraints();
+                cell.SetNeedsUpdateConstraints();
+                cell.UpdateConstraints();
                 return cell;
             }
         }

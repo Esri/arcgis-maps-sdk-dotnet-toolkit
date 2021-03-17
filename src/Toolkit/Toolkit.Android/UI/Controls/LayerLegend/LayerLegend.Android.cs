@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Android.Content;
 using Android.Runtime;
@@ -36,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public LayerLegend(Context context)
+        public LayerLegend(Context? context)
             : base(context)
         {
             Initialize();
@@ -47,15 +48,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public LayerLegend(Context context, IAttributeSet attr)
+        public LayerLegend(Context? context, IAttributeSet? attr)
             : base(context, attr)
         {
             Initialize();
         }
 
+        [MemberNotNull(nameof(_listView), nameof(_uithread))]
         private void Initialize()
         {
-            _uithread = new Android.OS.Handler(Context.MainLooper);
+            _uithread = new Android.OS.Handler(Context?.MainLooper);
 
             _listView = new ListView(Context)
             {
@@ -83,12 +85,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (LayerContent is ILoadable)
+            if (LayerContent is ILoadable loadable)
             {
-                if ((LayerContent as ILoadable).LoadStatus != LoadStatus.Loaded)
+                if (loadable.LoadStatus != LoadStatus.Loaded)
                 {
-                    (LayerContent as ILoadable).Loaded += Layer_Loaded;
-                    (LayerContent as ILoadable).LoadAsync();
+                    loadable.Loaded += Layer_Loaded;
+                    loadable.LoadAsync();
                     return;
                 }
             }
@@ -101,7 +103,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Layer_Loaded(object sender, System.EventArgs e)
         {
-            (sender as ILoadable).Loaded -= Layer_Loaded;
+            if (sender is ILoadable loadable)
+            {
+                loadable.Loaded -= Layer_Loaded;
+            }
+
             _uithread.Post(Refresh);
         }
 

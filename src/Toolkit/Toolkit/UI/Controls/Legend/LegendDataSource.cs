@@ -113,11 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#if NETFX_CORE && !XAMARIN_FORMS
-        private long _propertyChangedCallbackToken = 0;
-#endif
-
-        protected override void OnGeoViewChanged(GeoView oldGeoview, GeoView newGeoview)
+        protected override void OnGeoViewChanged(GeoView? oldGeoview, GeoView? newGeoview)
         {
             base.OnGeoViewChanged(oldGeoview, newGeoview);
             _currentScale = (newGeoview as MapView)?.MapScale ?? double.NaN;
@@ -150,6 +146,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private class DesigntimeSublayer : ILayerContent
         {
+            private static IReadOnlyList<ILayerContent> _readonlySublayerContents = new System.Collections.ObjectModel.ReadOnlyCollection<ILayerContent>(Enumerable.Empty<ILayerContent>().ToList());
+
             internal DesigntimeSublayer(string name)
             {
                 Name = name;
@@ -163,7 +161,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             public bool ShowInLegend { get; set; }
 
-            public IReadOnlyList<ILayerContent> SublayerContents { get; }
+            public IReadOnlyList<ILayerContent> SublayerContents => _readonlySublayerContents;
 
             public Task<IReadOnlyList<LegendInfo>> GetLegendInfosAsync() => throw new NotImplementedException();
 
@@ -183,7 +181,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnDocumentReset();
         }
 
-        protected override void OnLayerPropertyChanged(ILayerContent layer, string propertyName)
+        protected override void OnLayerPropertyChanged(ILayerContent layer, string? propertyName)
         {
             if (!layer.ShowInLegend && propertyName != nameof(layer.ShowInLegend))
             {
@@ -209,7 +207,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return GenerateDesignData();
             }
 #endif
-            IEnumerable<Layer> layers = null;
+            IEnumerable<Layer>? layers = null;
 
             if (GeoView is MapView mv)
             {
@@ -223,9 +221,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return BuildLegendList(layers, _reverseLayerOrder) ?? new List<LegendEntry>();
         }
 
-        protected override void OnLayerViewStateChanged(Layer layer, LayerViewStateChangedEventArgs layerViewState) => MarkCollectionDirty();
+        protected override void OnLayerViewStateChanged(Layer? layer, LayerViewStateChangedEventArgs layerViewState) => MarkCollectionDirty();
 
-        protected override void OnGeoViewPropertyChanged(GeoView geoView, string propertyName)
+        protected override void OnGeoViewPropertyChanged(GeoView geoView, string? propertyName)
         {
             base.OnGeoViewPropertyChanged(geoView, propertyName);
             if (propertyName == nameof(MapView.MapScale) && geoView is MapView mv)
@@ -237,7 +235,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private double _currentScale = double.NaN;
 
-        private List<LegendEntry> BuildLegendList(IEnumerable<ILayerContent> layers, bool reverse)
+        private List<LegendEntry>? BuildLegendList(IEnumerable<ILayerContent>? layers, bool reverse)
         {
             if (layers == null)
             {
@@ -267,7 +265,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 if (layerContent is Layer l)
                 {
-                    var state = GeoView.GetLayerViewState(l);
+                    var state = GeoView?.GetLayerViewState(l);
                     if (state != null &&
                         ((state.Status == LayerViewStatus.NotVisible && _filterHiddenLayers && !(l is GroupLayer)) ||
                         (state.Status == LayerViewStatus.OutOfScale && _filterByVisibleScaleRange)))
@@ -287,7 +285,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                 }
 
-                IReadOnlyList<LegendInfo> legendInfos = null;
+                IReadOnlyList<LegendInfo>? legendInfos = null;
                 if (!(layerContent is Layer) || (((Layer)layerContent).LoadStatus == LoadStatus.Loaded && !(layerContent is GroupLayer)))
                 {
                     // Generate the legend infos
@@ -334,7 +332,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         reverseSublayers = !_reverseLayerOrder;
                     }
 
-                    data.AddRange(BuildLegendList(layerContent.SublayerContents, reverseSublayers));
+                    var list = BuildLegendList(layerContent.SublayerContents, reverseSublayers);
+                    if (list != null)
+                    {
+                        data.AddRange(list);
+                    }
                 }
             }
 
