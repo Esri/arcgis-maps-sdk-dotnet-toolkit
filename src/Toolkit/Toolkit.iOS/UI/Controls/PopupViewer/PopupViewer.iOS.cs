@@ -75,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
-                LineBreakMode = UILineBreakMode.WordWrap
+                LineBreakMode = UILineBreakMode.WordWrap,
             };
 
             _customHtmlDescription = new UILabel()
@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
-                LineBreakMode = UILineBreakMode.WordWrap
+                LineBreakMode = UILineBreakMode.WordWrap,
             };
 
             _detailsList = new UITableView(CGRect.Empty, UITableViewStyle.Plain)
@@ -111,9 +111,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets total size needed for PopupViewer
+        /// Gets total size needed for PopupViewer.
         /// </summary>
-        /// <returns>The total size of control</returns>
+        /// <returns>The total size of control.</returns>
         private CGSize MeasureSize()
         {
             if (_intrinsicContentSize == CGSize.Empty)
@@ -266,7 +266,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private UIColor _foregroundColor = UIColorHelper.LabelColor;
 
         /// <summary>
-        /// Gets or sets the color of the foreground elements of the <see cref="PopupViewer"/>
+        /// Gets or sets the color of the foreground elements of the <see cref="PopupViewer"/>.
         /// </summary>
         public UIColor ForegroundColor
         {

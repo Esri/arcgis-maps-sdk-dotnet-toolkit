@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeExtent _fullExtent;
 
         /// <summary>
-        /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance
+        /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance.
         /// </summary>
         private TimeExtent FullExtentImpl
         {
@@ -99,7 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private IReadOnlyList<DateTimeOffset> _timeSteps;
 
         /// <summary>
-        /// Gets or sets the time steps that can be used to set the slider instance's current extent
+        /// Gets or sets the time steps that can be used to set the slider instance's current extent.
         /// </summary>
         private IReadOnlyList<DateTimeOffset> TimeStepsImpl
         {
@@ -118,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeSpan _playbackInterval = TimeSpan.FromSeconds(1);
 
         /// <summary>
-        /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step
+        /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step.
         /// </summary>
         private TimeSpan PlaybackIntervalImpl
         {
@@ -137,7 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private PlaybackDirection _playbackDirection = PlaybackDirection.Forward;
 
         /// <summary>
-        /// Gets or sets whether the current extent will move to the next or the previous time step during playback
+        /// Gets or sets whether the current extent will move to the next or the previous time step during playback.
         /// </summary>
         private PlaybackDirection PlaybackDirectionImpl
         {
@@ -155,7 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private LoopMode _playbackLoopMode = LoopMode.None;
 
         /// <summary>
-        /// Gets or sets the behavior when the current extent reaches the end of the slider during playback
+        /// Gets or sets the behavior when the current extent reaches the end of the slider during playback.
         /// </summary>
         private LoopMode PlaybackLoopModeImpl
         {
@@ -173,7 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isStartTimePinned = false;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the start time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the start time of the <see cref="CurrentExtent"/> is locked into place.
         /// </summary>
         private bool IsStartTimePinnedImpl
         {
@@ -192,7 +192,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isEndTimePinned = false;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the end time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the end time of the <see cref="CurrentExtent"/> is locked into place.
         /// </summary>
         private bool IsEndTimePinnedImpl
         {
@@ -211,7 +211,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isPlaying = false;
 
         /// <summary>
-        /// Gets or sets a value indicating whether the time slider is animating playback
+        /// Gets or sets a value indicating whether the time slider is animating playback.
         /// </summary>
         private bool IsPlayingImpl
         {
@@ -232,7 +232,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private string _fullExtentLabelFormat;
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>.
         /// </summary>
         private string FullExtentLabelFormatImpl
         {
@@ -251,7 +251,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private string _currentExtentLabelFormat;
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>.
         /// </summary>
         private string CurrentExtentLabelFormatImpl
         {
@@ -271,7 +271,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private string _timeStepIntervalLabelFormat;
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval
+        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval.
         /// </summary>
         private string TimeStepIntervalLabelFormatImpl
         {
@@ -290,7 +290,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private TimeSliderLabelMode _labelMode = TimeSliderLabelMode.CurrentExtent;
 
         /// <summary>
-        /// Gets or sets the mode to use for labels along the time slider
+        /// Gets or sets the mode to use for labels along the time slider.
         /// </summary>
         private TimeSliderLabelMode LabelModeImpl
         {
@@ -314,7 +314,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the border color of the thumbs
+        /// Gets or sets the border color of the thumbs.
         /// </summary>
         private Color ThumbStrokeImpl
         {
@@ -339,7 +339,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the fill color of the thumbs
+        /// Gets or sets the fill color of the thumbs.
         /// </summary>
         private Color ThumbFillImpl
         {
@@ -368,7 +368,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
+        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>.
         /// </summary>
         private Color CurrentExtentFillImpl
         {
@@ -392,7 +392,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>.
         /// </summary>
         private Color FullExtentFillImpl
         {
@@ -416,7 +416,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>.
         /// </summary>
         private Color FullExtentStrokeImpl
         {
@@ -439,7 +439,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private double _fullExtentBorderWidth = 0;
 
         /// <summary>
-        /// Gets or sets the border width of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// Gets or sets the border width of the area on the slider track that indicates the <see cref="FullExtent"/>.
         /// </summary>
         /// <value>The full width of the extent border.</value>
         public double FullExtentBorderWidth
@@ -464,7 +464,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the color of the slider's tickmarks
+        /// Gets or sets the color of the slider's tickmarks.
         /// </summary>
         private Color TimeStepIntervalTickFillImpl
         {
@@ -495,7 +495,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the fill color of the playback buttons
+        /// Gets or sets the fill color of the playback buttons.
         /// </summary>
         private Color PlaybackButtonsFillImpl
         {
@@ -521,7 +521,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the border color of the playback buttons
+        /// Gets or sets the border color of the playback buttons.
         /// </summary>
         private Color PlaybackButtonsStrokeImpl
         {
@@ -553,7 +553,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the color of the full extent labels
+        /// Gets or sets the color of the full extent labels.
         /// </summary>
         private Color FullExtentLabelColorImpl
         {
@@ -577,7 +577,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the color of the current extent labels
+        /// Gets or sets the color of the current extent labels.
         /// </summary>
         private Color CurrentExtentLabelColorImpl
         {
@@ -601,7 +601,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the color of the time step interval labels
+        /// Gets or sets the color of the time step interval labels.
         /// </summary>
         private Color TimeStepIntervalLabelColorImpl
         {

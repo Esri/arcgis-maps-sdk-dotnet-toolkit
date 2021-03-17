@@ -29,6 +29,7 @@ using Xamarin.Forms.Platform.UWP;
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Compass), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.CompassRenderer))]
+
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class CompassRenderer : ViewRenderer<Compass, Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass>

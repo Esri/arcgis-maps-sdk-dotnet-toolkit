@@ -24,7 +24,7 @@ using Android.Views;
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Draws a rectangle on the screen
+    /// Draws a rectangle on the screen.
     /// </summary>
     /// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size. The
     /// specified width and height will be applied to the width and height of the view's layout parameters.</remarks>
@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private double _width;
 
         /// <summary>
-        /// Gets or sets the rectangle's width
+        /// Gets or sets the rectangle's width.
         /// </summary>
         public new double Width
         {
@@ -75,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private double _height;
 
         /// <summary>
-        /// Gets or sets the rectangle's height
+        /// Gets or sets the rectangle's height.
         /// </summary>
         public new double Height
         {
@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private Color _backgroundColor;
 
         /// <summary>
-        /// Gets or sets the rectangle's background color
+        /// Gets or sets the rectangle's background color.
         /// </summary>
         public Color BackgroundColor
         {

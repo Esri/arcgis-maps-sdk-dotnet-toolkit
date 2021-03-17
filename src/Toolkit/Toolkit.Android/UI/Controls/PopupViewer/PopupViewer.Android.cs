@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         public PopupViewer(Context context)
             : base(context)
         {
@@ -45,8 +45,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view.</param>
         public PopupViewer(Context context, IAttributeSet attr)
             : base(context, attr)
         {
@@ -58,20 +58,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _rootLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Vertical,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
             _rootLayout.SetGravity(GravityFlags.Top);
 
             _editSummary = new TextView(Context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
             _editSummary.SetTextColor(_foregroundColor);
             _rootLayout.AddView(_editSummary);
 
             _customHtmlDescription = new TextView(Context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
             _customHtmlDescription.SetTextColor(_foregroundColor);
             _rootLayout.AddView(_customHtmlDescription);
@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Color _foregroundColor = Color.Black;
 
         /// <summary>
-        /// Gets or sets the color of the foreground elements of the <see cref="PopupViewer"/>
+        /// Gets or sets the color of the foreground elements of the <see cref="PopupViewer"/>.
         /// </summary>
         public Color ForegroundColor
         {

@@ -23,7 +23,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Draws a rectangle on the screen
+    /// Draws a rectangle on the screen.
     /// </summary>
     /// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size.
     /// The specified width and height will be applied to the view's intrinsic content size.</remarks>
@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Gets or sets the rectangle's width
+        /// Gets or sets the rectangle's width.
         /// </summary>
         public double Width
         {
@@ -66,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Gets or sets the rectangle's height
+        /// Gets or sets the rectangle's height.
         /// </summary>
         public double Height
         {

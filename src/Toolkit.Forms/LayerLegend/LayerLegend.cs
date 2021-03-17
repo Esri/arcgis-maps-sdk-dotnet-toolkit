@@ -20,14 +20,14 @@ using Xamarin.Forms;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
-    /// The Legend Control that generates a list of Legend Items for a Layer
+    /// The Legend Control that generates a list of Legend Items for a Layer.
     /// </summary>
     [System.Obsolete("Deprecated in favor of Legend control")]
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public class LayerLegend : View
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LayerLegend"/> class
+        /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         public LayerLegend()
 #if __ANDROID__
@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(IncludeSublayers), typeof(bool), typeof(LayerLegend), true, BindingMode.OneWay, null, OnIncludeSublayersPropertyChanged);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
+        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered.
         /// </summary>
         /// <seealso cref="IncludeSublayersProperty"/>
         public bool IncludeSublayers

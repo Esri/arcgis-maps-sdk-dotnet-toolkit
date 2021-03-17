@@ -25,6 +25,7 @@ using Xamarin.Forms.Platform.UWP;
 #endif
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.TimeSlider), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.TimeSliderRenderer))]
+
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class TimeSliderRenderer : ViewRenderer<TimeSlider, Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider>

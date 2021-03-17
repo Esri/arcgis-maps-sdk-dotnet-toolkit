@@ -23,7 +23,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
     /// <summary>
-    /// Custom <see cref="AuthenticationManager"/> Challenge Handler that combines user/password, certificate and OAuth authentication
+    /// Custom <see cref="AuthenticationManager"/> Challenge Handler that combines user/password, certificate and OAuth authentication.
     /// </summary>
     public class ChallengeHandler : Esri.ArcGISRuntime.Security.IChallengeHandler
     {
@@ -32,19 +32,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// <summary>
         /// Initializes a new instance of the <see cref="ChallengeHandler"/> class.
         /// </summary>
-        /// <param name="dispatcher">The Dispatcher for the application</param>
+        /// <param name="dispatcher">The Dispatcher for the application.</param>
         public ChallengeHandler(System.Windows.Threading.Dispatcher dispatcher)
         {
             _dispatcher = dispatcher;
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether credentials should be stored in the system's Credentials Cache
+        /// Gets or sets a value indicating whether credentials should be stored in the system's Credentials Cache.
         /// </summary>
         public bool EnableCredentialsCache { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the style applied to the SignInForm
+        /// Gets or sets the style applied to the SignInForm.
         /// </summary>
         public Style SignInFormStyle { get; set; }
 
@@ -81,12 +81,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 ShowInTaskbar = false,
                 WindowStyle = WindowStyle.ToolWindow,
-                ResizeMode = ResizeMode.NoResize
+                ResizeMode = ResizeMode.NoResize,
             };
             var contentDialog = new SignInForm()
             {
                 EnableCredentialCache = EnableCredentialsCache,
-                CredentialRequestInfo = info
+                CredentialRequestInfo = info,
             };
 
             if (SignInFormStyle != null)

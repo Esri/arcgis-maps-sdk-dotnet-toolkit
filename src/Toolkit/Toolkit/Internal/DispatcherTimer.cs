@@ -22,10 +22,10 @@ using System.Timers;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Timer for Xamarin use that mimics Windows DispatcherTimer in Android / iOS
+    /// Timer for Xamarin use that mimics Windows DispatcherTimer in Android / iOS.
     /// </summary>
     /// <remarks>
-    /// - Raises Tick events on the UI thread
+    /// - Raises Tick events on the UI thread.
     /// </remarks>
     internal class DispatcherTimer : IDisposable
     {
@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         private bool _isInitialized;
 
         /// <summary>
-        /// Gets or sets time interval of Tick event callbacks
+        /// Gets or sets time interval of Tick event callbacks.
         /// </summary>
         public TimeSpan Interval
         {
@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the timer is started or stopped
+        /// Gets or sets a value indicating whether the timer is started or stopped.
         /// </summary>
         public bool IsEnabled
         {

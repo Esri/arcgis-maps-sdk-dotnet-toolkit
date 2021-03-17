@@ -21,7 +21,7 @@ using Windows.UI.Xaml.Data;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// *FOR INTERNAL USE* Allows converting an object to a formatted string representation
+    /// *FOR INTERNAL USE* Allows converting an object to a formatted string representation.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class StringFormatConverter : IValueConverter

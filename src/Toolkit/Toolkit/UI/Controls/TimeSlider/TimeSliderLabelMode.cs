@@ -17,7 +17,7 @@
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Represents the display mode for time slider labels
+    /// Represents the display mode for time slider labels.
     /// </summary>
     public enum TimeSliderLabelMode
     {
@@ -34,6 +34,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Display labels for the time slider's time step intervals (i.e. on the slider's tick marks)
         /// </summary>
-        TimeStepInterval
+        TimeStepInterval,
     }
 }

@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                      {
                          CollectionChanged?.Invoke(this, eventArgs);
                      },
-                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
                 };
                 incc.CollectionChanged += listener.OnEvent;
             }

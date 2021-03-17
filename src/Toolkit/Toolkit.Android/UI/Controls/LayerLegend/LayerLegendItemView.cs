@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _symbolDisplay = new SymbolDisplay(context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.MatchParent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.MatchParent),
             };
             _symbolDisplay.SetMaxHeight(40);
             _symbolDisplay.SetMaxWidth(40);
@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _textView = new TextView(context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.MatchParent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.MatchParent),
             };
             _textView.Gravity = GravityFlags.CenterVertical;
             AddView(_textView);

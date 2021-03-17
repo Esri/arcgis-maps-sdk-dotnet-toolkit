@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Alignment = UIStackViewAlignment.Leading,
                 Distribution = UIStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
+                Spacing = 0,
             };
 
             // Initialize scalebar components with placeholder sizes and values
@@ -100,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Alignment = UIStackViewAlignment.Leading,
                 Distribution = UIStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
+                Spacing = 0,
             };
 
             firstRowStackView.AddArrangedSubview(_metricScaleLine);
@@ -116,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Alignment = UIStackViewAlignment.Leading,
                 Distribution = UIStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
+                Spacing = 0,
             };
 
             var tickWidth = 2;
@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Alignment = UIStackViewAlignment.Leading,
                 Distribution = UIStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
+                Spacing = 0,
             };
 
             _scaleLineStartSegment = new RectangleView(4, 2) { BackgroundColor = ForegroundColor };
@@ -157,7 +157,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Alignment = UIStackViewAlignment.Leading,
                 Distribution = UIStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
+                Spacing = 0,
             };
 
             _firstUsTickLine = new RectangleView(tickWidth, tickHeight) { BackgroundColor = ForegroundColor };
@@ -176,7 +176,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Alignment = UIStackViewAlignment.Leading,
                 Distribution = UIStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
+                Spacing = 0,
             };
 
             var usWidthPlaceholder = new UIView();
@@ -226,7 +226,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private UIColor _foregroundColor = UIColorHelper.LabelColor;
 
         /// <summary>
-        /// Gets or sets the color of the foreground elements of the <see cref="ScaleLine"/>
+        /// Gets or sets the color of the foreground elements of the <see cref="ScaleLine"/>.
         /// </summary>
         public UIColor ForegroundColor
         {
@@ -298,9 +298,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Aggregates the size of the view's sub-views
+        /// Aggregates the size of the view's sub-views.
         /// </summary>
-        /// <returns>The size of the view</returns>
+        /// <returns>The size of the view.</returns>
         private CGSize MeasureSize()
         {
             var totalHeight = 0d;

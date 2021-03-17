@@ -23,7 +23,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Represents a control that can be dragged by the user
+    /// Represents a control that can be dragged by the user.
     /// </summary>
     internal class Thumb : UIControl, INotifyPropertyChanged
     {
@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Gets or sets the rectangle's width
+        /// Gets or sets the rectangle's width.
         /// </summary>
         public double Width
         {
@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Gets or sets the rectangle's height
+        /// Gets or sets the rectangle's height.
         /// </summary>
         public double Height
         {

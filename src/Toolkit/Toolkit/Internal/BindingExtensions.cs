@@ -27,16 +27,16 @@ using System.Windows.Data;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Provides utility extension methods related to data-bindings
+    /// Provides utility extension methods related to data-bindings.
     /// </summary>
     internal static class BindingExtensions
     {
         /// <summary>
-        /// Creates a copy of the specified binding
+        /// Creates a copy of the specified binding.
         /// </summary>
-        /// <param name="source">The binding to copy</param>
-        /// <param name="newConverterParameter">The object to use as a converter parameter</param>
-        /// <returns>The copy of the binding</returns>
+        /// <param name="source">The binding to copy.</param>
+        /// <param name="newConverterParameter">The object to use as a converter parameter.</param>
+        /// <returns>The copy of the binding.</returns>
         public static Binding Clone(this Binding source, object newConverterParameter = null)
         {
             var copy = new Binding
@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 TargetNullValue = source.TargetNullValue,
                 UpdateSourceTrigger = source.UpdateSourceTrigger,
 #if NETFX_CORE
-                ConverterLanguage = source.ConverterLanguage
+                ConverterLanguage = source.ConverterLanguage,
 #else
                 AsyncState = source.AsyncState,
                 BindingGroupName = source.BindingGroupName,
@@ -88,9 +88,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// Applies the specified format string to the binding of the specified property on the specified element.  Also initializes a fallback string format from the
         /// original string format if one is not already referenced in the corresponding parameter.
         /// </summary>
-        /// <param name="bindingTarget">The element for which to update the property</param>
-        /// <param name="targetProperty">The dependency property to update</param>
-        /// <param name="stringFormat">The new format string</param>
+        /// <param name="bindingTarget">The element for which to update the property.</param>
+        /// <param name="targetProperty">The dependency property to update.</param>
+        /// <param name="stringFormat">The new format string.</param>
         /// <param name="fallbackFormat">The fallback format string.  Used if the new format string is null or empty.</param>
         public static void UpdateStringFormat(this FrameworkElement bindingTarget, DependencyProperty targetProperty, string stringFormat, ref string fallbackFormat)
         {
@@ -131,10 +131,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Forces the specified property to update on the specified element
+        /// Forces the specified property to update on the specified element.
         /// </summary>
-        /// <param name="element">The element to update the property for</param>
-        /// <param name="property">The property to update</param>
+        /// <param name="element">The element to update the property for.</param>
+        /// <param name="property">The property to update.</param>
         public static void RefreshBinding(this FrameworkElement element, DependencyProperty property)
         {
 #if NETFX_CORE

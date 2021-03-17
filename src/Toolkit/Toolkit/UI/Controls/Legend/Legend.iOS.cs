@@ -133,7 +133,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         CollectionChanged?.Invoke(this, eventArgs);
                     },
-                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
                 };
                 incc.CollectionChanged += listener.OnEvent;
             }
@@ -173,11 +173,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     BackgroundColor = UIColor.Clear,
                     ContentMode = UIViewContentMode.Center,
                     TextAlignment = UITextAlignment.Left,
-                    TranslatesAutoresizingMaskIntoConstraints = false
+                    TranslatesAutoresizingMaskIntoConstraints = false,
                 };
                 _symbol = new SymbolDisplay()
                 {
-                    TranslatesAutoresizingMaskIntoConstraints = false
+                    TranslatesAutoresizingMaskIntoConstraints = false,
                 };
 
                 ContentView.AddSubviews(_symbol, _textLabel);

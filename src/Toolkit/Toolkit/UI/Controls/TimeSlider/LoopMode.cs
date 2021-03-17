@@ -17,7 +17,7 @@
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Specifies the loop behavior of temporal playback
+    /// Specifies the loop behavior of temporal playback.
     /// </summary>
     public enum LoopMode
     {
@@ -34,6 +34,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Specifies that temporal playback should reverse direction when the bounds of the temporal extent are reached
         /// </summary>
-        Reverse
+        Reverse,
     }
 }

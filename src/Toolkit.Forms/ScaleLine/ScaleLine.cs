@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private bool _scaleSetByMapView;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScaleLine"/> class
+        /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
         public ScaleLine()
 #if __ANDROID__
@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(TargetWidth), typeof(double), typeof(ScaleLine), double.NaN, BindingMode.OneWay, null, OnTargetWidthChanged);
 
         /// <summary>
-        /// Gets or sets the width that will be used to calculate the length of the ScaleLine
+        /// Gets or sets the width that will be used to calculate the length of the ScaleLine.
         /// </summary>
         public double TargetWidth
         {
@@ -90,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="GeoView"/> Dependency Property
+        /// Identifies the <see cref="GeoView"/> Dependency Property.
         /// </summary>
         public static readonly BindableProperty MapViewProperty =
             BindableProperty.Create(nameof(ScaleLine.MapView), typeof(MapView), typeof(ScaleLine), null, BindingMode.OneWay, null, OnMapViewPropertyChanged);
@@ -201,14 +201,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Calculates the scale at the center of a polygon, at a given pixel size
+        /// Calculates the scale at the center of a polygon, at a given pixel size.
         /// </summary>
         /// <remarks>
         /// A pixel is a device independent logical pixel - ie 1/96 inches.
         /// </remarks>
         /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
-        /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference</param>
-        /// <returns>The MapScale for the center of the view</returns>
+        /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference.</param>
+        /// <returns>The MapScale for the center of the view.</returns>
         public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon visibleArea, double unitsPerPixel)
         {
             if (visibleArea == null)

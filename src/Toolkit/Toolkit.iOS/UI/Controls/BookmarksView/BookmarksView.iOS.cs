@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 AllowsSelection = true,
                 Bounces = true,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                RowHeight = UITableView.AutomaticDimension
+                RowHeight = UITableView.AutomaticDimension,
             };
             _listView.RegisterClassForCellReuse(typeof(UITableViewCell), BookmarksTableSource.CellId);
 
@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _listView.ReloadData();
                 },
-                OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
             };
             tableSource.CollectionChanged += listener.OnEvent;
 
@@ -70,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _listView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor),
                 _listView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor),
                 _listView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor),
-                _listView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor)
+                _listView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
             });
 
             // Set a title if not already set

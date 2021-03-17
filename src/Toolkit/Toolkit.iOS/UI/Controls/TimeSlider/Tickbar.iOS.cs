@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private CGSize _majorTickSize = new CGSize(1, 10);
 
         /// <summary>
-        /// Gets or sets the size of major tickmarks
+        /// Gets or sets the size of major tickmarks.
         /// </summary>
         public CGSize MajorTickSize
         {
@@ -62,7 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private CGSize _minorTickSize = new CGSize(1, 5);
 
         /// <summary>
-        /// Gets or sets the size of minor tickmarks
+        /// Gets or sets the size of minor tickmarks.
         /// </summary>
         public CGSize MinorTickSize
         {
@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private double _labelOffset = 4;
 
         /// <summary>
-        /// Gets or sets the spacing between ticks and tick labels
+        /// Gets or sets the spacing between ticks and tick labels.
         /// </summary>
         public double LabelOffset
         {
@@ -106,10 +106,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Adds a tick to the bar's visual tree
+        /// Adds a tick to the bar's visual tree.
         /// </summary>
-        /// <param name="position">The position to place the tick at along the tick bar</param>
-        /// <param name="dataSource">The data to pass to the tick's template</param>
+        /// <param name="position">The position to place the tick at along the tick bar.</param>
+        /// <param name="dataSource">The data to pass to the tick's template.</param>
         private void AddTickmark(double position, object dataSource)
         {
             // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 BackgroundColor = TickFill,
                 Width = MinorTickSize.Width,
                 Height = MinorTickSize.Height,
-                BorderWidth = 0
+                BorderWidth = 0,
             };
             SetIsMajorTickmark(tick, false);
             SetPosition(tick, position);
@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 BackgroundColor = TickFill,
                 Width = MajorTickSize.Width,
                 Height = MajorTickSize.Height,
-                BorderWidth = 0
+                BorderWidth = 0,
             };
 
             if (dataSource is DateTimeOffset dateTime)
@@ -150,7 +150,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     Text = dateTime.ToString(timeStepIntervalDateFormat),
                     Font = UIFont.SystemFontOfSize(11),
                     TextColor = TickLabelColor,
-                    Tag = (nint)dateTime.ToUnixTimeMilliseconds()
+                    Tag = (nint)dateTime.ToUnixTimeMilliseconds(),
                 };
 
                 // Calculate positions of the tickmark and label

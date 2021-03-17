@@ -68,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             break;
                     }
                 },
-                OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
             };
 
             dataSource.CollectionChanged += listener.OnEvent;

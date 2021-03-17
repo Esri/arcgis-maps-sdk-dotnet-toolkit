@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
         /// <summary>
-        /// Gets or sets the symbol to render
+        /// Gets or sets the symbol to render.
         /// </summary>
         public Symbology.Symbol Symbol
         {
@@ -69,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         Refresh();
                     },
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 newValue.PropertyChanged += _inpcListener.OnEvent;
             }

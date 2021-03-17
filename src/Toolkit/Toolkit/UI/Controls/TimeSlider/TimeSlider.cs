@@ -100,9 +100,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Updates slider track UI components to display the specified time extent
+        /// Updates slider track UI components to display the specified time extent.
         /// </summary>
-        /// <param name="extent">The time extent to display on the slider track</param>
+        /// <param name="extent">The time extent to display on the slider track.</param>
         private void UpdateTrackLayout(TimeExtent extent)
         {
             if (extent == null || extent.StartTime < ValidFullExtent.StartTime || extent.EndTime > ValidFullExtent.EndTime ||
@@ -262,11 +262,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Calculates the size of the specified text using the specified TextBlock's font properites
+        /// Calculates the size of the specified text using the specified TextBlock's font properites.
         /// </summary>
-        /// <param name="textBlock">The TextBlock to use in the size calculation</param>
+        /// <param name="textBlock">The TextBlock to use in the size calculation.</param>
         /// <param name="text">The text to calculate the size for.  If unspecified, the size of the TextBlock's text will be calculated.</param>
-        /// <returns>The size of the text</returns>
+        /// <returns>The size of the text.</returns>
         /// <remarks>This method is useful in cases where a TextBlock's text has updated, but its layout has not.  In such cases,
         /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
         private Size CalculateTextSize(TextBlock textBlock, string text = null)
@@ -281,7 +281,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 FontSize = textBlock.FontSize,
                 FontStyle = textBlock.FontStyle,
                 FontWeight = textBlock.FontWeight,
-                Text = text ?? textBlock.Text
+                Text = text ?? textBlock.Text,
             };
             tb.Measure(new Size(0, 0));
             tb.Arrange(new Rect(0, 0, 0, 0));
@@ -291,7 +291,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 Text = text ?? textBlock.Text,
                 Font = textBlock.Font,
-                LineBreakMode = textBlock.LineBreakMode
+                LineBreakMode = textBlock.LineBreakMode,
             };
             return (Size)label.SizeThatFits(new CoreGraphics.CGSize(double.MaxValue, double.MaxValue));
 #elif __ANDROID__
@@ -593,10 +593,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endregion // Drag event handlers
 
         /// <summary>
-        /// Adjusts the specified time extent so that it starts and ends at a valid time step interval
+        /// Adjusts the specified time extent so that it starts and ends at a valid time step interval.
         /// </summary>
-        /// <param name="extent">The time extent to adjust</param>
-        /// <returns>The snapped time extent</returns>
+        /// <param name="extent">The time extent to adjust.</param>
+        /// <returns>The snapped time extent.</returns>
         private TimeExtent Snap(TimeExtent extent)
         {
             if (extent == null)
@@ -664,7 +664,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Positions the tickmarks along the slider's tick bar
+        /// Positions the tickmarks along the slider's tick bar.
         /// </summary>
         private void PositionTickmarks()
         {
@@ -701,17 +701,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         #region Properties
 
         /// <summary>
-        /// Gets a value indicating whether or not the current extent represents a time instant
+        /// Gets a value indicating whether or not the current extent represents a time instant.
         /// </summary>
         private bool IsCurrentExtentTimeInstant => CurrentValidExtent?.IsTimeInstant() ?? false;
 
         /// <summary>
-        /// Gets the current FullExtent or, if unavailable, a valid substitute
+        /// Gets the current FullExtent or, if unavailable, a valid substitute.
         /// </summary>
         private TimeExtent ValidFullExtent => FullExtent ?? new TimeExtent(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
 
         /// <summary>
-        /// Gets the CurrentExtent or, if invalid, a valid substitute
+        /// Gets the CurrentExtent or, if invalid, a valid substitute.
         /// </summary>
         private TimeExtent CurrentValidExtent
         {
@@ -763,7 +763,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance
+        /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance.
         /// </summary>
 #if !NETFX_CORE && !XAMARIN
         [TypeConverter(typeof(TimeExtentConverter))]
@@ -822,7 +822,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets the time steps that can be used to set the slider instance's current extent
+        /// Gets the time steps that can be used to set the slider instance's current extent.
         /// </summary>
         public IReadOnlyList<DateTimeOffset> TimeSteps
         {
@@ -856,7 +856,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step
+        /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step.
         /// </summary>
         public TimeSpan PlaybackInterval
         {
@@ -867,7 +867,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnPlaybackIntervalPropertyChanged(TimeSpan interval) => _playTimer.Interval = interval;
 
         /// <summary>
-        /// Gets or sets whether the current extent will move to the next or the previous time step during playback
+        /// Gets or sets whether the current extent will move to the next or the previous time step during playback.
         /// </summary>
         public PlaybackDirection PlaybackDirection
         {
@@ -876,7 +876,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the behavior when the current extent reaches the end of the slider during playback
+        /// Gets or sets the behavior when the current extent reaches the end of the slider during playback.
         /// </summary>
         public LoopMode PlaybackLoopMode
         {
@@ -893,7 +893,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the start time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the start time of the <see cref="CurrentExtent"/> is locked into place.
         /// </summary>
         public bool IsStartTimePinned
         {
@@ -924,7 +924,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the end time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the end time of the <see cref="CurrentExtent"/> is locked into place.
         /// </summary>
         public bool IsEndTimePinned
         {
@@ -955,7 +955,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the time slider is animating playback
+        /// Gets or sets a value indicating whether the time slider is animating playback.
         /// </summary>
         public bool IsPlaying
         {
@@ -999,7 +999,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #region Appearance Properties
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>.
         /// </summary>
         public string FullExtentLabelFormat
         {
@@ -1008,7 +1008,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>.
         /// </summary>
         public string CurrentExtentLabelFormat
         {
@@ -1023,7 +1023,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval
+        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval.
         /// </summary>
         public string TimeStepIntervalLabelFormat
         {
@@ -1040,7 +1040,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the mode to use for labels along the time slider
+        /// Gets or sets the mode to use for labels along the time slider.
         /// </summary>
         public TimeSliderLabelMode LabelMode
         {
@@ -1051,9 +1051,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnLabelModePropertyChanged(TimeSliderLabelMode labelMode) => ApplyLabelMode(labelMode);
 
         /// <summary>
-        /// Updates the slider for the specified label mode
+        /// Updates the slider for the specified label mode.
         /// </summary>
-        /// <param name="labelMode">The label mode to apply</param>
+        /// <param name="labelMode">The label mode to apply.</param>
         private void ApplyLabelMode(TimeSliderLabelMode labelMode)
         {
             if (Tickmarks == null || MinimumThumbLabel == null || MaximumThumbLabel == null)
@@ -1082,7 +1082,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the border color of the thumbs
+        /// Gets or sets the border color of the thumbs.
         /// </summary>
         public Brush ThumbStroke
         {
@@ -1091,7 +1091,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the fill color of the thumbs
+        /// Gets or sets the fill color of the thumbs.
         /// </summary>
         public Brush ThumbFill
         {
@@ -1100,7 +1100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
+        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>.
         /// </summary>
         public Brush CurrentExtentFill
         {
@@ -1109,7 +1109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>.
         /// </summary>
         public Brush FullExtentFill
         {
@@ -1118,7 +1118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>.
         /// </summary>
         public Brush FullExtentStroke
         {
@@ -1127,7 +1127,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the color of the slider's tickmarks
+        /// Gets or sets the color of the slider's tickmarks.
         /// </summary>
         public Brush TimeStepIntervalTickFill
         {
@@ -1136,7 +1136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the fill color of the playback buttons
+        /// Gets or sets the fill color of the playback buttons.
         /// </summary>
         public Brush PlaybackButtonsFill
         {
@@ -1145,7 +1145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the border color of the playback buttons
+        /// Gets or sets the border color of the playback buttons.
         /// </summary>
         public Brush PlaybackButtonsStroke
         {
@@ -1154,7 +1154,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the color of the full extent labels
+        /// Gets or sets the color of the full extent labels.
         /// </summary>
         public Brush FullExtentLabelColor
         {
@@ -1163,7 +1163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the color of the current extent labels
+        /// Gets or sets the color of the current extent labels.
         /// </summary>
         public Brush CurrentExtentLabelColor
         {
@@ -1172,7 +1172,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the color of the time step interval labels
+        /// Gets or sets the color of the time step interval labels.
         /// </summary>
         public Brush TimeStepIntervalLabelColor
         {
@@ -1187,9 +1187,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #region Initialization Helper Methods
 
         /// <summary>
-        /// Updates the time slider to have the specified number of time steps
+        /// Updates the time slider to have the specified number of time steps.
         /// </summary>
-        /// <param name="count">The number of time steps</param>
+        /// <param name="count">The number of time steps.</param>
         /// <remarks>This method divides the TimeSlider instance's <see cref="FullExtent"/> into the number of steps specified,
         /// updating the <see cref="TimeStepInterval"/> and <see cref="TimeSteps"/> properties.  The method will attempt to set
         /// the interval to a TimeValue with the smallest duration and largest time unit that will fit evenly (i.e. without
@@ -1210,10 +1210,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <summary>
         /// Initializes the time slider's temporal properties based on the specified GeoView. Specifically,
-        /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>
+        /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>.
         /// </summary>
-        /// <param name="geoView">The GeoView to use to initialize the time-slider's properties</param>
-        /// <returns>Task</returns>
+        /// <param name="geoView">The GeoView to use to initialize the time-slider's properties.</param>
+        /// <returns>Task.</returns>
         public async Task InitializeTimePropertiesAsync(GeoView geoView)
         {
             // Get all the layers from the geoview
@@ -1259,8 +1259,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes the time slider's temporal properties based on the specified time-aware layer. Specifically,
         /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>.
         /// </summary>
-        /// <param name="timeAwareLayer">The layer to use to initialize the time slider</param>
-        /// <returns>Task</returns>
+        /// <param name="timeAwareLayer">The layer to use to initialize the time slider.</param>
+        /// <returns>Task.</returns>
         public async Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer)
         {
             if (timeAwareLayer is ILoadable loadable)
@@ -1296,10 +1296,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets the default time-step interval for the specified time-aware layer
+        /// Gets the default time-step interval for the specified time-aware layer.
         /// </summary>
-        /// <param name="timeAwareLayer">The time-aware layer to retrieve the interval for</param>
-        /// <returns>The interval, represented as a <see cref="TimeValue"/> instance</returns>
+        /// <param name="timeAwareLayer">The time-aware layer to retrieve the interval for.</param>
+        /// <returns>The interval, represented as a <see cref="TimeValue"/> instance.</returns>
         private static async Task<TimeValue> GetTimeStepIntervalAsync(ITimeAware timeAwareLayer)
         {
             if (timeAwareLayer is ILoadable loadable)
@@ -1345,10 +1345,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets whether an instantaneous time filter can be applied to the specified time-aware layer
+        /// Gets whether an instantaneous time filter can be applied to the specified time-aware layer.
         /// </summary>
-        /// <param name="timeAwareLayer">The time-aware layer to check</param>
-        /// <returns><c>true</c> if the layer can be filtered based on a time instant, otherwise <c>false</c></returns>
+        /// <param name="timeAwareLayer">The time-aware layer to check.</param>
+        /// <returns><c>true</c> if the layer can be filtered based on a time instant, otherwise <c>false</c>.</returns>
         private static async Task<bool> CanUseInstantaneousTimeAsync(ITimeAware timeAwareLayer)
         {
             var canUseInstantaneousTime = true;
@@ -1387,9 +1387,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Returns the layer's time-info, if applicable
+        /// Returns the layer's time-info, if applicable.
         /// </summary>
-        /// <returns>Task</returns>
+        /// <returns>Task.</returns>
         private static async Task<LayerTimeInfo> GetTimeInfoAsync(ILoadable layer) // Can't be of type Layer since ArcGISSublayer doesn't inherit from that
         {
             if (!(layer is ArcGISSublayer) && !(layer is FeatureLayer) && !(layer is RasterLayer))
@@ -1440,8 +1440,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Moves the slider position forward by the specified number of time steps.
         /// </summary>
-        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested</returns>
-        /// <param name="timeSteps">The number of steps to advance the slider's position</param>
+        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested.</returns>
+        /// <param name="timeSteps">The number of steps to advance the slider's position.</param>
         /// <remarks>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
         /// time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
         /// extent could not be moved by the specified number of time steps without going beyond the end of the time slider's full extent.
@@ -1464,8 +1464,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Moves the slider position back by the specified number of time steps.
         /// </summary>
-        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested</returns>
-        /// <param name="timeSteps">The number of steps to advance the slider's position</param>
+        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested.</returns>
+        /// <param name="timeSteps">The number of steps to advance the slider's position.</param>
         /// <remarks>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
         /// time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
         /// extent could not be moved by the specified number of time steps without going beyond the start of the time slider's full extent.
@@ -1485,12 +1485,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Moves the current start and end times by the specified number of time steps
+        /// Moves the current start and end times by the specified number of time steps.
         /// </summary>
         /// <param name="timeSteps">The number of time steps by which to move the current time.  A positive number will advance the time step forward, while
-        /// a negative value will move the current time step backward</param>
-        /// <param name="preserveSpan">Whether to preserve the number of time steps between the current start and end time</param>
-        /// <returns><c>true</c> if succeeded, <c>false</c> if the time step could not be moved as requested</returns>
+        /// a negative value will move the current time step backward.</param>
+        /// <param name="preserveSpan">Whether to preserve the number of time steps between the current start and end time.</param>
+        /// <returns><c>true</c> if succeeded, <c>false</c> if the time step could not be moved as requested.</returns>
         private bool MoveTimeStep(int timeSteps, bool preserveSpan)
         {
             if (TimeSteps == null || CurrentValidExtent == null || (IsStartTimePinned && IsEndTimePinned))
@@ -1575,7 +1575,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Moves the time slider's current extent upon expiration of the playback interval
+        /// Moves the time slider's current extent upon expiration of the playback interval.
         /// </summary>
         private void PlayTimer_Tick(object sender, object e)
         {

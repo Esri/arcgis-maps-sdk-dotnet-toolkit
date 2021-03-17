@@ -26,6 +26,7 @@ using Xamarin.Forms.Platform.UWP;
 #endif
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.SymbolDisplay), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.SymbolDisplayRenderer))]
+
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class SymbolDisplayRenderer : ViewRenderer<SymbolDisplay, UI.Controls.SymbolDisplay>

@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     public class SymbolDisplay : View
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class
+        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
         /// </summary>
         public SymbolDisplay()
         {
@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Used by the renderer to trigger measure invalidation
+        /// Used by the renderer to trigger measure invalidation.
         /// </summary>
         internal void InvalidateMeasure_Internal()
         {

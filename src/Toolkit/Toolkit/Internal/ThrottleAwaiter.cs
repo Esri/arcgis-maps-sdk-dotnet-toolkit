@@ -41,9 +41,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Invokes the throttled delay
+        /// Invokes the throttled delay.
         /// </summary>
-        /// <returns>Task</returns>
+        /// <returns>Task.</returns>
         public Task ThrottleDelay()
         {
             if (_throttleTcs == null || _throttleTcs.Task.IsCompleted || _throttleTcs.Task.IsFaulted)
@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Cancels an in-progress delay interval
+        /// Cancels an in-progress delay interval.
         /// </summary>
         internal void Cancel()
         {

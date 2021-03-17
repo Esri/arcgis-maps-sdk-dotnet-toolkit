@@ -86,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     Text = "Time Slider",
                     Font = UIFont.SystemFontOfSize(11),
-                    TranslatesAutoresizingMaskIntoConstraints = false
+                    TranslatesAutoresizingMaskIntoConstraints = false,
                 };
                 AddSubview(label);
 
@@ -101,7 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? string.Empty,
                 Font = UIFont.SystemFontOfSize(11),
-                TextColor = FullExtentLabelColor
+                TextColor = FullExtentLabelColor,
             };
             AddSubview(FullExtentStartTimeLabel);
 
@@ -109,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? string.Empty,
                 Font = UIFont.SystemFontOfSize(11),
-                TextColor = FullExtentLabelColor
+                TextColor = FullExtentLabelColor,
             };
             AddSubview(FullExtentEndTimeLabel);
 
@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var barLeft = triangleWidth + spacing - button.BorderWidth;
                     DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor,
                                   button.BorderWidth, button.BorderColor.CGColor, left: barLeft);
-                }
+                },
             };
             PreviousButton.TouchUpInside += (o, e) => OnPreviousButtonClick();
             AddSubview(PreviousButton);
@@ -151,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     DrawTriangle(context, triangleWidth, triangleHeight, button.BackgroundColor.CGColor, button.BorderWidth,
                                  button.BorderColor.CGColor, pointOnRight: true, left: barWidth + spacing, top: button.BorderWidth);
-                }
+                },
             };
             NextButton.TouchUpInside += (o, e) => OnNextButtonClick();
             AddSubview(NextButton);
@@ -176,7 +176,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var triangleWidth = button.Bounds.Width - button.BorderWidth;
                     DrawTriangle(context, triangleWidth, button.Bounds.Height, button.BackgroundColor.CGColor, button.BorderWidth,
                                  button.BorderColor.CGColor, pointOnRight: true, left: button.BorderWidth);
-                }
+                },
             };
             PlayPauseButton.CheckedChanged += (o, e) => IsPlaying = PlayPauseButton.IsChecked;
             AddSubview(PlayPauseButton);
@@ -186,7 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _startTimeTickmark = new RectangleView(endTickWidth, endTickHeight)
             {
-                BackgroundColor = FullExtentStroke
+                BackgroundColor = FullExtentStroke,
             };
             AddSubview(_startTimeTickmark);
 
@@ -198,7 +198,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 BackgroundColor = FullExtentFill,
                 BorderColor = FullExtentStroke,
-                BorderWidth = FullExtentBorderWidth
+                BorderWidth = FullExtentBorderWidth,
             };
             AddSubview(SliderTrack);
 
@@ -206,7 +206,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 BackgroundColor = CurrentExtentFill,
                 BorderColor = FullExtentStroke,
-                BorderWidth = SliderTrack.BorderWidth
+                BorderWidth = SliderTrack.BorderWidth,
             };
             HorizontalTrackThumb.PropertyChanged += (o, e) =>
             {
@@ -222,7 +222,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 TickFill = TimeStepIntervalTickFill,
                 TickLabelColor = TimeStepIntervalLabelColor,
-                ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval
+                ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval,
             };
             SliderTrack.AddSubview(Tickmarks);
 
@@ -235,7 +235,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 DisabledSize = disabledSize,
                 CornerRadius = thumbSize / 2d,
                 UseShadow = true,
-                Enabled = !IsStartTimePinned
+                Enabled = !IsStartTimePinned,
             };
             SliderTrack.AddSubview(MinimumThumb);
 
@@ -246,7 +246,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 DisabledSize = disabledSize,
                 CornerRadius = thumbSize / 2d,
                 UseShadow = true,
-                Enabled = !IsEndTimePinned
+                Enabled = !IsEndTimePinned,
             };
             SliderTrack.AddSubview(MaximumThumb);
 
@@ -258,7 +258,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Font = UIFont.SystemFontOfSize(11),
                 TextColor = CurrentExtentLabelColor,
                 Hidden = LabelMode != TimeSliderLabelMode.CurrentExtent,
-                LineBreakMode = UILineBreakMode.Clip
+                LineBreakMode = UILineBreakMode.Clip,
             };
             SliderTrack.AddSubview(MinimumThumbLabel);
 
@@ -268,7 +268,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Font = UIFont.SystemFontOfSize(11),
                 TextColor = CurrentExtentLabelColor,
                 Hidden = LabelMode != TimeSliderLabelMode.CurrentExtent,
-                LineBreakMode = UILineBreakMode.Clip
+                LineBreakMode = UILineBreakMode.Clip,
             };
             SliderTrack.AddSubview(MaximumThumbLabel);
 
@@ -504,7 +504,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 new CGPoint(pointedSideX, bottom / 2d),
                 new CGPoint(flatSideX, 0),
-                new CGPoint(flatSideX, bottom)
+                new CGPoint(flatSideX, bottom),
             });
             trianglePath.CloseSubpath();
 
@@ -522,7 +522,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 new CGPoint(left, top),
                 new CGPoint(right, top),
                 new CGPoint(right, bottom),
-                new CGPoint(left, bottom)
+                new CGPoint(left, bottom),
             });
             rectPath.CloseSubpath();
             DrawPath(context, rectPath, fillColor, strokeWidth, strokeColor);

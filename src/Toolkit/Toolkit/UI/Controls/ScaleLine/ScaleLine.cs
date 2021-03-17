@@ -79,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <summary>
         /// Gets or sets the width that will be used to
-        /// calculate the length of the ScaleLine
+        /// calculate the length of the ScaleLine.
         /// </summary>
         public double TargetWidth
         {
@@ -88,10 +88,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Sets the imperial units section of the scale line
+        /// Sets the imperial units section of the scale line.
         /// </summary>
-        /// <param name="value">map scale in imperial units</param>
-        /// <param name="unit">imperial unit</param>
+        /// <param name="value">map scale in imperial units.</param>
+        /// <param name="unit">imperial unit.</param>
         private void SetUsUnit(double value, string unit)
         {
             var roundedValue = GetRoundedValue(value);
@@ -113,10 +113,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Sets the metric units section of the scale line
+        /// Sets the metric units section of the scale line.
         /// </summary>
-        /// <param name="value">map scale in metric units</param>
-        /// <param name="unit">metric unit</param>
+        /// <param name="value">map scale in metric units.</param>
+        /// <param name="unit">metric unit.</param>
         private void SetMetricUnit(double value, string unit)
         {
             var roundedValue = GetRoundedValue(value);
@@ -160,9 +160,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// 1. (target_width_pixels / 96) = target_width_inches
         /// 2. target_width_inches * map_scale = map_scale_inches
-        /// 3. map_scale_inches converted to meters = map_scale_meters
+        /// 3. map_scale_inches converted to meters = map_scale_meters.
         /// </summary>
-        /// <returns>value that represents the maps scale in meters</returns>
+        /// <returns>value that represents the maps scale in meters.</returns>
         private double ConvertInchesTo(LinearUnit unit)
         {
             return LinearUnits.Inches.ConvertTo(unit, (TargetWidth / 96) * GetScale());
@@ -243,14 +243,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Calculates the scale at the center of a polygon, at a given pixel size
+        /// Calculates the scale at the center of a polygon, at a given pixel size.
         /// </summary>
         /// <remarks>
         /// A pixel is a device independent logical pixel - ie 1/96 inches.
         /// </remarks>
         /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
-        /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference</param>
-        /// <returns>The MapScale for the center of the view</returns>
+        /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference.</param>
+        /// <returns>The MapScale for the center of the view.</returns>
         public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon visibleArea, double unitsPerPixel)
         {
             if (visibleArea == null)

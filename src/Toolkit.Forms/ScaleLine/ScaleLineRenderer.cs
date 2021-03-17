@@ -25,6 +25,7 @@ using Xamarin.Forms.Platform.UWP;
 #endif
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.ScaleLine), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.ScaleLineRenderer))]
+
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class ScaleLineRenderer : ViewRenderer<ScaleLine, Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine>
