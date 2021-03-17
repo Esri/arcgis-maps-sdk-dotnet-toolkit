@@ -24,12 +24,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal static class FeatureHelper
     {
-        public static Field GetField(this Feature feature, string fieldName)
+        public static Field? GetField(this Feature feature, string fieldName)
         {
-            return feature?.FeatureTable?.Fields?.FirstOrDefault(f => f.Name == fieldName);
+            return feature.FeatureTable?.Fields?.FirstOrDefault(f => f.Name == fieldName);
         }
 
-        public static CodedValueDomain GetCodedValueDomain(this Field field)
+        public static CodedValueDomain? GetCodedValueDomain(this Field field)
         {
             return field?.Domain as CodedValueDomain;
         }

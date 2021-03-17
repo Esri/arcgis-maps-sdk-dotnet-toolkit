@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="callback">callback raised when <see cref="DataItem.Value"/> property changes.</param>
         /// <param name="value">default value selected.</param>
         /// <param name="items">coded-value domain options.</param>
-        public SelectorDataItem(Action<object> callback, object value, IEnumerable<Esri.ArcGISRuntime.Data.CodedValue> items)
+        public SelectorDataItem(Action<object?> callback, object? value, IEnumerable<Esri.ArcGISRuntime.Data.CodedValue?>? items)
             : base(callback)
         {
             _items = items?.ToList();
@@ -51,18 +51,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="value">key value.</param>
         /// <returns>matching key-value.</returns>
-        public Esri.ArcGISRuntime.Data.CodedValue GetSelectedItem(object value)
+        public Esri.ArcGISRuntime.Data.CodedValue? GetSelectedItem(object? value)
         {
             return Items?.FirstOrDefault(kvp => kvp?.Code != null && kvp.Code.Equals(value)) ??
                 default(Esri.ArcGISRuntime.Data.CodedValue);
         }
 
-        private IList<Esri.ArcGISRuntime.Data.CodedValue> _items;
+        private IList<Esri.ArcGISRuntime.Data.CodedValue?>? _items;
 
         /// <summary>
         /// Gets or sets the Items used as source for <see cref="FeatureDataField.SelectorTemplate"/>.
         /// </summary>
-        public IList<Esri.ArcGISRuntime.Data.CodedValue> Items
+        public IList<Esri.ArcGISRuntime.Data.CodedValue?>? Items
         {
             get
             {
@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        public override object Value
+        public override object? Value
         {
             get
             {
@@ -99,7 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        internal override object GetBoundValue()
+        internal override object? GetBoundValue()
         {
             if (Value is Esri.ArcGISRuntime.Data.CodedValue)
             {
