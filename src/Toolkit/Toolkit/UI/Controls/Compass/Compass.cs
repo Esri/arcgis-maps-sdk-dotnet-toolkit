@@ -69,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => AutoHideImpl = value;
         }
 
-        private void WireGeoViewPropertyChanged(GeoView oldGeoView, GeoView newGeoView)
+        private void WireGeoViewPropertyChanged(GeoView? oldGeoView, GeoView? newGeoView)
         {
             var inpc = oldGeoView as INotifyPropertyChanged;
             if (inpc != null)
@@ -86,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateCompassFromGeoView(newGeoView);
         }
 
-        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             var view = GeoView;
             if ((view is MapView && e.PropertyName == nameof(MapView.MapRotation)) ||
@@ -96,10 +96,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void UpdateCompassFromGeoView(GeoView view)
+        private void UpdateCompassFromGeoView(GeoView? view)
         {
             _headingSetByGeoView = true;
-            Heading = (view is MapView) ? ((MapView)view).MapRotation : (view is SceneView ? ((SceneView)view).Camera.Heading : 0);
+            Heading = (view is MapView mv) ? mv.MapRotation : (view is SceneView sv ? sv.Camera.Heading : 0);
             _headingSetByGeoView = false;
         }
 

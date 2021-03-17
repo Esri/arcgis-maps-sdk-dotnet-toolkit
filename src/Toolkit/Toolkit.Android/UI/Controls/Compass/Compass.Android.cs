@@ -26,26 +26,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass")]
     public partial class Compass
     {
-        private static DisplayMetrics s_displayMetrics;
-        private static IWindowManager s_windowManager;
+        private static DisplayMetrics? s_displayMetrics;
+        private static IWindowManager? s_windowManager;
         private NorthArrowShape _northArrow;
-        private ViewPropertyAnimator _fadeInAnimation;
-        private ViewPropertyAnimator _fadeOutAnimation;
+        private ViewPropertyAnimator? _fadeInAnimation;
+        private ViewPropertyAnimator? _fadeOutAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public Compass(Context context)
-            : base(context) => Initialize();
+        public Compass(Context? context)
+            : base(context)
+        {
+            _northArrow = Initialize();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public Compass(Context context, IAttributeSet attr)
-            : base(context, attr) => Initialize();
+        public Compass(Context? context, IAttributeSet? attr)
+            : base(context, attr)
+        {
+            _northArrow = Initialize();
+        }
 
         /// <inheritdoc />
         protected override LayoutParams GenerateDefaultLayoutParams()
@@ -54,14 +60,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new LayoutParams(size, size);
         }
 
-        private void Initialize()
+        private NorthArrowShape Initialize()
         {
             var size = (int)CalculateScreenDimension((float)DefaultSize);
-            _northArrow = new NorthArrowShape(Context) { Size = size };
-            _northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
-            AddView(_northArrow);
+            var northArrow = new NorthArrowShape(Context) { Size = size };
+            northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
+            AddView(northArrow);
             UpdateCompassRotation(false);
-            _northArrow.Click += (s, e) => ResetRotation();
+            northArrow.Click += (s, e) => ResetRotation();
+            return northArrow;
         }
 
         private void UpdateCompassRotation(bool transition)
@@ -111,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _fadeOutAnimation = null;
                     }
 
-                    _fadeInAnimation = _northArrow.Animate().Alpha(1f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeInAnimation = null; }));
+                    _fadeInAnimation = _northArrow.Animate()?.Alpha(1f)?.SetDuration(250)?.WithEndAction(new Java.Lang.Runnable(() => { _fadeInAnimation = null; }));
                 }
                 else
                 {
@@ -126,7 +133,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _fadeInAnimation = null;
                     }
 
-                    _fadeOutAnimation = _northArrow.Animate().Alpha(0f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeOutAnimation = null; }));
+                    _fadeOutAnimation = _northArrow.Animate()?.Alpha(0f)?.SetDuration(250)?.WithEndAction(new Java.Lang.Runnable(() => { _fadeOutAnimation = null; }));
                 }
             }
             else
@@ -136,7 +143,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics GetDisplayMetrics()
+        private static DisplayMetrics? GetDisplayMetrics()
         {
             if (s_displayMetrics == null)
             {
@@ -152,7 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else
                 {
                     s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
+                    s_windowManager.DefaultDisplay?.GetMetrics(s_displayMetrics);
                 }
             }
 
@@ -168,15 +175,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private class NorthArrowShape : View
         {
-            internal NorthArrowShape(Context context)
+            internal NorthArrowShape(Context? context)
                 : base(context)
             {
                 SetWillNotDraw(false);
             }
 
             /// <inheritdoc />
-            protected override void OnDraw(Canvas canvas)
+            protected override void OnDraw(Canvas? canvas)
             {
+                if (canvas is null)
+                {
+                    return;
+                }
+
                 float size = MeasuredWidth > MeasuredHeight ? MeasuredHeight : MeasuredWidth;
                 var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip);
                 float c = size * .5f;

@@ -153,7 +153,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the GeoView property that can be attached to a Compass control to accurately set the heading, instead of
         /// setting the <see cref="Compass.Heading"/> property directly.
         /// </summary>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
             get { return GetValue(GeoViewProperty) as GeoView; }
             set { SetValue(GeoViewProperty, value); }
