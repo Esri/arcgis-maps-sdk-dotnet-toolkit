@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Esri.ArcGISRuntime.Security;
 
@@ -29,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// </summary>
         /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/>.</param>
         /// <returns>A certificate picked by the user.</returns>
-        public static CertificateCredential SelectCertificate(CredentialRequestInfo info)
+        public static CertificateCredential? SelectCertificate(CredentialRequestInfo info)
         {
             return SelectCertificate(info, new X509Store(StoreName.My, StoreLocation.CurrentUser));
         }
@@ -40,9 +41,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/>.</param>
         /// <param name="x509Store">The certificate store.</param>
         /// <returns>A certificate picked by the user.</returns>
-        public static CertificateCredential SelectCertificate(CredentialRequestInfo info, X509Store x509Store)
+        public static CertificateCredential? SelectCertificate(CredentialRequestInfo info, X509Store x509Store)
         {
-            X509Certificate2 certSelected = null;
+            if (info is null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
+            if (x509Store is null)
+            {
+                throw new ArgumentNullException(nameof(x509Store));
+            }
+
+            X509Certificate2? certSelected = null;
             x509Store.Open(OpenFlags.ReadOnly);
 
             X509Certificate2Collection col = x509Store.Certificates;
@@ -53,7 +64,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 X509Certificate2Enumerator en = sel.GetEnumerator();
                 en.MoveNext();
                 x509Store.Close();
-                return new CertificateCredential(certSelected);
+                if (certSelected != null)
+                {
+                    return new CertificateCredential(certSelected);
+                }
             }
 
             return null;

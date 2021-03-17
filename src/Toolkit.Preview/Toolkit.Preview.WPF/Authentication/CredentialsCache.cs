@@ -57,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
             }
             else
             {
-                return System.Reflection.Assembly.GetEntryAssembly().GetName().Name + "|";
+                return System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name + "|";
             }
         }
 
@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// </summary>
         /// <param name="serviceUri">The endpoint to get the credential from.</param>
         /// <returns>A tuple of username + password.</returns>
-        public static CachedCredential ReadCredential(Uri serviceUri)
+        public static CachedCredential? ReadCredential(Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
             var credential = CredentialManager.ReadCredential(AppNamePrefix() + host);
@@ -108,7 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
             var prefix = AppNamePrefix();
             foreach (var item in CredentialManager.EnumerateCredentials())
             {
-                if (item.ApplicationName.StartsWith(prefix))
+                if (item.ApplicationName?.StartsWith(prefix) == true)
                 {
                     CredentialManager.DeleteCredential(item.ApplicationName);
                 }
@@ -128,7 +128,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 try
                 {
                     unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(securePassword);
-                    return Marshal.PtrToStringUni(unmanagedString);
+                    return Marshal.PtrToStringUni(unmanagedString) ?? string.Empty;
                 }
                 finally
                 {
@@ -136,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 }
             }
 
-            public static Credential ReadCredential(string applicationName)
+            public static Credential? ReadCredential(string applicationName)
             {
                 IntPtr nCredPtr;
                 bool read = CredRead(applicationName, CredentialType.Generic, 0, out nCredPtr);
@@ -144,8 +144,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 {
                     using (CriticalCredentialHandle critCred = new CriticalCredentialHandle(nCredPtr))
                     {
-                        CREDENTIAL cred = critCred.GetCredential();
-                        return ReadCredential(cred);
+                        CREDENTIAL? cred = critCred.GetCredential();
+                        if (cred.HasValue)
+                        {
+                            return ReadCredential(cred.Value);
+                        }
                     }
                 }
 
@@ -154,12 +157,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 
             private static Credential ReadCredential(CREDENTIAL credential)
             {
-                string applicationName = Marshal.PtrToStringUni(credential.TargetName);
-                string userName = Marshal.PtrToStringUni(credential.UserName);
-                string secret = null;
+                string applicationName = Marshal.PtrToStringUni(credential.TargetName) ?? string.Empty;
+                string userName = Marshal.PtrToStringUni(credential.UserName) ?? string.Empty;
+                string secret = string.Empty;
                 if (credential.CredentialBlob != IntPtr.Zero)
                 {
-                    secret = Marshal.PtrToStringUni(credential.CredentialBlob, (int)credential.CredentialBlobSize / 2);
+                    secret = Marshal.PtrToStringUni(credential.CredentialBlob, (int)credential.CredentialBlobSize / 2) ?? string.Empty;
                 }
 
                 return new Credential(credential.Type, applicationName, userName, secret);
@@ -227,7 +230,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                     for (int n = 0; n < count; n++)
                     {
                         IntPtr credential = Marshal.ReadIntPtr(pCredentials, n * Marshal.SizeOf(typeof(IntPtr)));
-                        result.Add(ReadCredential((CREDENTIAL)Marshal.PtrToStructure(credential, typeof(CREDENTIAL))));
+                        result.Add(ReadCredential((CREDENTIAL)Marshal.PtrToStructure(credential, typeof(CREDENTIAL)) !));
                     }
                 }
                 else
@@ -249,7 +252,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
             private static extern bool CredWrite([In] ref CREDENTIAL userCredential, [In] uint flags);
 
             [DllImport("advapi32", SetLastError = true, CharSet = CharSet.Unicode)]
-            private static extern bool CredEnumerate(string filter, int flag, out int count, out IntPtr pCredentials);
+            private static extern bool CredEnumerate(string? filter, int flag, out int count, out IntPtr pCredentials);
 
             [DllImport("Advapi32.dll", EntryPoint = "CredFree", SetLastError = true)]
             private static extern bool CredFree([In] IntPtr cred);
@@ -285,11 +288,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                     SetHandle(preexistingHandle);
                 }
 
-                public CREDENTIAL GetCredential()
+                public CREDENTIAL? GetCredential()
                 {
                     if (!IsInvalid)
                     {
-                        CREDENTIAL credential = (CREDENTIAL)Marshal.PtrToStructure(handle, typeof(CREDENTIAL));
+                        CREDENTIAL credential = (CREDENTIAL)(Marshal.PtrToStructure(handle, typeof(CREDENTIAL)) !);
                         return credential;
                     }
 
@@ -321,12 +324,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 MaximumEx = Maximum + 1000,
             }
 
-            public class Credential
+            public class Credential : IDisposable
             {
                 private readonly string _applicationName;
                 private readonly string _userName;
                 private readonly SecureString _password;
                 private readonly CredentialType _credentialType;
+                private bool _disposedValue;
 
                 public CredentialType CredentialType
                 {
@@ -353,9 +357,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                     _applicationName = applicationName;
                     _userName = userName;
                     _password = new SecureString();
-                    foreach (char c in password)
+                    if (password != null)
                     {
-                        _password.AppendChar(c);
+                        foreach (char c in password)
+                        {
+                            _password.AppendChar(c);
+                        }
                     }
 
                     _credentialType = credentialType;
@@ -364,6 +371,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 public override string ToString()
                 {
                     return string.Format("CredentialType: {0}, ApplicationName: {1}, UserName: {2}, Password: {3}", CredentialType, ApplicationName, UserName, Password);
+                }
+
+                protected virtual void Dispose(bool disposing)
+                {
+                    if (!_disposedValue)
+                    {
+                        if (disposing)
+                        {
+                            _password.Dispose();
+                        }
+
+                        _disposedValue = true;
+                    }
+                }
+
+                public void Dispose()
+                {
+                    // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+                    Dispose(disposing: true);
+                    GC.SuppressFinalize(this);
                 }
             }
         }
