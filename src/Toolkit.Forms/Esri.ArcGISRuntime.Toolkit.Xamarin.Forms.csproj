@@ -58,6 +58,13 @@
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(Nullable)'=='annotations'">
+    <Compile Include="..\Toolkit\NullableAttributes.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Nullable)'=='enable' AND '$(TargetFramework)' != '$(NetWindowsTargetFramework)' ">
+    <Compile Include="..\Toolkit\NullableAttributesNotNet5.cs" />
+    <!-- Adds some null annotations for pre-.net5 targets that already supports some annotations -->
+  </ItemGroup>
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
     <ItemGroup>

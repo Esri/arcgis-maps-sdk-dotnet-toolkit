@@ -85,6 +85,14 @@
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(Nullable)'=='annotations'">
+    <Compile Include="..\..\Toolkit\NullableAttributes.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Nullable)'=='enable' AND '$(TargetFramework)' != '$(NetWindowsTargetFramework)' ">
+    <Compile Include="..\..\Toolkit\NullableAttributesNotNet5.cs" />
+    <!-- Adds some null annotations for pre-.net5 targets that already supports some annotations -->
+  </ItemGroup>
  
   <ItemGroup>
     <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">

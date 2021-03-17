@@ -114,6 +114,13 @@
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(Nullable)'=='annotations'">
+    <Compile Include="..\NullableAttributes.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Nullable)'=='enable' AND '$(TargetFramework)' != '$(NetWindowsTargetFramework)' ">
+    <Compile Include="..\NullableAttributesNotNet5.cs" /> <!-- Adds some null annotations for pre-.net5 targets that already supports some annotations -->
+  </ItemGroup>
+
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
