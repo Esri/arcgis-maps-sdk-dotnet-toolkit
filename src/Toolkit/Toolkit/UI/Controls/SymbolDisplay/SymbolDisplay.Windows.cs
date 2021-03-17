@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the symbol to render.
         /// </summary>
-        private Symbology.Symbol SymbolImpl
+        private Symbology.Symbol? SymbolImpl
         {
             get { return GetValue(SymbolProperty) as Symbology.Symbol; }
             set { SetValue(SymbolProperty, value); }

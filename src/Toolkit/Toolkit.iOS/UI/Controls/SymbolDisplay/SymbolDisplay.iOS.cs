@@ -27,8 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Category("ArcGIS Runtime Controls")]
     public partial class SymbolDisplay : IComponent
     {
-        private UIStackView _rootStackView;
-        private UIImageView _imageView;
+        private UIStackView? _rootStackView;
+        private UIImageView? _imageView;
         internal static readonly nfloat MaxSize = 40;
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
@@ -100,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void UpdateConstraints()
         {
             base.UpdateConstraints();
-            if (!_intrinsicContentSize.IsEmpty)
+            if (!_intrinsicContentSize.IsEmpty && _imageView != null)
             {
                 _imageView.WidthAnchor.ConstraintEqualTo(_intrinsicContentSize.Height).Active = true;
                 _imageView.HeightAnchor.ConstraintEqualTo(_intrinsicContentSize.Height).Active = true;
@@ -121,14 +121,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-        ISite IComponent.Site { get; set; }
+        ISite? IComponent.Site { get; set; }
 
-        private EventHandler _disposed;
+        private EventHandler? _disposed;
 
         /// <summary>
         /// Internal use only
         /// </summary>
-        event EventHandler IComponent.Disposed
+        event EventHandler? IComponent.Disposed
         {
             add { _disposed += value; }
             remove { _disposed -= value; }

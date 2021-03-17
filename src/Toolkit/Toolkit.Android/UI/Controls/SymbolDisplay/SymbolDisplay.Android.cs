@@ -28,14 +28,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay")]
     public partial class SymbolDisplay
     {
-        private static DisplayMetrics s_displayMetrics;
-        private static IWindowManager s_windowManager;
+        private static DisplayMetrics? s_displayMetrics;
+        private static IWindowManager? s_windowManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public SymbolDisplay(Context context)
+        public SymbolDisplay(Context? context)
             : base(context)
         {
             Initialize();
@@ -80,29 +80,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning restore ESRI1800
         }
 
-        private static double GetScaleFactor(Context context)
+        private static double GetScaleFactor(Context? context)
         {
             return GetDisplayMetrics(context)?.Density ?? 1;
         }
 
         // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics GetDisplayMetrics(Context context)
+        private static DisplayMetrics? GetDisplayMetrics(Context? context)
         {
             if (s_displayMetrics == null)
             {
                 if (s_windowManager == null)
                 {
-                    s_windowManager = context.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                    s_windowManager = context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
                 }
 
                 if (s_windowManager == null)
                 {
-                    s_displayMetrics = context.Resources?.DisplayMetrics;
+                    s_displayMetrics = context?.Resources?.DisplayMetrics;
                 }
                 else
                 {
                     s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
+                    s_windowManager.DefaultDisplay?.GetMetrics(s_displayMetrics);
                 }
             }
 
