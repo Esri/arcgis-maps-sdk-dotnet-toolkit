@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// </summary>
     public class BookmarksView : TemplatedView
     {
-        private ListView _presentingView;
+        private ListView? _presentingView;
         private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
 
         private static readonly DataTemplate DefaultDataTemplate;
@@ -90,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public DataTemplate? ItemTemplate
         {
-            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            get { return GetValue(ItemTemplateProperty) as DataTemplate; }
             set { SetValue(ItemTemplateProperty, value); }
         }
 
@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <seealso cref="BookmarksOverrideProperty" />
         public IEnumerable<Bookmark>? BookmarksOverride
         {
-            get { return (IEnumerable<Bookmark>)GetValue(BookmarksOverrideProperty); }
+            get { return GetValue(BookmarksOverrideProperty) as IEnumerable<Bookmark>; }
             set { SetValue(BookmarksOverrideProperty, value); }
         }
 
@@ -163,7 +163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             if (bookmarkView?._presentingView != null)
             {
-                bookmarkView._presentingView.ItemTemplate = (DataTemplate)newValue;
+                bookmarkView._presentingView.ItemTemplate = newValue as DataTemplate;
             }
         }
 
@@ -203,6 +203,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Raised whenever a bookmark is selected.
         /// </summary>
-        public event EventHandler<Bookmark> BookmarkSelected;
+        public event EventHandler<Bookmark>? BookmarkSelected;
     }
 }
