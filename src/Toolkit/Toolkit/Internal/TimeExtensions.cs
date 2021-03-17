@@ -122,7 +122,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="timeExtent">The extent to divide.</param>
         /// <param name="count">The amount to divide the extent by.</param>
         /// <returns>A TimeValue instance which, will fit evenly into the input TimeExtent the specified number of times.</returns>
-        public static TimeValue Divide(this TimeExtent timeExtent, int count)
+        [return: System.Diagnostics.CodeAnalysis.NotNullIfNotNull("timeExtent")]
+        public static TimeValue? Divide(this TimeExtent? timeExtent, int count)
         {
             if (timeExtent == null)
             {

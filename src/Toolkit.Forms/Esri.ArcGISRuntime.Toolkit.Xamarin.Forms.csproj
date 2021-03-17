@@ -36,15 +36,6 @@
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
-    <UseWpf>true</UseWpf>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
-    <Nullable>annotations</Nullable>
-  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="$(ArcGISRuntimePackageVersion)" />
