@@ -21,12 +21,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class PopupViewer
     {
-        private PopupManager _popupManager;
+        private PopupManager? _popupManager;
 
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>
-        private PopupManager PopupManagerImpl
+        private PopupManager? PopupManagerImpl
         {
             get => _popupManager;
             set

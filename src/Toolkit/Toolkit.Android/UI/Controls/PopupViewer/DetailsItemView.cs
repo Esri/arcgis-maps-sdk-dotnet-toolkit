@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly TextView _label;
         private readonly TextView _formattedValue;
 
-        internal DetailsItemView(Context context, Color foregroundColor)
+        internal DetailsItemView(Context? context, Color foregroundColor)
             : base(context)
         {
             Orientation = Orientation.Vertical;

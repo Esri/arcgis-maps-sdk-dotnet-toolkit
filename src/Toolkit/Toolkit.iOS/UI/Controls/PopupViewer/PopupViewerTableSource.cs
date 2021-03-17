@@ -60,7 +60,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var cell = tableView.DequeueReusableCell(CellId) as DetailsItemCell;
             if (cell == null)
             {
-                return null;
+                System.Diagnostics.Debug.Assert(false, "Cell should not be null");
+                return null!;
             }
 
             cell.LayoutMargins = UIEdgeInsets.Zero;
