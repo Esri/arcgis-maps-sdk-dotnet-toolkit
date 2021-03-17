@@ -31,7 +31,7 @@ using System.Windows.Controls.Primitives;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Helper class for providing common cross-platform names for UI component manipulation
+    /// Helper class for providing common cross-platform names for UI component manipulation.
     /// </summary>
     internal static class ElementExtensions
     {

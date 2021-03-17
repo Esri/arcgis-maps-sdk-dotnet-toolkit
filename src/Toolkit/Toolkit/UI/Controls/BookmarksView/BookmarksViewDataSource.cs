@@ -62,7 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Sets the override bookmark list that will be shown instead of the Map's bookmark list.
         /// </summary>
-        /// <param name="bookmarks">List of bookmarks to show</param>
+        /// <param name="bookmarks">List of bookmarks to show.</param>
         public void SetOverrideList(IEnumerable<Bookmark> bookmarks)
         {
             // Skip if collection is the same
@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Sets the GeoView from which bookmarks will be shown.
         /// </summary>
-        /// <param name="view">The view from which to get Map/Scene bookmarks</param>
+        /// <param name="view">The view from which to get Map/Scene bookmarks.</param>
         public void SetGeoView(GeoView view)
         {
             if (_geoView == view)

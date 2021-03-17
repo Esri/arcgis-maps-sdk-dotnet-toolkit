@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private double _mapScale;
 
         /// <summary>
-        /// Gets or sets the platform-specific implementation of the <see cref="MapScale"/> property
+        /// Gets or sets the platform-specific implementation of the <see cref="MapScale"/> property.
         /// </summary>
         private double MapScaleImpl
         {
@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private double _targetWidth = 200;
 
         /// <summary>
-        /// Gets or sets the platform-specific implementation of the <see cref="TargetWidth"/> property
+        /// Gets or sets the platform-specific implementation of the <see cref="TargetWidth"/> property.
         /// </summary>
         private double TargetWidthImpl
         {
@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private MapView _mapView;
 
         /// <summary>
-        /// Gets or sets the MapView for which the scale is displayed. This will accurately reflect the scale at the center of the MapView
+        /// Gets or sets the MapView for which the scale is displayed. This will accurately reflect the scale at the center of the MapView.
         /// </summary>
         public MapView MapView
         {

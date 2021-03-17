@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             BookmarkLabel = new TextView(context)
             {
-                LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent)
+                LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent),
             };
 
             // Height

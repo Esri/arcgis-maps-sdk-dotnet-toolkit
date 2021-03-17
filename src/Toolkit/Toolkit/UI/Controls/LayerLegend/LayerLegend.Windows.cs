@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(LayerContent), typeof(ILayerContent), typeof(LayerLegend), new PropertyMetadata(null, (d, e) => (d as LayerLegend)?.Refresh()));
 
         /// <summary>
-        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered
+        /// Gets or sets a value indicating whether the entire <see cref="ILayerContent"/> tree hierarchy should be rendered.
         /// </summary>
         private bool IncludeSublayersImpl
         {
@@ -117,7 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the ItemsTemplate
+        /// Gets or sets the ItemsTemplate.
         /// </summary>
         public DataTemplate ItemTemplate
         {
@@ -132,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(LayerLegend), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the Items Panel Template
+        /// Gets or sets the Items Panel Template.
         /// </summary>
         public ItemsPanelTemplate ItemsPanel
         {

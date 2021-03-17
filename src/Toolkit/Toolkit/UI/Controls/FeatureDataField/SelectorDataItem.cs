@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private IList<Esri.ArcGISRuntime.Data.CodedValue> _items;
 
         /// <summary>
-        /// Gets or sets the Items used as source for <see cref="FeatureDataField.SelectorTemplate"/>
+        /// Gets or sets the Items used as source for <see cref="FeatureDataField.SelectorTemplate"/>.
         /// </summary>
         public IList<Esri.ArcGISRuntime.Data.CodedValue> Items
         {

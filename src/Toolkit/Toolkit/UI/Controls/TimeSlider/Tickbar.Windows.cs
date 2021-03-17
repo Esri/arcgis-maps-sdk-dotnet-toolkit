@@ -95,7 +95,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the data sources for the tick marks.  These can be bound to in the tick bar's tick templates.
         /// </summary>
-        /// <value>The data source objects</value>
+        /// <value>The data source objects.</value>
         private IEnumerable<object> TickmarkDataSourcesImpl
         {
             get { return (IEnumerable<object>)GetValue(TickmarkDataSourcesProperty); }
@@ -113,10 +113,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             ((Tickbar)d).OnTickmarkDataSourcesPropertyChanged(e.NewValue as IEnumerable<object>);
 
         /// <summary>
-        /// Adds a tick to the bar's visual tree
+        /// Adds a tick to the bar's visual tree.
         /// </summary>
-        /// <param name="position">The position to place the tick at along the tick bar</param>
-        /// <param name="dataSource">The data to pass to the tick's template</param>
+        /// <param name="position">The position to place the tick at along the tick bar.</param>
+        /// <param name="dataSource">The data to pass to the tick's template.</param>
         private void AddTickmark(double position, object dataSource)
         {
             // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
@@ -126,7 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             ContentPresenter c = new ContentPresenter()
             {
                 VerticalAlignment = VerticalAlignment.Top,
-                Content = dataSource
+                Content = dataSource,
             };
             c.SetValue(PositionProperty, position);
             c.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding()
@@ -141,14 +141,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             c = new ContentPresenter()
             {
                 VerticalAlignment = VerticalAlignment.Top,
-                Content = dataSource
+                Content = dataSource,
             };
             c.SetValue(PositionProperty, position);
             c.SetValue(IsMajorTickmarkProperty, true);
             c.SetBinding(ContentPresenter.ContentTemplateProperty, new Binding()
             {
                 Source = this,
-                Path = new PropertyPath(nameof(MajorTickmarkTemplate))
+                Path = new PropertyPath(nameof(MajorTickmarkTemplate)),
             });
 
             if (TickLabelFormat != null)
@@ -170,7 +170,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void SetPosition(DependencyObject view, double position) => view.SetValue(PositionProperty, position);
 
         /// <summary>
-        /// Gets or sets the item template for each minor tick mark
+        /// Gets or sets the item template for each minor tick mark.
         /// </summary>
         public DataTemplate MinorTickmarkTemplate
         {
@@ -185,7 +185,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DependencyProperty.Register(nameof(MinorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar), null);
 
         /// <summary>
-        /// Gets or sets the item template for each major tick mark
+        /// Gets or sets the item template for each major tick mark.
         /// </summary>
         public DataTemplate MajorTickmarkTemplate
         {
@@ -200,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DependencyProperty.Register(nameof(MajorTickmarkTemplate), typeof(DataTemplate), typeof(Tickbar), null);
 
         /// <summary>
-        /// Gets or sets the fill color for each tick mark
+        /// Gets or sets the fill color for each tick mark.
         /// </summary>
         private Brush TickFillImpl
         {
@@ -209,13 +209,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Identifies the <see cref="TickFill"/> dependency property
+        /// Identifies the <see cref="TickFill"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TickFillProperty =
             DependencyProperty.Register(nameof(TickFill), typeof(Brush), typeof(Tickbar), null);
 
         /// <summary>
-        /// Gets or sets the fill color for each tick mark
+        /// Gets or sets the fill color for each tick mark.
         /// </summary>
         private Brush TickLabelColorImpl
         {
@@ -224,13 +224,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Identifies the <see cref="TickLabelColor"/> dependency property
+        /// Identifies the <see cref="TickLabelColor"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty TickLabelColorProperty =
             DependencyProperty.Register(nameof(TickLabelColor), typeof(Brush), typeof(Tickbar), null);
 
         /// <summary>
-        /// Gets or sets a value indicating whether gets or sets whether to display labels on the ticks
+        /// Gets or sets a value indicating whether gets or sets whether to display labels on the ticks.
         /// </summary>
         /// <value>The item template.</value>
         private bool ShowTickLabelsImpl
@@ -240,7 +240,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Identifies the <see cref="ShowTickLabels"/> dependency property
+        /// Identifies the <see cref="ShowTickLabels"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ShowTickLabelsProperty =
             DependencyProperty.Register(nameof(ShowTickLabels), typeof(bool), typeof(Tickbar),
@@ -249,7 +249,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private static void OnShowTickLabelsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((Tickbar)d).OnShowTickLabelsPropertyChanged();
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the tick labels
+        /// Gets or sets the string format to use for displaying the tick labels.
         /// </summary>
         private string TickLabelFormatImpl
         {

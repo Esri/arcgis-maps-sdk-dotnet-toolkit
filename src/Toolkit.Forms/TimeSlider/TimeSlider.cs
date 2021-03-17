@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         internal UI.Controls.TimeSlider NativeSlider { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeSlider"/> class
+        /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
         public TimeSlider()
 #if __ANDROID__
@@ -104,7 +104,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 Path = new Windows.UI.Xaml.PropertyPath(sourcePropertyName),
                 Source = NativeSlider,
-                Mode = Windows.UI.Xaml.Data.BindingMode.TwoWay
+                Mode = Windows.UI.Xaml.Data.BindingMode.TwoWay,
             };
             Windows.UI.Xaml.Data.BindingOperations.SetBinding(_bindingProxy, targetProperty, b);
         }
@@ -283,7 +283,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(TimeSteps), typeof(IReadOnlyList<DateTimeOffset>), typeof(TimeSlider), null, BindingMode.OneWay, null, OnTimeStepsPropertyChanged);
 
         /// <summary>
-        /// Gets the time steps that can be used to set the slider instance's current extent
+        /// Gets the time steps that can be used to set the slider instance's current extent.
         /// </summary>
         public IReadOnlyList<DateTimeOffset> TimeSteps
         {
@@ -312,7 +312,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(PlaybackInterval), typeof(TimeSpan), typeof(TimeSlider), null, BindingMode.OneWay, null, OnPlaybackIntervalPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step
+        /// Gets or sets the interval at which the time slider's current extent will move to the next or previous time step.
         /// </summary>
         public TimeSpan PlaybackInterval
         {
@@ -343,7 +343,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(PlaybackDirection), typeof(PlaybackDirection), typeof(TimeSlider), null, BindingMode.OneWay, null, OnPlaybackDirectionPropertyChanged);
 
         /// <summary>
-        /// Gets or sets whether the current extent will move to the next or the previous time step during playback
+        /// Gets or sets whether the current extent will move to the next or the previous time step during playback.
         /// </summary>
         public PlaybackDirection PlaybackDirection
         {
@@ -374,7 +374,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(PlaybackLoopMode), typeof(LoopMode), typeof(TimeSlider), null, BindingMode.OneWay, null, OnPlaybackLoopModePropertyChanged);
 
         /// <summary>
-        /// Gets or sets the behavior when the current extent reaches the end of the slider during playback
+        /// Gets or sets the behavior when the current extent reaches the end of the slider during playback.
         /// </summary>
         public LoopMode PlaybackLoopMode
         {
@@ -405,7 +405,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(IsStartTimePinned), typeof(bool), typeof(TimeSlider), null, BindingMode.OneWay, null, OnIsStartTimePinnedPropertyChanged);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the start time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the start time of the <see cref="CurrentExtent"/> is locked into place.
         /// </summary>
         public bool IsStartTimePinned
         {
@@ -436,7 +436,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(IsEndTimePinned), typeof(bool), typeof(TimeSlider), null, BindingMode.OneWay, null, OnIsEndTimePinnedPropertyChanged);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the end time of the <see cref="CurrentExtent"/> is locked into place
+        /// Gets or sets a value indicating whether the end time of the <see cref="CurrentExtent"/> is locked into place.
         /// </summary>
         public bool IsEndTimePinned
         {
@@ -467,7 +467,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(IsPlaying), typeof(bool), typeof(TimeSlider), null, BindingMode.OneWay, null, OnIsPlayingPropertyChanged);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the time slider is animating playback
+        /// Gets or sets a value indicating whether the time slider is animating playback.
         /// </summary>
         public bool IsPlaying
         {
@@ -500,7 +500,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(FullExtentLabelFormat), typeof(string), typeof(TimeSlider), null, BindingMode.OneWay, null, OnFullExtentLabelFormatPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>.
         /// </summary>
         public string FullExtentLabelFormat
         {
@@ -531,7 +531,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(CurrentExtentLabelFormat), typeof(string), typeof(TimeSlider), null, BindingMode.OneWay, null, OnCurrentExtentLabelFormatPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>
+        /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>.
         /// </summary>
         public string CurrentExtentLabelFormat
         {
@@ -562,7 +562,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(TimeStepIntervalLabelFormat), typeof(string), typeof(TimeSlider), null, BindingMode.OneWay, null, OnTimeStepIntervalLabelFormatPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval
+        /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval.
         /// </summary>
         public string TimeStepIntervalLabelFormat
         {
@@ -593,7 +593,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(LabelMode), typeof(TimeSliderLabelMode), typeof(TimeSlider), null, BindingMode.OneWay, null, OnLabelModePropertyChanged);
 
         /// <summary>
-        /// Gets or sets the mode to use for labels along the time slider
+        /// Gets or sets the mode to use for labels along the time slider.
         /// </summary>
         public TimeSliderLabelMode LabelMode
         {
@@ -624,7 +624,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(ThumbStroke), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnThumbStrokePropertyChanged);
 
         /// <summary>
-        /// Gets or sets the border color of the thumbs
+        /// Gets or sets the border color of the thumbs.
         /// </summary>
         public Color ThumbStroke
         {
@@ -655,7 +655,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(ThumbFill), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnThumbFillPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the fill color of the thumbs
+        /// Gets or sets the fill color of the thumbs.
         /// </summary>
         public Color ThumbFill
         {
@@ -686,7 +686,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(CurrentExtentFill), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnCurrentExtentFillPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>
+        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="CurrentExtent"/>.
         /// </summary>
         public Color CurrentExtentFill
         {
@@ -717,7 +717,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(FullExtentFill), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnFullExtentFillPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// Gets or sets the fill color of the area on the slider track that indicates the <see cref="FullExtent"/>.
         /// </summary>
         public Color FullExtentFill
         {
@@ -748,7 +748,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(FullExtentStroke), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnFullExtentStrokePropertyChanged);
 
         /// <summary>
-        /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>
+        /// Gets or sets the border color of the area on the slider track that indicates the <see cref="FullExtent"/>.
         /// </summary>
         public Color FullExtentStroke
         {
@@ -779,7 +779,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(TimeStepIntervalTickFill), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnTimeStepIntervalTickFillPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the color of the slider's tickmarks
+        /// Gets or sets the color of the slider's tickmarks.
         /// </summary>
         public Color TimeStepIntervalTickFill
         {
@@ -810,7 +810,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(PlaybackButtonsFill), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnPlaybackButtonsFillPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the fill color of the playback buttons
+        /// Gets or sets the fill color of the playback buttons.
         /// </summary>
         public Color PlaybackButtonsFill
         {
@@ -841,7 +841,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(PlaybackButtonsStroke), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnPlaybackButtonsStrokePropertyChanged);
 
         /// <summary>
-        /// Gets or sets the border color of the playback buttons
+        /// Gets or sets the border color of the playback buttons.
         /// </summary>
         public Color PlaybackButtonsStroke
         {
@@ -872,7 +872,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(FullExtentLabelColor), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnFullExtentLabelColorPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the color of the full extent labels
+        /// Gets or sets the color of the full extent labels.
         /// </summary>
         public Color FullExtentLabelColor
         {
@@ -903,7 +903,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(CurrentExtentLabelColor), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnCurrentExtentLabelColorPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the color of the current extent labels
+        /// Gets or sets the color of the current extent labels.
         /// </summary>
         public Color CurrentExtentLabelColor
         {
@@ -934,7 +934,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(TimeStepIntervalLabelColor), typeof(Color), typeof(TimeSlider), null, BindingMode.OneWay, null, OnTimeStepIntervalLabelColorPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the color of the time step interval labels
+        /// Gets or sets the color of the time step interval labels.
         /// </summary>
         public Color TimeStepIntervalLabelColor
         {
@@ -963,9 +963,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 #region Initialization Helper Methods
 
         /// <summary>
-        /// Updates the time slider to have the specified number of time steps
+        /// Updates the time slider to have the specified number of time steps.
         /// </summary>
-        /// <param name="count">The number of time steps</param>
+        /// <param name="count">The number of time steps.</param>
         /// <remarks>This method divides the TimeSlider instance's <see cref="FullExtent"/> into the number of steps specified,
         /// updating the <see cref="TimeStepInterval"/> and <see cref="TimeSteps"/> properties.  The method will attempt to set
         /// the interval to a TimeValue with the smallest duration and largest time unit that will fit evenly (i.e. without
@@ -978,10 +978,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         /// <summary>
         /// Initializes the time slider's temporal properties based on the specified GeoView. Specifically,
-        /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>
+        /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>.
         /// </summary>
-        /// <param name="geoView">The GeoView to use to initialize the time-slider's properties</param>
-        /// <returns>Task</returns>
+        /// <param name="geoView">The GeoView to use to initialize the time-slider's properties.</param>
+        /// <returns>Task.</returns>
         public Task InitializeTimePropertiesAsync(GeoView geoView)
         {
 #if NETSTANDARD2_0
@@ -995,8 +995,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Initializes the time slider's temporal properties based on the specified time-aware layer. Specifically,
         /// this will initialize <see cref="FullExtent"/>, <see cref="TimeStepInterval"/>, and <see cref="CurrentExtent"/>.
         /// </summary>
-        /// <param name="timeAwareLayer">The layer to use to initialize the time slider</param>
-        /// <returns>Task</returns>
+        /// <param name="timeAwareLayer">The layer to use to initialize the time slider.</param>
+        /// <returns>Task.</returns>
         public Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer) => NativeSlider.InitializeTimePropertiesAsync(timeAwareLayer);
 
 #endregion
@@ -1006,8 +1006,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Moves the slider position forward by the specified number of time steps.
         /// </summary>
-        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested</returns>
-        /// <param name="timeSteps">The number of steps to advance the slider's position</param>
+        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested.</returns>
+        /// <param name="timeSteps">The number of steps to advance the slider's position.</param>
         /// <remarks>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
         /// time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
         /// extent could not be moved by the specified number of time steps without going beyond the end of the time slider's full extent.
@@ -1020,8 +1020,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Moves the slider position back by the specified number of time steps.
         /// </summary>
-        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested</returns>
-        /// <param name="timeSteps">The number of steps to advance the slider's position</param>
+        /// <returns><c>true</c> if succeeded, <c>false</c> if the position could not be moved as requested.</returns>
+        /// <param name="timeSteps">The number of steps to advance the slider's position.</param>
         /// <remarks>When the current time extent represents a time range and neither the start nor end time are pinned, then the number of
         /// time steps between the start and end time will always be preserved.  In that case, a value of false will be returned if the
         /// extent could not be moved by the specified number of time steps without going beyond the start of the time slider's full extent.

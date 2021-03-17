@@ -21,7 +21,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// A button for rendering arbitrary content as the button surface
+    /// A button for rendering arbitrary content as the button surface.
     /// </summary>
     internal class DrawActionButton : UIButton
     {

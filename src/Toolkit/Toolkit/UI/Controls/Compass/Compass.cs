@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
+        /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0.
         /// </summary>
         public bool AutoHide
         {

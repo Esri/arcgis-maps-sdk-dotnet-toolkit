@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _symbolDisplay = new SymbolDisplay()
             {
-                TranslatesAutoresizingMaskIntoConstraints = false
+                TranslatesAutoresizingMaskIntoConstraints = false,
             };
 
             _textLabel = new UILabel()
@@ -47,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 ContentMode = UIViewContentMode.Center,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                LineBreakMode = UILineBreakMode.TailTruncation
+                LineBreakMode = UILineBreakMode.TailTruncation,
             };
 
             ContentView.AddSubviews(_symbolDisplay, _textLabel);

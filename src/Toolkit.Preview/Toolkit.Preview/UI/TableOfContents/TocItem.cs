@@ -27,7 +27,7 @@ using Esri.ArcGISRuntime.Mapping;
 namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 {
     /// <summary>
-    /// Class used to represent an entry in the Legend control
+    /// Class used to represent an entry in the Legend control.
     /// </summary>
     /// <remarks>
     /// The <see cref="Content"/> property will contain the actual object it represents, mainly <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.
@@ -45,9 +45,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// Initializes a new instance of the <see cref="TocItem"/> class.
         /// </summary>
         /// <param name="content">The object this entry represents, usually a <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.</param>
-        /// <param name="showLegend">Whether the legend should be shown or not</param>
+        /// <param name="showLegend">Whether the legend should be shown or not.</param>
         /// <param name="depth">The depth of this item in the tree.</param>
-        /// <param name="parent">The parent to this item in the tree</param>
+        /// <param name="parent">The parent to this item in the tree.</param>
         internal TocItem(object content, bool showLegend, int depth, TocItem parent)
         {
             Content = content;
@@ -71,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                 var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc)
                 {
                     OnEventAction = (instance, source, eventArgs) => ContentPropertyChanged(eventArgs.PropertyName),
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 inpc.PropertyChanged += listener.OnEvent;
             }
@@ -86,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <summary>
-        /// Gets a reference to the parent of this tree item node
+        /// Gets a reference to the parent of this tree item node.
         /// </summary>
         public TocItem Parent
         {
@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the item is expanded in the TreeView or not
+        /// Gets or sets a value indicating whether the item is expanded in the TreeView or not.
         /// </summary>
         public bool IsExpanded
         {
@@ -153,7 +153,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <summary>
-        /// Gets the depth of this item in the TreeView
+        /// Gets the depth of this item in the TreeView.
         /// </summary>
         public int Depth { get; }
 
@@ -169,7 +169,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                         var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                         {
                             OnEventAction = (instance, source, eventArgs) => RefreshChildren(),
-                            OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                            OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
                         };
                         incc.CollectionChanged += listener.OnEvent;
                     }
@@ -236,7 +236,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <summary>
-        /// Forces regeneration of the legend for this item
+        /// Forces regeneration of the legend for this item.
         /// </summary>
         public void RefreshLegend()
         {
@@ -283,7 +283,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         private IEnumerable<TocItem> _children;
 
         /// <summary>
-        /// Gets the child entries for this TOC Entry
+        /// Gets the child entries for this TOC Entry.
         /// </summary>
         public IEnumerable<TocItem> Children
         {
@@ -323,7 +323,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <summary>
-        /// Gets the legend infos for this entry
+        /// Gets the legend infos for this entry.
         /// </summary>
         private IEnumerable<TocItem> LegendInfos
         {

@@ -20,16 +20,16 @@ using Esri.ArcGISRuntime.ArcGISServices;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Provides utility extension methods related to time
+    /// Provides utility extension methods related to time.
     /// </summary>
     internal static class TimeExtensions
     {
         /// <summary>
-        /// Adds the specified number of months to the DateTimeOffset object
+        /// Adds the specified number of months to the DateTimeOffset object.
         /// </summary>
-        /// <param name="startDateTime">The date to add months to</param>
-        /// <param name="months">The number of months to add</param>
-        /// <returns>A DateTimeOffset object with the specified number of months added</returns>
+        /// <param name="startDateTime">The date to add months to.</param>
+        /// <param name="months">The number of months to add.</param>
+        /// <returns>A DateTimeOffset object with the specified number of months added.</returns>
         public static DateTimeOffset AddMonths(this DateTimeOffset startDateTime, double months)
         {
             // Get the number of whole and fractional months to add
@@ -59,11 +59,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Adds the specified TimeValue to the DateTimeOffset object
+        /// Adds the specified TimeValue to the DateTimeOffset object.
         /// </summary>
-        /// <param name="startTime">The date to add the time value to</param>
-        /// <param name="timeStep">The amount of time to add</param>
-        /// <returns>A DateTimeOffset object with the specified time added</returns>
+        /// <param name="startTime">The date to add the time value to.</param>
+        /// <param name="timeStep">The amount of time to add.</param>
+        /// <returns>A DateTimeOffset object with the specified time added.</returns>
         public static DateTimeOffset AddTimeValue(this DateTimeOffset startTime, TimeValue timeStep)
         {
             var timeValueAsTimeSpan = TimeSpan.FromMilliseconds(0);
@@ -117,11 +117,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Divides the specified TimeExtent by the specified number
+        /// Divides the specified TimeExtent by the specified number.
         /// </summary>
-        /// <param name="timeExtent">The extent to divide</param>
-        /// <param name="count">The amount to divide the extent by</param>
-        /// <returns>A TimeValue instance which, will fit evenly into the input TimeExtent the specified number of times</returns>
+        /// <param name="timeExtent">The extent to divide.</param>
+        /// <param name="count">The amount to divide the extent by.</param>
+        /// <returns>A TimeValue instance which, will fit evenly into the input TimeExtent the specified number of times.</returns>
         public static TimeValue Divide(this TimeExtent timeExtent, int count)
         {
             if (timeExtent == null)
@@ -236,9 +236,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Determines whether a specified TimeValue is greater than another TimeValue instance
+        /// Determines whether a specified TimeValue is greater than another TimeValue instance.
         /// </summary>
-        /// <returns>A boolean indicating whether the first TimeValue is greater than the second</returns>
+        /// <returns>A boolean indicating whether the first TimeValue is greater than the second.</returns>
         public static bool IsGreaterThan(this TimeValue timeValue, TimeValue otherTimeValue)
         {
             if (timeValue.Unit == otherTimeValue.Unit)
@@ -252,10 +252,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Converts a TimeValue instance to milliseconds
+        /// Converts a TimeValue instance to milliseconds.
         /// </summary>
-        /// <param name="timeValue">The TimeValue to convert</param>
-        /// <returns>The TimeValue's equivalent number of milliseconds</returns>
+        /// <param name="timeValue">The TimeValue to convert.</param>
+        /// <returns>The TimeValue's equivalent number of milliseconds.</returns>
         /// <remarks>If the time value's unit is months or greater, the return value cannot be determined exactly indepedent of
         /// a known start or end date.  In these cases, a duration of one month is assumed to be (365 / 12) days, and the final
         /// value is determined based on that assumption.</remarks>
@@ -289,12 +289,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Merges two TimeExtents together to create one TimeExtent that will encompass both input extents
+        /// Merges two TimeExtents together to create one TimeExtent that will encompass both input extents.
         /// </summary>
-        /// <param name="timeExtent">The first extent to union</param>
-        /// <param name="otherTimeExtent">The second extent to union</param>
+        /// <param name="timeExtent">The first extent to union.</param>
+        /// <param name="otherTimeExtent">The second extent to union.</param>
         /// <returns>A TimeExtent instance with a start time that is the minimum of the that of the two input extents
-        /// and an end time that is the maximum of that of the two input extents</returns>
+        /// and an end time that is the maximum of that of the two input extents.</returns>
         public static TimeExtent Union(this TimeExtent timeExtent, TimeExtent otherTimeExtent)
         {
             if (otherTimeExtent == null)
@@ -308,10 +308,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <summary>
-        /// Determines whether the input extent represents instantaneous time
+        /// Determines whether the input extent represents instantaneous time.
         /// </summary>
-        /// <param name="timeExtent">The time extent to interrogate</param>
-        /// <returns>A boolean indicating whether the extent represents an instant in time</returns>
+        /// <param name="timeExtent">The time extent to interrogate.</param>
+        /// <returns>A boolean indicating whether the extent represents an instant in time.</returns>
         public static bool IsTimeInstant(this TimeExtent timeExtent)
         {
             return timeExtent.StartTime == timeExtent.EndTime;

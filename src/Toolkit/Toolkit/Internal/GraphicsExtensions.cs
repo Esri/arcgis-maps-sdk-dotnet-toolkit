@@ -25,7 +25,7 @@ using System.Windows;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Helper class for providing common cross-platform names for members having to do with graphics or drawing-related objects
+    /// Helper class for providing common cross-platform names for members having to do with graphics or drawing-related objects.
     /// </summary>
     internal static class GraphicsExtensions
     {

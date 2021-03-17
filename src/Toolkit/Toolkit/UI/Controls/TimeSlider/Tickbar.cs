@@ -363,7 +363,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the data sources for the tick marks.  These can be bound to in the tick bar's tick templates.
         /// </summary>
-        /// <value>The data source objects</value>
+        /// <value>The data source objects.</value>
         public IEnumerable<object> TickmarkDataSources
         {
             get => TickmarkDataSourcesImpl;
@@ -383,7 +383,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Gets or sets the fill color for each tick mark
+        /// Gets or sets the fill color for each tick mark.
         /// </summary>
         public Brush TickFill
         {
@@ -392,7 +392,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Gets or sets the fill color for each tick mark
+        /// Gets or sets the fill color for each tick mark.
         /// </summary>
         public Brush TickLabelColor
         {
@@ -401,7 +401,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether gets or sets whether to display labels on the ticks
+        /// Gets or sets a value indicating whether gets or sets whether to display labels on the ticks.
         /// </summary>
         public bool ShowTickLabels
         {
@@ -412,7 +412,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void OnShowTickLabelsPropertyChanged() => InvalidateMeasureAndArrange();
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the tick labels
+        /// Gets or sets the string format to use for displaying the tick labels.
         /// </summary>
         public string TickLabelFormat
         {

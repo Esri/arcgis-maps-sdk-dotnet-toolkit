@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to show a legend for the layers in the tree view
+        /// Gets or sets a value indicating whether to show a legend for the layers in the tree view.
         /// </summary>
         public bool ShowLegend
         {
@@ -185,7 +185,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
                 {
                     MenuItems = ctm.Items,
                     Item = item,
-                    Menu = ctm
+                    Menu = ctm,
                 };
                 TocItemContextMenuOpening?.Invoke(this, args);
                 e.Handled = args.Handled;

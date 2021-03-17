@@ -19,13 +19,13 @@ using System.ComponentModel;
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Internal use only
+    /// Internal use only.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public interface ILayerContentItem
     {
         /// <summary>
-        /// Gets the layer content this item encapsulates
+        /// Gets the layer content this item encapsulates.
         /// </summary>
         object Content { get; }
     }

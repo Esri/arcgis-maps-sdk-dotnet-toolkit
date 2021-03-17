@@ -36,14 +36,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _label = new TextView(context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
             };
             _label.SetTextColor(Color.Argb(foregroundColor.A / 2, foregroundColor.R, foregroundColor.G, foregroundColor.B));
             AddView(_label);
 
             _formattedValue = new TextView(context)
             {
-                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent),
             };
             _formattedValue.SetTextColor(foregroundColor);
             AddView(_formattedValue);

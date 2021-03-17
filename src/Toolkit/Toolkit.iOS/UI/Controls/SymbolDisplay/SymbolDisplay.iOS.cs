@@ -71,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 Alignment = UIStackViewAlignment.Fill,
                 Distribution = UIStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Spacing = 0
+                Spacing = 0,
             };
 
             _imageView = new UIImageView()
@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 ContentMode = UIViewContentMode.ScaleAspectFit,
             };
 
-              _rootStackView.AddArrangedSubview(_imageView);
+            _rootStackView.AddArrangedSubview(_imageView);
 
             AddSubview(_rootStackView);
 
