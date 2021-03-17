@@ -120,9 +120,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// eventSource.Changed += _eventListener.OnEvent;
     ///
     /// UNSUBSCRIBE FROM EVENT:
-    ///
+    /// <code>
     /// _eventListener.Detach();
     /// _eventListener = null;
+    /// </code>
     /// </remarks>
     /// <typeparam name="TInstance">Type of instance listening for the event.</typeparam>
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Used as link target in several projects.")]

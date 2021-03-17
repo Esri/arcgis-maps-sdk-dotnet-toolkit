@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </remarks>
     internal class DispatcherTimer : IDisposable
     {
-        private Timer _timer;
+        private Timer? _timer;
         private bool _isInitialized;
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <summary>
         /// Event fired at each Interval
         /// </summary>
-        public event EventHandler Tick;
+        public event EventHandler? Tick;
 
         public DispatcherTimer()
         {
@@ -115,7 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 Action action = () =>
                 {
-                    if (tick != null && _timer.Enabled)
+                    if (tick != null && _timer?.Enabled == true)
                     {
                         tick(sender, e);
                     }

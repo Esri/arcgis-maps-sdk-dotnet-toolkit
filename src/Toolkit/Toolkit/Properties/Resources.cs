@@ -28,24 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties
             return _resource.GetString(name);
         }
 #else
-        private static ResourceManager _resourceManager;
-
-        private static ResourceManager ResourceManager
-        {
-            get
-            {
-                if (_resourceManager == null)
-                {
-                    _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.LocalizedStrings.Resources", typeof(Resources).Assembly);
-                }
-
-                return _resourceManager;
-            }
-        }
+        private static ResourceManager _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.LocalizedStrings.Resources", typeof(Resources).Assembly);
 
         public static string GetString(string name)
         {
-            return ResourceManager.GetString(name);
+            return _resourceManager.GetString(name);
         }
 #endif
     }
