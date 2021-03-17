@@ -32,9 +32,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Layer.BorderColor = UIColor.Clear.CGColor;
         }
 
-        private UIColor _backgroundColor;
+        private UIColor? _backgroundColor;
 
-        public override UIColor BackgroundColor
+        public override UIColor? BackgroundColor
         {
             get => _backgroundColor;
             set
@@ -47,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private UIColor _borderColor;
+        private UIColor _borderColor = UIColor.Clear;
 
         public UIColor BorderColor
         {
@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the action to be executed during the control's rendering pass.  This action is responsible for rendering the control's UI.
         /// </summary>
         /// <value>The on draw action.</value>
-        public Action<CGContext, DrawActionButton> DrawContentAction { get; set; }
+        public Action<CGContext, DrawActionButton>? DrawContentAction { get; set; }
 
         public override void Draw(CGRect rect)
         {
