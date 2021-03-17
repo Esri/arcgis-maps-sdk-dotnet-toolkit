@@ -27,6 +27,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets the layer content this item encapsulates.
         /// </summary>
-        object Content { get; }
+        object? Content { get; }
     }
 }

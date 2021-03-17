@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     public sealed class AttributeValueChangedEventArgs : EventArgs
     {
-        internal AttributeValueChangedEventArgs(object oldValue, object newValue)
+        internal AttributeValueChangedEventArgs(object? oldValue, object? newValue)
         {
             OldValue = oldValue;
             NewValue = newValue;
@@ -34,12 +34,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets the old attribute field value.
         /// </summary>
-        public object OldValue { get; }
+        public object? OldValue { get; }
 
         /// <summary>
         /// Gets the new attribute field value.
         /// </summary>
-        public object NewValue { get; }
+        public object? NewValue { get; }
     }
 }
 #endif

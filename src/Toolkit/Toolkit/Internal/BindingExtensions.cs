@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="source">The binding to copy.</param>
         /// <param name="newConverterParameter">The object to use as a converter parameter.</param>
         /// <returns>The copy of the binding.</returns>
-        public static Binding Clone(this Binding source, object newConverterParameter = null)
+        public static Binding Clone(this Binding source, object? newConverterParameter = null)
         {
             var copy = new Binding
             {
