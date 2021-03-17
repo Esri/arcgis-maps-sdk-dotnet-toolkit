@@ -30,6 +30,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class ScaleLine
     {
+        private TextBlock? _usValue;
+        private TextBlock? _usUnit;
+        private TextBlock? _metricValue;
+        private TextBlock? _metricUnit;
+        private Rectangle? _metricScaleLine;
+        private Rectangle? _usScaleLine;
+
         private void Initialize() => DefaultStyleKey = typeof(ScaleLine);
 
         /// <inheritdoc/>

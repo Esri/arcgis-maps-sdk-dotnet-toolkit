@@ -16,6 +16,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using CoreGraphics;
 using UIKit;
 
@@ -57,6 +58,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
+        [MemberNotNull(nameof(_rootStackView), nameof(_combinedScaleLine), nameof(_metricScaleLine), nameof(_metricValue), nameof(_metricUnit),
+            nameof(_usScaleLine), nameof(_usValue), nameof(_usUnit), nameof(_firstMetricTickLine), nameof(_secondMetricTickLine), nameof(_scaleLineStartSegment),
+            nameof(_firstUsTickLine), nameof(_secondUsTickLine))]
         private void Initialize()
         {
             BackgroundColor = UIColor.Clear;
@@ -214,6 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
             }
+
             InvalidateIntrinsicContentSize();
         }
 

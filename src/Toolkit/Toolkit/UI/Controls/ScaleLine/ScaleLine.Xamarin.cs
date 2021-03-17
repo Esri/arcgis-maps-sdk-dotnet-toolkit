@@ -16,11 +16,23 @@
 
 #if XAMARIN
 using Esri.ArcGISRuntime.UI.Controls;
-
+#if __IOS__
+using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
+using TextBlock = UIKit.UILabel;
+#elif __ANDROID__
+using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
+using TextBlock = Android.Widget.TextView;
+#endif
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class ScaleLine
     {
+        private TextBlock _usValue;
+        private TextBlock _usUnit;
+        private TextBlock _metricValue;
+        private TextBlock _metricUnit;
+        private Rectangle _metricScaleLine;
+        private Rectangle _usScaleLine;
         private double _mapScale;
 
         /// <summary>

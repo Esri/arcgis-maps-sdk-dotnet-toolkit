@@ -16,6 +16,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -29,8 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine")]
     public partial class ScaleLine
     {
-        private static DisplayMetrics s_displayMetrics;
-        private static IWindowManager s_windowManager;
+        private static DisplayMetrics? s_displayMetrics;
+        private static IWindowManager? s_windowManager;
         private RectangleView _firstMetricTickLine;
         private RectangleView _secondMetricTickLine;
         private RectangleView _scaleLineStartSegment;
@@ -45,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public ScaleLine(Context context)
+        public ScaleLine(Context? context)
             : base(context)
         {
             Initialize();
@@ -56,12 +57,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public ScaleLine(Context context, IAttributeSet attr)
+        public ScaleLine(Context? context, IAttributeSet? attr)
             : base(context, attr)
         {
             Initialize();
         }
 
+        [MemberNotNull(nameof(_rootLayout), nameof(_combinedScaleLine), nameof(_metricScaleLine), nameof(_metricValue), nameof(_metricUnit),
+            nameof(_usScaleLine), nameof(_usValue), nameof(_usUnit), nameof(_firstMetricTickLine), nameof(_secondMetricTickLine), nameof(_scaleLineStartSegment),
+            nameof(_firstUsTickLine), nameof(_secondUsTickLine), nameof(_metricWidthPlaceholder), nameof(_usWidthPlaceholder))]
         private void Initialize()
         {
             if (!DesignTime.IsDesignMode)
@@ -264,7 +268,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics GetDisplayMetrics()
+        private static DisplayMetrics? GetDisplayMetrics()
         {
             if (s_displayMetrics == null)
             {
@@ -280,7 +284,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else
                 {
                     s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
+                    s_windowManager.DefaultDisplay?.GetMetrics(s_displayMetrics);
                 }
             }
 
