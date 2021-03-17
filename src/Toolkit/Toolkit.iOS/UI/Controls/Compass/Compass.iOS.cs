@@ -148,12 +148,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-        ISite IComponent.Site { get; set; }
+        ISite? IComponent.Site { get; set; }
 
-        private EventHandler _disposed;
+        private EventHandler? _disposed;
 
         /// <inheritdoc />
-        event EventHandler IComponent.Disposed
+        event EventHandler? IComponent.Disposed
         {
             add { _disposed += value; }
             remove { _disposed -= value; }

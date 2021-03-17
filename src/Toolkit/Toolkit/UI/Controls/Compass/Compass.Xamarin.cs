@@ -58,13 +58,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private GeoView _geoView;
+        private GeoView? _geoView;
 
         /// <summary>
         /// Gets or sets the GeoView for which the heading is displayed. This will accurately reflect the heading at the center of the GeoView.
         /// </summary>
         /// <seealso cref="Heading"/>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
             get => _geoView;
             set
@@ -76,13 +76,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
 #endif
