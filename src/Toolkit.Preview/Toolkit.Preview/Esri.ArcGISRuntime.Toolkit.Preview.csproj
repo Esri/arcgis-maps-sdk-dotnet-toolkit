@@ -8,24 +8,33 @@
     <AssemblyName>Esri.ArcGISRuntime.Toolkit.Preview</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
     <UseWpf>true</UseWpf>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
