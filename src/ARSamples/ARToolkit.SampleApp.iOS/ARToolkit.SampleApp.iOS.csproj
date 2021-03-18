@@ -129,7 +129,7 @@
     <PackageReference Include="Xam.Plugins.Settings">
       <Version>3.1.1</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Essentials" Version="1.0.1" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -183,7 +183,7 @@
           <Name>Esri.ArcGISRuntime.ARToolkit</Name>
         </ProjectReference>
       </ItemGroup>
-	</When>
+    </When>
     <Otherwise>
       <ItemGroup>
         <PackageReference Include="Esri.ArcGISRuntime.ARToolkit">

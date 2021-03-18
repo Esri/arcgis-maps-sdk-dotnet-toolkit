@@ -1,6 +1,7 @@
-<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+
   <PropertyGroup>
-    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
+    <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,11 +29,9 @@
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
-    <PackageReference Include="Xamarin.Google.ARCore" Version="1.11.0" />
+    <PackageReference Include="Xamarin.Google.ARCore" Version="1.15.0" />
     <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
-    <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.11.0" />
-    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
-
+    <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.15.0.1" />
     <AndroidResource Include="Resources\**\*.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
