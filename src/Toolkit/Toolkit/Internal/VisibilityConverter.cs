@@ -31,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Returns visible status for positive boolean, non-null text and opposite state for visibility value.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public class VisibilityConverter : IValueConverter
+    public sealed class VisibilityConverter : IValueConverter
     {
         /// <inheritdoc />
         object IValueConverter.Convert(object value, Type targetType, object parameter,

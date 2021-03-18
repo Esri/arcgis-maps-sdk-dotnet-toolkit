@@ -24,11 +24,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// called many times within a certain interval, but you only want the code executed once.  Awaiting the ThrottleDelay method will
     /// delay code continuation until a set interval has elapsed without any other calls to ThrottleDelay on the same instance.
     /// </summary>
-    internal class ThrottleAwaiter
+    internal class ThrottleAwaiter : System.IDisposable
     {
         private Timer _throttleTimer;
         private int _interval;
         private TaskCompletionSource<bool> _throttleTcs = new TaskCompletionSource<bool>();
+        private bool _disposedValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThrottleAwaiter"/> class.
@@ -64,6 +65,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         {
             _throttleTimer.Change(Timeout.Infinite, Timeout.Infinite);
             _throttleTcs.TrySetCanceled();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _throttleTimer.Dispose();
+                }
+
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            System.GC.SuppressFinalize(this);
         }
     }
 }

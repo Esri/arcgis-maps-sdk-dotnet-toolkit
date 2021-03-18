@@ -24,6 +24,7 @@ using TextBlock = UIKit.UILabel;
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
 using TextBlock = Android.Widget.TextView;
 #endif
+
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class ScaleLine

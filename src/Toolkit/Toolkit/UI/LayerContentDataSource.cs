@@ -193,11 +193,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             if (sender is GeoView geoview)
             {
 #if __IOS__ || __ANDROID__ || XAMARIN_FORMS
-            if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
-                (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
-            {
-                OnDocumentChanged();
-            }
+                if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
+                    (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
+                {
+                    OnDocumentChanged();
+                }
 #endif
                 OnGeoViewPropertyChanged(geoview, e.PropertyName);
             }
