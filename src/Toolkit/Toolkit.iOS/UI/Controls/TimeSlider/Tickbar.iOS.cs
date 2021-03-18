@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <param name="position">The position to place the tick at along the tick bar.</param>
         /// <param name="dataSource">The data to pass to the tick's template.</param>
-        private void AddTickmark(double position, object dataSource)
+        private void AddTickmark(double position, object? dataSource)
         {
             // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
             // one to actually show at the position.
@@ -179,7 +179,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private void ApplyTickLabelFormat(UIView tick, string tickLabelFormat)
+        private void ApplyTickLabelFormat(UIView tick, string? tickLabelFormat)
         {
             // Retrieve the label from the container holding the major tick rectangle and label
             if (tick.Subviews.Length > 1 && tick.Subviews[1] is UILabel label)

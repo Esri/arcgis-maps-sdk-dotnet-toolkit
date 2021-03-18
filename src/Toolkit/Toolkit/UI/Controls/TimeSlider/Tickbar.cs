@@ -75,7 +75,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             : base()
 #endif
         {
+#if __IOS__ || __ANDROID__
             Initialize();
+#endif
         }
 
         private Size OnArrange(Size finalSize)
@@ -89,9 +91,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var minorTickmarksBounds = new List<Rect>();
 
             // Iterate all child ticks and calculate bounds for each
-            foreach (UIElement child in Children)
+            foreach (UIElement? child in Children)
             {
-                FrameworkElement c = child as FrameworkElement;
+                FrameworkElement? c = child as FrameworkElement;
                 if (c == null)
                 {
                     continue;
@@ -299,13 +301,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <value>The tick mark positions.</value>
         /// <remarks>The tick mark position values should be between 0 and 1.  They represent proportional positions along the tick bar.</remarks>
-        public IEnumerable<double> TickmarkPositions
+        public IEnumerable<double>? TickmarkPositions
         {
             get => TickmarkPositionsImpl;
             set => TickmarkPositionsImpl = value;
         }
 
-        private void OnTickmarkPositionsPropertyChanged(IEnumerable<double> newTickPositions, IEnumerable<double> oldTickPositions)
+        private void OnTickmarkPositionsPropertyChanged(IEnumerable<double>? newTickPositions, IEnumerable<double>? oldTickPositions)
         {
 #if !XAMARIN
             if (MinorTickmarkTemplate == null)
@@ -332,10 +334,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
 
                 // Update the positions of the remaining ticks
-                for (var i = 0; i < _minorTickmarks.Count; i++)
+                if (newTickPositions != null)
                 {
-                    SetPosition(_minorTickmarks[i], newTickPositions.ElementAt(i));
-                    SetPosition(_majorTickmarks[i], newTickPositions.ElementAt(i));
+                    for (var i = 0; i < _minorTickmarks.Count; i++)
+                    {
+                        SetPosition(_minorTickmarks[i], newTickPositions.ElementAt(i));
+                        SetPosition(_majorTickmarks[i], newTickPositions.ElementAt(i));
+                    }
                 }
             }
             else if (newTickPositions != null)
@@ -364,13 +369,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Gets or sets the data sources for the tick marks.  These can be bound to in the tick bar's tick templates.
         /// </summary>
         /// <value>The data source objects.</value>
-        public IEnumerable<object> TickmarkDataSources
+        public IEnumerable<object>? TickmarkDataSources
         {
             get => TickmarkDataSourcesImpl;
             set => TickmarkDataSourcesImpl = value;
         }
 
-        private void OnTickmarkDataSourcesPropertyChanged(IEnumerable<object> dataSources)
+        private void OnTickmarkDataSourcesPropertyChanged(IEnumerable<object>? dataSources)
         {
             var newDataSources = dataSources ?? new List<object>();
 
@@ -385,7 +390,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the fill color for each tick mark.
         /// </summary>
+#if __IOS__ || __ANDROID__
         public Brush TickFill
+#else
+        public Brush? TickFill
+#endif
         {
             get => TickFillImpl;
             set => TickFillImpl = value;
@@ -394,7 +403,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the fill color for each tick mark.
         /// </summary>
+#if __IOS__ || __ANDROID__
         public Brush TickLabelColor
+#else
+        public Brush? TickLabelColor
+#endif
         {
             get => TickLabelColorImpl;
             set => TickLabelColorImpl = value;
@@ -414,13 +427,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the string format to use for displaying the tick labels.
         /// </summary>
-        public string TickLabelFormat
+        public string? TickLabelFormat
         {
             get => TickLabelFormatImpl;
             set => TickLabelFormatImpl = value;
         }
 
-        private void OnTickLabelFormatPropertyChanged(string labelFormat)
+        private void OnTickLabelFormatPropertyChanged(string? labelFormat)
         {
             if (_majorTickmarks == null)
             {
