@@ -156,8 +156,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 var locationPoint = e.Position;
                 if (_locationTrackingMode == ARLocationTrackingMode.Initial || !_initialLocationSet)
                 {
+#if __ANDROID__
+                    double heading = _initialHeading ?? 0;
+#else
+                    double heading = 0;
+#endif
+
                     // if location has altitude, use that else use a default value
-                    var newCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : 1, 0, 90, 0);
+                    var newCamera = new Mapping.Camera(locationPoint.Y, locationPoint.X, locationPoint.HasZ ? locationPoint.Z : 1, heading, 90, 0);
                     OriginCamera = newCamera;
                     _initialLocationSet = true;
                 }
