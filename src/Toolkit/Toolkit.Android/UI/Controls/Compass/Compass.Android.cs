@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Diagnostics.CodeAnalysis;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -39,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Compass(Context? context)
             : base(context)
         {
-            _northArrow = Initialize();
+            Initialize();
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Compass(Context? context, IAttributeSet? attr)
             : base(context, attr)
         {
-            _northArrow = Initialize();
+            Initialize();
         }
 
         /// <inheritdoc />
@@ -60,15 +61,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new LayoutParams(size, size);
         }
 
-        private NorthArrowShape Initialize()
+        [MemberNotNull(nameof(_northArrow))]
+        private void Initialize()
         {
             var size = (int)CalculateScreenDimension((float)DefaultSize);
-            var northArrow = new NorthArrowShape(Context) { Size = size };
-            northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
-            AddView(northArrow);
+            _northArrow = new NorthArrowShape(Context) { Size = size };
+            _northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
+            AddView(_northArrow);
             UpdateCompassRotation(false);
-            northArrow.Click += (s, e) => ResetRotation();
-            return northArrow;
+            _northArrow.Click += (s, e) => ResetRotation();
         }
 
         private void UpdateCompassRotation(bool transition)
@@ -98,7 +99,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             // Forward layout call to the root layout
-            _northArrow.Layout(PaddingLeft, PaddingTop, _northArrow.MeasuredWidth + PaddingLeft, _northArrow.MeasuredHeight + PaddingBottom);
+            if (_northArrow != null)
+            {
+                _northArrow.Layout(PaddingLeft, PaddingTop, _northArrow.MeasuredWidth + PaddingLeft, _northArrow.MeasuredHeight + PaddingBottom);
+            }
         }
 
         private void SetVisibility(bool isVisible, bool animate = true)
