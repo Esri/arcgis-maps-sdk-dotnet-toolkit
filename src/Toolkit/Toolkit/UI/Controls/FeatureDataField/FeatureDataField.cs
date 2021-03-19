@@ -492,6 +492,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             items.AddRange(cvd.CodedValues);
+
+            if (_contentControl != null)
+            {
+                _contentControl.Content = null;
+                _contentControl.ContentTemplate = null;
+            }
+
             _dataItem = new SelectorDataItem(ValueChangedCallback, BindingValue, items);
             if (_contentControl != null)
             {
