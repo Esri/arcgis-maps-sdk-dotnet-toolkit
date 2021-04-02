@@ -4,20 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:symb="clr-namespace:Esri.ArcGISRuntime.Symbology;assembly=Esri.ArcGISRuntime"
+             xmlns:esriui="clr-namespace:Esri.ArcGISRuntime.UI;assembly=Esri.ArcGISRuntime"
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="600">
     <UserControl.Resources>
-        <esri:SimpleFillSymbol x:Key="SFS"
+        <symb:SimpleFillSymbol x:Key="SFS"
                                Style="Solid"
                                Color="#4CFF0000" />
-        <esri:SimpleRenderer x:Key="SR"
+        <symb:SimpleRenderer x:Key="SR"
                              Symbol="{StaticResource SFS}" />
     </UserControl.Resources>
     <Grid>
         <esri:MapView x:Name="mapView">
             <esri:MapView.GraphicsOverlays>
-                <esri:GraphicsOverlay Renderer="{StaticResource SR}" />
+                <esriui:GraphicsOverlay Renderer="{StaticResource SR}" />
             </esri:MapView.GraphicsOverlays>
         </esri:MapView>
         <esri:MeasureToolbar VerticalAlignment="Top"
