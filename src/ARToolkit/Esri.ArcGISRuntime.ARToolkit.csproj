@@ -29,9 +29,9 @@
   
   <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
-    <PackageReference Include="Xamarin.Google.ARCore" Version="1.15.0" />
+    <PackageReference Include="Xamarin.Google.ARCore" Version="1.11.0" />
     <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
-    <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.15.0.1" />
+    <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.11.0" />
     <AndroidResource Include="Resources\**\*.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
