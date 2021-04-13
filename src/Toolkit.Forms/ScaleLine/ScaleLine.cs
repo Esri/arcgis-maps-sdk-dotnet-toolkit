@@ -190,8 +190,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             var view = MapView;
             if (e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating))
             {
-                var mapView = sender as MapView;
-                if (mapView?.IsNavigating == true)
+                if (view?.IsNavigating == true)
                 {
                     return;
                 }

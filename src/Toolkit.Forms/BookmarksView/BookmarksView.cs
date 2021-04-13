@@ -161,7 +161,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             BookmarksView bookmarkView = (BookmarksView)sender;
 
-            if (bookmarkView?._presentingView != null)
+            if (bookmarkView._presentingView != null)
             {
                 bookmarkView._presentingView.ItemTemplate = newValue as DataTemplate;
             }

@@ -32,7 +32,7 @@ using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    internal class CompassRenderer : ViewRenderer<Compass, Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass>
+    internal class CompassRenderer : ViewRenderer<Compass, Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass?>
     {
 #if __ANDROID__
         public CompassRenderer(Android.Content.Context context)
@@ -94,19 +94,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void Element_SizeChanged(object sender, EventArgs e)
         {
-#if NETFX_CORE
-            Control.Width = Math.Max(0, Element.Width - 1);
-            Control.Height = Element.Height;
-#elif __ANDROID__
-            var lp = Control.LayoutParameters;
-            if (lp != null && Context != null)
+            if (Control != null)
             {
-                lp.Width = (int)Context.ToPixels(Element.Width);
-                lp.Height = (int)Context.ToPixels(Element.Height);
-            }
+#if NETFX_CORE
+                Control.Width = Math.Max(0, Element.Width - 1);
+                Control.Height = Element.Height;
+#elif __ANDROID__
+                var lp = Control.LayoutParameters;
+                if (lp != null && Context != null)
+                {
+                    lp.Width = (int)Context.ToPixels(Element.Width);
+                    lp.Height = (int)Context.ToPixels(Element.Height);
+                }
 
-            Control.LayoutParameters = lp;
+                Control.LayoutParameters = lp;
 #endif
+            }
         }
 
         private bool _isUpdatingHeadingFromGeoView;
@@ -116,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             _isUpdatingHeadingFromGeoView = true;
             if (Element != null)
             {
-                Element.Heading = Control.Heading;
+                Element.Heading = Control?.Heading ?? 0d;
             }
 
             _isUpdatingHeadingFromGeoView = false;

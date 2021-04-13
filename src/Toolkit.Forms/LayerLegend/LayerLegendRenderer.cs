@@ -32,7 +32,7 @@ using Xamarin.Forms.Platform.UWP;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     [System.Obsolete("Deprecated in favor of Legend control")]
-    internal class LayerLegendRenderer : ViewRenderer<LayerLegend, UI.Controls.LayerLegend>
+    internal class LayerLegendRenderer : ViewRenderer<LayerLegend, UI.Controls.LayerLegend?>
     {
 #if __ANDROID__
         public LayerLegendRenderer(Android.Content.Context context)

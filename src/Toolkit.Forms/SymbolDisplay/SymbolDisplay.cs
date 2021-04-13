@@ -44,9 +44,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Gets or sets the symbol to render.
         /// </summary>
         /// <seealso cref="SymbolProperty"/>
-        public Symbol Symbol
+        public Symbol? Symbol
         {
-            get { return (Symbol)GetValue(SymbolProperty); }
+            get { return GetValue(SymbolProperty) as Symbol; }
             set { SetValue(SymbolProperty, value); }
         }
 

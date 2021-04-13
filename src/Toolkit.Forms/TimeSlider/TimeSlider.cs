@@ -287,7 +287,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public IReadOnlyList<DateTimeOffset>? TimeSteps
         {
-            get => NativeSlider?.TimeSteps;
+            get => NativeSlider.TimeSteps;
         }
 
         private static void OnTimeStepsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
