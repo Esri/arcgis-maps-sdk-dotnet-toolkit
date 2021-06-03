@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeoView _geoView;
 
         /// <summary>
-        /// Gets or sets the GeoView for which the heading is displayed. This will accurately reflect the heading at the center of the GeoView
+        /// Gets or sets the GeoView for which the heading is displayed. This will accurately reflect the heading at the center of the GeoView.
         /// </summary>
         /// <seealso cref="Heading"/>
         public GeoView GeoView

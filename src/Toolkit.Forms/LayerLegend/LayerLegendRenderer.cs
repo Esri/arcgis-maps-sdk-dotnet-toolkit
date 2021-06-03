@@ -26,6 +26,7 @@ using Xamarin.Forms.Platform.UWP;
 #endif
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.LayerLegend), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.LayerLegendRenderer))]
+
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class LayerLegendRenderer : ViewRenderer<LayerLegend, UI.Controls.LayerLegend>

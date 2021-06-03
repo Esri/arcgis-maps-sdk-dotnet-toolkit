@@ -71,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 
         /// <summary>
-        /// Gets or sets the fill color for each tick mark
+        /// Gets or sets the fill color for each tick mark.
         /// </summary>
         private Color TickFillImpl
         {
@@ -111,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 
         /// <summary>
-        /// Gets or sets the fill color for each tick mark
+        /// Gets or sets the fill color for each tick mark.
         /// </summary>
         private Color TickLabelColorImpl
         {
@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private bool _showTicklabels;
 
         /// <summary>
-        /// Gets or sets a value indicating whether to display labels on the ticks
+        /// Gets or sets a value indicating whether to display labels on the ticks.
         /// </summary>
         /// <value>The item template.</value>
         private bool ShowTickLabelsImpl
@@ -151,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private string _tickLabelFormat;
 
         /// <summary>
-        /// Gets or sets the string format to use for displaying the tick labels
+        /// Gets or sets the string format to use for displaying the tick labels.
         /// </summary>
         private string TickLabelFormatImpl
         {

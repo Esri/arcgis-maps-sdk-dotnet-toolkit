@@ -121,3 +121,5 @@ NuGet/
 src/Samples/Toolkit.SampleApp.UWP/BundleArtifacts/
 src/ARToolkit/.vs/
 .tools
+src/Samples/Toolkit.SampleApp.Android/Resources/Resource.Designer.cs
+src/Samples/Toolkit.Samples.Forms/Toolkit.Samples.Forms.UWP/BundleArtifacts

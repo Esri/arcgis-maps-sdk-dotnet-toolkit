@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         NotifyDataSetChanged();
                     },
-                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                    OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
                 };
                 incc.CollectionChanged += listener.OnEvent;
             }

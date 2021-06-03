@@ -36,26 +36,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _label = new UILabel()
             {
-                Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
+                Font = UIFont.PreferredBody,
                 TextColor = UIColor.Gray,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
-                LineBreakMode = UILineBreakMode.WordWrap
+                LineBreakMode = UILineBreakMode.WordWrap,
             };
 
             _formattedValue = new UILabel()
             {
-                Font = UIFont.SystemFontOfSize(UIFont.SystemFontSize),
+                Font = UIFont.PreferredCaption1,
                 TextColor = UIColor.Black,
                 BackgroundColor = UIColor.Clear,
                 ContentMode = UIViewContentMode.TopLeft,
                 TextAlignment = UITextAlignment.Left,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Lines = 0,
-                LineBreakMode = UILineBreakMode.WordWrap
+                LineBreakMode = UILineBreakMode.WordWrap,
             };
 
             ContentView.AddSubviews(_label, _formattedValue);
@@ -81,8 +81,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void UpdateConstraints()
         {
             base.UpdateConstraints();
-            _label.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
-            _formattedValue.SetContentCompressionResistancePriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Vertical);
 
             _label.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
             _formattedValue.SetContentHuggingPriority((float)UILayoutPriority.DefaultHigh, UILayoutConstraintAxis.Horizontal);
@@ -94,11 +92,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _constraintsUpdated = true;
             var margin = ContentView.LayoutMarginsGuide;
 
-            _label.TopAnchor.ConstraintEqualTo(margin.TopAnchor).Active = true;
-            _label.LeftAnchor.ConstraintEqualTo(margin.LeftAnchor).Active = true;
+            NSLayoutConstraint.ActivateConstraints(new[]
+            {
+                _label.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor),
+                _label.TopAnchor.ConstraintEqualTo(margin.TopAnchor),
+                _label.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor),
 
-            _formattedValue.TopAnchor.ConstraintEqualTo(_label.BottomAnchor).Active = true;
-            _formattedValue.LeftAnchor.ConstraintEqualTo(margin.LeftAnchor).Active = true;
+                _formattedValue.TopAnchor.ConstraintEqualTo(_label.BottomAnchor),
+                _formattedValue.LeadingAnchor.ConstraintEqualTo(margin.LeadingAnchor),
+                _formattedValue.TrailingAnchor.ConstraintEqualTo(margin.TrailingAnchor),
+
+                ContentView.BottomAnchor.ConstraintEqualTo(_formattedValue.BottomAnchor),
+            });
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
     /// <summary>
-    /// Used for generating symbols during design time
+    /// Used for generating symbols during design time.
     /// </summary>
     internal class DesignLegendInfo
     {

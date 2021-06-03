@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             None,
             Line,
             Area,
-            Feature
+            Feature,
         }
 
         private MeasureToolbarMode _mode = MeasureToolbarMode.None;
@@ -112,7 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.LinearUnits.Miles,
                     Geometry.LinearUnits.Millimeters,
                     Geometry.LinearUnits.NauticalMiles,
-                    Geometry.LinearUnits.Yards
+                    Geometry.LinearUnits.Yards,
                 };
             AreaUnits = new ObservableCollection<AreaUnit>()
                 {
@@ -125,7 +125,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Geometry.AreaUnits.SquareMeters,
                     Geometry.AreaUnits.SquareMiles,
                     Geometry.AreaUnits.SquareMillimeters,
-                    Geometry.AreaUnits.SquareYards
+                    Geometry.AreaUnits.SquareYards,
                 };
             LineSketchEditor = new SketchEditor();
             AreaSketchEditor = new SketchEditor();
@@ -222,7 +222,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// - Only one of the units selector is visible
         /// - Updates instruction text
         /// - Assigns the appropriate SketchEditor
-        /// - Updates command to execute on clear
+        /// - Updates command to execute on clear.
         /// </summary>
         private void PrepareMeasureMode()
         {
@@ -295,7 +295,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Updates visibility of unit selector based on geometry type.
         /// </summary>
-        /// <param name="geometry">geometry to measure</param>
+        /// <param name="geometry">geometry to measure.</param>
         private void PrepareUnitSelector(Geometry.Geometry geometry)
         {
             var isMeasuringArea = geometry is Polygon || geometry is Envelope;
@@ -311,9 +311,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Displays the measurement result
+        /// Displays the measurement result.
         /// </summary>
-        /// <param name="geometry">geometry to measure</param>
+        /// <param name="geometry">geometry to measure.</param>
         private void DisplayResult(Geometry.Geometry geometry = null)
         {
             if (_measureResultTextBlock != null)
@@ -368,8 +368,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Toggles between measure modes and starts SketchEditor when not already started for length and area.
         /// </summary>
-        /// <param name="sender">Toggle button that raised click event</param>
-        /// <param name="e">Contains information or event data associated with routed event</param>
+        /// <param name="sender">Toggle button that raised click event.</param>
+        /// <param name="e">Contains information or event data associated with routed event.</param>
         private async void OnToggleMeasureMode(object sender, RoutedEventArgs e)
         {
             var toggleButton = (ToggleButton)sender;
@@ -399,8 +399,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Displays the measurement result for the given new geometry.
         /// </summary>
-        /// <param name="sender">SketchEditor that raised GeometryChanged event</param>
-        /// <param name="e">Data for the GeometryChanged event</param>
+        /// <param name="sender">SketchEditor that raised GeometryChanged event.</param>
+        /// <param name="e">Data for the GeometryChanged event.</param>
         private void OnGeometryChanged(object sender, GeometryChangedEventArgs e)
         {
             if (_clearButton != null)
@@ -414,8 +414,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Identifies the polyline or polygon feature or graphic whose geometry will be measured.
         /// </summary>
-        /// <param name="sender">MapView that raised GeoViewTapped event</param>
-        /// <param name="e">Data for the GeoViewTapped event</param>
+        /// <param name="sender">MapView that raised GeoViewTapped event.</param>
+        /// <param name="e">Data for the GeoViewTapped event.</param>
         private async void OnMapViewTapped(object sender, GeoViewInputEventArgs e)
         {
             if (Mode != MeasureToolbarMode.Feature)
@@ -488,8 +488,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Recursively checks SublayerResults and returns the geometry of the first polyline or polygon feature.
         /// </summary>
-        /// <param name="identifyLayerResults">Results returned from identifying layers</param>
-        /// <returns>the first polyline or polygon geometry</returns>
+        /// <param name="identifyLayerResults">Results returned from identifying layers.</param>
+        /// <returns>the first polyline or polygon geometry.</returns>
         private Geometry.Geometry GetGeometry(IEnumerable<IdentifyLayerResult> identifyLayerResults)
         {
             foreach (var result in identifyLayerResults)
@@ -515,8 +515,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Returns the geometry of the first polyline or polygon graphic.
         /// </summary>
-        /// <param name="identifyGraphicsOverlayResults">Results returned from identifying graphics</param>
-        /// <returns>the first polyline or polygon geometry</returns>
+        /// <param name="identifyGraphicsOverlayResults">Results returned from identifying graphics.</param>
+        /// <returns>the first polyline or polygon geometry.</returns>
         private Geometry.Geometry GetGeometry(IEnumerable<IdentifyGraphicsOverlayResult> identifyGraphicsOverlayResults)
         {
             foreach (var result in identifyGraphicsOverlayResults)
@@ -537,8 +537,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Clears the map of any graphics from measuring distance, area or feature.
         /// This will also clear undo/redo stack.
         /// </summary>
-        /// <param name="sender">Button that raised clicked event</param>
-        /// <param name="e">Contains information or event data associated with routed event</param>
+        /// <param name="sender">Button that raised clicked event.</param>
+        /// <param name="e">Contains information or event data associated with routed event.</param>
         private void OnClear(object sender, RoutedEventArgs e)
         {
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)

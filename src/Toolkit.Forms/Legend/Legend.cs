@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private readonly LegendDataSource _datasource;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Legend"/> class
+        /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
         public Legend()
         {

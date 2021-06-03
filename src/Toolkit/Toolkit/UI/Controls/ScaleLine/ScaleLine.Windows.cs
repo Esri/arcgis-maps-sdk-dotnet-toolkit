@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the platform-specific implementation of the <see cref="MapScale"/> property
+        /// Gets or sets the platform-specific implementation of the <see cref="MapScale"/> property.
         /// </summary>
         private double MapScaleImpl
         {
@@ -70,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// The property changed event that is raised when
         /// the value of Scale property changes.
         /// </summary>
-        /// <param name="d">ScaleLine</param>
+        /// <param name="d">ScaleLine.</param>
         /// <param name="e">Contains information related to the change to the Scale property.</param>
         private static void OnMapScalePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -84,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the platform-specific implementation of the <see cref="TargetWidth"/> property
+        /// Gets or sets the platform-specific implementation of the <see cref="TargetWidth"/> property.
         /// </summary>
         private double TargetWidthImpl
         {
@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// The property changed handler that is called when
         /// the value of TargetWidth property changes.
         /// </summary>
-        /// <param name="d">ScaleLine</param>
+        /// <param name="d">ScaleLine.</param>
         /// <param name="e">Contains information related to the change to the TargetWidth property.</param>
         private static void OnTargetWidthPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Identifies the <see cref="GeoView"/> Dependency Property
+        /// Identifies the <see cref="GeoView"/> Dependency Property.
         /// </summary>
         public static readonly DependencyProperty MapViewProperty =
             DependencyProperty.Register(nameof(ScaleLine.MapView), typeof(MapView), typeof(ScaleLine), new PropertyMetadata(null, OnMapViewPropertyChanged));

@@ -216,23 +216,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Called when an attribute value is about to change
+        /// Called when an attribute value is about to change.
         /// </summary>
         /// <remarks>
         /// To trigger a validation exception, throw an exception in this method.
         /// </remarks>
-        /// <param name="oldvValue">The old attribute value</param>
-        /// <param name="newValue">The new updated attribute value</param>
+        /// <param name="oldvValue">The old attribute value.</param>
+        /// <param name="newValue">The new updated attribute value.</param>
         /// <seealso cref="ValueChanging"/>
         protected void OnValueChanging(object oldvValue, object newValue)
         {
         }
 
         /// <summary>
-        /// Called when an attribute value has changed
+        /// Called when an attribute value has changed.
         /// </summary>
-        /// <param name="oldvValue">The old attribute value</param>
-        /// <param name="newValue">The new updated attribute value</param>
+        /// <param name="oldvValue">The old attribute value.</param>
+        /// <param name="newValue">The new updated attribute value.</param>
         /// <seealso cref="ValueChanged"/>
         protected void OnValueChanged(object oldvValue, object newValue)
         {
@@ -335,9 +335,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// *FOR INTERNAL USE ONLY* : Gets the text box changed listener.
         /// </summary>
-        /// <param name="obj"><see cref="DependencyObject"/></param>
+        /// <param name="obj"><see cref="DependencyObject"/>.</param>
         /// <exclude/>
-        /// <returns><see cref="TextBox"/></returns>
+        /// <returns><see cref="TextBox"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TextBox GetTextBoxChangedListener(DependencyObject obj)
         {
@@ -347,8 +347,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// *FOR INTERNAL USE ONLY* : Sets the text box changed listener.
         /// </summary>
-        /// <param name="obj"><see cref="DependencyObject"/></param>
-        /// <param name="value"><see cref="TextBox"/></param>
+        /// <param name="obj"><see cref="DependencyObject"/>.</param>
+        /// <param name="value"><see cref="TextBox"/>.</param>
         /// <exclude/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetTextBoxChangedListener(DependencyObject obj, TextBox value)
@@ -357,7 +357,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// *FOR INTERNAL USE ONLY* : The text box changed listener property
+        /// *FOR INTERNAL USE ONLY* : The text box changed listener property.
         /// </summary>
         /// <remarks>
         /// Subscribes to TextBox.TextChanged to perform validation while the string content is updated.
@@ -639,7 +639,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Updates the validation state based on <see cref="ValidationException"/>
+        /// Updates the validation state based on <see cref="ValidationException"/>.
         /// </summary>
         private void UpdateValidationState()
         {
@@ -737,7 +737,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Updates feature attribute to commit the attribute edit from <see cref="FeatureDataField"/>
+        /// Updates feature attribute to commit the attribute edit from <see cref="FeatureDataField"/>.
         /// </summary>
         /// <param name="value">The new attribute value.</param>
         /// <returns>a value indicating whether change is committed.</returns>

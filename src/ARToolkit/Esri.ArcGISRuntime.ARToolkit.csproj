@@ -1,16 +1,13 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
-  
+<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
+
   <PropertyGroup>
-    <AndroidTargetFramework>monoandroid81</AndroidTargetFramework>
-    <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-    <UWPTargetFramework>uap10.0.17134</UWPTargetFramework>
+    <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
-    <Title>ArcGIS Runtime SDK for .NET - AR Toolkit</Title>
-    <Description>ArcGIS Runtime Augmented Reality controls and utilities for Universal Windows Platform (UWP), Xamarin.Android, and Xamarin.iOS apps.</Description>
-    <PackageTags>AR Esri ArcGIS Runtime GIS maps map mapping location spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
+    <Description>ArcGIS Runtime Augmented Reality controls and utilities for Xamarin.Android and Xamarin.iOS apps.</Description>
+    <PackageTags>Esri ArcGIS Runtime AR GIS maps map mapping location spatial 3D Xamarin Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.ARToolkit</RootNamespace>
     <AssemblyName>Esri.ArcGISRuntime.ARToolkit</AssemblyName>
     <Configurations>Debug;Release</Configurations>
@@ -35,8 +32,6 @@
     <PackageReference Include="Xamarin.Google.ARCore" Version="1.11.0" />
     <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
     <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.11.0" />
-    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
-
     <AndroidResource Include="Resources\**\*.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>

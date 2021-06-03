@@ -371,7 +371,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 base.Delegate = del;
             }
 
-            public override IARSCNViewDelegate Delegate { get => base.Delegate; set => throw new NotSupportedException(); }
+            public override IARSCNViewDelegate? Delegate { get => base.Delegate; set => throw new NotSupportedException(); }
         }
 
         private class ARDelegate : ARSCNViewDelegate
@@ -448,44 +448,51 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
             private class Plane : SCNNode
             {
-                private SCNNode node;
-                private SCNMaterial material;
+                private SCNNode? node;
+                private SCNMaterial? material;
                 private static UIImage img = UIImage.FromResource(typeof(Plane).Assembly, "Esri.ArcGISRuntime.ARToolkit.GridDot.png");
 
                 public Plane(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
                     var planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
-                    planeGeometry.Update(anchor.Geometry);
-                    node = SCNNode.FromGeometry(planeGeometry);
-                    node.Geometry = planeGeometry;
-                    node.Opacity = 1f;
-                    material = new SCNMaterial()
+                    if (planeGeometry != null)
                     {
-                        DoubleSided = false
-                    };
-                    material.Diffuse.Contents = img;
-                    material.Diffuse.WrapS = SCNWrapMode.Repeat;
-                    material.Diffuse.WrapT = SCNWrapMode.Repeat;
-                    planeGeometry.Materials = new[] { material };
-                    UpdateMaterial(anchor);
-                    AddChildNode(node);
+                        planeGeometry.Update(anchor.Geometry);
+                        node = SCNNode.FromGeometry(planeGeometry);
+                        node.Geometry = planeGeometry;
+                        node.Opacity = 1f;
+                        material = new SCNMaterial()
+                        {
+                            DoubleSided = false
+                        };
+                        material.Diffuse.Contents = img;
+                        material.Diffuse.WrapS = SCNWrapMode.Repeat;
+                        material.Diffuse.WrapT = SCNWrapMode.Repeat;
+                        planeGeometry.Materials = new[] { material };
+                        UpdateMaterial(anchor);
+                        AddChildNode(node);
+                    }
                 }
 
                 public void Update(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
                     ARPlaneGeometry geometry = anchor.Geometry;
-                    ARSCNPlaneGeometry planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
-                    planeGeometry.Update(geometry);
-                    planeGeometry.Materials = new[] { material };
-                    UpdateMaterial(anchor);
-                    node.Geometry = planeGeometry;
+                    ARSCNPlaneGeometry? planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
+                    if (planeGeometry != null && material != null && node != null)
+                    {
+                        planeGeometry.Update(geometry);
+                        planeGeometry.Materials = new[] { material };
+                        UpdateMaterial(anchor);
+                        node.Geometry = planeGeometry;
+                    }
                 }
 
                 private void UpdateMaterial(ARPlaneAnchor anchor)
                 {
                     // Scale the material to be 10x10cm
                     // Texture used is 1.732x taller than wide
-                    material.Diffuse.ContentsTransform = SCNMatrix4.Scale(anchor.Extent.X / .1f, anchor.Extent.Z / .1f / 1.732f, 0);
+                    if (material != null)
+                        material.Diffuse.ContentsTransform = SCNMatrix4.Scale(anchor.Extent.X / .1f, anchor.Extent.Z / .1f / 1.732f, 0);
                 }
             }
         }

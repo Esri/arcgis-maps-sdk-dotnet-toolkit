@@ -24,7 +24,7 @@ using Windows.UI.Xaml;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
-    /// Provides property changed notifications for UWP TimeSlider DependencyProperties
+    /// Provides property changed notifications for UWP TimeSlider DependencyProperties.
     /// </summary>
     internal class TimeSliderBindingProxy : DependencyObject, INotifyPropertyChanged
     {

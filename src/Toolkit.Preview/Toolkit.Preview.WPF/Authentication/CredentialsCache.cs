@@ -23,12 +23,12 @@ using System.Text;
 namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
     /// <summary>
-    /// A helper class for stoting credentials in the cache
+    /// A helper class for stoting credentials in the cache.
     /// </summary>
     public static class CredentialsCache
     {
         /// <summary>
-        /// A credential retrieved from the credentials cache
+        /// A credential retrieved from the credentials cache.
         /// </summary>
         public sealed class CachedCredential
         {
@@ -39,12 +39,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
             }
 
             /// <summary>
-            /// Gets the username
+            /// Gets the username.
             /// </summary>
             public string Username { get; }
 
             /// <summary>
-            /// Gets the password
+            /// Gets the password.
             /// </summary>
             public SecureString Password { get; }
         }
@@ -62,11 +62,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         }
 
         /// <summary>
-        /// Saves a credential to the credentials cache
+        /// Saves a credential to the credentials cache.
         /// </summary>
-        /// <param name="username">Username</param>
-        /// <param name="password">The password</param>
-        /// <param name="serviceUri">The endpoint to associate the credentials with</param>
+        /// <param name="username">Username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="serviceUri">The endpoint to associate the credentials with.</param>
         public static void SaveCredential(string username, SecureString password, Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
@@ -74,9 +74,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         }
 
         /// <summary>
-        /// Removes a credential from the cache
+        /// Removes a credential from the cache.
         /// </summary>
-        /// <param name="serviceUri">Service Uri</param>
+        /// <param name="serviceUri">Service Uri.</param>
         public static void DeleteCredential(Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
@@ -84,10 +84,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         }
 
         /// <summary>
-        /// Gets a credential from the cache
+        /// Gets a credential from the cache.
         /// </summary>
-        /// <param name="serviceUri">The endpoint to get the credential from</param>
-        /// <returns>A tuple of username + password</returns>
+        /// <param name="serviceUri">The endpoint to get the credential from.</param>
+        /// <returns>A tuple of username + password.</returns>
         public static CachedCredential ReadCredential(Uri serviceUri)
         {
             string host = serviceUri.OriginalString;
@@ -101,7 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         }
 
         /// <summary>
-        /// Clears the credential cache
+        /// Clears the credential cache.
         /// </summary>
         public static void ClearCredentials()
         {
@@ -197,7 +197,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                     CredentialBlobSize = (uint)Encoding.Unicode.GetBytes(secret).Length,
                     TargetName = Marshal.StringToCoTaskMemUni(applicationName),
                     CredentialBlob = Marshal.StringToCoTaskMemUni(secret),
-                    UserName = Marshal.StringToCoTaskMemUni(userName ?? Environment.UserName)
+                    UserName = Marshal.StringToCoTaskMemUni(userName ?? Environment.UserName),
                 };
 
                 bool written = CredWrite(ref credential, 0);
@@ -258,7 +258,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
             {
                 Session = 1,
                 LocalMachine,
-                Enterprise
+                Enterprise,
             }
 
             [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]

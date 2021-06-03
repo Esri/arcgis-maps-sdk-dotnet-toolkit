@@ -22,7 +22,7 @@ using Esri.ArcGISRuntime.Mapping;
 namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
 {
     /// <summary>
-    /// Event argument fired by the <see cref="TableOfContents"/> when right-clicking an item
+    /// Event argument fired by the <see cref="TableOfContents"/> when right-clicking an item.
     /// </summary>
     /// <seealso cref="TableOfContents.TocItemContextMenuOpening"/>
     public class TocItemContextMenuEventArgs : RoutedEventArgs
@@ -38,12 +38,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         public TocItem Item { get; internal set; }
 
         /// <summary>
-        /// Gets a reference to the context menu that will be displayed
+        /// Gets a reference to the context menu that will be displayed.
         /// </summary>
         public ContextMenu Menu { get; internal set; }
 
         /// <summary>
-        /// Gets a set of menu items to display. If empty, no context menu will be displayed
+        /// Gets a set of menu items to display. If empty, no context menu will be displayed.
         /// </summary>
         public ItemCollection MenuItems { get; internal set; }
     }

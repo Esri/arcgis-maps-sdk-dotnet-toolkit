@@ -39,8 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Initializes a new instance of the <see cref="Tickbar"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view.</param>
         public Tickbar(Context context, IAttributeSet attr)
             : base(context, attr)
         {
@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private Size _majorTickSize = new Size(1, 10);
 
         /// <summary>
-        /// Gets or sets the size of major tickmarks
+        /// Gets or sets the size of major tickmarks.
         /// </summary>
         public Size MajorTickSize
         {
@@ -80,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private Size _minorTickSize = new Size(1, 5);
 
         /// <summary>
-        /// Gets or sets the size of minor tickmarks
+        /// Gets or sets the size of minor tickmarks.
         /// </summary>
         public Size MinorTickSize
         {
@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private double _labelOffset = 4;
 
         /// <summary>
-        /// Gets or sets the spacing between ticks and tick labels
+        /// Gets or sets the spacing between ticks and tick labels.
         /// </summary>
         public double LabelOffset
         {
@@ -126,7 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private float _tickInset;
 
         /// <summary>
-        /// Gets or sets the amount by which the tick rendering area is offset from the left and right edge of the tickbar
+        /// Gets or sets the amount by which the tick rendering area is offset from the left and right edge of the tickbar.
         /// </summary>
         internal float TickInset
         {
@@ -139,10 +139,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Adds a tick to the bar's visual tree
+        /// Adds a tick to the bar's visual tree.
         /// </summary>
-        /// <param name="position">The position to place the tick at along the tick bar</param>
-        /// <param name="dataSource">The data to pass to the tick's template</param>
+        /// <param name="position">The position to place the tick at along the tick bar.</param>
+        /// <param name="dataSource">The data to pass to the tick's template.</param>
         private void AddTickmark(double position, object dataSource)
         {
             // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
@@ -159,8 +159,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 LayoutParameters = new FrameLayout.LayoutParams(minorTickWidthDp, minorTickHeightDp)
                 {
-                    Gravity = GravityFlags.Bottom
-                }
+                    Gravity = GravityFlags.Bottom,
+                },
             };
             tick.SetBackgroundFill(TickFill);
             SetIsMajorTickmark(tick, false);
@@ -180,8 +180,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     Orientation = Orientation.Vertical,
                     LayoutParameters = new FrameLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
                     {
-                        Gravity = GravityFlags.Bottom
-                    }
+                        Gravity = GravityFlags.Bottom,
+                    },
                 };
 
                 // Create label for major tickmark
@@ -191,7 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     Text = dateTime.ToString(timeStepIntervalDateFormat),
                     Tag = dateTime.ToUnixTimeMilliseconds(),
-                    LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                    LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
                 };
                 label.SetTextColor(TickLabelColor);
 
@@ -200,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                 tick.LayoutParameters = new LinearLayout.LayoutParams(majorTickWidthDp, majorTickHeightDp)
                 {
-                    Gravity = GravityFlags.CenterHorizontal
+                    Gravity = GravityFlags.CenterHorizontal,
                 };
 
                 majorTickContainer.AddView(label);
@@ -217,7 +217,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 tick.LayoutParameters = new FrameLayout.LayoutParams(majorTickWidthDp, majorTickHeightDp)
                 {
-                    Gravity = GravityFlags.Bottom
+                    Gravity = GravityFlags.Bottom,
                 };
                 SetIsMajorTickmark(tick, true);
                 SetPosition(tick, position);

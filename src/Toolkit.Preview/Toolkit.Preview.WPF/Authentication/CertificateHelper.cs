@@ -20,15 +20,15 @@ using Esri.ArcGISRuntime.Security;
 namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
     /// <summary>
-    /// A helper class for picking a certificate from the Certificate Store
+    /// A helper class for picking a certificate from the Certificate Store.
     /// </summary>
     public static class CertificateHelper
     {
         /// <summary>
-        /// Requests the user to pick a certificate from the Current User's <see cref="StoreLocation"/>
+        /// Requests the user to pick a certificate from the Current User's <see cref="StoreLocation"/>.
         /// </summary>
-        /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/></param>
-        /// <returns>A certificate picked by the user</returns>
+        /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/>.</param>
+        /// <returns>A certificate picked by the user.</returns>
         public static CertificateCredential SelectCertificate(CredentialRequestInfo info)
         {
             return SelectCertificate(info, new X509Store(StoreName.My, StoreLocation.CurrentUser));
@@ -37,9 +37,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// <summary>
         /// Requests the user to pick a certificate from the provided <see cref="X509Store"/>.
         /// </summary>
-        /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/></param>
-        /// <param name="x509Store">The certificate store</param>
-        /// <returns>A certificate picked by the user</returns>
+        /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/>.</param>
+        /// <param name="x509Store">The certificate store.</param>
+        /// <returns>A certificate picked by the user.</returns>
         public static CertificateCredential SelectCertificate(CredentialRequestInfo info, X509Store x509Store)
         {
             X509Certificate2 certSelected = null;

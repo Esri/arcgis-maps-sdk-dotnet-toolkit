@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Toolkit.Samples.Forms.Droid</RootNamespace>
     <AssemblyName>Toolkit.Samples.Forms.Android</AssemblyName>
-    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,11 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
-    <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
-    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
-    <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
-    <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.3" />
-    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.AndroidX.ConstraintLayout" Version="2.0.2" />
+    <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.0" />
+    <PackageReference Include="Xamarin.AndroidX.Palette" Version="1.0.0.5" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -93,18 +92,34 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
-      <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Toolkit.Samples.Forms\Toolkit.Samples.Forms.csproj">
       <Project>{d7b89b7d-f360-4a68-aecb-c27caddc8118}</Project>
       <Name>Toolkit.Samples.Forms</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
+          <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Xamarin.Forms">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 </Project>

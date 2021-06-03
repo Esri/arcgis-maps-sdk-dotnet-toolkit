@@ -17,7 +17,7 @@
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Specifies the direction of temporal playback
+    /// Specifies the direction of temporal playback.
     /// </summary>
     public enum PlaybackDirection
     {
@@ -29,6 +29,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Specifies that playback moves backward in time
         /// </summary>
-        Backward
+        Backward,
     }
 }

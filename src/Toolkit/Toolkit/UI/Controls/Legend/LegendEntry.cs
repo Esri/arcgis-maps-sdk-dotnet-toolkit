@@ -19,7 +19,7 @@ using Esri.ArcGISRuntime.Mapping;
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
-    /// Class used to represent an entry in the Legend control
+    /// Class used to represent an entry in the Legend control.
     /// </summary>
     /// <remarks>
     /// The <see cref="Content"/> property will contain the actual object it represents, mainly <see cref="Layer"/>, <see cref="ILayerContent"/> or <see cref="LegendInfo"/>.

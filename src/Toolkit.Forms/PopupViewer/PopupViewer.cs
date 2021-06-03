@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     public class PopupViewer : View
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PopupViewer"/> class
+        /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
         public PopupViewer()
 #if __ANDROID__

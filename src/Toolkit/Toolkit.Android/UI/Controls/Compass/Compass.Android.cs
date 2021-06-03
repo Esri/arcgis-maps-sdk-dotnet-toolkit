@@ -35,15 +35,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         public Compass(Context context)
             : base(context) => Initialize();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view.</param>
         public Compass(Context context, IAttributeSet attr)
             : base(context, attr) => Initialize();
 

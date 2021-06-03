@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// handles changes on multiple threads, yet ensures the collection is only updated on the UI Thread.
     /// Used by Legend and Table of Contents controls.
     /// </summary>
-    /// <typeparam name="T">List item type</typeparam>
+    /// <typeparam name="T">List item type.</typeparam>
     internal abstract class LayerContentDataSource<T> : IList<T>, INotifyCollectionChanged, INotifyPropertyChanged, IList
         where T : ILayerContentItem
     {
@@ -220,7 +220,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 _documentListener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(document)
                 {
                     OnEventAction = (instance, source, eventArgs) => DocumentPropertyChanged(instance, eventArgs.PropertyName),
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 document.PropertyChanged += _documentListener.OnEvent;
             }
@@ -260,7 +260,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 _basemapListener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(basemap)
                 {
                     OnEventAction = (instance, source, eventArgs) => BasemapPropertyChanged(instance, eventArgs.PropertyName),
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 basemap.PropertyChanged += _basemapListener.OnEvent;
             }
@@ -363,7 +363,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc)
                         {
                             OnEventAction = (instance, source, eventArgs) => Layer_PropertyChanged(instance as ILayerContent, eventArgs.PropertyName),
-                            OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent
+                            OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                         };
                         inpc.PropertyChanged += listener.OnEvent;
                         yield return listener.Detach;
@@ -380,7 +380,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                     {
                         OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
-                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
                     };
                     incc.CollectionChanged += listener.OnEvent;
                     yield return listener.Detach;

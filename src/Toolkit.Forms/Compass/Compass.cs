@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     public class Compass : View
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Compass"/> class
+        /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         public Compass()
         {
@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(AutoHide), typeof(bool), typeof(Compass), true, BindingMode.OneWay, null);
 
         /// <summary>
-        /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0
+        /// Gets or sets a value indicating whether to auto-hide the control when Heading is 0.
         /// </summary>
         public bool AutoHide
         {
@@ -78,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="GeoView"/> Dependency Property
+        /// Identifies the <see cref="GeoView"/> Dependency Property.
         /// </summary>
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, null);

@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         public ScaleLine(Context context)
             : base(context)
         {
@@ -54,8 +54,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ScaleLine"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view.</param>
         public ScaleLine(Context context, IAttributeSet attr)
             : base(context, attr)
         {
@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _rootLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Vertical,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
             _rootLayout.SetGravity(GravityFlags.Top);
 
@@ -107,7 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var firstRowLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Horizontal,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
 
             firstRowLayout.AddView(_metricScaleLine);
@@ -120,7 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var secondRowLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Horizontal,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
 
             var tickWidth = CalculateScreenDimension(2);
@@ -141,7 +141,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var thirdRowLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Horizontal,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
 
             _scaleLineStartSegment = new RectangleView(Context, Math.Round(tickWidth) * 2, scalelineHeight) { BackgroundColor = ForegroundColor };
@@ -155,7 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var fourthRowLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Horizontal,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
 
             _firstUsTickLine = new RectangleView(Context, tickWidth, tickHeight) { BackgroundColor = ForegroundColor };
@@ -171,7 +171,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var fifthRowLayout = new LinearLayout(Context)
             {
                 Orientation = Orientation.Horizontal,
-                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent)
+                LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
             };
 
             _usWidthPlaceholder = new RectangleView(Context, _usScaleLine.Width, 1);
@@ -195,7 +195,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Color _foregroundColor = Color.Black;
 
         /// <summary>
-        /// Gets or sets the color of the foreground elements of the <see cref="ScaleLine"/>
+        /// Gets or sets the color of the foreground elements of the <see cref="ScaleLine"/>.
         /// </summary>
         public Color ForegroundColor
         {

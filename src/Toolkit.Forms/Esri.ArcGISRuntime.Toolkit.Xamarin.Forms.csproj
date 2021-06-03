@@ -1,9 +1,11 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+  <PropertyGroup Condition="$(XamarinFormsPackageVersion.StartsWith('5.0'))">
+    <AndroidTargetFramework>monoandroid10.0</AndroidTargetFramework>
+  </PropertyGroup>
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
     <Authors>ESRI Inc.</Authors>
-    <Title>ArcGIS Runtime SDK for .NET - Toolkit for Xamarin.Forms apps</Title>
     <Description>ArcGIS Runtime controls and utilities for Xamarin.Forms apps (Android, iOS, and UWP).</Description>
     <PackageTags>Esri ArcGIS Runtime GIS maps map mapping location spatial 3D Android iOS UWP Xamarin.Forms Xamarin Mobile toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</RootNamespace>
@@ -32,7 +34,7 @@
     <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
     <PackageReference Include="StyleCop.Analyzers">
       <PrivateAssets>all</PrivateAssets>
-      <Version>1.0.2</Version>
+      <Version>1.1.118</Version>
     </PackageReference>
   </ItemGroup>
   

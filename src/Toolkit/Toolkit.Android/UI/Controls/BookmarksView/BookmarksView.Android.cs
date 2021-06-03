@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="BookmarksView"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         public BookmarksView(Context context)
             : base(context)
         {
@@ -40,8 +40,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="BookmarksView"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view.</param>
         public BookmarksView(Context context, IAttributeSet attr)
             : base(context, attr)
         {

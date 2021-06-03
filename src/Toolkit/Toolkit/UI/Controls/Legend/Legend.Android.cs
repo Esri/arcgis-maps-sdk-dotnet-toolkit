@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         public Legend(Context context)
             : base(context)
         {
@@ -48,8 +48,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
-        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc</param>
-        /// <param name="attr">The attributes of the AXML element declaring the view</param>
+        /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
+        /// <param name="attr">The attributes of the AXML element declaring the view.</param>
         public Legend(Context context, IAttributeSet attr)
             : base(context, attr)
         {
@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         {
                             NotifyDataSetChanged();
                         },
-                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent
+                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
                     };
                     incc.CollectionChanged += listener.OnEvent;
                 }
@@ -124,12 +124,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     _textView = new TextView(context)
                     {
-                        LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.CenterVertical | GravityFlags.Left }
+                        LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.CenterVertical | GravityFlags.Left },
                     };
                     var maxSize = (int)(Resources.DisplayMetrics.Density * 40);
                     _symbol = new SymbolDisplay(context)
                     {
-                        LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.Center, Width = maxSize }
+                        LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.Center, Width = maxSize },
                     };
                     _symbol.SetMaxHeight(maxSize);
                     _symbol.SetMaxWidth(maxSize);

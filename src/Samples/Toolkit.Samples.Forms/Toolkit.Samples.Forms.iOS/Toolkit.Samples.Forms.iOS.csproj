@@ -150,15 +150,32 @@
     <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
+          <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
+        </ProjectReference>
+      </ItemGroup>
+	</When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Xamarin.Forms">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Toolkit.Forms\Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj">
-      <Project>{bc141500-2741-4f13-86dc-2fa002422c60}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.Xamarin.Forms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Toolkit.Samples.Forms\Toolkit.Samples.Forms.csproj">
       <Project>{d7b89b7d-f360-4a68-aecb-c27caddc8118}</Project>
       <Name>Toolkit.Samples.Forms</Name>

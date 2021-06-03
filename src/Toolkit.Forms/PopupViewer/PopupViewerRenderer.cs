@@ -25,6 +25,7 @@ using Xamarin.Forms.Platform.UWP;
 #endif
 
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.PopupViewer), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.PopupViewerRenderer))]
+
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     internal class PopupViewerRenderer : ViewRenderer<PopupViewer, UI.Controls.PopupViewer>

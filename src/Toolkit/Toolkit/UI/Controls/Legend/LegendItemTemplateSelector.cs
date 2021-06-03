@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if NETFX_CORE
-            protected override DataTemplate SelectTemplateCore(object item)
+        protected override DataTemplate SelectTemplateCore(object item)
 #else
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
 #endif

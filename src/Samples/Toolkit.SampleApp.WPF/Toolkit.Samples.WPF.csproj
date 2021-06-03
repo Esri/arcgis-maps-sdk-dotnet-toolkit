@@ -55,116 +55,30 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="..\Toolkit.SampleApp.WPF_Net5\App.xaml">
+      <Link>App.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="SampleDatasource.cs" />
-    <Compile Include="Samples\BookmarksView\BookmarksViewSample.xaml.cs">
-      <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Compass\SceneViewCompassSample.xaml.cs">
-      <DependentUpon>SceneViewCompassSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Compass\MapViewCompassSample.xaml.cs">
-      <DependentUpon>MapViewCompassSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\PopupViewer\PopupViewerSample.xaml.cs">
-      <DependentUpon>PopupViewerSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\FeatureDataField\EditFeatureSample.xaml.cs">
-      <DependentUpon>EditFeatureSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Legend\LayerLegendSample.xaml.cs">
-      <DependentUpon>LayerLegendSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\Legend\LegendSample.xaml.cs">
-      <DependentUpon>LegendSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\MeasureToolbar\MeasureToolbarSample.xaml.cs">
-      <DependentUpon>MeasureToolbarSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\ScaleLine\ScaleLineSample.xaml.cs">
-      <DependentUpon>ScaleLineSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\SymbolDisplay\SymbolEditorSample.xaml.cs">
-      <DependentUpon>SymbolEditorSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml.cs">
-      <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Samples\ToC\TableOfContentsSample.xaml.cs">
-      <DependentUpon>TableOfContentsSample.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Samples\BookmarksView\BookmarksViewSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\Compass\SceneViewCompassSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\Compass\MapViewCompassSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\PopupViewer\PopupViewerSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\FeatureDataField\DatagridSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
+    <Compile Include="..\Toolkit.SampleApp.WPF_Net5\**\*.xaml.cs">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <DependentUpon>%(Filename)</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Samples\FeatureDataField\DatagridSample.xaml.cs">
-      <DependentUpon>DatagridSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Samples\FeatureDataField\EditFeatureSample.xaml">
+    <Page Include="..\Toolkit.SampleApp.WPF_Net5\**\*.xaml" Exclude="..\Toolkit.SampleApp.WPF_Net5\App.xaml">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Samples\Legend\LayerLegendSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\Legend\LegendSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\MeasureToolbar\MeasureToolbarSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\ScaleLine\ScaleLineSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\SymbolDisplay\SymbolEditorSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Samples\ToC\TableOfContentsSample.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Content Include="..\Toolkit.SampleApp.WPF_Net5\**\*.png">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Toolkit.SampleApp.WPF_Net5\**\*.cs" Exclude="..\Toolkit.SampleApp.WPF_Net5\**\*.xaml.cs;..\Toolkit.SampleApp.WPF_Net5\obj\**\*.cs">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -196,19 +110,30 @@
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Toolkit.Preview\Toolkit.Preview\Esri.ArcGISRuntime.Toolkit.Preview.csproj">
-      <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-      <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-      <Name>Esri.ArcGISRuntime.Toolkit</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Samples\PopupViewer\info.png" />
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\Toolkit.Preview\Toolkit.Preview\Esri.ArcGISRuntime.Toolkit.Preview.csproj">
+          <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
+          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Preview">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

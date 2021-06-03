@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the symbol to render
+        /// Gets or sets the symbol to render.
         /// </summary>
         private Symbology.Symbol SymbolImpl
         {

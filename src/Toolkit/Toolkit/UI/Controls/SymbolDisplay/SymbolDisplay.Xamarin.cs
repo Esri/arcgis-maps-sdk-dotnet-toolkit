@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Symbology.Symbol _symbol;
 
         /// <summary>
-        /// Gets or sets the symbol to render
+        /// Gets or sets the symbol to render.
         /// </summary>
         private Symbology.Symbol SymbolImpl
         {

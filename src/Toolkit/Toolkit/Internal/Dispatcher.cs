@@ -28,7 +28,7 @@ using Foundation;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Provides methods for invoking functionality on the Main (UI) thread
+    /// Provides methods for invoking functionality on the Main (UI) thread.
     /// </summary>
     internal class Dispatcher
     {
@@ -38,11 +38,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 #endif
 
         /// <summary>
-        /// Executes the specified action on the UI thread asynchronously
+        /// Executes the specified action on the UI thread asynchronously.
         /// </summary>
         /// <remarks>
         /// - Uses Xamarin.Forms Device class to invoke action on the UI thread
-        /// - void return - fire and forget
+        /// - void return - fire and forget.
         /// </remarks>
         internal static void RunAsyncAction(Action a, bool highPriority = true)
         {
