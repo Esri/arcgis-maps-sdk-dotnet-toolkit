@@ -148,6 +148,12 @@
     <Compile Include="Samples\MeasureToolbar\MeasureToolbarSample.xaml.cs">
       <DependentUpon>MeasureToolbarSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\OverviewMap\OverviewMapWithSceneSample.xaml.cs">
+      <DependentUpon>OverviewMapWithSceneSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\OverviewMap\OverviewMapSample.xaml.cs">
+      <DependentUpon>OverviewMapSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\ScaleLine\ScaleLineSample.xaml.cs">
       <DependentUpon>ScaleLineSample.xaml</DependentUpon>
     </Compile>
@@ -223,6 +229,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Samples\OverviewMap\OverviewMapWithSceneSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\OverviewMap\OverviewMapSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Samples\ScaleLine\ScaleLineSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -252,7 +266,7 @@
           <Name>Esri.ArcGISRuntime.Toolkit</Name>
         </ProjectReference>
       </ItemGroup>
-	</When>
+    </When>
     <Otherwise>
       <ItemGroup>
         <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
