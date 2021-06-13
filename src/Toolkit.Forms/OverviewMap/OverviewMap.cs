@@ -14,21 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-using System;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
-#else
-using System.Windows;
-using System.Windows.Media;
-#endif
+using Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;
+using Esri.ArcGISRuntime.Xamarin.Forms;
+using Xamarin.Forms;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
     /// Defines a small "overview" (or "inset") map displaying the current extent of the attached <see cref="GeoView"/>.
@@ -45,15 +37,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
             IsAttributionTextVisible = false;
             Map = new Map(BasemapStyle.ArcGISTopographic);
 
-            _controller = new OverviewMapController(this)
+            _controller = new OverviewMapController((GeoView)this)
             {
                 ExtentSymbol = ExtentSymbol,
                 ScaleFactor = ScaleFactor,
                 AttachedView = GeoView,
             };
-
-            BorderThickness = new Thickness(1);
-            BorderBrush = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
         }
 
         /// <summary>
@@ -81,6 +70,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
         }
 
         /// <summary>
+        /// Identifies the <see cref="ExtentSymbol"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty ExtentSymbolProperty =
+            BindableProperty.Create(nameof(ExtentSymbol), typeof(FillSymbol), typeof(OverviewMap), new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent, new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)), propertyChanged: OnExtentSymbolPropertyChanged);
+
+        /// <summary>
         /// Gets or sets the geoview whose extent is to be displayed.
         /// </summary>
         /// <remarks>
@@ -93,34 +88,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
         }
 
         /// <summary>
-        /// Identifies the <see cref="ScaleFactor"/> dependency property.
+        /// Identifies the <see cref="ScaleFactor"/> bindable property.
         /// </summary>
-        public static readonly DependencyProperty ScaleFactorProperty =
-            DependencyProperty.Register(nameof(ScaleFactor), typeof(double), typeof(OverviewMap), new PropertyMetadata(25.0, OnScaleFactorPropertyChanged));
+        public static readonly BindableProperty ScaleFactorProperty =
+            BindableProperty.Create(nameof(ScaleFactor), typeof(double), typeof(OverviewMap), 25.0, propertyChanged: OnScaleFactorPropertyChanged);
 
         /// <summary>
-        /// Identifies the <see cref="ExtentSymbol"/> dependency property.
+        /// Identifies the <see cref="GeoView"/> bindable property.
         /// </summary>
-        public static readonly DependencyProperty ExtentSymbolProperty =
-            DependencyProperty.Register(nameof(ExtentSymbol), typeof(FillSymbol), typeof(OverviewMap), new PropertyMetadata(
-                new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent,
-                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)), OnExtentSymbolPropertyChanged));
+        public static readonly BindableProperty GeoViewProperty =
+            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(OverviewMap), null, BindingMode.OneWay, null, propertyChanged: OnGeoViewPropertyChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="GeoView"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty GeoViewProperty =
-            DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(OverviewMap), new PropertyMetadata(null, OnGeoViewPropertyChanged));
+        private static void OnGeoViewPropertyChanged(BindableObject sender, object oldValue, object newValue)
+            => ((OverviewMap)sender)._controller.AttachedView = newValue as GeoView;
 
-        private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            => ((OverviewMap)d)._controller.AttachedView = e.NewValue as GeoView;
+        private static void OnExtentSymbolPropertyChanged(BindableObject sender, object oldValue, object newValue)
+            => ((OverviewMap)sender)._controller.ExtentSymbol = newValue as FillSymbol;
 
-        private static void OnExtentSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            => ((OverviewMap)d)._controller.ExtentSymbol = e.NewValue as FillSymbol;
-
-        private static void OnScaleFactorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            => ((OverviewMap)d)._controller.ScaleFactor = (double)e.NewValue;
+        private static void OnScaleFactorPropertyChanged(BindableObject sender, object oldValue, object newValue)
+            => ((OverviewMap)sender)._controller.ScaleFactor = (double)newValue;
     }
 }
-
-#endif

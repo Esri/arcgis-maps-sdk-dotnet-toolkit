@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Toolkit.Samples.Forms.Samples.OverviewMapSample"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+    xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+    Title="OverviewMap - MapView">
+    <ContentPage.Content>
+        <Grid>
+            <esriUI:MapView x:Name="mapView" />
+
+            <StackLayout
+                Margin="20"
+                Padding="20"
+                BackgroundColor="#F2F2F2"
+                HorizontalOptions="Start"
+                VerticalOptions="Start">
+                <Label Text="Rotation" />
+                <Slider
+                    Maximum="360"
+                    MaximumTrackColor="Gray"
+                    Minimum="0"
+                    ValueChanged="Slider_ValueChanged"
+                    Value="0" />
+                <esriTK:OverviewMap
+                    GeoView="{Binding Source={x:Reference mapView}}"
+                    HeightRequest="100"
+                    WidthRequest="100" />
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
