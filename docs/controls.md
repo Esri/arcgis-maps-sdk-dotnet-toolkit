@@ -38,6 +38,13 @@ Allows measurement of distances and areas on the map view.
 
 ![MeasureToolbar](https://user-images.githubusercontent.com/1378165/73389958-0f6dde00-428a-11ea-8c78-7192d49ea605.png)
 
+### OverviewMap
+
+Displays an interactive inset map for a map or scene.
+
+![OverviewMap](https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png)
+
+[Documentation](overview-map.md)
 
 ### PopupViewer
 
@@ -76,6 +83,7 @@ Allows interactively defining a temporal range (i.e. time extent) and animating 
 |Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |
+|[OverviewMap](overview-map.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
 |PopupViewer | ✔ | ✔ | ✔ | ✔ | ✔ |
 |ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |SignInForm   |   | Preview |   |   |   |

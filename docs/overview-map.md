@@ -1,0 +1,95 @@
+# OverviewMap
+
+OverviewMap is a small, secondary `MapView` (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. OverviewMap shows shows the visible extent of the `GeoView` it is connected to.
+
+![OverviewMap](https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png)
+
+> **NOTE**: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
+
+## Features
+
+OverviewMap:
+
+- Displays the visible extent for a connected GeoView
+- Supports a configurable scaling factor for setting the overview map's zoom level relative to the connected view.
+- Supports a configurable symbol for visualizing the visible extent
+- Supports two-way navigation, so the user can navigate the connected GeoView by panning and zooming the overview.
+- Exposes all of the same properties as `MapView`, so you can apply additional customization as needed. For example, you can change the `Map` property to use a custom basemap.
+
+## Key properties
+
+OverviewMap extends `MapView` with the following bindable properties:
+
+- `GeoView` - References the connected MapView or SceneView
+- `ExtentSymbol` - Defines the symbol used to visualize the current extent. This is a red rectangle by default.
+- `ScaleFactor` - Defines the scale of the OverviewMap relative to the scale of the connected `GeoView`. The default is 25.
+
+## Usage
+
+UWP:
+
+```xml
+<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap.OverviewMapSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:overviewmap="using:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <esri:MapView x:Name="mapView" />
+        <overviewmap:OverviewMap
+            Width="100"
+            Height="100"
+            Margin="4"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            GeoView="{Binding ElementName=mapView}" />
+    </Grid>
+</Page>
+```
+
+WPF:
+
+```xml
+<UserControl
+    x:Class="Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap.OverviewMapWithSceneSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:overviewmap="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;assembly=Esri.ArcGISRuntime.Toolkit">
+    <Grid>
+        <esri:SceneView x:Name="MySceneView" />
+        <overviewmap:OverviewMap
+            Width="100"
+            Height="100"
+            Margin="8"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            GeoView="{Binding ElementName=MySceneView}" />
+    </Grid>
+</UserControl>
+```
+
+Xamarin.Forms:
+
+```xml
+<ContentPage x:Class="Toolkit.Samples.Forms.Samples.OverviewMapWithSceneSample"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms">
+    <ContentPage.Content>
+        <Grid>
+            <esriUI:SceneView x:Name="sceneView" />
+            <StackLayout Margin="4"
+                         HorizontalOptions="Start"
+                         VerticalOptions="Start">
+                <esriTK:OverviewMap GeoView="{Binding Source={x:Reference sceneView}}"
+                                    HeightRequest="100"
+                                    WidthRequest="100" />
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
+```
