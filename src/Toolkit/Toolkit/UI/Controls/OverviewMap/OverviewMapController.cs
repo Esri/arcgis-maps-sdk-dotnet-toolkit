@@ -31,6 +31,8 @@ using Point = System.Windows.Point;
 #endif
 
 #if !XAMARIN_FORMS
+using System.Collections.Generic;
+using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
@@ -48,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
         public OverviewMapController(GeoView overview)
         {
             _overview = overview;
-            _extentOverlay = new GraphicsOverlay { RenderingMode = GraphicsRenderingMode.Dynamic };
+            _extentOverlay = new GraphicsOverlay();
             _overview.GraphicsOverlays.Add(_extentOverlay);
 
             // _overview.ViewpointChanged += OnViewpointChanged;
@@ -111,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
                 if (_extentSymbol != value)
                 {
                     _extentSymbol = value;
-                    _extentOverlay.Renderer = new SimpleRenderer(_extentSymbol) { RotationExpression = "[HEADING]" };
+                    _extentOverlay.Renderer = new SimpleRenderer(_extentSymbol);
                     UpdateGraphic();
                 }
             }
@@ -124,50 +126,73 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
                 return;
             }
 
-            #if !XAMARIN_FORMS
-            var height = _connectedView.ActualHeight;
-            var width = _connectedView.ActualWidth;
-            #else
-            var height = _connectedView.Height;
-            var width = _connectedView.Width;
-            #endif
-
             _extentOverlay.Graphics.Clear();
-            if (_connectedView is MapView mv)
+
+            if (_connectedView is MapView mv && mv.VisibleArea is Polygon area)
             {
-                var topLeft = mv.ScreenToLocation(new Point(0, 0));
-                var topRight = mv.ScreenToLocation(new Point(width, 0));
-                var bottomLeft = mv.ScreenToLocation(new Point(0, height));
-                var bottomRight = mv.ScreenToLocation(new Point(width, height));
-                if (topLeft != null && topRight != null && bottomLeft != null && bottomRight != null)
-                {
-                    PolygonBuilder pb = new PolygonBuilder(new MapPoint[] { topLeft, topRight, bottomRight, bottomLeft });
-                    var graphic = new Graphic(pb.ToGeometry());
-                    _extentOverlay.Graphics.Add(graphic);
-                    return;
-                }
+                _extentOverlay.Graphics.Add(new Graphic(area));
+                return;
             }
             else if (_connectedView is SceneView sv)
             {
+                Graphic fallbackGraphic = null;
+                if (_connectedView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint extent && extent.TargetGeometry is MapPoint centerPoint)
+                {
+                    fallbackGraphic = new Graphic(centerPoint, new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, ExtentSymbol?.Outline?.Color ?? System.Drawing.Color.Red, 8));
+                    if (_connectedView.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Envelope env && env.YMax > 85)
+                    {
+                        _extentOverlay.Graphics.Add(fallbackGraphic);
+                        return;
+                    }
+                }
+#if !XAMARIN_FORMS
+                var height = _connectedView.ActualHeight;
+                var width = _connectedView.ActualWidth;
+#else
+                var height = _connectedView.Height;
+                var width = _connectedView.Width;
+#endif
                 var topLeft = sv.ScreenToBaseSurface(new Point(0, 0));
                 var topRight = sv.ScreenToBaseSurface(new Point(width, 0));
                 var bottomLeft = sv.ScreenToBaseSurface(new Point(0, height));
                 var bottomRight = sv.ScreenToBaseSurface(new Point(width, height));
-                if (topLeft != null && topRight != null && bottomLeft != null && bottomRight != null)
-                {
-                    PolygonBuilder pb = new PolygonBuilder(new MapPoint[] { topLeft, topRight, bottomRight, bottomLeft });
-                    var graphic = new Graphic(pb.ToGeometry());
-                    _extentOverlay.Graphics.Add(graphic);
-                    return;
-                }
-            }
 
-            if (_connectedView.GetCurrentViewpoint(ViewpointType.BoundingGeometry) is Viewpoint extent)
-            {
-                var projectedExtent = GeometryEngine.Project(extent.TargetGeometry, _overview.SpatialReference);
-                var graphic = new Graphic(projectedExtent);
-                graphic.Attributes["Heading"] = extent.Rotation;
-                _extentOverlay.Graphics.Add(graphic);
+                var list = new List<MapPoint> { topLeft, topRight, bottomRight, bottomLeft };
+
+                if (list.All(p => p != null))
+                {
+                    // In some edge cases this won't work, fall back to workaround in that case
+                    try
+                    {
+                        list = list.Select(point => (MapPoint)GeometryEngine.Project(point, SpatialReferences.WebMercator)).ToList();
+                        var webMercatorWidth = SpatialReferences.WebMercator.Extent.Width;
+                        var enableDensify = true;
+                        if (list.Max(point => point.X) - list.Min(point => point.X) > webMercatorWidth / 2)
+                        {
+                            list = list.Select(point => new MapPoint(point.X > 0 ? point.X - webMercatorWidth : point.X, point.Y, SpatialReferences.WebMercator)).ToList();
+                            enableDensify = false;
+                        }
+
+                        Polygon pb = new Polygon(list);
+                        if (enableDensify)
+                        {
+                            pb = (Polygon)GeometryEngine.DensifyGeodetic(pb, 400, LinearUnits.Miles);
+                        }
+
+                        var graphic = new Graphic(pb);
+                        _extentOverlay.Graphics.Add(graphic);
+                        return;
+                    }
+                    catch (Exception)
+                    {
+                        // Ignore
+                    }
+                }
+
+                if (fallbackGraphic != null)
+                {
+                    _extentOverlay.Graphics.Add(fallbackGraphic);
+                }
             }
         }
 
