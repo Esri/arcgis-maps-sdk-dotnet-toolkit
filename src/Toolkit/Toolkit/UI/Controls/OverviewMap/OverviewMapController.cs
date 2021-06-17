@@ -16,13 +16,15 @@
 
 #if !_XAMARIN_ANDROID_ && !_XAMARIN_IOS_
 using System;
+using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
+using System.Linq;
 #if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Xamarin.Forms;
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
+using Esri.ArcGISRuntime.Xamarin.Forms;
 using Point = Xamarin.Forms.Point;
 #elif NETFX_CORE
 using Point = Windows.Foundation.Point;
@@ -135,16 +137,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
             }
             else if (_connectedView is SceneView sv)
             {
-                Graphic fallbackGraphic = null;
-                if (_connectedView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint extent && extent.TargetGeometry is MapPoint centerPoint)
-                {
-                    fallbackGraphic = new Graphic(centerPoint, new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, ExtentSymbol?.Outline?.Color ?? System.Drawing.Color.Red, 8));
-                    if (_connectedView.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Envelope env && env.YMax > 85)
-                    {
-                        _extentOverlay.Graphics.Add(fallbackGraphic);
-                        return;
-                    }
-                }
 #if !XAMARIN_FORMS
                 var height = _connectedView.ActualHeight;
                 var width = _connectedView.ActualWidth;
@@ -152,46 +144,57 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
                 var height = _connectedView.Height;
                 var width = _connectedView.Width;
 #endif
-                var topLeft = sv.ScreenToBaseSurface(new Point(0, 0));
-                var topRight = sv.ScreenToBaseSurface(new Point(width, 0));
-                var bottomLeft = sv.ScreenToBaseSurface(new Point(0, height));
-                var bottomRight = sv.ScreenToBaseSurface(new Point(width, height));
-
-                var list = new List<MapPoint> { topLeft, topRight, bottomRight, bottomLeft };
-
-                if (list.All(p => p != null))
+                try
                 {
-                    // In some edge cases this won't work, fall back to workaround in that case
-                    try
+                    var topLeft = sv.ScreenToBaseSurface(new Point(0, 0));
+                    var topRight = sv.ScreenToBaseSurface(new Point(width, 0));
+                    var bottomLeft = sv.ScreenToBaseSurface(new Point(0, height));
+                    var bottomRight = sv.ScreenToBaseSurface(new Point(width, height));
+
+                    var list = new List<MapPoint> { topLeft, topRight, bottomRight, bottomLeft };
+
+                    if (list.All(p => p != null))
                     {
                         list = list.Select(point => (MapPoint)GeometryEngine.Project(point, SpatialReferences.WebMercator)).ToList();
-                        var webMercatorWidth = SpatialReferences.WebMercator.Extent.Width;
-                        var enableDensify = true;
-                        if (list.Max(point => point.X) - list.Min(point => point.X) > webMercatorWidth / 2)
+                        var topLine = new Polyline(new[] { list[0], list[1] });
+                        var rightLine = new Polyline(new[] { list[1], list[2] });
+                        var bottomLine = new Polyline(new[] { list[2], list[3] });
+                        var leftLine = new Polyline(new[] { list[3], list[0] });
+
+                        topLine = (Polyline)GeometryEngine.DensifyGeodetic(topLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
+                        rightLine = (Polyline)GeometryEngine.DensifyGeodetic(rightLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
+                        bottomLine = (Polyline)GeometryEngine.DensifyGeodetic(bottomLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
+                        leftLine = (Polyline)GeometryEngine.DensifyGeodetic(leftLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
+
+                        LineSymbol lineSymbol = null;
+                        if (ExtentSymbol?.Outline is LineSymbol ls)
                         {
-                            list = list.Select(point => new MapPoint(point.X > 0 ? point.X - webMercatorWidth : point.X, point.Y, SpatialReferences.WebMercator)).ToList();
-                            enableDensify = false;
+                            lineSymbol = ls;
+                        }
+                        else if (ExtentSymbol != null && ExtentSymbol.Color is System.Drawing.Color color)
+                        {
+                            lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 1);
+                        }
+                        else
+                        {
+                            lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1);
                         }
 
-                        Polygon pb = new Polygon(list);
-                        if (enableDensify)
-                        {
-                            pb = (Polygon)GeometryEngine.DensifyGeodetic(pb, 400, LinearUnits.Miles);
-                        }
-
-                        var graphic = new Graphic(pb);
-                        _extentOverlay.Graphics.Add(graphic);
+                        _extentOverlay.Graphics.Add(new Graphic(topLine, lineSymbol));
+                        _extentOverlay.Graphics.Add(new Graphic(rightLine, lineSymbol));
+                        _extentOverlay.Graphics.Add(new Graphic(bottomLine, lineSymbol));
+                        _extentOverlay.Graphics.Add(new Graphic(leftLine, lineSymbol));
                         return;
                     }
-                    catch (Exception)
-                    {
-                        // Ignore
-                    }
+                }
+                catch (Exception)
+                {
+                    // Ignore (fall back to crosshair)
                 }
 
-                if (fallbackGraphic != null)
+                if (_connectedView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint extent && extent.TargetGeometry is MapPoint centerPoint)
                 {
-                    _extentOverlay.Graphics.Add(fallbackGraphic);
+                    _extentOverlay.Graphics.Add(new Graphic(centerPoint, new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, ExtentSymbol?.Outline?.Color ?? System.Drawing.Color.Red, 16)));
                 }
             }
         }
