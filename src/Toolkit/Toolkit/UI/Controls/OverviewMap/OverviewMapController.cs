@@ -135,63 +135,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
                 _extentOverlay.Graphics.Add(new Graphic(area));
                 return;
             }
-            else if (_connectedView is SceneView sv)
+            else if (_connectedView is SceneView)
             {
-#if !XAMARIN_FORMS
-                var height = _connectedView.ActualHeight;
-                var width = _connectedView.ActualWidth;
-#else
-                var height = _connectedView.Height;
-                var width = _connectedView.Width;
-#endif
-                try
-                {
-                    var topLeft = sv.ScreenToBaseSurface(new Point(0, 0));
-                    var topRight = sv.ScreenToBaseSurface(new Point(width, 0));
-                    var bottomLeft = sv.ScreenToBaseSurface(new Point(0, height));
-                    var bottomRight = sv.ScreenToBaseSurface(new Point(width, height));
-
-                    var list = new List<MapPoint> { topLeft, topRight, bottomRight, bottomLeft };
-
-                    if (list.All(p => p != null))
-                    {
-                        list = list.Select(point => (MapPoint)GeometryEngine.Project(point, SpatialReferences.WebMercator)).ToList();
-                        var topLine = new Polyline(new[] { list[0], list[1] });
-                        var rightLine = new Polyline(new[] { list[1], list[2] });
-                        var bottomLine = new Polyline(new[] { list[2], list[3] });
-                        var leftLine = new Polyline(new[] { list[3], list[0] });
-
-                        topLine = (Polyline)GeometryEngine.DensifyGeodetic(topLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
-                        rightLine = (Polyline)GeometryEngine.DensifyGeodetic(rightLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
-                        bottomLine = (Polyline)GeometryEngine.DensifyGeodetic(bottomLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
-                        leftLine = (Polyline)GeometryEngine.DensifyGeodetic(leftLine, 1, LinearUnits.Kilometers, GeodeticCurveType.GreatElliptic);
-
-                        LineSymbol lineSymbol = null;
-                        if (ExtentSymbol?.Outline is LineSymbol ls)
-                        {
-                            lineSymbol = ls;
-                        }
-                        else if (ExtentSymbol != null && ExtentSymbol.Color is System.Drawing.Color color)
-                        {
-                            lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 1);
-                        }
-                        else
-                        {
-                            lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1);
-                        }
-
-                        _extentOverlay.Graphics.Add(new Graphic(topLine, lineSymbol));
-                        _extentOverlay.Graphics.Add(new Graphic(rightLine, lineSymbol));
-                        _extentOverlay.Graphics.Add(new Graphic(bottomLine, lineSymbol));
-                        _extentOverlay.Graphics.Add(new Graphic(leftLine, lineSymbol));
-                        return;
-                    }
-                }
-                catch (Exception)
-                {
-                    // Ignore (fall back to crosshair)
-                }
-
                 if (_connectedView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint extent && extent.TargetGeometry is MapPoint centerPoint)
                 {
                     _extentOverlay.Graphics.Add(new Graphic(centerPoint, new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, ExtentSymbol?.Outline?.Color ?? System.Drawing.Color.Red, 16)));
