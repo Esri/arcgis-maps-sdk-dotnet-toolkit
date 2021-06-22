@@ -23,7 +23,7 @@ using Xamarin.Forms;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
-    /// Defines a small "overview" (or "inset") map displaying the current extent of the attached <see cref="GeoView"/>.
+    /// Defines a small "overview" (or "inset") map displaying a representation of the attached <see cref="GeoView"/>'s current viewpoint.
     /// </summary>
     public class OverviewMap : MapView
     {
@@ -37,9 +37,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             IsAttributionTextVisible = false;
             Map = new Map(BasemapStyle.ArcGISTopographic);
 
-            _controller = new OverviewMapController((GeoView)this)
+            _controller = new OverviewMapController(this)
             {
-                ExtentSymbol = ExtentSymbol,
                 ScaleFactor = ScaleFactor,
                 AttachedView = GeoView,
             };
@@ -58,22 +57,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets the symbol used to draw the <see cref="GeoView"/>'s extent.
+        /// Gets or sets the symbol used to draw a representation of the <see cref="GeoView"/>'s current viewpoint.
         /// </summary>
         /// <remarks>
-        /// The default is an empty fill symbol with a 1 point red outline.
+        /// The default is an empty fill symbol with a 1 point red outline or a red crosshair for scenes.
         /// </remarks>
-        public FillSymbol ExtentSymbol
+        public Symbol Symbol
         {
-            get { return (FillSymbol)GetValue(ExtentSymbolProperty); }
-            set { SetValue(ExtentSymbolProperty, value); }
+            get { return (Symbol)GetValue(SymbolProperty); }
+            set { SetValue(SymbolProperty, value); }
         }
 
         /// <summary>
-        /// Identifies the <see cref="ExtentSymbol"/> bindable property.
+        /// Identifies the <see cref="Symbol"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty ExtentSymbolProperty =
-            BindableProperty.Create(nameof(ExtentSymbol), typeof(FillSymbol), typeof(OverviewMap), new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent, new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)), propertyChanged: OnExtentSymbolPropertyChanged);
+        public static readonly BindableProperty SymbolProperty =
+            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(OverviewMap), null, propertyChanged: OnExtentSymbolPropertyChanged);
 
         /// <summary>
         /// Gets or sets the geoview whose extent is to be displayed.
@@ -103,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             => ((OverviewMap)sender)._controller.AttachedView = newValue as GeoView;
 
         private static void OnExtentSymbolPropertyChanged(BindableObject sender, object oldValue, object newValue)
-            => ((OverviewMap)sender)._controller.ExtentSymbol = newValue as FillSymbol;
+            => ((OverviewMap)sender)._controller.Symbol = newValue as FillSymbol;
 
         private static void OnScaleFactorPropertyChanged(BindableObject sender, object oldValue, object newValue)
             => ((OverviewMap)sender)._controller.ScaleFactor = (double)newValue;

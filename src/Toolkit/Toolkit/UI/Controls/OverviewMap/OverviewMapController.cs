@@ -16,12 +16,10 @@
 
 #if !_XAMARIN_ANDROID_ && !_XAMARIN_IOS_
 using System;
-using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
-using System.Linq;
 #if XAMARIN_FORMS
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
@@ -31,10 +29,7 @@ using Point = Windows.Foundation.Point;
 #else
 using Point = System.Windows.Point;
 #endif
-
 #if !XAMARIN_FORMS
-using System.Collections.Generic;
-using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
@@ -44,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
     internal class OverviewMapController
     {
         private double _scaleFactor;
-        private FillSymbol _extentSymbol;
+        private Symbol _symbol;
         private GeoView _connectedView;
         private GraphicsOverlay _extentOverlay;
         private readonly GeoView _overview;
@@ -89,6 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
                 {
                     _connectedView.ViewpointChanged += OnViewpointChanged;
                     _connectedView.NavigationCompleted += OnNavigationCompleted;
+                    UpdateSymbol();
                     ApplyViewpoint(_connectedView, _overview);
                 }
             }
@@ -107,15 +103,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
             }
         }
 
-        public FillSymbol ExtentSymbol
+        public Symbol Symbol
         {
-            get => _extentSymbol;
+            get => _symbol;
             set
             {
-                if (_extentSymbol != value)
+                if (_symbol != value)
                 {
-                    _extentSymbol = value;
-                    _extentOverlay.Renderer = new SimpleRenderer(_extentSymbol);
+                    _symbol = value;
+                    UpdateSymbol();
                     UpdateGraphic();
                 }
             }
@@ -133,14 +129,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
             if (_connectedView is MapView mv && mv.VisibleArea is Polygon area)
             {
                 _extentOverlay.Graphics.Add(new Graphic(area));
-                return;
             }
-            else if (_connectedView is SceneView)
+            else if (_connectedView is SceneView sv && sv.GetCurrentViewpoint(ViewpointType.CenterAndScale)?.TargetGeometry is MapPoint centerPoint)
             {
-                if (_connectedView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint extent && extent.TargetGeometry is MapPoint centerPoint)
-                {
-                    _extentOverlay.Graphics.Add(new Graphic(centerPoint, new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, ExtentSymbol?.Outline?.Color ?? System.Drawing.Color.Red, 16)));
-                }
+                _extentOverlay.Graphics.Add(new Graphic(centerPoint));
             }
         }
 
@@ -176,6 +168,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
                 Viewpoint newViewpoint = new Viewpoint((MapPoint)existingViewpoint.TargetGeometry, existingViewpoint.TargetScale * scaleMultiplier);
                 receivingView.SetViewpoint(newViewpoint);
                 UpdateGraphic();
+            }
+        }
+
+        private void UpdateSymbol()
+        {
+            if (Symbol != null)
+            {
+                _extentOverlay.Renderer = new SimpleRenderer(Symbol);
+            }
+            else if (_connectedView is MapView)
+            {
+                _extentOverlay.Renderer = new SimpleRenderer(
+                    new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent,
+                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)));
+            }
+            else if (_connectedView is SceneView)
+            {
+                _extentOverlay.Renderer = new SimpleRenderer(
+                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 8));
             }
         }
     }

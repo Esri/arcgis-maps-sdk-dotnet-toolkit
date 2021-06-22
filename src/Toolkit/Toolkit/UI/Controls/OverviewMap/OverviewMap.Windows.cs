@@ -31,7 +31,7 @@ using System.Windows.Media;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
 {
     /// <summary>
-    /// Defines a small "overview" (or "inset") map displaying the current extent of the attached <see cref="GeoView"/>.
+    /// Defines a small "overview" (or "inset") map displaying a representation of the attached <see cref="GeoView"/>'s current viewpoint.
     /// </summary>
     public class OverviewMap : MapView
     {
@@ -47,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
 
             _controller = new OverviewMapController(this)
             {
-                ExtentSymbol = ExtentSymbol,
+                Symbol = Symbol,
                 ScaleFactor = ScaleFactor,
                 AttachedView = GeoView,
             };
@@ -72,12 +72,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
         /// Gets or sets the symbol used to draw the <see cref="GeoView"/>'s extent.
         /// </summary>
         /// <remarks>
-        /// The default is an empty fill symbol with a 1 point red outline.
+        /// The default is an empty fill symbol with a 1 point red outline or a red crosshair for scenes.
         /// </remarks>
-        public FillSymbol ExtentSymbol
+        public Symbol Symbol
         {
-            get { return (FillSymbol)GetValue(ExtentSymbolProperty); }
-            set { SetValue(ExtentSymbolProperty, value); }
+            get { return (Symbol)GetValue(SymbolProperty); }
+            set { SetValue(SymbolProperty, value); }
         }
 
         /// <summary>
@@ -99,12 +99,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
             DependencyProperty.Register(nameof(ScaleFactor), typeof(double), typeof(OverviewMap), new PropertyMetadata(25.0, OnScaleFactorPropertyChanged));
 
         /// <summary>
-        /// Identifies the <see cref="ExtentSymbol"/> dependency property.
+        /// Identifies the <see cref="Symbol"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty ExtentSymbolProperty =
-            DependencyProperty.Register(nameof(ExtentSymbol), typeof(FillSymbol), typeof(OverviewMap), new PropertyMetadata(
-                new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent,
-                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)), OnExtentSymbolPropertyChanged));
+        public static readonly DependencyProperty SymbolProperty =
+            DependencyProperty.Register(nameof(Symbol), typeof(Symbol), typeof(OverviewMap), new PropertyMetadata(null, OnSymbolPropertyChanged));
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> dependency property.
@@ -115,8 +113,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
             => ((OverviewMap)d)._controller.AttachedView = e.NewValue as GeoView;
 
-        private static void OnExtentSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            => ((OverviewMap)d)._controller.ExtentSymbol = e.NewValue as FillSymbol;
+        private static void OnSymbolPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+            => ((OverviewMap)d)._controller.Symbol = e.NewValue as Symbol;
 
         private static void OnScaleFactorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
             => ((OverviewMap)d)._controller.ScaleFactor = (double)e.NewValue;
