@@ -1,63 +1,82 @@
 # ArcGIS Runtime SDK for .NET - Toolkit
 
-[![doc](https://img.shields.io/badge/Doc-purple)](https://esri.github.io/arcgis-toolkit-dotnet/controls.html) [![API reference](https://img.shields.io/badge/API_Ref-Android-lime)](https://esri.github.io/arcgis-toolkit-dotnet/api/android/index.html) [![API reference](https://img.shields.io/badge/API_Ref-iOS-darkblue)](https://esri.github.io/arcgis-toolkit-dotnet/api/ios/index.html) [![API reference](https://img.shields.io/badge/API_Ref-UWP-skyblue)](https://esri.github.io/arcgis-toolkit-dotnet/api/uwp/index.html) [![API reference](https://img.shields.io/badge/API_Ref-Forms-blue)](https://esri.github.io/arcgis-toolkit-dotnet/api/netstd/index.html) [![API reference](https://img.shields.io/badge/API_Ref-WPF-blueviolet)](https://esri.github.io/arcgis-toolkit-dotnet/api/netfx/index.html)
+<a href="https://developers.arcgis.com"><img src="https://img.shields.io/badge/ArcGIS%20Developers%20Home-633b9b?style=flat-square" /></a> <a href="https://developers.arcgis.com/net/"><img src="https://img.shields.io/badge/Documentation-633b9b?style=flat-square" /></a>
+<a href="https://developers.arcgis.com/documentation/mapping-apis-and-services/tutorials/"><img src="https://img.shields.io/badge/Tutorials-633b9b?style=flat-square" /></a>
+<a href="https://developers.arcgis.com/net/wpf/sample-code/"><img src="https://img.shields.io/badge/Samples-633b9b?style=flat-square" /></a>
+<a href="https://github.com/Esri/arcgis-runtime-demos-dotnet"><img src="https://img.shields.io/badge/Demos-633b9b?style=flat-square" /></a>
+<a href=""><img src="https://img.shields.io/badge/Toolkit-black?style=flat-square" /></a>
+<a href="https://github.com/Esri/arcgis-runtime-templates-dotnet"><img src="https://img.shields.io/badge/Templates-633b9b?style=flat-square&logo=visualstudio&labelColor=gray" /></a>
+<a href="https://www.nuget.org/profiles/Esri_Inc"><img src="https://img.shields.io/badge/NuGet-633b9b?style=flat-square&logo=nuget&labelColor=gray" /></a> <a href="https://community.esri.com/t5/arcgis-runtime-sdks/ct-p/arcgis-runtime-sdks"><img src="https://img.shields.io/badge/🙋-Get%20help%20in%20Esri%20Community-633b9b?style=flat-square" /></a>
 
-The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).
+<a href="https://esri.github.io/arcgis-toolkit-dotnet/controls.html"><img src="https://img.shields.io/badge/%F0%9F%93%84-Toolkit%20Guide-633b9b?style=flat-square" /></a>
+<a href="https://esri.github.io/arcgis-toolkit-dotnet/api/index.html"><img src="https://img.shields.io/badge/Toolkit%20API%20Reference:-fff?style=flat-square" /></a> <a href="https://esri.github.io/arcgis-toolkit-dotnet/api/android/index.html"><img src="https://img.shields.io/badge/Xamarin.Android-3ddc84?style=flat-square&labelColor=gray&logo=android" /></a> <a href="https://esri.github.io/arcgis-toolkit-dotnet/api/ios/index.html"><img src="https://img.shields.io/badge/Xamarin.iOS-black?style=flat-square&labelColor=gray&logo=ios" /></a>
+<a href="https://esri.github.io/arcgis-toolkit-dotnet/api/netstd/index.html"><img src="https://img.shields.io/badge/Xamarin.Forms-3498db?style=flat-square&labelColor=gray&logo=Xamarin" /></a>
+<a href="https://esri.github.io/arcgis-toolkit-dotnet/api/netfx/index.html"><img src="https://img.shields.io/badge/WPF-0078d6?style=flat-square&labelColor=gray&logo=windowsxp" /></a>
+<a href="https://esri.github.io/arcgis-toolkit-dotnet/api/uwp/index.html"><img src="https://img.shields.io/badge/UWP-0078d6?style=flat-square&labelColor=gray&logo=windows" /></a>
 
-There are two ways to add Toolkit to your project:
+**Toolkit controls accelerate application development with ArcGIS Runtime**, including...
 
-1. **Install from Nuget** - the fastest way to get toolkit into your app
-    - [Esri.ArcGISRuntime.Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
-	- [Esri.ArcGISRuntime.Toolkit.Xamarin.Forms](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms)
-	- [Esri.ArcGISRuntime.ARToolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit)
-	- [Esri.ArcGISRuntime.ARToolkit.Forms](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit.Forms)
-2. **[Build from source](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html)** - do this if you want to customize toolkit
-   
+<!-- Options: Centered image, gallery, side image -->
+<!-- Use gallery for multi-projects (e.g. Demos repo), centered image for desktop/iPad apps, side image for phone apps -->
+
+<div align="center">
+
+| <img src="./docs/images/readme_compass.png" height="64"> | <img src="./docs/images/readme_legend.png" height="64" /> | <img src="./docs/images/readme_popup.png" height="64"> | <img src="./docs/images/readme_scaleline.png" height="64" /> |
+|----|---|---|---|
+| Compass | Legend | Popup viewer | Scale line |
+
+</div>
+
+...and many more!
+
+<hr />
+
+## Get started
+
+The simplest way to get started is to add the NuGet package(s) to your projects:
+
+<a href="https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/"><img src="https://img.shields.io/badge/Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget" /></a>
+<a href="https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit/"><img src="https://img.shields.io/badge/AR%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget" /></a>
+<a href="https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms/"><img src="https://img.shields.io/badge/Xamarin.Forms%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget" /></a>
+<a href="https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit.Forms/"><img src="https://img.shields.io/badge/Xamarin.Forms%20AR%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget" /></a>
+
+If you need more control, you can fork the repo and build it yourself. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for full instructions.
+
+Building the toolkit requires the latest version of Visual Studio 2019 running on Windows.
+
 ## Features
 
-> See [List of controls](https://esri.github.io/arcgis-toolkit-dotnet/controls.html) for a full list of controls with screenshots
-
-- **[ARSceneView](https://esri.github.io/arcgis-toolkit-dotnet/ar.html)**: Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
-- **[Bookmarks](https://esri.github.io/arcgis-toolkit-dotnet/bookmarks-view.html)**: Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
-- **Compass**: Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
-- **FeatureDataField**: Displays and optionally allows editing of a single field attribute of a feature.
-- **Legend**: Displays a legend for a single layer in your map (and optionally for its sub layers).
-- **MeasureToolbar**: Allows measurement of distances and areas on the map view.
-- **PopupViewer**: Display details and media, edit attributes, geometry and related records, and manage the attachments of features and graphics (popups are defined in the popup property of features and graphics).
-- **ScaleLine**: Displays current scale reference.
-- **SymbolDisplay**: Renders a symbol in a control.
-- **TimeSlider**: Allows interactively defining a temporal range (i.e. time extent) and animating time moving forward or backward.  Can be used to manipulate the time extent in a MapView or SceneView.
-
-### Features in Preview
-
-- **ChallengeHandler**: Displays SignInForm when accessing secure ArcGIS resources, as well as helper classes for storing credentials in Windows' credentials cache.
-- **SignInForm**: Displays a UI dialog to enter or select credentials to use when accessing secure ArcGIS resources.
-
-## Resources
-
-- [Documentation](https://esri.github.io/arcgis-toolkit-dotnet/)
-- [List of controls](https://esri.github.io/arcgis-toolkit-dotnet/controls.html)
-- [Build the SDK](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html)
-- [System Requirements](https://esri.github.io/arcgis-toolkit-dotnet/requirements.html)
-- [ArcGIS Runtime SDK for .NET](https://developers.arcgis.com/net/latest/)
-
-## Issues
-
-Find a bug or want to request a new feature? Please let us know by [submitting an issue](https://github.com/Esri/arcgis-toolkit-dotnet/issues/new).
+|Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
+|---|---|---|---|---|---|
+|[ARSceneView](ar.md)   | N/A | N/A | ✔ | ✔ | ✔ |
+|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
+|Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |
+|PopupViewer | ✔ | ✔ | ✔ | ✔ | ✔ |
+|ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|SignInForm   |   | Preview |   |   |   |
+|SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|TableOfContents   | N/A | Preview | N/A  | N/A | N/A |
+|TimeSlider   | ✔ | ✔ | ✔ | ✔ | ✔ |
 
 ## Contributing
 
-Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
+Contributions are welcome. Please see the [contribution guide](CONTRIBUTING.md) for more details.
 
-## Licensing
+Find a bug or want to request a new feature? Please let us know by [submitting an issue](https://github.com/Esri/arcgis-toolkit-dotnet/issues/new).
 
-Copyright © 2014-2020 Esri.
+## License
+
+Copyright © 2014-2021 Esri.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+   https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
