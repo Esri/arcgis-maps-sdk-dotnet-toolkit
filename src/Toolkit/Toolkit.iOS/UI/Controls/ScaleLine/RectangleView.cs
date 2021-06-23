@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             get => _borderColor;
             set
             {
-                _borderColor = value;
+                _borderColor = value ?? throw new ArgumentNullException(nameof(BorderColor));
                 SetNeedsDisplay();
             }
         }

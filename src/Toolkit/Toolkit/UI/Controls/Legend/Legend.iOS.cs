@@ -150,7 +150,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
                 var info = _legends[indexPath.Row];
-                var cell = tableView.DequeueReusableCell(CellId, indexPath);
+                UITableViewCell? cell = tableView.DequeueReusableCell(CellId, indexPath);
+                if (cell is null)
+                {
+                    cell = new LegendTableViewCell(UITableViewCellStyle.Default, CellId);
+                }
+
                 (cell as LegendTableViewCell)?.Update(info);
                 cell.SetNeedsUpdateConstraints();
                 cell.UpdateConstraints();
@@ -160,11 +165,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private class LegendTableViewCell : UITableViewCell
         {
-            private readonly UILabel _textLabel;
-            private readonly SymbolDisplay _symbol;
+            private UILabel _textLabel;
+            private SymbolDisplay _symbol;
+
+            public LegendTableViewCell(UITableViewCellStyle style, string reuseIdentifier)
+                : base(style, reuseIdentifier)
+            {
+                Initialize();
+            }
 
             public LegendTableViewCell(IntPtr handle)
                 : base(handle)
+            {
+                Initialize();
+            }
+
+            [MemberNotNull(nameof(_textLabel))]
+            [MemberNotNull(nameof(_symbol))]
+            private void Initialize()
             {
                 SelectionStyle = UITableViewCellSelectionStyle.None;
                 TranslatesAutoresizingMaskIntoConstraints = false;

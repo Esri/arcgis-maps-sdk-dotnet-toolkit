@@ -47,16 +47,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        public override nint RowsInSection(UITableView tableview, nint section)
-        {
-            return _bookmarks?.Count() ?? 0;
-        }
+        public override nint RowsInSection(UITableView tableview, nint section) => _bookmarks.Count();
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var bookmark = _bookmarks.ElementAt(indexPath.Row);
-            var cell = tableView.DequeueReusableCell(CellId, indexPath);
-            if (cell == null)
+            UITableViewCell? cell = tableView.DequeueReusableCell(CellId, indexPath);
+            if (cell is null)
             {
                 cell = new UITableViewCell(UITableViewCellStyle.Default, CellId);
             }

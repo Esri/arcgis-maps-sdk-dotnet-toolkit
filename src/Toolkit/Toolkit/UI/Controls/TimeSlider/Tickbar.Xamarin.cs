@@ -33,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class Tickbar
     {
         private IEnumerable<double>? _tickmarkPositions;
-        private string _defaultTickLabelFormat = "M/d/yyyy";
+        private const string _defaultTickLabelFormat = "M/d/yyyy";
 
         /// <summary>
         /// Gets or sets the tick mark positions.

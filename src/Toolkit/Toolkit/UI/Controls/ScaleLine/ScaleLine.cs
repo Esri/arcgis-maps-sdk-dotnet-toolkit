@@ -271,7 +271,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Calculate the geodedetic distance between two points one 'pixel' apart
             var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
-            double distanceInInches = result?.Distance ?? 0;
+            double distanceInInches = result!.Distance;
             return distanceInInches * 96;
         }
     }

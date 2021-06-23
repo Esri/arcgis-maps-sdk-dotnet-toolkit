@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             get => _borderColor;
             set
             {
-                _borderColor = value;
+                _borderColor = value ?? throw new ArgumentNullException(nameof(BorderColor));
                 SetNeedsDisplay();
             }
         }
@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             get => _disabledColor;
             set
             {
-                _disabledColor = value;
+                _disabledColor = value ?? throw new ArgumentNullException(nameof(DisabledColor));
                 SetNeedsDisplay();
             }
         }

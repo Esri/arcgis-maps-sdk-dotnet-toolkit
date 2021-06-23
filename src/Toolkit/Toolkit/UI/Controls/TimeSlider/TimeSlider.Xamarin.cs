@@ -423,6 +423,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtentStroke;
             set
             {
+#if __IOS__
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(FullExtentStroke));
+                }
+#endif
                 if (_fullExtentStroke != value)
                 {
                     _fullExtentStroke = value;
@@ -547,7 +553,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if __IOS__
-        private Color? _fullExtentLabelColor;
+        private Color _fullExtentLabelColor = new Color(.72f, .72f, .72f, 1);
 #elif __ANDROID__
         private Color _fullExtentLabelColor = Color.Rgb(184, 184, 184);
 #endif
@@ -555,11 +561,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the full extent labels.
         /// </summary>
-#if __IOS__
-        private Color? FullExtentLabelColorImpl
-#elif __ANDROID__
         private Color FullExtentLabelColorImpl
-#endif
         {
             get => _fullExtentLabelColor;
             set
@@ -567,19 +569,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (_fullExtentLabelColor != value)
                 {
                     _fullExtentLabelColor = value;
-                    if (value != null)
-                    {
-                        FullExtentStartTimeLabel?.SetTextColor(value);
-                        FullExtentEndTimeLabel?.SetTextColor(value);
-                    }
-
+                    FullExtentStartTimeLabel?.SetTextColor(value);
+                    FullExtentEndTimeLabel?.SetTextColor(value);
                     OnPropertyChanged(nameof(FullExtentLabelColor));
                 }
             }
         }
 
 #if __IOS__
-        private Color? _currentExtentLabelColor;
+        private Color _currentExtentLabelColor = new Color(.72f, .72f, .72f, 1);
 #elif __ANDROID__
         private Color _currentExtentLabelColor = Color.Rgb(184, 184, 184);
 #endif
@@ -587,31 +585,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the current extent labels.
         /// </summary>
-#if __IOS__
-        private Color? CurrentExtentLabelColorImpl
-#elif __ANDROID__
         private Color CurrentExtentLabelColorImpl
-#endif
         {
             get => _currentExtentLabelColor;
             set
             {
+#if __IOS__
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+#endif
                 if (_currentExtentLabelColor != value)
                 {
                     _currentExtentLabelColor = value;
-                    if (value != null)
-                    {
-                        MinimumThumbLabel?.SetTextColor(value);
-                        MaximumThumbLabel?.SetTextColor(value);
-                    }
-
+                    MinimumThumbLabel?.SetTextColor(value);
+                    MaximumThumbLabel?.SetTextColor(value);
                     OnPropertyChanged(nameof(CurrentExtentLabelColor));
                 }
             }
         }
 
 #if __IOS__
-        private Color? _timeStepIntervalLabelColor;
+        private Color _timeStepIntervalLabelColor = new Color(.72f, .72f, .72f, 1);
 #elif __ANDROID__
         private Color _timeStepIntervalLabelColor = Color.Rgb(184, 184, 184);
 #endif
@@ -619,19 +615,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the time step interval labels.
         /// </summary>
-#if __IOS__
-        private Color? TimeStepIntervalLabelColorImpl
-#elif __ANDROID__
         private Color TimeStepIntervalLabelColorImpl
-#endif
         {
             get => _timeStepIntervalLabelColor;
             set
             {
+#if __IOS__
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+#endif
                 if (_timeStepIntervalLabelColor != value)
                 {
                     _timeStepIntervalLabelColor = value;
-                    if (Tickmarks != null && value != null)
+                    if (Tickmarks != null)
                     {
                         Tickmarks.TickLabelColor = value;
                     }

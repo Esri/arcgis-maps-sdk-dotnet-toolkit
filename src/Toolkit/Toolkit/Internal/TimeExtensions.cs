@@ -296,7 +296,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="otherTimeExtent">The second extent to union.</param>
         /// <returns>A TimeExtent instance with a start time that is the minimum of the that of the two input extents
         /// and an end time that is the maximum of that of the two input extents.</returns>
-        public static TimeExtent Union(this TimeExtent timeExtent, TimeExtent otherTimeExtent)
+        public static TimeExtent Union(this TimeExtent timeExtent, TimeExtent? otherTimeExtent)
         {
             if (otherTimeExtent == null)
             {

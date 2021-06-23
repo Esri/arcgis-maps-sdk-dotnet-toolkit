@@ -221,20 +221,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// To trigger a validation exception, throw an exception in this method.
         /// </remarks>
-        /// <param name="oldvValue">The old attribute value.</param>
+        /// <param name="oldValue">The old attribute value.</param>
         /// <param name="newValue">The new updated attribute value.</param>
         /// <seealso cref="ValueChanging"/>
-        protected void OnValueChanging(object? oldvValue, object? newValue)
+        protected void OnValueChanging(object? oldValue, object? newValue)
         {
         }
 
         /// <summary>
         /// Called when an attribute value has changed.
         /// </summary>
-        /// <param name="oldvValue">The old attribute value.</param>
+        /// <param name="oldValue">The old attribute value.</param>
         /// <param name="newValue">The new updated attribute value.</param>
         /// <seealso cref="ValueChanged"/>
-        protected void OnValueChanged(object? oldvValue, object? newValue)
+        protected void OnValueChanged(object? oldValue, object? newValue)
         {
         }
 

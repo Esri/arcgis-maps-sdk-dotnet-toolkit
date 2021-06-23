@@ -91,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var minorTickmarksBounds = new List<Rect>();
 
             // Iterate all child ticks and calculate bounds for each
-            foreach (UIElement? child in Children)
+            foreach (UIElement child in Children)
             {
                 FrameworkElement? c = child as FrameworkElement;
                 if (c == null)

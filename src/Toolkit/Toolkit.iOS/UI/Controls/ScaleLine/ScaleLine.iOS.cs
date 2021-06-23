@@ -214,11 +214,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ScaleLine_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Update the scale line to be the longer of the metric or imperial lines
-            if (_combinedScaleLine != null && _metricScaleLine != null && _usScaleLine != null)
-            {
-                _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
-            }
-
+            _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
             InvalidateIntrinsicContentSize();
         }
 

@@ -16,6 +16,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CoreGraphics;
 using Esri.ArcGISRuntime.UI;
@@ -27,8 +28,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Category("ArcGIS Runtime Controls")]
     public partial class SymbolDisplay : IComponent
     {
-        private UIStackView? _rootStackView;
-        private UIImageView? _imageView;
+        private UIStackView _rootStackView;
+        private UIImageView _imageView;
         internal static readonly nfloat MaxSize = 40;
 
 #pragma warning disable SA1642 // Constructor summary documentation must begin with standard text
@@ -55,6 +56,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
+        [MemberNotNull(nameof(_rootStackView))]
+        [MemberNotNull(nameof(_imageView))]
         private void Initialize()
         {
             BackgroundColor = UIColor.Clear;
@@ -100,7 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override void UpdateConstraints()
         {
             base.UpdateConstraints();
-            if (!_intrinsicContentSize.IsEmpty && _imageView != null)
+            if (!_intrinsicContentSize.IsEmpty)
             {
                 _imageView.WidthAnchor.ConstraintEqualTo(_intrinsicContentSize.Height).Active = true;
                 _imageView.HeightAnchor.ConstraintEqualTo(_intrinsicContentSize.Height).Active = true;
@@ -136,11 +139,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task UpdateSwatchAsync()
         {
-            if (_imageView == null)
-            {
-                return;
-            }
-
             if (Symbol == null)
             {
                 _imageView.Image = null;

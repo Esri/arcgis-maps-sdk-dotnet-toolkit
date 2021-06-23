@@ -54,6 +54,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _borderColor;
             set
             {
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 if (_borderColor != value)
                 {
                     _borderColor = value;

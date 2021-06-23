@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public Legend(Context context)
+        public Legend(Context? context)
             : base(context)
         {
             _datasource = new LegendDataSource(this);
@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public Legend(Context context, IAttributeSet attr)
+        public Legend(Context? context, IAttributeSet? attr)
             : base(context, attr)
         {
             _datasource = new LegendDataSource(this);

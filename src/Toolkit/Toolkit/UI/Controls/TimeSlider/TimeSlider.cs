@@ -80,17 +80,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ThrottleAwaiter _layoutTimeStepsThrottler = new ThrottleAwaiter(1);
         private TaskCompletionSource<bool> _calculateTimeStepsTcs = new TaskCompletionSource<bool>();
 
-#endregion // Fields
+        #endregion // Fields
 
+#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
-#if !__ANDROID__
         public TimeSlider()
             : base()
         {
             InitializeImpl();
             Initialize();
+        }
+#endif
+
+#if __IOS__ || __ANDROID__
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                _layoutTimeStepsThrottler.Dispose();
+            }
         }
 #endif
 
@@ -1217,7 +1229,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the full extent labels.
         /// </summary>
-#if __ANDROID__
+#if __ANDROID__ || __IOS__
         public Brush FullExtentLabelColor
 #else
         public Brush? FullExtentLabelColor
@@ -1230,7 +1242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the current extent labels.
         /// </summary>
-#if __ANDROID__
+#if __ANDROID__ || __IOS__
         public Brush CurrentExtentLabelColor
 #else
         public Brush? CurrentExtentLabelColor
@@ -1243,7 +1255,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the color of the time step interval labels.
         /// </summary>
-#if __ANDROID__
+#if __ANDROID__ || __IOS__
         public Brush TimeStepIntervalLabelColor
 #else
         public Brush? TimeStepIntervalLabelColor
@@ -1312,10 +1324,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 foreach (var layer in temporallyActiveLayers)
                 {
-                    if (layer.FullTimeExtent != null)
-                    {
-                        fullExtent = fullExtent == null ? layer.FullTimeExtent : fullExtent.Union(layer.FullTimeExtent);
-                    }
+                    fullExtent = fullExtent == null ? layer.FullTimeExtent : fullExtent.Union(layer.FullTimeExtent);
 
                     var layerTimeStepInterval = await GetTimeStepIntervalAsync(layer);
                     timeStepInterval = timeStepInterval == null ? layerTimeStepInterval :
@@ -1348,6 +1357,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <returns>Task.</returns>
         public async Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer)
         {
+            if (timeAwareLayer is null)
+            {
+                throw new ArgumentNullException(nameof(timeAwareLayer));
+            }
+
             if (timeAwareLayer is ILoadable loadable)
             {
                 await loadable.LoadAsync();

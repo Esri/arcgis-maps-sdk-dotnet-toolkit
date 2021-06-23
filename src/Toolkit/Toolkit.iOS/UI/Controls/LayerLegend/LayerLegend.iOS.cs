@@ -115,11 +115,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Refresh()
         {
-            if (_listView == null)
-            {
-                return;
-            }
-
             if (LayerContent == null)
             {
                 _listView.Source = null;

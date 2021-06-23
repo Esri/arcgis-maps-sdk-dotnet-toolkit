@@ -20,6 +20,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -146,7 +147,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private class DesigntimeSublayer : ILayerContent
         {
-            private static IReadOnlyList<ILayerContent> _readonlySublayerContents = new System.Collections.ObjectModel.ReadOnlyCollection<ILayerContent>(Enumerable.Empty<ILayerContent>().ToList());
+            private static IReadOnlyList<ILayerContent> _readonlySublayerContents = Array.Empty<ILayerContent>();
 
             internal DesigntimeSublayer(string name)
             {
@@ -235,6 +236,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private double _currentScale = double.NaN;
 
+        [return: NotNullIfNotNull("layers")]
         private List<LegendEntry>? BuildLegendList(IEnumerable<ILayerContent>? layers, bool reverse)
         {
             if (layers == null)
@@ -332,11 +334,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         reverseSublayers = !_reverseLayerOrder;
                     }
 
-                    var list = BuildLegendList(layerContent.SublayerContents, reverseSublayers);
-                    if (list != null)
-                    {
-                        data.AddRange(list);
-                    }
+                    data.AddRange(BuildLegendList(layerContent.SublayerContents, reverseSublayers));
                 }
             }
 

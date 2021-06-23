@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
             else if (view.Background is Drawable drawable)
             {
-                drawable.SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+                drawable.SetColorFilter(color, PorterDuff.Mode.SrcAtop!);
             }
             else
             {

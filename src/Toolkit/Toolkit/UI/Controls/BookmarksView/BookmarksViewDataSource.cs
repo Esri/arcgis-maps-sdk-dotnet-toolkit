@@ -303,13 +303,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         bool ICollection<Bookmark>.Contains(Bookmark item) => ActiveBookmarkList.Contains(item);
 
-        void ICollection<Bookmark>.CopyTo(Bookmark[] array, int arrayIndex) => ActiveBookmarkList?.CopyTo(array, arrayIndex);
+        void ICollection<Bookmark>.CopyTo(Bookmark[] array, int arrayIndex) => ActiveBookmarkList.CopyTo(array, arrayIndex);
 
         IEnumerator<Bookmark> IEnumerable<Bookmark>.GetEnumerator() => ActiveBookmarkList.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => ActiveBookmarkList.GetEnumerator();
 
-        int IList<Bookmark>.IndexOf(Bookmark item) => ActiveBookmarkList?.IndexOf(item) ?? -1;
+        int IList<Bookmark>.IndexOf(Bookmark item) => ActiveBookmarkList.IndexOf(item);
 
         void IList<Bookmark>.Insert(int index, Bookmark item) => throw new NotImplementedException();
 
@@ -319,7 +319,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         int IList.Add(object? value) => throw new NotImplementedException();
 
-        bool IList.Contains(object? value) => ActiveBookmarkList?.Contains(value) ?? false;
+        bool IList.Contains(object? value) => ActiveBookmarkList.Contains(value);
 
         void IList.Clear() => throw new NotImplementedException();
 

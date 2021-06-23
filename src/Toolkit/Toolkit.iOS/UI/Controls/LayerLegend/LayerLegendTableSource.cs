@@ -56,7 +56,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var info = _layerLegends[indexPath.Row];
-            var cell = tableView.DequeueReusableCell(CellId, indexPath);
+            UITableViewCell? cell = tableView.DequeueReusableCell(CellId, indexPath);
+            if (cell is null)
+            {
+                cell = new LayerLegendItemCell(UITableViewCellStyle.Default, CellId);
+            }
+
             (cell as LayerLegendItemCell)?.Update(info);
             cell.SetNeedsUpdateConstraints();
             cell.UpdateConstraints();

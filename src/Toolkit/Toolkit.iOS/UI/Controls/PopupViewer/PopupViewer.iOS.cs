@@ -218,11 +218,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Refresh()
         {
-            if (_detailsList == null)
-            {
-                return;
-            }
-
             if (PopupManager == null)
             {
                 _detailsList.Source = null;
@@ -245,7 +240,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (!string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml))
             {
                 _customHtmlDescription.Hidden = false;
-                _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml?.ToPlainText();
+                _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml!.ToPlainText();
                 _detailsList.Hidden = true;
                 _detailsList.Source = null;
                 _detailsList.ReloadData();
