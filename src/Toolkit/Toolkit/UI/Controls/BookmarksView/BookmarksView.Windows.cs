@@ -148,9 +148,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the style used by the list view items in the underlying list view control.
         /// </summary>
-        public Style ItemContainerStyle
+        public Style? ItemContainerStyle
         {
-            get { return (Style)GetValue(ItemContainerStyleProperty); }
+            get { return GetValue(ItemContainerStyleProperty) as Style; }
             set { SetValue(ItemContainerStyleProperty, value); }
         }
 
@@ -158,7 +158,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="ItemContainerStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ItemContainerStyleProperty =
-            DependencyProperty.Register(nameof(ItemContainerStyle), typeof(Style), typeof(BookmarksView), null);
+            DependencyProperty.Register(nameof(ItemContainerStyle), typeof(Style?), typeof(BookmarksView), null);
     }
 }
 #endif
