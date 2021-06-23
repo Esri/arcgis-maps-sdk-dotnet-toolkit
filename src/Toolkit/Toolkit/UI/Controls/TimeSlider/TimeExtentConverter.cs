@@ -50,28 +50,28 @@ namespace Esri.ArcGISRuntime.Toolkit
         }
 
         /// <inheritdoc />
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object? value)
         {
             return Convert(value as string, culture);
         }
 
         /// <inheritdoc />
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object? value, Type destinationType)
         {
             if (destinationType == null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string) && value is TimeExtent)
+            if (destinationType == typeof(string) && value is TimeExtent te)
             {
-                return Convert((TimeExtent)value, culture);
+                return Convert(te, culture);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private TimeExtent Convert(string timeExtentString, CultureInfo culture)
+        private TimeExtent? Convert(string? timeExtentString, CultureInfo culture)
         {
             if (string.IsNullOrEmpty(timeExtentString))
             {
@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
         }
 
-        private string Convert(TimeExtent timeExtent, CultureInfo culture)
+        private string? Convert(TimeExtent? timeExtent, CultureInfo culture)
         {
             if (timeExtent == null)
             {

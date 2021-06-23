@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Util;
@@ -32,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         public BookmarksView(Context context)
-            : base(context)
+            : base(context ?? throw new ArgumentNullException(nameof(context)))
         {
             Initialize();
         }
@@ -42,12 +43,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public BookmarksView(Context context, IAttributeSet attr)
-            : base(context, attr)
+        public BookmarksView(Context context, IAttributeSet? attr)
+            : base(context ?? throw new ArgumentNullException(nameof(context)), attr)
         {
             Initialize();
         }
 
+        [MemberNotNull(nameof(_internalListView))]
+        [MemberNotNull(nameof(_adapter))]
         internal void Initialize()
         {
             _internalListView = new RecyclerView(Context);

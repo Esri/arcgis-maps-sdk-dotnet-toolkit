@@ -24,9 +24,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class BookmarksView
     {
-        private GeoView _geoView;
+        private GeoView? _geoView;
 
-        private GeoView GeoViewImpl
+        private GeoView? GeoViewImpl
         {
             get => _geoView;
             set
@@ -39,9 +39,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private IEnumerable<Bookmark> _bookmarksOverrideImpl;
+        private IEnumerable<Bookmark>? _bookmarksOverrideImpl;
 
-        private IEnumerable<Bookmark> BookmarksOverrideImpl
+        private IEnumerable<Bookmark>? BookmarksOverrideImpl
         {
             get
             {

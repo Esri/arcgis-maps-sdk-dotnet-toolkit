@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Gets or sets the MapView property that can be attached to a ScaleLine control to accurately set the scale, instead of
         /// setting the <see cref="ScaleLine.MapScale"/> property directly.
         /// </summary>
-        public MapView MapView
+        public MapView? MapView
         {
             get { return GetValue(MapViewProperty) as MapView; }
             set { SetValue(MapViewProperty, value); }
@@ -95,7 +95,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty MapViewProperty =
             BindableProperty.Create(nameof(ScaleLine.MapView), typeof(MapView), typeof(ScaleLine), null, BindingMode.OneWay, null, OnMapViewPropertyChanged);
 
-        private static void OnMapViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnMapViewPropertyChanged(BindableObject bindable, object? oldValue, object? newValue)
         {
             var scaleLine = (ScaleLine)bindable;
             var inpc = oldValue as INotifyPropertyChanged;
@@ -113,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             scaleLine.UpdateScaleFromMapView(newValue as MapView);
         }
 
-        private void UpdateScaleFromMapView(MapView view)
+        private void UpdateScaleFromMapView(MapView? view)
         {
             _scaleSetByMapView = true;
             if (view == null)
@@ -146,7 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             set { SetValue(MapScaleProperty, value); }
         }
 
-        private static void OnMapScaleChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnMapScaleChanged(BindableObject bindable, object? oldValue, object? newValue)
         {
             if (newValue != null)
             {
@@ -176,7 +176,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             set { SetValue(ForegroundProperty, value); }
         }
 
-        private static void OnForegroundChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnForegroundChanged(BindableObject bindable, object? oldValue, object? newValue)
         {
             var nativeView = ((ScaleLine)bindable).NativeScaleLine;
             if (newValue != null)
@@ -185,13 +185,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
         }
 
-        private void MapView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void MapView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             var view = MapView;
             if (e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating))
             {
-                var mapView = (MapView)sender;
-                if (mapView.IsNavigating)
+                if (view?.IsNavigating == true)
                 {
                     return;
                 }
@@ -209,7 +208,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
         /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference.</param>
         /// <returns>The MapScale for the center of the view.</returns>
-        public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon visibleArea, double unitsPerPixel)
+        public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon? visibleArea, double unitsPerPixel)
         {
             if (visibleArea == null)
             {
@@ -231,7 +230,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             // Calculate the geodedetic distance between two points one 'pixel' apart
             var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
-            double distanceInInches = result.Distance;
+            double distanceInInches = result?.Distance ?? 0;
             return distanceInInches * 96;
         }
     }

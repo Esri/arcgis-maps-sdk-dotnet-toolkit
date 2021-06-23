@@ -42,12 +42,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class ScaleLine : Control
     {
-        private TextBlock _usValue;
-        private TextBlock _usUnit;
-        private TextBlock _metricValue;
-        private TextBlock _metricUnit;
-        private Rectangle _metricScaleLine;
-        private Rectangle _usScaleLine;
         private bool _scaleSetByMapView;
 
 #if !__ANDROID__
@@ -92,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="value">map scale in imperial units.</param>
         /// <param name="unit">imperial unit.</param>
-        private void SetUsUnit(double value, string unit)
+        private void SetUsUnit(double value, string? unit)
         {
             var roundedValue = GetRoundedValue(value);
 
@@ -117,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="value">map scale in metric units.</param>
         /// <param name="unit">metric unit.</param>
-        private void SetMetricUnit(double value, string unit)
+        private void SetMetricUnit(double value, string? unit)
         {
             var roundedValue = GetRoundedValue(value);
 
@@ -206,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void WireMapViewPropertyChanged(MapView oldMapView, MapView newMapView)
+        private void WireMapViewPropertyChanged(MapView? oldMapView, MapView? newMapView)
         {
             if (oldMapView is INotifyPropertyChanged inpc1)
             {
@@ -219,7 +213,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void MapView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void MapView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (sender is MapView view && (e.PropertyName == nameof(MapView.VisibleArea) || e.PropertyName == nameof(MapView.IsNavigating)) && !view.IsNavigating)
             {
@@ -227,7 +221,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void UpdateScalelineFromMapView(MapView view)
+        private void UpdateScalelineFromMapView(MapView? view)
         {
             _scaleSetByMapView = true;
             if (view == null)
@@ -251,7 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="visibleArea">The area which center the scale will be calculated for.</param>
         /// <param name="unitsPerPixel">The size of a device indepedent pixel in the units of the spatial reference.</param>
         /// <returns>The MapScale for the center of the view.</returns>
-        public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon visibleArea, double unitsPerPixel)
+        public static double CalculateScale(Esri.ArcGISRuntime.Geometry.Polygon? visibleArea, double unitsPerPixel)
         {
             if (visibleArea == null)
             {
@@ -277,7 +271,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Calculate the geodedetic distance between two points one 'pixel' apart
             var result = Geometry.GeometryEngine.DistanceGeodetic(center, centerOnePixelOver, Geometry.LinearUnits.Inches, Geometry.AngularUnits.Degrees, Geometry.GeodeticCurveType.Geodesic);
-            double distanceInInches = result.Distance;
+            double distanceInInches = result!.Distance;
             return distanceInInches * 96;
         }
     }

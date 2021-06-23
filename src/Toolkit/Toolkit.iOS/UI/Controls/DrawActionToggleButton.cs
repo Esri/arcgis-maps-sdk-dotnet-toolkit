@@ -35,9 +35,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             TouchUpInside += (s, e) => IsChecked = !IsChecked;
         }
 
-        private UIColor _backgroundColor;
+        private UIColor? _backgroundColor;
 
-        public override UIColor BackgroundColor
+        public override UIColor? BackgroundColor
         {
             get => _backgroundColor;
             set
@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private UIColor _borderColor;
+        private UIColor _borderColor = UIColor.Clear;
 
         public UIColor BorderColor
         {
@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (_borderColor != value)
                 {
-                    _borderColor = value;
+                    _borderColor = value ?? throw new ArgumentNullException(nameof(value));
                     SetNeedsDisplay();
                 }
             }
@@ -102,13 +102,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the action to be executed during the control's rendering pass if the switch is on.  This action is responsible for rendering the control's UI.
         /// </summary>
         /// <value>The on draw action.</value>
-        public Action<CGContext, DrawActionToggleButton> DrawCheckedContentAction { get; set; }
+        public Action<CGContext, DrawActionToggleButton>? DrawCheckedContentAction { get; set; }
 
         /// <summary>
         /// Gets or sets the action to be executed during the control's rendering pass if the switch is off.  This action is responsible for rendering the control's UI.
         /// </summary>
         /// <value>The on draw action.</value>
-        public Action<CGContext, DrawActionToggleButton> DrawUncheckedContentAction { get; set; }
+        public Action<CGContext, DrawActionToggleButton>? DrawUncheckedContentAction { get; set; }
 
         public override void Draw(CGRect rect)
         {
@@ -122,6 +122,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        public event EventHandler CheckedChanged;
+        public event EventHandler? CheckedChanged;
     }
 }

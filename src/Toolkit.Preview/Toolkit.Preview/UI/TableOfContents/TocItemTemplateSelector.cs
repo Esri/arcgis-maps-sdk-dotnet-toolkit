@@ -39,9 +39,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         }
 
 #if NETFX_CORE
-        protected override DataTemplate SelectTemplateCore(object item)
+        protected override DataTemplate? SelectTemplateCore(object item)
 #else
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
 #endif
         {
             if (item is TocItem entry)
@@ -79,13 +79,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
 #endif
         }
 
-        public DataTemplate BasemapItemTemplate => _owner.BasemapItemTemplate;
+        public DataTemplate? BasemapItemTemplate => _owner.BasemapItemTemplate;
 
-        public DataTemplate LayerTemplate => _owner.LayerItemTemplate;
+        public DataTemplate? LayerTemplate => _owner.LayerItemTemplate;
 
-        public DataTemplate SublayerTemplate => _owner.SublayerItemTemplate;
+        public DataTemplate? SublayerTemplate => _owner.SublayerItemTemplate;
 
-        public DataTemplate LegendInfoTemplate => _owner.LegendInfoItemTemplate;
+        public DataTemplate? LegendInfoTemplate => _owner.LegendInfoItemTemplate;
     }
 }
 #endif

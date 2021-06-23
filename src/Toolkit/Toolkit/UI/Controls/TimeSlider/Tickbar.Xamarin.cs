@@ -32,15 +32,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class Tickbar
     {
-        private IEnumerable<double> _tickmarkPositions;
-        private string _defaultTickLabelFormat = "M/d/yyyy";
+        private const string _defaultTickLabelFormat = "M/d/yyyy";
+        private IEnumerable<double>? _tickmarkPositions;
 
         /// <summary>
         /// Gets or sets the tick mark positions.
         /// </summary>
         /// <value>The tick mark positions.</value>
         /// <remarks>The tick mark position values should be between 0 and 1.  They represent proportional positions along the tick bar.</remarks>
-        private IEnumerable<double> TickmarkPositionsImpl
+        private IEnumerable<double>? TickmarkPositionsImpl
         {
             get => _tickmarkPositions;
             set
@@ -51,9 +51,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private IEnumerable<object> _tickmarkDataSources;
+        private IEnumerable<object>? _tickmarkDataSources;
 
-        private IEnumerable<object> TickmarkDataSourcesImpl
+        private IEnumerable<object>? TickmarkDataSourcesImpl
         {
             get => _tickmarkDataSources;
             set
@@ -148,12 +148,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private string _tickLabelFormat;
+        private string? _tickLabelFormat;
 
         /// <summary>
         /// Gets or sets the string format to use for displaying the tick labels.
         /// </summary>
-        private string TickLabelFormatImpl
+        private string? TickLabelFormatImpl
         {
             get => _tickLabelFormat;
             set

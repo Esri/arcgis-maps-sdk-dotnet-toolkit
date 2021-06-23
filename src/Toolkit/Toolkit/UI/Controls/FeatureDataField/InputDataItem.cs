@@ -32,15 +32,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="callback">callback raised when <see cref="DataItem.Value"/> property changes.</param>
         /// <param name="value">default value.</param>
         /// <param name="field">contains schema for field value.</param>
-        internal InputDataItem(Action<object> callback, object value, Field field)
+        internal InputDataItem(Action<object?> callback, object? value, Field? field)
             : base(callback, value)
         {
-            Field = field;
+            _field = field;
         }
 
-        private Field _field;
+        private Field? _field;
 
-        public Field Field
+        public Field? Field
         {
             get
             {

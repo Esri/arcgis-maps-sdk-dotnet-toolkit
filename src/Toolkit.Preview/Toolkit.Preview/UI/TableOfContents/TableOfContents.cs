@@ -55,9 +55,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// </summary>
         /// <seealso cref="MapView"/>
         /// <seealso cref="SceneView"/>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
-            get { return (GeoView)GetValue(GeoViewProperty); }
+            get { return GetValue(GeoViewProperty) as GeoView; }
             set { SetValue(GeoViewProperty, value); }
         }
 
@@ -103,9 +103,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <seealso cref="SublayerItemTemplate"/>
         /// <seealso cref="LegendInfoItemTemplate"/>
         /// <seealso cref="BasemapItemTemplate"/>
-        public HierarchicalDataTemplate LayerItemTemplate
+        public HierarchicalDataTemplate? LayerItemTemplate
         {
-            get { return (HierarchicalDataTemplate)GetValue(LayerItemTemplateProperty); }
+            get { return GetValue(LayerItemTemplateProperty) as HierarchicalDataTemplate; }
             set { SetValue(LayerItemTemplateProperty, value); }
         }
 
@@ -124,9 +124,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <seealso cref="LegendInfoItemTemplate"/>
         /// <seealso cref="LayerItemTemplate"/>
         /// <seealso cref="BasemapItemTemplate"/>
-        public HierarchicalDataTemplate SublayerItemTemplate
+        public HierarchicalDataTemplate? SublayerItemTemplate
         {
-            get { return (HierarchicalDataTemplate)GetValue(SublayerItemTemplateProperty); }
+            get { return GetValue(SublayerItemTemplateProperty) as HierarchicalDataTemplate; }
             set { SetValue(SublayerItemTemplateProperty, value); }
         }
 
@@ -142,9 +142,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <seealso cref="SublayerItemTemplate"/>
         /// <seealso cref="LayerItemTemplate"/>
         /// <seealso cref="BasemapItemTemplate"/>
-        public DataTemplate LegendInfoItemTemplate
+        public DataTemplate? LegendInfoItemTemplate
         {
-            get { return (DataTemplate)GetValue(LegendInfoItemTemplateProperty); }
+            get { return GetValue(LegendInfoItemTemplateProperty) as DataTemplate; }
             set { SetValue(LegendInfoItemTemplateProperty, value); }
         }
 
@@ -160,9 +160,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <seealso cref="SublayerItemTemplate"/>
         /// <seealso cref="LayerItemTemplate"/>
         /// <seealso cref="LegendInfoItemTemplate"/>
-        public DataTemplate BasemapItemTemplate
+        public DataTemplate? BasemapItemTemplate
         {
-            get { return (DataTemplate)GetValue(BasemapItemTemplateProperty); }
+            get { return GetValue(BasemapItemTemplateProperty) as DataTemplate; }
             set { SetValue(BasemapItemTemplateProperty, value); }
         }
 
@@ -176,22 +176,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         private void ContextMenuEventHandler(object sender, ContextMenuEventArgs e)
         {
             var s = new TreeView().ItemContainerStyle;
-            (sender as FrameworkElement).ContextMenu = null;
+            ((FrameworkElement)sender).ContextMenu = null;
             var vm = (e.OriginalSource as FrameworkElement)?.DataContext;
             if (vm is TocItem item && TocItemContextMenuOpening != null)
             {
                 var ctm = new ContextMenu();
-                var args = new TocItemContextMenuEventArgs(sender, e)
-                {
-                    MenuItems = ctm.Items,
-                    Item = item,
-                    Menu = ctm,
-                };
+                var args = new TocItemContextMenuEventArgs(sender, e, item, ctm, ctm.Items);
                 TocItemContextMenuOpening?.Invoke(this, args);
                 e.Handled = args.Handled;
                 if (args.MenuItems.Count > 0)
                 {
-                    (sender as FrameworkElement).ContextMenu = args.Menu;
+                    ((FrameworkElement)sender).ContextMenu = args.Menu;
                 }
             }
         }
@@ -199,7 +194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// <summary>
         /// Event fired by the <see cref="TableOfContents"/> when right-clicking a <see cref="TocItem"/> in the tree
         /// </summary>
-        public event System.EventHandler<TocItemContextMenuEventArgs> TocItemContextMenuOpening;
+        public event System.EventHandler<TocItemContextMenuEventArgs>? TocItemContextMenuOpening;
 #endif
     }
 }

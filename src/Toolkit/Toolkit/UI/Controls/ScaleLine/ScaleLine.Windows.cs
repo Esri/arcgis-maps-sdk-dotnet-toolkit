@@ -30,6 +30,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class ScaleLine
     {
+        private TextBlock? _usValue;
+        private TextBlock? _usUnit;
+        private TextBlock? _metricValue;
+        private TextBlock? _metricUnit;
+        private Rectangle? _metricScaleLine;
+        private Rectangle? _usScaleLine;
+
         private void Initialize() => DefaultStyleKey = typeof(ScaleLine);
 
         /// <inheritdoc/>
@@ -114,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the MapView property that can be attached to a Scaleline control to accurately set the scale, instead of
         /// setting the <see cref="ScaleLine.MapScale"/> property directly.
         /// </summary>
-        public MapView MapView
+        public MapView? MapView
         {
             get { return GetValue(MapViewProperty) as MapView; }
             set { SetValue(MapViewProperty, value); }

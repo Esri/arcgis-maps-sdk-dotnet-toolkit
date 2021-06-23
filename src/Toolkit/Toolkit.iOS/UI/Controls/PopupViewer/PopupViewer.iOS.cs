@@ -16,6 +16,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using CoreGraphics;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -55,6 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
+        [MemberNotNull(nameof(_editSummary), nameof(_customHtmlDescription), nameof(_detailsList))]
         private void Initialize()
         {
             BackgroundColor = UIColor.Clear;
@@ -201,9 +203,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-        ISite IComponent.Site { get; set; }
+        ISite? IComponent.Site { get; set; }
 
-        private EventHandler _disposed;
+        private EventHandler? _disposed;
 
         /// <summary>
         /// Internal use only
@@ -216,11 +218,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Refresh()
         {
-            if (_detailsList == null)
-            {
-                return;
-            }
-
             if (PopupManager == null)
             {
                 _detailsList.Source = null;
@@ -243,7 +240,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (!string.IsNullOrWhiteSpace(PopupManager.CustomDescriptionHtml))
             {
                 _customHtmlDescription.Hidden = false;
-                _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml.ToPlainText();
+                _customHtmlDescription.Text = PopupManager.CustomDescriptionHtml!.ToPlainText();
                 _detailsList.Hidden = true;
                 _detailsList.Source = null;
                 _detailsList.ReloadData();

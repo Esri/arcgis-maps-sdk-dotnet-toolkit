@@ -25,8 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Category("ArcGIS Runtime Controls")]
     public partial class BookmarksView
     {
-        private UITableView _listView;
-        private UIBarButtonItem _closeButton;
+        private UITableView? _listView;
 
         /// <inheritdoc />
         public override void LoadView()

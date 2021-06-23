@@ -22,12 +22,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class LayerLegend
     {
-        private ILayerContent _layerContent;
+        private ILayerContent? _layerContent;
 
         /// <summary>
         /// Gets or sets the layer to display the legend for.
         /// </summary>
-        private ILayerContent LayerContentImpl
+        private ILayerContent? LayerContentImpl
         {
             get => _layerContent;
             set

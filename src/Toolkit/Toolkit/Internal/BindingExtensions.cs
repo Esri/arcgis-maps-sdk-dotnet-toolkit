@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="source">The binding to copy.</param>
         /// <param name="newConverterParameter">The object to use as a converter parameter.</param>
         /// <returns>The copy of the binding.</returns>
-        public static Binding Clone(this Binding source, object newConverterParameter = null)
+        public static Binding Clone(this Binding source, object? newConverterParameter = null)
         {
             var copy = new Binding
             {
@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="targetProperty">The dependency property to update.</param>
         /// <param name="stringFormat">The new format string.</param>
         /// <param name="fallbackFormat">The fallback format string.  Used if the new format string is null or empty.</param>
-        public static void UpdateStringFormat(this FrameworkElement bindingTarget, DependencyProperty targetProperty, string stringFormat, ref string fallbackFormat)
+        public static void UpdateStringFormat(this FrameworkElement bindingTarget, DependencyProperty targetProperty, string? stringFormat, ref string? fallbackFormat)
         {
             if (bindingTarget == null)
             {

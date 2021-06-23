@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="Legend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public Legend(Context context)
+        public Legend(Context? context)
             : base(context)
         {
             _datasource = new LegendDataSource(this);
@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public Legend(Context context, IAttributeSet attr)
+        public Legend(Context? context, IAttributeSet? attr)
             : base(context, attr)
         {
             _datasource = new LegendDataSource(this);
@@ -66,16 +66,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal class LegendAdapter : BaseAdapter<object>
         {
             private readonly IList<LegendEntry> _layers;
-            private readonly Context _context;
+            private readonly Context? _context;
 
-            internal LegendAdapter(Context context, IList<LegendEntry> layers)
+            internal LegendAdapter(Context? context, IList<LegendEntry> layers)
             {
                 _context = context;
                 _layers = layers;
-                if (_layers is INotifyCollectionChanged)
+                if (_layers is INotifyCollectionChanged incc)
                 {
-                    var incc = _layers as INotifyCollectionChanged;
-                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
                     {
                         OnEventAction = (instance, source, eventArgs) =>
                         {
@@ -93,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             public override long GetItemId(int position) => position;
 
-            public override View GetView(int position, View convertView, ViewGroup parent)
+            public override View GetView(int position, View? convertView, ViewGroup? parent)
             {
                 var layerLegend = _layers[position];
                 if (convertView == null)
@@ -115,7 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 private readonly TextView _textView;
                 private readonly SymbolDisplay _symbol;
 
-                internal LegendItemView(Context context)
+                internal LegendItemView(Context? context)
                     : base(context)
                 {
                     Orientation = Orientation.Horizontal;
@@ -126,7 +125,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.CenterVertical | GravityFlags.Left },
                     };
-                    var maxSize = (int)(Resources.DisplayMetrics.Density * 40);
+                    var maxSize = (int)((Resources?.DisplayMetrics?.Density ?? 1) * 40);
                     _symbol = new SymbolDisplay(context)
                     {
                         LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { Gravity = GravityFlags.Center, Width = maxSize },

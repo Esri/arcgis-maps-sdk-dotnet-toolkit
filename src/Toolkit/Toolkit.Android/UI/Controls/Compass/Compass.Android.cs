@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Diagnostics.CodeAnalysis;
 using Android.App;
 using Android.Content;
 using Android.Graphics;
@@ -26,37 +27,42 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass")]
     public partial class Compass
     {
-        private static DisplayMetrics s_displayMetrics;
-        private static IWindowManager s_windowManager;
         private NorthArrowShape _northArrow;
-        private ViewPropertyAnimator _fadeInAnimation;
-        private ViewPropertyAnimator _fadeOutAnimation;
+        private ViewPropertyAnimator? _fadeInAnimation;
+        private ViewPropertyAnimator? _fadeOutAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public Compass(Context context)
-            : base(context) => Initialize();
+        public Compass(Context? context)
+            : base(context)
+        {
+            Initialize();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public Compass(Context context, IAttributeSet attr)
-            : base(context, attr) => Initialize();
+        public Compass(Context? context, IAttributeSet? attr)
+            : base(context, attr)
+        {
+            Initialize();
+        }
 
         /// <inheritdoc />
         protected override LayoutParams GenerateDefaultLayoutParams()
         {
-            var size = (int)CalculateScreenDimension((float)DefaultSize);
+            var size = (int)CalculateScreenDimension((float)DefaultSize, context: Context);
             return new LayoutParams(size, size);
         }
 
+        [MemberNotNull(nameof(_northArrow))]
         private void Initialize()
         {
-            var size = (int)CalculateScreenDimension((float)DefaultSize);
+            var size = (int)CalculateScreenDimension((float)DefaultSize, context: Context);
             _northArrow = new NorthArrowShape(Context) { Size = size };
             _northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
             AddView(_northArrow);
@@ -111,7 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _fadeOutAnimation = null;
                     }
 
-                    _fadeInAnimation = _northArrow.Animate().Alpha(1f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeInAnimation = null; }));
+                    _fadeInAnimation = _northArrow.Animate()?.Alpha(1f)?.SetDuration(250)?.WithEndAction(new Java.Lang.Runnable(() => { _fadeInAnimation = null; }));
                 }
                 else
                 {
@@ -126,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         _fadeInAnimation = null;
                     }
 
-                    _fadeOutAnimation = _northArrow.Animate().Alpha(0f).SetDuration(250).WithEndAction(new Java.Lang.Runnable(() => { _fadeOutAnimation = null; }));
+                    _fadeOutAnimation = _northArrow.Animate()?.Alpha(0f)?.SetDuration(250)?.WithEndAction(new Java.Lang.Runnable(() => { _fadeOutAnimation = null; }));
                 }
             }
             else
@@ -135,50 +141,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics GetDisplayMetrics()
-        {
-            if (s_displayMetrics == null)
-            {
-                if (s_windowManager == null)
-                {
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
-                }
-
-                if (s_windowManager == null)
-                {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
-                }
-                else
-                {
-                    s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
-                }
-            }
-
-            return s_displayMetrics;
-        }
-
         // Calculates a screen dimension given a specified dimension in raw pixels
-        internal static float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip)
+        internal static float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip, Context? context = null)
         {
             return !DesignTime.IsDesignMode ?
-                TypedValue.ApplyDimension(screenUnitType, pixels, GetDisplayMetrics()) : pixels;
+                TypedValue.ApplyDimension(screenUnitType, pixels, Internal.ViewExtensions.GetDisplayMetrics(context)) : pixels;
         }
 
         private class NorthArrowShape : View
         {
-            internal NorthArrowShape(Context context)
+            internal NorthArrowShape(Context? context)
                 : base(context)
             {
                 SetWillNotDraw(false);
             }
 
             /// <inheritdoc />
-            protected override void OnDraw(Canvas canvas)
+            protected override void OnDraw(Canvas? canvas)
             {
+                if (canvas is null)
+                {
+                    return;
+                }
+
                 float size = MeasuredWidth > MeasuredHeight ? MeasuredHeight : MeasuredWidth;
-                var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip);
+                var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip, Context);
                 float c = size * .5f;
                 float l = (MeasuredWidth - size) * .5f;
                 float t = (MeasuredHeight - size) * .5f;

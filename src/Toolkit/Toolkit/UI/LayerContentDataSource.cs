@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         where T : ILayerContentItem
     {
         private readonly View _owner;
-        private GeoView _geoview;
+        private GeoView? _geoview;
         private List<T> _items = new List<T>();
 
         protected LayerContentDataSource(View owner)
@@ -68,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         protected IList<T> Items => _items;
 
-        protected GeoView GeoView => _geoview;
+        protected GeoView? GeoView => _geoview;
 
         private protected void RunOnUIThread(Action action)
         {
@@ -96,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private long _propertyChangedCallbackToken = 0;
 #endif
 
-        internal void SetGeoView(GeoView geoview)
+        internal void SetGeoView(GeoView? geoview)
         {
             if (geoview == _geoview)
             {
@@ -160,54 +160,56 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             OnDocumentChanged();
         }
 
-        protected virtual void OnGeoViewChanged(GeoView oldGeoview, GeoView newGeoview)
+        protected virtual void OnGeoViewChanged(GeoView? oldGeoview, GeoView? newGeoview)
         {
         }
 
-        private void GeoView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e)
+        private void GeoView_LayerViewStateChanged(object? sender, LayerViewStateChangedEventArgs e)
         {
             OnLayerViewStateChanged(sender as Layer, e);
         }
 
-        protected virtual void OnLayerViewStateChanged(Layer layer, LayerViewStateChangedEventArgs layerViewState)
+        protected virtual void OnLayerViewStateChanged(Layer? layer, LayerViewStateChangedEventArgs layerViewState)
         {
         }
 
 #if !XAMARIN && !XAMARIN_FORMS
-        private void GeoViewDocumentChanged(object sender, object e)
+        private void GeoViewDocumentChanged(object? sender, object e)
         {
             OnDocumentChanged();
-            if (_geoview is MapView)
+            if (sender is MapView mapView)
             {
-                OnGeoViewPropertyChanged(sender as GeoView, nameof(MapView.Map));
+                OnGeoViewPropertyChanged(mapView, nameof(MapView.Map));
             }
-            else if (_geoview is SceneView)
+            else if (sender is SceneView sceneView)
             {
-                OnGeoViewPropertyChanged(sender as GeoView, nameof(SceneView.Scene));
+                OnGeoViewPropertyChanged(sceneView, nameof(SceneView.Scene));
             }
         }
 #endif
 
-        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (sender is GeoView geoview)
+            {
 #if __IOS__ || __ANDROID__ || XAMARIN_FORMS
-            if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
-                (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
-            {
-                OnDocumentChanged();
-            }
+                if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
+                    (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
+                {
+                    OnDocumentChanged();
+                }
 #endif
-
-            OnGeoViewPropertyChanged(sender as GeoView, e.PropertyName);
+                OnGeoViewPropertyChanged(geoview, e.PropertyName);
+            }
         }
 
-        protected virtual void OnGeoViewPropertyChanged(GeoView geoView, string propertyName)
+        protected virtual void OnGeoViewPropertyChanged(GeoView geoView, string? propertyName)
         {
         }
 
-        private Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs> _documentListener;
+        private Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _documentListener;
 
-        private void SubscribeToDocument(INotifyPropertyChanged document)
+        private void SubscribeToDocument(INotifyPropertyChanged? document)
         {
             if (_documentListener != null)
             {
@@ -217,7 +219,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (document != null)
             {
-                _documentListener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(document)
+                _documentListener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(document)
                 {
                     OnEventAction = (instance, source, eventArgs) => DocumentPropertyChanged(instance, eventArgs.PropertyName),
                     OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
@@ -226,7 +228,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private void DocumentPropertyChanged(object sender, string propertyName)
+        private void DocumentPropertyChanged(object sender, string? propertyName)
         {
             if (propertyName == nameof(Map.OperationalLayers))
             {
@@ -241,13 +243,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             OnDocumentPropertyChanged(sender, propertyName);
         }
 
-        protected virtual void OnDocumentPropertyChanged(object sender, string propertyName)
+        protected virtual void OnDocumentPropertyChanged(object sender, string? propertyName)
         {
         }
 
-        private Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs> _basemapListener;
+        private Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _basemapListener;
 
-        private void SubscribeToBasemap(Basemap basemap)
+        private void SubscribeToBasemap(Basemap? basemap)
         {
             if (_basemapListener != null)
             {
@@ -257,7 +259,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (basemap != null)
             {
-                _basemapListener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(basemap)
+                _basemapListener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(basemap)
                 {
                     OnEventAction = (instance, source, eventArgs) => BasemapPropertyChanged(instance, eventArgs.PropertyName),
                     OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
@@ -266,12 +268,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private void BasemapPropertyChanged(INotifyPropertyChanged instance, string propertyName)
+        private void BasemapPropertyChanged(INotifyPropertyChanged instance, string? propertyName)
         {
-            OnBasemapPropertyChanged(instance as Basemap, propertyName);
+            OnBasemapPropertyChanged((Basemap)instance, propertyName);
         }
 
-        protected void OnBasemapPropertyChanged(Basemap basemap, string propertyName)
+        protected void OnBasemapPropertyChanged(Basemap basemap, string? propertyName)
         {
         }
 
@@ -303,7 +305,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
         }
 
-        private void Layer_PropertyChanged(ILayerContent sender, string propertyName)
+        private void Layer_PropertyChanged(ILayerContent sender, string? propertyName)
         {
             var layer = sender as ILayerContent;
             if (layer is ILoadable loadable && propertyName == nameof(ILoadable.LoadStatus) && loadable.LoadStatus == LoadStatus.Loaded)
@@ -319,11 +321,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             OnLayerPropertyChanged(layer, propertyName);
         }
 
-        protected virtual void OnLayerPropertyChanged(ILayerContent layer, string propertyName)
+        protected virtual void OnLayerPropertyChanged(ILayerContent layer, string? propertyName)
         {
         }
 
-        private List<Action> _operationalLayerTrackingDetachActions;
+        private List<Action>? _operationalLayerTrackingDetachActions;
 
         private void TrackOperationalLayers()
         {
@@ -338,7 +340,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 _operationalLayerTrackingDetachActions = null;
             }
 
-            IEnumerable<Layer> layers = null;
+            IEnumerable<Layer>? layers = null;
 
             if (_geoview is MapView mv)
             {
@@ -352,7 +354,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             _operationalLayerTrackingDetachActions = new List<Action>(TrackLayerContentsRecursive(layers));
         }
 
-        private IEnumerable<Action> TrackLayerContentsRecursive(IEnumerable<ILayerContent> layers)
+        private IEnumerable<Action> TrackLayerContentsRecursive(IEnumerable<ILayerContent>? layers)
         {
             if (layers != null)
             {
@@ -360,9 +362,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     if (layer is INotifyPropertyChanged inpc)
                     {
-                        var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc)
+                        var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(inpc)
                         {
-                            OnEventAction = (instance, source, eventArgs) => Layer_PropertyChanged(instance as ILayerContent, eventArgs.PropertyName),
+                            OnEventAction = (instance, source, eventArgs) => Layer_PropertyChanged((ILayerContent)instance, eventArgs.PropertyName),
                             OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                         };
                         inpc.PropertyChanged += listener.OnEvent;
@@ -377,7 +379,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 if (layers is INotifyCollectionChanged incc)
                 {
-                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
                     {
                         OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
                         OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
@@ -388,7 +390,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private void Layers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Layers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             TrackOperationalLayers();
             MarkCollectionDirty();
@@ -493,7 +495,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public bool IsSynchronized => (Items as ICollection)?.IsSynchronized ?? false;
 
-        public object SyncRoot => (Items as ICollection)?.SyncRoot;
+        public object SyncRoot => ((ICollection)Items).SyncRoot;
 
         public T this[int index] { get => Items[index]; set => throw new NotSupportedException(); }
 
@@ -521,19 +523,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         #region List
 
-        object IList.this[int index] { get => Items[index]; set => throw new NotSupportedException(); }
+        object? IList.this[int index] { get => Items[index]; set => throw new NotSupportedException(); }
 
-        int IList.Add(object value) => throw new NotSupportedException();
+        int IList.Add(object? value) => throw new NotSupportedException();
 
-        void IList.Remove(object value) => throw new NotSupportedException();
+        void IList.Remove(object? value) => throw new NotSupportedException();
 
         void ICollection.CopyTo(Array array, int index) => ((ICollection)Items).CopyTo(array, index);
 
-        bool IList.Contains(object value) => ((IList)Items).Contains(value);
+        bool IList.Contains(object? value) => ((IList)Items).Contains(value);
 
-        int IList.IndexOf(object value) => ((IList)Items).IndexOf(value);
+        int IList.IndexOf(object? value) => ((IList)Items).IndexOf(value);
 
-        void IList.Insert(int index, object value) => throw new NotSupportedException();
+        void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
         #endregion
 
@@ -549,8 +551,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
     }
 }

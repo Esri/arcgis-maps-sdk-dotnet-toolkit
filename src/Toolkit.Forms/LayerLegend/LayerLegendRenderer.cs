@@ -25,11 +25,14 @@ using Xamarin.Forms.Platform.iOS;
 using Xamarin.Forms.Platform.UWP;
 #endif
 
+#pragma warning disable CS0618 // Type or member 'LayerLegend' is obsolete
 [assembly: ExportRenderer(typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.LayerLegend), typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.LayerLegendRenderer))]
+#pragma warning restore CS0618 // Type or member is obsolete
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    internal class LayerLegendRenderer : ViewRenderer<LayerLegend, UI.Controls.LayerLegend>
+    [System.Obsolete("Deprecated in favor of Legend control")]
+    internal class LayerLegendRenderer : ViewRenderer<LayerLegend, UI.Controls.LayerLegend?>
     {
 #if __ANDROID__
         public LayerLegendRenderer(Android.Content.Context context)
@@ -76,4 +79,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
     }
 }
+
 #endif

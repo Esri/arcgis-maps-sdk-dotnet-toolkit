@@ -29,7 +29,7 @@ using Xamarin.Forms.Platform.UWP;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    internal class SymbolDisplayRenderer : ViewRenderer<SymbolDisplay, UI.Controls.SymbolDisplay>
+    internal class SymbolDisplayRenderer : ViewRenderer<SymbolDisplay, UI.Controls.SymbolDisplay?>
     {
 #if __ANDROID__
         public SymbolDisplayRenderer(Android.Content.Context context)
@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == SymbolDisplay.SymbolProperty.PropertyName)
+            if (e.PropertyName == SymbolDisplay.SymbolProperty.PropertyName && Control != null)
             {
                 Control.Symbol = Element.Symbol;
             }

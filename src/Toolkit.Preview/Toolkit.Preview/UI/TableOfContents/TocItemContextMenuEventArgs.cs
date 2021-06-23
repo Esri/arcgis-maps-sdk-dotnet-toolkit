@@ -27,25 +27,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
     /// <seealso cref="TableOfContents.TocItemContextMenuOpening"/>
     public class TocItemContextMenuEventArgs : RoutedEventArgs
     {
-        internal TocItemContextMenuEventArgs(object source, ContextMenuEventArgs args)
+        internal TocItemContextMenuEventArgs(object source, ContextMenuEventArgs args, TocItem item, ContextMenu menu, ItemCollection menuItems)
             : base(args.RoutedEvent, source)
         {
+            Item = item;
+            Menu = menu;
+            MenuItems = menuItems;
         }
 
         /// <summary>
         /// Gets a reference to the node that was clicked.
         /// </summary>
-        public TocItem Item { get; internal set; }
+        public TocItem Item { get; }
 
         /// <summary>
         /// Gets a reference to the context menu that will be displayed.
         /// </summary>
-        public ContextMenu Menu { get; internal set; }
+        public ContextMenu Menu { get; }
 
         /// <summary>
         /// Gets a set of menu items to display. If empty, no context menu will be displayed.
         /// </summary>
-        public ItemCollection MenuItems { get; internal set; }
+        public ItemCollection MenuItems { get; }
     }
 }
 #endif

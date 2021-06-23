@@ -28,10 +28,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class PopupFieldAdapter : BaseAdapter<PopupFieldValue>
     {
         private readonly IReadOnlyList<PopupFieldValue> _displayFields;
-        private readonly Context _context;
+        private readonly Context? _context;
         private Color _foregroundColor = Color.Black;
 
-        internal PopupFieldAdapter(Context context, IEnumerable<PopupFieldValue> displayFields, Color foregroundColor)
+        internal PopupFieldAdapter(Context? context, IEnumerable<PopupFieldValue> displayFields, Color foregroundColor)
         {
             _context = context;
             _displayFields = displayFields?.Any() ?? false ?
@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return position;
         }
 
-        public override View GetView(int position, View convertView, ViewGroup parent)
+        public override View GetView(int position, View? convertView, ViewGroup? parent)
         {
             var popupFieldValue = _displayFields[position];
             if (convertView == null)

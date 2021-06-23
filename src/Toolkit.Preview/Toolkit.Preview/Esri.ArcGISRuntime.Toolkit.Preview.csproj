@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
     <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework)</TargetFrameworks>
@@ -8,34 +8,25 @@
     <AssemblyName>Esri.ArcGISRuntime.Toolkit.Preview</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+  <Import Project="..\..\CommonProperties.targets" />
+
+  <PropertyGroup Condition="'$(IsUWP)' == 'true'">
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
-  </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(TargetFramework)' == '$(DotNetTargetFramework)'">
     <UseWpf>true</UseWpf>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
+  
+  <ItemGroup Condition="'$(IsDotNetFramework)' == 'true'">
     <Reference Include="System.Security" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
   </ItemGroup>
-    
+
   <ItemGroup> 
      <PackageReference Include="StyleCop.Analyzers">
 	  <PrivateAssets>all</PrivateAssets>
@@ -67,6 +58,7 @@
   <ItemGroup>
     <Compile Include="..\..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="UI\TableOfContents\LayerContentDataSource.cs" />
     <Compile Include="..\..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
+    <Compile Include="..\..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
   </ItemGroup>
  
   <ItemGroup>
@@ -82,9 +74,7 @@
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.Android\Esri.ArcGISRuntime.Toolkit.Preview.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.iOS\Esri.ArcGISRuntime.Toolkit.Preview.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
   <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.UWP\Esri.ArcGISRuntime.Toolkit.Preview.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Preview.WPF\Esri.ArcGISRuntime.Toolkit.Preview.WPF.projitems" Label="Shared" Condition="'$(UseWpf)' == 'true'" />
 
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">

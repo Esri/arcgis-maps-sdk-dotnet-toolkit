@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
   <PropertyGroup Condition="$(XamarinFormsPackageVersion.StartsWith('5.0'))">
     <AndroidTargetFramework>monoandroid10.0</AndroidTargetFramework>
   </PropertyGroup>
@@ -12,21 +12,29 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <DefineConstants>$(DefineConstants);XAMARIN_FORMS</DefineConstants>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
     <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
     <DefineConstants>$(DefineConstants);XAMARIN</DefineConstants>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -50,6 +58,13 @@
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(Nullable)'=='annotations'">
+    <Compile Include="..\Toolkit\NullableAttributes.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Nullable)'=='enable' AND '$(TargetFramework)' != '$(NetWindowsTargetFramework)' ">
+    <Compile Include="..\Toolkit\NullableAttributesNotNet5.cs" />
+    <!-- Adds some null annotations for pre-.net5 targets that already supports some annotations -->
+  </ItemGroup>
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
     <ItemGroup>

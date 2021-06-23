@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             }
         }
 
-        protected override void OnDocumentPropertyChanged(object sender, string propertyName)
+        protected override void OnDocumentPropertyChanged(object sender, string? propertyName)
         {
             if (propertyName == nameof(Map.Basemap))
             {
@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             base.OnDocumentPropertyChanged(sender, propertyName);
         }
 
-        protected override void OnLayerPropertyChanged(ILayerContent layer, string propertyName)
+        protected override void OnLayerPropertyChanged(ILayerContent layer, string? propertyName)
         {
             base.OnLayerPropertyChanged(layer, propertyName);
             if (propertyName == nameof(FeatureLayer.Renderer) && ShowLegend)
@@ -98,8 +98,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
         private List<TocItem> BuildTocList()
         {
-            IEnumerable<Layer> layers = null;
-            Basemap basemap = null;
+            IEnumerable<Layer>? layers = null;
+            Basemap? basemap = null;
 
             if (GeoView is MapView mv)
             {

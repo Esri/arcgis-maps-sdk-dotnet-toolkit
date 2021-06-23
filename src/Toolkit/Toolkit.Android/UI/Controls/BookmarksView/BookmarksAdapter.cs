@@ -31,10 +31,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class BookmarksAdapter : RecyclerView.Adapter
     {
         private BookmarksViewDataSource _dataSource;
-        private readonly Context _context;
+        private readonly Context? _context;
         private List<Bookmark> _shadowList = new List<Bookmark>();
 
-        internal BookmarksAdapter(Context context, BookmarksViewDataSource dataSource)
+        internal BookmarksAdapter(Context? context, BookmarksViewDataSource dataSource)
         {
             _context = context;
             _dataSource = dataSource;
@@ -79,12 +79,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override long GetItemId(int position) => position;
 
-        public event EventHandler<Bookmark> BookmarkSelected;
+        public event EventHandler<Bookmark>? BookmarkSelected;
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            BookmarkItemViewHolder bookmarkHolder = holder as BookmarkItemViewHolder;
-            if (_shadowList != null && _shadowList.Count() > position)
+            BookmarkItemViewHolder? bookmarkHolder = holder as BookmarkItemViewHolder;
+            if (bookmarkHolder?.BookmarkLabel != null && _shadowList != null && _shadowList.Count() > position)
             {
                 bookmarkHolder.BookmarkLabel.Text = _shadowList.ElementAt(position).Name;
             }
@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            View itemView = new BookmarkItemView(_context);
+            BookmarkItemView itemView = new BookmarkItemView(_context);
             return new BookmarkItemViewHolder(itemView, OnBookmarkClicked);
         }
 

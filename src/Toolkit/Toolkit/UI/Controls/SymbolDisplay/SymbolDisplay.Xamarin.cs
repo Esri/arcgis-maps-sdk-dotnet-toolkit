@@ -23,12 +23,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class SymbolDisplay
     {
-        private Symbology.Symbol _symbol;
+        private Symbology.Symbol? _symbol;
 
         /// <summary>
         /// Gets or sets the symbol to render.
         /// </summary>
-        private Symbology.Symbol SymbolImpl
+        private Symbology.Symbol? SymbolImpl
         {
             get => _symbol;
             set

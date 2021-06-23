@@ -30,13 +30,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Callback for notifying <see cref="FeatureDataField"/> that <see cref="Value"/> property has changed.
         /// </summary>
-        private readonly Action<object> _callback;
+        private readonly Action<object?>? _callback;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataItem" /> class.
         /// </summary>
         /// <param name="callback">callback raised when <see cref="Value"/> property changes.</param>
-        internal DataItem(Action<object> callback)
+        internal DataItem(Action<object?>? callback)
         {
             _callback = callback;
         }
@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="callback">callback raised when <see cref="Value"/> property changes.</param>
         /// <param name="value">default value.</param>
-        internal DataItem(Action<object> callback, object value)
+        internal DataItem(Action<object?>? callback, object? value)
             : this(callback)
         {
             _value = value;
@@ -57,14 +57,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         protected virtual void OnValueChanged() => _callback?.Invoke(GetBoundValue());
 
-        internal virtual object GetBoundValue() => Value;
+        internal virtual object? GetBoundValue() => Value;
 
-        private object _value;
+        private object? _value;
 
         /// <summary>
         /// Gets or sets the value used to bind ContentTemplate.
         /// </summary>
-        public virtual object Value
+        public virtual object? Value
         {
             get
             {
@@ -84,12 +84,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private string _errorMessage;
+        private string? _errorMessage;
 
         /// <summary>
         /// Gets or sets the error message.
         /// </summary>
-        public virtual string ErrorMessage
+        public virtual string? ErrorMessage
         {
             get
             {
@@ -108,9 +108,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             var handler = PropertyChanged;
             if (handler != null)

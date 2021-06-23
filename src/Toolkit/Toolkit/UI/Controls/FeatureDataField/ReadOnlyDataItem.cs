@@ -26,28 +26,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     internal sealed class ReadOnlyDataItem : DataItem
     {
-        private readonly Field _field;
+        private readonly Field? _field;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReadOnlyDataItem" /> class.
         /// </summary>
         /// <param name="value">default value.</param>
         /// <param name="field">contains schema for field value.</param>
-        internal ReadOnlyDataItem(object value, Field field)
+        internal ReadOnlyDataItem(object? value, Field? field)
             : base(null, value)
         {
             _value = value;
             _field = field;
         }
 
-        private object _value;
+        private object? _value;
 
         /// <summary>
         /// Gets or sets the current attribute value of field.
         /// </summary>
-        public override object Value
+        public override object? Value
         {
-            get { return _field?.GetDisplayValue(_value) ?? _value; }
+            get { return _value is null ? null : _field?.GetDisplayValue(_value) ?? _value; }
             set { _value = value; }
         }
     }

@@ -29,26 +29,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </remarks>
     internal class DispatcherTimer : IDisposable
     {
-        private Timer _timer;
+        private readonly Timer _timer;
         private bool _isInitialized;
+        private bool _isDisposed;
 
         /// <summary>
         /// Gets or sets time interval of Tick event callbacks.
         /// </summary>
         public TimeSpan Interval
         {
-            get
-            {
-                return (_timer != null) ? TimeSpan.FromMilliseconds(_timer.Interval) : TimeSpan.Zero;
-            }
-
-            set
-            {
-                if (_timer != null)
-                {
-                    _timer.Interval = value.TotalMilliseconds;
-                }
-            }
+            get => TimeSpan.FromMilliseconds(_timer.Interval);
+            set => _timer.Interval = value.TotalMilliseconds;
         }
 
         /// <summary>
@@ -56,36 +47,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public bool IsEnabled
         {
-            get
-            {
-                return _timer != null && _timer.Enabled;
-            }
-
-            set
-            {
-                if (_timer != null)
-                {
-                    _timer.Enabled = value;
-                }
-            }
+            get => !_isDisposed && _timer.Enabled;
+            set => _timer.Enabled = value;
         }
 
         /// <summary>
         /// Event fired at each Interval
         /// </summary>
-        public event EventHandler Tick;
+        public event EventHandler? Tick;
 
         public DispatcherTimer()
         {
             _timer = new Timer();
             _timer.AutoReset = true;
             _isInitialized = false;
+            _isDisposed = false;
         }
 
         public void Start()
         {
             // check for a disposed timer
-            if (_timer == null)
+            if (_isDisposed)
             {
                 return;
             }
@@ -102,10 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public void Stop()
         {
-            if (_timer != null)
-            {
-                _timer.Stop();
-            }
+            _timer.Stop();
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -126,21 +105,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public void Dispose()
         {
-            if (_timer != null)
+            _isDisposed = true;
+            if (_timer.Enabled)
             {
-                if (_timer.Enabled)
-                {
-                    _timer.Stop();
-                }
-
-                if (_isInitialized)
-                {
-                    _timer.Elapsed -= Timer_Elapsed;
-                }
-
-                _timer.Dispose();
-                _timer = null;
+                _timer.Stop();
             }
+
+            if (_isInitialized)
+            {
+                _timer.Elapsed -= Timer_Elapsed;
+            }
+
+            _timer.Dispose();
         }
     }
 }

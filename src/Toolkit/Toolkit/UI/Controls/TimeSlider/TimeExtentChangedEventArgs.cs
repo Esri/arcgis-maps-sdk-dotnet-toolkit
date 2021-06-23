@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         /// <param name="newExtent">The new <see cref="TimeExtent"/> value.</param>
         /// <param name="oldExtent">The old <see cref="TimeExtent"/> value.</param>
-        internal TimeExtentChangedEventArgs(TimeExtent newExtent, TimeExtent oldExtent)
+        internal TimeExtentChangedEventArgs(TimeExtent? newExtent, TimeExtent? oldExtent)
         {
             NewExtent = newExtent;
             OldExtent = oldExtent;
@@ -46,11 +46,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets the new <see cref="TimeExtent"/> value.
         /// </summary>
-        public TimeExtent NewExtent { get; private set; }
+        public TimeExtent? NewExtent { get; private set; }
 
         /// <summary>
         /// Gets the old <see cref="TimeExtent"/> value.
         /// </summary>
-        public TimeExtent OldExtent { get; private set; }
+        public TimeExtent? OldExtent { get; private set; }
     }
 }

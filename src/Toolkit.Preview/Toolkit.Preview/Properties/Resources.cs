@@ -23,29 +23,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Properties
 #if NETFX_CORE
         private static readonly Windows.ApplicationModel.Resources.ResourceLoader _resource = Windows.ApplicationModel.Resources.ResourceLoader.GetForViewIndependentUse("Esri.ArcGISRuntime.Toolkit.Preview/Resources");
 
-        public static string GetString(string name)
+        public static string? GetString(string name)
         {
             return _resource.GetString(name);
         }
 #else
-        private static ResourceManager _resourceManager;
+        private static ResourceManager _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.Preview.LocalizedStrings.Resources", typeof(Resources).Assembly);
 
-        private static ResourceManager ResourceManager
+        public static string? GetString(string name)
         {
-            get
-            {
-                if (_resourceManager == null)
-                {
-                    _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.Preview.LocalizedStrings.Resources", typeof(Resources).Assembly);
-                }
-
-                return _resourceManager;
-            }
-        }
-
-        public static string GetString(string name)
-        {
-            return ResourceManager.GetString(name);
+            return _resourceManager.GetString(name);
         }
 #endif
     }

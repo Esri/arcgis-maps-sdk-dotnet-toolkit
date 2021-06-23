@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly TextView _label;
         private readonly TextView _formattedValue;
 
-        internal DetailsItemView(Context context, Color foregroundColor)
+        internal DetailsItemView(Context? context, Color foregroundColor)
             : base(context)
         {
             Orientation = Orientation.Vertical;
@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RequestLayout();
         }
 
-        internal void Update(PopupFieldValue field)
+        internal void Update(PopupFieldValue? field)
         {
             _label.Text = field?.Field?.Label;
             _formattedValue.Text = field?.FormattedValue;
