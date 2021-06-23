@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// <returns>A certificate picked by the user.</returns>
         public static CertificateCredential? SelectCertificate(CredentialRequestInfo info)
         {
-            using store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            using var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             return SelectCertificate(info, store);
         }
 
