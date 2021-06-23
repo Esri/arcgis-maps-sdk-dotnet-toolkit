@@ -1,0 +1,29 @@
+<Project>
+
+  <PropertyGroup>
+    <IsDotNetFramework Condition="'$([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework)))'=='.NETFramework'">true</IsDotNetFramework>
+    <IsDotNet Condition="'$([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework)))'=='.NETCoreApp'">true</IsDotNet>
+    <IsUWP Condition="'$([MSBuild]::GetTargetFrameworkIdentifier($(TargetFramework)))'=='UAP'">true</IsUWP>
+    <IsTargetingWindows Condition="'$([MSBuild]::GetTargetPlatformIdentifier($(TargetFramework)))'=='Windows' OR '$(IsDotNetFramework)'=='true' OR '$(TargetFramework.StartsWith(&quot;uap10.0.&quot;))'=='true' OR '$(TargetFramework)'=='netcoreapp3.1'">true</IsTargetingWindows>
+    <IsTargetingiOS Condition="'$([MSBuild]::GetTargetPlatformIdentifier($(TargetFramework)))'=='ios' OR '$(TargetFramework)'=='xamarinios10'">true</IsTargetingiOS>
+    <IsTargetingAndroid Condition="'$([MSBuild]::GetTargetPlatformIdentifier($(TargetFramework)))'=='android' OR '$(TargetFramework.StartsWith(&quot;monoandroid&quot;))'=='true'">true</IsTargetingAndroid>
+    <SupportsNullable Condition="'$(IsTargetingAndroid)' == 'true' OR '$(IsTargetingiOS)' == 'true' OR '$(IsDotNet)' == 'true'">true</SupportsNullable>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <DefineConstants Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net5.0'))">$(DefineConstants);NET5_0_OR_GREATER</DefineConstants>
+    <DefineConstants Condition="'$(IsTargetingWindows)'=='true'">$(DefineConstants);WINDOWS</DefineConstants>
+    <DefineConstants Condition="'$(IsTargetingAndroid)'=='true' OR '$(IsTargetingiOS)'=='true'">$(DefineConstants);XAMARIN</DefineConstants>
+    <Nullable Condition="'$(SupportsNullable)'=='true'">enable</Nullable>
+    <Nullable Condition="'$(SupportsNullable)'!='true'">annotations</Nullable>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(Nullable)'=='annotations'">
+    <Compile Include="$(MSBuildThisFileDirectory)\Toolkit\NullableAttributes.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Nullable)'=='enable'">
+    <Compile Include="$(MSBuildThisFileDirectory)\Toolkit\NullableAttributesNotNet5.cs" /> <!-- Adds some null annotations for pre-.net5 targets that already supports some annotations -->
+  </ItemGroup>
+
+
+</Project>

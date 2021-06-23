@@ -369,7 +369,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                     return string.Format("CredentialType: {0}, ApplicationName: {1}, UserName: {2}, Password: {3}", CredentialType, ApplicationName, UserName, Password);
                 }
 
-                protected void Dispose(bool disposing)
+                private void Dispose(bool disposing)
                 {
                     if (!_disposedValue)
                     {

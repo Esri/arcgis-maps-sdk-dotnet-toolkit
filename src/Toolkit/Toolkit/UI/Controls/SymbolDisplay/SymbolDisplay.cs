@@ -101,6 +101,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Triggered when the image source has updated
         /// </summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+#if NETCOREAPP
+        public new event System.EventHandler? SourceUpdated;
+#else
         public event System.EventHandler? SourceUpdated;
+#endif
     }
 }

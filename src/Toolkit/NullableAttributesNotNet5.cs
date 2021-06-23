@@ -13,7 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
+#if !NET5_0_OR_GREATER
 #pragma warning disable SA1505 // Opening braces should not be followed by blank line
 #pragma warning disable SA1512 // Single-line comments should not be followed by blank line
 #pragma warning disable SA1642 // Constructor summary documentation should begin with standard text
@@ -91,3 +91,4 @@ namespace System.Diagnostics.CodeAnalysis
 #pragma warning restore SA1642 // Constructor summary documentation should begin with standard text
 #pragma warning restore SA1512 // Single-line comments should not be followed by blank line
 #pragma warning restore SA1505 // Opening braces should not be followed by blank line
+#endif

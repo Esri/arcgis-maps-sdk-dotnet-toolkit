@@ -205,6 +205,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _foregroundColor = value;
+
                 // Apply specified color to scalebar elements
                 _combinedScaleLine.BackgroundColor = value;
                 _metricUnit.SetTextColor(value);

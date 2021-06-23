@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
     /// <summary>
     /// Custom <see cref="AuthenticationManager"/> Challenge Handler that combines user/password, certificate and OAuth authentication.
     /// </summary>
-    public class ChallengeHandler : Esri.ArcGISRuntime.Security.IChallengeHandler
+    public sealed class ChallengeHandler : Esri.ArcGISRuntime.Security.IChallengeHandler
     {
         private System.Windows.Threading.Dispatcher _dispatcher;
 
