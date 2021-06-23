@@ -98,11 +98,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Refresh()
         {
-            if (_detailsList == null)
-            {
-                return;
-            }
-
             if (PopupManager == null)
             {
                 _detailsList.Adapter = null;
@@ -141,12 +136,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _foregroundColor = value;
-
-                if (_customHtmlDescription == null)
-                {
-                    return;
-                }
-
                 _editSummary.SetTextColor(value);
                 _customHtmlDescription.SetTextColor(value);
                 (_detailsList.Adapter as PopupFieldAdapter)?.SetForegroundColor(value);

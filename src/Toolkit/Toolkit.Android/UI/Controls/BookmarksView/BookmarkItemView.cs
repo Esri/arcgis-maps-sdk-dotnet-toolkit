@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class BookmarkItemView : LinearLayout
     {
         // View that renders the bookmark's title.
-        public TextView BookmarkLabel { get; set; }
+        public TextView BookmarkLabel { get; }
 
         internal BookmarkItemView(Context? context)
             : base(context)

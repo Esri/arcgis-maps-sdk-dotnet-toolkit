@@ -30,8 +30,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine")]
     public partial class ScaleLine
     {
-        private static DisplayMetrics? s_displayMetrics;
-        private static IWindowManager? s_windowManager;
         private RectangleView _firstMetricTickLine;
         private RectangleView _secondMetricTickLine;
         private RectangleView _scaleLineStartSegment;
@@ -207,12 +205,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set
             {
                 _foregroundColor = value;
-
-                if (_metricScaleLine == null)
-                {
-                    return;
-                }
-
                 // Apply specified color to scalebar elements
                 _combinedScaleLine.BackgroundColor = value;
                 _metricUnit.SetTextColor(value);
@@ -267,35 +259,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _rootLayout.Layout(PaddingLeft, PaddingTop, _rootLayout.MeasuredWidth + PaddingLeft, _rootLayout.MeasuredHeight + PaddingBottom);
         }
 
-        // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics? GetDisplayMetrics()
-        {
-            if (s_displayMetrics == null)
-            {
-                if (s_windowManager == null)
-                {
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
-                }
-
-                if (s_windowManager == null)
-                {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
-                }
-                else
-                {
-                    s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay?.GetMetrics(s_displayMetrics);
-                }
-            }
-
-            return s_displayMetrics;
-        }
-
         // Calculates a screen dimension given a specified dimension in raw pixels
         private float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip)
         {
             return !DesignTime.IsDesignMode ?
-                TypedValue.ApplyDimension(screenUnitType, pixels, GetDisplayMetrics()) : pixels;
+                TypedValue.ApplyDimension(screenUnitType, pixels, Internal.ViewExtensions.GetDisplayMetrics(Context)) : pixels;
         }
     }
 }

@@ -27,8 +27,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass")]
     public partial class Compass
     {
-        private static DisplayMetrics? s_displayMetrics;
-        private static IWindowManager? s_windowManager;
         private NorthArrowShape _northArrow;
         private ViewPropertyAnimator? _fadeInAnimation;
         private ViewPropertyAnimator? _fadeOutAnimation;
@@ -57,14 +55,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         protected override LayoutParams GenerateDefaultLayoutParams()
         {
-            var size = (int)CalculateScreenDimension((float)DefaultSize);
+            var size = (int)CalculateScreenDimension((float)DefaultSize, context: Context);
             return new LayoutParams(size, size);
         }
 
         [MemberNotNull(nameof(_northArrow))]
         private void Initialize()
         {
-            var size = (int)CalculateScreenDimension((float)DefaultSize);
+            var size = (int)CalculateScreenDimension((float)DefaultSize, context: Context);
             _northArrow = new NorthArrowShape(Context) { Size = size };
             _northArrow.LayoutParameters = new Android.Widget.FrameLayout.LayoutParams(Android.Widget.FrameLayout.LayoutParams.MatchParent, Android.Widget.FrameLayout.LayoutParams.MatchParent);
             AddView(_northArrow);
@@ -99,10 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             // Forward layout call to the root layout
-            if (_northArrow != null)
-            {
-                _northArrow.Layout(PaddingLeft, PaddingTop, _northArrow.MeasuredWidth + PaddingLeft, _northArrow.MeasuredHeight + PaddingBottom);
-            }
+            _northArrow.Layout(PaddingLeft, PaddingTop, _northArrow.MeasuredWidth + PaddingLeft, _northArrow.MeasuredHeight + PaddingBottom);
         }
 
         private void SetVisibility(bool isVisible, bool animate = true)
@@ -146,35 +141,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        // Gets a display metrics object for calculating display dimensions
-        private static DisplayMetrics? GetDisplayMetrics()
-        {
-            if (s_displayMetrics == null)
-            {
-                if (s_windowManager == null)
-                {
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
-                }
-
-                if (s_windowManager == null)
-                {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
-                }
-                else
-                {
-                    s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay?.GetMetrics(s_displayMetrics);
-                }
-            }
-
-            return s_displayMetrics;
-        }
-
         // Calculates a screen dimension given a specified dimension in raw pixels
-        internal static float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip)
+        internal static float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip, Context? context = null)
         {
             return !DesignTime.IsDesignMode ?
-                TypedValue.ApplyDimension(screenUnitType, pixels, GetDisplayMetrics()) : pixels;
+                TypedValue.ApplyDimension(screenUnitType, pixels, Internal.ViewExtensions.GetDisplayMetrics(context)) : pixels;
         }
 
         private class NorthArrowShape : View
@@ -194,7 +165,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 float size = MeasuredWidth > MeasuredHeight ? MeasuredHeight : MeasuredWidth;
-                var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip);
+                var strokeWidth = Compass.CalculateScreenDimension(1.5f, ComplexUnitType.Dip, Context);
                 float c = size * .5f;
                 float l = (MeasuredWidth - size) * .5f;
                 float t = (MeasuredHeight - size) * .5f;

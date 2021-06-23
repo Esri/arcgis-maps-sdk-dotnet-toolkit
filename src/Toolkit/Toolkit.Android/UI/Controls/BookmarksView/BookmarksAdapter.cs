@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
         {
-            View itemView = new BookmarkItemView(_context);
+            BookmarkItemView itemView = new BookmarkItemView(_context);
             return new BookmarkItemViewHolder(itemView, OnBookmarkClicked);
         }
 

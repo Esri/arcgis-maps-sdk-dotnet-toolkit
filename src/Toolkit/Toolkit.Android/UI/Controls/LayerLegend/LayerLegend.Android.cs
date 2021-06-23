@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -37,8 +38,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="LayerLegend"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public LayerLegend(Context? context)
-            : base(context)
+        public LayerLegend(Context context)
+            : base(context ?? throw new ArgumentNullException(nameof(context)))
         {
             Initialize();
         }
@@ -48,8 +49,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public LayerLegend(Context? context, IAttributeSet? attr)
-            : base(context, attr)
+        public LayerLegend(Context context, IAttributeSet? attr)
+            : base(context ?? throw new ArgumentNullException(nameof(context)), attr)
         {
             Initialize();
         }
@@ -57,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         [MemberNotNull(nameof(_listView), nameof(_uithread))]
         private void Initialize()
         {
-            _uithread = new Android.OS.Handler(Context?.MainLooper);
+            _uithread = new Android.OS.Handler(Context!.MainLooper!);
 
             _listView = new ListView(Context)
             {

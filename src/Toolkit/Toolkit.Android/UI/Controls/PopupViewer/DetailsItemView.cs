@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RequestLayout();
         }
 
-        internal void Update(PopupFieldValue field)
+        internal void Update(PopupFieldValue? field)
         {
             _label.Text = field?.Field?.Label;
             _formattedValue.Text = field?.FormattedValue;

@@ -197,7 +197,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var touchY = e.RawY;
 
             var isTouchHandled = _isMinThumbFocused || _isMaxThumbFocused;
-            var minTargetSize = TypedValue.ApplyDimension(ComplexUnitType.Dip, 44f, ViewExtensions.GetDisplayMetrics());
+            var minTargetSize = TypedValue.ApplyDimension(ComplexUnitType.Dip, 44f, ViewExtensions.GetDisplayMetrics(Context));
             var minThumbBounds = GetBounds(MinimumThumb, minTargetSize, minTargetSize);
             var maxThumbBounds = GetBounds(MaximumThumb, minTargetSize, minTargetSize);
             switch (e.Action)

@@ -117,7 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 // available outside the bounds of the Tickbar and needs to be taken into account in the placement of ticks.
                 // This inset also needs to be adjusted slightly, as it yields a position that is slightly offset for reasons as
                 // yet unknown.
-                var pixelsPerDip = Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 1, ViewExtensions.GetDisplayMetrics());
+                var pixelsPerDip = Android.Util.TypedValue.ApplyDimension(Android.Util.ComplexUnitType.Dip, 1, ViewExtensions.GetDisplayMetrics(Context));
                 x += TickInset - (2 * pixelsPerDip);
 #endif
                 var childBounds = new Rect(0, 0, desiredSize.Width, finalSize.Height);

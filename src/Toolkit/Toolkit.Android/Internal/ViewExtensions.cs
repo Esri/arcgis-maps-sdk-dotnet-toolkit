@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         {
             if (view.Background is GradientDrawable drawable)
             {
-                var strokeWidth = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, GetDisplayMetrics());
+                var strokeWidth = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, GetDisplayMetrics(view.Context));
                 drawable.SetStroke(strokeWidth, color);
             }
             else
@@ -141,18 +141,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static void Measure(this View view, SizeF availableSize) => view.Measure((int)Math.Round(availableSize.Width), (int)Math.Round(availableSize.Height));
 
         // Gets a display metrics object for calculating display dimensions
-        internal static DisplayMetrics? GetDisplayMetrics()
+        internal static DisplayMetrics? GetDisplayMetrics(Context? context = null)
         {
+            if (context is null)
+            {
+                context = Application.Context;
+            }
+
             if (s_displayMetrics == null)
             {
                 if (s_windowManager == null)
                 {
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                    s_windowManager = context.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
                 }
 
                 if (s_windowManager == null)
                 {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
+                    s_displayMetrics = context.Resources?.DisplayMetrics;
                 }
                 else
                 {
