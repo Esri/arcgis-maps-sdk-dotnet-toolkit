@@ -34,7 +34,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         private ToggleButton? _rememberCredentialsButton;
         private PasswordBox? _password;
         private TextBox? _username;
-        private TextBlock? _messageText;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SignInForm"/> class.
@@ -48,8 +47,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            ButtonBase? okButton = GetTemplateChild("OkButton") as ButtonBase;
-            ButtonBase? cancelButton = GetTemplateChild("CancelButton") as ButtonBase;
             _rememberCredentialsButton = GetTemplateChild("RememberCredentials") as ToggleButton;
             if (_rememberCredentialsButton != null)
             {
@@ -58,14 +55,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
 
             _username = GetTemplateChild("Username") as TextBox;
             _password = GetTemplateChild("Password") as PasswordBox;
-            _messageText = GetTemplateChild("MessageText") as TextBlock;
 
-            if (okButton != null)
+            if (GetTemplateChild("OkButton") is ButtonBase okButton)
             {
                 okButton.Click += OkButton_Click;
             }
 
-            if (cancelButton != null)
+            if (GetTemplateChild("CancelButton") is ButtonBase cancelButton)
             {
                 cancelButton.Click += CancelButton_Click;
             }
@@ -215,9 +211,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
         /// This value is extracted from the value of the <see cref="CredentialRequestInfo"/>
         /// and the <see cref="AuthenticationManager"/>.
         /// </summary>
-        public Uri ServerHost
+        public Uri? ServerHost
         {
-            get { return (Uri)GetValue(ServerHostPropertyKey.DependencyProperty); }
+            get { return GetValue(ServerHostPropertyKey.DependencyProperty) as Uri; }
         }
 
         private static readonly DependencyPropertyKey ServerHostPropertyKey =

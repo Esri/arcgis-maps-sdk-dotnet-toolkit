@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                     var cert = Authentication.CertificateHelper.SelectCertificate(info);
                     if (cert is null)
                     {
-                        tcs.SetException(new System.ArgumentNullException());
+                        tcs.SetException(new System.InvalidOperationException("No certificate was selected."));
                     }
                     else
                     {
@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                         var credential = (login.Content as SignInForm)?.Credential;
                         if (credential is null)
                         {
-                            tcs.SetException(new System.ArgumentNullException());
+                            tcs.SetException(new System.InvalidOperationException(" No credential was provided."));
                         }
                         else
                         {
