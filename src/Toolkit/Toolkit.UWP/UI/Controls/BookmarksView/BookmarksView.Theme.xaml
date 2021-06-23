@@ -15,6 +15,7 @@
             <ListView x:Name="List"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ScrollViewer.VerticalScrollMode="Enabled"
+                      ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
                       ItemTemplate="{TemplateBinding ItemTemplate}" />
         </ControlTemplate>
       </Setter.Value>
