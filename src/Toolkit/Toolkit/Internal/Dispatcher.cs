@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
 #if __ANDROID__
         // Create a static instance of this and re-use so that only one peer Java instance is created.
-        private static Handler _handler = new Handler(Looper.MainLooper);
+        private static Handler _handler = new Handler(Looper.MainLooper!);
 #endif
 
         /// <summary>

@@ -67,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
 #endif
         }
 
-        internal static Esri.ArcGISRuntime.UI.Controls.GeoView GetNativeGeoView(this Esri.ArcGISRuntime.Xamarin.Forms.GeoView geoView)
+        internal static Esri.ArcGISRuntime.UI.Controls.GeoView? GetNativeGeoView(this Esri.ArcGISRuntime.Xamarin.Forms.GeoView geoView)
         {
             var property = typeof(Esri.ArcGISRuntime.Xamarin.Forms.GeoView).GetProperty("NativeGeoView", BindingFlags.Instance | BindingFlags.NonPublic);
             return property?.GetValue(geoView) as Esri.ArcGISRuntime.UI.Controls.GeoView;

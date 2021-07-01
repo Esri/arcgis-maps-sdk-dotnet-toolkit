@@ -56,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 
 #if XAMARIN
-        private GeoView _geoView;
+        private GeoView? _geoView;
 #endif
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <seealso cref="MapView"/>
         /// <seealso cref="SceneView"/>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
 #if XAMARIN
             get => _geoView;

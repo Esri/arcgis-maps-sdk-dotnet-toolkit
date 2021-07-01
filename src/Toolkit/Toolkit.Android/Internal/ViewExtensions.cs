@@ -33,8 +33,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     internal static class ViewExtensions
     {
-        private static DisplayMetrics s_displayMetrics;
-        private static IWindowManager s_windowManager;
+        private static DisplayMetrics? s_displayMetrics;
+        private static IWindowManager? s_windowManager;
 
         public static void SetMargin(this View view, double left, double top, double right, double bottom)
         {
@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
             else if (view.Background is Drawable drawable)
             {
-                drawable.SetColorFilter(color, PorterDuff.Mode.SrcAtop);
+                drawable.SetColorFilter(color, PorterDuff.Mode.SrcAtop!);
             }
             else
             {
@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         {
             if (view.Background is GradientDrawable drawable)
             {
-                var strokeWidth = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, GetDisplayMetrics());
+                var strokeWidth = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, GetDisplayMetrics(view.Context));
                 drawable.SetStroke(strokeWidth, color);
             }
             else
@@ -128,7 +128,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             var children = new List<View>();
             for (var i = 0; i < parent.ChildCount; i++)
             {
-                children.Add(parent.GetChildAt(i));
+                var child = parent.GetChildAt(i);
+                if (child != null)
+                {
+                    children.Add(child);
+                }
             }
 
             return children;
@@ -137,23 +141,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static void Measure(this View view, SizeF availableSize) => view.Measure((int)Math.Round(availableSize.Width), (int)Math.Round(availableSize.Height));
 
         // Gets a display metrics object for calculating display dimensions
-        internal static DisplayMetrics GetDisplayMetrics()
+        internal static DisplayMetrics? GetDisplayMetrics(Context? context = null)
         {
+            if (context is null)
+            {
+                context = Application.Context;
+            }
+
             if (s_displayMetrics == null)
             {
                 if (s_windowManager == null)
                 {
-                    s_windowManager = Application.Context?.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
+                    s_windowManager = context.GetSystemService(Context.WindowService)?.JavaCast<IWindowManager>();
                 }
 
                 if (s_windowManager == null)
                 {
-                    s_displayMetrics = Application.Context?.Resources?.DisplayMetrics;
+                    s_displayMetrics = context.Resources?.DisplayMetrics;
                 }
                 else
                 {
                     s_displayMetrics = new DisplayMetrics();
-                    s_windowManager.DefaultDisplay.GetMetrics(s_displayMetrics);
+                    s_windowManager.DefaultDisplay?.GetMetrics(s_displayMetrics);
                 }
             }
 

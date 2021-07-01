@@ -33,8 +33,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class SymbolDisplay : Control
     {
-        private Internal.WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object, System.ComponentModel.PropertyChangedEventArgs> _inpcListener;
-        private Task _currentUpdateTask;
+        private Internal.WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
+        private Task? _currentUpdateTask;
         private bool _isRefreshRequired;
 
 #if !__ANDROID__
@@ -47,13 +47,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the symbol to render.
         /// </summary>
-        public Symbology.Symbol Symbol
+        public Symbology.Symbol? Symbol
         {
             get => SymbolImpl;
             set => SymbolImpl = value;
         }
 
-        private void OnSymbolChanged(Symbology.Symbol oldValue, Symbology.Symbol newValue)
+        private void OnSymbolChanged(Symbology.Symbol? oldValue, Symbology.Symbol? newValue)
         {
             if (oldValue != null)
             {
@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (newValue != null)
             {
-                _inpcListener = new Internal.WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object, System.ComponentModel.PropertyChangedEventArgs>(newValue)
+                _inpcListener = new Internal.WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>(newValue)
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                     {
@@ -101,6 +101,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Triggered when the image source has updated
         /// </summary>
         [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public event System.EventHandler SourceUpdated;
+#if NETCOREAPP
+        public new event System.EventHandler? SourceUpdated;
+#else
+        public event System.EventHandler? SourceUpdated;
+#endif
     }
 }

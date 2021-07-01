@@ -187,7 +187,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
-        public TimeExtent CurrentExtent
+        public TimeExtent? CurrentExtent
         {
             get => GetValue(CurrentExtentProperty) as TimeExtent;
             set => SetValue(CurrentExtentProperty, value);
@@ -222,7 +222,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
-        public TimeExtent FullExtent
+        public TimeExtent? FullExtent
         {
             get => GetValue(FullExtentProperty) as TimeExtent;
             set => SetValue(FullExtentProperty, value);
@@ -253,7 +253,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the <see cref="TimeValue" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
-        public TimeValue TimeStepInterval
+        public TimeValue? TimeStepInterval
         {
             get => GetValue(TimeStepIntervalProperty) as TimeValue;
             set => SetValue(TimeStepIntervalProperty, value);
@@ -285,7 +285,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets the time steps that can be used to set the slider instance's current extent.
         /// </summary>
-        public IReadOnlyList<DateTimeOffset> TimeSteps
+        public IReadOnlyList<DateTimeOffset>? TimeSteps
         {
             get => NativeSlider.TimeSteps;
         }
@@ -502,7 +502,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>.
         /// </summary>
-        public string FullExtentLabelFormat
+        public string? FullExtentLabelFormat
         {
             get => GetValue(FullExtentLabelFormatProperty) as string;
             set => SetValue(FullExtentLabelFormatProperty, value);
@@ -533,7 +533,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>.
         /// </summary>
-        public string CurrentExtentLabelFormat
+        public string? CurrentExtentLabelFormat
         {
             get => GetValue(CurrentExtentLabelFormatProperty) as string;
             set => SetValue(CurrentExtentLabelFormatProperty, value);
@@ -564,7 +564,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval.
         /// </summary>
-        public string TimeStepIntervalLabelFormat
+        public string? TimeStepIntervalLabelFormat
         {
             get => GetValue(TimeStepIntervalLabelFormatProperty) as string;
             set => SetValue(TimeStepIntervalLabelFormatProperty, value);
@@ -984,6 +984,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <returns>Task.</returns>
         public Task InitializeTimePropertiesAsync(GeoView geoView)
         {
+            if (geoView is null)
+            {
+                throw new ArgumentNullException(nameof(geoView));
+            }
 #if NETSTANDARD2_0
             throw new NotImplementedException();
 #else
@@ -1036,7 +1040,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Occurs when the selected time extent has changed.
         /// </summary>
-        public event EventHandler<TimeExtentChangedEventArgs> CurrentExtentChanged;
+        public event EventHandler<TimeExtentChangedEventArgs>? CurrentExtentChanged;
 
         private void OnCurrentExtentChanged(TimeExtentChangedEventArgs e)
         {

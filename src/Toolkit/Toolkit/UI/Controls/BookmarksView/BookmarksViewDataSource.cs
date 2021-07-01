@@ -35,8 +35,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class BookmarksViewDataSource : IList<Bookmark>, INotifyCollectionChanged, INotifyPropertyChanged, IList
     {
-        private GeoView _geoView;
-        private IList<Bookmark> _overrideList;
+        private GeoView? _geoView;
+        private IList<Bookmark>? _overrideList;
 
         private IList<Bookmark> ActiveBookmarkList
         {
@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (_geoView is SceneView sv && sv.Scene?.Bookmarks != null)
                 {
-                    return sv.Scene?.Bookmarks;
+                    return sv.Scene.Bookmarks;
                 }
 
                 return new Bookmark[] { };
@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Sets the override bookmark list that will be shown instead of the Map's bookmark list.
         /// </summary>
         /// <param name="bookmarks">List of bookmarks to show.</param>
-        public void SetOverrideList(IEnumerable<Bookmark> bookmarks)
+        public void SetOverrideList(IEnumerable<Bookmark>? bookmarks)
         {
             // Skip if collection is the same
             if (_overrideList == bookmarks)
@@ -91,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Subscribe to events if applicable
             if (bookmarks is INotifyCollectionChanged iCollectionChanged)
             {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(iCollectionChanged);
+                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(iCollectionChanged);
                 listener.OnEventAction = (instance, source, eventArgs) => HandleOverrideListCollectionChanged(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
                 iCollectionChanged.CollectionChanged += listener.OnEvent;
@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Sets the GeoView from which bookmarks will be shown.
         /// </summary>
         /// <param name="view">The view from which to get Map/Scene bookmarks.</param>
-        public void SetGeoView(GeoView view)
+        public void SetGeoView(GeoView? view)
         {
             if (_geoView == view)
             {
@@ -184,12 +184,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
-        private void GeoViewDocumentChanged(object sender, object e)
+        private void GeoViewDocumentChanged(object? sender, object? e)
         {
             if (_geoView is MapView mv && mv.Map is ILoadable mapLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(mapLoadable);
+                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(mapLoadable);
                 listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
                 mapLoadable.Loaded += listener.OnEvent;
@@ -200,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             else if (_geoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(sceneLoadable);
+                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(sceneLoadable);
                 listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
                 sceneLoadable.Loaded += listener.OnEvent;
@@ -215,7 +215,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void Doc_Loaded(object sender, EventArgs e)
+        private void Doc_Loaded(object? sender, EventArgs e)
         {
             // Get new bookmarks collection
             BookmarkCollection bmCollection;
@@ -238,13 +238,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
 
-            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(bmCollection);
+            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(bmCollection);
             listener.OnEventAction = (instance, source, eventArgs) => HandleGeoViewBookmarksCollectionChanged(source, eventArgs);
             listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
             bmCollection.CollectionChanged += listener.OnEvent;
         }
 
-        private void HandleGeoViewBookmarksCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void HandleGeoViewBookmarksCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             // Don't do anything if the override list is there
             if (_overrideList != null)
@@ -255,7 +255,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             OnCollectionChanged(e);
         }
 
-        private void HandleOverrideListCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void HandleOverrideListCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (_overrideList != null)
             {
@@ -268,20 +268,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if XAMARIN_FORMS
             global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
 #elif __IOS__
-            _geoView.InvokeOnMainThread(action);
+            _geoView?.InvokeOnMainThread(action);
 #elif __ANDROID__
-            _geoView.PostDelayed(action, 500);
+            _geoView?.PostDelayed(action, 500);
 #elif NETFX_CORE
-            _ = _geoView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
+            _ = _geoView?.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #else
-            _geoView.Dispatcher.Invoke(action);
+            _geoView?.Dispatcher.Invoke(action);
 #endif
         }
 
         #region IList<Bookmark> implementation
-        Bookmark IList<Bookmark>.this[int index] { get => ActiveBookmarkList?[index]; set => throw new NotImplementedException(); }
+        Bookmark IList<Bookmark>.this[int index] { get => ActiveBookmarkList[index]; set => throw new NotImplementedException(); }
 
-        int ICollection<Bookmark>.Count => ActiveBookmarkList?.Count ?? 0;
+        int ICollection<Bookmark>.Count => ActiveBookmarkList.Count;
 
         bool ICollection<Bookmark>.IsReadOnly => true;
 
@@ -289,27 +289,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         bool IList.IsFixedSize => false;
 
-        int ICollection.Count => ActiveBookmarkList?.Count ?? 0;
+        int ICollection.Count => ActiveBookmarkList.Count;
 
         object ICollection.SyncRoot => throw new NotImplementedException();
 
         bool ICollection.IsSynchronized => false;
 
-        object IList.this[int index] { get => ActiveBookmarkList?[index]; set => throw new NotImplementedException(); }
+        object? IList.this[int index] { get => ActiveBookmarkList[index]; set => throw new NotImplementedException(); }
 
         void ICollection<Bookmark>.Add(Bookmark item) => throw new NotImplementedException();
 
         void ICollection<Bookmark>.Clear() => throw new NotImplementedException();
 
-        bool ICollection<Bookmark>.Contains(Bookmark item) => ActiveBookmarkList?.Contains(item) ?? false;
+        bool ICollection<Bookmark>.Contains(Bookmark item) => ActiveBookmarkList.Contains(item);
 
-        void ICollection<Bookmark>.CopyTo(Bookmark[] array, int arrayIndex) => ActiveBookmarkList?.CopyTo(array, arrayIndex);
+        void ICollection<Bookmark>.CopyTo(Bookmark[] array, int arrayIndex) => ActiveBookmarkList.CopyTo(array, arrayIndex);
 
-        IEnumerator<Bookmark> IEnumerable<Bookmark>.GetEnumerator() => ActiveBookmarkList?.GetEnumerator();
+        IEnumerator<Bookmark> IEnumerable<Bookmark>.GetEnumerator() => ActiveBookmarkList.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => ActiveBookmarkList?.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ActiveBookmarkList.GetEnumerator();
 
-        int IList<Bookmark>.IndexOf(Bookmark item) => ActiveBookmarkList?.IndexOf(item) ?? -1;
+        int IList<Bookmark>.IndexOf(Bookmark item) => ActiveBookmarkList.IndexOf(item);
 
         void IList<Bookmark>.Insert(int index, Bookmark item) => throw new NotImplementedException();
 
@@ -317,17 +317,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         void IList<Bookmark>.RemoveAt(int index) => throw new NotImplementedException();
 
-        int IList.Add(object value) => throw new NotImplementedException();
+        int IList.Add(object? value) => throw new NotImplementedException();
 
-        bool IList.Contains(object value) => ActiveBookmarkList?.Contains(value) ?? false;
+        bool IList.Contains(object? value) => ActiveBookmarkList.Contains(value);
 
         void IList.Clear() => throw new NotImplementedException();
 
-        int IList.IndexOf(object value) => ActiveBookmarkList?.IndexOf(value as Bookmark) ?? -1;
+        int IList.IndexOf(object? value) => value is Bookmark bm ? ActiveBookmarkList.IndexOf(bm) : -1;
 
-        void IList.Insert(int index, object value) => throw new NotImplementedException();
+        void IList.Insert(int index, object? value) => throw new NotImplementedException();
 
-        void IList.Remove(object value) => throw new NotImplementedException();
+        void IList.Remove(object? value) => throw new NotImplementedException();
 
         void IList.RemoveAt(int index) => throw new NotImplementedException();
 
@@ -352,11 +352,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// <inheritdoc />
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// <inheritdoc />
         /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
     }
 }

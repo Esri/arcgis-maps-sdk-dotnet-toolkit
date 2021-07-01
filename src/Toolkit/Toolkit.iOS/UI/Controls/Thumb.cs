@@ -67,9 +67,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private UIColor _backgroundColor = UIColor.White;
+        private UIColor? _backgroundColor = UIColor.White;
 
-        public override UIColor BackgroundColor
+        public override UIColor? BackgroundColor
         {
             get => _backgroundColor;
             set
@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             get => _borderColor;
             set
             {
-                _borderColor = value;
+                _borderColor = value ?? throw new ArgumentNullException(nameof(BorderColor));
                 SetNeedsDisplay();
             }
         }
@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             get => _disabledColor;
             set
             {
-                _disabledColor = value;
+                _disabledColor = value ?? throw new ArgumentNullException(nameof(DisabledColor));
                 SetNeedsDisplay();
             }
         }
@@ -180,7 +180,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     ctx.SetShadow(offset: new CGSize(width: 0.0, height: 3.0), blur: (nfloat)4.0, color: shadowColor.CGColor);
                 }
 
-                ctx.SetFillColor(BackgroundColor.CGColor);
+                if (BackgroundColor != null)
+                {
+                    ctx.SetFillColor(BackgroundColor.CGColor);
+                }
+
                 ctx.SetStrokeColor(BorderColor.CGColor);
 
                 var path = CornerRadius > 0 ? UIBezierPath.FromRoundedRect(renderTarget, (nfloat)CornerRadius) : UIBezierPath.FromRect(renderTarget);
@@ -216,9 +220,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

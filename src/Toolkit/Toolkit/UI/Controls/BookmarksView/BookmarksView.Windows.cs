@@ -59,9 +59,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private ListView _listView;
+        private ListView? _listView;
 
-        private ListView ListView
+        private ListView? ListView
         {
             get => _listView;
             set
@@ -83,25 +83,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void ListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0 && e.AddedItems[0] is Bookmark bm)
             {
                 SelectAndNavigateToBookmark(bm);
             }
 
-            ((ListView)sender).SelectedItem = null;
+            if (sender is ListView lv)
+            {
+                lv.SelectedItem = null;
+            }
         }
 
-        private GeoView GeoViewImpl
+        private GeoView? GeoViewImpl
         {
-            get { return (GeoView)GetValue(GeoViewProperty); }
+            get { return GetValue(GeoViewProperty) as GeoView; }
             set { SetValue(GeoViewProperty, value); }
         }
 
-        private IEnumerable<Bookmark> BookmarksOverrideImpl
+        private IEnumerable<Bookmark>? BookmarksOverrideImpl
         {
-            get { return (IEnumerable<Bookmark>)GetValue(BookmarksOverrideProperty); }
+            get { return GetValue(BookmarksOverrideProperty) as IEnumerable<Bookmark>; }
             set { SetValue(BookmarksOverrideProperty, value); }
         }
 
@@ -130,9 +133,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the item template used to render bookmark entries in the list.
         /// </summary>
-        public DataTemplate ItemTemplate
+        public DataTemplate? ItemTemplate
         {
-            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            get { return GetValue(ItemTemplateProperty) as DataTemplate; }
             set { SetValue(ItemTemplateProperty, value); }
         }
 
@@ -145,9 +148,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the style used by the list view items in the underlying list view control.
         /// </summary>
-        public Style ItemContainerStyle
+        public Style? ItemContainerStyle
         {
-            get { return (Style)GetValue(ItemContainerStyleProperty); }
+            get { return GetValue(ItemContainerStyleProperty) as Style; }
             set { SetValue(ItemContainerStyleProperty, value); }
         }
 

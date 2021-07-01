@@ -31,17 +31,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     public partial class TimeSlider : INotifyPropertyChanged
     {
-        private string _defaultFullExtentLabelFormat = "M/d/yyyy";
-        private string _defaultCurrentExtentLabelFormat = "M/d/yyyy";
+        private const string _defaultFullExtentLabelFormat = "M/d/yyyy";
+        private const string _defaultCurrentExtentLabelFormat = "M/d/yyyy";
 
         #region Properties
 
-        private TimeExtent _currentExtent;
+        private TimeExtent? _currentExtent;
 
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
-        private TimeExtent CurrentExtentImpl
+        private TimeExtent? CurrentExtentImpl
         {
             get => _currentExtent;
             set
@@ -57,12 +57,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private TimeExtent _fullExtent;
+        private TimeExtent? _fullExtent;
 
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance.
         /// </summary>
-        private TimeExtent FullExtentImpl
+        private TimeExtent? FullExtentImpl
         {
             get => _fullExtent;
             set
@@ -77,12 +77,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private TimeValue _timeStepInterval;
+        private TimeValue? _timeStepInterval;
 
         /// <summary>
         /// Gets or sets the time step intervals for the time slider.  The slider thumbs will snap to and tick marks will be shown at this interval.
         /// </summary>
-        private TimeValue TimeStepIntervalImpl
+        private TimeValue? TimeStepIntervalImpl
         {
             get => _timeStepInterval;
             set
@@ -96,12 +96,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private IReadOnlyList<DateTimeOffset> _timeSteps;
+        private IReadOnlyList<DateTimeOffset>? _timeSteps;
 
         /// <summary>
         /// Gets or sets the time steps that can be used to set the slider instance's current extent.
         /// </summary>
-        private IReadOnlyList<DateTimeOffset> TimeStepsImpl
+        private IReadOnlyList<DateTimeOffset>? TimeStepsImpl
         {
             get => _timeSteps;
             set
@@ -229,12 +229,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         #region Appearance Properties
 
-        private string _fullExtentLabelFormat;
+        private string? _fullExtentLabelFormat;
 
         /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="FullExtent"/>.
         /// </summary>
-        private string FullExtentLabelFormatImpl
+        private string? FullExtentLabelFormatImpl
         {
             get => _fullExtentLabelFormat;
             set
@@ -248,12 +248,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private string _currentExtentLabelFormat;
+        private string? _currentExtentLabelFormat;
 
         /// <summary>
         /// Gets or sets the string format to use for displaying the start and end labels for the <see cref="CurrentExtent"/>.
         /// </summary>
-        private string CurrentExtentLabelFormatImpl
+        private string? CurrentExtentLabelFormatImpl
         {
             get => _currentExtentLabelFormat;
             set
@@ -268,12 +268,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private string _timeStepIntervalLabelFormat;
+        private string? _timeStepIntervalLabelFormat;
 
         /// <summary>
         /// Gets or sets the string format to use for displaying the labels for the tick marks representing each time step interval.
         /// </summary>
-        private string TimeStepIntervalLabelFormatImpl
+        private string? TimeStepIntervalLabelFormatImpl
         {
             get => _timeStepIntervalLabelFormat;
             set
@@ -423,6 +423,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _fullExtentStroke;
             set
             {
+#if __IOS__
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(FullExtentStroke));
+                }
+#endif
                 if (_fullExtentStroke != value)
                 {
                     _fullExtentStroke = value;
@@ -507,7 +513,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _playbackButtonsFill = value;
                     PreviousButton?.SetBackgroundFill(value);
                     NextButton?.SetBackgroundFill(value);
-                    PlayPauseButton.SetBackgroundFill(value);
+                    PlayPauseButton?.SetBackgroundFill(value);
                     OnPropertyChanged(nameof(PlaybackButtonsFill));
                 }
             }
@@ -536,10 +542,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     NextButton?.SetBorderColor(value);
                     PlayPauseButton.SetBorderColor(value);
 #elif __ANDROID__
-                    PreviousButtonOutline.SetBackgroundFill(value);
-                    NextButtonOutline.SetBackgroundFill(value);
-                    PlayButtonOutline.SetBackgroundFill(value);
-                    PauseButtonOutline.SetBackgroundFill(value);
+                    PreviousButtonOutline?.SetBackgroundFill(value);
+                    NextButtonOutline?.SetBackgroundFill(value);
+                    PlayButtonOutline?.SetBackgroundFill(value);
+                    PauseButtonOutline?.SetBackgroundFill(value);
 #endif
                     OnPropertyChanged(nameof(PlaybackButtonsStroke));
                 }
@@ -547,7 +553,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if __IOS__
-        private Color _fullExtentLabelColor;
+        private Color _fullExtentLabelColor = new Color(.72f, .72f, .72f, 1);
 #elif __ANDROID__
         private Color _fullExtentLabelColor = Color.Rgb(184, 184, 184);
 #endif
@@ -571,7 +577,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if __IOS__
-        private Color _currentExtentLabelColor;
+        private Color _currentExtentLabelColor = new Color(.72f, .72f, .72f, 1);
 #elif __ANDROID__
         private Color _currentExtentLabelColor = Color.Rgb(184, 184, 184);
 #endif
@@ -584,6 +590,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _currentExtentLabelColor;
             set
             {
+#if __IOS__
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+#endif
                 if (_currentExtentLabelColor != value)
                 {
                     _currentExtentLabelColor = value;
@@ -595,7 +607,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if __IOS__
-        private Color _timeStepIntervalLabelColor;
+        private Color _timeStepIntervalLabelColor = new Color(.72f, .72f, .72f, 1);
 #elif __ANDROID__
         private Color _timeStepIntervalLabelColor = Color.Rgb(184, 184, 184);
 #endif
@@ -608,6 +620,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _timeStepIntervalLabelColor;
             set
             {
+#if __IOS__
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+#endif
                 if (_timeStepIntervalLabelColor != value)
                 {
                     _timeStepIntervalLabelColor = value;
@@ -621,15 +639,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #endregion // Appearance Properties
+#endregion // Appearance Properties
 
-        #endregion // Properties
+#endregion // Properties
 
         private void ApplyFullExtentLabelFormat()
         {
             var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
-            FullExtentStartTimeLabel.Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? string.Empty;
-            FullExtentEndTimeLabel.Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? string.Empty;
+            if (FullExtentStartTimeLabel != null)
+            {
+                FullExtentStartTimeLabel.Text = FullExtent?.StartTime.ToString(fullExtentLabelFormat) ?? string.Empty;
+            }
+
+            if (FullExtentEndTimeLabel != null)
+            {
+                FullExtentEndTimeLabel.Text = FullExtent?.EndTime.ToString(fullExtentLabelFormat) ?? string.Empty;
+            }
 
             InvalidateMeasureAndArrange();
         }
@@ -637,16 +662,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void ApplyCurrentExtentLabelFormat()
         {
             var currentExtentLabelFormat = string.IsNullOrEmpty(CurrentExtentLabelFormat) ? _defaultCurrentExtentLabelFormat : CurrentExtentLabelFormat;
-            MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? string.Empty;
-            MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? string.Empty;
+            if (MinimumThumbLabel != null)
+            {
+                MinimumThumbLabel.Text = CurrentExtent?.StartTime.ToString(currentExtentLabelFormat) ?? string.Empty;
+            }
+
+            if (MaximumThumbLabel != null)
+            {
+                MaximumThumbLabel.Text = CurrentExtent?.EndTime.ToString(currentExtentLabelFormat) ?? string.Empty;
+            }
 
             InvalidateMeasureAndArrange();
         }
 
         /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 

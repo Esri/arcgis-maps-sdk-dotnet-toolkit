@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public Tickbar(Context context, IAttributeSet attr)
+        public Tickbar(Context context, IAttributeSet? attr)
             : base(context, attr)
         {
             Initialize();
@@ -143,16 +143,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <param name="position">The position to place the tick at along the tick bar.</param>
         /// <param name="dataSource">The data to pass to the tick's template.</param>
-        private void AddTickmark(double position, object dataSource)
+        private void AddTickmark(double position, object? dataSource)
         {
             // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
             // one to actually show at the position.
 
             // Get dimension of ticks in DIPs
-            var minorTickWidthDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MinorTickSize.Width, ViewExtensions.GetDisplayMetrics());
-            var minorTickHeightDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MinorTickSize.Height, ViewExtensions.GetDisplayMetrics());
-            var majorTickWidthDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MajorTickSize.Width, ViewExtensions.GetDisplayMetrics());
-            var majorTickHeightDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MajorTickSize.Height, ViewExtensions.GetDisplayMetrics());
+            var minorTickWidthDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MinorTickSize.Width, ViewExtensions.GetDisplayMetrics(Context));
+            var minorTickHeightDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MinorTickSize.Height, ViewExtensions.GetDisplayMetrics(Context));
+            var majorTickWidthDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MajorTickSize.Width, ViewExtensions.GetDisplayMetrics(Context));
+            var majorTickHeightDp = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, MajorTickSize.Height, ViewExtensions.GetDisplayMetrics(Context));
 
             // Create a minor tickmark
             var tick = new View(Context)
@@ -227,14 +227,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private void ApplyTickLabelFormat(View tickContainer, string tickLabelFormat)
+        private void ApplyTickLabelFormat(View tickContainer, string? tickLabelFormat)
         {
             // Retrieve the label from the container holding the major tick rectangle and label
             if (tickContainer is ViewGroup group && group.ChildCount > 1 && group.GetChildAt(0) is TextView label)
             {
                 // Apply the specified format to the tick's date and update the label
                 var labelFormat = string.IsNullOrEmpty(tickLabelFormat) ? _defaultTickLabelFormat : tickLabelFormat;
-                var labelDate = DateTimeOffset.FromUnixTimeMilliseconds((long)label.Tag);
+                var labelDate = DateTimeOffset.FromUnixTimeMilliseconds((long)(label.Tag ?? 0L));
                 label.Text = labelDate.ToString(labelFormat);
             }
         }
@@ -256,7 +256,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _children.Clear();
                 for (var i = 0; i < ChildCount; i++)
                 {
-                    _children.Add(GetChildAt(i));
+                    var child = GetChildAt(i);
+                    if (child != null)
+                    {
+                        _children.Add(child);
+                    }
                 }
 
                 return _children;
@@ -270,13 +274,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private bool GetIsMajorTickmark(View view)
         {
-            return (double)view.Tag % 10 == 0 ? false : true;
+            return (double)(view.Tag ?? 1d) % 10 == 0 ? false : true;
         }
 
         private double GetPosition(View view)
         {
             // Remove last digit as that stores whether the tickmark is major or minor
-            var positionDigits = Math.Truncate((double)view.Tag / 10);
+            var positionDigits = Math.Truncate((double)(view.Tag ?? 1d) / 10);
 
             // Convert remaining digits to decimal value between 0 and 1
             return positionDigits / 10000000;

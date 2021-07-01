@@ -28,16 +28,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private readonly IReadOnlyList<LegendInfo> _layerLegends;
         internal static readonly NSString CellId = new NSString(nameof(LayerLegendItemCell));
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         public LayerLegendTableSource(IReadOnlyList<LegendInfo> layerLegends)
             : base()
         {
             _layerLegends = layerLegends;
-            if (_layerLegends is INotifyCollectionChanged)
+            if (_layerLegends is INotifyCollectionChanged incc)
             {
-                var incc = _layerLegends as INotifyCollectionChanged;
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                      {
@@ -57,10 +56,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var info = _layerLegends[indexPath.Row];
-            var cell = tableView.DequeueReusableCell(CellId, indexPath);
+            UITableViewCell? cell = tableView.DequeueReusableCell(CellId, indexPath);
+            if (cell is null)
+            {
+                cell = new LayerLegendItemCell(UITableViewCellStyle.Default, CellId);
+            }
+
             (cell as LayerLegendItemCell)?.Update(info);
-            cell?.SetNeedsUpdateConstraints();
-            cell?.UpdateConstraints();
+            cell.SetNeedsUpdateConstraints();
+            cell.UpdateConstraints();
             return cell;
         }
     }

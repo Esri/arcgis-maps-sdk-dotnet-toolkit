@@ -18,6 +18,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoreGraphics;
 using Foundation;
@@ -39,8 +40,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private DrawActionButton NextButton;
         private DrawActionButton PreviousButton;
         private DrawActionToggleButton PlayPauseButton;
-        private RectangleView SliderTrackStepBackRepeater = null;
-        private RectangleView SliderTrackStepForwardRepeater = null;
+        private RectangleView? SliderTrackStepBackRepeater = null;
+        private RectangleView? SliderTrackStepForwardRepeater = null;
 #pragma warning restore SX1309
 #pragma warning restore SA1306
         private RectangleView _startTimeTickmark;
@@ -59,6 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public TimeSlider(IntPtr handle)
             : base(handle)
         {
+            InitializeImpl();
             Initialize();
         }
 
@@ -73,6 +75,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
+        [MemberNotNull(nameof(FullExtentStartTimeLabel), nameof(FullExtentEndTimeLabel), nameof(PreviousButton), nameof(NextButton),
+            nameof(PlayPauseButton), nameof(_startTimeTickmark), nameof(_endTimeTickmark), nameof(SliderTrack), nameof(HorizontalTrackThumb),
+            nameof(Tickmarks), nameof(MinimumThumb), nameof(MaximumThumb), nameof(MinimumThumbLabel), nameof(MaximumThumbLabel))]
         private void InitializeImpl()
         {
             if (DesignTime.IsDesignMode)
@@ -93,7 +98,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Center the "Time Slider" label
                 label.CenterXAnchor.ConstraintEqualTo(CenterXAnchor).Active = true;
                 label.CenterYAnchor.ConstraintEqualTo(CenterYAnchor).Active = true;
+#pragma warning disable CS8774 // Member must have a non-null value when exiting.
                 return;
+#pragma warning restore CS8774 // Member must have a non-null value when exiting.
             }
 
             var fullExtentLabelFormat = string.IsNullOrEmpty(FullExtentLabelFormat) ? _defaultFullExtentLabelFormat : FullExtentLabelFormat;
@@ -124,11 +131,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var barWidth = 3;
                     var triangleWidth = button.Bounds.Width - spacing - barWidth;
                     var triangleHeight = button.Bounds.Height - (button.BorderWidth * 2);
-                    DrawTriangle(context, triangleWidth, triangleHeight, button.BackgroundColor.CGColor, button.BorderWidth,
+                    DrawTriangle(context, triangleWidth, triangleHeight, button.BackgroundColor?.CGColor, button.BorderWidth,
                                  button.BorderColor.CGColor, pointOnRight: false, left: 0, top: button.BorderWidth);
 
                     var barLeft = triangleWidth + spacing - button.BorderWidth;
-                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor,
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor?.CGColor,
                                   button.BorderWidth, button.BorderColor.CGColor, left: barLeft);
                 },
             };
@@ -146,10 +153,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var barWidth = 3;
                     var triangleWidth = button.Bounds.Width - spacing - barWidth;
                     var triangleHeight = button.Bounds.Height - (button.BorderWidth * 2);
-                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor,
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor?.CGColor,
                                   button.BorderWidth, button.BorderColor.CGColor, left: button.BorderWidth);
 
-                    DrawTriangle(context, triangleWidth, triangleHeight, button.BackgroundColor.CGColor, button.BorderWidth,
+                    DrawTriangle(context, triangleWidth, triangleHeight, button.BackgroundColor?.CGColor, button.BorderWidth,
                                  button.BorderColor.CGColor, pointOnRight: true, left: barWidth + spacing, top: button.BorderWidth);
                 },
             };
@@ -166,15 +173,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var spacing = 4d;
                     var barWidth = 7d;
                     var left = button.Bounds.GetMidX() - (spacing / 2) - barWidth - 2;
-                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor, button.BorderWidth, button.BorderColor.CGColor, left);
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor?.CGColor, button.BorderWidth, button.BorderColor.CGColor, left);
 
                     left = button.Bounds.GetMidX() + (spacing / 2);
-                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor.CGColor, button.BorderWidth, button.BorderColor.CGColor, left);
+                    DrawRectangle(context, barWidth, button.Bounds.Height, button.BackgroundColor?.CGColor, button.BorderWidth, button.BorderColor.CGColor, left);
                 },
                 DrawUncheckedContentAction = (context, button) =>
                 {
                     var triangleWidth = button.Bounds.Width - button.BorderWidth;
-                    DrawTriangle(context, triangleWidth, button.Bounds.Height, button.BackgroundColor.CGColor, button.BorderWidth,
+                    DrawTriangle(context, triangleWidth, button.Bounds.Height, button.BackgroundColor?.CGColor, button.BorderWidth,
                                  button.BorderColor.CGColor, pointOnRight: true, left: button.BorderWidth);
                 },
             };
@@ -221,9 +228,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Tickmarks = new Primitives.Tickbar()
             {
                 TickFill = TimeStepIntervalTickFill,
-                TickLabelColor = TimeStepIntervalLabelColor,
                 ShowTickLabels = LabelMode == TimeSliderLabelMode.TimeStepInterval,
             };
+
+            if (TimeStepIntervalLabelColor != null)
+            {
+                Tickmarks.TickLabelColor = TimeStepIntervalLabelColor;
+            }
+
             SliderTrack.AddSubview(Tickmarks);
 
             var thumbSize = 36;
@@ -313,7 +325,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             return;
                         }
 
-                        UIView trackedView = null;
+                        UIView? trackedView = null;
                         if (MinimumThumb.IsFocused && MaximumThumb.IsFocused)
                         {
                             // Gesture was within both min and max thumb, so let the direction of the gesture determine which thumb should be dragged
@@ -447,8 +459,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var playbackButtonsBottom = playPauseButtonHeight;
 
-            var fullExtentStartLabelSize = FullExtentStartTimeLabel.SizeThatFits(Bounds.Size);
-            var fullExtentEndLabelSize = FullExtentEndTimeLabel.SizeThatFits(Bounds.Size);
+            var fullExtentStartLabelSize = FullExtentStartTimeLabel?.SizeThatFits(Bounds.Size) ?? CGSize.Empty;
+            var fullExtentEndLabelSize = FullExtentEndTimeLabel?.SizeThatFits(Bounds.Size) ?? CGSize.Empty;
 
             var maxThumbHeight = Math.Max(MinimumThumb.Height, MaximumThumb.Height);
             var thumbOverhang = (maxThumbHeight - SliderTrack.Height) / 2;
@@ -461,18 +473,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var endTickLeft = Bounds.Width - ((fullExtentEndLabelSize.Width - _endTimeTickmark.Width) / 2);
             _endTimeTickmark.Frame = new CGRect(endTickLeft, endTickTop, _endTimeTickmark.Width, _endTimeTickmark.Height);
 
-            var fullExtentStartLabelTop = endTickTop - verticalSpacing - fullExtentStartLabelSize.Height;
-            FullExtentStartTimeLabel.Frame = new CGRect(0, fullExtentStartLabelTop,
-                fullExtentStartLabelSize.Width, fullExtentStartLabelSize.Height);
+            if (FullExtentStartTimeLabel != null)
+            {
+                var fullExtentStartLabelTop = endTickTop - verticalSpacing - fullExtentStartLabelSize.Height;
+                FullExtentStartTimeLabel.Frame = new CGRect(0, fullExtentStartLabelTop,
+                    fullExtentStartLabelSize.Width, fullExtentStartLabelSize.Height);
+            }
 
-            var fullExtentEndLabelTop = endTickTop - verticalSpacing - fullExtentEndLabelSize.Height;
-            FullExtentEndTimeLabel.Frame = new CGRect(Bounds.Right - fullExtentEndLabelSize.Width, fullExtentEndLabelTop, fullExtentEndLabelSize.Width, fullExtentEndLabelSize.Height);
+            if (FullExtentEndTimeLabel != null)
+            {
+                var fullExtentEndLabelTop = endTickTop - verticalSpacing - fullExtentEndLabelSize.Height;
+                FullExtentEndTimeLabel.Frame = new CGRect(Bounds.Right - fullExtentEndLabelSize.Width, fullExtentEndLabelTop, fullExtentEndLabelSize.Width, fullExtentEndLabelSize.Height);
+            }
 
             var sliderTrackLeft = startTickLeft;
             var sliderTrackWidth = _endTimeTickmark.Frame.Right - sliderTrackLeft;
             SliderTrack.Width = sliderTrackWidth;
             SliderTrack.Frame = new CGRect(sliderTrackLeft, sliderTrackTop, sliderTrackWidth, SliderTrack.Height);
-            Tickmarks.Frame = new CGRect(0, SliderTrack.Height, sliderTrackWidth, 50);
+            if (Tickmarks != null)
+            {
+                Tickmarks.Frame = new CGRect(0, SliderTrack.Height, sliderTrackWidth, 50);
+            }
 
             if (!arrangeCurrentExtentElements)
             {
@@ -486,13 +507,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             MinimumThumb.Frame = new CGRect(thumbLeft, thumbTop, MinimumThumb.Width, MinimumThumb.Height);
             MaximumThumb.Frame = new CGRect(thumbLeft, thumbTop, MaximumThumb.Width, MaximumThumb.Height);
             var thumbLabelTop = MinimumThumb.Frame.Bottom + 1;
-            var minLabelSize = CalculateTextSize(MinimumThumbLabel);
-            var maxLabelSize = CalculateTextSize(MaximumThumbLabel);
-            MinimumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, minLabelSize.Height);
-            MaximumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, maxLabelSize.Height);
+            if (MinimumThumbLabel != null)
+            {
+                var minLabelSize = CalculateTextSize(MinimumThumbLabel);
+                MinimumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, minLabelSize.Height);
+            }
+
+            if (MaximumThumbLabel != null)
+            {
+                var maxLabelSize = CalculateTextSize(MaximumThumbLabel);
+                MaximumThumbLabel.Frame = new CGRect(0, thumbLabelTop, Frame.Width, maxLabelSize.Height);
+            }
         }
 
-        private void DrawTriangle(CGContext context, double width, double height, CGColor fillColor, double strokeWidth,
+        private void DrawTriangle(CGContext context, double width, double height, CGColor? fillColor, double strokeWidth,
                                   CGColor strokeColor, bool pointOnRight, double left = 0, double top = 0)
         {
             var trianglePath = new CGPath();
@@ -511,7 +539,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DrawPath(context, trianglePath, fillColor, strokeWidth, strokeColor);
         }
 
-        private void DrawRectangle(CGContext context, double width, double height, CGColor fillColor, double strokeWidth,
+        private void DrawRectangle(CGContext context, double width, double height, CGColor? fillColor, double strokeWidth,
                                    CGColor strokeColor, double left = 0, double top = 0)
         {
             var bottom = top + height;
@@ -528,7 +556,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DrawPath(context, rectPath, fillColor, strokeWidth, strokeColor);
         }
 
-        private void DrawPath(CGContext context, CGPath path, CGColor fillColor, double strokeWidth, CGColor strokeColor)
+        private void DrawPath(CGContext context, CGPath path, CGColor? fillColor, double strokeWidth, CGColor strokeColor)
         {
             context.SetFillColor(fillColor);
             context.AddPath(path);
@@ -555,14 +583,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         #region IComponent
 
         /// <inheritdoc />
-        ISite IComponent.Site { get; set; }
+        ISite? IComponent.Site { get; set; }
 
-        private EventHandler _disposed;
+        private EventHandler? _disposed;
 
         /// <summary>
         /// Internal use only
         /// </summary>
-        event EventHandler IComponent.Disposed
+        event EventHandler? IComponent.Disposed
         {
             add { _disposed += value; }
             remove { _disposed -= value; }

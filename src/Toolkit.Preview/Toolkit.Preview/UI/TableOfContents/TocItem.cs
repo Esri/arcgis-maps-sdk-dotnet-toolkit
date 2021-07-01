@@ -37,9 +37,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 #endif
     public class TocItem : INotifyPropertyChanged, Toolkit.UI.ILayerContentItem
     {
-        private System.Threading.Tasks.Task<IList<TocItem>> _legendInfoLoadTask;
+        private System.Threading.Tasks.Task<IList<TocItem>>? _legendInfoLoadTask;
         private bool _isExpanded;
-        private WeakReference<TocItem> _parent;
+        private WeakReference<TocItem?> _parent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TocItem"/> class.
@@ -48,11 +48,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// <param name="showLegend">Whether the legend should be shown or not.</param>
         /// <param name="depth">The depth of this item in the tree.</param>
         /// <param name="parent">The parent to this item in the tree.</param>
-        internal TocItem(object content, bool showLegend, int depth, TocItem parent)
+        internal TocItem(object content, bool showLegend, int depth, TocItem? parent)
         {
             Content = content;
             Depth = depth;
-            _parent = new WeakReference<TocItem>(parent);
+            _parent = new WeakReference<TocItem?>(parent);
             _showLegend = showLegend;
             if (content is ILayerContent)
             {
@@ -68,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
             if (content is INotifyPropertyChanged inpc)
             {
-                var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object, PropertyChangedEventArgs>(inpc)
+                var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(inpc)
                 {
                     OnEventAction = (instance, source, eventArgs) => ContentPropertyChanged(eventArgs.PropertyName),
                     OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             }
         }
 
-        private void ContentPropertyChanged(string propertyName)
+        private void ContentPropertyChanged(string? propertyName)
         {
             if (Content is FeatureLayer && propertyName == nameof(FeatureLayer.Renderer))
             {
@@ -88,11 +88,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// <summary>
         /// Gets a reference to the parent of this tree item node.
         /// </summary>
-        public TocItem Parent
+        public TocItem? Parent
         {
             get
             {
-                if (_parent != null && _parent.TryGetTarget(out TocItem parent) == true)
+                if (_parent != null && _parent.TryGetTarget(out TocItem? parent) == true)
                 {
                     return parent;
                 }
@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// </summary>
         /// <seealso cref="Layer"/>
         /// <seealso cref="Content"/>
-        public ILayerContent LayerContent
+        public ILayerContent? LayerContent
         {
             get
             {
@@ -125,7 +125,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// </summary>
         /// <seealso cref="LayerContent"/>
         /// <seealso cref="Content"/>
-        public Layer Layer
+        public Layer? Layer
         {
             get
             {
@@ -166,7 +166,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     RefreshChildren();
                     if (ilc.SublayerContents is INotifyCollectionChanged incc)
                     {
-                        var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
+                        var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
                         {
                             OnEventAction = (instance, source, eventArgs) => RefreshChildren(),
                             OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
@@ -280,7 +280,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             return new List<TocItem>(infos.Select(t => new TocItem(t, _showLegend, Depth + 1, this)));
         }
 
-        private IEnumerable<TocItem> _children;
+        private IEnumerable<TocItem>? _children;
 
         /// <summary>
         /// Gets the child entries for this TOC Entry.
@@ -325,7 +325,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         /// <summary>
         /// Gets the legend infos for this entry.
         /// </summary>
-        private IEnumerable<TocItem> LegendInfos
+        private IEnumerable<TocItem>? LegendInfos
         {
             get
             {
@@ -346,10 +346,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => obj is TocItem le && ReferenceEquals(Content, le.Content);
+        public override bool Equals(object? obj) => obj is TocItem le && ReferenceEquals(Content, le.Content);
 
         /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
 #endif

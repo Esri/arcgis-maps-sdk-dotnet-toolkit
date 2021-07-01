@@ -59,13 +59,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>
-        public PopupManager PopupManager
+        public PopupManager? PopupManager
         {
             get { return (PopupManager)GetValue(PopupManagerProperty); }
             set { SetValue(PopupManagerProperty, value); }
         }
 
-        private static void OnPopupManagerProperty(BindableObject bindable, object oldValue, object newValue)
+        private static void OnPopupManagerProperty(BindableObject bindable, object? oldValue, object? newValue)
         {
             var popupViewer = bindable as PopupViewer;
             if (popupViewer?.NativePopupViewer != null)

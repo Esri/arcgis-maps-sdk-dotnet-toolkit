@@ -16,6 +16,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using CoreGraphics;
 using UIKit;
 
@@ -57,6 +58,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.AwakeFromNib();
         }
 
+        [MemberNotNull(nameof(_rootStackView), nameof(_combinedScaleLine), nameof(_metricScaleLine), nameof(_metricValue), nameof(_metricUnit),
+            nameof(_usScaleLine), nameof(_usValue), nameof(_usUnit), nameof(_firstMetricTickLine), nameof(_secondMetricTickLine), nameof(_scaleLineStartSegment),
+            nameof(_firstUsTickLine), nameof(_secondUsTickLine))]
         private void Initialize()
         {
             BackgroundColor = UIColor.Clear;
@@ -279,14 +283,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-        ISite IComponent.Site { get; set; }
+        ISite? IComponent.Site { get; set; }
 
-        private EventHandler _disposed;
+        private EventHandler? _disposed;
 
         /// <summary>
         /// Internal use only
         /// </summary>
-        event EventHandler IComponent.Disposed
+        event EventHandler? IComponent.Disposed
         {
             add { _disposed += value; }
             remove { _disposed -= value; }

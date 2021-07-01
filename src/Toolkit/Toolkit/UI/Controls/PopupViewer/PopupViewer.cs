@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>
-        public PopupManager PopupManager
+        public PopupManager? PopupManager
         {
             get => PopupManagerImpl;
             set => PopupManagerImpl = value;

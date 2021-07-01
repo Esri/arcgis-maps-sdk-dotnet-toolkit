@@ -39,11 +39,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class FeatureDataField : Control
     {
-        private ContentControl _contentControl;
-        private Field _field;
-        private DataItem _dataItem;
+        private ContentControl? _contentControl;
+        private Field? _field;
+        private DataItem? _dataItem;
         private bool _focused;
-        private string _currentState;
+        private string? _currentState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureDataField"/> class.
@@ -87,9 +87,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the <see cref="Data.Feature">Feature</see> that owns the field attribute the schema and values of fields.
         /// </summary>
-        public Feature Feature
+        public Feature? Feature
         {
-            get { return (Feature)GetValue(FeatureProperty); }
+            get { return GetValue(FeatureProperty) as Feature; }
             set { SetValue(FeatureProperty, value); }
         }
 
@@ -108,9 +108,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the name of the attribute field that will be used to generate control.
         /// </summary>
-        public string FieldName
+        public string? FieldName
         {
-            get { return (string)GetValue(FieldNameProperty); }
+            get { return GetValue(FieldNameProperty) as string; }
             set { SetValue(FieldNameProperty, value); }
         }
 
@@ -154,9 +154,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the attribute value for field.
         /// </summary>
-        public object BindingValue
+        public object? BindingValue
         {
-            get { return (object)GetValue(BindingValueProperty); }
+            get { return GetValue(BindingValueProperty); }
             set { SetValue(BindingValueProperty, value); }
         }
 
@@ -221,20 +221,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// To trigger a validation exception, throw an exception in this method.
         /// </remarks>
-        /// <param name="oldvValue">The old attribute value.</param>
+        /// <param name="oldValue">The old attribute value.</param>
         /// <param name="newValue">The new updated attribute value.</param>
         /// <seealso cref="ValueChanging"/>
-        protected void OnValueChanging(object oldvValue, object newValue)
+        protected void OnValueChanging(object? oldValue, object? newValue)
         {
         }
 
         /// <summary>
         /// Called when an attribute value has changed.
         /// </summary>
-        /// <param name="oldvValue">The old attribute value.</param>
+        /// <param name="oldValue">The old attribute value.</param>
         /// <param name="newValue">The new updated attribute value.</param>
         /// <seealso cref="ValueChanged"/>
-        protected void OnValueChanged(object oldvValue, object newValue)
+        protected void OnValueChanged(object? oldValue, object? newValue)
         {
         }
 
@@ -245,9 +245,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Default validation is handled based on field schema.
         /// Custom validation may be added by subscribing to ValueChanging event.
         /// </remarks>
-        public Exception ValidationException
+        public Exception? ValidationException
         {
-            get { return (Exception)GetValue(ValidationExceptionProperty); }
+            get { return GetValue(ValidationExceptionProperty) as Exception; }
         }
 
         /// <summary>
@@ -267,9 +267,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <seealso cref="ReadOnlyTemplate"/>
         /// <seealso cref="InputTemplate"/>
-        public DataTemplate SelectorTemplate
+        public DataTemplate? SelectorTemplate
         {
-            get { return (DataTemplate)GetValue(SelectorTemplateProperty); }
+            get { return GetValue(SelectorTemplateProperty) as DataTemplate; }
             set { SetValue(SelectorTemplateProperty, value); }
         }
 
@@ -290,9 +290,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <seealso cref="ReadOnlyTemplate"/>
         /// <seealso cref="SelectorTemplate"/>
-        public DataTemplate InputTemplate
+        public DataTemplate? InputTemplate
         {
-            get { return (DataTemplate)GetValue(InputTemplateProperty); }
+            get { return GetValue(InputTemplateProperty) as DataTemplate; }
             set { SetValue(InputTemplateProperty, value); }
         }
 
@@ -314,9 +314,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <seealso cref="InputTemplate"/>
         /// <seealso cref="SelectorTemplate"/>
-        public DataTemplate ReadOnlyTemplate
+        public DataTemplate? ReadOnlyTemplate
         {
-            get { return (DataTemplate)GetValue(ReadOnlyTemplateProperty); }
+            get { return GetValue(ReadOnlyTemplateProperty) as DataTemplate; }
             set { SetValue(ReadOnlyTemplateProperty, value); }
         }
 
@@ -372,16 +372,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnTextBoxChangedListenerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is TextBox)
+            if (e.OldValue is TextBox textBoxOld)
             {
-                var textBox = (TextBox)e.OldValue;
-                textBox.TextChanged -= OnTextBoxChanged;
+                textBoxOld.TextChanged -= OnTextBoxChanged;
             }
 
-            if (e.NewValue is TextBox)
+            if (e.NewValue is TextBox textBoxNew)
             {
-                var textBox = (TextBox)e.NewValue;
-                textBox.TextChanged += OnTextBoxChanged;
+                textBoxNew.TextChanged += OnTextBoxChanged;
             }
         }
 
@@ -401,14 +399,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// This event may be used to provide custom validation by throwing an exception in the event handler.
         /// </remarks>
-        /// <seealso cref="OnValueChanging(object, object)"/>
-        public event EventHandler<AttributeValueChangedEventArgs> ValueChanging;
+        /// <seealso cref="OnValueChanging(object?, object?)"/>
+        public event EventHandler<AttributeValueChangedEventArgs>? ValueChanging;
 
         /// <summary>
         /// Occurs when the field attribute value has changed and committed back to the feature.
         /// </summary>
-        /// <seealso cref="OnValueChanged(object, object)"/>
-        public event EventHandler<AttributeValueChangedEventArgs> ValueChanged;
+        /// <seealso cref="OnValueChanged(object?, object?)"/>
+        public event EventHandler<AttributeValueChangedEventArgs>? ValueChanged;
 
         /// <summary>
         /// Generates the control for <see cref="FeatureDataField"/>.
@@ -428,7 +426,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Content control, container for the control, and Field, which provides schema for attribute field,
             // are both required to generate the control.
-            if (_contentControl == null || Feature == null)
+            if (_contentControl == null || Feature == null || FieldName == null)
             {
                 return;
             }
@@ -476,24 +474,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private void GenerateSelectorField()
         {
+            if (_field is null)
+            {
+                return;
+            }
+
             var cvd = _field.GetCodedValueDomain();
             if (cvd == null)
             {
                 return;
             }
 
-            var items = new List<Esri.ArcGISRuntime.Data.CodedValue>();
+            var items = new List<Esri.ArcGISRuntime.Data.CodedValue?>();
             if (_field.IsNullable)
             {
                 items.Add(default(Esri.ArcGISRuntime.Data.CodedValue));
             }
 
             items.AddRange(cvd.CodedValues);
-            _contentControl.Content = null;
-            _contentControl.ContentTemplate = null;
+
+            if (_contentControl != null)
+            {
+                _contentControl.Content = null;
+                _contentControl.ContentTemplate = null;
+            }
+
             _dataItem = new SelectorDataItem(ValueChangedCallback, BindingValue, items);
-            _contentControl.Content = _dataItem;
-            _contentControl.ContentTemplate = SelectorTemplate;
+            if (_contentControl != null)
+            {
+                _contentControl.Content = _dataItem;
+                _contentControl.ContentTemplate = SelectorTemplate;
+            }
         }
 
         /// <summary>
@@ -501,9 +512,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private void GenerateInputField()
         {
-            _contentControl.ContentTemplate = InputTemplate;
             _dataItem = new InputDataItem(ValueChangedCallback, BindingValue, _field);
-            _contentControl.Content = _dataItem;
+            if (_contentControl != null)
+            {
+                _contentControl.ContentTemplate = InputTemplate;
+                _contentControl.Content = _dataItem;
+            }
         }
 
         /// <summary>
@@ -511,16 +525,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private void GenerateReadOnlyField()
         {
-            _contentControl.ContentTemplate = ReadOnlyTemplate;
             _dataItem = new ReadOnlyDataItem(BindingValue, _field);
-            _contentControl.Content = _dataItem;
+            if (_contentControl != null)
+            {
+                _contentControl.ContentTemplate = ReadOnlyTemplate;
+                _contentControl.Content = _dataItem;
+            }
         }
 
         /// <summary>
         /// Callback used to track when value changes in one of the <see cref="DataItem"/> classes.
         /// </summary>
         /// <param name="value">new value entered or selected by user.</param>
-        private void ValueChangedCallback(object value)
+        private void ValueChangedCallback(object? value)
         {
             BindingValue = value;
         }
@@ -530,7 +547,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="value">value to convert.</param>
         /// <returns>value in its correct field type or value.</returns>
-        private object ConvertToFieldType(object value)
+        private object? ConvertToFieldType(object? value)
         {
             if (_field == null || value == null)
             {
@@ -643,12 +660,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private void UpdateValidationState()
         {
-            _dataItem.ErrorMessage = ValidationException?.Message ?? string.Empty;
+            if (_dataItem != null)
+            {
+                _dataItem.ErrorMessage = ValidationException?.Message ?? string.Empty;
+            }
+
             var deltaState = ValidationException == null ? "ValidState" : (_focused ? "InvalidFocusedState" : "InvalidUnfocusedState");
             if (_currentState != deltaState)
             {
                 _currentState = deltaState;
-                GoToState(_contentControl, _currentState);
+                if (_contentControl != null)
+                {
+                    GoToState(_contentControl, _currentState);
+                }
             }
         }
 
@@ -745,7 +769,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             try
             {
-                Feature.Attributes[FieldName] = ConvertToFieldType((value is KeyValuePair<object, string>) ? ((KeyValuePair<object, string>)value).Key : value);
+                if (Feature != null && FieldName != null)
+                {
+                    Feature.Attributes[FieldName] = ConvertToFieldType((value is KeyValuePair<object, string>) ? ((KeyValuePair<object, string>)value).Key : value);
+                }
+
                 ClearValue(ValidationExceptionProperty);
                 return true;
             }

@@ -29,10 +29,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Strips out html-code to return plain text.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public class HtmlToPlainTextConverter : IValueConverter
+    public sealed class HtmlToPlainTextConverter : IValueConverter
     {
         /// <inheritdoc />
-        object IValueConverter.Convert(object value, Type targetType, object parameter,
+        object? IValueConverter.Convert(object? value, Type targetType, object parameter,
 #if NETFX_CORE
             string language)
 #else
@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <inheritdoc />
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter,
+        object? IValueConverter.ConvertBack(object? value, Type targetType, object parameter,
 #if NETFX_CORE
             string language)
 #else

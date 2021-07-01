@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
@@ -34,26 +35,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
 #pragma warning disable SX1309 // Names match elements in template
 #pragma warning disable SA1306 // Names match elements in template
-        private View SliderTrack;
-        private View SliderTrackOutline;
-        private View MinimumThumb;
-        private View MaximumThumb;
-        private View PinnedMinimumThumb;
-        private View PinnedMaximumThumb;
-        private View HorizontalTrackThumb;
-        private Button NextButton;
-        private Button PreviousButton;
-        private View NextButtonOutline;
-        private View PreviousButtonOutline;
-        private ToggleButton PlayPauseButton;
-        private View PlayButtonOutline;
-        private View PauseButtonOutline;
-        private RectangleView SliderTrackStepBackRepeater = null;
-        private RectangleView SliderTrackStepForwardRepeater = null;
+        private View? SliderTrack;
+        private View? SliderTrackOutline;
+        private View? MinimumThumb;
+        private View? MaximumThumb;
+        private View? PinnedMinimumThumb;
+        private View? PinnedMaximumThumb;
+        private View? HorizontalTrackThumb;
+        private Button? NextButton;
+        private Button? PreviousButton;
+        private View? NextButtonOutline;
+        private View? PreviousButtonOutline;
+        private ToggleButton? PlayPauseButton;
+        private View? PlayButtonOutline;
+        private View? PauseButtonOutline;
+        private RectangleView? SliderTrackStepBackRepeater = null;
+        private RectangleView? SliderTrackStepForwardRepeater = null;
 #pragma warning restore SX1309
 #pragma warning restore SA1306
-        private View _startTimeTickmark;
-        private View _endTimeTickmark;
+        private View? _startTimeTickmark;
+        private View? _endTimeTickmark;
         private bool _isMinThumbFocused = false;
         private bool _isMaxThumbFocused = false;
         private float _lastX = 0;
@@ -63,9 +64,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="TimeSlider"/> class.
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
-        public TimeSlider(Context context)
+        public TimeSlider(Context? context)
             : base(context)
         {
+            InitializeImpl();
             Initialize();
         }
 
@@ -74,9 +76,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="context">The Context the view is running in, through which it can access resources, themes, etc.</param>
         /// <param name="attr">The attributes of the AXML element declaring the view.</param>
-        public TimeSlider(Context context, IAttributeSet attr)
+        public TimeSlider(Context? context, IAttributeSet? attr)
             : base(context, attr)
         {
+            InitializeImpl();
             Initialize();
         }
 
@@ -104,11 +107,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.Bottom, ConstraintSet.ParentId, ConstraintSet.Bottom, 15);
                 constraintSet.ApplyTo(this);
 
+#pragma warning disable CS8774 // Member must have a non-null value when exiting.
                 return;
+#pragma warning restore CS8774 // Member must have a non-null value when exiting.
             }
 
-            var inflater = LayoutInflater.FromContext(Context);
-            inflater.Inflate(Resource.Layout.TimeSlider, this, true);
+            var inflater = LayoutInflater.FromContext(Context!);
+            inflater?.Inflate(Resource.Layout.TimeSlider, this, true);
 
             SliderTrack = FindViewById<View>(Resource.Id.SliderTrack);
             SliderTrackOutline = FindViewById<View>(Resource.Id.SliderTrackOutline);
@@ -135,14 +140,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             PositionTickmarks();
             ApplyLabelMode(LabelMode);
 
-            PlayPauseButton.CheckedChange += (o, e) =>
+            if (PlayPauseButton != null)
             {
-                IsPlaying = PlayPauseButton.Checked;
-                PlayButtonOutline.Visibility = IsPlaying ? ViewStates.Gone : ViewStates.Visible;
-                PauseButtonOutline.Visibility = IsPlaying ? ViewStates.Visible : ViewStates.Gone;
-            };
-            NextButton.Click += (o, e) => OnNextButtonClick();
-            PreviousButton.Click += (o, e) => OnPreviousButtonClick();
+                PlayPauseButton.CheckedChange += (o, e) =>
+                {
+                    IsPlaying = PlayPauseButton.Checked;
+                    if (PlayButtonOutline != null)
+                    {
+                        PlayButtonOutline.Visibility = IsPlaying ? ViewStates.Gone : ViewStates.Visible;
+                    }
+
+                    if (PauseButtonOutline != null)
+                    {
+                        PauseButtonOutline.Visibility = IsPlaying ? ViewStates.Visible : ViewStates.Gone;
+                    }
+                };
+            }
+
+            if (NextButton != null)
+            {
+                NextButton.Click += (o, e) => OnNextButtonClick();
+            }
+
+            if (PreviousButton != null)
+            {
+                PreviousButton.Click += (o, e) => OnPreviousButtonClick();
+            }
 
             SetOnTouchListener(this);
         }
@@ -162,14 +185,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-        public bool OnTouch(View v, MotionEvent e)
+        public bool OnTouch(View? v, MotionEvent? e)
         {
+            if (e is null || MinimumThumb is null || MaximumThumb is null)
+            {
+                return false;
+            }
+
             // Get x/y coordinates of touch location
             var touchX = e.RawX;
             var touchY = e.RawY;
 
             var isTouchHandled = _isMinThumbFocused || _isMaxThumbFocused;
-            var minTargetSize = TypedValue.ApplyDimension(ComplexUnitType.Dip, 44f, ViewExtensions.GetDisplayMetrics());
+            var minTargetSize = TypedValue.ApplyDimension(ComplexUnitType.Dip, 44f, ViewExtensions.GetDisplayMetrics(Context));
             var minThumbBounds = GetBounds(MinimumThumb, minTargetSize, minTargetSize);
             var maxThumbBounds = GetBounds(MaximumThumb, minTargetSize, minTargetSize);
             switch (e.Action)
@@ -197,7 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         return isTouchHandled;
                     }
 
-                    View trackedThumb = null;
+                    View? trackedThumb = null;
                     if (_isMinThumbFocused && _isMaxThumbFocused)
                     {
                         var maxThumbTranslateX = touchX - maxThumbBounds.Left - _lastX;
@@ -225,7 +253,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         trackedThumb = MaximumThumb;
                     }
 
-                    var currentThumbX = touchX - trackedThumb.Left;
+                    var currentThumbX = touchX - trackedThumb?.Left ?? 0;
                     var translateX = currentThumbX - _lastX;
 
                     if (_isMinThumbFocused)
@@ -283,7 +311,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnMeasure(widthMeasureSpec, heightMeasureSpec);
 
             await _measureThrottler.ThrottleDelay();
-            Tickmarks.TickInset = (float)(this.GetActualWidth() - SliderTrack.GetActualWidth()) / 2;
+            if (Tickmarks != null && SliderTrack != null)
+            {
+                Tickmarks.TickInset = (float)(this.GetActualWidth() - SliderTrack.GetActualWidth()) / 2;
+            }
         }
     }
 }

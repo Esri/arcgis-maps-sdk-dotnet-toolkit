@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(Legend), null, BindingMode.OneWay, propertyChanged: OnGeoViewPropertyChanged);
 
-        private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnGeoViewPropertyChanged(BindableObject bindable, object? oldValue, object? newValue)
         {
             ((Legend)bindable)._datasource.SetGeoView(newValue as GeoView);
         }
@@ -116,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <seealso cref="MapView"/>
         /// <seealso cref="SceneView"/>
         /// <seealso cref="GeoViewProperty"/>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
             get { return (GeoView)GetValue(GeoViewProperty); }
             set { SetValue(GeoViewProperty, value); }
@@ -209,9 +209,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </remarks>
         /// <seealso cref="SublayerItemTemplate"/>
         /// <seealso cref="LegendInfoItemTemplate"/>
-        public DataTemplate LayerItemTemplate
+        public DataTemplate? LayerItemTemplate
         {
-            get { return (DataTemplate)GetValue(LayerItemTemplateProperty); }
+            get { return GetValue(LayerItemTemplateProperty) as DataTemplate; }
             set { SetValue(LayerItemTemplateProperty, value); }
         }
 
@@ -226,9 +226,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         /// <seealso cref="LegendInfoItemTemplate"/>
         /// <seealso cref="LayerItemTemplate"/>
-        public DataTemplate SublayerItemTemplate
+        public DataTemplate? SublayerItemTemplate
         {
-            get { return (DataTemplate)GetValue(SublayerItemTemplateProperty); }
+            get { return GetValue(SublayerItemTemplateProperty) as DataTemplate; }
             set { SetValue(SublayerItemTemplateProperty, value); }
         }
 
@@ -243,9 +243,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         /// <seealso cref="SublayerItemTemplate"/>
         /// <seealso cref="LayerItemTemplate"/>
-        public DataTemplate LegendInfoItemTemplate
+        public DataTemplate? LegendInfoItemTemplate
         {
-            get { return (DataTemplate)GetValue(LegendInfoItemTemplateProperty); }
+            get { return GetValue(LegendInfoItemTemplateProperty) as DataTemplate; }
             set { SetValue(LegendInfoItemTemplateProperty, value); }
         }
     }

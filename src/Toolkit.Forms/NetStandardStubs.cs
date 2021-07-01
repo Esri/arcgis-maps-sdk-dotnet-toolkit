@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class PopupViewer
     {
-        public object PopupManager { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Mapping.Popups.PopupManager? PopupManager { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         internal void SetForeground(Color color) => throw new NotImplementedException();
     }
 
@@ -51,13 +51,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     internal class LayerLegend
     {
         public bool IncludeSublayers { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ILayerContent LayerContent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ILayerContent? LayerContent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 
     internal class Legend
     {
         public bool FilterByVisibleScaleRange { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public object GeoView { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public object? GeoView { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool ReverseLayerOrder { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 
@@ -70,15 +70,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
     internal class SymbolDisplay
     {
-        public Symbol Symbol { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Symbol? Symbol { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 
     internal class TimeSlider
     {
-        public TimeExtent CurrentExtent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public TimeExtent FullExtent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public TimeValue TimeStepInterval { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IReadOnlyList<DateTimeOffset> TimeSteps { get => throw new NotImplementedException(); }
+        public TimeExtent? CurrentExtent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TimeExtent? FullExtent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public TimeValue? TimeStepInterval { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IReadOnlyList<DateTimeOffset>? TimeSteps { get => throw new NotImplementedException(); }
         public TimeSpan PlaybackInterval { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public PlaybackDirection PlaybackDirection { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public LoopMode PlaybackLoopMode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Task InitializeTimePropertiesAsync(ITimeAware timeAwareLayer) => throw new NotImplementedException();
         public bool StepForward(int timeSteps = 1) => throw new NotImplementedException();
         public bool StepBack(int timeSteps = 1) => throw new NotImplementedException();
-        public event EventHandler<TimeExtentChangedEventArgs> CurrentExtentChanged;
+        public event EventHandler<TimeExtentChangedEventArgs>? CurrentExtentChanged;
     }
 }
 

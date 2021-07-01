@@ -44,12 +44,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        public Action<TInstance, TSource, TEventArgs> OnEventAction { get; set; }
+        public Action<TInstance, TSource, TEventArgs>? OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when detaching from the event.
         /// </summary>
-        public Action<TInstance, WeakEventListener<TInstance, TSource, TEventArgs>> OnDetachAction { get; set; }
+        public Action<TInstance, WeakEventListener<TInstance, TSource, TEventArgs>>? OnDetachAction { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakEventListener{TInstance, TSource, TEventArgs}"/> class.
@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="eventArgs">Event arguments.</param>
         public void OnEvent(TSource source, TEventArgs eventArgs)
         {
-            TInstance target = (TInstance)_weakInstance.Target;
+            TInstance? target = (TInstance?)_weakInstance.Target;
             if (target != null)
             {
                 // Call registered action
@@ -102,7 +102,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Implements a weak event listener that allows the owner to be garbage
     /// collected if its only remaining link is an event handler.
-    ///
+    /// </summary>
+    /// <remarks>
     /// USAGE:
     ///
     /// EventReceiver - the class that is listening for the event
@@ -119,11 +120,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// eventSource.Changed += _eventListener.OnEvent;
     ///
     /// UNSUBSCRIBE FROM EVENT:
-    ///
+    /// <code>
     /// _eventListener.Detach();
     /// _eventListener = null;
-    ///
-    /// </summary>
+    /// </code>
+    /// </remarks>
     /// <typeparam name="TInstance">Type of instance listening for the event.</typeparam>
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Used as link target in several projects.")]
 #pragma warning disable SA1402
@@ -139,12 +140,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        public Action<TInstance> OnEventAction { get; set; }
+        public Action<TInstance>? OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when detaching from the event.
         /// </summary>
-        public Action<WeakEventListener<TInstance>> OnDetachAction { get; set; }
+        public Action<WeakEventListener<TInstance>>? OnDetachAction { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakEventListener{TInstance}"/> class.
@@ -165,7 +166,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public void OnEvent()
         {
-            TInstance target;
+            TInstance? target;
             if (_weakInstance.TryGetTarget(out target))
             {
                 // Call registered action

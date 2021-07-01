@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras/2.1.2">
+﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
     <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework);netstandard2.0</TargetFrameworks>
@@ -8,9 +8,12 @@
     <AssemblyName>Esri.ArcGISRuntime.Toolkit</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+  <Import Project="..\..\CommonProperties.targets" />
+  
+  <PropertyGroup Condition="'$(IsUWP)' == 'true'">
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
@@ -24,34 +27,26 @@
     <DefineConstants>$(DefineConstants);XAMARIN;_XAMARIN_IOS_</DefineConstants>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(IsDotNetFramework)' == 'true'">
     <UseWpf>true</UseWpf>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+  <ItemGroup Condition="'$(IsUWP)' == 'true'">
     <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
+  <ItemGroup Condition="'$(IsTargetingAndroid)' == 'true'">
     <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.2" />
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
     <PackageReference Include="Xamarin.Android.Support.v7.RecyclerView" Version="28.0.0.3" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+  <ItemGroup Condition="'$(IsTargetingiOS)' == 'true'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="$(ArcGISRuntimePackageVersion)" />
     <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
+  <ItemGroup Condition="'$(UseWpf)' == 'true'">
     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
@@ -81,11 +76,11 @@
     <_ResxFiles Remove="**\*.resx" />
     <None Remove="**\*.axml" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
+  <ItemGroup Condition="'$(IsUWP)' == 'true'">
     <Compile Remove="LocalizedStrings\Resources.Designer.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != '$(UWPTargetFramework)'">
+  <ItemGroup Condition="'$(IsUWP)' != 'true'">
     <EmbeddedResource Update="LocalizedStrings\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -101,11 +96,9 @@
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(DotNetTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)'" />
-  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.Android\Esri.ArcGISRuntime.Toolkit.Android.projitems" Label="Shared" Condition="'$(IsTargetingAndroid)' == 'true'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.iOS\Esri.ArcGISRuntime.Toolkit.iOS.projitems" Label="Shared" Condition="'$(IsTargetingiOS)' == 'true'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.projitems" Label="Shared" Condition="'$(IsUWP)' == 'true'" />
+  <Import Project="$(MSBuildThisFileDirectory)..\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.projitems" Label="Shared" Condition="'$(UseWpf)' == 'true'" />
 
 </Project>

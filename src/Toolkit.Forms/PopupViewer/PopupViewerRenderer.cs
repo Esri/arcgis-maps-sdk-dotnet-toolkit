@@ -28,7 +28,7 @@ using Xamarin.Forms.Platform.UWP;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    internal class PopupViewerRenderer : ViewRenderer<PopupViewer, UI.Controls.PopupViewer>
+    internal class PopupViewerRenderer : ViewRenderer<PopupViewer, UI.Controls.PopupViewer?>
     {
 #if __ANDROID__
         public PopupViewerRenderer(Android.Content.Context context)

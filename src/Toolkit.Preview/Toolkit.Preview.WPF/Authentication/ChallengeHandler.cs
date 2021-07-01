@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
     /// <summary>
     /// Custom <see cref="AuthenticationManager"/> Challenge Handler that combines user/password, certificate and OAuth authentication.
     /// </summary>
-    public class ChallengeHandler : Esri.ArcGISRuntime.Security.IChallengeHandler
+    public sealed class ChallengeHandler : Esri.ArcGISRuntime.Security.IChallengeHandler
     {
         private System.Windows.Threading.Dispatcher _dispatcher;
 
@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// <param name="dispatcher">The Dispatcher for the application.</param>
         public ChallengeHandler(System.Windows.Threading.Dispatcher dispatcher)
         {
-            _dispatcher = dispatcher;
+            _dispatcher = dispatcher ?? throw new System.ArgumentNullException(nameof(dispatcher));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
         /// <summary>
         /// Gets or sets the style applied to the SignInForm.
         /// </summary>
-        public Style SignInFormStyle { get; set; }
+        public Style? SignInFormStyle { get; set; }
 
         /// <inheritdoc />
         Task<Credential> IChallengeHandler.CreateCredentialAsync(CredentialRequestInfo info)
@@ -57,14 +57,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
                 if (info.AuthenticationType == AuthenticationType.Certificate)
                 {
                     var cert = Authentication.CertificateHelper.SelectCertificate(info);
-                    tcs.SetResult(cert);
+                    if (cert is null)
+                    {
+                        tcs.SetException(new System.InvalidOperationException("No certificate was selected."));
+                    }
+                    else
+                    {
+                        tcs.SetResult(cert);
+                    }
                 }
                 else
                 {
                     var login = CreateWindow(info);
                     login.Closed += (s, e) =>
                     {
-                        tcs.SetResult((login.Content as SignInForm).Credential);
+                        var credential = (login.Content as SignInForm)?.Credential;
+                        if (credential is null)
+                        {
+                            tcs.SetException(new System.InvalidOperationException(" No credential was provided."));
+                        }
+                        else
+                        {
+                            tcs.SetResult(credential);
+                        }
                     };
                     login.ShowDialog();
                 }

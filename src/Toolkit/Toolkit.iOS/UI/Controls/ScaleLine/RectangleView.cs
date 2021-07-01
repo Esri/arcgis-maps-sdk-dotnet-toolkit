@@ -79,9 +79,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private UIColor _backgroundColor = UIColor.Clear;
+        private UIColor? _backgroundColor = UIColor.Clear;
 
-        public override UIColor BackgroundColor
+        public override UIColor? BackgroundColor
         {
             get => _backgroundColor;
             set
@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             get => _borderColor;
             set
             {
-                _borderColor = value;
+                _borderColor = value ?? throw new ArgumentNullException(nameof(BorderColor));
                 SetNeedsDisplay();
             }
         }
@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             CGRect renderTarget = new CGRect(rect.Location, _size);
             CGContext ctx = UIGraphics.GetCurrentContext();
 
-            ctx.SetFillColor(BackgroundColor.CGColor);
+            ctx.SetFillColor(BackgroundColor?.CGColor ?? UIColor.Clear.CGColor);
             ctx.SetStrokeColor(BorderColor.CGColor);
             ctx.FillRect(renderTarget);
             ctx.SetLineWidth((nfloat)BorderWidth);
@@ -141,9 +141,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

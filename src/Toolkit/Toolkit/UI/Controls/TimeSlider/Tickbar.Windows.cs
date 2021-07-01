@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             "<TextBlock Text=\"|\" VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\" />" +
             "</DataTemplate>";
 
-        private string _originalTickLabelFormat;
+        private string? _originalTickLabelFormat;
         private static DataTemplate _defaultTickmarkTemplate;
 
         internal static readonly DependencyProperty PositionProperty =
@@ -52,17 +52,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         internal static readonly DependencyProperty IsMajorTickmarkProperty =
             DependencyProperty.RegisterAttached("IsMajorTickmark", typeof(bool), typeof(Tickbar), new PropertyMetadata(false));
 
-        private void Initialize()
+        static Tickbar()
         {
-            if (_defaultTickmarkTemplate == null)
-            {
 #if NETFX_CORE
-                _defaultTickmarkTemplate = XamlReader.Load(_template) as DataTemplate;
+            _defaultTickmarkTemplate = XamlReader.Load(_template) as DataTemplate;
 #else
-                System.IO.MemoryStream stream = new System.IO.MemoryStream(UTF8Encoding.Default.GetBytes(_template));
-                _defaultTickmarkTemplate = XamlReader.Load(stream) as DataTemplate;
+            System.IO.MemoryStream stream = new System.IO.MemoryStream(UTF8Encoding.Default.GetBytes(_template));
+            _defaultTickmarkTemplate = (DataTemplate)XamlReader.Load(stream);
 #endif
-            }
         }
 
         /// <inheritdoc />
@@ -76,9 +73,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <value>The tick mark positions.</value>
         /// <remarks>The tick mark position values should be between 0 and 1.  They represent proportional positions along the tick bar.</remarks>
-        private IEnumerable<double> TickmarkPositionsImpl
+        private IEnumerable<double>? TickmarkPositionsImpl
         {
-            get { return (IEnumerable<double>)GetValue(TickmarkPositionsProperty); }
+            get { return GetValue(TickmarkPositionsProperty) as IEnumerable<double>; }
             set { SetValue(TickmarkPositionsProperty, value); }
         }
 
@@ -96,9 +93,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Gets or sets the data sources for the tick marks.  These can be bound to in the tick bar's tick templates.
         /// </summary>
         /// <value>The data source objects.</value>
-        private IEnumerable<object> TickmarkDataSourcesImpl
+        private IEnumerable<object>? TickmarkDataSourcesImpl
         {
-            get { return (IEnumerable<object>)GetValue(TickmarkDataSourcesProperty); }
+            get { return GetValue(TickmarkDataSourcesProperty) as IEnumerable<object>; }
             set { SetValue(TickmarkDataSourcesProperty, value); }
         }
 
@@ -117,7 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <param name="position">The position to place the tick at along the tick bar.</param>
         /// <param name="dataSource">The data to pass to the tick's template.</param>
-        private void AddTickmark(double position, object dataSource)
+        private void AddTickmark(double position, object? dataSource)
         {
             // Create both a minor and major tick mark at the specified position.  Layout logic will determine which
             // one to actually show at the position.
@@ -172,9 +169,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the item template for each minor tick mark.
         /// </summary>
-        public DataTemplate MinorTickmarkTemplate
+        public DataTemplate? MinorTickmarkTemplate
         {
-            get { return (DataTemplate)GetValue(MinorTickmarkTemplateProperty); }
+            get { return GetValue(MinorTickmarkTemplateProperty) as DataTemplate; }
             set { SetValue(MinorTickmarkTemplateProperty, value); }
         }
 
@@ -187,9 +184,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the item template for each major tick mark.
         /// </summary>
-        public DataTemplate MajorTickmarkTemplate
+        public DataTemplate? MajorTickmarkTemplate
         {
-            get { return (DataTemplate)GetValue(MajorTickmarkTemplateProperty); }
+            get { return GetValue(MajorTickmarkTemplateProperty) as DataTemplate; }
             set { SetValue(MajorTickmarkTemplateProperty, value); }
         }
 
@@ -202,9 +199,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the fill color for each tick mark.
         /// </summary>
-        private Brush TickFillImpl
+        private Brush? TickFillImpl
         {
-            get { return (Brush)GetValue(TickFillProperty); }
+            get { return GetValue(TickFillProperty) as Brush; }
             set { SetValue(TickFillProperty, value); }
         }
 
@@ -217,9 +214,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the fill color for each tick mark.
         /// </summary>
-        private Brush TickLabelColorImpl
+        private Brush? TickLabelColorImpl
         {
-            get { return (Brush)GetValue(TickLabelColorProperty); }
+            get { return GetValue(TickLabelColorProperty) as Brush; }
             set { SetValue(TickLabelColorProperty, value); }
         }
 
@@ -251,9 +248,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Gets or sets the string format to use for displaying the tick labels.
         /// </summary>
-        private string TickLabelFormatImpl
+        private string? TickLabelFormatImpl
         {
-            get { return (string)GetValue(TickLabelFormatProperty); }
+            get { return GetValue(TickLabelFormatProperty) as string; }
             set { SetValue(TickLabelFormatProperty, value); }
         }
 
@@ -267,14 +264,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private static void OnTickLabelFormatPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((Tickbar)d).OnTickLabelFormatPropertyChanged(e.NewValue as string);
 
-        private void ApplyTickLabelFormat(ContentPresenter tick, string tickLabelFormat)
+        private void ApplyTickLabelFormat(ContentPresenter tick, string? tickLabelFormat)
         {
             // Check whether the tick element has its children populated
             if (VisualTreeHelper.GetChildrenCount(tick) > 0)
             {
                 // Find the tick label in the visual tree
                 var contentRoot = VisualTreeHelper.GetChild(tick, 0) as FrameworkElement;
-                var labelTextBlock = contentRoot.FindName("TickLabel") as TextBlock;
+                var labelTextBlock = contentRoot?.FindName("TickLabel") as TextBlock;
                 labelTextBlock?.UpdateStringFormat(
                     targetProperty: TextBlock.TextProperty,
                     stringFormat: tickLabelFormat,
@@ -284,13 +281,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 // Children are not populated yet.  Wait for tick to load.
                 // Defer the method call until the tick element is loaded
-                void tickLoadedHandler(object o, RoutedEventArgs e)
+                void TickLoadedHandler(object o, RoutedEventArgs e)
                 {
                     ApplyTickLabelFormat(tick, tickLabelFormat);
-                    tick.Loaded -= tickLoadedHandler;
+                    tick.Loaded -= TickLoadedHandler;
                 }
 
-                tick.Loaded += tickLoadedHandler;
+                tick.Loaded += TickLoadedHandler;
             }
         }
 

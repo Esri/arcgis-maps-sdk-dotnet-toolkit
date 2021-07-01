@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             _owner = owner;
         }
 
-        protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+        protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
         {
             if (item is LegendEntry entry)
             {
@@ -55,10 +55,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             return null;
         }
 
-        public DataTemplate LayerTemplate => _owner.LayerItemTemplate;
+        public DataTemplate? LayerTemplate => _owner.LayerItemTemplate;
 
-        public DataTemplate SublayerTemplate => _owner.SublayerItemTemplate;
+        public DataTemplate? SublayerTemplate => _owner.SublayerItemTemplate;
 
-        public DataTemplate LegendInfoTemplate => _owner.LegendInfoItemTemplate;
+        public DataTemplate? LegendInfoTemplate => _owner.LegendInfoItemTemplate;
     }
 }

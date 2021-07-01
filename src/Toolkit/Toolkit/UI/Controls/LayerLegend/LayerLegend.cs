@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the layer to display the legend for.
         /// </summary>
-        public ILayerContent LayerContent
+        public ILayerContent? LayerContent
         {
             get => LayerContentImpl;
             set => LayerContentImpl = value;
