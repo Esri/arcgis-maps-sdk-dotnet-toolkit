@@ -1,6 +1,6 @@
 # OverviewMap
 
-OverviewMap is a small, secondary `MapView` (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. OverviewMap shows shows the visible extent of the `GeoView` it is connected to.
+OverviewMap is a small, secondary `MapView` (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. OverviewMap shows shows a representation of the viewpoint of the `GeoView` it is connected to.
 
 ![OverviewMap](https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png)
 
@@ -10,9 +10,9 @@ OverviewMap is a small, secondary `MapView` (sometimes called an inset map), tha
 
 OverviewMap:
 
-- Displays the visible extent for a connected GeoView
+- Displays a representation of the current viewpoint for a connected GeoView
 - Supports a configurable scaling factor for setting the overview map's zoom level relative to the connected view.
-- Supports a configurable symbol for visualizing the visible extent
+- Supports a configurable symbol for visualizing the current viewpoint
 - Supports two-way navigation, so the user can navigate the connected GeoView by panning and zooming the overview.
 - Exposes all of the same properties as `MapView`, so you can apply additional customization as needed. For example, you can change the `Map` property to use a custom basemap.
 
@@ -21,7 +21,7 @@ OverviewMap:
 OverviewMap extends `MapView` with the following bindable properties:
 
 - `GeoView` - References the connected MapView or SceneView
-- `ExtentSymbol` - Defines the symbol used to visualize the current extent. This is a red rectangle by default.
+- `ExtentSymbol` - Defines the symbol used to visualize the current viewpoint. This is a red rectangle by default for maps, and a red cross for scenes.
 - `ScaleFactor` - Defines the scale of the OverviewMap relative to the scale of the connected `GeoView`. The default is 25.
 
 ## Usage
