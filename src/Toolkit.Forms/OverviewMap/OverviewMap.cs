@@ -69,12 +69,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Identifies the <see cref="Symbol"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty SymbolProperty =
-            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(OverviewMap), null, propertyChanged: OnExtentSymbolPropertyChanged);
-
-        /// <summary>
         /// Gets or sets the geoview whose extent is to be displayed.
         /// </summary>
         /// <remarks>
@@ -85,6 +79,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             get { return (GeoView)GetValue(GeoViewProperty); }
             set { SetValue(GeoViewProperty, value); }
         }
+
+        /// <summary>
+        /// Identifies the <see cref="Symbol"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty SymbolProperty =
+            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(OverviewMap), null, propertyChanged: OnExtentSymbolPropertyChanged);
 
         /// <summary>
         /// Identifies the <see cref="ScaleFactor"/> bindable property.
