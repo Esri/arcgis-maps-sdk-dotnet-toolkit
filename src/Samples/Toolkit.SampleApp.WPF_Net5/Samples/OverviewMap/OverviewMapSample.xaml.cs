@@ -4,8 +4,8 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap
 {
-    [SampleInfoAttribute(Category = "OverviewMap", DisplayName = "OverviewMap - Map", Description = "Overview Map sample")]
-    public partial class OverviewMapSample: UserControl
+    [SampleInfoAttribute(Category = "OverviewMap", DisplayName = "OverviewMap - Map", Description = "OverviewMap sample")]
+    public partial class OverviewMapSample : UserControl
     {
         public OverviewMapSample()
         {
@@ -14,7 +14,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
         }
 
-        private void handle_valuechanged (object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void Handle_valuechanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             // Set the MapView rotation to that of the Slider.
             MyMapView.SetViewpointRotationAsync(e.NewValue);

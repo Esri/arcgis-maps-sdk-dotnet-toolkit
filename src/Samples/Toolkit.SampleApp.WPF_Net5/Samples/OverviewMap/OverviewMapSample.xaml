@@ -2,11 +2,8 @@
     x:Class="Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap.OverviewMapSample"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-    xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap"
-    xmlns:mapping="clr-namespace:Esri.ArcGISRuntime.Mapping;assembly=Esri.ArcGISRuntime"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:overviewmap="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;assembly=Esri.ArcGISRuntime.Toolkit"
     d:DesignHeight="450"
@@ -23,7 +20,7 @@
             VerticalAlignment="Top" />
         <Border Background="White"
                 HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="8">
-            <Slider Minimum="0" Maximum="360" ValueChanged="handle_valuechanged" />
+            <Slider Minimum="0" Maximum="360" ValueChanged="Handle_valuechanged" />
         </Border>
     </Grid>
 </UserControl>

@@ -9,6 +9,18 @@
     mc:Ignorable="d">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <esri:MapView x:Name="mapView" />
+        <Border
+            Margin="4"
+            Width="150"
+            Padding="4"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <Slider
+                Maximum="360"
+                Minimum="0"
+                ValueChanged="Slider_ValueChanged" />
+        </Border>
         <overviewmap:OverviewMap
             Width="100"
             Height="100"

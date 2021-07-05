@@ -28,10 +28,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         {
             this.InitializeComponent();
 
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = "";
+
             if (string.IsNullOrWhiteSpace(Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey))
             {
                 throw new InvalidOperationException("Please edit MainPage.xaml.cs to supply an API key");
             }
+
             this.Loaded += RootFrame_Loaded;
             rootFrame.Navigated += RootFrame_Navigated;
         }

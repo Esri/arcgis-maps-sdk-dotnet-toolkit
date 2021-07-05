@@ -1,8 +1,4 @@
-﻿using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI;
-using System;
-using System.Linq;
+﻿using Esri.ArcGISRuntime.Mapping;
 using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap
@@ -13,7 +9,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap
         {
             this.InitializeComponent();
             sceneView.Scene = new Scene(BasemapStyle.ArcGISImagery);
-
         }
     }
 }

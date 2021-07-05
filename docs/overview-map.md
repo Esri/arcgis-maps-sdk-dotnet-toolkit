@@ -1,6 +1,6 @@
 # OverviewMap
 
-OverviewMap is a small, secondary `MapView` (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. OverviewMap shows shows a representation of the viewpoint of the `GeoView` it is connected to.
+OverviewMap is a small, secondary `MapView` (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. OverviewMap shows a representation of the viewpoint of the `GeoView` it is connected to.
 
 ![OverviewMap](https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png)
 

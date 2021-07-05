@@ -44,6 +44,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
         private readonly GraphicsOverlay _extentOverlay;
         private readonly GeoView _overview;
 
+        // Flag needed because when the GeoView is first attached, GetCurrentViewpoint returns null.
+        // Subsequent ViewpointChanged event happens when IsNavigating is false, so special case is needed to
+        // ensure viewpoint is shown before manual interaction.
+        private bool _hasSetViewpoint;
+
         public OverviewMapController(GeoView overview)
         {
             _overview = overview;
@@ -153,6 +158,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
             if ((sendingView?.IsNavigating ?? false) && receivingView != null)
             {
                 ApplyViewpoint(sendingView, receivingView);
+                return;
+            }
+
+            if (_connectedView != null && !_hasSetViewpoint)
+            {
+                ApplyViewpoint(_connectedView, _overview);
             }
         }
 
@@ -170,6 +181,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
         {
             if (sendingView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint existingViewpoint)
             {
+                _hasSetViewpoint = true;
                 var scaleMultiplier = sendingView == _overview ? 1.0 / ScaleFactor : ScaleFactor;
                 Viewpoint newViewpoint = new Viewpoint((MapPoint)existingViewpoint.TargetGeometry, existingViewpoint.TargetScale * scaleMultiplier);
                 receivingView.SetViewpoint(newViewpoint);

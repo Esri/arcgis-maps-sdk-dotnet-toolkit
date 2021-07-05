@@ -26,6 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
             InitializeComponent();
 
+            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = "";
 
             if (string.IsNullOrWhiteSpace(Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey))
             {
