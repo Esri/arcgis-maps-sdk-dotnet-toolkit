@@ -6,7 +6,7 @@
 <a href="https://github.com/Esri/arcgis-runtime-demos-dotnet"><img src="https://img.shields.io/badge/Demos-633b9b?style=flat-square" /></a>
 <a href=""><img src="https://img.shields.io/badge/Toolkit-black?style=flat-square" /></a>
 <a href="https://github.com/Esri/arcgis-runtime-templates-dotnet"><img src="https://img.shields.io/badge/Templates-633b9b?style=flat-square&logo=visualstudio&labelColor=gray" /></a>
-<a href="https://www.nuget.org/profiles/Esri_Inc"><img src="https://img.shields.io/badge/NuGet-633b9b?style=flat-square&logo=nuget&labelColor=gray" /></a> <a href="https://community.esri.com/t5/arcgis-runtime-sdks/ct-p/arcgis-runtime-sdks"><img src="https://img.shields.io/badge/🙋-Get%20help%20in%20Esri%20Community-633b9b?style=flat-square" /></a>
+<a href="https://www.nuget.org/profiles/Esri_Inc"><img src="https://img.shields.io/badge/NuGet-633b9b?style=flat-square&logo=nuget&labelColor=gray" /></a> <a href="https://community.esri.com/t5/arcgis-runtime-sdk-for-net/bd-p/arcgis-runtime-sdk-dotnet-questions"><img src="https://img.shields.io/badge/🙋-Get%20help%20in%20Esri%20Community-633b9b?style=flat-square" /></a>
 
 <a href="https://esri.github.io/arcgis-toolkit-dotnet/controls.html"><img src="https://img.shields.io/badge/%F0%9F%93%84-Toolkit%20Guide-633b9b?style=flat-square" /></a>
 <a href="https://esri.github.io/arcgis-toolkit-dotnet/api/index.html"><img src="https://img.shields.io/badge/Toolkit%20API%20Reference:-fff?style=flat-square" /></a> <a href="https://esri.github.io/arcgis-toolkit-dotnet/api/android/index.html"><img src="https://img.shields.io/badge/Xamarin.Android-3ddc84?style=flat-square&labelColor=gray&logo=android" /></a> <a href="https://esri.github.io/arcgis-toolkit-dotnet/api/ios/index.html"><img src="https://img.shields.io/badge/Xamarin.iOS-black?style=flat-square&labelColor=gray&logo=ios" /></a>
@@ -14,7 +14,7 @@
 <a href="https://esri.github.io/arcgis-toolkit-dotnet/api/netfx/index.html"><img src="https://img.shields.io/badge/WPF-0078d6?style=flat-square&labelColor=gray&logo=windowsxp" /></a>
 <a href="https://esri.github.io/arcgis-toolkit-dotnet/api/uwp/index.html"><img src="https://img.shields.io/badge/UWP-0078d6?style=flat-square&labelColor=gray&logo=windows" /></a>
 
-**Toolkit controls accelerate application development with ArcGIS Runtime**, including...
+**The toolkit helps accelerate application development with ArcGIS Runtime**. Controls include:
 
 <!-- Options: Centered image, gallery, side image -->
 <!-- Use gallery for multi-projects (e.g. Demos repo), centered image for desktop/iPad apps, side image for phone apps -->
@@ -40,7 +40,7 @@ The simplest way to get started is to add the NuGet package(s) to your projects:
 <a href="https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms/"><img src="https://img.shields.io/badge/Xamarin.Forms%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget" /></a>
 <a href="https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit.Forms/"><img src="https://img.shields.io/badge/Xamarin.Forms%20AR%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget" /></a>
 
-If you need more control, you can fork the repo and build it yourself. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for full instructions.
+If you want to make customizations, you can fork the repo and build it yourself. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for full instructions.
 
 Building the toolkit requires the latest version of Visual Studio 2019 running on Windows.
 
@@ -48,8 +48,8 @@ Building the toolkit requires the latest version of Visual Studio 2019 running o
 
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
-|[ARSceneView](ar.md)   | N/A | N/A | ✔ | ✔ | ✔ |
-|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|[ARSceneView](docs/ar.md)   | N/A | N/A | ✔ | ✔ | ✔ |
+|[BookmarksView](docs/bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
 |Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
