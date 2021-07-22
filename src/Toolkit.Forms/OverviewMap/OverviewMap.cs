@@ -16,32 +16,122 @@
 
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
     /// Defines a small "overview" (or "inset") map displaying a representation of the attached <see cref="GeoView"/>'s current viewpoint.
     /// </summary>
-    public class OverviewMap : MapView
+    public class OverviewMap : TemplatedView
     {
-        private readonly OverviewMapController _controller;
+        private OverviewMapController? _controller;
+        private static readonly ControlTemplate DefaultControlTemplate;
+
+        private MapView? _overviewMapView;
+
+        static OverviewMap()
+        {
+            string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms""
+                                                 xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
+                                                 xmlns:esri=""clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms""
+                                                 xmlns:internal=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <internal:LoadStatusToVisibilityConverter x:Key=""LoadStatusToVisibilityConverter"" />
+                                        </Grid.Resources>
+                                        <ActivityIndicator IsRunning=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loading'}"" />
+                                        <Label Text=""Map failed to load. Did you forget an API key?"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}""  />
+                                        <esri:MapView x:Name=""PART_MapView"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}"" />
+                                    </Grid>
+                                </ControlTemplate>";
+            DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OverviewMap"/> class.
         /// </summary>
         public OverviewMap()
         {
-            IsAttributionTextVisible = false;
-            Map = new Map(BasemapStyle.ArcGISTopographic);
+            ControlTemplate = DefaultControlTemplate;
+        }
 
-            _controller = new OverviewMapController(this)
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _overviewMapView = GetTemplateChild("PART_MapView") as MapView;
+
+            if (_overviewMapView != null)
             {
-                ScaleFactor = ScaleFactor,
-                AttachedView = GeoView,
-            };
+                _controller = new OverviewMapController(_overviewMapView)
+                {
+                    ScaleFactor = ScaleFactor,
+                    PointSymbol = PointSymbol,
+                    AreaSymbol = AreaSymbol,
+                    AttachedView = GeoView,
+                };
+                _overviewMapView.IsAttributionTextVisible = false;
+
+                if (Map == null)
+                {
+                    Map = new Map(BasemapStyle.ArcGISTopographic);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the symbol used to draw the <see cref="GeoView"/>'s visible area.
+        /// </summary>
+        /// <remarks>
+        /// The default is an empty fill symbol with a 1 point red outline.
+        /// </remarks>
+        public Symbol? AreaSymbol
+        {
+            get => GetValue(AreaSymbolProperty) as Symbol;
+            set => SetValue(AreaSymbolProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the geoview whose extent is to be displayed.
+        /// </summary>
+        /// <remarks>
+        /// Note that by default interaction with <see cref="OverviewMap"/> will navigate the attached GeoView.
+        /// </remarks>
+        public GeoView? GeoView
+        {
+            get => GetValue(GeoViewProperty) as GeoView;
+            set => SetValue(GeoViewProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the Map shown in the inset/overview map.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to a map with a basemap in style <see cref="BasemapStyle.ArcGISTopographic"/>.
+        /// </remarks>
+        public Map? Map
+        {
+            get => GetValue(MapProperty) as Map;
+            set => SetValue(MapProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the symbol used to draw the <see cref="GeoView"/>'s viewpoint when it isn't possible to show the visible area (for example, when showing a scene).
+        /// </summary>
+        /// <remarks>
+        /// The default is a red cross.
+        /// </remarks>
+        public Symbol? PointSymbol
+        {
+            get => GetValue(PointSymbolProperty) as Symbol;
+            set => SetValue(PointSymbolProperty, value);
         }
 
         /// <summary>
@@ -52,45 +142,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </remarks>
         public double ScaleFactor
         {
-            get { return (double)GetValue(ScaleFactorProperty); }
-            set { SetValue(ScaleFactorProperty, value); }
+            get => (double)GetValue(ScaleFactorProperty);
+            set => SetValue(ScaleFactorProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the symbol used to draw a representation of the <see cref="GeoView"/>'s current viewpoint.
+        /// Identifies the <see cref="AreaSymbol"/> bindable property.
         /// </summary>
-        /// <remarks>
-        /// The default is an empty fill symbol with a 1 point red outline or a red crosshair for scenes.
-        /// </remarks>
-        public Symbol Symbol
-        {
-            get { return (Symbol)GetValue(SymbolProperty); }
-            set { SetValue(SymbolProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the geoview whose extent is to be displayed.
-        /// </summary>
-        /// <remarks>
-        /// Note that by default interaction with <see cref="OverviewMap"/> will navigate the attached GeoView.
-        /// </remarks>
-        public GeoView GeoView
-        {
-            get { return (GeoView)GetValue(GeoViewProperty); }
-            set { SetValue(GeoViewProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Symbol"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty SymbolProperty =
-            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(OverviewMap), null, propertyChanged: OnExtentSymbolPropertyChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="ScaleFactor"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty ScaleFactorProperty =
-            BindableProperty.Create(nameof(ScaleFactor), typeof(double), typeof(OverviewMap), 25.0, propertyChanged: OnScaleFactorPropertyChanged);
+        public static readonly BindableProperty AreaSymbolProperty =
+            BindableProperty.Create(nameof(AreaSymbol), typeof(Symbol), typeof(OverviewMap), new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent, new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)), propertyChanged: OnAreaSymbolChanged);
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> bindable property.
@@ -98,13 +158,62 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(OverviewMap), null, BindingMode.OneWay, null, propertyChanged: OnGeoViewPropertyChanged);
 
-        private static void OnGeoViewPropertyChanged(BindableObject sender, object oldValue, object newValue)
-            => ((OverviewMap)sender)._controller.AttachedView = newValue as GeoView;
+        /// <summary>
+        /// Identifies the <see cref="Map"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty MapProperty =
+            BindableProperty.Create(nameof(Map), typeof(Map), typeof(OverviewMap), null, propertyChanged: OnMapPropertyChanged);
 
-        private static void OnExtentSymbolPropertyChanged(BindableObject sender, object oldValue, object newValue)
-            => ((OverviewMap)sender)._controller.Symbol = newValue as FillSymbol;
+        /// <summary>
+        /// Identifies the <see cref="PointSymbol"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty PointSymbolProperty =
+            BindableProperty.Create(nameof(PointSymbol), typeof(Symbol), typeof(OverviewMap), new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 16), propertyChanged: OnPointSymbolChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="ScaleFactor"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty ScaleFactorProperty =
+            BindableProperty.Create(nameof(ScaleFactor), typeof(double), typeof(OverviewMap), 25.0, propertyChanged: OnScaleFactorPropertyChanged);
+
+        private static void OnAreaSymbolChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (((OverviewMap)sender)._controller is OverviewMapController controller)
+            {
+                controller.AreaSymbol = newValue as Symbol;
+            }
+        }
+
+        private static void OnGeoViewPropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (((OverviewMap)sender)._controller is OverviewMapController controller)
+            {
+                controller.AttachedView = newValue as GeoView;
+            }
+        }
+
+        private static void OnMapPropertyChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if ((OverviewMap)sender is OverviewMap sendingView && sendingView._overviewMapView is MapView overview)
+            {
+                overview.Map = (Map)newValue;
+            }
+        }
+
+        private static void OnPointSymbolChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (((OverviewMap)sender)._controller is OverviewMapController controller)
+            {
+                controller.PointSymbol = newValue as Symbol;
+            }
+        }
 
         private static void OnScaleFactorPropertyChanged(BindableObject sender, object oldValue, object newValue)
-            => ((OverviewMap)sender)._controller.ScaleFactor = (double)newValue;
+        {
+            if (((OverviewMap)sender)._controller is OverviewMapController controller)
+            {
+                controller.ScaleFactor = (double)newValue;
+            }
+        }
     }
 }

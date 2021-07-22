@@ -23,54 +23,58 @@ using Esri.ArcGISRuntime.UI;
 #if XAMARIN_FORMS
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
-using Point = Xamarin.Forms.Point;
-#elif NETFX_CORE
-using Point = Windows.Foundation.Point;
-#else
-using Point = System.Windows.Point;
 #endif
 #if !XAMARIN_FORMS
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     internal class OverviewMapController
     {
         private double _scaleFactor;
-        private Symbol? _symbol;
+        private Symbol? _areaSymbol;
+        private Symbol? _pointSymbol;
         private GeoView? _connectedView;
         private readonly GraphicsOverlay _extentOverlay;
-        private readonly GeoView _overview;
+        private readonly Graphic _extentGraphic;
+        private readonly MapView _insetView;
 
         // Flag needed because when the GeoView is first attached, GetCurrentViewpoint returns null.
         // Subsequent ViewpointChanged event happens when IsNavigating is false, so special case is needed to
         // ensure viewpoint is shown before manual interaction.
         private bool _hasSetViewpoint;
 
-        public OverviewMapController(GeoView overview)
+        public OverviewMapController(MapView overview)
         {
-            _overview = overview;
+            _insetView = overview;
             _extentOverlay = new GraphicsOverlay();
-            if (_overview.GraphicsOverlays == null)
+            if (_insetView.GraphicsOverlays == null)
             {
-                _overview.GraphicsOverlays = new GraphicsOverlayCollection();
+                _insetView.GraphicsOverlays = new GraphicsOverlayCollection();
             }
 
-            _overview.GraphicsOverlays.Add(_extentOverlay);
+            _insetView.GraphicsOverlays.Add(_extentOverlay);
+
+            _extentGraphic = new Graphic();
+            _extentOverlay.Graphics.Add(_extentGraphic);
 
             // _overview.ViewpointChanged += OnViewpointChanged;
-            var listener = new WeakEventListener<GeoView, object?, EventArgs>(_overview);
-            listener.OnEventAction = (instance, source, eventArgs) => OnViewpointChanged(source, eventArgs);
-            listener.OnDetachAction = (instance, weakEventListener) => instance.ViewpointChanged -= weakEventListener.OnEvent;
-            _overview.ViewpointChanged += listener.OnEvent;
+            WeakEventListener<GeoView, object?, EventArgs> listener = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
+            {
+                OnEventAction = (instance, source, eventArgs) => OnInsetViewpointChanged(source, eventArgs),
+                OnDetachAction = (instance, weakEventListener) => instance.ViewpointChanged -= weakEventListener.OnEvent,
+            };
+            _insetView.ViewpointChanged += listener.OnEvent;
 
             // _overview.NavigationCompleted += OnNavigationCompleted;
-            var listener2 = new WeakEventListener<GeoView, object?, EventArgs>(_overview);
-            listener2.OnEventAction = (instance, source, eventArgs) => OnNavigationCompleted(source, eventArgs);
-            listener2.OnDetachAction = (instance, weakEventListener) => instance.NavigationCompleted -= weakEventListener.OnEvent;
-            _overview.NavigationCompleted += listener2.OnEvent;
+            WeakEventListener<GeoView, object?, EventArgs> listener2 = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
+            {
+                OnEventAction = (instance, source, eventArgs) => OnInsetNavigationCompleted(source, eventArgs),
+                OnDetachAction = (instance, weakEventListener) => instance.NavigationCompleted -= weakEventListener.OnEvent,
+            };
+            _insetView.NavigationCompleted += listener2.OnEvent;
         }
 
         public GeoView? AttachedView
@@ -85,17 +89,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
 
                 if (_connectedView != null)
                 {
-                    _connectedView.ViewpointChanged -= OnViewpointChanged;
-                    _connectedView.NavigationCompleted -= OnNavigationCompleted;
+                    _connectedView.ViewpointChanged -= OnConnectedViewViewpointChanged;
+                    _connectedView.NavigationCompleted -= OnConnectedViewNavigationCompleted;
                 }
 
                 _connectedView = value;
                 if (_connectedView != null)
                 {
-                    _connectedView.ViewpointChanged += OnViewpointChanged;
-                    _connectedView.NavigationCompleted += OnNavigationCompleted;
+                    _connectedView.ViewpointChanged += OnConnectedViewViewpointChanged;
+                    _connectedView.NavigationCompleted += OnConnectedViewNavigationCompleted;
                     UpdateSymbol();
-                    ApplyViewpoint(_connectedView, _overview);
+                    ApplyViewpoint(_connectedView, _insetView);
+                    UpdateGraphic();
                 }
             }
         }
@@ -110,20 +115,35 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
                     _scaleFactor = value;
                     if (_connectedView != null)
                     {
-                        ApplyViewpoint(_connectedView, _overview);
+                        ApplyViewpoint(_connectedView, _insetView);
+                        UpdateGraphic();
                     }
                 }
             }
         }
 
-        public Symbol? Symbol
+        public Symbol? AreaSymbol
         {
-            get => _symbol;
+            get => _areaSymbol;
             set
             {
-                if (_symbol != value)
+                if (_areaSymbol != value)
                 {
-                    _symbol = value;
+                    _areaSymbol = value;
+                    UpdateSymbol();
+                    UpdateGraphic();
+                }
+            }
+        }
+
+        public Symbol? PointSymbol
+        {
+            get => _pointSymbol;
+            set
+            {
+                if (_pointSymbol != value)
+                {
+                    _pointSymbol = value;
                     UpdateSymbol();
                     UpdateGraphic();
                 }
@@ -132,48 +152,56 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
 
         private void UpdateGraphic()
         {
-            if (_connectedView == null || _overview == null)
+            if (_connectedView == null || _insetView == null)
             {
                 return;
             }
-
-            _extentOverlay.Graphics.Clear();
 
             if (_connectedView is MapView mv && mv.VisibleArea is Polygon area)
             {
-                _extentOverlay.Graphics.Add(new Graphic(area));
+                _extentGraphic.Geometry = area;
             }
             else if (_connectedView is SceneView sv && sv.GetCurrentViewpoint(ViewpointType.CenterAndScale)?.TargetGeometry is MapPoint centerPoint)
             {
-                _extentOverlay.Graphics.Add(new Graphic(centerPoint));
+                _extentGraphic.Geometry = centerPoint;
             }
         }
 
-        private void OnViewpointChanged(object? sender, EventArgs e)
+        private void OnInsetViewpointChanged(object? sender, EventArgs e)
         {
-            GeoView? sendingView = sender as GeoView;
-            GeoView? receivingView = sendingView == _overview ? _connectedView : _overview;
-
-            // Check for IsNavigating is intended to ignore OnViewpointChanged calls triggered by the call to SetViewpoint.
-            if ((sendingView?.IsNavigating ?? false) && receivingView != null)
-            {
-                ApplyViewpoint(sendingView, receivingView);
-                return;
-            }
-
+            UpdateGraphic();
             if (_connectedView != null && !_hasSetViewpoint)
             {
-                ApplyViewpoint(_connectedView, _overview);
+                ApplyViewpoint(_connectedView, _insetView);
+                UpdateGraphic();
             }
         }
 
-        private void OnNavigationCompleted(object? sender, EventArgs e)
+        private void OnConnectedViewViewpointChanged(object? sender, EventArgs e)
         {
-            GeoView? sendingView = sender as GeoView;
-            GeoView? receivingView = sendingView == _overview ? _connectedView : _overview;
-            if (receivingView != null && sendingView != null)
+            UpdateGraphic();
+            if (_connectedView != null && !_hasSetViewpoint)
             {
-                ApplyViewpoint(sendingView, receivingView);
+                ApplyViewpoint(_connectedView, _insetView);
+                UpdateGraphic();
+            }
+        }
+
+        private void OnInsetNavigationCompleted(object? sender, EventArgs e)
+        {
+            if (_connectedView != null)
+            {
+                ApplyViewpoint(_insetView, _connectedView);
+                UpdateGraphic();
+            }
+        }
+
+        private void OnConnectedViewNavigationCompleted(object? sender, EventArgs e)
+        {
+            if (_connectedView != null)
+            {
+                ApplyViewpoint(_connectedView, _insetView);
+                UpdateGraphic();
             }
         }
 
@@ -182,29 +210,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap
             if (sendingView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint existingViewpoint)
             {
                 _hasSetViewpoint = true;
-                var scaleMultiplier = sendingView == _overview ? 1.0 / ScaleFactor : ScaleFactor;
+                double scaleMultiplier = sendingView == _insetView ? 1.0 / ScaleFactor : ScaleFactor;
                 Viewpoint newViewpoint = new Viewpoint((MapPoint)existingViewpoint.TargetGeometry, existingViewpoint.TargetScale * scaleMultiplier);
-                receivingView.SetViewpoint(newViewpoint);
-                UpdateGraphic();
+                try
+                {
+                    receivingView.SetViewpoint(newViewpoint);
+                }
+                catch (Exception)
+                {
+                    // Ignore
+                }
             }
         }
 
         private void UpdateSymbol()
         {
-            if (Symbol != null)
+            if (_connectedView is MapView)
             {
-                _extentOverlay.Renderer = new SimpleRenderer(Symbol);
-            }
-            else if (_connectedView is MapView)
-            {
-                _extentOverlay.Renderer = new SimpleRenderer(
-                    new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent,
-                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)));
+                _extentOverlay.Renderer = new SimpleRenderer(AreaSymbol);
             }
             else if (_connectedView is SceneView)
             {
-                _extentOverlay.Renderer = new SimpleRenderer(
-                    new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 16));
+                _extentOverlay.Renderer = new SimpleRenderer(PointSymbol);
             }
         }
     }

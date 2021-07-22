@@ -5,22 +5,52 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:overviewmap="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;assembly=Esri.ArcGISRuntime.Toolkit"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
         <esri:MapView x:Name="MyMapView" />
-        <overviewmap:OverviewMap
+        <esri:SceneView x:Name="MySceneView" Visibility="Collapsed" />
+        <toolkit:OverviewMap
+            x:Name="SampleOverview"
             Width="100"
             Height="100"
             Margin="8"
-            GeoView="{Binding ElementName=MyMapView}"
             HorizontalAlignment="Right"
             VerticalAlignment="Top" />
-        <Border Background="White"
-                HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="8">
-            <Slider Minimum="0" Maximum="360" ValueChanged="Handle_valuechanged" />
+        <Border
+            Width="200"
+            Margin="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="White">
+            <StackPanel Orientation="Vertical">
+                <Button
+                    Margin="2"
+                    Click="ToggleViewClick"
+                    Content="Toggle MapView/SceneView" />
+                <Button
+                    Margin="2"
+                    Click="ToggleModelClick"
+                    Content="Apply new Map/Scene" />
+                <Button
+                    Margin="2"
+                    Click="ToggleSymbolsClick"
+                    Content="Toggle symbols" />
+                <Label Margin="2" Content="Map rotation (map only):" />
+                <Slider
+                    Margin="2"
+                    Maximum="360"
+                    Minimum="0"
+                    ValueChanged="Handle_valuechanged" />
+                <Label Margin="2" Content="Scale factor:" />
+                <Slider
+                    Margin="2"
+                    Maximum="100"
+                    Minimum="1"
+                    Value="{Binding ElementName=SampleOverview, Path=ScaleFactor, Mode=TwoWay}" />
+            </StackPanel>
         </Border>
     </Grid>
 </UserControl>

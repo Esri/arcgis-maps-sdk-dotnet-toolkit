@@ -8,23 +8,25 @@
     Title="OverviewMap - MapView">
     <ContentPage.Content>
         <Grid>
-            <esriUI:MapView x:Name="mapView" />
+            <esriUI:MapView x:Name="MyMapView" />
+            <esriUI:SceneView x:Name="MySceneView" IsVisible="False" />
 
             <StackLayout
                 Margin="20"
-                Padding="20"
+                Padding="8"
                 BackgroundColor="#F2F2F2"
                 HorizontalOptions="Start"
+                Spacing="2"
                 VerticalOptions="Start">
-                <Label Text="Rotation" />
-                <Slider
-                    Maximum="360"
-                    MaximumTrackColor="Gray"
-                    Minimum="0"
-                    ValueChanged="Slider_ValueChanged"
-                    Value="0" />
+                <Button Clicked="ToggleViewClick" Text="Toggle MapView/SceneView" />
+                <Button Clicked="ToggleModelClick" Text="Apply new Map/Scene" />
+                <Button Clicked="ToggleSymbolsClick" Text="Toggle symbols" />
+                <Label Text="Map rotation (map only):" />
+                <Slider Maximum="360" ValueChanged="Slider_ValueChanged" />
+                <Label Text="Scale factor:" />
+                <Slider Maximum="50" Minimum="10" Value="{Binding Source={x:Reference SampleOverview}, Path=ScaleFactor, Mode=TwoWay}" />
                 <esriTK:OverviewMap
-                    GeoView="{Binding Source={x:Reference mapView}}"
+                    x:Name="SampleOverview"
                     HeightRequest="100"
                     WidthRequest="100" />
             </StackLayout>

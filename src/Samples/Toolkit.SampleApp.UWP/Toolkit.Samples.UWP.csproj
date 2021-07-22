@@ -148,9 +148,6 @@
     <Compile Include="Samples\MeasureToolbar\MeasureToolbarSample.xaml.cs">
       <DependentUpon>MeasureToolbarSample.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Samples\OverviewMap\OverviewMapWithSceneSample.xaml.cs">
-      <DependentUpon>OverviewMapWithSceneSample.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Samples\OverviewMap\OverviewMapSample.xaml.cs">
       <DependentUpon>OverviewMapSample.xaml</DependentUpon>
     </Compile>
@@ -226,10 +223,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\MeasureToolbar\MeasureToolbarSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\OverviewMap\OverviewMapWithSceneSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

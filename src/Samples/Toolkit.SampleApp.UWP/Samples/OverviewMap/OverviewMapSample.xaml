@@ -5,28 +5,54 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:overviewmap="using:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <esri:MapView x:Name="mapView" />
+        <esri:MapView x:Name="MyMapView" />
+        <esri:SceneView x:Name="MySceneView" Visibility="Collapsed" />
         <Border
+            Width="250"
             Margin="4"
-            Width="150"
             Padding="4"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-            <Slider
-                Maximum="360"
-                Minimum="0"
-                ValueChanged="Slider_ValueChanged" />
+            <StackPanel Orientation="Vertical">
+                <Button
+                    Margin="2"
+                    HorizontalAlignment="Stretch"
+                    Click="ToggleViewClick"
+                    Content="Toggle MapView/SceneView" />
+                <Button
+                    Margin="2"
+                    HorizontalAlignment="Stretch"
+                    Click="ToggleModelClick"
+                    Content="Apply new Map/Scene" />
+                <Button
+                    Margin="2"
+                    HorizontalAlignment="Stretch"
+                    Click="ToggleSymbolsClick"
+                    Content="Toggle symbols" />
+                <TextBlock Margin="2" Text="Map rotation (map only):" />
+                <Slider
+                    Margin="2"
+                    Maximum="360"
+                    Minimum="0"
+                    ValueChanged="Slider_ValueChanged" />
+                <TextBlock Margin="2" Text="Scale factor:" />
+                <Slider
+                    Margin="2"
+                    Maximum="100"
+                    Minimum="1"
+                    Value="{Binding ElementName=SampleOverview, Path=ScaleFactor, Mode=TwoWay}" />
+            </StackPanel>
         </Border>
-        <overviewmap:OverviewMap
+        <toolkit:OverviewMap
+            x:Name="SampleOverview"
             Width="100"
             Height="100"
             Margin="4"
             HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            GeoView="{Binding ElementName=mapView}" />
+            VerticalAlignment="Top" />
     </Grid>
 </Page>
