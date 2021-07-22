@@ -1,6 +1,6 @@
 # OverviewMap
 
-OverviewMap is a small, secondary `MapView` (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. OverviewMap shows a representation of the viewpoint of the `GeoView` it is connected to.
+OverviewMap is a small, secondary map (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. OverviewMap shows a representation of the viewpoint of the `GeoView` it is connected to.
 
 ![OverviewMap](https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png)
 
@@ -14,14 +14,16 @@ OverviewMap:
 - Supports a configurable scaling factor for setting the overview map's zoom level relative to the connected view.
 - Supports a configurable symbol for visualizing the current viewpoint
 - Supports two-way navigation, so the user can navigate the connected GeoView by panning and zooming the overview.
-- Exposes all of the same properties as `MapView`, so you can apply additional customization as needed. For example, you can change the `Map` property to use a custom basemap.
+- Exposes a `Map` property to allow use of a custom basemap. Defaults to an empty map with a topographic basemap.
 
 ## Key properties
 
-OverviewMap extends `MapView` with the following bindable properties:
+OverviewMap has the following bindable properties:
 
+- `AreaSymbol` - Defines the symbol used to visualize the current viewpoint when connected to a map. This is a red rectangle by default.
 - `GeoView` - References the connected MapView or SceneView
-- `ExtentSymbol` - Defines the symbol used to visualize the current viewpoint. This is a red rectangle by default for maps, and a red cross for scenes.
+- `Map` - Defines the map shown in the inset/overview.
+- `PointSymbol` - Defines the symbol used to visualize the current viewpoint when connected to a scene. This is a red cross by default.
 - `ScaleFactor` - Defines the scale of the OverviewMap relative to the scale of the connected `GeoView`. The default is 25.
 
 ## Usage
