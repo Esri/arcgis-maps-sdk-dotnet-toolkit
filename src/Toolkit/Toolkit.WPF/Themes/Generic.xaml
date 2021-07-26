@@ -16,5 +16,5 @@
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-
+   
 </ResourceDictionary>
