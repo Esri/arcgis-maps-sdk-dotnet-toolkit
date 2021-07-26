@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+         
     </Application.Resources>
 </Application>
