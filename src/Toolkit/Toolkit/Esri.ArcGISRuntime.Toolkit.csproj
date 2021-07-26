@@ -20,11 +20,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <DefineConstants>$(DefineConstants);XAMARIN;_XAMARIN_ANDROID_</DefineConstants>
+    <DefineConstants>$(DefineConstants);XAMARIN;</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <DefineConstants>$(DefineConstants);XAMARIN;_XAMARIN_IOS_</DefineConstants>
+    <DefineConstants>$(DefineConstants);XAMARIN;</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(IsDotNetFramework)' == 'true'">

@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                                         </Grid.Resources>
                                         <ActivityIndicator IsRunning=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loading'}"" />
                                         <Label Text=""Map failed to load. Did you forget an API key?"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}""  />
-                                        <esri:MapView x:Name=""PART_MapView"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}"" />
+                                        <esri:MapView x:Name=""PART_MapView"" IsAttributionTextVisible=""False"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}"" />
                                     </Grid>
                                 </ControlTemplate>";
             DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
@@ -57,6 +57,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public OverviewMap()
         {
             ControlTemplate = DefaultControlTemplate;
+            AreaSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent, new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1));
+            PointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 16);
+            Map = new Map(BasemapStyle.ArcGISTopographic);
         }
 
         /// <summary>
@@ -70,6 +73,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             if (_overviewMapView != null)
             {
+                _overviewMapView.Map = Map;
+
+                _controller?.Dispose();
+
                 _controller = new OverviewMapController(_overviewMapView)
                 {
                     ScaleFactor = ScaleFactor,
@@ -77,12 +84,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     AreaSymbol = AreaSymbol,
                     AttachedView = GeoView,
                 };
-                _overviewMapView.IsAttributionTextVisible = false;
-
-                if (Map == null)
-                {
-                    Map = new Map(BasemapStyle.ArcGISTopographic);
-                }
             }
         }
 
@@ -150,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="AreaSymbol"/> bindable property.
         /// </summary>
         public static readonly BindableProperty AreaSymbolProperty =
-            BindableProperty.Create(nameof(AreaSymbol), typeof(Symbol), typeof(OverviewMap), new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent, new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1)), propertyChanged: OnAreaSymbolChanged);
+            BindableProperty.Create(nameof(AreaSymbol), typeof(Symbol), typeof(OverviewMap), null, propertyChanged: OnAreaSymbolChanged);
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> bindable property.
@@ -168,7 +169,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="PointSymbol"/> bindable property.
         /// </summary>
         public static readonly BindableProperty PointSymbolProperty =
-            BindableProperty.Create(nameof(PointSymbol), typeof(Symbol), typeof(OverviewMap), new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 16), propertyChanged: OnPointSymbolChanged);
+            BindableProperty.Create(nameof(PointSymbol), typeof(Symbol), typeof(OverviewMap), null, propertyChanged: OnPointSymbolChanged);
 
         /// <summary>
         /// Identifies the <see cref="ScaleFactor"/> bindable property.
@@ -197,6 +198,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if ((OverviewMap)sender is OverviewMap sendingView && sendingView._overviewMapView is MapView overview)
             {
                 overview.Map = (Map)newValue;
+                if (sendingView._controller is OverviewMapController controller && sendingView.GeoView != null)
+                {
+                    controller.ApplyViewpoint(sendingView.GeoView, overview);
+                }
             }
         }
 

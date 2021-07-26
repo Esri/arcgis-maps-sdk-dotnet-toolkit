@@ -13,12 +13,8 @@
         <esri:MapView x:Name="MyMapView" />
         <esri:SceneView x:Name="MySceneView" Visibility="Collapsed" />
         <toolkit:OverviewMap
-            x:Name="SampleOverview"
-            Width="100"
-            Height="100"
             Margin="8"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top" />
+            x:Name="SampleOverview" />
         <Border
             Width="200"
             Margin="8"

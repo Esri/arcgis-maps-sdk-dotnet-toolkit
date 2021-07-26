@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !_XAMARIN_ANDROID_ && !_XAMARIN_IOS_
 using System;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -37,6 +36,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Symbol? _areaSymbol;
         private Symbol? _pointSymbol;
         private GeoView? _connectedView;
+        private WeakEventListener<GeoView, object?, EventArgs>? _viewpointListener;
+        private WeakEventListener<GeoView, object?, EventArgs>? _navigationListener;
         private readonly GraphicsOverlay _extentOverlay;
         private readonly Graphic _extentGraphic;
         private readonly MapView _insetView;
@@ -60,21 +61,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _extentGraphic = new Graphic();
             _extentOverlay.Graphics.Add(_extentGraphic);
 
-            // _overview.ViewpointChanged += OnViewpointChanged;
-            WeakEventListener<GeoView, object?, EventArgs> listener = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
+            // _overview.ViewpointChanged += OnViewpointChanged
+            _viewpointListener = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
             {
                 OnEventAction = (instance, source, eventArgs) => OnInsetViewpointChanged(source, eventArgs),
                 OnDetachAction = (instance, weakEventListener) => instance.ViewpointChanged -= weakEventListener.OnEvent,
             };
-            _insetView.ViewpointChanged += listener.OnEvent;
+            _insetView.ViewpointChanged += _viewpointListener.OnEvent;
 
             // _overview.NavigationCompleted += OnNavigationCompleted;
-            WeakEventListener<GeoView, object?, EventArgs> listener2 = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
+            _navigationListener = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
             {
                 OnEventAction = (instance, source, eventArgs) => OnInsetNavigationCompleted(source, eventArgs),
                 OnDetachAction = (instance, weakEventListener) => instance.NavigationCompleted -= weakEventListener.OnEvent,
             };
-            _insetView.NavigationCompleted += listener2.OnEvent;
+            _insetView.NavigationCompleted += _navigationListener.OnEvent;
         }
 
         public GeoView? AttachedView
@@ -93,6 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _connectedView.NavigationCompleted -= OnConnectedViewNavigationCompleted;
                 }
 
+                _hasSetViewpoint = false;
                 _connectedView = value;
                 if (_connectedView != null)
                 {
@@ -110,7 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _scaleFactor;
             set
             {
-                if (_scaleFactor != value)
+                if (_scaleFactor != value && value >= 1)
                 {
                     _scaleFactor = value;
                     if (_connectedView != null)
@@ -205,7 +207,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void ApplyViewpoint(GeoView sendingView, GeoView receivingView)
+        internal void ApplyViewpoint(GeoView sendingView, GeoView receivingView)
         {
             if (sendingView.GetCurrentViewpoint(ViewpointType.CenterAndScale) is Viewpoint existingViewpoint)
             {
@@ -234,6 +236,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _extentOverlay.Renderer = new SimpleRenderer(PointSymbol);
             }
         }
+
+        public void Dispose()
+        {
+            AttachedView = null;
+            _navigationListener.Detach();
+            _viewpointListener.Detach();
+        }
     }
 }
-#endif

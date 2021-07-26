@@ -29,6 +29,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (DesignMode.IsDesignModeEnabled)
+            {
+                if (parameter is string statusParameter)
+                {
+                    switch (statusParameter)
+                    {
+                        case "Loaded":
+                            return true;
+                        case "NotLoaded":
+                            return false;
+                        case "Loading":
+                            return false;
+                        case "FailedToLoad":
+                            return false;
+                    }
+                }
+            }
             if (value is LoadStatus status && parameter is string parameterString)
             {
                 if (parameterString == "Loaded" && status == LoadStatus.Loaded)

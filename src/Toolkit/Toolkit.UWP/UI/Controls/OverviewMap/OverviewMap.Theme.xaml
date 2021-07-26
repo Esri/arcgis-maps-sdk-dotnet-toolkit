@@ -10,18 +10,22 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:OverviewMap">
                     <Border
-                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid Background="White">
-                            <TextBlock Foreground="Black"
+                            <TextBlock
+                                Foreground="Black"
                                 Text="Map failed to load. Did you forget to set an API key?"
                                 TextWrapping="Wrap"
                                 Visibility="{Binding ElementName=PART_MapView, Path=Map.LoadStatus, Mode=OneWay, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}" />
-                            <esri:MapView x:Name="PART_MapView" Visibility="{Binding ElementName=PART_MapView, Mode=OneWay, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}" />
+                            <esri:MapView
+                                x:Name="PART_MapView"
+                                IsAttributionTextVisible="False"
+                                Visibility="{Binding ElementName=PART_MapView, Mode=OneWay, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}" />
                             <ProgressBar
                                 Width="{TemplateBinding Width}"
                                 Height="20"

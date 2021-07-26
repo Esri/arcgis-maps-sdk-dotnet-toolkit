@@ -44,6 +44,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public OverviewMap()
         {
             DefaultStyleKey = typeof(OverviewMap);
+            AreaSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent,
+                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1));
+            PointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 16);
+            Map = new Map(BasemapStyle.ArcGISTopographic);
         }
 
         /// <inheritdoc/>
@@ -57,8 +61,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_MapView") is MapView templateMapView)
             {
                 _overviewMapView = templateMapView;
-                _overviewMapView.IsAttributionTextVisible = false;
-                _overviewMapView.Map = new Map(BasemapStyle.ArcGISTopographic);
+                _overviewMapView.Map = Map;
+
+                _controller?.Dispose();
 
                 _controller = new OverviewMapController(_overviewMapView)
                 {
@@ -134,10 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="AreaSymbol"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty AreaSymbolProperty =
-            DependencyProperty.Register(nameof(AreaSymbol), typeof(Symbol), typeof(OverviewMap), new PropertyMetadata(
-                new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent,
-                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 0)),
-                OnAreaSymbolPropertyChanged));
+            DependencyProperty.Register(nameof(AreaSymbol), typeof(Symbol), typeof(OverviewMap), new PropertyMetadata(null, OnAreaSymbolPropertyChanged));
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> dependency property.
@@ -155,8 +157,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="PointSymbol"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty PointSymbolProperty =
-            DependencyProperty.Register(nameof(PointSymbol), typeof(Symbol), typeof(OverviewMap), new PropertyMetadata(
-                new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 16), OnPointSymbolPropertyChanged));
+            DependencyProperty.Register(nameof(PointSymbol), typeof(Symbol), typeof(OverviewMap), new PropertyMetadata(null, OnPointSymbolPropertyChanged));
 
         /// <summary>
         /// Identifies the <see cref="ScaleFactor"/> dependency property.
@@ -182,9 +183,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnMapPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (((OverviewMap)d)._overviewMapView is MapView mv)
+            if (d is OverviewMap overviewMap && overviewMap._overviewMapView is MapView mv)
             {
                 mv.Map = e.NewValue as Map;
+                if (overviewMap._controller is OverviewMapController controller)
+                {
+                    controller.ApplyViewpoint(overviewMap.GeoView, mv);
+                }
             }
         }
 

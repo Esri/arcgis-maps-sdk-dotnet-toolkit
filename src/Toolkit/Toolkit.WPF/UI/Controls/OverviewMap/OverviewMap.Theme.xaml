@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-    xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
-    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal">
     <internal:LoadStatusToVisibilityConverter x:Key="LoadStatusToVisibilityConverter" />
     <Style TargetType="{x:Type controls:OverviewMap}">
         <!--  Default item template can be overriden by the user.  -->
@@ -15,22 +15,27 @@
                         Height="{TemplateBinding Height}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-                      <Grid>
-                        <TextBlock TextWrapping="Wrap"
-                                   Text="Map failed to load. Did you forget to set an API key?"
-                                   Visibility="{Binding ElementName=PART_MapView, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}" />
-                        <esri:MapView x:Name="PART_MapView"
-                                      Visibility="{Binding ElementName=PART_MapView, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}" />
-                        <ProgressBar IsIndeterminate="True" Width="{TemplateBinding Width}"
-                                     Height="20"
-                                     Visibility="{Binding ElementName=PART_MapView, Path=Map.LoadStatus, Mode=OneWay, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loading'}" />
-                      </Grid>
+                        <Grid>
+                            <TextBlock
+                                Text="Map failed to load. Did you forget to set an API key?"
+                                TextWrapping="Wrap"
+                                Visibility="{Binding ElementName=PART_MapView, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}" />
+                            <esri:MapView
+                                x:Name="PART_MapView"
+                                IsAttributionTextVisible="False"
+                                Visibility="{Binding ElementName=PART_MapView, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}" />
+                            <ProgressBar
+                                Width="{TemplateBinding Width}"
+                                Height="20"
+                                IsIndeterminate="True"
+                                Visibility="{Binding ElementName=PART_MapView, Path=Map.LoadStatus, Mode=OneWay, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loading'}" />
+                        </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="Width" Value="200" />
-        <Setter Property="Height" Value="200" />
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="100" />
         <Setter Property="BorderBrush" Value="Black" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Right" />

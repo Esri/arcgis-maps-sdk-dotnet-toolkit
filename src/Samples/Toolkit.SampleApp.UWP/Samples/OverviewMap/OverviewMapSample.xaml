@@ -47,12 +47,6 @@
                     Value="{Binding ElementName=SampleOverview, Path=ScaleFactor, Mode=TwoWay}" />
             </StackPanel>
         </Border>
-        <toolkit:OverviewMap
-            x:Name="SampleOverview"
-            Width="100"
-            Height="100"
-            Margin="4"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top" />
+        <toolkit:OverviewMap x:Name="SampleOverview" Margin="4" />
     </Grid>
 </Page>

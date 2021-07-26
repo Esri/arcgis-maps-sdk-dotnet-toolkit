@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if !XAMARIN
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
 using System.Globalization;
 #if NETFX_CORE
@@ -41,6 +42,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
+            if (DesignTime.IsDesignMode)
+            {
+                if (parameter is string statusParameter)
+                {
+                    switch (statusParameter)
+                    {
+                        case "Loaded":
+                            return Visibility.Visible;
+                        case "NotLoaded":
+                            return Visibility.Collapsed;
+                        case "Loading":
+                            return Visibility.Collapsed;
+                        case "FailedToLoad":
+                            return Visibility.Collapsed;
+                    }
+                    return true;
+                }
+            }
+
             if (value is LoadStatus status && parameter is string parameterString)
             {
                 if (parameterString == "Loaded" && status == LoadStatus.Loaded)
