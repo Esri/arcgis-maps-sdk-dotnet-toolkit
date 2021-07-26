@@ -40,11 +40,7 @@ UWP:
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <esri:MapView x:Name="mapView" />
         <overviewmap:OverviewMap
-            Width="100"
-            Height="100"
             Margin="4"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
             GeoView="{Binding ElementName=mapView}" />
     </Grid>
 </Page>
@@ -62,11 +58,7 @@ WPF:
     <Grid>
         <esri:SceneView x:Name="MySceneView" />
         <overviewmap:OverviewMap
-            Width="100"
-            Height="100"
             Margin="8"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
             GeoView="{Binding ElementName=MySceneView}" />
     </Grid>
 </UserControl>
