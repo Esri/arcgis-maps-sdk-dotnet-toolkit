@@ -183,12 +183,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnMapPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is OverviewMap overviewMap && overviewMap._overviewMapView is MapView mv)
+            if (d is OverviewMap overviewMap && overviewMap._overviewMapView is MapView insetView)
             {
-                mv.Map = e.NewValue as Map;
-                if (overviewMap._controller is OverviewMapController controller)
+                insetView.Map = e.NewValue as Map;
+                if (overviewMap._controller is OverviewMapController controller && overviewMap.GeoView is GeoView attachedView)
                 {
-                    controller.ApplyViewpoint(overviewMap.GeoView, mv);
+                    controller.ApplyViewpoint(attachedView, insetView);
                 }
             }
         }

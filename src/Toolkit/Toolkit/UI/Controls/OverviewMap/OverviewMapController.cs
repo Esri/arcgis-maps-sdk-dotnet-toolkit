@@ -36,8 +36,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Symbol? _areaSymbol;
         private Symbol? _pointSymbol;
         private GeoView? _connectedView;
-        private WeakEventListener<GeoView, object?, EventArgs>? _viewpointListener;
-        private WeakEventListener<GeoView, object?, EventArgs>? _navigationListener;
+        private readonly WeakEventListener<GeoView, object?, EventArgs>? _viewpointListener;
+        private readonly WeakEventListener<GeoView, object?, EventArgs>? _navigationListener;
         private readonly GraphicsOverlay _extentOverlay;
         private readonly Graphic _extentGraphic;
         private readonly MapView _insetView;
@@ -240,8 +240,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public void Dispose()
         {
             AttachedView = null;
-            _navigationListener.Detach();
-            _viewpointListener.Detach();
+            _navigationListener?.Detach();
+            _viewpointListener?.Detach();
         }
     }
 }

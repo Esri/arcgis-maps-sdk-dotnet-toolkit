@@ -43,9 +43,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
                             return false;
                         case "FailedToLoad":
                             return false;
+                        default:
+                            return true;
                     }
                 }
             }
+
             if (value is LoadStatus status && parameter is string parameterString)
             {
                 if (parameterString == "Loaded" && status == LoadStatus.Loaded)
