@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Class="Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery.BasemapGallerySample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls;assembly=Esri.ArcGISRuntime.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+    xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <esri:MapView x:Name="MyMapView" />
+        <esri:SceneView x:Name="MySceneView" Visibility="Hidden" />
+        <esri:SceneView x:Name="MySceneViewWG" Visibility="Hidden" />
+
+        <Border
+            Width="200"
+            Margin="8"
+            Padding="8"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Background="White">
+            <StackPanel>
+                <Label Content="Control Width:" />
+                <Slider
+                    x:Name="WidthSlider"
+                    Maximum="1000"
+                    Minimum="0"
+                    Value="200" />
+                <Label Content="Width threshold:" />
+                <Slider
+                    x:Name="ThresholdSlider"
+                    Maximum="1000"
+                    Minimum="0"
+                    Value="400" />
+                <Label Content="Gallery View Style: " />
+                <ComboBox x:Name="ViewStyleCombobox" SelectionChanged="ViewStyleCombobox_SelectionChanged" />
+                <Label Content="Attach to:" />
+                <Button Click="Button_Select_Scene" Content="Scene" />
+                <Button Click="Button_Select_Map" Content="Map" />
+                <Label Content="Load a new:" />
+                <Button Click="Button_Load_Scene" Content="Scene in WebMercator" />
+                <Button Click="Button_Load_Map_WM" Content="Map in WebMercator" />
+                <Button Click="Button_Load_Map_WGS" Content="Map in WGS84" />
+                <Label Content="Set a new:" />
+                <Button Click="Button_Load_AGOL" Content="ArcGIS Online" />
+                <Button Click="Button_Load_Portal" Content="Portal" />
+                <Label Content="Manipulate list by:" />
+                <Button Click="Button_Add_Last" Content="Adding an Item" />
+                <Button Click="Button_Remove_Last" Content="Removing an Item" />
+            </StackPanel>
+        </Border>
+
+        <Border
+            Margin="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Background="White">
+            <controls:BasemapGallery
+                x:Name="Gallery"
+                Width="{Binding ElementName=WidthSlider, Path=Value}"
+                ViewStyleWidthThreshold="{Binding ElementName=ThresholdSlider, Path=Value}" />
+        </Border>
+    </Grid>
+</UserControl>

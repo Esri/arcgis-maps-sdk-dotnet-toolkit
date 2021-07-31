@@ -5,6 +5,13 @@ Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
 
 [Documentation](ar.md)
 
+### BasemapGallery
+
+BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defined portal, or a custom collection. When a basemap is selected from the gallery, the basemap used in the connected GeoView is replaced.
+
+![BasemapGallery List View](https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png)
+
+[Documentation](basemap-gallery.md)
 
 ### Bookmarks
 Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
@@ -70,6 +77,7 @@ Allows interactively defining a temporal range (i.e. time extent) and animating 
 |Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
 |---|---|---|---|---|---|
 |[ARSceneView](ar.md)   | N/A | N/A | ✔ | ✔ | ✔ |
+|[BasemapGallery](basemap-gallery.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
 |[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |

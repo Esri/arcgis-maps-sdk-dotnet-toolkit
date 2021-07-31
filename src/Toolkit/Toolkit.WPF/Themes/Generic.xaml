@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/BasemapGallery/BasemapGallery.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/BookmarksView/BookmarksView.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Compass/Compass.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
