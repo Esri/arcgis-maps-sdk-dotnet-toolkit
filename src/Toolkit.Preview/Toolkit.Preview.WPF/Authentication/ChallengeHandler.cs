@@ -23,7 +23,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.Preview.Authentication
 {
     /// <summary>
-    /// Custom <see cref="AuthenticationManager"/> Challenge Handler that combines user/password, certificate and OAuth authentication.
+    /// Custom <see cref="AuthenticationManager"/> Challenge Handler that combines user/password and certificate authentication.
     /// </summary>
     public sealed class ChallengeHandler : Esri.ArcGISRuntime.Security.IChallengeHandler
     {
