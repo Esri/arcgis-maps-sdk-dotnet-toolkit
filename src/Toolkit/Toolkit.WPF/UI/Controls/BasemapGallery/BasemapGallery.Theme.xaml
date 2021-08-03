@@ -77,15 +77,7 @@
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="PressedSelected" />
-                                <VisualState x:Name="Normal">
-                                    <!--<Storyboard>
-                                        <DoubleAnimation
-                                            Storyboard.TargetName="ContentBorder"
-                                            Storyboard.TargetProperty="Opacity"
-                                            To="1"
-                                            Duration="0" />
-                                    </Storyboard>-->
-                                </VisualState>
+                                <VisualState x:Name="Normal" />
                                 <VisualState x:Name="Disabled">
                                     <Storyboard>
                                         <DoubleAnimation

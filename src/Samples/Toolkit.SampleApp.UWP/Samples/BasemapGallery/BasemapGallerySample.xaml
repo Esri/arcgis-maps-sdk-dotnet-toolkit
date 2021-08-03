@@ -16,7 +16,6 @@
     <Grid>
         <esri:MapView x:Name="MyMapView" />
         <esri:SceneView x:Name="MySceneView" Visibility="Collapsed" />
-        <esri:SceneView x:Name="MySceneViewWG" Visibility="Collapsed" />
 
         <Border
             Width="200"
@@ -44,19 +43,15 @@
                     HorizontalAlignment="Stretch"
                     SelectionChanged="ViewStyleCombobox_SelectionChanged" />
                 <TextBlock Text="Attach to:" />
-                <Button Content="Scene" Click="Button_Select_Scene" />
-                <Button Content="Map" Click="Button_Select_Map" />
+                <Button Click="Button_Select_Scene" Content="Scene" />
+                <Button Click="Button_Select_Map" Content="Map" />
                 <TextBlock Text="Load a new:" />
                 <Button Click="Button_Load_Scene" Content="Scene in WebMercator" />
                 <Button Click="Button_Load_Map_WM" Content="Map in WebMercator" />
                 <Button Click="Button_Load_Map_WGS" Content="Map in WGS84" />
                 <TextBlock Text="Set a new:" />
-                <Button
-                    Click="Button_Load_AGOL"
-                    Content="ArcGIS Online" />
-                <Button
-                    Click="Button_Load_Portal"
-                    Content="Portal" />
+                <Button Click="Button_Load_AGOL" Content="ArcGIS Online" />
+                <Button Click="Button_Load_Portal" Content="Portal" />
                 <TextBlock Text="Manipulate list by:" />
                 <Button Click="Button_Add_Last" Content="Adding an Item" />
                 <Button Click="Button_Remove_Last" Content="Removing an Item" />

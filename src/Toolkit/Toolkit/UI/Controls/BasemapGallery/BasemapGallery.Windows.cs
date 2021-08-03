@@ -80,54 +80,54 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the portal to use for displaying basemaps.
         /// </summary>
-        public ArcGISPortal Portal
+        public ArcGISPortal? Portal
         {
-            get => (ArcGISPortal)GetValue(PortalProperty);
+            get => GetValue(PortalProperty) as ArcGISPortal;
             set => SetValue(PortalProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the connected GeoView.
         /// </summary>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
-            get => (GeoView)GetValue(GeoViewProperty);
+            get => GetValue(GeoViewProperty) as GeoView;
             set => SetValue(GeoViewProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the style used for the container used to display items when showing basemaps in a list.
         /// </summary>
-        public Style ListItemContainerStyle
+        public Style? ListItemContainerStyle
         {
-            get => (Style)GetValue(ListItemContainerStyleProperty);
+            get => GetValue(ListItemContainerStyleProperty) as Style;
             set => SetValue(ListItemContainerStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the style used for the container used to display items when showing basemaps in a grid.
         /// </summary>
-        public Style GridItemContainerStyle
+        public Style? GridItemContainerStyle
         {
-            get => (Style)GetValue(GridItemContainerStyleProperty);
+            get => GetValue(GridItemContainerStyleProperty) as Style;
             set => SetValue(GridItemContainerStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the data template used to show basemaps in a list.
         /// </summary>
-        public DataTemplate ListItemTemplate
+        public DataTemplate? ListItemTemplate
         {
-            get => (DataTemplate)GetValue(ListItemTemplateProperty);
+            get => GetValue(ListItemTemplateProperty) as DataTemplate;
             set => SetValue(ListItemTemplateProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the data template used to show basemaps in a grid.
         /// </summary>
-        public DataTemplate GridItemTemplate
+        public DataTemplate? GridItemTemplate
         {
-            get => (DataTemplate)GetValue(GridItemTemplateProperty);
+            get => GetValue(GridItemTemplateProperty) as DataTemplate;
             set => SetValue(GridItemTemplateProperty, value);
         }
 
@@ -155,14 +155,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static void OnViewLayoutPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var gallery = (BasemapGallery)d;
-            gallery.SetNewStyle(gallery.ActualWidth);
+            if (d is BasemapGallery gallery)
+            {
+                gallery.SetNewStyle(gallery.ActualWidth);
+            }
         }
 
         private static void OnStyleOrTemplateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var gallery = (BasemapGallery)d;
-            gallery.UpdateListViewForStyle(gallery.GalleryViewStyle, true);
+            if (d is BasemapGallery gallery)
+            {
+                gallery.UpdateListViewForStyle(gallery.GalleryViewStyle, true);
+            }
         }
 
         /// <summary>
@@ -267,7 +271,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
-        private static ItemsPanelTemplate GetItemsPanelTemplate(Type panelType)
+        private static ItemsPanelTemplate? GetItemsPanelTemplate(Type panelType)
         {
 #if !NETFX_CORE
             return new ItemsPanelTemplate(new FrameworkElementFactory(panelType));

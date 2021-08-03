@@ -35,18 +35,22 @@ namespace Toolkit.Samples.Forms.Samples
             MySceneView.IsVisible = false;
             Gallery.GeoView = MyMapView;
         }
+
         private void Button_Load_Scene(object sender, EventArgs e)
         {
             MySceneView.Scene = new Scene(BasemapStyle.ArcGISImageryStandard);
         }
+
         private void Button_Load_Map_WM(object sender, EventArgs e)
         {
             MyMapView.Map = new Map(SpatialReferences.WebMercator);
         }
+
         private void Button_Load_Map_WGS(object sender, EventArgs e)
         {
             MyMapView.Map = new Map(SpatialReferences.Wgs84);
         }
+
         private void Button_Add_Item(object sender, EventArgs e)
         {
             BasemapGalleryItem item = new BasemapGalleryItem(new Basemap())
@@ -57,6 +61,7 @@ namespace Toolkit.Samples.Forms.Samples
             };
             Gallery.Controller.Add(item);
         }
+
         private void Button_Remove_Item(object sender, EventArgs e)
         {
             Gallery.Controller.Remove(Gallery.Controller.Basemaps.Last());

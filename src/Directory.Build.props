@@ -38,7 +38,7 @@
     <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
     <NetWindowsTargetFramework>net5.0-windows10.0.18362.0</NetWindowsTargetFramework>
 
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.12.0-daily3222</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.12.0</ArcGISRuntimePackageVersion>
     <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.1874</XamarinFormsPackageVersion>
 
     <!--Output paths-->

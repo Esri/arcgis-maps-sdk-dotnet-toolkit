@@ -13,7 +13,6 @@
     <Grid>
         <esri:MapView x:Name="MyMapView" />
         <esri:SceneView x:Name="MySceneView" Visibility="Hidden" />
-        <esri:SceneView x:Name="MySceneViewWG" Visibility="Hidden" />
 
         <Border
             Width="200"
