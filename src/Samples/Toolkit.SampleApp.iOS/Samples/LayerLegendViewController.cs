@@ -36,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-1.98402303E7, 2144435, -7452840, 1.15368106626E7, SpatialReferences.WebMercator))
             };
-            mapView.Map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_Population_Density/MapServer")));
+            mapView.Map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Wildfire/MapServer")));
             this.View.AddSubview(mapView);
 
             legend = new LayerLegend()

@@ -29,7 +29,7 @@ namespace Toolkit.Samples.Forms.Samples
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-1.98402303E7, 2144435, -7452840, 1.15368106626E7, SpatialReferences.WebMercator))
             };
-            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_Population_Density/MapServer")));
+            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Wildfire/MapServer")));
             return map;
         }
 
