@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -52,7 +53,14 @@ namespace Toolkit.Samples.Forms.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                Xamarin.Forms.Forms.Init(e);
+                // Work around for .NET native compilation issue where ArcGIS Runtime assemblies 
+                // get optimized away by explicitly defining the assemblies that are used.
+                var assembliesToInclude = new List<Assembly>
+                {
+                    typeof(Esri.ArcGISRuntime.Xamarin.Forms.MapView).GetTypeInfo().Assembly,
+                    typeof(Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.SymbolDisplay).GetTypeInfo().Assembly
+                };
+                Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
