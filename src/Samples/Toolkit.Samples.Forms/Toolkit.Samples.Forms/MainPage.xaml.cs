@@ -17,9 +17,6 @@ namespace Toolkit.Samples.Forms
         public MainPage()
         {
             InitializeComponent();
-
-            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = "";
-
             SamplesList.ItemsSource = SampleDatasource.Current.Samples;
         }
 

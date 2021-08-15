@@ -10,7 +10,6 @@
         <Grid>
             <esriUI:MapView x:Name="MyMapView" />
             <esriUI:SceneView x:Name="MySceneView" IsVisible="False" />
-
             <StackLayout
                 Margin="20"
                 Padding="8"

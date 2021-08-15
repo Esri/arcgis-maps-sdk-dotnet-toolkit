@@ -29,10 +29,10 @@ using System.Windows.Data;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// *FOR INTERNAL USE* Returns visible status for positive boolean, non-null text and opposite state for visibility value.
+    /// *FOR INTERNAL USE* Returns visibility for the given load status.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public sealed class LoadStatusToVisibilityConverter : IValueConverter
+    internal sealed class LoadStatusToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc />
         object IValueConverter.Convert(object? value, Type targetType, object? parameter,

@@ -21,10 +21,10 @@ using Xamarin.Forms;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
 {
     /// <summary>
-    /// *FOR INTERNAL USE* Returns visible status for positive boolean, non-null text and opposite state for visibility value.
+    /// *FOR INTERNAL USE* Returns a boolean representing visibility for a given load status.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public class LoadStatusToVisibilityConverter : IValueConverter
+    internal class LoadStatusToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -259,7 +259,7 @@
           <Name>Esri.ArcGISRuntime.Toolkit</Name>
         </ProjectReference>
       </ItemGroup>
-    </When>
+      </When>
     <Otherwise>
       <ItemGroup>
         <PackageReference Include="Esri.ArcGISRuntime.Toolkit">

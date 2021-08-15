@@ -39,14 +39,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                                                  xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
                                                  xmlns:esri=""clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms""
                                                  xmlns:internal=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
+                                    <Frame Padding=""1"" WidthRequest=""100"" HeightRequest=""100"" CornerRadius=""0"" HasShadow=""False"" BorderColor=""Black"" BackgroundColor=""White"">
                                     <Grid>
                                         <Grid.Resources>
                                             <internal:LoadStatusToVisibilityConverter x:Key=""LoadStatusToVisibilityConverter"" />
                                         </Grid.Resources>
                                         <ActivityIndicator IsRunning=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loading'}"" />
-                                        <Label Text=""Map failed to load. Did you forget an API key?"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}""  />
+                                        <Label TextColor=""Black"" Text=""Map failed to load. Did you forget an API key?"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}""  />
                                         <esri:MapView x:Name=""PART_MapView"" IsAttributionTextVisible=""False"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}"" />
                                     </Grid>
+                                    </Frame>
                                 </ControlTemplate>";
             DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
         }

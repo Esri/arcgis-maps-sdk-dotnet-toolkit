@@ -26,8 +26,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
             InitializeComponent();
 
-            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = "";
-
             // Configure this app to use the Toolkit's Authentication Challenge Handler
             Esri.ArcGISRuntime.Security.AuthenticationManager.Current.ChallengeHandler =
                 new Esri.ArcGISRuntime.Toolkit.Preview.Authentication.ChallengeHandler(this.Dispatcher);

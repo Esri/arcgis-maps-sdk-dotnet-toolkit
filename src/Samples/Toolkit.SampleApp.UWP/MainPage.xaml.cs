@@ -27,9 +27,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public MainPage()
         {
             this.InitializeComponent();
-
-            Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.ApiKey = "";
-
             this.Loaded += RootFrame_Loaded;
             rootFrame.Navigated += RootFrame_Navigated;
         }
