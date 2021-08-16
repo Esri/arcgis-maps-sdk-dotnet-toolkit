@@ -28,7 +28,7 @@
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
 
     <!--Framework versions-->
-    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">17134</ArcGISRuntime_MinimumSupportedWindowsBuild>
+    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">18362</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <UWPTargetPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
@@ -38,7 +38,7 @@
     <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
     <NetWindowsTargetFramework>net5.0-windows10.0.18362.0</NetWindowsTargetFramework>
 
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.11.0</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.12.0</ArcGISRuntimePackageVersion>
     <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.1874</XamarinFormsPackageVersion>
 
     <!--Output paths-->
