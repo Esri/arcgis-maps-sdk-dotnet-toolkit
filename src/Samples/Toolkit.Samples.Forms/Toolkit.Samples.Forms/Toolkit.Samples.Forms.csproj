@@ -25,6 +25,9 @@
   </Choose>
 
   <ItemGroup>
+    <Compile Update="Samples\BasemapGallerySample.xaml.cs">
+      <DependentUpon>BasemapGallerySample.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Samples\BookmarksViewTemplatedSample.xaml.cs">
       <DependentUpon>BookmarksViewTemplatedSample.xaml</DependentUpon>
     </Compile>

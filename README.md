@@ -18,6 +18,7 @@ There are two ways to add Toolkit to your project:
 > See [List of controls](https://esri.github.io/arcgis-toolkit-dotnet/controls.html) for a full list of controls with screenshots
 
 - **[ARSceneView](https://esri.github.io/arcgis-toolkit-dotnet/ar.html)**: Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
+- **[BasemapGallery](https://esri.github.io/arcgis-toolkit-dotnet/basemap-gallery.htm)**: Shows basemaps, either from a Portal or a custom collection; applies the selected basemap to the connected GeoView.
 - **[Bookmarks](https://esri.github.io/arcgis-toolkit-dotnet/bookmarks-view.html)**: Shows bookmarks, from a map, scene, or a list; navigates the associated MapView/SceneView when a bookmark is selected.
 - **Compass**: Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
 - **FeatureDataField**: Displays and optionally allows editing of a single field attribute of a feature.

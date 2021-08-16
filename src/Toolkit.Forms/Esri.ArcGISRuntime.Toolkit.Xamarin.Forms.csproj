@@ -38,6 +38,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\BasemapDark.png" />
+    <None Remove="Assets\BasemapLight.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Forms" Version="$(ArcGISRuntimePackageVersion)" />
     <PackageReference Include="Xamarin.Forms" Version="$(XamarinFormsPackageVersion)" />
     <PackageReference Include="StyleCop.Analyzers">
@@ -54,8 +59,12 @@
     <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\Legend\LegendDataSource.cs" Link="Legend\LegendDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BookmarksView\BookmarksViewDataSource.cs" Link="BookmarksView\BookmarksViewDataSource.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryController.cs" Link="BasemapGallery\BasemapGalleryController.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryItem.cs" Link="BasemapGallery\BasemapGalleryItem.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryViewStyle.cs" Link="BasemapGallery\BasemapGalleryViewStyle.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="LayerContentDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
+    <Compile Include="..\Toolkit\Toolkit\Internal\StringExtensions.cs" Link="StringExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Nullable)'=='annotations'">
@@ -64,6 +73,10 @@
   <ItemGroup Condition="'$(Nullable)'=='enable' AND '$(TargetFramework)' != '$(NetWindowsTargetFramework)' ">
     <Compile Include="..\Toolkit\NullableAttributesNotNet5.cs" />
     <!-- Adds some null annotations for pre-.net5 targets that already supports some annotations -->
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\BasemapDark.png" />
+    <EmbeddedResource Include="Assets\BasemapLight.png" />
   </ItemGroup>
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">
