@@ -4,6 +4,7 @@ using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
             InitializeComponent();
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
             MySceneView.Scene = new Scene(BasemapStyle.ArcGISImageryStandard);
-            Gallery.GeoView = MyMapView;
+            Gallery.GeoModel = MyMapView.Map;
             ViewStyleCombobox.Items.Add("Auto");
             ViewStyleCombobox.Items.Add("List");
             ViewStyleCombobox.Items.Add("Grid");
@@ -55,14 +56,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
 
         private void Button_Select_Map(object sender, RoutedEventArgs e)
         {
-            Gallery.GeoView = MyMapView;
+            Gallery.GeoModel = MyMapView.Map;
             MyMapView.Visibility = Visibility.Visible;
             MySceneView.Visibility = Visibility.Collapsed;
         }
 
         private void Button_Select_Scene(object sender, RoutedEventArgs e)
         {
-            Gallery.GeoView = MySceneView;
+            Gallery.GeoModel = MySceneView.Scene;
             MySceneView.Visibility = Visibility.Visible;
             MyMapView.Visibility = Visibility.Collapsed;
         }
@@ -90,12 +91,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
                 Tooltip = Guid.NewGuid().ToString(),
                 Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"))
             };
-            Gallery.Controller.Add(item);
+            if (Gallery.OverrideList == null)
+            {
+                Gallery.OverrideList = new ObservableCollection<BasemapGalleryItem>();
+            }
+            if (Gallery.OverrideList is ICollection<BasemapGalleryItem> list)
+            {
+                list.Add(item);
+            }
         }
 
         private void Button_Remove_Last(object sender, RoutedEventArgs e)
         {
-            Gallery.Controller.Remove(Gallery.Controller.Basemaps.Last());
+            if (Gallery.OverrideList is ICollection<BasemapGalleryItem> list)
+            {
+                list.Remove(list.Last());
+            }
+            if (!Gallery.OverrideList?.Any() ?? false)
+            {
+                Gallery.OverrideList = null;
+            }
         }
 
         private async void Button_Load_AGOL(object sender, RoutedEventArgs e)

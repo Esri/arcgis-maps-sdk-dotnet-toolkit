@@ -200,7 +200,6 @@
                         VerticalAlignment="{TemplateBinding VerticalAlignment}"
                         HorizontalContentAlignment="Stretch"
                         Background="{TemplateBinding Background}"
-                        ItemsSource="{Binding Controller.Basemaps, Mode=OneWay}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         SelectedItem="{Binding Controller.SelectedBasemap, Mode=TwoWay}">
                         <ListView.Resources>

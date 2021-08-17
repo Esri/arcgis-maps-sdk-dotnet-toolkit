@@ -18,6 +18,8 @@
 using System;
 using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.UI.Controls;
+using Esri.ArcGISRuntime.Mapping;
+using System.Collections.Generic;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -39,8 +41,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_InnerListView", Type = typeof(ListView))]
     public class BasemapGallery : Control
     {
-        private ListView? _listViewFromTemplate;
-        private readonly BasemapGalleryController _controller;
+        private ListView? _listView;
+        private readonly BasemapGalleryDataSource _controller;
         private ItemsPanelTemplate? _listTemplate;
         private ItemsPanelTemplate? _gridTemplate;
 
@@ -53,19 +55,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public BasemapGallery()
         {
             DefaultStyleKey = typeof(BasemapGallery);
-            _controller = new BasemapGalleryController();
+            _controller = new BasemapGalleryDataSource();
             DataContext = this;
             SizeChanged += BasemapGallery_SizeChanged;
+            _controller.PropertyChanged += _controller_PropertyChanged;
+            _controller.CollectionChanged += _controller_CollectionChanged;
+            _ = _controller.PopulateFromDefaultList();
         }
 
-        /// <summary>
-        /// Gets the data source for the gallery.
-        /// </summary>
-        public BasemapGalleryController Controller { get => _controller; }
+        private void _controller_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            {
+                if (ListView.Items.Contains(_controller.SelectedBasemap))
+                {
+                    ListView.SelectedItem = _controller.SelectedBasemap;
+                }
+            }
+        }
 
-        /// <summary>
+        private void _controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_controller.SelectedBasemap))
+            {
+                if (_controller.SelectedBasemap != null)
+                {
+                    BasemapSelected?.Invoke(this, _controller.SelectedBasemap);
+                }
+
+                ListView.SelectedItem = _controller.SelectedBasemap;
+            }
+        }
+
         /// <inheritdoc />
-        /// </summary>
 #if NETFX_CORE
         protected override void OnApplyTemplate()
 #else
@@ -73,9 +95,56 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
-            _listViewFromTemplate = GetTemplateChild("PART_InnerListView") as ListView;
+
+            ListView = GetTemplateChild("PART_InnerListView") as ListView;
+
+            if (ListView != null)
+            {
+                ListView.ItemsSource = _controller;
+            }
+
             SetNewStyle(ActualWidth);
         }
+
+        private ListView? ListView
+        {
+            get => _listView;
+            set
+            {
+                if (value != _listView)
+                {
+                    if (_listView != null)
+                    {
+                        _listView.SelectionChanged -= ListSelectionChanged;
+                    }
+
+                    _listView = value;
+
+                    if (_listView != null)
+                    {
+                        _listView.SelectionChanged += ListSelectionChanged;
+                    }
+                }
+            }
+        }
+
+        private void ListSelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is BasemapGalleryItem item)
+            {
+                if (item.IsValid)
+                {
+                    _controller.SelectedBasemap = item;
+                    BasemapSelected?.Invoke(this, item);
+                }
+                else if (sender is ListView lv)
+                {
+                    lv.SelectedItem = null;
+                }
+            }
+        }
+
+        public event EventHandler<BasemapGalleryItem>? BasemapSelected;
 
         /// <summary>
         /// Gets or sets the portal to use for displaying basemaps.
@@ -87,12 +156,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the connected GeoView.
+        /// Gets or sets the connected GeoModel.
         /// </summary>
-        public GeoView? GeoView
+        public GeoModel? GeoModel
         {
-            get => GetValue(GeoViewProperty) as GeoView;
-            set => SetValue(GeoViewProperty, value);
+            get => GetValue(GeoModelProperty) as GeoModel;
+            set => SetValue(GeoModelProperty, value);
         }
 
         /// <summary>
@@ -149,9 +218,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => SetValue(ViewStyleWidthThresholdProperty, value);
         }
 
-        private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((BasemapGallery)d)._controller.GeoView = e.NewValue as GeoView;
+        public IEnumerable<BasemapGalleryItem>? OverrideList
+        {
+            get => GetValue(OverrideListProperty) as IEnumerable<BasemapGalleryItem>;
+            set => SetValue(OverrideListProperty, value);
+        }
 
-        private static void OnPortalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((BasemapGallery)d)._controller.Portal = e.NewValue as ArcGISPortal;
+        // Using a DependencyProperty as the backing store for OverrideList.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OverrideListProperty =
+            DependencyProperty.Register("OverrideList", typeof(IEnumerable<BasemapGalleryItem>), typeof(BasemapGallery), new PropertyMetadata(null, OnOverrideListPropertyChanged));
+
+        private static void OnGeoModelPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((BasemapGallery)d)._controller.GeoModel = e.NewValue as GeoModel;
+
+        private static void OnPortalPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((BasemapGallery)d)._controller.PopulateBasemapsForPortal(e.NewValue as ArcGISPortal);
+
+        private static void OnOverrideListPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((BasemapGallery)d)._controller.SetOverrideList(e.NewValue as IEnumerable<BasemapGalleryItem>);
 
         private static void OnViewLayoutPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -194,10 +275,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(GridItemTemplate), typeof(DataTemplate), typeof(BasemapGallery), new PropertyMetadata(null, OnStyleOrTemplateChanged));
 
         /// <summary>
-        /// Identifies the <see cref="GeoView"/> dependency property.
+        /// Identifies the <see cref="GeoModel"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty GeoViewProperty =
-            DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(BasemapGallery), new PropertyMetadata(null, OnGeoViewPropertyChanged));
+        public static readonly DependencyProperty GeoModelProperty =
+            DependencyProperty.Register(nameof(GeoModel), typeof(GeoModel), typeof(BasemapGallery), new PropertyMetadata(null, OnGeoModelPropertyChanged));
 
         /// <summary>
         /// Identifies the <see cref="Portal"/> dependency proeprty.
@@ -221,7 +302,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SetNewStyle(double currentSize)
         {
-            if (_listViewFromTemplate == null)
+            if (ListView == null)
             {
                 return;
             }
@@ -243,22 +324,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (_listViewFromTemplate == null)
+            if (ListView == null)
             {
                 return;
             }
 
             if (style == BasemapGalleryViewStyle.List)
             {
-                _listViewFromTemplate.ItemContainerStyle = ListItemContainerStyle;
-                _listViewFromTemplate.ItemTemplate = ListItemTemplate;
-                _listViewFromTemplate.ItemsPanel = _listTemplate ??= GetItemsPanelTemplate(typeof(StackPanel));
+                ListView.ItemContainerStyle = ListItemContainerStyle;
+                ListView.ItemTemplate = ListItemTemplate;
+                ListView.ItemsPanel = _listTemplate ??= GetItemsPanelTemplate(typeof(StackPanel));
             }
             else if (style == BasemapGalleryViewStyle.Grid)
             {
-                _listViewFromTemplate.ItemContainerStyle = GridItemContainerStyle;
-                _listViewFromTemplate.ItemTemplate = GridItemTemplate;
-                _listViewFromTemplate.ItemsPanel = _gridTemplate ??= GetItemsPanelTemplate(typeof(WrapPanel));
+                ListView.ItemContainerStyle = GridItemContainerStyle;
+                ListView.ItemTemplate = GridItemTemplate;
+                ListView.ItemsPanel = _gridTemplate ??= GetItemsPanelTemplate(typeof(WrapPanel));
             }
 
             _currentlyAppliedStyle = style;

@@ -14,9 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
@@ -34,6 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     public class BasemapGallery : TemplatedView
     {
         private CollectionView? _presentingView;
+        private BasemapGalleryDataSource _controller;
 
         // Tracks currently-applied layout to avoid unnecessary re-styling of the view
         private int _currentSelectedSpan = 0;
@@ -128,8 +131,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             GridItemTemplate = DefaultGridDataTemplate;
             ControlTemplate = DefaultControlTemplate;
 
-            Controller.PropertyChanged += Controller_PropertyChanged;
-            Controller.Basemaps.CollectionChanged += Basemaps_CollectionChanged;
+            _controller.PropertyChanged += Controller_PropertyChanged;
+            _controller.CollectionChanged += Basemaps_CollectionChanged;
+
+            _ = _controller.PopulateFromDefaultList();
         }
 
         private async void Basemaps_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -148,10 +153,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             try
             {
                 await Task.Delay(1000, _cancelSource.Token);
-                _presentingView.ItemsSource = Controller.Basemaps;
-                if (Controller.SelectedBasemap != null)
+                _presentingView.ItemsSource =_controller;
+                if (_controller.SelectedBasemap != null)
                 {
-                    _presentingView.SelectedItem = Controller.Basemaps.FirstOrDefault(bm => bm.Equals(Controller.SelectedBasemap));
+                    _presentingView.SelectedItem = _controller.FirstOrDefault(bm => bm.Equals(_controller.SelectedBasemap));
                 }
                 else
                 {
@@ -166,11 +171,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Controller.SelectedBasemap) && _presentingView is CollectionView listView)
+            if (e.PropertyName == nameof(_controller.SelectedBasemap) && _presentingView is CollectionView listView)
             {
-                if (Controller.SelectedBasemap != null)
+                if (_controller.SelectedBasemap != null)
                 {
-                    _presentingView.SelectedItem = Controller.Basemaps.FirstOrDefault(bm => bm.Equals(Controller.SelectedBasemap));
+                    _presentingView.SelectedItem = _controller.FirstOrDefault(bm => bm.Equals(_controller.SelectedBasemap));
                 }
                 else
                 {
@@ -204,18 +209,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (e.CurrentSelection.Count == 0)
             {
-                Controller.SelectedBasemap = null;
+                _controller.SelectedBasemap = null;
             }
             else if (e.CurrentSelection[0] is BasemapGalleryItem currentSelection)
             {
-                Controller.SelectedBasemap = currentSelection;
+                _controller.SelectedBasemap = currentSelection;
             }
         }
-
-        /// <summary>
-        /// Gets the data source for the gallery.
-        /// </summary>
-        public BasemapGalleryController Controller { get; private set; } = new BasemapGalleryController();
 
         /// <summary>
         /// Gets or sets the portal used to populate the basemap list.
@@ -247,12 +247,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets the connected GeoView.
+        /// Gets or sets the connected GeoModel.
         /// </summary>
-        public GeoView? GeoView
+        public GeoModel? GeoModel
         {
-            get => GetValue(GeoViewProperty) as GeoView;
-            set => SetValue(GeoViewProperty, value);
+            get => GetValue(GeoModelProperty) as GeoModel;
+            set => SetValue(GeoModelProperty, value);
         }
 
         /// <summary>
@@ -262,6 +262,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get => (BasemapGalleryViewStyle)GetValue(GalleryViewStyleProperty);
             set => SetValue(GalleryViewStyleProperty, value);
+        }
+
+        public IEnumerable<BasemapGalleryItem>? OverrideList
+        {
+            get => GetValue(OverrideListProperty) as IEnumerable<BasemapGalleryItem>;
+            set => SetValue(OverrideListProperty, value);
         }
 
         /// <summary>
@@ -280,10 +286,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(Portal), typeof(ArcGISPortal), typeof(BasemapGallery), null, propertyChanged: PortalChanged);
 
         /// <summary>
-        /// Identifies the <see cref="GeoView"/> bindable property.
+        /// Identifies the <see cref="GeoModel"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty GeoViewProperty =
-            BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: GeoViewChanged);
+        public static readonly BindableProperty GeoModelProperty =
+            BindableProperty.Create(nameof(GeoModel), typeof(GeoModel), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: GeoModelChanged);
 
         /// <summary>
         /// Identifies the <see cref="ListItemTemplate"/> bindable property.
@@ -309,17 +315,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty ViewStyleWidthThresholdProperty =
             BindableProperty.Create(nameof(ViewStyleWidthThreshold), typeof(double), typeof(BasemapGallery), 384.0, BindingMode.OneWay, propertyChanged: ItemTemplateChanged);
 
+        public static readonly BindableProperty OverrideListProperty =
+            BindableProperty.Create(nameof(OverrideList), typeof(IEnumerable<BasemapGalleryItem>), typeof(BasemapGallery), null, BindingMode.OneWay, propertyChanged: OverrideListChanged);
+
         /// <summary>
-        /// Handles property changes for the <see cref="GeoView" /> bindable property.
+        /// Handles property changes for the <see cref="GeoModel" /> bindable property.
         /// </summary>
-        private static void GeoViewChanged(BindableObject sender, object oldValue, object newValue) =>
-            ((BasemapGallery)sender).Controller.GeoView = newValue as GeoView;
+        private static void GeoModelChanged(BindableObject sender, object oldValue, object newValue) =>
+            ((BasemapGallery)sender)._controller.GeoModel = newValue as GeoModel;
 
         /// <summary>
         /// Handles property changes for the <see cref="Portal"/> bindable property.
         /// </summary>
-        private static void PortalChanged(BindableObject sender, object oldValue, object newValue) =>
-            ((BasemapGallery)sender).Controller.Portal = newValue as ArcGISPortal;
+        private static void PortalChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            _ = ((BasemapGallery)sender)._controller.PopulateBasemapsForPortal(newValue as ArcGISPortal);
+        }
 
         /// <summary>
         /// Handles property changes for the bindable properties that can trigger a style or template change.
@@ -328,6 +339,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             BasemapGallery sendingView = (BasemapGallery)sender;
             sendingView.HandleTemplateChange(sendingView.Width);
+        }
+
+        private static void OverrideListChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            ((BasemapGallery)sender)._controller.SetOverrideList(newValue as IEnumerable<BasemapGalleryItem>);
         }
 
         /// <summary>
