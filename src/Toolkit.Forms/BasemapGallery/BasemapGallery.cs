@@ -14,7 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,189 +37,137 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
     /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
     /// </remarks>
-    public class BasemapGallery : TemplatedView
+    public partial class BasemapGallery
     {
-        private CollectionView? _presentingView;
-        private BasemapGalleryDataSource _controller;
-
-        // Tracks currently-applied layout to avoid unnecessary re-styling of the view
-        private int _currentSelectedSpan = 0;
-        private BasemapGalleryViewStyle _currentlyAppliedViewStyle = BasemapGalleryViewStyle.Automatic;
-
-        private static readonly DataTemplate DefaultListDataTemplate;
-        private static readonly DataTemplate DefaultGridDataTemplate;
-        private static readonly ControlTemplate DefaultControlTemplate;
-        private static readonly BoolToOpacityConverter OpacityConverter;
-
+        private CollectionView? _listView;
         private CancellationTokenSource? _cancelSource;
+        private BasemapGalleryController _controller = new BasemapGalleryController();
 
-        static BasemapGallery()
-        {
-            OpacityConverter = new BoolToOpacityConverter();
-
-            DefaultGridDataTemplate = new DataTemplate(() =>
-            {
-                Grid outerScrimContainer = new Grid();
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = 128 });
-
-                StackLayout parentLayout = new StackLayout() { Orientation = StackOrientation.Vertical };
-                parentLayout.Padding = new Thickness(8);
-                Grid imageContainer = new Grid { Margin = new Thickness(0, 0, 0, 8) };
-                Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
-                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
-                Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), HorizontalTextAlignment = TextAlignment.Center };
-                imageContainer.Children.Add(fallback);
-                imageContainer.Children.Add(thumbnail);
-                parentLayout.Children.Add(imageContainer);
-                parentLayout.Children.Add(nameLabel);
-
-                Grid scrimGrid = new Grid { BackgroundColor = Color.White };
-                scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
-                parentLayout.Children.Add(scrimGrid);
-
-                outerScrimContainer.Children.Add(parentLayout);
-                outerScrimContainer.Children.Add(scrimGrid);
-
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
-                nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
-                scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), converter: OpacityConverter);
-
-                return outerScrimContainer;
-            });
-
-            DefaultListDataTemplate = new DataTemplate(() =>
-            {
-                Grid parentLayout = new Grid() { };
-                parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
-                parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(72) });
-                parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-
-                Grid imageContainer = new Grid();
-                Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
-                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
-                Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center };
-                imageContainer.Children.Add(fallback);
-                imageContainer.Children.Add(thumbnail);
-
-                parentLayout.Children.Add(imageContainer);
-                parentLayout.Children.Add(nameLabel);
-
-                Grid scrimGrid = new Grid { BackgroundColor = Color.White };
-                scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
-                parentLayout.Children.Add(scrimGrid);
-
-                imageContainer.SetValue(Grid.ColumnProperty, 1);
-                nameLabel.SetValue(Grid.ColumnProperty, 2);
-
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
-                nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
-                scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), converter: OpacityConverter);
-
-                return parentLayout;
-            });
-
-            string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
-                                    <CollectionView x:Name=""PresentingView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" SelectionMode=""Single"" />
-                                </ControlTemplate>";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
-        /// </summary>
         public BasemapGallery()
         {
             ListItemTemplate = DefaultListDataTemplate;
             GridItemTemplate = DefaultGridDataTemplate;
             ControlTemplate = DefaultControlTemplate;
-
-            _controller.PropertyChanged += Controller_PropertyChanged;
-            _controller.CollectionChanged += Basemaps_CollectionChanged;
-
-            _ = _controller.PopulateFromDefaultList();
+            _controller.LoadFromDefaultPortal(this);
         }
 
-        private async void Basemaps_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+
+        private CollectionView? ListView
         {
-            if (_presentingView == null)
+            get => _listView;
+            set
             {
-                return;
-            }
-
-            if (_cancelSource != null)
-            {
-                _cancelSource.Cancel();
-            }
-
-            _cancelSource = new CancellationTokenSource();
-            try
-            {
-                await Task.Delay(1000, _cancelSource.Token);
-                _presentingView.ItemsSource =_controller;
-                if (_controller.SelectedBasemap != null)
+                if (value != _listView)
                 {
-                    _presentingView.SelectedItem = _controller.FirstOrDefault(bm => bm.Equals(_controller.SelectedBasemap));
+                    if (_listView != null)
+                    {
+                        _listView.SelectionChanged -= ListViewSelectionChanged;
+                    }
+
+                    _listView = value;
+
+                    if (_listView != null)
+                    {
+                        _controller.HandleListViewChanged(this);
+                        _listView.SelectionChanged += ListViewSelectionChanged;
+                        HandleTemplateChange(Width);
+                    }
                 }
-                else
-                {
-                    _presentingView.SelectedItem = null;
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                // Ignore
             }
         }
 
-        private void Controller_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private static void SelectedBasemapChanged(BindableObject sender, object oldValue, object newValue)
         {
-            if (e.PropertyName == nameof(_controller.SelectedBasemap) && _presentingView is CollectionView listView)
+            if (sender is BasemapGallery gallery)
             {
-                if (_controller.SelectedBasemap != null)
-                {
-                    _presentingView.SelectedItem = _controller.FirstOrDefault(bm => bm.Equals(_controller.SelectedBasemap));
-                }
-                else
-                {
-                    _presentingView.SelectedItem = null;
-                }
+                gallery._controller.HandleSelectedBasemapChanged(gallery);
             }
         }
 
         /// <summary>
-        /// <inheritdoc />
+        /// Handles property changes for the <see cref="GeoModel" /> bindable property.
         /// </summary>
-        protected override void OnApplyTemplate()
+        private static void GeoModelChanged(BindableObject sender, object oldValue, object newValue)
         {
-            base.OnApplyTemplate();
-
-            if (_presentingView != null)
+            if (sender is BasemapGallery gallery)
             {
-                _presentingView.SelectionChanged -= PresentingView_SelectionChanged;
-            }
+                if (oldValue is GeoModel oldModel)
+                {
+                    oldModel.PropertyChanged -= gallery.GeoModelPropertyChanged;
+                }
 
-            _presentingView = GetTemplateChild("PresentingView") as CollectionView;
+                gallery._controller.HandleGeoModelChanged(gallery);
 
-            if (_presentingView != null)
-            {
-                _presentingView.SelectionChanged += PresentingView_SelectionChanged;
-                HandleTemplateChange(Width);
+                if (newValue is GeoModel newModel)
+                {
+                    newModel.PropertyChanged += gallery.GeoModelPropertyChanged;
+                }
             }
         }
 
-        private void PresentingView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void GeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            _controller.HandleGeoModelPropertyChanged(this, e.PropertyName);
+        }
+
+        private void ListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListView == null)
+            {
+                return;
+            }
+
             if (e.CurrentSelection.Count == 0)
             {
-                _controller.SelectedBasemap = null;
+                _controller.HandleListViewSelectionChanged(this, -1);
             }
-            else if (e.CurrentSelection[0] is BasemapGalleryItem currentSelection)
+            else
             {
-                _controller.SelectedBasemap = currentSelection;
+                //TODO = decide if this really has to be done by index
+                _controller.HandleListViewSelectionChanged(this, AvailableBasemaps.IndexOf((BasemapGalleryItem)e.CurrentSelection.First()));
             }
         }
+
+        /// <summary>
+        /// Handles property changes for the <see cref="Portal"/> bindable property.
+        /// </summary>
+        private static void PortalChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (sender is BasemapGallery gallery)
+            {
+                _ = gallery._controller.HandlePortalChanged(gallery);
+            }
+        }
+
+        private static void AvailableBasemapsChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (sender is BasemapGallery gallery)
+            {
+                if (oldValue is ObservableCollection<BasemapGalleryItem> oldAvailableBasemaps)
+                {
+                    oldAvailableBasemaps.CollectionChanged -= gallery.AvailableBasemapsCollectionChanged;
+                }
+
+                gallery._controller.HandleAvailableBasemapsChanged(gallery);
+
+                if (newValue is ObservableCollection<BasemapGalleryItem> newAvailableBasemaps)
+                {
+                    newAvailableBasemaps.CollectionChanged += gallery.AvailableBasemapsCollectionChanged;
+                }
+            }
+        }
+
+        private void AvailableBasemapsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            _controller.HandleAvailableBasemapsCollectionChanged(this, e);
+        }
+
+        /// <summary>
+        /// Event raised when a basemap is selected.
+        /// </summary>
+        public event EventHandler<BasemapGalleryItem>? BasemapSelected;
+
+        #region Convenience Properties
 
         /// <summary>
         /// Gets or sets the portal used to populate the basemap list.
@@ -224,26 +176,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get => (ArcGISPortal)GetValue(PortalProperty);
             set => SetValue(PortalProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the data template used to show basemaps in a list.
-        /// </summary>
-        /// <seealso cref="GalleryViewStyle"/>
-        public DataTemplate? ListItemTemplate
-        {
-            get => GetValue(ListItemTemplateProperty) as DataTemplate;
-            set => SetValue(ListItemTemplateProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the template used to show basemaps in a grid.
-        /// </summary>
-        /// <seealso cref="GalleryViewStyle"/>
-        public DataTemplate? GridItemTemplate
-        {
-            get => GetValue(GridItemTemplateProperty) as DataTemplate;
-            set => SetValue(GridItemTemplateProperty, value);
         }
 
         /// <summary>
@@ -256,28 +188,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets the view style for the gallery.
+        /// Gets or sets the gallery of basemaps to show.
         /// </summary>
-        public BasemapGalleryViewStyle GalleryViewStyle
+        /// <remarks>
+        /// When <see cref="Portal"/> is set, this collection will be overwritten.
+        /// </remarks>
+        public IList<BasemapGalleryItem>? AvailableBasemaps
         {
-            get => (BasemapGalleryViewStyle)GetValue(GalleryViewStyleProperty);
-            set => SetValue(GalleryViewStyleProperty, value);
-        }
-
-        public IEnumerable<BasemapGalleryItem>? OverrideList
-        {
-            get => GetValue(OverrideListProperty) as IEnumerable<BasemapGalleryItem>;
-            set => SetValue(OverrideListProperty, value);
+            get => GetValue(AvailableBasemapsProperty) as IList<BasemapGalleryItem>;
+            set => SetValue(AvailableBasemapsProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the width threshold to use for deciding between grid and list view when <see cref="GalleryViewStyle"/> is <see cref="BasemapGalleryViewStyle.Automatic"/>.
+        /// Gets or sets the selected basemap.
         /// </summary>
-        public double ViewStyleWidthThreshold
+        public BasemapGalleryItem? SelectedBasemap
         {
-            get => (double)GetValue(ViewStyleWidthThresholdProperty);
-            set => SetValue(ViewStyleWidthThresholdProperty, value);
+            get => GetValue(SelectedBasemapProperty) as BasemapGalleryItem;
+            set => SetValue(SelectedBasemapProperty, value);
         }
+
+        #endregion ConvenienceProperties
+
+        #region Bindable Properties
 
         /// <summary>
         /// Identifies the <see cref="Portal"/> bindable property.
@@ -292,125 +225,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(GeoModel), typeof(GeoModel), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: GeoModelChanged);
 
         /// <summary>
-        /// Identifies the <see cref="ListItemTemplate"/> bindable property.
+        /// Identifies the <see cref="AvailableBasemaps"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty ListItemTemplateProperty =
-            BindableProperty.Create(nameof(ListItemTemplate), typeof(DataTemplate), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+        public static readonly BindableProperty AvailableBasemapsProperty =
+            BindableProperty.Create(nameof(AvailableBasemaps), typeof(IList<BasemapGalleryItem>), typeof(BasemapGallery), null, BindingMode.OneWay, propertyChanged: AvailableBasemapsChanged);
 
         /// <summary>
-        /// Identifies the <see cref="GridItemTemplate"/> bindable property.
+        /// Identifies the <see cref="SelectedBasemap"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty GridItemTemplateProperty =
-            BindableProperty.Create(nameof(GridItemTemplate), typeof(DataTemplate), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+        public static readonly BindableProperty SelectedBasemapProperty =
+            BindableProperty.Create(nameof(SelectedBasemap), typeof(BasemapGalleryItem), typeof(BasemapGallery), null, BindingMode.OneWay, propertyChanged: SelectedBasemapChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="GalleryViewStyle"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty GalleryViewStyleProperty =
-            BindableProperty.Create(nameof(GalleryViewStyle), typeof(BasemapGalleryViewStyle), typeof(BasemapGallery), BasemapGalleryViewStyle.Automatic, BindingMode.OneWay, propertyChanged: ItemTemplateChanged);
+        #endregion Bindable Properties
 
-        /// <summary>
-        /// Identifies the <see cref="ViewStyleWidthThreshold"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty ViewStyleWidthThresholdProperty =
-            BindableProperty.Create(nameof(ViewStyleWidthThreshold), typeof(double), typeof(BasemapGallery), 384.0, BindingMode.OneWay, propertyChanged: ItemTemplateChanged);
+        #region Controller Callbacks
 
-        public static readonly BindableProperty OverrideListProperty =
-            BindableProperty.Create(nameof(OverrideList), typeof(IEnumerable<BasemapGalleryItem>), typeof(BasemapGallery), null, BindingMode.OneWay, propertyChanged: OverrideListChanged);
-
-        /// <summary>
-        /// Handles property changes for the <see cref="GeoModel" /> bindable property.
-        /// </summary>
-        private static void GeoModelChanged(BindableObject sender, object oldValue, object newValue) =>
-            ((BasemapGallery)sender)._controller.GeoModel = newValue as GeoModel;
-
-        /// <summary>
-        /// Handles property changes for the <see cref="Portal"/> bindable property.
-        /// </summary>
-        private static void PortalChanged(BindableObject sender, object oldValue, object newValue)
+        internal void SetListViewSource(IList<BasemapGalleryItem> newSource)
         {
-            _ = ((BasemapGallery)sender)._controller.PopulateBasemapsForPortal(newValue as ArcGISPortal);
-        }
-
-        /// <summary>
-        /// Handles property changes for the bindable properties that can trigger a style or template change.
-        /// </summary>
-        private static void ItemTemplateChanged(BindableObject sender, object oldValue, object newValue)
-        {
-            BasemapGallery sendingView = (BasemapGallery)sender;
-            sendingView.HandleTemplateChange(sendingView.Width);
-        }
-
-        private static void OverrideListChanged(BindableObject sender, object oldValue, object newValue)
-        {
-            ((BasemapGallery)sender)._controller.SetOverrideList(newValue as IEnumerable<BasemapGalleryItem>);
-        }
-
-        /// <summary>
-        /// Updates the view based on the current width, adjusting the collection view presentation style as configured.
-        /// </summary>
-        /// <seealso cref="GridItemTemplate"/>
-        /// <seealso cref="ListItemTemplate"/>
-        /// <seealso cref="GalleryViewStyle"/>
-        /// <seealso cref="ViewStyleWidthThreshold"/>
-        private void HandleTemplateChange(double currentWidth)
-        {
-            if (_presentingView == null)
+            if (ListView != null)
             {
-                return;
-            }
-
-            BasemapGalleryViewStyle styleAfterUpdate = BasemapGalleryViewStyle.Automatic;
-            int gridSpanAfterUpdate = 0;
-            switch (GalleryViewStyle)
-            {
-                case BasemapGalleryViewStyle.List:
-                    styleAfterUpdate = BasemapGalleryViewStyle.List;
-                    break;
-                case BasemapGalleryViewStyle.Grid:
-                    styleAfterUpdate = BasemapGalleryViewStyle.Grid;
-                    break;
-                case BasemapGalleryViewStyle.Automatic:
-                    styleAfterUpdate = currentWidth >= ViewStyleWidthThreshold ? BasemapGalleryViewStyle.Grid : BasemapGalleryViewStyle.List;
-                    break;
-            }
-
-            // This check may be removable once UWP collectionview supports dynamic item sizing: https://gist.github.com/hartez/7d0edd4182dbc7de65cebc6c67f72e14
-            if (Device.RuntimePlatform == Device.UWP)
-            {
-                styleAfterUpdate = BasemapGalleryViewStyle.List;
-            }
-
-            if (styleAfterUpdate == BasemapGalleryViewStyle.Grid)
-            {
-                gridSpanAfterUpdate = System.Math.Max((int)(currentWidth / 128), 1);
-            }
-
-            if (_currentSelectedSpan != gridSpanAfterUpdate || styleAfterUpdate != _currentlyAppliedViewStyle)
-            {
-                if (styleAfterUpdate == BasemapGalleryViewStyle.List)
-                {
-                    _presentingView.ItemTemplate = ListItemTemplate;
-                    _presentingView.ItemsLayout = LinearItemsLayout.Vertical;
-                }
-                else
-                {
-                    _presentingView.ItemTemplate = GridItemTemplate;
-                    _presentingView.ItemsLayout = new GridItemsLayout(gridSpanAfterUpdate, ItemsLayoutOrientation.Vertical);
-                }
-
-                _currentSelectedSpan = gridSpanAfterUpdate;
-                _currentlyAppliedViewStyle = styleAfterUpdate;
+                ListView.ItemsSource = newSource;
             }
         }
 
-        /// <inheritdoc />
-        protected override void OnSizeAllocated(double width, double height)
+        internal void SetListViewSelection(BasemapGalleryItem? item)
         {
-            base.OnSizeAllocated(width, height);
-
-            // Size change could necesitate a switch between list and grid presentations.
-            HandleTemplateChange(width);
+            if (ListView != null)
+            {
+                #if WINDOWS_UWP
+                ListView.SelectedItems.Clear();
+                ListView.SelectedItem = null;
+                #endif
+                ListView.SelectedItem = item;
+            }
         }
+
+        internal void NotifyBasemapSelected(BasemapGalleryItem item)
+        {
+            BasemapSelected?.Invoke(this, item);
+        }
+
+        #endregion Controller Callbacks
     }
 }

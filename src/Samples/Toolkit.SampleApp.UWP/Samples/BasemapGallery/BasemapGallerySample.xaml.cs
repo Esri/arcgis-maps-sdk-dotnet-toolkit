@@ -84,14 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
                 Tooltip = Guid.NewGuid().ToString(),
                 Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"))
             };
-            if (Gallery.OverrideList == null)
-            {
-                Gallery.OverrideList = new ObservableCollection<BasemapGalleryItem>();
-            }
-            if (Gallery.OverrideList is ICollection<BasemapGalleryItem> list)
-            {
-                list.Add(item);
-            }
+            Gallery.AvailableBasemaps.Add(item);
         }
 
         private async void Button_Load_AGOL(object sender, RoutedEventArgs e)
@@ -120,14 +113,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
 
         private void Button_Remove_Last(object sender, RoutedEventArgs e)
         {
-            if (Gallery.OverrideList is ICollection<BasemapGalleryItem> list)
+            if (Gallery.AvailableBasemaps.Any())
             {
-                list.Remove(list.Last());
-            }
-
-            if (!Gallery.OverrideList?.Any() ?? false)
-            {
-                Gallery.OverrideList = null;
+                Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
             }
         }
     }

@@ -60,27 +60,14 @@ namespace Toolkit.Samples.Forms.Samples
                 Tooltip = Guid.NewGuid().ToString(),
                 Thumbnail = new Esri.ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"))
             };
-            if (Gallery.OverrideList == null)
-            {
-                Gallery.OverrideList = new ObservableCollection<BasemapGalleryItem>();
-            }
-            if (Gallery.OverrideList is ICollection<BasemapGalleryItem> list)
-            {
-                list.Add(item);
-            }
+            Gallery.AvailableBasemaps.Add(item);
         }
 
         private void Button_Remove_Item(object sender, EventArgs e)
         {
-            if (Gallery.OverrideList is ICollection<BasemapGalleryItem> list)
+            if (Gallery.AvailableBasemaps.Any())
             {
-                list.Remove(Gallery.OverrideList.Last());
-            }
-
-            if (!Gallery.OverrideList?.Any() ?? false)
-            {
-                Gallery.OverrideList = null;
-
+                Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
             }
         }
 

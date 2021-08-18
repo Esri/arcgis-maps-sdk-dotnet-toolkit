@@ -49,6 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isLoading = false;
         private bool _isValid = true;
         private readonly Task? _loadTask;
+        private SpatialReference _spatialReference;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasemapGalleryItem"/> class.
@@ -84,6 +85,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tooltip)));
                 await LoadImage();
+
+                // Load the SR.
+                var clone = Basemap.Clone();
+                var map = new Map(clone);
+                await map.LoadAsync();
+                if (map.LoadStatus == LoadStatus.Loaded)
+                {
+                    SpatialReference = map.SpatialReference;
+                }
             }
             catch (Exception)
             {
@@ -124,24 +134,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        internal async Task NotifySpatialReferenceChanged(SpatialReference? sr)
+        internal void NotifySpatialReferenceChanged(SpatialReference? sr)
         {
             if (sr == null)
             {
                 IsValid = true;
-                return;
             }
-
-            await LoadBasemapAsync();
-
-            var map = new Map(Basemap.Clone());
-            await map.LoadAsync();
-            if (map.LoadStatus != LoadStatus.Loaded)
+            else if (sr == SpatialReference)
+            {
+                IsValid = true;
+            }
+            else
             {
                 IsValid = false;
             }
+        }
 
-            IsValid = map.SpatialReference == sr;
+        public SpatialReference SpatialReference
+        {
+            get => _spatialReference;
+            private set
+            {
+                if (value != _spatialReference)
+                {
+                    _spatialReference = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpatialReference)));
+                }
+            }
         }
 
         /// <inheritdoc />
@@ -152,22 +171,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return false;
             }
 
-            if (other.Basemap == Basemap)
+            return EqualsBasemap(other.Basemap);
+        }
+
+        public bool EqualsBasemap(Basemap? other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (other == Basemap)
             {
                 return true;
             }
 
-            if (other?.Basemap?.Item?.ItemId != null && other.Basemap?.Item?.ItemId == Basemap?.Item?.ItemId)
+            if (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
             {
                 return true;
             }
 
-            if (other?.Basemap?.Name == Basemap?.Name)
+            if (other.Name == Basemap?.Name)
             {
                 return true;
             }
 
-            if (other?.Basemap?.Uri == Basemap?.Uri)
+            if (other.Uri == Basemap?.Uri)
             {
                 return true;
             }

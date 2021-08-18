@@ -59,7 +59,7 @@
     <Compile Include="..\Toolkit\Toolkit\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\Legend\LegendDataSource.cs" Link="Legend\LegendDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BookmarksView\BookmarksViewDataSource.cs" Link="BookmarksView\BookmarksViewDataSource.cs" />
-    <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryDataSource.cs" Link="BasemapGallery\BasemapGalleryDataSource.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryController.cs" Link="BasemapGallery\BasemapGalleryController.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryItem.cs" Link="BasemapGallery\BasemapGalleryItem.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryViewStyle.cs" Link="BasemapGallery\BasemapGalleryViewStyle.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="LayerContentDataSource.cs" />
