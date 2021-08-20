@@ -107,14 +107,25 @@
         <Setter Property="GridItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <StackPanel Width="128" Orientation="Vertical">
+                    <StackPanel
+                        Width="128"
+                        Background="Transparent"
+                        Orientation="Vertical">
+                        <StackPanel.ToolTip>
+                            <ToolTip>
+                                <TextBlock
+                                    Width="200"
+                                    Text="{Binding Tooltip}"
+                                    TextWrapping="Wrap" />
+                            </ToolTip>
+                        </StackPanel.ToolTip>
                         <Border
                             Width="64"
                             Height="64"
                             Margin="8"
+                            Background="{StaticResource ControlBackground}"
                             BorderBrush="#4d6e6e6e"
-                            BorderThickness="1"
-                            ToolTipService.ToolTip="{Binding Tooltip}">
+                            BorderThickness="1">
                             <Grid>
                                 <Path
                                     Width="32"
@@ -135,8 +146,7 @@
                             FontSize="11"
                             Text="{Binding Name}"
                             TextAlignment="Center"
-                            TextWrapping="Wrap"
-                            ToolTipService.ToolTip="{Binding Tooltip}" />
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -144,7 +154,15 @@
         <Setter Property="ListItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch" Background="Transparent">
+                        <Grid.ToolTip>
+                            <ToolTip>
+                                <TextBlock
+                                    Width="200"
+                                    Text="{Binding Tooltip}"
+                                    TextWrapping="Wrap" />
+                            </ToolTip>
+                        </Grid.ToolTip>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -153,10 +171,9 @@
                             Width="64"
                             Height="64"
                             Margin="6"
-                            Background="White"
+                            Background="{StaticResource ControlBackground}"
                             BorderBrush="#4d6e6e6e"
-                            BorderThickness="1"
-                            ToolTipService.ToolTip="{Binding Tooltip}">
+                            BorderThickness="1">
                             <Grid>
                                 <Path
                                     x:Name="PlaceholderPath"
@@ -180,8 +197,7 @@
                             Margin="0,6,6,6"
                             VerticalAlignment="Center"
                             Text="{Binding Name, Mode=OneWay}"
-                            TextWrapping="Wrap"
-                            ToolTipService.ToolTip="{Binding Tooltip}" />
+                            TextWrapping="Wrap" />
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

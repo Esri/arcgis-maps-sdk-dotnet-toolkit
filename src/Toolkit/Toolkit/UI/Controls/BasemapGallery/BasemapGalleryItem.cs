@@ -49,7 +49,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isLoading = false;
         private bool _isValid = true;
         private readonly Task? _loadTask;
-        private SpatialReference _spatialReference;
+        private SpatialReference? _spatialReference;
+        private SpatialReference? _lastNotifiedSpatialReference;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasemapGalleryItem"/> class.
@@ -134,13 +135,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        internal void NotifySpatialReferenceChanged(SpatialReference? sr)
+        internal void NotifySpatialReferenceChanged(GeoModel? gm)
         {
-            if (sr == null)
+            // Scenes return a spatial reference of 4326 even when the basemap is 3857
+            if (gm is Scene scene && scene.SceneViewTilingScheme == SceneViewTilingScheme.WebMercator)
+            {
+                _lastNotifiedSpatialReference = SpatialReferences.WebMercator;
+            }
+            else
+            {
+                _lastNotifiedSpatialReference = gm?.SpatialReference;
+            }
+
+            if (_lastNotifiedSpatialReference == null)
             {
                 IsValid = true;
             }
-            else if (sr == SpatialReference)
+            else if (_lastNotifiedSpatialReference == SpatialReference)
             {
                 IsValid = true;
             }
@@ -158,6 +169,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (value != _spatialReference)
                 {
                     _spatialReference = value;
+                    if (_lastNotifiedSpatialReference != null && _spatialReference != null && _spatialReference != _lastNotifiedSpatialReference)
+                    {
+                        IsValid = false;
+                    }
+                    else
+                    {
+                        IsValid = true;
+                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpatialReference)));
                 }
             }

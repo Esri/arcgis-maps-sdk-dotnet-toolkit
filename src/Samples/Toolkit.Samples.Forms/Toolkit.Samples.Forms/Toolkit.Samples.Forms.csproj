@@ -25,8 +25,11 @@
   </Choose>
 
   <ItemGroup>
-    <Compile Update="Samples\BasemapGallerySample.xaml.cs">
-      <DependentUpon>BasemapGallerySample.xaml</DependentUpon>
+    <Compile Update="Samples\BasemapGalleryAppearanceSample.xaml.cs">
+      <DependentUpon>BasemapGalleryAppearanceSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Samples\BasemapGalleryBehaviorSample.xaml.cs">
+      <DependentUpon>BasemapGalleryBehaviorSample.xaml</DependentUpon>
     </Compile>
     <Compile Update="Samples\BookmarksViewTemplatedSample.xaml.cs">
       <DependentUpon>BookmarksViewTemplatedSample.xaml</DependentUpon>
@@ -52,6 +55,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Samples\BasemapGalleryAppearanceSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Samples\BasemapGalleryBehaviorSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Samples\BookmarksViewSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

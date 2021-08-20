@@ -1,0 +1,58 @@
+﻿<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery.BasemapGalleryBehaviorSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <esri:MapView x:Name="MyMapView" Visibility="Collapsed" />
+        <esri:SceneView x:Name="MySceneView" Visibility="Collapsed" />
+
+        <Border
+            Width="250"
+            Margin="8"
+            Padding="8"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Background="White">
+            <StackPanel>
+                <TextBlock Text="Gallery View Style: " />
+                <ComboBox x:Name="ViewStyleCombobox" SelectionChanged="ViewStyleCombobox_SelectionChanged" HorizontalAlignment="Stretch" />
+                <TextBlock Text="Connect to GeoView: " />
+                <Button Content="Disconnected" Click="Button_Disconect_View" />
+                <Button Content="Switch to Map" Click="Button_Switch_To_Map" Margin="0,4,0,4" />
+                <Button Content="Switch to Scene" Click="Button_Switch_To_Scene" />
+                <TextBlock Text="Refresh gallery from Portal: " />
+                <Button Content="Load ArcGIS Online basemaps" Click="Button_Load_AGOL" />
+                <Button Content="Load basemaps from custom Portal" Click="Button_Load_Portal" Margin="0,4,0,0" />
+                <TextBlock Text="Manipulate List: " />
+                <Button Click="Button_Add_Last" Content="Add special items" Margin="0,4,0,4" />
+                <Button Click="Button_Remove_Last" Content="Remove last item" />
+                <TextBlock Text="Currently selected Basemap:" />
+                <TextBlock Text="{Binding ElementName=Gallery, Path=SelectedBasemap.Name, Mode=OneWay}" />
+                <TextBlock Text="Basemap selection event last raised:" />
+                <TextBlock x:Name="LastSelectedDateLabel" Text="Never" />
+            </StackPanel>
+        </Border>
+
+        <Border
+            Margin="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Background="White">
+            <toolkit:BasemapGallery
+                x:Name="Gallery"
+                BasemapSelected="Gallery_BasemapSelected"
+                Width="280" />
+        </Border>
+    </Grid>
+</Page>

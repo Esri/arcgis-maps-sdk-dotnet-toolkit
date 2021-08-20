@@ -65,6 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         public void HandleGeoModelChanged(BasemapGallery gallery)
         {
+            gallery.AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(gallery.GeoModel));
             _ = UpdateSelectionForGeoModelBasemap(gallery);
         }
 
@@ -99,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (propertyName == nameof(GeoModel.SpatialReference))
             {
-                gallery.AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(gallery.GeoModel?.SpatialReference));
+                gallery.AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(gallery.GeoModel));
             }
         }
 
@@ -145,7 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             try
             {
                 // Update validity
-                gallery.AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(gallery.GeoModel?.SpatialReference));
+                gallery.AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(gallery.GeoModel));
 
                 // Show new items in UI
                 gallery.SetListViewSource(gallery.AvailableBasemaps);
@@ -185,7 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case NotifyCollectionChangedAction.Move:
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
-                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(gallery.GeoModel?.SpatialReference));
+                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(gallery.GeoModel));
                     _ = UpdateSelectionForGeoModelBasemap(gallery);
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -193,6 +194,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     break;
             }
         }
+
         private static async Task<List<BasemapGalleryItem>?> PopulateBasemapsForPortal(ArcGISPortal? portal)
         {
             if (portal == null)

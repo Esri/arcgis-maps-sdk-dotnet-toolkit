@@ -252,10 +252,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (ListView != null)
             {
-                #if WINDOWS_UWP
-                ListView.SelectedItems.Clear();
-                ListView.SelectedItem = null;
-                #endif
                 ListView.SelectedItem = item;
             }
         }

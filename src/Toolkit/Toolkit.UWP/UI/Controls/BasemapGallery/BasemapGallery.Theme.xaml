@@ -132,14 +132,17 @@
         <Setter Property="GridItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <StackPanel MaxWidth="128" Orientation="Vertical">
+                    <StackPanel
+                        MaxWidth="128"
+                        Background="Transparent"
+                        Orientation="Vertical"
+                        ToolTipService.ToolTip="{Binding Tooltip}">
                         <Border
                             Width="64"
                             Height="64"
                             Margin="8"
                             BorderBrush="#4d6e6e6e"
-                            BorderThickness="1"
-                            ToolTipService.ToolTip="{Binding Tooltip}">
+                            BorderThickness="1">
                             <Grid>
 
                                 <Image
@@ -159,11 +162,11 @@
                         <TextBlock
                             x:Name="ItemTextBlock"
                             Margin="8,0,8,8"
+                            MinHeight="32"
                             FontSize="11"
                             Text="{Binding Name}"
                             TextAlignment="Center"
-                            TextWrapping="Wrap"
-                            ToolTipService.ToolTip="{Binding Tooltip}" />
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
@@ -171,7 +174,11 @@
         <Setter Property="ListItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid Padding="6" HorizontalAlignment="Stretch">
+                    <Grid
+                        Padding="6"
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        ToolTipService.ToolTip="{Binding Tooltip}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -181,8 +188,7 @@
                             Height="64"
                             Margin="0,0,6,0"
                             BorderBrush="#4d6e6e6e"
-                            BorderThickness="1"
-                            ToolTipService.ToolTip="{Binding Tooltip}">
+                            BorderThickness="1">
                             <Grid>
 
                                 <Image
@@ -203,8 +209,7 @@
                             Grid.Column="1"
                             VerticalAlignment="Center"
                             Text="{Binding Name, Mode=OneWay}"
-                            TextWrapping="Wrap"
-                            ToolTipService.ToolTip="{Binding Tooltip}" />
+                            TextWrapping="Wrap" />
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

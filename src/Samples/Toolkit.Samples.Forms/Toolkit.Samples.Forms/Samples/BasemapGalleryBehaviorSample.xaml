@@ -1,19 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="Toolkit.Samples.Forms.Samples.BasemapGallerySample"
+    x:Class="Toolkit.Samples.Forms.Samples.BasemapGalleryBehaviorSample"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-    Title="BasemapGallery"
+    Title="BasemapGallery - Appearance"
     mc:Ignorable="d">
     <ContentPage.Content>
         <Grid BackgroundColor="{AppThemeBinding Dark=Black, Light=White}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -29,32 +27,16 @@
                     Value="400" />
             </StackLayout>
             <StackLayout Grid.Row="1" Orientation="Horizontal">
-                <Label Text="Attach to:" />
-                <Button Clicked="Button_Select_Scene" Text="SceneView" />
-                <Button Clicked="Button_Select_Map" Text="MapView" />
-            </StackLayout>
-            <StackLayout Grid.Row="2" Orientation="Horizontal">
-                <Label Text="Load a new:" />
-                <Button Clicked="Button_Load_Scene" Text="Scene" />
-                <Button Clicked="Button_Load_Map_WM" Text="Map (WM)" />
-                <Button Clicked="Button_Load_Map_WGS" Text="Map (WGS84)" />
-            </StackLayout>
-            <StackLayout Grid.Row="3" Orientation="Horizontal">
-                <Button Clicked="Button_Load_AGOL" Text="ArcGIS Online" />
-                <Button Clicked="Button_Load_Portal" Text="Custom Portal" />
-                <Button Clicked="Button_Add_Item" Text="+" />
-                <Button Clicked="Button_Remove_Item" Text="-" />
+                <Button Clicked="Button_Add_Item" Text="Add special items" />
+                <Button Clicked="Button_Remove_Item" Text="Remove last item" />
             </StackLayout>
 
-            <esri:MapView x:Name="MyMapView" Grid.Row="4" />
-            <esri:SceneView
-                x:Name="MySceneView"
-                Grid.Row="4"
-                IsVisible="False" />
+            <esri:MapView x:Name="MyMapView" Grid.Row="2" />
 
             <toolkit:BasemapGallery
                 x:Name="Gallery"
-                Grid.Row="5"
+                Grid.Row="3"
+                GeoModel="{Binding Source={x:Reference MyMapView}, Path=Map, Mode=OneWay}"
                 ViewStyleWidthThreshold="{Binding Source={x:Reference ThresholdSlider}, Path=Value, Mode=OneWay}" />
         </Grid>
     </ContentPage.Content>
