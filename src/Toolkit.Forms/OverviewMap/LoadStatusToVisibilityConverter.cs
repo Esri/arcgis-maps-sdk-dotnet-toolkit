@@ -23,7 +23,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
     /// <summary>
     /// *FOR INTERNAL USE* Returns a boolean representing visibility for a given load status.
     /// </summary>
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     internal class LoadStatusToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc/>

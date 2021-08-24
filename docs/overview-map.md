@@ -58,7 +58,7 @@ WPF:
     <Grid>
         <esri:SceneView x:Name="MySceneView" />
         <overviewmap:OverviewMap
-            Margin="8"
+            Margin="4"
             GeoView="{Binding ElementName=MySceneView}" />
     </Grid>
 </UserControl>
@@ -78,9 +78,7 @@ Xamarin.Forms:
             <StackLayout Margin="4"
                          HorizontalOptions="Start"
                          VerticalOptions="Start">
-                <esriTK:OverviewMap GeoView="{Binding Source={x:Reference sceneView}}"
-                                    HeightRequest="100"
-                                    WidthRequest="100" />
+                <esriTK:OverviewMap GeoView="{Binding Source={x:Reference sceneView}}" />
             </StackLayout>
 
         </Grid>

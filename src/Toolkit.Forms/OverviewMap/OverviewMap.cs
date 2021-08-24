@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                                                  xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
                                                  xmlns:esri=""clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms""
                                                  xmlns:internal=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
-                                    <Frame Padding=""1"" WidthRequest=""100"" HeightRequest=""100"" CornerRadius=""0"" HasShadow=""False"" BorderColor=""Black"" BackgroundColor=""White"">
+                                    <Frame Padding=""1"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" CornerRadius=""0"" HasShadow=""False"" BorderColor=""Black"" BackgroundColor=""White"">
                                     <Grid>
                                         <Grid.Resources>
                                             <internal:LoadStatusToVisibilityConverter x:Key=""LoadStatusToVisibilityConverter"" />
@@ -59,6 +59,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public OverviewMap()
         {
             ControlTemplate = DefaultControlTemplate;
+            HeightRequest = 100;
+            WidthRequest = 100;
+            HorizontalOptions = LayoutOptions.End;
+            VerticalOptions = LayoutOptions.Start;
             AreaSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Null, System.Drawing.Color.Transparent, new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Red, 1));
             PointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.Red, 16);
             Map = new Map(BasemapStyle.ArcGISTopographic);
@@ -70,14 +74,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+            if (_overviewMapView != null)
+            {
+                _controller?.Dispose();
+                _overviewMapView.Map = null;
+            }
 
             _overviewMapView = GetTemplateChild("PART_MapView") as MapView;
 
             if (_overviewMapView != null)
             {
                 _overviewMapView.Map = Map;
-
-                _controller?.Dispose();
 
                 _controller = new OverviewMapController(_overviewMapView)
                 {

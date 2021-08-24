@@ -8,15 +8,22 @@
     Title="OverviewMap - MapView">
     <ContentPage.Content>
         <Grid>
-            <esriUI:MapView x:Name="MyMapView" />
-            <esriUI:SceneView x:Name="MySceneView" IsVisible="False" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <esriUI:MapView x:Name="MyMapView" />
+                <esriUI:SceneView x:Name="MySceneView" IsVisible="False" />
+                <esriTK:OverviewMap
+                    Margin="4"
+                    x:Name="SampleOverview" />
+            </Grid>
             <StackLayout
-                Margin="20"
-                Padding="8"
+                Grid.Row="1"
+                Padding="4"
                 BackgroundColor="#F2F2F2"
-                HorizontalOptions="Start"
-                Spacing="2"
-                VerticalOptions="Start">
+                Spacing="2">
                 <Button Clicked="ToggleViewClick" Text="Toggle MapView/SceneView" />
                 <Button Clicked="ToggleModelClick" Text="Apply new Map/Scene" />
                 <Button Clicked="ToggleSymbolsClick" Text="Toggle symbols" />
@@ -24,10 +31,6 @@
                 <Slider Maximum="360" ValueChanged="Slider_ValueChanged" />
                 <Label Text="Scale factor:" />
                 <Slider Maximum="50" Minimum="10" Value="{Binding Source={x:Reference SampleOverview}, Path=ScaleFactor, Mode=TwoWay}" />
-                <esriTK:OverviewMap
-                    x:Name="SampleOverview"
-                    HeightRequest="100"
-                    WidthRequest="100" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

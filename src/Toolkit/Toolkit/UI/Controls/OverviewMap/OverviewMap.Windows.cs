@@ -58,12 +58,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
+
+            if (_overviewMapView != null)
+            {
+                _overviewMapView.Map = null;
+                _controller?.Dispose();
+            }
+
             if (GetTemplateChild("PART_MapView") is MapView templateMapView)
             {
                 _overviewMapView = templateMapView;
                 _overviewMapView.Map = Map;
-
-                _controller?.Dispose();
 
                 _controller = new OverviewMapController(_overviewMapView)
                 {
