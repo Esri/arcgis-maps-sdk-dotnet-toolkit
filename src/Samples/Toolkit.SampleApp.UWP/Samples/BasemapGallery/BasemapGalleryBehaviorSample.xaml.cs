@@ -1,6 +1,4 @@
-﻿using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Portal;
+﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
 using System.Linq;
@@ -14,7 +12,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
         public BasemapGalleryBehaviorSample()
         {
             InitializeComponent();
-            this.DataContext = this;
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
             MySceneView.Scene = new Scene(BasemapStyle.ArcGISImageryStandard);
             ViewStyleCombobox.Items.Add("List");

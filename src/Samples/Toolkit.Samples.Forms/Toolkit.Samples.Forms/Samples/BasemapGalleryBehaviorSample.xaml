@@ -12,32 +12,46 @@
     <ContentPage.Content>
         <Grid BackgroundColor="{AppThemeBinding Dark=Black, Light=White}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="200" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="150" />
             </Grid.RowDefinitions>
-            <StackLayout Grid.Row="0" Orientation="Vertical">
-                <Label Text="Width threshold:" />
-                <Slider
-                    x:Name="ThresholdSlider"
-                    HorizontalOptions="FillAndExpand"
-                    Maximum="1000"
-                    Minimum="0"
-                    Value="400" />
-            </StackLayout>
-            <StackLayout Grid.Row="1" Orientation="Horizontal">
-                <Button Clicked="Button_Add_Item" Text="Add special items" />
-                <Button Clicked="Button_Remove_Item" Text="Remove last item" />
-            </StackLayout>
+            <esri:MapView x:Name="MyMapView" IsVisible="False" />
+            <esri:SceneView x:Name="MySceneView" IsVisible="False"/>
 
-            <esri:MapView x:Name="MyMapView" Grid.Row="2" />
+            <Grid Grid.Row="1" RowSpacing="4" ColumnSpacing="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Text="Gallery View Style:" HorizontalTextAlignment="End" Grid.Column="0" />
+                <Picker x:Name="ViewStyleCombobox" Grid.Column="1" SelectedIndexChanged="ViewStyleCombobox_SelectedIndexChanged" HorizontalOptions="FillAndExpand" />
+                <Button Text="Disconnected" Clicked="Button_Disconect_View" Grid.ColumnSpan="2" Grid.Row="1" />
+                <Button Text="Switch to Map" Clicked="Button_Switch_To_Map" Grid.Column="0" Grid.Row="2" />
+                <Button Text="Switch to Scene" Clicked="Button_Switch_To_Scene" Grid.Column="1" Grid.Row="2" />
+                <Button Text="Load ArcGIS Online" Clicked="Button_Load_AGOL" Grid.Row="3" Grid.Column="0" />
+                <Button Text="Load custom Portal" Clicked="Button_Load_Portal" Grid.Row="3" Grid.Column="1" />
+                <Button Clicked="Button_Add_Last" Text="Add items" Grid.Row="4" Grid.Column="0" />
+                <Button Clicked="Button_Remove_Last" Text="Remove last item" Grid.Row="4" Grid.Column="1" />
+                <Label Text="Selection:" Grid.Row="5" Grid.Column="0" HorizontalTextAlignment="End" />
+                <Label Text="{Binding Source={x:Reference Gallery}, Path=SelectedBasemap.Name, FallbackValue='None', Mode=OneWay}" Grid.Row="5" Grid.Column="1" />
+                <Label Text="Basemap selection event last raised:" HorizontalTextAlignment="End" Grid.Row="6" Grid.Column="0" />
+                <Label x:Name="LastSelectedDateLabel" Text="Never" Grid.Row="6" Grid.Column="1" />
+            </Grid>
 
             <toolkit:BasemapGallery
+                Grid.Row="2"
                 x:Name="Gallery"
-                Grid.Row="3"
-                GeoModel="{Binding Source={x:Reference MyMapView}, Path=Map, Mode=OneWay}"
-                ViewStyleWidthThreshold="{Binding Source={x:Reference ThresholdSlider}, Path=Value, Mode=OneWay}" />
+                BasemapSelected="Gallery_BasemapSelected" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>
