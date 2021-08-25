@@ -23,21 +23,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// <summary>
     /// Converts boolean value to opacity, used to show a scrim to cover invalid selections in a list.
     /// </summary>
-    public class BoolToOpacityConverter : IValueConverter
+    internal class BoolToOpacityConverter : IValueConverter
     {
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
             {
-                if (boolValue)
-                {
-                    return 0f;
-                }
-                else
-                {
-                    return 0.3f;
-                }
+                return boolValue ? 0f : 0.7f;
             }
 
             return 1.0f;

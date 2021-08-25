@@ -204,26 +204,43 @@
         </Setter>
         <Setter Property="ListItemContainerStyle" Value="{StaticResource BaseContainerStyle}" />
         <Setter Property="GridItemContainerStyle" Value="{StaticResource GridContainerStyle}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:BasemapGallery">
-                    <ListView
-                        x:Name="PART_InnerListView"
-                        Width="{TemplateBinding Width}"
-                        Height="{TemplateBinding Height}"
-                        Padding="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                        HorizontalContentAlignment="Stretch"
-                        Background="{TemplateBinding Background}"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        SelectedItem="{Binding Controller.SelectedBasemap, Mode=TwoWay}">
-                        <ListView.Resources>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.Resources>
-                    </ListView>
+                    <Grid>
+                        <ListView
+                            x:Name="PART_InnerListView"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            HorizontalContentAlignment="Stretch"
+                            Background="{TemplateBinding Background}"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListView.Resources>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.Resources>
+                        </ListView>
+                        <Border
+                            x:Name="PART_LoadingScrim"
+                            Padding="8"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Background="{TemplateBinding Background}"
+                            Opacity="0.3">
+                            <ProgressBar
+                                Height="16"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                IsIndeterminate="True" />
+                        </Border>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -41,7 +41,10 @@
                     x:Name="ViewStyleCombobox"
                     HorizontalAlignment="Stretch"
                     SelectionChanged="ViewStyleCombobox_SelectionChanged" />
-                <Button Click="Button_Add_Last" Content="Add special items" Margin="0,4,0,4" />
+                <Button
+                    Margin="0,4,0,4"
+                    Click="Button_Add_Last"
+                    Content="Add special items" />
                 <Button Click="Button_Remove_Last" Content="Remove last item" />
             </StackPanel>
         </Border>
@@ -53,8 +56,8 @@
             Background="White">
             <toolkit:BasemapGallery
                 x:Name="Gallery"
-                GeoModel="{Binding ElementName=MyMapView, Path=Map, Mode=OneWay}"
                 Width="{Binding ElementName=WidthSlider, Path=Value}"
+                GeoModel="{Binding ElementName=MyMapView, Path=Map, Mode=OneWay}"
                 ViewStyleWidthThreshold="{Binding ElementName=ThresholdSlider, Path=Value}" />
         </Border>
     </Grid>

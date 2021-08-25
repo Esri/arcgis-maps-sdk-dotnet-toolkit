@@ -16,12 +16,12 @@
 
 #if !__IOS__ && !__ANDROID__
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
-using System.Collections.Generic;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -39,19 +39,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
     /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
     /// </remarks>
+    [TemplatePart(Name = "PART_InnerListView")]
     public partial class BasemapGallery : Control
     {
-        private readonly BasemapGalleryController _controller = new BasemapGalleryController();
+        private readonly BasemapGalleryController _controller;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
         /// </summary>
         public BasemapGallery()
         {
+            _controller = new BasemapGalleryController(this);
             DefaultStyleKey = typeof(BasemapGallery);
             SizeChanged += BasemapGallerySizeChanged;
             AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>();
-            _ = _controller.LoadFromDefaultPortal(this);
+            _ = _controller.LoadFromDefaultPortal();
         }
 
         private ListView? ListView
@@ -70,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     if (_listView != null)
                     {
-                        _controller.HandleListViewChanged(this);
+                        _controller.HandleListViewChanged();
                         _listView.SelectionChanged += ListViewSelectionChanged;
                     }
                 }
@@ -81,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (d is BasemapGallery gallery)
             {
-                gallery._controller.HandleSelectedBasemapChanged(gallery);
+                gallery._controller.HandleSelectedBasemapChanged();
             }
         }
 
@@ -94,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     oldModel.PropertyChanged -= gallery.GeoModelPropertyChanged;
                 }
 
-                gallery._controller.HandleGeoModelChanged(gallery);
+                gallery._controller.HandleGeoModelChanged();
 
                 if (e.NewValue is GeoModel newModel)
                 {
@@ -105,7 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void GeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            _controller.HandleGeoModelPropertyChanged(this, e.PropertyName);
+            _controller.HandleGeoModelPropertyChanged(e.PropertyName ?? string.Empty);
         }
 
         private void ListViewSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -115,14 +117,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _controller.HandleListViewSelectionChanged(this, ListView.SelectedIndex);
+            _controller.HandleListViewSelectionChanged(ListView.SelectedItem as BasemapGalleryItem);
         }
 
         private static void PortalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is BasemapGallery gallery)
             {
-                _ = gallery._controller.HandlePortalChanged(gallery);
+                _ = gallery._controller.HandlePortalChanged();
             }
         }
 
@@ -135,7 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     oldAvailableBasemaps.CollectionChanged -= gallery.AvailableBasemapsCollectionChanged;
                 }
 
-                gallery._controller.HandleAvailableBasemapsChanged(gallery);
+                gallery._controller.HandleAvailableBasemapsChanged();
 
                 if (e.NewValue is ObservableCollection<BasemapGalleryItem> newAvailableBasemaps)
                 {
@@ -146,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void AvailableBasemapsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            _controller.HandleAvailableBasemapsCollectionChanged(this, e);
+            _controller.HandleAvailableBasemapsCollectionChanged(e);
         }
 
         #region Convenience Properties
@@ -228,7 +230,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public event EventHandler<BasemapGalleryItem>? BasemapSelected;
 
         #region Controller Callbacks
-        internal void SetListViewSource(IList<BasemapGalleryItem> newSource)
+        internal void SetListViewSource(IList<BasemapGalleryItem>? newSource)
         {
             if (ListView != null)
             {
@@ -247,6 +249,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal void NotifyBasemapSelected(BasemapGalleryItem item)
         {
             BasemapSelected?.Invoke(this, item);
+        }
+
+        internal void SetIsLoading(bool isLoading)
+        {
+            if (isLoading && _loadingScrim != null)
+            {
+                _loadingScrim.Visibility = Visibility.Visible;
+            }
+            else if (_loadingScrim != null)
+            {
+                _loadingScrim.Visibility = Visibility.Collapsed;
+            }
         }
         #endregion Controller Callbacks
     }

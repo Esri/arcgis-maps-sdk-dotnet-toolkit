@@ -34,7 +34,10 @@
                     Value="400" />
                 <Label Content="Gallery View Style: " />
                 <ComboBox x:Name="ViewStyleCombobox" SelectionChanged="ViewStyleCombobox_SelectionChanged" />
-                <Button Click="Button_Add_Last" Content="Add special items" Margin="0,4,0,4" />
+                <Button
+                    Margin="0,4,0,4"
+                    Click="Button_Add_Last"
+                    Content="Add special items" />
                 <Button Click="Button_Remove_Last" Content="Remove last item" />
             </StackPanel>
         </Border>

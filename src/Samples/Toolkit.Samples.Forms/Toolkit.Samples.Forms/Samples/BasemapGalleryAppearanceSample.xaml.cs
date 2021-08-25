@@ -8,7 +8,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Configure various appearance properties, including list and grid view options.")]
+    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Sample showing customization options related to appearance.")]
     public partial class BasemapGalleryAppearanceSample : ContentPage
     {
         public BasemapGalleryAppearanceSample()

@@ -26,16 +26,28 @@
             Background="White">
             <StackPanel>
                 <TextBlock Text="Gallery View Style: " />
-                <ComboBox x:Name="ViewStyleCombobox" SelectionChanged="ViewStyleCombobox_SelectionChanged" HorizontalAlignment="Stretch" />
+                <ComboBox
+                    x:Name="ViewStyleCombobox"
+                    HorizontalAlignment="Stretch"
+                    SelectionChanged="ViewStyleCombobox_SelectionChanged" />
                 <TextBlock Text="Connect to GeoView: " />
-                <Button Content="Disconnected" Click="Button_Disconect_View" />
-                <Button Content="Switch to Map" Click="Button_Switch_To_Map" Margin="0,4,0,4" />
-                <Button Content="Switch to Scene" Click="Button_Switch_To_Scene" />
+                <Button Click="Button_Disconect_View" Content="Disconnected" />
+                <Button
+                    Margin="0,4,0,4"
+                    Click="Button_Switch_To_Map"
+                    Content="Switch to Map" />
+                <Button Click="Button_Switch_To_Scene" Content="Switch to Scene" />
                 <TextBlock Text="Refresh gallery from Portal: " />
-                <Button Content="Load ArcGIS Online basemaps" Click="Button_Load_AGOL" />
-                <Button Content="Load basemaps from custom Portal" Click="Button_Load_Portal" Margin="0,4,0,0" />
+                <Button Click="Button_Load_AGOL" Content="Load ArcGIS Online basemaps" />
+                <Button
+                    Margin="0,4,0,0"
+                    Click="Button_Load_Portal"
+                    Content="Load basemaps from custom Portal" />
                 <TextBlock Text="Manipulate List: " />
-                <Button Click="Button_Add_Last" Content="Add special items" Margin="0,4,0,4" />
+                <Button
+                    Margin="0,4,0,4"
+                    Click="Button_Add_Last"
+                    Content="Add special items" />
                 <Button Click="Button_Remove_Last" Content="Remove last item" />
                 <TextBlock Text="Currently selected Basemap:" />
                 <TextBlock Text="{Binding ElementName=Gallery, Path=SelectedBasemap.Name, Mode=OneWay}" />
@@ -51,8 +63,8 @@
             Background="White">
             <toolkit:BasemapGallery
                 x:Name="Gallery"
-                BasemapSelected="Gallery_BasemapSelected"
-                Width="280" />
+                Width="280"
+                BasemapSelected="Gallery_BasemapSelected" />
         </Border>
     </Grid>
 </Page>

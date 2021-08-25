@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         private string? _tooltipOverride;
         private string? _nameOverride;
-        private bool _isLoading = false;
+        private bool _isLoading;
         private bool _isValid = true;
         private readonly Task? _loadTask;
         private SpatialReference? _spatialReference;
@@ -88,12 +88,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 await LoadImage();
 
                 // Load the SR.
-                var clone = Basemap.Clone();
-                var map = new Map(clone);
-                await map.LoadAsync();
-                if (map.LoadStatus == LoadStatus.Loaded)
+                if (Basemap != null)
                 {
-                    SpatialReference = map.SpatialReference;
+                    var clone = Basemap.Clone();
+                    var map = new Map(clone);
+                    await map.LoadAsync();
+                    if (map.LoadStatus == LoadStatus.Loaded)
+                    {
+                        SpatialReference = map.SpatialReference;
+                    }
                 }
             }
             catch (Exception)
@@ -138,20 +141,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal void NotifySpatialReferenceChanged(GeoModel? gm)
         {
             // Scenes return a spatial reference of 4326 even when the basemap is 3857
-            if (gm is Scene scene && scene.SceneViewTilingScheme == SceneViewTilingScheme.WebMercator)
-            {
-                _lastNotifiedSpatialReference = SpatialReferences.WebMercator;
-            }
-            else
-            {
-                _lastNotifiedSpatialReference = gm?.SpatialReference;
-            }
+            _lastNotifiedSpatialReference = gm is Scene scene && scene.SceneViewTilingScheme == SceneViewTilingScheme.WebMercator
+                ? SpatialReferences.WebMercator
+                : gm?.SpatialReference;
 
-            if (_lastNotifiedSpatialReference == null)
-            {
-                IsValid = true;
-            }
-            else if (_lastNotifiedSpatialReference == SpatialReference)
+            if (_lastNotifiedSpatialReference == null || _lastNotifiedSpatialReference == SpatialReference)
             {
                 IsValid = true;
             }
@@ -161,7 +155,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        public SpatialReference SpatialReference
+        /// <summary>
+        /// Gets the spatial reference, if known, of the underlying basemap.
+        /// </summary>
+        public SpatialReference? SpatialReference
         {
             get => _spatialReference;
             private set
@@ -177,6 +174,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     {
                         IsValid = true;
                     }
+
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SpatialReference)));
                 }
             }
@@ -193,6 +191,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return EqualsBasemap(other.Basemap);
         }
 
+        /// <summary>
+        /// Returns true if the other basemap is equal to this item's underlying basemap.
+        /// </summary>
         public bool EqualsBasemap(Basemap? other)
         {
             if (other == null)
@@ -200,27 +201,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return false;
             }
 
-            if (other == Basemap)
-            {
-                return true;
-            }
-
-            if (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
-            {
-                return true;
-            }
-
-            if (other.Name == Basemap?.Name)
-            {
-                return true;
-            }
-
-            if (other.Uri == Basemap?.Uri)
-            {
-                return true;
-            }
-
-            return false;
+            return other == Basemap || other.Name == Basemap?.Name
+                                    || (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
+                                    || other.Uri == Basemap?.Uri;
         }
 
         /// <inheritdoc />
@@ -255,6 +238,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
+
+        #if XAMARIN_FORMS
+        private bool _isSelected;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to show item as selected. Selection property used to assist manual list selection implementation for Xamarin.Forms.
+        /// </summary>
+        /// <remarks>
+        /// Native listview selection can't be used because of many outstanding Xamarin.Forms,
+        /// specifically affecting UWP: e.g. https://github.com/xamarin/Xamarin.Forms/issues/11405, https://github.com/xamarin/Xamarin.Forms/issues/12491.
+        /// </remarks>
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (value != _isSelected)
+                {
+                    _isSelected = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+                }
+            }
+        }
+        #endif
 
         /// <summary>
         /// Gets the basemap associated with this basemap item.

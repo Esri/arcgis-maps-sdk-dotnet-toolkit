@@ -20,13 +20,9 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
-using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
@@ -40,17 +36,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     public partial class BasemapGallery
     {
         private CollectionView? _listView;
-        private CancellationTokenSource? _cancelSource;
-        private BasemapGalleryController _controller = new BasemapGalleryController();
+        private BasemapGalleryController _controller;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
+        /// </summary>
         public BasemapGallery()
         {
+            _controller = new BasemapGalleryController(this);
             ListItemTemplate = DefaultListDataTemplate;
             GridItemTemplate = DefaultGridDataTemplate;
             ControlTemplate = DefaultControlTemplate;
-            _controller.LoadFromDefaultPortal(this);
+            _ = _controller.LoadFromDefaultPortal();
         }
-
 
         private CollectionView? ListView
         {
@@ -59,17 +57,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 if (value != _listView)
                 {
-                    if (_listView != null)
-                    {
-                        _listView.SelectionChanged -= ListViewSelectionChanged;
-                    }
-
                     _listView = value;
 
                     if (_listView != null)
                     {
-                        _controller.HandleListViewChanged(this);
-                        _listView.SelectionChanged += ListViewSelectionChanged;
+                        _controller.HandleListViewChanged();
                         HandleTemplateChange(Width);
                     }
                 }
@@ -78,9 +70,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void SelectedBasemapChanged(BindableObject sender, object oldValue, object newValue)
         {
+            if (oldValue is BasemapGalleryItem oldItem)
+            {
+                oldItem.IsSelected = false;
+            }
+
             if (sender is BasemapGallery gallery)
             {
-                gallery._controller.HandleSelectedBasemapChanged(gallery);
+                gallery._controller.HandleSelectedBasemapChanged();
+            }
+
+            if (newValue is BasemapGalleryItem newItem)
+            {
+                newItem.IsSelected = true;
             }
         }
 
@@ -96,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     oldModel.PropertyChanged -= gallery.GeoModelPropertyChanged;
                 }
 
-                gallery._controller.HandleGeoModelChanged(gallery);
+                gallery._controller.HandleGeoModelChanged();
 
                 if (newValue is GeoModel newModel)
                 {
@@ -107,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void GeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            _controller.HandleGeoModelPropertyChanged(this, e.PropertyName);
+            _controller.HandleGeoModelPropertyChanged(e.PropertyName);
         }
 
         private void ListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -119,12 +121,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             if (e.CurrentSelection.Count == 0)
             {
-                _controller.HandleListViewSelectionChanged(this, -1);
+                _controller.HandleListViewSelectionChanged(null);
             }
-            else
+            else if (e.CurrentSelection.FirstOrDefault() is BasemapGalleryItem selectedItem)
             {
-                //TODO = decide if this really has to be done by index
-                _controller.HandleListViewSelectionChanged(this, AvailableBasemaps.IndexOf((BasemapGalleryItem)e.CurrentSelection.First()));
+                if (selectedItem.IsValid)
+                {
+                    _controller.HandleListViewSelectionChanged(e.CurrentSelection.FirstOrDefault() as BasemapGalleryItem);
+                }
             }
         }
 
@@ -135,7 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (sender is BasemapGallery gallery)
             {
-                _ = gallery._controller.HandlePortalChanged(gallery);
+                _ = gallery._controller.HandlePortalChanged();
             }
         }
 
@@ -148,7 +152,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     oldAvailableBasemaps.CollectionChanged -= gallery.AvailableBasemapsCollectionChanged;
                 }
 
-                gallery._controller.HandleAvailableBasemapsChanged(gallery);
+                gallery._controller.HandleAvailableBasemapsChanged();
 
                 if (newValue is ObservableCollection<BasemapGalleryItem> newAvailableBasemaps)
                 {
@@ -159,7 +163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void AvailableBasemapsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            _controller.HandleAvailableBasemapsCollectionChanged(this, e);
+            _controller.HandleAvailableBasemapsCollectionChanged(e);
         }
 
         /// <summary>
@@ -240,7 +244,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         #region Controller Callbacks
 
-        internal void SetListViewSource(IList<BasemapGalleryItem> newSource)
+        internal void SetListViewSource(IList<BasemapGalleryItem>? newSource)
         {
             if (ListView != null)
             {
@@ -253,14 +257,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (ListView != null)
             {
                 ListView.SelectedItem = item;
+                if (item != null)
+                {
+                    item.IsSelected = true;
+                }
             }
         }
 
         internal void NotifyBasemapSelected(BasemapGalleryItem item)
         {
+            item.IsSelected = true;
             BasemapSelected?.Invoke(this, item);
         }
 
+        internal void SetIsLoading(bool isLoading)
+        {
+            if (isLoading && _loadingScrim != null)
+            {
+                _loadingScrim.IsVisible = true;
+            }
+            else if (_loadingScrim != null)
+            {
+                _loadingScrim.IsVisible = false;
+            }
+        }
         #endregion Controller Callbacks
     }
 }

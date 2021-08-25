@@ -7,7 +7,7 @@
     xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-    Title="BasemapGallery - Appearance"
+    Title="BasemapGallery - Behavior"
     mc:Ignorable="d">
     <ContentPage.Content>
         <Grid BackgroundColor="{AppThemeBinding Dark=Black, Light=White}">
@@ -17,9 +17,12 @@
                 <RowDefinition Height="150" />
             </Grid.RowDefinitions>
             <esri:MapView x:Name="MyMapView" IsVisible="False" />
-            <esri:SceneView x:Name="MySceneView" IsVisible="False"/>
+            <esri:SceneView x:Name="MySceneView" IsVisible="False" />
 
-            <Grid Grid.Row="1" RowSpacing="4" ColumnSpacing="2">
+            <Grid
+                Grid.Row="1"
+                ColumnSpacing="2"
+                RowSpacing="4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -33,24 +36,74 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Label Text="Gallery View Style:" HorizontalTextAlignment="End" Grid.Column="0" />
-                <Picker x:Name="ViewStyleCombobox" Grid.Column="1" SelectedIndexChanged="ViewStyleCombobox_SelectedIndexChanged" HorizontalOptions="FillAndExpand" />
-                <Button Text="Disconnected" Clicked="Button_Disconect_View" Grid.ColumnSpan="2" Grid.Row="1" />
-                <Button Text="Switch to Map" Clicked="Button_Switch_To_Map" Grid.Column="0" Grid.Row="2" />
-                <Button Text="Switch to Scene" Clicked="Button_Switch_To_Scene" Grid.Column="1" Grid.Row="2" />
-                <Button Text="Load ArcGIS Online" Clicked="Button_Load_AGOL" Grid.Row="3" Grid.Column="0" />
-                <Button Text="Load custom Portal" Clicked="Button_Load_Portal" Grid.Row="3" Grid.Column="1" />
-                <Button Clicked="Button_Add_Last" Text="Add items" Grid.Row="4" Grid.Column="0" />
-                <Button Clicked="Button_Remove_Last" Text="Remove last item" Grid.Row="4" Grid.Column="1" />
-                <Label Text="Selection:" Grid.Row="5" Grid.Column="0" HorizontalTextAlignment="End" />
-                <Label Text="{Binding Source={x:Reference Gallery}, Path=SelectedBasemap.Name, FallbackValue='None', Mode=OneWay}" Grid.Row="5" Grid.Column="1" />
-                <Label Text="Basemap selection event last raised:" HorizontalTextAlignment="End" Grid.Row="6" Grid.Column="0" />
-                <Label x:Name="LastSelectedDateLabel" Text="Never" Grid.Row="6" Grid.Column="1" />
+                <Label
+                    Grid.Column="0"
+                    HorizontalTextAlignment="End"
+                    Text="Gallery View Style:" />
+                <Picker
+                    x:Name="ViewStyleCombobox"
+                    Grid.Column="1"
+                    HorizontalOptions="FillAndExpand"
+                    SelectedIndexChanged="ViewStyleCombobox_SelectedIndexChanged" />
+                <Button
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Clicked="Button_Disconect_View"
+                    Text="Disconnected" />
+                <Button
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Clicked="Button_Switch_To_Map"
+                    Text="Switch to Map" />
+                <Button
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Clicked="Button_Switch_To_Scene"
+                    Text="Switch to Scene" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Clicked="Button_Load_AGOL"
+                    Text="Load ArcGIS Online" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Clicked="Button_Load_Portal"
+                    Text="Load custom Portal" />
+                <Button
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Clicked="Button_Add_Last"
+                    Text="Add items" />
+                <Button
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Clicked="Button_Remove_Last"
+                    Text="Remove last item" />
+                <Label
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    HorizontalTextAlignment="End"
+                    Text="Selection:" />
+                <Label
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    Text="{Binding Source={x:Reference Gallery}, Path=SelectedBasemap.Name, FallbackValue='None', Mode=OneWay}" />
+                <Label
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    HorizontalTextAlignment="End"
+                    Text="Basemap selection event last raised:" />
+                <Label
+                    x:Name="LastSelectedDateLabel"
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    Text="Never" />
             </Grid>
 
             <toolkit:BasemapGallery
-                Grid.Row="2"
                 x:Name="Gallery"
+                Grid.Row="2"
                 BasemapSelected="Gallery_BasemapSelected" />
         </Grid>
     </ContentPage.Content>

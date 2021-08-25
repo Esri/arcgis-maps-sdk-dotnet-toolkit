@@ -28,11 +28,13 @@ using System.Windows.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [TemplatePart(Name = "PART_InnerListView", Type = typeof(ListView))]
+    [TemplatePart(Name = "PART_LoadingScrum", Type = typeof(UIElement))]
     public partial class BasemapGallery
     {
         private ListView? _listView;
         private ItemsPanelTemplate? _listTemplate;
         private ItemsPanelTemplate? _gridTemplate;
+        private UIElement? _loadingScrim;
 
         // Track currently applied style to avoid unnecessary re-styling of list view
         private BasemapGalleryViewStyle _currentlyAppliedStyle = BasemapGalleryViewStyle.Automatic;
@@ -47,10 +49,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnApplyTemplate();
 
             ListView = GetTemplateChild("PART_InnerListView") as ListView;
+            _loadingScrim = GetTemplateChild("PART_LoadingScrim") as UIElement;
 
             SetNewStyle(ActualWidth);
         }
 
+        /// <summary>
+        /// Gets or sets the style used for the container used to display items when showing basemaps in a list.
+        /// </summary>
         public Style? ListItemContainerStyle
         {
             get => GetValue(ListItemContainerStyleProperty) as Style;
