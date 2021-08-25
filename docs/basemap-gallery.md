@@ -23,9 +23,9 @@ BasemapGallery:
 
 BasemapGallery exposes the following properties:
 
-- `GeoView` - References the connected MapView or SceneView (optional).
+- `GeoModel` - References the connected Map or Scene (optional).
 - `Portal` - Controls which portal is used to find basemaps. Setting the portal will reset the basemap collection.
-- `Controller` - Underlying controller manages basemap selection and loading behavior. Can be used to access the underlying basemap collection if needed.
+- `AvailableBasemaps` - Collection of basemaps being shown.
 
 The following properties enable customization of the gallery's appearance:
 
@@ -55,7 +55,7 @@ UWP:
             Margin="4"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            GeoView="{Binding ElementName=mapView}" />
+            GeoModel="{Binding ElementName=mapView, Path=Map}" />
     </Grid>
 </Page>
 ```
@@ -77,7 +77,7 @@ WPF:
             Margin="8"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            GeoView="{Binding ElementName=MySceneView}" />
+            GeoModel="{Binding ElementName=MySceneView, Path=Scene}" />
     </Grid>
 </UserControl>
 ```
@@ -96,11 +96,10 @@ Xamarin.Forms:
             <StackLayout Margin="4"
                          HorizontalOptions="Start"
                          VerticalOptions="Start">
-                <esriTK:BasemapGallery GeoView="{Binding Source={x:Reference sceneView}}"
+                <esriTK:BasemapGallery GeoModel="{Binding Source={x:Reference sceneView}, Path=Scene}"
                                     HeightRequest="200"
                                     WidthRequest="400" />
             </StackLayout>
-
         </Grid>
     </ContentPage.Content>
 </ContentPage>
