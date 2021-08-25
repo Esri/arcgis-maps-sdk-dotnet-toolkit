@@ -241,7 +241,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 listOfBasemaps.Add(new BasemapGalleryItem(item));
             }
 
+            #if !WINDOWS_UWP && !NETCOREAPP && !NETCOREAPP3_1
             await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
+            #else
+            foreach (var item in listOfBasemaps)
+            {
+                try
+                {
+                    await item.LoadAsync();
+                }
+                catch (Exception)
+                {
+                }
+            }
+            #endif
 
             return listOfBasemaps;
         }
@@ -259,8 +272,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 listOfBasemaps.Add(new BasemapGalleryItem(basemap));
             }
 
+#if !WINDOWS_UWP && !NETCOREAPP && !NETCOREAPP3_1
             await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
-
+#else
+            foreach (var item in listOfBasemaps)
+            {
+                try
+                {
+                    await item.LoadAsync();
+                }
+                catch (Exception)
+                {
+                }
+            }
+#endif
             return listOfBasemaps;
         }
 

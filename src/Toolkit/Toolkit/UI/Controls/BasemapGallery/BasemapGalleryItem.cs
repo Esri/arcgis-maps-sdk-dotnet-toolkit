@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private string? _nameOverride;
         private bool _isLoading;
         private bool _isValid = true;
-        private readonly Task? _loadTask;
+        private bool _hasLoaded;
         private SpatialReference? _spatialReference;
         private SpatialReference? _lastNotifiedSpatialReference;
 
@@ -56,25 +56,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Initializes a new instance of the <see cref="BasemapGalleryItem"/> class.
         /// </summary>
         /// <param name="basemap">Basemap for this gallery item. Must be not null and loaded.</param>
-        public BasemapGalleryItem(Basemap basemap)
+        internal BasemapGalleryItem(Basemap basemap)
         {
             Basemap = basemap;
-            _loadTask = LoadBasemapAsync();
         }
 
         /// <summary>
-        /// Loads the basemap.
+        /// Creates an item to represent the given basemap.
         /// </summary>
-        public async Task LoadAsync()
+        public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap)
         {
-            if (_loadTask != null)
-            {
-                await _loadTask;
-            }
+            var bmgi = new BasemapGalleryItem(basemap);
+            await bmgi.LoadAsync();
+            return bmgi;
         }
 
-        private async Task LoadBasemapAsync()
+        /// <summary>
+        /// Loads the basemap and other properties.
+        /// </summary>
+        internal async Task LoadAsync()
         {
+            if (_hasLoaded)
+            {
+                return;
+            }
+
             IsLoading = true;
             try
             {
@@ -106,6 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             finally
             {
                 IsLoading = false;
+                _hasLoaded = true;
             }
         }
 

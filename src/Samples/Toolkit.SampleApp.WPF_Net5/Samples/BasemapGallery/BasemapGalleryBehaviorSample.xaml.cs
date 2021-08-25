@@ -103,20 +103,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
             SelectedGeoView = null;
         }
 
-        private void Button_Add_Last(object sender, RoutedEventArgs e)
+        private async void Button_Add_Last(object sender, RoutedEventArgs e)
         {
-            BasemapGalleryItem item = new BasemapGalleryItem(new Basemap())
-            {
-                Name = "With Thumbnail",
-                Tooltip = Guid.NewGuid().ToString(),
-                Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"))
-            };
+            BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
+            item.Name = "With Thumbnail";
+            item.Tooltip = Guid.NewGuid().ToString();
+            item.Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
             Gallery.AvailableBasemaps.Add(item);
 
-            BasemapGalleryItem item2 = new BasemapGalleryItem(new Basemap())
-            {
-                Name = "Without Thumbnail"
-            };
+            BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
+            item2.Name = "Without Thumbnail";
             Gallery.AvailableBasemaps.Add(item2);
         }
 
