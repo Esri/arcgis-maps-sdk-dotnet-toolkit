@@ -46,6 +46,10 @@
      <PackageReference Include="Esri.ArcGISRuntime" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(IsDotNetFramework)' == 'true'">
+    <Reference Include="System.Security" />
+  </ItemGroup>
+
   <ItemGroup>
      <PackageReference Include="StyleCop.Analyzers">
       <PrivateAssets>all</PrivateAssets>

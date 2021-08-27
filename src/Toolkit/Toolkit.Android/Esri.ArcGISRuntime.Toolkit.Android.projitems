@@ -9,7 +9,7 @@
     <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit.UI</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
     <AndroidResource Include="$(MSBuildThisFileDirectory)..\Toolkit\**\*.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
