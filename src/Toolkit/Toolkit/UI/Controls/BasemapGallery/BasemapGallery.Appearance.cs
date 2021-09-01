@@ -28,7 +28,7 @@ using System.Windows.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [TemplatePart(Name = "PART_InnerListView", Type = typeof(ListView))]
-    [TemplatePart(Name = "PART_LoadingScrum", Type = typeof(UIElement))]
+    [TemplatePart(Name = "PART_LoadingScrim", Type = typeof(UIElement))]
     public partial class BasemapGallery
     {
         private ListView? _listView;
