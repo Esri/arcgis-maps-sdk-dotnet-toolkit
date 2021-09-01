@@ -52,7 +52,7 @@
   </PropertyGroup>
 
   <!-- Change target to .NET 6 for Update 13, and drop net3.1 and net5 -->
-  <PropertyGroup Condition="'$(ArcGISRuntimePackageVersion)'.StartsWith('100.13.')">
+  <PropertyGroup Condition="'$(ArcGISRuntimePackageVersion).StartsWith(&quot;100.13.&quot;)'=='true'">
     <BuildDotNet6>true</BuildDotNet6>
     <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
     <NetCoreTargetFramework></NetCoreTargetFramework>
