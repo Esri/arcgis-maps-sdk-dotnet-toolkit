@@ -37,6 +37,9 @@
     <Compile Update="Samples\BookmarksViewSample.xaml.cs">
       <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Samples\OverviewMapSample.xaml.cs">
+      <DependentUpon>OverviewMapSample.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Samples\CompassSceneViewSample.xaml.cs">
       <DependentUpon>CompassSceneViewSample.xaml</DependentUpon>
     </Compile>

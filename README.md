@@ -24,6 +24,7 @@ There are two ways to add Toolkit to your project:
 - **FeatureDataField**: Displays and optionally allows editing of a single field attribute of a feature.
 - **Legend**: Displays a legend for a single layer in your map (and optionally for its sub layers).
 - **MeasureToolbar**: Allows measurement of distances and areas on the map view.
+- [**OverviewMap**](https://esri.github.io/arcgis-toolkit-dotnet/overview-map.html): Displays an interactive inset map for a map or scene.
 - **PopupViewer**: Display details and media, edit attributes, geometry and related records, and manage the attachments of features and graphics (popups are defined in the popup property of features and graphics).
 - **ScaleLine**: Displays current scale reference.
 - **SymbolDisplay**: Renders a symbol in a control.

@@ -9,6 +9,7 @@
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
