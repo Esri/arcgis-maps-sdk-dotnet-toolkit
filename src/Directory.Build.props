@@ -51,6 +51,13 @@
     <UseNugetPackage></UseNugetPackage>
   </PropertyGroup>
 
+  <!-- Change target to .NET 6 for Update 13, and drop net3.1 and net5 -->
+  <PropertyGroup Condition="'$(ArcGISRuntimePackageVersion)'.StartsWith('100.13.')">
+    <BuildDotNet6>true</BuildDotNet6>
+    <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
+    <NetCoreTargetFramework></NetCoreTargetFramework>
+  </PropertyGroup>
+
   <Choose>
     <When Condition="$(IsToolkitLibrary)" >      
       <PropertyGroup>
