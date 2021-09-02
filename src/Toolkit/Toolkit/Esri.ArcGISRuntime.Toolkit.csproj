@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework);netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework);$(NetAndroidTargetFramework);$(NetiOSTargetFramework);netstandard2.0</TargetFrameworks>
     <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP), Windows Presentation Foundation (WPF), Xamarin.Android, and Xamarin.iOS apps.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
@@ -28,14 +28,14 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTargetingAndroid)' == 'true'">
-    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.2" />
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
-    <PackageReference Include="Xamarin.Android.Support.v7.RecyclerView" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.2" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'!='true'" />
+    <PackageReference Include="Xamarin.Android.Support.v7.RecyclerView" Version="28.0.0.3" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'!='true'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsTargetingiOS)' == 'true'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="$(ArcGISRuntimePackageVersion)" />
-    <Reference Include="OpenTK-1.0, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065" />
+    <Reference Include="OpenTK-1.0" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'!='true'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseWpf)' == 'true'">
