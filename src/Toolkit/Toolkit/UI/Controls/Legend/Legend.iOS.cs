@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidateIntrinsicContentSize();
         }
 
-        private void Source_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Source_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
@@ -96,26 +96,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                for (int i = e.NewStartingIndex; i < e.NewItems.Count + e.NewStartingIndex; i++)
+                for (int i = e.NewStartingIndex; i < (e.NewItems?.Count ?? 0) + e.NewStartingIndex; i++)
                 {
                     _listView.InsertRows(new NSIndexPath[] { NSIndexPath.FromRowSection(i, 0) }, UITableViewRowAnimation.Automatic);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                for (int i = e.OldStartingIndex; i < e.OldItems.Count + e.OldStartingIndex; i++)
+                for (int i = e.OldStartingIndex; i < (e.OldItems?.Count ?? 0) + e.OldStartingIndex; i++)
                 {
                     _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(e.OldStartingIndex, 0) }, UITableViewRowAnimation.Automatic);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Replace)
             {
-                _listView.ReloadRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.Automatic);
+                _listView.ReloadRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems?.Count ?? 0).ToArray()) }, UITableViewRowAnimation.Automatic);
             }
             else if (e.Action == NotifyCollectionChangedAction.Move)
             {
-                _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.OldStartingIndex, e.OldItems.Count).ToArray()) }, UITableViewRowAnimation.None);
-                _listView.InsertRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems.Count).ToArray()) }, UITableViewRowAnimation.None);
+                _listView.DeleteRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.OldStartingIndex, e.OldItems?.Count ?? 0).ToArray()) }, UITableViewRowAnimation.None);
+                _listView.InsertRows(new NSIndexPath[] { NSIndexPath.Create(Enumerable.Range(e.NewStartingIndex, e.NewItems?.Count ?? 0).ToArray()) }, UITableViewRowAnimation.None);
             }
         }
 

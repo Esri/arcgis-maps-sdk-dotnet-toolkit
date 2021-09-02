@@ -109,8 +109,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         event EventHandler? IComponent.Disposed
         {
+#pragma warning disable CA1033 // Interface methods should be callable by child types
             add { _disposed += value; }
             remove { _disposed -= value; }
+#pragma warning restore CA1033 // Interface methods should be callable by child types
+
         }
 
         private void Refresh()
@@ -151,7 +154,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Hidden = false;
         }
 
-        private void Layer_loaded(object sender, EventArgs e)
+        private void Layer_loaded(object? sender, EventArgs e)
         {
             if (sender is ILoadable loadable)
             {

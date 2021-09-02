@@ -82,6 +82,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _listView.ReloadData();
         }
 
-        private void HandleBookmarkSelected(object sender, Bookmark bookmark) => SelectAndNavigateToBookmark(bookmark);
+        private void HandleBookmarkSelected(object? sender, Bookmark bookmark) => SelectAndNavigateToBookmark(bookmark);
     }
 }

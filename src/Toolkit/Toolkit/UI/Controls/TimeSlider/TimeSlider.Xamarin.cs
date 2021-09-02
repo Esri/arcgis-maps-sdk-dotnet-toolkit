@@ -29,6 +29,7 @@ using Android.Graphics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+#pragma warning disable CA2213 // Disposable fields should be disposed
     public partial class TimeSlider : INotifyPropertyChanged
     {
         private const string _defaultFullExtentLabelFormat = "M/d/yyyy";
@@ -681,5 +682,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
-
+#pragma warning restore CA2213 // Disposable fields should be disposed
 #endif
