@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.12.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.13.0-daily3256</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.12.0</ArcGISRuntimePackageVersion>
     <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.1874</XamarinFormsPackageVersion>
 
     <!-- Change target to .NET 6 for Update 13, and drop net3.1 and net5 -->
