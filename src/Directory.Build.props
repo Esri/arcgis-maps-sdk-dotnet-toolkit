@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.12.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.13.0-daily3256</ArcGISRuntimePackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.1874</XamarinFormsPackageVersion>
+
+    <!-- Change target to .NET 6 for Update 13, and drop net3.1 and net5 -->
+    <BuildDotNet6 Condition="$(ArcGISRuntimePackageVersion.StartsWith('100.13.'))">true</BuildDotNet6>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -35,11 +40,12 @@
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)</UWPTargetFramework>
-    <NetCoreTargetFramework>netcoreapp3.1</NetCoreTargetFramework>
-    <NetWindowsTargetFramework>net5.0-windows10.0.18362.0</NetWindowsTargetFramework>
-
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.12.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.1874</XamarinFormsPackageVersion>
+    <NetCoreTargetFramework Condition="'$(BuildDotNet6)'!='true'">netcoreapp3.1</NetCoreTargetFramework>
+    <NetWindowsTargetFramework Condition="'$(BuildDotNet6)'!='true'">net5.0-windows10.0.18362.0</NetWindowsTargetFramework>
+    <NetWindowsTargetFramework Condition="'$(BuildDotNet6)'=='true'">net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
+	<NetAndroidTargetFramework Condition="'$(BuildDotNet6)'=='true'">net6.0-android30</NetAndroidTargetFramework>
+    <NetiOSTargetFramework Condition="'$(BuildDotNet6)'=='true'">net6.0-ios13.0</NetiOSTargetFramework>
+    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Output\NuGet\$(Configuration)\</PackageOutputPath>
@@ -49,16 +55,6 @@
     <!-- Set this to a Toolkit NuGet version like '100.10.0' to have samples use nuget packages 
          instead of project references. Leave blank for project reference. -->
     <UseNugetPackage></UseNugetPackage>
-  </PropertyGroup>
-
-  <!-- Change target to .NET 6 for Update 13, and drop net3.1 and net5 -->
-  <PropertyGroup Condition="'$(ArcGISRuntimePackageVersion).StartsWith(&quot;100.13.&quot;)'=='true'">
-    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
-    <BuildDotNet6>true</BuildDotNet6>
-    <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
-    <NetCoreTargetFramework></NetCoreTargetFramework>
-	<NetAndroidTargetFramework>net6.0-android30</NetAndroidTargetFramework>
-    <NetiOSTargetFramework>net6.0-ios13.0</NetiOSTargetFramework>
   </PropertyGroup>
 
   <Choose>
