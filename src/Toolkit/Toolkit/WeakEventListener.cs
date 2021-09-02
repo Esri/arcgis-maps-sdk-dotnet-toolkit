@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        public Action<TInstance, TSource, TEventArgs>? OnEventAction { get; set; }
+        public Action<TInstance, TSource?, TEventArgs>? OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when detaching from the event.
@@ -70,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         /// <param name="source">Event source.</param>
         /// <param name="eventArgs">Event arguments.</param>
-        public void OnEvent(TSource source, TEventArgs eventArgs)
+        public void OnEvent(TSource? source, TEventArgs eventArgs)
         {
             TInstance? target = (TInstance?)_weakInstance.Target;
             if (target != null)

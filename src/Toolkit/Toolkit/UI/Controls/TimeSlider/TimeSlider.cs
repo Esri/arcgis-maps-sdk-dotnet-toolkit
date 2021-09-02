@@ -102,6 +102,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (disposing)
             {
                 _layoutTimeStepsThrottler.Dispose();
+#if __IOS__
+                SliderTrack?.Dispose();
+                MinimumThumb?.Dispose();
+                MaximumThumb?.Dispose();
+                HorizontalTrackThumb?.Dispose();
+                NextButton?.Dispose();
+                PreviousButton?.Dispose();
+                PlayPauseButton?.Dispose();
+                SliderTrackStepBackRepeater?.Dispose();
+                SliderTrackStepForwardRepeater?.Dispose();
+#endif
             }
         }
 #endif

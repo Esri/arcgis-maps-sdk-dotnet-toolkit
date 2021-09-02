@@ -174,7 +174,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if XAMARIN || XAMARIN_FORMS
-        private void GeoView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
                 (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))

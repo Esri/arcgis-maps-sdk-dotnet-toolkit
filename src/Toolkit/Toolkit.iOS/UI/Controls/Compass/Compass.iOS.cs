@@ -155,8 +155,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         event EventHandler? IComponent.Disposed
         {
+#pragma warning disable CA1033 // Interface methods should be callable by child types
             add { _disposed += value; }
             remove { _disposed -= value; }
+#pragma warning restore CA1033 // Interface methods should be callable by child types
+
         }
     }
 }
