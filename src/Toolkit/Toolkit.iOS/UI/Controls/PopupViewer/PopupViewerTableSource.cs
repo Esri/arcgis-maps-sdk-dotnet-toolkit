@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             : base()
         {
             _displayFields = displayFields?.Any() ?? false ?
-                new ReadOnlyCollection<PopupFieldValue>(displayFields?.ToList()) :
+                new ReadOnlyCollection<PopupFieldValue>(displayFields.ToList()) :
                 new ReadOnlyCollection<PopupFieldValue>(Enumerable.Empty<PopupFieldValue>().ToList());
             _foregroundColor = foregroundColor;
         }

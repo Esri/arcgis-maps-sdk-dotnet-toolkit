@@ -15,9 +15,9 @@
 //  ******************************************************************************/
 
 #if !XAMARIN
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
 using System.Globalization;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
@@ -56,6 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                         case "FailedToLoad":
                             return Visibility.Collapsed;
                     }
+
                     return true;
                 }
             }

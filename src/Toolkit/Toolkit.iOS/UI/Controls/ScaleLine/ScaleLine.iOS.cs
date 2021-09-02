@@ -211,7 +211,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidateIntrinsicContentSize();
         }
 
-        private void ScaleLine_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ScaleLine_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // Update the scale line to be the longer of the metric or imperial lines
             _combinedScaleLine.Width = _metricScaleLine.Width > _usScaleLine.Width ? _metricScaleLine.Width : _usScaleLine.Width;
@@ -292,8 +292,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         event EventHandler? IComponent.Disposed
         {
+#pragma warning disable CA1033 // Interface methods should be callable by child types
             add { _disposed += value; }
             remove { _disposed -= value; }
+#pragma warning restore CA1033 // Interface methods should be callable by child types
         }
 
         private void SetVisibility(bool isVisible)

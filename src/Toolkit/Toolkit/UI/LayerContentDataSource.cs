@@ -478,7 +478,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             System.Diagnostics.Debug.Assert(newItems.Count == _items.Count, "Entry count doesn't match");
             for (i = 0; i < newItems.Count; i++)
             {
-                System.Diagnostics.Debug.Assert(newItems[i].Content == _items[i].Content, $"Entry {i} doesn't match");
+                System.Diagnostics.Debug.Assert(newItems[i].Content == _items[i].Content, "Entry " + i + " doesn't match");
             }
 #endif
         }
