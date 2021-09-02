@@ -26,12 +26,6 @@
                     Maximum="1000"
                     Minimum="0"
                     Value="200" />
-                <Label Content="Width threshold:" />
-                <Slider
-                    x:Name="ThresholdSlider"
-                    Maximum="1000"
-                    Minimum="0"
-                    Value="400" />
                 <Label Content="Gallery View Style: " />
                 <ComboBox x:Name="ViewStyleCombobox" SelectionChanged="ViewStyleCombobox_SelectionChanged" />
                 <Button
@@ -50,8 +44,7 @@
             <controls:BasemapGallery
                 x:Name="Gallery"
                 Width="{Binding ElementName=WidthSlider, Path=Value}"
-                GeoModel="{Binding ElementName=MyMapView, Path=Map, Mode=OneWay}"
-                ViewStyleWidthThreshold="{Binding ElementName=ThresholdSlider, Path=Value}" />
+                GeoModel="{Binding ElementName=MyMapView, Path=Map, Mode=OneWay}" />
         </Border>
     </Grid>
 </UserControl>

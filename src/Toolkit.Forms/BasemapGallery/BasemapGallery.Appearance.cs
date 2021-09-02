@@ -21,6 +21,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     public partial class BasemapGallery : TemplatedView
     {
+        private const double ViewStyleWidthThreshold = 384.0;
+
         // Tracks currently-applied layout to avoid unnecessary re-styling of the view
         private int _currentSelectedSpan = 0;
         private BasemapGalleryViewStyle _currentlyAppliedViewStyle = BasemapGalleryViewStyle.Automatic;
@@ -174,15 +176,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets the width threshold to use for deciding between grid and list view when <see cref="GalleryViewStyle"/> is <see cref="BasemapGalleryViewStyle.Automatic"/>.
-        /// </summary>
-        public double ViewStyleWidthThreshold
-        {
-            get => (double)GetValue(ViewStyleWidthThresholdProperty);
-            set => SetValue(ViewStyleWidthThresholdProperty, value);
-        }
-
-        /// <summary>
         /// Identifies the <see cref="ListItemTemplate"/> bindable property.
         /// </summary>
         public static readonly BindableProperty ListItemTemplateProperty =
@@ -201,12 +194,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(GalleryViewStyle), typeof(BasemapGalleryViewStyle), typeof(BasemapGallery), BasemapGalleryViewStyle.Automatic, BindingMode.OneWay, propertyChanged: ItemTemplateChanged);
 
         /// <summary>
-        /// Identifies the <see cref="ViewStyleWidthThreshold"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty ViewStyleWidthThresholdProperty =
-            BindableProperty.Create(nameof(ViewStyleWidthThreshold), typeof(double), typeof(BasemapGallery), 384.0, BindingMode.OneWay, propertyChanged: ItemTemplateChanged);
-
-        /// <summary>
         /// Handles property changes for the bindable properties that can trigger a style or template change.
         /// </summary>
         private static void ItemTemplateChanged(BindableObject sender, object oldValue, object newValue)
@@ -221,7 +208,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <seealso cref="GridItemTemplate"/>
         /// <seealso cref="ListItemTemplate"/>
         /// <seealso cref="GalleryViewStyle"/>
-        /// <seealso cref="ViewStyleWidthThreshold"/>
         private void HandleTemplateChange(double currentWidth)
         {
             if (ListView == null)

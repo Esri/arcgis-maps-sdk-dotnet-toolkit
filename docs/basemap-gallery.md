@@ -30,7 +30,6 @@ BasemapGallery exposes the following properties:
 The following properties enable customization of the gallery's appearance:
 
 - `GalleryViewStyle` - Controls whether the gallery is displayed as a list or a grid.
-- `ViewStyleWidthThreshold` - Controls the width at which the view transitions from a list to a grid view, if the gallery view style is `Automatic`.
 - `GridItemTemplate` - Template used to display basemaps when using a grid presentation.
 - `ListItemTemplate` - Template used to display basemaps when using a list presentation.
 - `ListItemContainerStyle` - Container style used when displaying items as a list. Does not apply to Xamarin.Forms.

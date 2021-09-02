@@ -31,6 +31,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_LoadingScrim", Type = typeof(UIElement))]
     public partial class BasemapGallery
     {
+        private const double ViewStyleWidthThreshold = 440.0;
+
         private ListView? _listView;
         private ItemsPanelTemplate? _listTemplate;
         private ItemsPanelTemplate? _gridTemplate;
@@ -99,15 +101,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => SetValue(GalleryViewStyleProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the width threshold to use for deciding between grid and list views when <see cref="GalleryViewStyle"/> is <see cref="BasemapGalleryViewStyle.Automatic"/>.
-        /// </summary>
-        public double ViewStyleWidthThreshold
-        {
-            get => (double)GetValue(ViewStyleWidthThresholdProperty);
-            set => SetValue(ViewStyleWidthThresholdProperty, value);
-        }
-
         private static void OnViewLayoutPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is BasemapGallery gallery)
@@ -153,12 +146,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty GalleryViewStyleProperty =
             DependencyProperty.Register(nameof(GalleryViewStyle), typeof(BasemapGalleryViewStyle), typeof(BasemapGallery), new PropertyMetadata(BasemapGalleryViewStyle.Automatic, OnViewLayoutPropertyChanged));
-
-        /// <summary>
-        /// Identifies the <see cref="ViewStyleWidthThreshold"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ViewStyleWidthThresholdProperty =
-            DependencyProperty.Register(nameof(ViewStyleWidthThreshold), typeof(double), typeof(BasemapGallery), new PropertyMetadata(440.0, OnViewLayoutPropertyChanged));
 
         private void BasemapGallerySizeChanged(object sender, SizeChangedEventArgs e) => SetNewStyle(e.NewSize.Width);
 
