@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
     /// </remarks>
     [TemplatePart(Name = "PART_InnerListView")]
-    public partial class BasemapGallery : Control
+    public partial class BasemapGallery : Control, IBasemapGallery
     {
         private readonly BasemapGalleryController _controller;
 
@@ -230,7 +230,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public event EventHandler<BasemapGalleryItem>? BasemapSelected;
 
         #region Controller Callbacks
-        internal void SetListViewSource(IList<BasemapGalleryItem>? newSource)
+        void IBasemapGallery.SetListViewSource(IList<BasemapGalleryItem>? newSource)
         {
             if (ListView != null)
             {
@@ -238,7 +238,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        internal void SetListViewSelection(BasemapGalleryItem? item)
+        void IBasemapGallery.SetListViewSelection(BasemapGalleryItem? item)
         {
             if (ListView != null)
             {
@@ -246,12 +246,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        internal void NotifyBasemapSelected(BasemapGalleryItem item)
+        void IBasemapGallery.NotifyBasemapSelected(BasemapGalleryItem item)
         {
             BasemapSelected?.Invoke(this, item);
         }
 
-        internal void SetIsLoading(bool isLoading)
+        void IBasemapGallery.SetIsLoading(bool isLoading)
         {
             if (isLoading && _loadingScrim != null)
             {

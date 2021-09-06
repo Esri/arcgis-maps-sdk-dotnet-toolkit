@@ -14,26 +14,26 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.UI
+#if WINDOWS || XAMARIN_FORMS
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Portal;
+using System.Collections.Generic;
+
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The view style of a basemap gallery.
-    /// </summary>
-    public enum BasemapGalleryViewStyle
+    internal interface IBasemapGallery
     {
-        /// <summary>
-        /// Display a grid when there is enough width to support that, otherwise display a list.
-        /// </summary>
-        Automatic = 0,
+        public GeoModel? GeoModel {get; set;}
+        public BasemapGalleryItem? SelectedBasemap { get; set;}
+        public IList<BasemapGalleryItem>? AvailableBasemaps { get; set; }
+        public ArcGISPortal? Portal { get; set; }
+        internal void SetListViewSource(IList<BasemapGalleryItem>? newSource);
 
-        /// <summary>
-        /// Always display a grid.
-        /// </summary>
-        Grid = 1,
+        internal void SetListViewSelection(BasemapGalleryItem? item);
 
-        /// <summary>
-        /// Always display a list.
-        /// </summary>
-        List = 2,
+        internal void NotifyBasemapSelected(BasemapGalleryItem item);
+
+        internal void SetIsLoading(bool isLoading);
     }
 }
+#endif

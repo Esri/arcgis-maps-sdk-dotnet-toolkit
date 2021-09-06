@@ -22,19 +22,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
-#else
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
-#endif
+namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     internal class BasemapGalleryController
     {
         private bool _ignoreEventsFlag;
-        private BasemapGallery _gallery;
+        private IBasemapGallery _gallery;
 
-        public BasemapGalleryController(BasemapGallery gallery)
+        public BasemapGalleryController(IBasemapGallery gallery)
         {
             _gallery = gallery;
         }

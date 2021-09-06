@@ -62,6 +62,7 @@
     <Compile Include="UI\Controls\TimeSlider\TimeSliderLabelMode.cs" />
     <Compile Include="UI\Controls\Legend\LegendEntry.cs" />
     <Compile Include="UI\ILayerContentItem.cs" />
+    <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryViewStyle.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,7 +13,6 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +21,8 @@ using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
+using Esri.ArcGISRuntime.Toolkit.UI;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -33,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
     /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
     /// </remarks>
-    public partial class BasemapGallery
+    public partial class BasemapGallery : IBasemapGallery
     {
         private CollectionView? _listView;
         private BasemapGalleryController _controller;
@@ -244,7 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         #region Controller Callbacks
 
-        internal void SetListViewSource(IList<BasemapGalleryItem>? newSource)
+        void IBasemapGallery.SetListViewSource(IList<BasemapGalleryItem>? newSource)
         {
             if (ListView != null)
             {
@@ -252,7 +253,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
         }
 
-        internal void SetListViewSelection(BasemapGalleryItem? item)
+        void IBasemapGallery.SetListViewSelection(BasemapGalleryItem? item)
         {
             if (ListView != null)
             {
@@ -264,13 +265,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
         }
 
-        internal void NotifyBasemapSelected(BasemapGalleryItem item)
+        void IBasemapGallery.NotifyBasemapSelected(BasemapGalleryItem item)
         {
             item.IsSelected = true;
             BasemapSelected?.Invoke(this, item);
         }
 
-        internal void SetIsLoading(bool isLoading)
+        void IBasemapGallery.SetIsLoading(bool isLoading)
         {
             if (isLoading && _loadingScrim != null)
             {

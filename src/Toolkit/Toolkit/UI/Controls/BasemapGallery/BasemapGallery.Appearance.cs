@@ -31,7 +31,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_LoadingScrim", Type = typeof(UIElement))]
     public partial class BasemapGallery
     {
+        #if WINDOWS_UWP
+        private const double ViewStyleWidthThreshold = 386.0;
+        #else
         private const double ViewStyleWidthThreshold = 440.0;
+        #endif
 
         private ListView? _listView;
         private ItemsPanelTemplate? _listTemplate;

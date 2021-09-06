@@ -61,7 +61,7 @@
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BookmarksView\BookmarksViewDataSource.cs" Link="BookmarksView\BookmarksViewDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryController.cs" Link="BasemapGallery\BasemapGalleryController.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryItem.cs" Link="BasemapGallery\BasemapGalleryItem.cs" />
-    <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\BasemapGalleryViewStyle.cs" Link="BasemapGallery\BasemapGalleryViewStyle.cs" />
+    <Compile Include="..\Toolkit\Toolkit\UI\Controls\BasemapGallery\IBasemapGallery.cs" Link="BasemapGallery\IBasemapGallery.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\OverviewMap\OverviewMapController.cs" Link="OverviewMap\OverviewMapController.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="LayerContentDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />

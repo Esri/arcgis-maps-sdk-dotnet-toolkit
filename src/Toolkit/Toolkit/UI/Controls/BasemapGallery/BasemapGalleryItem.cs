@@ -13,27 +13,30 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
+#if WINDOWS || XAMARIN_FORMS
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
 
 #if XAMARIN_FORMS
+using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
+using ImageSource = Xamarin.Forms.ImageSource;
+using RuntimeImage = Esri.ArcGISRuntime.UI.RuntimeImage;
 #elif NETFX_CORE
 using Windows.UI.Xaml.Media;
+using ImageSource = Windows.UI.Xaml.Media.ImageSource;
+using Esri.ArcGISRuntime.UI;
 #elif NETFRAMEWORK || NETCOREAPP
 using System.Windows.Media;
+using ImageSource = System.Windows.Media.ImageSource;
+using Esri.ArcGISRuntime.UI;
 #endif
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
-#else
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
-#endif
+namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
     /// Encompasses an element in a basemap gallery.
@@ -41,9 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
     {
         private RuntimeImage? _thumbnailOverride;
-#if XAMARIN_FORMS || (!__IOS__ && !__ANDROID__)
         private ImageSource? _thumbnailImageSource;
-#endif
         private string? _tooltipOverride;
         private string? _nameOverride;
         private bool _isLoading;
@@ -128,11 +129,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 if (Thumbnail != null)
                 {
-#if XAMARIN_FORMS
-                    ThumbnailImageSource = await Esri.ArcGISRuntime.Xamarin.Forms.RuntimeImageExtensions.ToImageSourceAsync(Thumbnail);
-#elif !__IOS__ && !__ANDROID__
                     ThumbnailImageSource = await Thumbnail.ToImageSourceAsync();
-#endif
                 }
             }
             catch (Exception)
@@ -301,7 +298,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#if XAMARIN_FORMS || (!__IOS__ && !__ANDROID__)
         /// <summary>
         /// Gets the thumbnail in a format that is easily displayable in a view.
         /// </summary>
@@ -314,7 +310,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ThumbnailImageSource)));
             }
         }
-#endif
 
         /// <summary>
         /// Gets or sets the tooltip to display for this basemap item.
@@ -381,3 +376,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
+#endif
