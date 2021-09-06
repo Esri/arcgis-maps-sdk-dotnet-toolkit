@@ -176,7 +176,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets or sets the portal used to populate the basemap list.
         /// </summary>
-        public ArcGISPortal Portal
+        public ArcGISPortal? Portal
         {
             get => (ArcGISPortal)GetValue(PortalProperty);
             set => SetValue(PortalProperty, value);
