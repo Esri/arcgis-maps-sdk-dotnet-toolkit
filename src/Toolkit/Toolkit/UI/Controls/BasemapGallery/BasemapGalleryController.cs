@@ -83,9 +83,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 else if (_gallery.AvailableBasemaps?.FirstOrDefault(bmgi => bmgi.EqualsBasemap(inputBasemap)) is BasemapGalleryItem selectedItem)
                 {
                     _gallery.SelectedBasemap = selectedItem;
-                    #if XAMARIN_FORMS
-                    selectedItem.IsSelected = true;
-                    #endif
                 }
                 else
                 {

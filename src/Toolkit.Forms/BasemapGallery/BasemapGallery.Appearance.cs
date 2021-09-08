@@ -40,16 +40,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             OpacityConverter = new BoolToOpacityConverter();
 
-            tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.NumberOfTapsRequired = 1;
-            tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
-
             DefaultGridDataTemplate = new DataTemplate(() =>
             {
                 Grid outerScrimContainer = new Grid();
                 outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = 128 });
-
-                Grid selectionBackground = new Grid { BackgroundColor = Color.Accent };
 
                 StackLayout parentLayout = new StackLayout() { Orientation = StackOrientation.Vertical };
                 parentLayout.Padding = new Thickness(8);
@@ -67,14 +61,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
                 parentLayout.Children.Add(scrimGrid);
 
-                outerScrimContainer.Children.Add(selectionBackground);
                 outerScrimContainer.Children.Add(parentLayout);
                 outerScrimContainer.Children.Add(scrimGrid);
 
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
+                //thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
-                selectionBackground.SetBinding(IsVisibleProperty, nameof(BasemapGalleryItem.IsSelected));
 
                 outerScrimContainer.GestureRecognizers.Add(tapGestureRecognizer);
 
@@ -88,8 +80,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(72) });
                 parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
 
-                Grid selectionBackground = new Grid { BackgroundColor = Color.Accent };
-
                 Grid imageContainer = new Grid();
                 Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
                 fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
@@ -98,9 +88,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 imageContainer.Children.Add(fallback);
                 imageContainer.Children.Add(thumbnail);
 
-                selectionBackground.SetValue(Grid.ColumnSpanProperty, 3);
-
-                parentLayout.Children.Add(selectionBackground);
                 parentLayout.Children.Add(imageContainer);
                 parentLayout.Children.Add(nameLabel);
 
@@ -111,10 +98,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 imageContainer.SetValue(Grid.ColumnProperty, 1);
                 nameLabel.SetValue(Grid.ColumnProperty, 2);
 
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
+                //thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
-                selectionBackground.SetBinding(IsVisibleProperty, nameof(BasemapGalleryItem.IsSelected));
 
                 parentLayout.GestureRecognizers.Add(tapGestureRecognizer);
 
@@ -123,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
                                     <Grid>
-                                        <CollectionView x:Name=""PART_InnerListView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" SelectionMode=""None"" />
+                                        <CollectionView x:Name=""PART_InnerListView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" SelectionMode=""Single"" />
                                         <ActivityIndicator x:Name=""PART_LoadingScrim"" IsRunning=""True"" HorizontalOptions=""Center"" VerticalOptions=""Center"" />
                                     </Grid>
                                 </ControlTemplate>";
@@ -256,16 +242,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
                 _currentSelectedSpan = gridSpanAfterUpdate;
                 _currentlyAppliedViewStyle = styleAfterUpdate;
-            }
-        }
-
-        private static void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
-        {
-            if (sender is View sendingView && sendingView.BindingContext is BasemapGalleryItem bmgi
-                && !bmgi.IsSelected && bmgi.IsValid
-                && sendingView.Parent.BindingContext is BasemapGalleryController controller)
-            {
-                controller.HandleListViewSelectionChanged(bmgi);
             }
         }
 

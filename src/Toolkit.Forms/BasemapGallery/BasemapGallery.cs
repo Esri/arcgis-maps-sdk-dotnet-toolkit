@@ -58,11 +58,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 if (value != _listView)
                 {
+                    if (_listView != null)
+                    {
+                        _listView.SelectionChanged -= ListViewSelectionChanged;
+                    }
+
                     _listView = value;
 
                     if (_listView != null)
                     {
                         _controller.HandleListViewChanged();
+                        _listView.SelectionChanged += ListViewSelectionChanged;
                         HandleTemplateChange(Width);
                     }
                 }
@@ -71,19 +77,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static void SelectedBasemapChanged(BindableObject sender, object oldValue, object newValue)
         {
-            if (oldValue is BasemapGalleryItem oldItem)
-            {
-                oldItem.IsSelected = false;
-            }
-
             if (sender is BasemapGallery gallery)
             {
                 gallery._controller.HandleSelectedBasemapChanged();
-            }
-
-            if (newValue is BasemapGalleryItem newItem)
-            {
-                newItem.IsSelected = true;
             }
         }
 
@@ -258,16 +254,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (ListView != null)
             {
                 ListView.SelectedItem = item;
-                if (item != null)
-                {
-                    item.IsSelected = true;
-                }
             }
         }
 
         void IBasemapGallery.NotifyBasemapSelected(BasemapGalleryItem item)
         {
-            item.IsSelected = true;
             BasemapSelected?.Invoke(this, item);
         }
 

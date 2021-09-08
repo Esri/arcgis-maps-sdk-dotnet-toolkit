@@ -13,29 +13,16 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-#if WINDOWS || XAMARIN_FORMS
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-
-#if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Xamarin.Forms;
-using Xamarin.Forms;
-using ImageSource = Xamarin.Forms.ImageSource;
-using RuntimeImage = Esri.ArcGISRuntime.UI.RuntimeImage;
-#elif NETFX_CORE
-using Windows.UI.Xaml.Media;
-using ImageSource = Windows.UI.Xaml.Media.ImageSource;
 using Esri.ArcGISRuntime.UI;
-#elif NETFRAMEWORK || NETCOREAPP
-using System.Windows.Media;
-using ImageSource = System.Windows.Media.ImageSource;
-using Esri.ArcGISRuntime.UI;
-#endif
 
+[assembly: InternalsVisibleTo("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms")]
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
@@ -44,7 +31,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     public class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
     {
         private RuntimeImage? _thumbnailOverride;
-        private ImageSource? _thumbnailImageSource;
         private string? _tooltipOverride;
         private string? _nameOverride;
         private bool _isLoading;
@@ -126,11 +112,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     await Thumbnail.RetryLoadAsync();
                 }
-
-                if (Thumbnail != null)
-                {
-                    ThumbnailImageSource = await Thumbnail.ToImageSourceAsync();
-                }
             }
             catch (Exception)
             {
@@ -198,7 +179,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Returns true if the other basemap is equal to this item's underlying basemap.
         /// </summary>
-        public bool EqualsBasemap(Basemap? other)
+        internal bool EqualsBasemap(Basemap? other)
         {
             if (other == null)
             {
@@ -243,30 +224,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        #if XAMARIN_FORMS
-        private bool _isSelected;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to show item as selected. Selection property used to assist manual list selection implementation for Xamarin.Forms.
-        /// </summary>
-        /// <remarks>
-        /// Native listview selection can't be used because of many outstanding Xamarin.Forms,
-        /// specifically affecting UWP: e.g. https://github.com/xamarin/Xamarin.Forms/issues/11405, https://github.com/xamarin/Xamarin.Forms/issues/12491.
-        /// </remarks>
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                if (value != _isSelected)
-                {
-                    _isSelected = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
-                }
-            }
-        }
-        #endif
-
         /// <summary>
         /// Gets the basemap associated with this basemap item.
         /// </summary>
@@ -295,19 +252,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Thumbnail)));
                     _ = LoadImage();
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets the thumbnail in a format that is easily displayable in a view.
-        /// </summary>
-        public ImageSource? ThumbnailImageSource
-        {
-            get => _thumbnailImageSource;
-            private set
-            {
-                _thumbnailImageSource = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ThumbnailImageSource)));
             }
         }
 
@@ -376,4 +320,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
-#endif
