@@ -155,7 +155,7 @@
                                     Width="62"
                                     Height="62"
                                     Opacity="1"
-                                    Source="{Binding ThumbnailImageSource, Mode=OneWay}"
+                                    Source="{Binding ThumbnailBitmap, Mode=OneWay}"
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>
@@ -200,7 +200,7 @@
                                 <Image
                                     Width="62"
                                     Height="62"
-                                    Source="{Binding ThumbnailImageSource, Mode=OneWay}"
+                                    Source="{Binding ThumbnailBitmap, Mode=OneWay}"
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>

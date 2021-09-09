@@ -21,6 +21,9 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
+#if WINDOWS_UWP
+using Windows.UI.Xaml.Media;
+#endif
 
 [assembly: InternalsVisibleTo("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms")]
 namespace Esri.ArcGISRuntime.Toolkit.UI
@@ -30,6 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     public class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
     {
+        private byte[]? _thumbnailData;
         private RuntimeImage? _thumbnailOverride;
         private string? _tooltipOverride;
         private string? _nameOverride;
@@ -112,6 +116,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     await Thumbnail.RetryLoadAsync();
                 }
+
+                if (Thumbnail != null && Thumbnail.LoadStatus == LoadStatus.Loaded)
+                {
+                    var stream = await Thumbnail.GetEncodedBufferAsync();
+                    var buffer = new byte[stream.Length];
+                    await stream.ReadAsync(buffer, 0, (int)stream.Length);
+                    ThumbnailData = buffer;
+                    #if WINDOWS_UWP
+                    await LoadBitmapForThumbnailAsync();
+                    #endif
+                }
             }
             catch (Exception)
             {
@@ -164,6 +179,40 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
             }
         }
+
+        public byte[] ThumbnailData
+        {
+            get => _thumbnailData;
+            set
+            {
+                if (value != _thumbnailData)
+                {
+                    _thumbnailData = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ThumbnailData)));
+                }
+            }
+        }
+
+        #if WINDOWS_UWP
+        private async Task LoadBitmapForThumbnailAsync()
+        {
+            ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();
+        }
+
+        private ImageSource _thumbnailBitmap;
+        public ImageSource ThumbnailBitmap
+        {
+            get => _thumbnailBitmap;
+            set
+            {
+                if (value != _thumbnailBitmap)
+                {
+                    _thumbnailBitmap = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ThumbnailBitmap)));
+                }
+            }
+        }
+#endif
 
         /// <inheritdoc />
         public bool Equals(BasemapGalleryItem? other)

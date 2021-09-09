@@ -136,7 +136,7 @@
                                 <Image
                                     Width="62"
                                     Height="62"
-                                    Source="{Binding ThumbnailImageSource, Mode=OneWay}"
+                                    Source="{Binding ThumbnailData, Mode=OneWay}"
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>
@@ -187,7 +187,7 @@
                                     x:Name="ImageThumb"
                                     Width="62"
                                     Height="62"
-                                    Source="{Binding ThumbnailImageSource, Mode=OneWay}"
+                                    Source="{Binding ThumbnailData, Mode=OneWay}"
                                     Stretch="UniformToFill" />
                             </Grid>
                         </Border>

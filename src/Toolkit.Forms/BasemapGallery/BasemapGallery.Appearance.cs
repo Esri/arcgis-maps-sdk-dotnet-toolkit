@@ -33,12 +33,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private static readonly DataTemplate DefaultGridDataTemplate;
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly BoolToOpacityConverter OpacityConverter;
-
-        private static readonly TapGestureRecognizer tapGestureRecognizer;
+        private static readonly StreamToImageSourceConverter StreamSourceConverter;
 
         static BasemapGallery()
         {
             OpacityConverter = new BoolToOpacityConverter();
+            StreamSourceConverter = new StreamToImageSourceConverter();
 
             DefaultGridDataTemplate = new DataTemplate(() =>
             {
@@ -64,11 +64,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 outerScrimContainer.Children.Add(parentLayout);
                 outerScrimContainer.Children.Add(scrimGrid);
 
-                //thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
+                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: StreamSourceConverter);
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
-
-                outerScrimContainer.GestureRecognizers.Add(tapGestureRecognizer);
 
                 return outerScrimContainer;
             });
@@ -98,11 +96,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 imageContainer.SetValue(Grid.ColumnProperty, 1);
                 nameLabel.SetValue(Grid.ColumnProperty, 2);
 
-                //thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailImageSource));
+                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: StreamSourceConverter);
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
-
-                parentLayout.GestureRecognizers.Add(tapGestureRecognizer);
 
                 return parentLayout;
             });
