@@ -5,21 +5,23 @@
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#6e6e6e" />
-            <SolidColorBrush x:Key="ItemTextForegroundSelected" Color="#323232" />
-            <SolidColorBrush x:Key="SelectionRectangleBorderBrush" Color="#0079c1" />
+            <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#6a6a6a" />
+            <SolidColorBrush x:Key="ItemTextForegroundSelected" Color="#151515" />
+            <SolidColorBrush x:Key="SelectionRectangleBorderBrush" Color="#007ac2" />
             <SolidColorBrush x:Key="SelectionRectangleBackgroundBrush" Color="#e2f1fb" />
             <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#f3f3f3" />
             <SolidColorBrush x:Key="ControlBackground" Color="#fff" />
+            <SolidColorBrush x:Key="ControlBorder" Color="#cacaca" />
             <BitmapImage x:Key="BasemapPlaceholder" UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/BasemapLight.png" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#adadad" />
-            <SolidColorBrush x:Key="ItemTextForegroundSelected" Color="#d1d1d1" />
-            <SolidColorBrush x:Key="SelectionRectangleBorderBrush" Color="#fff" />
-            <SolidColorBrush x:Key="SelectionRectangleBackgroundBrush" Color="#000" />
-            <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#303030" />
-            <SolidColorBrush x:Key="ControlBackground" Color="#242424" />
+            <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#ffffff" />
+            <SolidColorBrush x:Key="ItemTextForegroundSelected" Color="#ffffff" />
+            <SolidColorBrush x:Key="SelectionRectangleBorderBrush" Color="#009af2" />
+            <SolidColorBrush x:Key="SelectionRectangleBackgroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#2B2B2B" />
+            <SolidColorBrush x:Key="ControlBackground" Color="#353535" />
+            <SolidColorBrush x:Key="ControlBorder" Color="#555555" />
             <BitmapImage x:Key="BasemapPlaceholder" UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/BasemapDark.png" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
@@ -219,40 +221,49 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{ThemeResource ControlBorder}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:BasemapGallery">
-                    <Grid>
-                        <basemapgallery:UWPCustomListView
-                            x:Name="PART_InnerListView"
-                            Width="{TemplateBinding Width}"
-                            Height="{TemplateBinding Height}"
-                            Padding="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                            HorizontalContentAlignment="Stretch"
-                            Background="{TemplateBinding Background}"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            <ListView.Resources>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                </Style>
-                            </ListView.Resources>
-                        </basemapgallery:UWPCustomListView>
-                        <Border
-                            x:Name="PART_LoadingScrim"
-                            Padding="8"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Background="{TemplateBinding Background}"
-                            Opacity="0.3">
-                            <ProgressBar
-                                Height="16"
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <basemapgallery:UWPCustomListView
+                                x:Name="PART_InnerListView"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Padding="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                HorizontalContentAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListView.Resources>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.Resources>
+                            </basemapgallery:UWPCustomListView>
+                            <Border
+                                x:Name="PART_LoadingScrim"
                                 HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                IsIndeterminate="True" />
-                        </Border>
-                    </Grid>
+                                VerticalAlignment="Stretch">
+                                <Grid>
+                                    <Border Background="{TemplateBinding Background}" Opacity="0.3" />
+
+                                    <ProgressBar
+                                        Height="16"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Center"
+                                        IsIndeterminate="True" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
