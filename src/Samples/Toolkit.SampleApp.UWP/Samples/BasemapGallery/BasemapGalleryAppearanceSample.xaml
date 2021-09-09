@@ -22,7 +22,7 @@
             Padding="8"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Background="White">
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <StackPanel>
                 <TextBlock Text="Control Width:" />
                 <Slider

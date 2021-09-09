@@ -2,7 +2,6 @@
     x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp"
-    RequestedTheme="Light">
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp">
 
 </Application>
