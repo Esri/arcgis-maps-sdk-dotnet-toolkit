@@ -21,9 +21,11 @@ using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    internal class StreamToImageSourceConverter : IValueConverter
+    internal class ByteArrayToImageSourceConverter : IValueConverter
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// Converts a byte array to an image source for display in Xamarin.Forms.
+        /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is byte[] rawBuffer)

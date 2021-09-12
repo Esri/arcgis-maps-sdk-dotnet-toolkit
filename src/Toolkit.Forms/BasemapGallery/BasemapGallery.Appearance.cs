@@ -33,12 +33,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private static readonly DataTemplate DefaultGridDataTemplate;
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly BoolToOpacityConverter OpacityConverter;
-        private static readonly StreamToImageSourceConverter StreamSourceConverter;
+        private static readonly ByteArrayToImageSourceConverter ImageSourceConverter;
 
         static BasemapGallery()
         {
             OpacityConverter = new BoolToOpacityConverter();
-            StreamSourceConverter = new StreamToImageSourceConverter();
+            ImageSourceConverter = new ByteArrayToImageSourceConverter();
 
             DefaultGridDataTemplate = new DataTemplate(() =>
             {
@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 outerScrimContainer.Children.Add(parentLayout);
                 outerScrimContainer.Children.Add(scrimGrid);
 
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: StreamSourceConverter);
+                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
 
@@ -96,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 imageContainer.SetValue(Grid.ColumnProperty, 1);
                 nameLabel.SetValue(Grid.ColumnProperty, 2);
 
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: StreamSourceConverter);
+                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
 
