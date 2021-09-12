@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Data;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// Custom ListView implementation enables disabling listview selection for disabled items.
+    /// Custom ListView implementation disables listview selection for disabled items.
     /// </summary>
     internal class UWPCustomListView : ListView
     {

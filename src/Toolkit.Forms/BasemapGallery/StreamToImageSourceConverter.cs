@@ -21,7 +21,7 @@ using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    internal class StreamToImageSourceConverter: IValueConverter
+    internal class StreamToImageSourceConverter : IValueConverter
     {
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

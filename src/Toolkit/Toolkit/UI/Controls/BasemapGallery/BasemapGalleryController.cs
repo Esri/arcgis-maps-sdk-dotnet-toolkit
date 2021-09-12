@@ -13,7 +13,6 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-#if WINDOWS || XAMARIN_FORMS
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -298,4 +297,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
     }
 }
-#endif

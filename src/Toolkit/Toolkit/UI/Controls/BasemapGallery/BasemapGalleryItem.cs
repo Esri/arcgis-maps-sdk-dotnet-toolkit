@@ -15,7 +15,7 @@
 //  ******************************************************************************/
 using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -25,7 +25,6 @@ using Esri.ArcGISRuntime.UI;
 using Windows.UI.Xaml.Media;
 #endif
 
-[assembly: InternalsVisibleTo("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms")]
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
@@ -58,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public static async Task<BasemapGalleryItem> CreateAsync(Basemap basemap)
         {
             var bmgi = new BasemapGalleryItem(basemap);
-            await bmgi.LoadAsync();
+            await bmgi.LoadAsync().ConfigureAwait(false);
             return bmgi;
         }
 
@@ -124,7 +123,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     await stream.ReadAsync(buffer, 0, (int)stream.Length);
                     ThumbnailData = buffer;
                     #if WINDOWS_UWP
-                    await LoadBitmapForThumbnailAsync();
+                    ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();
                     #endif
                 }
             }
@@ -180,10 +179,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public byte[] ThumbnailData
+        /// <summary>
+        /// Gets thumbnail as a byte array.
+        /// </summary>
+        public byte[]? ThumbnailData
         {
             get => _thumbnailData;
-            set
+            private set
             {
                 if (value != _thumbnailData)
                 {
@@ -194,16 +196,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         #if WINDOWS_UWP
-        private async Task LoadBitmapForThumbnailAsync()
-        {
-            ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();
-        }
+        private ImageSource? _thumbnailBitmap;
 
-        private ImageSource _thumbnailBitmap;
-        public ImageSource ThumbnailBitmap
+        /// <summary>
+        /// Gets the thumbnail as an ImageSource for convenient use from UWP.
+        /// </summary>
+        public ImageSource? ThumbnailBitmap
         {
             get => _thumbnailBitmap;
-            set
+            private set
             {
                 if (value != _thumbnailBitmap)
                 {
@@ -307,6 +308,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets or sets the tooltip to display for this basemap item.
         /// </summary>
+        [AllowNull]
         public string Tooltip
         {
             get

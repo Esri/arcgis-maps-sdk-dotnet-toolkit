@@ -14,19 +14,27 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WINDOWS || XAMARIN_FORMS
+using System.Collections.Generic;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
-using System.Collections.Generic;
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms")]
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// Internal interface enables code sharing for <see cref="BasemapGalleryController" /> with Forms- and Windows-specific BasemapGallery implementations.
+    /// </summary>
     internal interface IBasemapGallery
     {
-        public GeoModel? GeoModel {get; set;}
-        public BasemapGalleryItem? SelectedBasemap { get; set;}
+        public GeoModel? GeoModel { get; set; }
+
+        public BasemapGalleryItem? SelectedBasemap { get; set; }
+
         public IList<BasemapGalleryItem>? AvailableBasemaps { get; set; }
+
         public ArcGISPortal? Portal { get; set; }
+
         internal void SetListViewSource(IList<BasemapGalleryItem>? newSource);
 
         internal void SetListViewSelection(BasemapGalleryItem? item);
@@ -36,4 +44,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         internal void SetIsLoading(bool isLoading);
     }
 }
-#endif
