@@ -106,7 +106,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
                                     <Grid>
                                         <CollectionView x:Name=""PART_InnerListView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" SelectionMode=""Single"" />
-                                        <ActivityIndicator x:Name=""PART_LoadingScrim"" IsRunning=""True"" HorizontalOptions=""Center"" VerticalOptions=""Center"" />
+                                        <Grid x:Name=""PART_LoadingScrim"">
+                                            <Grid BackgroundColor=""{AppThemeBinding Light=White, Dark=Black}"" Opacity=""0.3"" />
+                                            <ActivityIndicator IsRunning=""True"" HorizontalOptions=""Center"" VerticalOptions=""Center"" />
+                                        </Grid>
                                     </Grid>
                                 </ControlTemplate>";
             DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);

@@ -7,7 +7,7 @@ Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
 
 ### BasemapGallery
 
-BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defined portal, or a custom collection. When a basemap is selected from the gallery, the basemap used in the connected GeoView is replaced.
+BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defined portal, or a custom collection. When a basemap is selected from the gallery, the basemap used in the connected GeoModel is replaced.
 
 ![BasemapGallery List View](https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png)
 

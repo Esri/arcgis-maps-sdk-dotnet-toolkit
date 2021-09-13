@@ -39,7 +39,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
     /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
     /// </remarks>
-    [TemplatePart(Name = "PART_InnerListView")]
     public partial class BasemapGallery : Control, IBasemapGallery
     {
         private readonly BasemapGalleryController _controller;

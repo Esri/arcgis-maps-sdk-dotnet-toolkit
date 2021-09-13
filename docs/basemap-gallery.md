@@ -1,10 +1,10 @@
 # BasemapGallery
 
-BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defined portal, or a custom collection. When a basemap is selected from the gallery, the basemap used in the connected GeoView is replaced.
+BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defined portal, or a custom collection. When a basemap is selected from the gallery, the basemap used in the connected GeoModel is replaced.
 
 ![BasemapGallery List View](https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png)
 
-![BasemapGallery Column View](https://user-images.githubusercontent.com/29742178/124198175-ff60bc00-da84-11eb-9a41-6b85a6ed89fd.png)
+![BasemapGallery Grid View](https://user-images.githubusercontent.com/29742178/124198175-ff60bc00-da84-11eb-9a41-6b85a6ed89fd.png)
 
 > **NOTE**: BasemapGallery uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
 
@@ -13,8 +13,9 @@ BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defi
 BasemapGallery:
 
 - Can be configured to use a list, grid, or automatic layout. When using an automatic layout, list or grid presentation is chosen based on a defined width threshold.
+    - Note: Grid layout is not supported on Xamarin.Forms UWP. Regardless of settings, the list layout will always be used.
 - Shows basemaps from a portal, and allows manually adding and removing basemaps from the collection.
-- Shows a representation of the map or scene's current basemap if that basemap doesn't exist in the gallery.
+- Shows a representation of the map or scene's current basemap if that basemap exists in the gallery.
 - Shows a name and thumbnail for each basemap.
 - Shows a tooltip on hover on WPF and UWP.
 - Supports templating.

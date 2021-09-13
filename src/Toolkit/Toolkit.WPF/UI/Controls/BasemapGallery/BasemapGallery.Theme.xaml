@@ -13,6 +13,7 @@
     <Style x:Key="BaseContainerStyle" TargetType="ListViewItem">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="Foreground" Value="{StaticResource ItemTextForegroundUnselected}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderThickness" Value="3,0,0,0" />
@@ -228,6 +229,7 @@
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ListView.Resources>
                                     <Style TargetType="ListViewItem">
+                                        <Setter Property="VerticalContentAlignment" Value="Top" />
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                     </Style>
                                 </ListView.Resources>

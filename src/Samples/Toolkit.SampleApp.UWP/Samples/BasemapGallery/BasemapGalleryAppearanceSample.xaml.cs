@@ -1,6 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
 using System.Linq;
 using Windows.UI.Xaml;
@@ -35,6 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
                     break;
             }
         }
+
         private async void Button_Add_Last(object sender, RoutedEventArgs e)
         {
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());

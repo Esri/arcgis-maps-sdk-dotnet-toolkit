@@ -62,7 +62,6 @@
     <Compile Include="..\Toolkit\Toolkit\UI\Controls\OverviewMap\OverviewMapController.cs" Link="OverviewMap\OverviewMapController.cs" />
     <Compile Include="..\Toolkit\Toolkit\UI\LayerContentDataSource.cs" Link="LayerContentDataSource.cs" />
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
-    <Compile Include="..\Toolkit\Toolkit\Internal\StringExtensions.cs" Link="StringExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Nullable)'=='annotations'">

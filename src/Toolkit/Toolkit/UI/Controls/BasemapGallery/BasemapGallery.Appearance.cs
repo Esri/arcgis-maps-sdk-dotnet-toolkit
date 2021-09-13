@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class BasemapGallery
     {
         #if WINDOWS_UWP
-        private const double ViewStyleWidthThreshold = 386.0;
+        private const double ViewStyleWidthThreshold = 398.0;
         #else
         private const double ViewStyleWidthThreshold = 440.0;
         #endif

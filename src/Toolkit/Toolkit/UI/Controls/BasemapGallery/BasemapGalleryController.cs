@@ -27,41 +27,49 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     internal class BasemapGalleryController
     {
-        private bool _ignoreEventsFlag;
         private IBasemapGallery _gallery;
+        private bool _ignoreEventsFlag;
 
         public BasemapGalleryController(IBasemapGallery gallery)
         {
             _gallery = gallery;
         }
 
-        public void HandleSelectedBasemapChanged()
+        public void HandleAvailableBasemapsChanged()
         {
+            _ignoreEventsFlag = true;
+
             try
             {
-                // Stop listening to list events
-                _ignoreEventsFlag = true;
+                // Update validity
+                _gallery.AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(_gallery.GeoModel));
 
-                _gallery.SetListViewSelection(_gallery.SelectedBasemap);
+                // Show new items in UI
+                _gallery.SetListViewSource(_gallery.AvailableBasemaps);
 
-                if (_gallery.GeoModel != null && (!_gallery.SelectedBasemap?.EqualsBasemap(_gallery.GeoModel.Basemap) ?? true))
-                {
-                    _gallery.GeoModel.Basemap = _gallery.SelectedBasemap?.Basemap?.Clone();
-                }
-
-                if (_gallery.SelectedBasemap is BasemapGalleryItem selectedItem)
-                {
-                    _gallery.NotifyBasemapSelected(selectedItem);
-                }
-            }
-            catch (Exception)
-            {
-                // Ignore
+                // Update selection.
+                _ = UpdateSelectionForGeoModelBasemap();
             }
             finally
             {
-                // restore events
                 _ignoreEventsFlag = false;
+            }
+        }
+
+        public void HandleAvailableBasemapsCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                case NotifyCollectionChangedAction.Move:
+                case NotifyCollectionChangedAction.Replace:
+                case NotifyCollectionChangedAction.Reset:
+                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(_gallery.GeoModel));
+                    _ = UpdateSelectionForGeoModelBasemap();
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    _ = UpdateSelectionForGeoModelBasemap();
+                    break;
             }
         }
 
@@ -69,29 +77,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             _gallery.AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(_gallery.GeoModel));
             _ = UpdateSelectionForGeoModelBasemap();
-        }
-
-        public async Task UpdateSelectionForGeoModelBasemap()
-        {
-            if (_gallery.GeoModel?.Basemap is Basemap inputBasemap)
-            {
-                if (await BasemapIsActuallyNotABasemap(inputBasemap))
-                {
-                    _gallery.SelectedBasemap = null;
-                }
-                else if (_gallery.AvailableBasemaps?.FirstOrDefault(bmgi => bmgi.EqualsBasemap(inputBasemap)) is BasemapGalleryItem selectedItem)
-                {
-                    _gallery.SelectedBasemap = selectedItem;
-                }
-                else
-                {
-                    _gallery.SelectedBasemap = null;
-                }
-            }
-            else
-            {
-                _gallery.SelectedBasemap = null;
-            }
         }
 
         public void HandleGeoModelPropertyChanged(string propertyName)
@@ -134,27 +119,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public void HandleAvailableBasemapsChanged()
-        {
-            _ignoreEventsFlag = true;
-
-            try
-            {
-                // Update validity
-                _gallery.AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(_gallery.GeoModel));
-
-                // Show new items in UI
-                _gallery.SetListViewSource(_gallery.AvailableBasemaps);
-
-                // Update selection.
-                _ = UpdateSelectionForGeoModelBasemap();
-            }
-            finally
-            {
-                _ignoreEventsFlag = false;
-            }
-        }
-
         public async Task HandlePortalChanged()
         {
             _gallery.SetIsLoading(true);
@@ -171,6 +135,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             finally
             {
                 _gallery.SetIsLoading(false);
+            }
+        }
+
+        public void HandleSelectedBasemapChanged()
+        {
+            try
+            {
+                // Stop listening to list events
+                _ignoreEventsFlag = true;
+
+                _gallery.SetListViewSelection(_gallery.SelectedBasemap);
+
+                if (_gallery.GeoModel != null && (!_gallery.SelectedBasemap?.EqualsBasemap(_gallery.GeoModel.Basemap) ?? true))
+                {
+                    _gallery.GeoModel.Basemap = _gallery.SelectedBasemap?.Basemap?.Clone();
+                }
+
+                if (_gallery.SelectedBasemap is BasemapGalleryItem selectedItem)
+                {
+                    _gallery.NotifyBasemapSelected(selectedItem);
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
+            finally
+            {
+                // restore events
+                _ignoreEventsFlag = false;
             }
         }
 
@@ -191,21 +185,41 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public void HandleAvailableBasemapsCollectionChanged(NotifyCollectionChangedEventArgs e)
+        public async Task UpdateSelectionForGeoModelBasemap()
         {
-            switch (e.Action)
+            if (_gallery.GeoModel?.Basemap is Basemap inputBasemap)
             {
-                case NotifyCollectionChangedAction.Add:
-                case NotifyCollectionChangedAction.Move:
-                case NotifyCollectionChangedAction.Replace:
-                case NotifyCollectionChangedAction.Reset:
-                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(_gallery.GeoModel));
-                    _ = UpdateSelectionForGeoModelBasemap();
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    _ = UpdateSelectionForGeoModelBasemap();
-                    break;
+                if (await BasemapIsActuallyNotABasemap(inputBasemap))
+                {
+                    _gallery.SelectedBasemap = null;
+                }
+                else if (_gallery.AvailableBasemaps?.FirstOrDefault(bmgi => bmgi.EqualsBasemap(inputBasemap)) is BasemapGalleryItem selectedItem)
+                {
+                    _gallery.SelectedBasemap = selectedItem;
+                }
+                else
+                {
+                    _gallery.SelectedBasemap = null;
+                }
             }
+            else
+            {
+                _gallery.SelectedBasemap = null;
+            }
+        }
+
+        /// <summary>
+        /// Maps and scenes start with an empty basemap that should not be shown in the UI.
+        /// </summary>
+        private static async Task<bool> BasemapIsActuallyNotABasemap(Basemap input)
+        {
+            await input.LoadAsync();
+            if (!input.BaseLayers.Any() && !input.ReferenceLayers.Any())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static async Task<List<BasemapGalleryItem>?> PopulateBasemapsForPortal(ArcGISPortal? portal)
@@ -265,7 +279,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 listOfBasemaps.Add(new BasemapGalleryItem(basemap));
             }
 
-#if !WINDOWS_UWP && !NETCOREAPP && !NETCOREAPP3_1
+#if !WINDOWS_UWP && !NETCOREAPP
             await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
 #else
             foreach (var item in listOfBasemaps)
@@ -280,20 +294,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
 #endif
             return listOfBasemaps;
-        }
-
-        /// <summary>
-        /// Maps and scenes start with an empty basemap that should not be shown in the UI.
-        /// </summary>
-        private static async Task<bool> BasemapIsActuallyNotABasemap(Basemap input)
-        {
-            await input.LoadAsync();
-            if (!input.BaseLayers.Any() && !input.ReferenceLayers.Any())
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }
