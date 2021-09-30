@@ -66,6 +66,9 @@ Displays current scale reference.
 
 ![ScaleLine](https://user-images.githubusercontent.com/1378165/73390077-3debb900-428a-11ea-8b2f-dfd4914a637e.png)
 
+### SearchView
+
+Enables searching one or more locators.
 
 ### SymbolDisplay
 

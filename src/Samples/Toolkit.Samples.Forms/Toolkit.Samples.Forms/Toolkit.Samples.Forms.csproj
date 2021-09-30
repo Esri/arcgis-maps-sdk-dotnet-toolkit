@@ -52,6 +52,9 @@
     <Compile Update="Samples\PopupViewerSample.xaml.cs">
       <DependentUpon>PopupViewerSample.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Samples\SearchViewSample.xaml.cs">
+      <DependentUpon>SearchViewSample.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Samples\SymbolEditorSample.xaml.cs">
       <DependentUpon>SymbolEditorSample.xaml</DependentUpon>
     </Compile>
@@ -77,6 +80,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Samples\ScaleLineSample.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Samples\SearchViewSample.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Samples\SymbolDisplaySample.xaml">

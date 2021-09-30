@@ -163,6 +163,9 @@
     <Compile Include="Samples\PopupViewer\PopupViewerSample.xaml.cs">
       <DependentUpon>PopupViewerSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\SearchView\SearchViewSample.xaml.cs">
+      <DependentUpon>SearchViewSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\SymbolDisplay\SymbolEditorSample.xaml.cs">
       <DependentUpon>SymbolEditorSample.xaml</DependentUpon>
     </Compile>
@@ -249,6 +252,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\PopupViewer\PopupViewerSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\SearchView\SearchViewSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
