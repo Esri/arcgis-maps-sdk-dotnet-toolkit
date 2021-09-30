@@ -5,15 +5,17 @@
     xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Grid Background="LightGray">
+    <Grid>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="ArcGIS Runtime Toolkit for Universal apps (UWP)"
                        Style="{ThemeResource SubheaderTextBlockStyle}" />
 
-            <TextBlock Text="Please select a sample from the sample list" />
+            <TextBlock Text="Please select a sample from the sample list"
+                       Style="{ThemeResource BodyTextBlockStyle}"/>
         </StackPanel>
 
     </Grid>

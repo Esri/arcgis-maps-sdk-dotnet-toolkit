@@ -9,7 +9,7 @@
     xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
-
+    RequestedTheme="Light"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

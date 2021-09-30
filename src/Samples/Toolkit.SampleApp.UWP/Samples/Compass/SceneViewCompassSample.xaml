@@ -6,7 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="Light">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <esri:SceneView Scene="{x:Bind Scene}" x:Name="sceneView"/>
