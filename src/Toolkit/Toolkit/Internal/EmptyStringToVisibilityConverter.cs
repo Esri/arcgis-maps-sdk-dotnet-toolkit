@@ -39,9 +39,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 if ("NotEmpty".Equals(parameter))
                 {
+                    #if !WINDOWS_UWP
+                    return string.IsNullOrEmpty(valueString) ? Visibility.Hidden : Visibility.Visible;
+                    #else
                     return string.IsNullOrEmpty(valueString) ? Visibility.Collapsed : Visibility.Visible;
+                    #endif
                 }
+
+                #if !WINDOWS_UWP
+                return string.IsNullOrEmpty(valueString) ? Visibility.Visible : Visibility.Hidden;
+                #else
                 return string.IsNullOrEmpty(valueString) ? Visibility.Visible : Visibility.Collapsed;
+                #endif
             }
 
             return Visibility.Visible;

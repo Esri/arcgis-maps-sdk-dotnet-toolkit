@@ -39,7 +39,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         #endif
 
         private RuntimeImage? _rtImage;
-        private CalloutDefinition? _calloutDefinition;
 
         /// <summary>
         /// Gets or sets the title that should be shown whenever the result is displayed.

@@ -85,7 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the default symbol to use when displaying results.
         /// </summary>
-        public Symbol? DefaultSymbol { get; set; }
+        public Symbol? DefaultSymbol { get; set; } = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 4);
 
         /// <summary>
         /// Gets or sets a callback that can be used to customize or filter results before they are returned.
@@ -96,6 +96,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets a callback that can be used to customize or filter suggestions before they are returned.
         /// </summary>
         public Func<SearchSuggestion, SearchSuggestion?>? SuggestionCustomizationCallback { get; set; }
+
+        public double DefaultZoomScale { get; set; } = 100_000;
+
+        public Geometry.Geometry? SearchArea { get; set; }
+
+        public MapPoint? PreferredSearchLocation { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocatorSearchSource"/> class.
@@ -152,7 +158,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private SearchSuggestion SuggestResultToSearchSuggestion(SuggestResult r)
         {
-            return new SearchSuggestion(r.Label, this) { IsCollection = r.IsCollection };
+            return new SearchSuggestion(r.Label, this) { IsCollection = r.IsCollection, UnderlyingObject = r };
         }
 
         /// <summary>
@@ -202,13 +208,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, MapPoint? preferredSearchLocation, CancellationToken? cancellationToken)
+        public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken)
         {
             await EnsureLoaded();
 
             cancellationToken?.ThrowIfCancellationRequested();
 
-            SuggestParameters.PreferredSearchLocation = preferredSearchLocation;
+            SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
             SuggestParameters.MaxResults = MaximumSuggestions;
 
             var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
@@ -217,15 +223,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, MapPoint? preferredSearchLocation, Geometry.Geometry? searchArea, CancellationToken? cancellationToken)
+        public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken)
         {
             await EnsureLoaded();
 
             cancellationToken?.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
-            GeocodeParameters.PreferredSearchLocation = preferredSearchLocation;
-            GeocodeParameters.SearchArea = searchArea;
+            GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
+            GeocodeParameters.MaxResults = MaximumResults;
+
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+            return ResultToSearchResult(results);
+        }
+
+        public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken? cancellationToken)
+        {
+            await EnsureLoaded();
+
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            // Reset spatial parameters
+            GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
+            GeocodeParameters.SearchArea = queryExtent;
             GeocodeParameters.MaxResults = MaximumResults;
 
             var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);

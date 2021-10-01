@@ -51,6 +51,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Symbol? DefaultSymbol { get; set; }
 
         /// <summary>
+        /// Gets or sets the default zoom scale to be used for results from this source.</summary>
+        /// <remarks>This value should be ignored when the underlying provider (e.g. LocatorTask) provides a viewpoint.
+        /// Otherwise this zoom scale should be used to create the viewpoint for point results.
+        /// </remarks>
+        public double DefaultZoomScale { get; set; }
+
+        /// <summary>
         /// Gets or sets the maximum number of results to return when completing a search.
         /// </summary>
         int MaximumResults { get; set; }
@@ -61,23 +68,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         int MaximumSuggestions { get; set; }
 
         /// <summary>
+        /// Gets or sets the area to be used as a constraint for searches and suggestions.
+        /// </summary>
+        Geometry.Geometry? SearchArea { get; set; }
+
+        /// <summary>
+        /// Gets or sets the point to be used as an input to searches and suggestions.
+        /// </summary>
+        Geometry.MapPoint? PreferredSearchLocation { get; set; }
+
+        /// <summary>
         /// Gets a list of suggestions for the given query.
         /// </summary>
         /// <param name="queryString">Text of the query.</param>
-        /// <param name="preferredSearchLocation">Area around which results should be returned.</param>
         /// <param name="cancellationToken">Token used to cancel requests (e.g. because the search text has changed).</param>
         /// <returns>Task returning a list of suggestions.</returns>
-        Task<IList<SearchSuggestion>> SuggestAsync(string queryString, MapPoint? preferredSearchLocation, CancellationToken? cancellationToken);
+        Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken);
 
         /// <summary>
         /// Gets a list of search results for the given query.
         /// </summary>
         /// <param name="queryString">Text of the query.</param>
-        /// <param name="preferredSearchLocation">Point around which results should be returned.</param>
-        /// <param name="searchArea">Area used as a constraint on the search.</param>
         /// <param name="cancellationToken">Token used to cancel requests (e.g. because the search was changed or canceled).</param>
         /// <returns>Task returning list of search results.</returns>
-        Task<IList<SearchResult>> SearchAsync(string queryString, MapPoint? preferredSearchLocation, Geometry.Geometry? searchArea, CancellationToken? cancellationToken);
+        Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken);
 
         /// <summary>
         /// Gets a list of search results for the given suggestions.
@@ -86,6 +100,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="cancellationToken">Token used to cancel searches.</param>
         /// <returns>Task returning a list of results.</returns>
         Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken? cancellationToken);
+
+        /// <summary>
+        /// Repeats the last search, with results restricted to the current visible area.
+        /// </summary>
+        /// <param name="queryString">Text to be used for the query.</param>
+        /// <param name="queryExtent">Extent used to limit the results.</param>
+        /// <param name="cancellationToken">Token used to cancel search.</param>
+        /// <returns>Task returning a list of results.</returns>
+        Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken? cancellationToken);
 
         /// <summary>
         /// Used to notify the source when the <see cref="SearchViewModel"/> has selected a result.

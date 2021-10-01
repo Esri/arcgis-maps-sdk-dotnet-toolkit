@@ -55,13 +55,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Geometry.Geometry QueryArea { get => _queryArea; 
             set {
                 SetPropertyChanged(value, ref _queryArea);
+                foreach(var source in Sources)
+                {
+                    source.SearchArea = value;
+                }
                 if (Results != null && value != null)
                 {
+                    // TODO - update for new logic
                     IsEligibleForRequery = true;
                 }
                 } 
             }
-        public MapPoint QueryCenter { get => _queryCenter; set => SetPropertyChanged(value, ref _queryCenter); }
+        public MapPoint QueryCenter { get => _queryCenter; set { 
+                SetPropertyChanged(value, ref _queryCenter);
+                foreach(var source in Sources)
+                {
+                    source.PreferredSearchLocation = value;
+                }
+                } }
 
         public ObservableCollection<ISearchSource> Sources { get; } = new ObservableCollection<ISearchSource>();
         public List<SearchResult> Results { get => _results; private set => SetPropertyChanged(value, ref _results); }
@@ -92,7 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     var queryRestrictionArea = restrictToViewArea ? QueryArea : null;
 
-                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.SearchAsync(CurrentQuery, QueryCenter, queryRestrictionArea, _activeSearchCancellation.Token)));
+                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.SearchAsync(CurrentQuery,   _activeSearchCancellation.Token)));
 
                     Results = allResults.SelectMany(l => l).ToList();
                 }
@@ -125,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     var sourcesToSearch = SourcesToSearch();
 
-                    var allSuggestions = await Task.WhenAll(sourcesToSearch.Select(s => s.SuggestAsync(CurrentQuery, QueryCenter, suggestCancellation.Token)));
+                    var allSuggestions = await Task.WhenAll(sourcesToSearch.Select(s => s.SuggestAsync(CurrentQuery,  suggestCancellation.Token)));
 
                     Suggestions = allSuggestions.SelectMany(l => l).ToList();
                 }

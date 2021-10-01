@@ -189,11 +189,11 @@
                    Source="{Binding Path=MarkerImage, Mode=OneWay}" />
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
-                       Text="{Binding Path=Title}" />
+                       Text="{Binding Path=DisplayTitle}" />
             <TextBlock Grid.Row="1"
                        Grid.Column="1"
                        Foreground="DarkSlateGray"
-                       Text="{Binding Path=Subtitle}" />
+                       Text="{Binding Path=DisplaySubtitle}" />
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="DefaultSearchSuggestionTemplate" DataType="{x:Type controls:SearchSuggestion}">

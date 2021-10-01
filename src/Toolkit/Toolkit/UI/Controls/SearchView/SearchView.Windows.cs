@@ -295,9 +295,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             GeoView.SetViewpoint(selectedResult.SelectionViewpoint);
                             _ignoreViewpointChangedFlag = false;
                         }
-                        if (GeoView != null)
+                        if (GeoView != null && selectedResult.CalloutDefinition != null && selectedResult.GeoElement != null)
                         {
-                            // This isn't a result of user tap, why is the API trying to force me to pass a tap location or a separate MapPoint; The GeoElement knows where it is...
                             GeoView.ShowCalloutForGeoElement(selectedResult.GeoElement, new Point(0,0), selectedResult.CalloutDefinition);
                         }
                     }
@@ -345,7 +344,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (mv.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Geometry.Geometry newView)
                 {
-                    SearchViewModel.QueryCenter = null;
+                    SearchViewModel.QueryCenter = (newView as Envelope).GetCenter();
                     SearchViewModel.QueryArea = newView;
                 }
             }
