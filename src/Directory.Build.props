@@ -43,7 +43,7 @@
     <NetCoreTargetFramework Condition="'$(BuildDotNet6)'!='true'">netcoreapp3.1</NetCoreTargetFramework>
     <NetWindowsTargetFramework Condition="'$(BuildDotNet6)'!='true'">net5.0-windows10.0.18362.0</NetWindowsTargetFramework>
     <NetWindowsTargetFramework Condition="'$(BuildDotNet6)'=='true'">net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
-	<NetAndroidTargetFramework Condition="'$(BuildDotNet6)'=='true'">net6.0-android30</NetAndroidTargetFramework>
+    <NetAndroidTargetFramework Condition="'$(BuildDotNet6)'=='true'">net6.0-android31.0</NetAndroidTargetFramework>
     <NetiOSTargetFramework Condition="'$(BuildDotNet6)'=='true'">net6.0-ios13.0</NetiOSTargetFramework>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 

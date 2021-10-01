@@ -17,7 +17,11 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Android.Content;
+#if NET6_0_OR_GREATER
+using AndroidX.RecyclerView.Widget;
+#else
 using Android.Support.V7.Widget;
+#endif
 using Android.Util;
 using Esri.ArcGISRuntime.Mapping;
 
