@@ -14,15 +14,15 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
-#if !XAMARIN && !NETFX_CORE
-using System.Windows.Media;
-#elif NETFX_CORE
+#if WINDOWS_UWP
 using Windows.UI.Xaml.Media;
 #endif
 
@@ -32,46 +32,93 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// Wraps a search result for display.
     /// </summary>
     public class SearchResult : INotifyPropertyChanged
-        //TODO - implement INPC for other properties
     {
-        #if !XAMARIN
-        private ImageSource _uiImage;
+        private byte[]? _markerData;
+        private RuntimeImage? _markerImage;
+        #if WINDOWS_UWP
+        private ImageSource _markerImageSource;
         #endif
-
-        private RuntimeImage? _rtImage;
+        private bool _imageRequestFlag;
+        private string _displayTitle;
+        private string? _displaySubtitle;
+        private ISearchSource _owningSource;
+        private GeoElement? _geoElement;
+        private Viewpoint? _selectionViewpoint;
+        private CalloutDefinition _calloutDefinition;
 
         /// <summary>
         /// Gets or sets the title that should be shown whenever the result is displayed.
         /// </summary>
-        public string DisplayTitle { get; set; }
+        public string DisplayTitle
+        {
+            get => _displayTitle;
+            set => SetPropertyChanged(value, ref _displayTitle);
+        }
 
         /// <summary>
         /// Gets or sets the subtitle that should be shown whenever the result is displayed.
         /// </summary>
-        public string? DisplaySubtitle { get; set; }
+        public string? DisplaySubtitle
+        {
+            get => _displaySubtitle;
+            set => SetPropertyChanged(value, ref _displaySubtitle);
+        }
 
         /// <summary>
         /// Gets the search source that created this result.
         /// </summary>
-        public ISearchSource OwningSource { get; private set; }
+        public ISearchSource OwningSource
+        {
+            get => _owningSource;
+            private set => SetPropertyChanged(value, ref _owningSource);
+        }
 
         /// <summary>
         /// Gets or sets the optional GeoElement for the result. This could be a graphic for a locator search, a feature for a feature layer search, or null if there is nothing to display on the map.
         /// </summary>
-        public GeoElement? GeoElement { get; set; }
+        public GeoElement? GeoElement
+        {
+            get => _geoElement;
+            set
+            {
+                if (value != _geoElement)
+                {
+                    _geoElement = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GeoElement)));
+
+                    // Start loading image
+                    // TODO = decide if it would be better to expose a top-level symbol property
+                    if (_geoElement is Graphic graphic && graphic.Symbol is Symbol symbol)
+                    {
+                        _ = LoadImage(symbol);
+                    }
+                    else if (_geoElement is Feature feature &&
+                             feature.FeatureTable?.Layer is FeatureLayer featureLayer &&
+                             featureLayer.Renderer?.GetSymbol(_geoElement) is Symbol featureSymbol)
+                    {
+                        _ = LoadImage(featureSymbol);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the selection viewpoint for the result. Some search sources will return a viewpoint that should be used when a result is selected.
         /// </summary>
-        public Viewpoint? SelectionViewpoint { get; set; }
+        public Viewpoint? SelectionViewpoint
+        {
+            get => _selectionViewpoint;
+            set => SetPropertyChanged(value, ref _selectionViewpoint);
+        }
 
         /// <summary>
         /// Gets or sets the CalloutDefinition used to display the result.
         /// </summary>
-        public CalloutDefinition? CalloutDefinition { get; set; }
-
-        /// <inheritdoc/>
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public CalloutDefinition? CalloutDefinition
+        {
+            get => _calloutDefinition;
+            set => SetPropertyChanged(value, ref _calloutDefinition);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchResult"/> class.
@@ -90,38 +137,88 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SelectionViewpoint = viewpoint;
         }
 
-        #if !XAMARIN
+        #region graphics display
+
         // TODO - cache these operations; multiple roundtrips to core for images is not fast
-        public ImageSource MarkerImage
+
+        /// <summary>
+        /// Gets the image displayed for this result.
+        /// </summary>
+        public RuntimeImage MarkerImage
         {
-            get
+            get => _markerImage;
+            private set => SetPropertyChanged(value, ref _markerImage);
+        }
+
+        /// <summary>
+        /// Gets or sets the image displayed for this result, in a format useful for cross-platform scenarios.
+        /// </summary>
+        public byte[]? MarkerImageData
+        {
+            get => _markerData;
+            set => SetPropertyChanged(value, ref _markerData);
+        }
+
+        #if WINDOWS_UWP
+
+        /// <summary>
+        /// Gets the image displayed for this result, in a format useful for UWP.
+        /// </summary>
+        public ImageSource? MarkerImageSource
+        {
+            get => _markerImageSource;
+            private set => SetPropertyChanged(value, ref _markerImageSource);
+        }
+#endif
+
+        private async Task LoadImage(Symbol symbol)
+        {
+            if (_imageRequestFlag)
             {
-                if (_uiImage != null)
-                {
-                    return _uiImage;
-                }
-                else if (GeoElement is Graphic graphic && graphic.Symbol != null)
-                {
-                    _ = GetImage(graphic.Symbol);
-                }
-                else if (GeoElement is Feature feature && feature.FeatureTable?.Layer is FeatureLayer featureLayer
-                    && featureLayer.Renderer?.GetSymbol(GeoElement) is Symbol symbol)
-                {
-                    _ = GetImage(symbol);
-                }
-                return null;
+                return;
+            }
+
+            _imageRequestFlag = true;
+
+            try
+            {
+            MarkerImage = await symbol.CreateSwatchAsync();
+            #if WINDOWS_UWP
+            MarkerImageSource = await MarkerImage.ToImageSourceAsync();
+            #endif
+            var markerDataStream = await MarkerImage.GetEncodedBufferAsync();
+            var buffer = new byte[markerDataStream.Length];
+            await markerDataStream.ReadAsync(buffer, 0, (int)markerDataStream.Length);
+            MarkerImageData = buffer;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MarkerImage)));
+            }
+            catch (Exception)
+            {
+                // Ignored
+            }
+            finally
+            {
+                _imageRequestFlag = false;
             }
         }
-        private bool _imageRequestFlag;
 
-        private async Task GetImage(Symbol symbol)
+        #endregion
+
+        private void SetPropertyChanged<T>(T value, ref T field, [CallerMemberName] string propertyName = "")
         {
-            if (_imageRequestFlag) return;
-            _imageRequestFlag = true;
-            var swatch = await symbol.CreateSwatchAsync();
-            _uiImage = await swatch.ToImageSourceAsync();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MarkerImage)));
+            if (!Equals(value, field))
+            {
+                field = value;
+                OnPropertyChanged(propertyName);
+            }
         }
-        #endif
+
+        private void OnPropertyChanged(string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <inheritdoc/>
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

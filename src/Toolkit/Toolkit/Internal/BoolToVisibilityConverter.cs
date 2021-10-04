@@ -40,6 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 {
                     return inputValue ? Visibility.Collapsed : Visibility.Visible;
                 }
+
                 return inputValue ? Visibility.Visible : Visibility.Collapsed;
             }
 

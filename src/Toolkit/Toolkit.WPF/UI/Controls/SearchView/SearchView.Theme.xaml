@@ -52,7 +52,7 @@
                          Text="{Binding SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Grid.Column="1"
                            Style="{TemplateBinding PlaceholderTextBlockStyle}"
-                           Text="{Binding SearchViewModel.DefaultPlaceholder, Mode=OneWay}"
+                           Text="{Binding SearchViewModel.ActivePlaceholder, Mode=OneWay}"
                            Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                 <Button Grid.Column="2"
                         Command="{Binding ClearCommand}"
@@ -186,7 +186,7 @@
                    Height="16"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Source="{Binding Path=MarkerImage, Mode=OneWay}" />
+                   Source="{Binding Path=MarkerImageData, Mode=OneWay}" />
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
                        Text="{Binding Path=DisplayTitle}" />
@@ -207,13 +207,13 @@
                   Data="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"
                   Stretch="Uniform"
                   Stroke="Gray"
-                  Visibility="{Binding SuggestResult.IsCollection, Converter={StaticResource BoolToVisibilityConverter}}" />
+                  Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}}" />
             <Path Width="10"
                   Height="10"
                   Data="M8 0a4.96 4.96 0 0 0-4.9 5.086C3.1 7.893 5.778 11.692 8 16c2.222-4.308 4.9-8.107 4.9-10.914A4.96 4.96 0 0 0 8 0zm0 13.877c-.298-.543-.598-1.077-.89-1.6C5.561 9.514 4.1 6.906 4.1 5.085A3.954 3.954 0 0 1 8 1a3.954 3.954 0 0 1 3.9 4.086c0 1.82-1.462 4.429-3.01 7.19-.292.524-.592 1.058-.89 1.601zM8 2.834A2.166 2.166 0 1 0 10.13 5 2.147 2.147 0 0 0 8 2.834zm0 3.332A1.167 1.167 0 1 1 9.13 5 1.15 1.15 0 0 1 8 6.166z"
                   Stretch="Uniform"
                   Stroke="Gray"
-                  Visibility="{Binding SuggestResult.IsCollection, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                  Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
             <TextBlock Grid.Column="1"
                        Margin="4,0,0,0"
                        Text="{Binding DisplayTitle, Mode=OneTime}" />

@@ -47,10 +47,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private CancellationTokenSource _activeSearchCancellation;
         private CancellationTokenSource _activeSuggestCancellation;
 
-        public ISearchSource ActiveSource { get => _activeSource; set { SetPropertyChanged(value, ref _activeSource); UpdateSuggestions(); } }
+        public ISearchSource ActiveSource { get => _activeSource; set { SetPropertyChanged(value, ref _activeSource, nameof(ActiveSource), nameof(ActivePlaceholder)); UpdateSuggestions(); } }
         public SearchResult SelectedResult { get => _selectedResult; set => SetPropertyChanged(value, ref _selectedResult); }
         public string CurrentQuery { get => _currentQuery; set => SetPropertyChanged(value, ref _currentQuery); }
         public string DefaultPlaceholder { get => _defaultPlaceholder; set => SetPropertyChanged(value, ref _defaultPlaceholder); }
+
+        public string ActivePlaceholder
+        {
+            get
+            {
+                if (ActiveSource?.Placeholder is string placeholder)
+                {
+                    return placeholder;
+                }
+                return DefaultPlaceholder;
+            }
+        }
         public SearchResultMode SearchMode { get => _searchMode; set => SetPropertyChanged(value, ref _searchMode); }
         public Geometry.Geometry QueryArea { get => _queryArea; 
             set {
@@ -74,6 +86,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 } }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether changes to the query area should be ignored. This is used to prevent <see cref="IsEligibleForRequery"/> becoming true because the view zoomed to a result.
+        /// </summary>
+        /// <remarks>
+        /// Set this value to true when the GeoView is being navigated to show results, and set to false when the navigation completes.
+        /// </remarks>
+        public bool IgnoreAreaChangesFlag { get; set; }
         public ObservableCollection<ISearchSource> Sources { get; } = new ObservableCollection<ISearchSource>();
         public List<SearchResult> Results { get => _results; private set => SetPropertyChanged(value, ref _results); }
         public List<SearchSuggestion> Suggestions { get => _suggestions; private set => SetPropertyChanged(value, ref _suggestions); }
@@ -86,10 +105,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             private set => SetPropertyChanged(value, ref _viewpointChangedSinceResultReturned);
         }
 
-        public async Task CommitSearch(bool restrictToViewArea = false)
+        public async Task CommitSearch()
         {
             if (_activeSearchCancellation != null)
+            {
                 _activeSearchCancellation.Cancel();
+            }
 
             using (CancellationTokenSource searchCancellation = new CancellationTokenSource(2000))
             {
@@ -100,8 +121,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Results = null;
                     IsEligibleForRequery = false;
                     var sourcesToSearch = SourcesToSearch();
-
-                    var queryRestrictionArea = restrictToViewArea ? QueryArea : null;
 
                     var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.SearchAsync(CurrentQuery,   _activeSearchCancellation.Token)));
 
@@ -116,7 +135,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _activeSearchCancellation = null;
                 }
             }
+        }
 
+        public async Task RepeatSearch()
+        {
+            // TODO - be smarter about remembering suggestions and using those for repeated searches if possible
+            if (_activeSearchCancellation != null)
+            {
+                _activeSearchCancellation.Cancel();
+            }
+
+            using (CancellationTokenSource searchCancellation = new CancellationTokenSource(2000))
+            {
+                try
+                {
+                    _activeSearchCancellation = searchCancellation;
+                    Suggestions = null;
+                    Results = null;
+                    IsEligibleForRequery = false;
+                    var sourcesToSearch = SourcesToSearch();
+
+                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.RepeatSearchAsync(CurrentQuery, QueryArea?.Extent,  _activeSearchCancellation.Token)));
+
+                    Results = allResults.SelectMany(l => l).ToList();
+                }
+                catch (Exception)
+                {
+
+                }
+                finally
+                {
+                    _activeSearchCancellation = null;
+                }
+            }
         }
 
         public async Task UpdateSuggestions()
@@ -293,6 +344,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 field = value;
                 OnPropertyChanged(propertyName);
+            }
+        }
+
+        private void SetPropertyChanged<T>(T value, ref T field, params string[] notifiedProperties)
+        {
+            if (!Equals(value, field))
+            {
+                field = value;
+                foreach(var property in notifiedProperties)
+                {
+                    OnPropertyChanged(property);
+                }
             }
         }
 

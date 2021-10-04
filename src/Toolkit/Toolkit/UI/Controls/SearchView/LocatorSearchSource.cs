@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
@@ -33,6 +32,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <seealso cref="SmartLocatorSearchSource" />
     public class LocatorSearchSource : ISearchSource
     {
+        private bool _loading;
+        private bool _hasPerformedInitialLoad;
+
         /// <summary>
         /// Gets or sets the name of the locator. Defaults to the locator's name, or "locator" if not set.
         /// </summary>
@@ -97,10 +99,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public Func<SearchSuggestion, SearchSuggestion?>? SuggestionCustomizationCallback { get; set; }
 
+        /// <inheritdoc />
         public double DefaultZoomScale { get; set; } = 100_000;
 
+        /// <inheritdoc />
         public Geometry.Geometry? SearchArea { get; set; }
 
+        /// <inheritdoc />
         public MapPoint? PreferredSearchLocation { get; set; }
 
         /// <summary>
@@ -111,12 +116,73 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public LocatorSearchSource(LocatorTask locator)
         {
             Locator = locator;
-            if (!string.IsNullOrWhiteSpace(locator.LocatorInfo?.Name ?? null))
-            {
-                DisplayName = locator?.LocatorInfo?.Name ?? "Locator";
-            }
 
             _ = EnsureLoaded();
+        }
+
+        private async Task EnsureLoaded()
+        {
+            // TODO = find a better way of handling this
+            if (_loading || _hasPerformedInitialLoad)
+            {
+                return;
+            }
+            else
+            {
+                _loading = true;
+            }
+
+            if (!_hasPerformedInitialLoad && Locator.LoadStatus != LoadStatus.Loaded)
+            {
+                // TODO = decide how to handle locators that throw.
+                await Locator.LoadAsync();
+            }
+
+            if (!_hasPerformedInitialLoad)
+            {
+                if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator.LocatorInfo?.Name))
+                {
+                    DisplayName = Locator?.LocatorInfo?.Name ?? "Locator";
+                }
+
+                GeocodeParameters.ResultAttributeNames.Add("*");
+            }
+
+            _hasPerformedInitialLoad = true;
+            _loading = false;
+        }
+
+        /// <summary>
+        /// This search source does not track selection state.
+        /// </summary>
+        public virtual void NotifySelected(SearchResult result)
+        {
+            // This space intentionally left blank.
+        }
+
+        /// <summary>
+        /// This search source does not track selection state.
+        /// </summary>
+        public virtual void NotifyDeselected(SearchResult? result)
+        {
+            // This space intentionally left blank.
+        }
+
+        /// <inheritdoc/>
+        public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken)
+        {
+            await EnsureLoaded();
+
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
+            SuggestParameters.MaxResults = MaximumSuggestions;
+
+            var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
+
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            return SuggestionToSearchSuggestion(results);
         }
 
         /// <inheritdoc/>
@@ -128,38 +194,49 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, cancellationToken ?? CancellationToken.None);
 
+            cancellationToken?.ThrowIfCancellationRequested();
+
             return ResultToSearchResult(results);
         }
 
-        private async Task EnsureLoaded()
+        /// <inheritdoc/>
+        public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken)
         {
-            if (Locator.LoadStatus == LoadStatus.Loaded)
-            {
-                return;
-            }
+            await EnsureLoaded();
 
-            await Locator.RetryLoadAsync();
-            // TODO = decide how to handle locators that throw.
+            cancellationToken?.ThrowIfCancellationRequested();
 
-            GeocodeParameters.ResultAttributeNames.Add("*");
+            // Reset spatial parameters
+            GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
+            GeocodeParameters.MaxResults = MaximumResults;
+
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            return ResultToSearchResult(results);
         }
 
-        /// <summary>
-        /// Creates a basic search result for the given geocode result.
-        /// </summary>
-        private SearchResult GeocodeResultToSearchResult(GeocodeResult r)
+        /// <inheritdoc />
+        public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken? cancellationToken)
         {
-            Mapping.Viewpoint? selectionViewpoint = r.Extent == null ? null : new Mapping.Viewpoint(r.Extent);
-            return new SearchResult(r.Label, null, this, new Graphic(r.DisplayLocation, r.Attributes, DefaultSymbol), selectionViewpoint) { CalloutDefinition = DefaultCalloutDefinition };
+            await EnsureLoaded();
+
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            // Reset spatial parameters
+            GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
+            GeocodeParameters.SearchArea = queryExtent;
+            GeocodeParameters.MaxResults = MaximumResults;
+
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            return ResultToSearchResult(results);
         }
 
-        /// <summary>
-        /// Creates a basic search suggestion for the given suggest result.
-        /// </summary>
-        private SearchSuggestion SuggestResultToSearchSuggestion(SuggestResult r)
-        {
-            return new SearchSuggestion(r.Label, this) { IsCollection = r.IsCollection, UnderlyingObject = r };
-        }
+        #region process raw results
 
         /// <summary>
         /// Converts geocode result list into list of results, applying result limits and calling necessary callbacks.
@@ -192,64 +269,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// No action taken.
+        /// Creates a basic search result for the given geocode result.
         /// </summary>
-        public void NotifySelected(SearchResult result)
+        private SearchResult GeocodeResultToSearchResult(GeocodeResult r)
         {
-            // This space intentionally left blank.
+            Mapping.Viewpoint? selectionViewpoint = r.Extent == null ? null : new Mapping.Viewpoint(r.Extent);
+            return new SearchResult(r.Label, null, this, new Graphic(r.DisplayLocation, r.Attributes, DefaultSymbol), selectionViewpoint) { CalloutDefinition = DefaultCalloutDefinition };
         }
 
         /// <summary>
-        /// No action taken.
+        /// Creates a basic search suggestion for the given suggest result.
         /// </summary>
-        public void NotifyDeselected(SearchResult? result)
+        private SearchSuggestion SuggestResultToSearchSuggestion(SuggestResult r)
         {
-            // This space intentionally left blank.
+            return new SearchSuggestion(r.Label, this) { IsCollection = r.IsCollection, UnderlyingObject = r };
         }
 
-        /// <inheritdoc/>
-        public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken)
-        {
-            await EnsureLoaded();
-
-            cancellationToken?.ThrowIfCancellationRequested();
-
-            SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
-            SuggestParameters.MaxResults = MaximumSuggestions;
-
-            var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
-
-            return SuggestionToSearchSuggestion(results);
-        }
-
-        /// <inheritdoc/>
-        public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken)
-        {
-            await EnsureLoaded();
-
-            cancellationToken?.ThrowIfCancellationRequested();
-
-            // Reset spatial parameters
-            GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
-            GeocodeParameters.MaxResults = MaximumResults;
-
-            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
-            return ResultToSearchResult(results);
-        }
-
-        public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken? cancellationToken)
-        {
-            await EnsureLoaded();
-
-            cancellationToken?.ThrowIfCancellationRequested();
-
-            // Reset spatial parameters
-            GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
-            GeocodeParameters.SearchArea = queryExtent;
-            GeocodeParameters.MaxResults = MaximumResults;
-
-            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
-            return ResultToSearchResult(results);
-        }
+        #endregion process raw results
     }
 }

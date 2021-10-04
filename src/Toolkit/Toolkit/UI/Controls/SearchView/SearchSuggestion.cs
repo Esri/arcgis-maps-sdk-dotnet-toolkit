@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public string? DisplaySubtitle { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this result is for a collection (e.g. 'Coffee Shops') or a single result (e.g. 'Starbucks on Grand'). 
+        /// Gets or sets a value indicating whether this result is for a collection (e.g. 'Coffee Shops') or a single result (e.g. 'Starbucks on Grand').
         /// </summary>
         public bool IsCollection { get; set; }
 
