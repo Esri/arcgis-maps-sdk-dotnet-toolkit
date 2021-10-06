@@ -31,10 +31,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class SmartLocatorSearchSource : LocatorSearchSource
     {
+        /// <summary>
+        /// Gets or sets the minimum number of results to attempt to return.
+        /// If there are too few results, the search is repeated with loosened parameters until enough results are accumulated.
+        /// </summary>
+        /// <remarks>
+        /// If no search is successful, it is still possible to have a total number of results less than this threshold.
+        /// Does not apply to repeated search with area constraint.
+        /// Set to zero to disable search repeat behavior. Defaults to 1.
+        /// </remarks>
         public int RepeatSearchResultThreshold { get; set; } = 0;
-        public int RepeatSuggestResultThreshold { get; set; } = 3;
 
-        public SymbolStyle? SymbolStyleDictionary { get; set; }
+        /// <summary>
+        /// Gets or sets the minimum number of suggestions to attempt to return.
+        /// If there are too few suggestions, request is repeated with loosened constraints until enough suggestions are accumulated.
+        /// </summary>
+        /// <remarks>
+        /// If no search is successful, it is still possible to have a total number of results less than this threshold.
+        /// Does not apply to repeated search with area constraint.
+        /// Set to zero to disable search repeat behavior. Defaults to 6.
+        /// </remarks>
+        public int RepeatSuggestResultThreshold { get; set; } = 6;
+
+        /// <summary>
+        /// Gets or sets the web style used to find symbols for results.
+        /// When set, symbols are found for results based on the result's `Type` field, if available.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to the style identified by the name "Esri2DPointSymbolsStyle".
+        /// The default Esri 2D point symbol has good results for many of the types returned by the world geocode service.
+        /// You can use this property to customize result icons by publishing a web style, taking care to ensure that symbol keys match the `Type` attribute returned by the locator.
+        /// </remarks>
+        public SymbolStyle? ResultSymbolStyle { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartLocatorSearchSource"/> class.
@@ -44,10 +72,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public SmartLocatorSearchSource(LocatorTask locator, SymbolStyle? style)
             : base(locator)
         {
-            SymbolStyleDictionary = style;
+            if (style != null)
+            {
+                ResultSymbolStyle = style;
+            }
+
             _ = EnsureLoaded();
         }
-
 
         private async Task EnsureLoaded()
         {
@@ -60,16 +91,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 await Locator.RetryLoadAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                //TODO  - decide how tohandle this
+                // TODO  - decide how tohandle this
             }
 
             if (Locator.LocatorInfo is LocatorInfo info)
             {
                 // Locators from online services have descriptions but not names.
-                if (!string.IsNullOrWhiteSpace(info.Name))
+                if (!string.IsNullOrWhiteSpace(info.Name) && info.Name != Locator.Uri?.ToString())
                 {
                     DisplayName = info.Name;
                 }
@@ -80,20 +110,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             // Add attributes expected from the World Geocoder Service if present, otherwise default to all attributes.
-            var desiredAttributes = new[] { "LongLabel", "Type" };
-            if (Locator?.LocatorInfo?.ResultAttributes?.Any() ?? false)
+            if (Locator.Uri == new Uri("https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer"))
             {
-                foreach (var attr in desiredAttributes)
+                var desiredAttributes = new[] { "LongLabel", "Type" };
+                if (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false)
                 {
-                    if (Locator.LocatorInfo.ResultAttributes.Where(at => at.Name == attr).Any())
+                    foreach (var attr in desiredAttributes)
                     {
-                        GeocodeParameters.ResultAttributeNames.Add(attr);
+                        if (Locator.LocatorInfo.ResultAttributes.Where(at => at.Name == attr).Any())
+                        {
+                            GeocodeParameters.ResultAttributeNames.Add(attr);
+                        }
                     }
                 }
-            }
-            else
-            {
-                GeocodeParameters.ResultAttributeNames.Add("*");
+                else
+                {
+                    GeocodeParameters.ResultAttributeNames.Add("*");
+                }
             }
         }
 
@@ -116,15 +149,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (r.Attributes.ContainsKey("Type"))
             {
                 var typeAttrs = r.Attributes["Type"];
+
                 //var firstResult = await _esriStyle.GetSymbolAsync(new[] { typeAttrs.ToString().Replace(' ', '-').ToLower() });
                 //if (firstResult != null)
-                {
+                //{
                     //return firstResult;
-                }
+                //}
                 var symbParams = new SymbolStyleSearchParameters();
                 symbParams.Names.Add(typeAttrs.ToString());
                 symbParams.NamesStrictlyMatch = false;
-                var symbolResult = await SymbolStyleDictionary.SearchSymbolsAsync(symbParams);
+                var symbolResult = await ResultSymbolStyle.SearchSymbolsAsync(symbParams);
 
                 if (symbolResult.Any())
                 {
@@ -133,16 +167,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             return DefaultSymbol;
-        }
-
-        public void NotifySelected(SearchResult result)
-        {
-            // This space intentionally left blank.
-        }
-
-        public void NotifyDeselected(SearchResult result)
-        {
-            // This space intentionally left blank.
         }
 
         /// <summary>
@@ -175,7 +199,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return results.Take(MaximumResults).ToList();
         }
 
-        // TODO = abstract away commonalities between SearchAsync with suggestion and string
+        /// <inheritdoc />
         public override async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken? cancellationToken)
         {
             await EnsureLoaded();
@@ -183,6 +207,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             cancellationToken?.ThrowIfCancellationRequested();
 
             var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, cancellationToken ?? CancellationToken.None);
+
+            cancellationToken?.ThrowIfCancellationRequested();
 
             return await ResultToSearchResult(results);
         }
@@ -192,40 +218,41 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private SearchSuggestion SuggestResultToSearchSuggestion(SuggestResult r)
         {
-            return new SearchSuggestion(r.Label, this) { IsCollection = r.IsCollection };
+            return new SearchSuggestion(r.Label, this) { IsCollection = r.IsCollection, UnderlyingObject = r };
         }
 
-        public async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, MapPoint? preferredSearchLocation, CancellationToken? cancellationToken)
+        /// <inheritdoc/>
+        public override async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken)
         {
             await EnsureLoaded();
 
             cancellationToken?.ThrowIfCancellationRequested();
 
-            SuggestParameters.PreferredSearchLocation = preferredSearchLocation;
+            SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
             SuggestParameters.MaxResults = MaximumSuggestions;
 
             // TODO = implement repeat suggest behavior
-
             var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
+            cancellationToken?.ThrowIfCancellationRequested();
 
             return SuggestionToSearchSuggestion(results);
         }
 
-        public async Task<IList<SearchResult>> SearchAsync(string queryString, MapPoint? preferredSearchLocation, Geometry.Geometry? searchArea, CancellationToken? cancellationToken)
+        /// <inheritdoc/>
+        public override async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken)
         {
             await EnsureLoaded();
 
             cancellationToken?.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
-            GeocodeParameters.PreferredSearchLocation = preferredSearchLocation;
-            GeocodeParameters.SearchArea = searchArea;
+            GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
+            GeocodeParameters.SearchArea = SearchArea;
             GeocodeParameters.MaxResults = MaximumResults;
 
-
             // TODO = implement repeat search behavior
-
             var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+            cancellationToken?.ThrowIfCancellationRequested();
             return await ResultToSearchResult(results);
         }
     }

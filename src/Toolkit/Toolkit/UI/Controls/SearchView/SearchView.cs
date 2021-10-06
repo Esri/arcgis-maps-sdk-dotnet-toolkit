@@ -377,7 +377,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleRepeatSearchHereCommand()
         {
-            SearchViewModel?.RepeatSearch();
+            SearchViewModel?.RepeatSearchHere();
         }
         #endregion commands
 
