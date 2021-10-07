@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.UI;
@@ -31,6 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class SmartLocatorSearchSource : LocatorSearchSource
     {
+        private const string WorldGeocoderUriString = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
+
         /// <summary>
         /// Gets or sets the minimum number of results to attempt to return.
         /// If there are too few results, the search is repeated with loosened parameters until enough results are accumulated.
@@ -110,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             // Add attributes expected from the World Geocoder Service if present, otherwise default to all attributes.
-            if (Locator.Uri == new Uri("https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer"))
+            if (Locator.Uri?.ToString() == WorldGeocoderUriString)
             {
                 var desiredAttributes = new[] { "LongLabel", "Type" };
                 if (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false)
@@ -150,11 +151,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 var typeAttrs = r.Attributes["Type"];
 
-                //var firstResult = await _esriStyle.GetSymbolAsync(new[] { typeAttrs.ToString().Replace(' ', '-').ToLower() });
-                //if (firstResult != null)
-                //{
-                    //return firstResult;
-                //}
+                if (Locator.Uri?.ToString() == WorldGeocoderUriString)
+                {
+
+                    var firstResult = await ResultSymbolStyle.GetSymbolAsync(new[] { typeAttrs.ToString().Replace(' ', '-').ToLower() });
+                    if (firstResult != null)
+                    {
+                        return firstResult;
+                    }
+                }
+                // TODO = verify this works
                 var symbParams = new SymbolStyleSearchParameters();
                 symbParams.Names.Add(typeAttrs.ToString());
                 symbParams.NamesStrictlyMatch = false;
@@ -230,10 +236,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
             SuggestParameters.MaxResults = MaximumSuggestions;
+            SuggestParameters.SearchArea = SearchArea;
 
-            // TODO = implement repeat suggest behavior
             var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
             cancellationToken?.ThrowIfCancellationRequested();
+
+            if (RepeatSuggestResultThreshold > 0 && results.Count() < RepeatSuggestResultThreshold)
+            {
+                SuggestParameters.SearchArea = null;
+                results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
+                cancellationToken?.ThrowIfCancellationRequested();
+            }
+
+            if (RepeatSuggestResultThreshold > 0 && results.Count() < RepeatSuggestResultThreshold)
+            {
+                SuggestParameters.PreferredSearchLocation = null;
+                results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
+                cancellationToken?.ThrowIfCancellationRequested();
+            }
 
             return SuggestionToSearchSuggestion(results);
         }
@@ -250,9 +270,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             GeocodeParameters.SearchArea = SearchArea;
             GeocodeParameters.MaxResults = MaximumResults;
 
-            // TODO = implement repeat search behavior
             var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
             cancellationToken?.ThrowIfCancellationRequested();
+
+            if (RepeatSearchResultThreshold > 0 && results.Count() < RepeatSearchResultThreshold)
+            {
+                GeocodeParameters.SearchArea = null;
+                results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+                cancellationToken?.ThrowIfCancellationRequested();
+            }
+
+            if (RepeatSearchResultThreshold > 0 && results.Count() < RepeatSearchResultThreshold)
+            {
+                GeocodeParameters.PreferredSearchLocation = null;
+                results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+                cancellationToken?.ThrowIfCancellationRequested();
+            }
+
             return await ResultToSearchResult(results);
         }
     }

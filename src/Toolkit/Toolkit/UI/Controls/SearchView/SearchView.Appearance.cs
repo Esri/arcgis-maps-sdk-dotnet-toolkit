@@ -45,81 +45,81 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the style applied to the search button.
         /// </summary>
-        public Style SearchButtonStyle
+        public Style? SearchButtonStyle
         {
-            get => (Style)GetValue(SearchButtonStyleProperty);
+            get => GetValue(SearchButtonStyleProperty) as Style;
             set => SetValue(SearchButtonStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the style applied to the source selection button.
         /// </summary>
-        public Style SourceSelectButtonStyle
+        public Style? SourceSelectButtonStyle
         {
-            get => (Style)GetValue(SourceSelectButtonStyleProperty);
+            get => GetValue(SourceSelectButtonStyleProperty) as Style;
             set => SetValue(SourceSelectButtonStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the style applied to the clear button.
         /// </summary>
-        public Style ClearButtonStyle
+        public Style? ClearButtonStyle
         {
-            get => (Style)GetValue(ClearButtonStyleProperty);
+            get => GetValue(ClearButtonStyleProperty) as Style;
             set => SetValue(ClearButtonStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the style applied to the placeholder text block.
         /// </summary>
-        public Style PlaceholderTextBlockStyle
+        public Style? PlaceholderTextBlockStyle
         {
-            get => (Style)GetValue(PlaceholderTextBlockStyleProperty);
+            get => GetValue(PlaceholderTextBlockStyleProperty) as Style;
             set => SetValue(PlaceholderTextBlockStyleProperty, value);
         }
 
         /// <summary>
         ///  Gets or sets the style applied to the query entry textbox.
         /// </summary>
-        public Style QueryTextBoxStyle
+        public Style? QueryTextBoxStyle
         {
-            get => (Style)GetValue(QueryTextBoxStyleProperty);
+            get => GetValue(QueryTextBoxStyleProperty) as Style;
             set => SetValue(QueryTextBoxStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the templated used to display suggestions.
         /// </summary>
-        public DataTemplate SearchSuggestionTemplate
+        public DataTemplate? SearchSuggestionTemplate
         {
-            get => (DataTemplate)GetValue(SearchSuggestionTemplateProperty);
+            get => GetValue(SearchSuggestionTemplateProperty) as DataTemplate;
             set => SetValue(SearchSuggestionTemplateProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the template used to display search results.
         /// </summary>
-        public DataTemplate SearchResultTemplate
+        public DataTemplate? SearchResultTemplate
         {
-            get => (DataTemplate)GetValue(SearchResultTemplateProperty);
+            get => GetValue(SearchResultTemplateProperty) as DataTemplate;
             set => SetValue(SearchResultTemplateProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the style applied to the suggestion Popup.
         /// </summary>
-        public Style SuggestionPopupStyle
+        public Style? SuggestionPopupStyle
         {
-            get => (Style)GetValue(SuggestionPopupStyleProperty);
+            get => GetValue(SuggestionPopupStyleProperty) as Style;
             set => SetValue(SuggestionPopupStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the style applied to the outer border.
         /// </summary>
-        public Style SearchBarBorderStyle
+        public Style? SearchBarBorderStyle
         {
-            get => (Style)GetValue(SearchBarBorderStyleProperty);
+            get => GetValue(SearchBarBorderStyleProperty) as Style;
             set => SetValue(SearchBarBorderStyleProperty, value);
         }
 
@@ -127,55 +127,55 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="SourceSelectButtonStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SourceSelectButtonStyleProperty =
-            DependencyProperty.Register(nameof(SourceSelectButtonStyle), typeof(Style), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(SourceSelectButtonStyle), typeof(Style), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="ClearButtonStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ClearButtonStyleProperty =
-            DependencyProperty.Register(nameof(ClearButtonStyle), typeof(Style), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ClearButtonStyle), typeof(Style), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="PlaceholderTextBlockStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty PlaceholderTextBlockStyleProperty =
-            DependencyProperty.Register(nameof(PlaceholderTextBlockStyle), typeof(Style), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(PlaceholderTextBlockStyle), typeof(Style), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="QueryTextBoxStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty QueryTextBoxStyleProperty =
-            DependencyProperty.Register(nameof(QueryTextBoxStyle), typeof(Style), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(QueryTextBoxStyle), typeof(Style), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="SearchSuggestionTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SearchSuggestionTemplateProperty =
-            DependencyProperty.Register(nameof(SearchSuggestionTemplate), typeof(DataTemplate), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(SearchSuggestionTemplate), typeof(DataTemplate), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="SearchResultTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SearchResultTemplateProperty =
-            DependencyProperty.Register(nameof(SearchResultTemplate), typeof(DataTemplate), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(SearchResultTemplate), typeof(DataTemplate), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="SuggestionPopupStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SuggestionPopupStyleProperty =
-            DependencyProperty.Register(nameof(SuggestionPopupStyle), typeof(Style), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(SuggestionPopupStyle), typeof(Style), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="SearchBarBorderStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SearchBarBorderStyleProperty =
-            DependencyProperty.Register(nameof(SearchBarBorderStyle), typeof(Style), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(SearchBarBorderStyle), typeof(Style), typeof(SearchView), null);
 
         /// <summary>
         /// Identifies the <see cref="SearchButtonStyle"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SearchButtonStyleProperty =
-            DependencyProperty.Register(nameof(SearchButtonStyle), typeof(Style), typeof(SearchView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(SearchButtonStyle), typeof(Style), typeof(SearchView), null);
     }
 }
 #endif

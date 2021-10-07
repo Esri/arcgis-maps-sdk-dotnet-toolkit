@@ -42,8 +42,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         // Controls how long the control waits after typing stops before looking for suggestions.
         private const int TypingDelayMilliseconds = 75;
-        private GeoModel _lastUsedGeomodel;
-        private GraphicsOverlay _resultOverlay;
+        private GeoModel? _lastUsedGeomodel;
+        private GraphicsOverlay? _resultOverlay;
         private bool _hasViewpointChangedPostSearch;
 
         // Flag indicates whether control is waiting after user finished typing.
@@ -98,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Sets the selected suggestion, triggering a search.
         /// </summary>
-        public SearchSuggestion SelectedSuggestion
+        public SearchSuggestion? SelectedSuggestion
         {
             set
             {
@@ -389,27 +389,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// If set, <see cref="SearchView"/> will add a graphics overlay for showing results, and will automatically navigate to show search results.
         /// </remarks>
-        public GeoView GeoView
+        public GeoView? GeoView
         {
-            get => (GeoView)GetValue(GeoViewProperty);
+            get => GetValue(GeoViewProperty) as GeoView;
             set => SetValue(GeoViewProperty, value);
         }
 
         /// <summary>
         /// Gets or sets a message to show when a search completes with no results.
         /// </summary>
-        public string NoResultMessage
+        public string? NoResultMessage
         {
-            get => (string)GetValue(NoResultMessageProperty);
+            get => GetValue(NoResultMessageProperty) as string;
             set => SetValue(NoResultMessageProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the viewmodel that implements core search behavior.
         /// </summary>
-        public SearchViewModel SearchViewModel
+        public SearchViewModel? SearchViewModel
         {
-            get => (SearchViewModel)GetValue(SearchViewModelProperty);
+            get => GetValue(SearchViewModelProperty) as SearchViewModel;
             set => SetValue(SearchViewModelProperty, value);
         }
 

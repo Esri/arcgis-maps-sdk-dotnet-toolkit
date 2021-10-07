@@ -24,7 +24,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.UI.Controls;
 
@@ -47,6 +46,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private List<SearchResult>? _results;
         private List<SearchSuggestion>? _suggestions;
 
+        private bool _searchInProgress;
+        private bool _suggestInProgress;
+
         private CancellationTokenSource? _activeSearchCancellation;
         private CancellationTokenSource? _activeSuggestCancellation;
 
@@ -61,6 +63,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 SetPropertyChanged(value, ref _activeSource, nameof(ActiveSource), nameof(ActivePlaceholder));
                 _ = UpdateSuggestions();
             }
+        }
+
+        public bool IsSearchInProgress
+        {
+            get => _searchInProgress;
+            set => SetPropertyChanged(value, ref _searchInProgress, nameof(IsSearchInProgress), nameof(IsWaiting));
+        }
+
+        public bool IsSuggestInProgress
+        {
+            get => _suggestInProgress;
+            set => SetPropertyChanged(value, ref _suggestInProgress, nameof(IsSuggestInProgress), nameof(IsWaiting));
+        }
+
+        public bool IsWaiting
+        {
+            get => IsSearchInProgress || IsSuggestInProgress;
         }
 
         /// <summary>
@@ -144,7 +163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the list of available search sources, which can be updated dynamically.
         /// </summary>
-        /// <remarks>See <see cref="ConfigureFromMap(object)"/> for a convenient method to populate this collection automatically.</remarks>
+        /// <remarks>See <see cref="ConfigureFromMap(GeoModel?)"/> for a convenient method to populate this collection automatically.</remarks>
         public ObservableCollection<ISearchSource> Sources { get; } = new ObservableCollection<ISearchSource>();
 
         /// <summary>
@@ -190,6 +209,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 try
                 {
+                    IsSearchInProgress = true;
                     _activeSearchCancellation = searchCancellation;
                     Suggestions = null;
                     Results = null;
@@ -213,6 +233,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 finally
                 {
                     _activeSearchCancellation = null;
+                    IsSearchInProgress = false;
                 }
             }
         }
@@ -236,6 +257,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 try
                 {
+                    IsSearchInProgress = true;
                     _activeSearchCancellation = searchCancellation;
                     Suggestions = null;
                     Results = null;
@@ -258,6 +280,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 finally
                 {
                     _activeSearchCancellation = null;
+                    IsSearchInProgress = false;
                 }
             }
         }
@@ -276,6 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 try
                 {
+                    IsSuggestInProgress = true;
                     _activeSuggestCancellation = suggestCancellation;
                     Suggestions = null;
                     if (string.IsNullOrWhiteSpace(CurrentQuery))
@@ -300,6 +324,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 finally
                 {
                     _activeSuggestCancellation = null;
+                    IsSuggestInProgress = false;
                 }
             }
         }
@@ -320,6 +345,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 try
                 {
+                    IsSearchInProgress = true;
                     _activeSearchCancellation = searchCancellation;
                     Suggestions = null;
                     Results = null;
@@ -371,6 +397,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 finally
                 {
                     _activeSearchCancellation = null;
+                    IsSearchInProgress = false;
                 }
             }
         }
