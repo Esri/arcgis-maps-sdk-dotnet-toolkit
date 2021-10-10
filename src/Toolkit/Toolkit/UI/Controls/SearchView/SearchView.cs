@@ -136,6 +136,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        public Visibility SourceSelectVisibility
+        {
+            get
+            {
+                if (SearchViewModel.Sources.Count() > 1)
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
         #endregion binding support
 
         #region events
@@ -173,13 +185,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (e.OldValue is SearchViewModel oldModel)
                 {
                     oldModel.PropertyChanged -= sendingView.SearchViewModel_PropertyChanged;
+                    oldModel.Sources.CollectionChanged -= sendingView.Sources_CollectionChanged;
                 }
 
                 if (e.NewValue is SearchViewModel newModel)
                 {
                     newModel.PropertyChanged += sendingView.SearchViewModel_PropertyChanged;
+                    newModel.Sources.CollectionChanged += sendingView.Sources_CollectionChanged;
                 }
             }
+        }
+
+        private void Sources_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultViewVisibility)));
         }
 
         private void HandleMapChange(object sender, PropertyChangedEventArgs e)
