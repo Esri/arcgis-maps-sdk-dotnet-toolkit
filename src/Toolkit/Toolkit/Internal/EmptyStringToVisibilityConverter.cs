@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 return string.IsNullOrEmpty(valueString) ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            return Visibility.Visible;
+            return "NotEmpty".Equals(parameter) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, Culture culture)

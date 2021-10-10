@@ -382,28 +382,20 @@
                     <ColumnDefinition Width="24" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
                 <Image
-                    Grid.RowSpan="2"
                     Width="16"
                     Height="16"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Source="{Binding Path=MarkerImageData, Mode=OneWay}" />
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Text="{Binding Path=DisplayTitle}"
-                    TextWrapping="Wrap" />
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Foreground="DarkSlateGray"
-                    Text="{Binding Path=DisplaySubtitle}"
-                    TextTrimming="CharacterEllipsis" />
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+                    <TextBlock Text="{Binding Path=DisplayTitle}" TextWrapping="Wrap" />
+                    <TextBlock
+                        Foreground="#4a4a4a"
+                        Text="{Binding Path=DisplaySubtitle}"
+                        TextTrimming="CharacterEllipsis"
+                        Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
+                </StackPanel>
             </Grid>
         </Border>
     </DataTemplate>
