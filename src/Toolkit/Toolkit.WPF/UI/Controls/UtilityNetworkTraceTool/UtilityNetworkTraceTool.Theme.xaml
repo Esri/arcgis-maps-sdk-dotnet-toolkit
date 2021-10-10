@@ -1,0 +1,201 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"> 
+  <Style TargetType="controls:UtilityNetworkTraceTool">
+    <Setter Property="UtilityNetworkItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+            <TextBlock Text="{Binding Name}"
+                       Margin="2" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TraceTypeItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <TextBlock Text="{Binding Name}"
+                     Margin="2" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="ResultItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <Border BorderBrush="Black"
+                  BorderThickness="1">
+            <Grid VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+              </Grid.ColumnDefinitions>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto" />
+                  <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Function.FunctionType}"
+                           FontWeight="Bold"
+                           Margin="2" />
+                <TextBlock Text="{Binding Function.NetworkAttribute.Name}"
+                           FontWeight="Bold"
+                           Margin="2"
+                           Grid.Row="1" />
+              </Grid>
+              <TextBlock Text="{Binding Result}"
+                         Margin="2"
+                         VerticalAlignment="Center"
+                         Grid.Column="1" />
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="StartingPointItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <Border BorderBrush="Black"
+                  BorderThickness="1">
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="{Binding StartingPoint.NetworkSource.Name}"
+                         Margin="2"/>
+              <TextBlock Text="{Binding StartingPoint.AssetGroup.Name}"
+                         FontWeight="Bold"
+                         Grid.Row="1"
+                         Margin="2"/>
+              <Button Command="{Binding ZoomToCommand}"
+                      CommandParameter="{Binding StartingPoint}"
+                      VerticalAlignment="Center"
+                      Margin="2"
+                      Grid.RowSpan="2"
+                      Grid.Column="1">
+                <Image Source="/Esri.ArcGISRuntime.Toolkit;component/Assets/ZoomTo.png"
+                       Height="20"
+                       Width="20"
+                       Stretch="UniformToFill" />
+              </Button>
+              <Button Command="{Binding DeleteCommand}"
+                      CommandParameter="{Binding StartingPoint}"
+                      VerticalAlignment="Center"
+                      Margin="2"
+                      Grid.RowSpan="2"
+                      Grid.Column="2">
+                <Image Source="/Esri.ArcGISRuntime.Toolkit;component/Assets/Delete.png"
+                       Height="20"
+                       Width="20"
+                       Stretch="UniformToFill" />
+              </Button>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="controls:UtilityNetworkTraceTool">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}"
+                  Margin="{TemplateBinding Margin}"
+                  MinWidth="{TemplateBinding MinWidth}"
+                  MaxWidth="{TemplateBinding MaxWidth}">
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+              </Grid.RowDefinitions>
+              <TextBlock Text="Select a utility network"
+                         Visibility="{Binding ElementName=PART_UtilityNetworksPicker, Path=Visibility}"
+                         FontWeight="Bold"
+                         Margin="2" />
+              <ComboBox x:Name="PART_UtilityNetworksPicker"
+                        HorizontalContentAlignment="Stretch"
+                        Visibility="Collapsed"
+                        ItemContainerStyle="{TemplateBinding UtilityNetworkItemContainerStyle}"
+                        ItemTemplate="{TemplateBinding UtilityNetworkItemTemplate}"
+                        Margin="2"
+                        Grid.Row="1" />
+              <TextBlock Text="Select a trace type"
+                         Visibility="{Binding ElementName=PART_TraceTypesPicker, Path=Visibility}"
+                         FontWeight="Bold"
+                         Margin="2"
+                         Grid.Row="2" />
+              <ComboBox x:Name="PART_TraceTypesPicker"
+                        HorizontalContentAlignment="Stretch"
+                        Visibility="Collapsed"
+                        ItemContainerStyle="{TemplateBinding TraceTypeItemContainerStyle}"
+                        ItemTemplate="{TemplateBinding TraceTypeItemTemplate}"
+                        Margin="2"
+                        Grid.Row="3" />
+              <ToggleButton x:Name="PART_AddStartingPointsToggle"
+                            Content="Add Starting Point"
+                            Margin="2"
+                            Grid.Row="4" />
+              <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button x:Name="PART_TraceButton"
+                        Content="Trace"
+                        Margin="2" />
+                <Button x:Name="PART_ResetButton"
+                        Content="Reset"
+                        Margin="2"
+                        Grid.Column="1" />
+              </Grid>
+              <ProgressBar x:Name="PART_BusyIndicator"
+                           Visibility="Collapsed"
+                           Margin="2"
+                           Grid.Row="6" />
+              <TextBlock x:Name="PART_StatusLabel"
+                         Text="{Binding Status}"
+                         TextWrapping="Wrap"
+                         Margin="2"
+                         Grid.Row="7" />
+              <TextBlock Text="Trace function results"
+                         Visibility="{Binding ElementName=PART_FunctionResultsList, Path=Visibility}"
+                         FontWeight="Bold"
+                         Margin="2"
+                         Grid.Row="8" />
+              <ItemsControl x:Name="PART_StartingPointsList"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            HorizontalContentAlignment="Stretch"
+                            Visibility="Collapsed"
+                            ItemContainerStyle="{TemplateBinding StartingPointItemContainerStyle}"
+                            Margin="2"
+                            Grid.Row="9" />
+              <ItemsControl x:Name="PART_FunctionResultsList"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            HorizontalContentAlignment="Stretch"
+                            Visibility="Collapsed"
+                            ItemContainerStyle="{TemplateBinding ResultItemContainerStyle}"
+                            ItemTemplate="{TemplateBinding ResultItemTemplate}"
+                            Margin="2"
+                            Grid.Row="9" />
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

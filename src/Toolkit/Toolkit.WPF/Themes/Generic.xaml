@@ -15,6 +15,7 @@
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
    
