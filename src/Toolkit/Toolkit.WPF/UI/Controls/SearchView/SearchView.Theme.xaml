@@ -77,6 +77,7 @@
     <ControlTemplate x:Key="PlainButtonTemplate" TargetType="ButtonBase">
         <Border
             x:Name="Border"
+            Padding="{TemplateBinding Padding}"
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
@@ -141,161 +142,186 @@
         <Setter Property="Template" Value="{StaticResource PlainButtonTemplate}" />
     </Style>
 
+    <Style x:Key="ProminentButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Template" Value="{StaticResource PlainButtonTemplate}" />
+    </Style>
+
     <ControlTemplate x:Key="DefaultSearchViewTemplate" TargetType="{x:Type controls:SearchView}">
-        <Border x:Name="Self" Style="{TemplateBinding SearchBarBorderStyle}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <ToggleButton
-                    x:Name="SourceSelectToggle"
-                    Grid.Column="0"
-                    Style="{TemplateBinding SourceSelectButtonStyle}"
-                    Visibility="{Binding SourceSelectVisibility, Mode=OneWay}" />
-                <Popup
-                    Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
-                    HorizontalOffset="-1"
-                    IsOpen="{Binding ElementName=SourceSelectToggle, Path=IsChecked, Mode=TwoWay}"
-                    StaysOpen="False">
-                    <Border BorderThickness="1" Style="{TemplateBinding SearchBarBorderStyle}">
-                        <StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                            <ToggleButton
-                                Width="{Binding ElementName=sourseList, Path=ActualWidth, Mode=OneWay}"
-                                BorderThickness="0"
-                                IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
-                                Style="{TemplateBinding SourceSelectButtonStyle}">
-                                <TextBlock Text="All Sources" />
-                            </ToggleButton>
-                            <ListView
-                                x:Name="sourseList"
-                                ItemContainerStyle="{StaticResource SimpleListItem}"
-                                ItemsSource="{Binding SearchViewModel.Sources, Mode=OneWay}"
-                                SelectedItem="{Binding SearchViewModel.ActiveSource, Mode=TwoWay}"
-                                Style="{StaticResource SimpleListView}">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type controls:ISearchSource}">
-                                        <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
-                                            <TextBlock
-                                                Padding="8"
-                                                FontSize="12"
-                                                Text="{Binding DisplayName, Mode=OneWay}"
-                                                TextWrapping="Wrap" />
-                                        </Border>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </StackPanel>
-                    </Border>
-                </Popup>
-                <TextBox
-                    x:Name="QueryEntry"
-                    Grid.Column="1"
-                    Style="{TemplateBinding QueryTextBoxStyle}"
-                    Text="{Binding SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock
-                    Grid.Column="1"
-                    Style="{TemplateBinding PlaceholderTextBlockStyle}"
-                    Text="{Binding SearchViewModel.ActivePlaceholder, Mode=OneWay}"
-                    Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
-                <Button
-                    Grid.Column="2"
-                    Command="{Binding ClearCommand}"
-                    Style="{TemplateBinding ClearButtonStyle}"
-                    Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
-                <Popup
-                    Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
-                    HorizontalOffset="-1"
-                    IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}"
-                    Placement="Bottom"
-                    Style="{TemplateBinding SuggestionPopupStyle}">
-                    <Popup.Resources>
-                        <CollectionViewSource x:Key="GroupedSuggestions" Source="{Binding SearchViewModel.Suggestions}">
-                            <CollectionViewSource.GroupDescriptions>
-                                <PropertyGroupDescription PropertyName="OwningSource" />
-                            </CollectionViewSource.GroupDescriptions>
-                        </CollectionViewSource>
-                    </Popup.Resources>
-                    <Border BorderThickness="1,1,1,0" Style="{TemplateBinding SearchBarBorderStyle}">
+            <Border x:Name="Self" Style="{TemplateBinding SearchBarBorderStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ToggleButton
+                        x:Name="SourceSelectToggle"
+                        Grid.Column="0"
+                        Style="{TemplateBinding SourceSelectButtonStyle}"
+                        Visibility="{Binding SourceSelectVisibility, Mode=OneWay}" />
+                    <Popup
+                        Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
+                        HorizontalOffset="-1"
+                        IsOpen="{Binding ElementName=SourceSelectToggle, Path=IsChecked, Mode=TwoWay}"
+                        StaysOpen="False">
+                        <Border BorderThickness="1" Style="{TemplateBinding SearchBarBorderStyle}">
+                            <StackPanel>
 
-                        <ListView
-                            ItemContainerStyle="{StaticResource SimpleListItem}"
-                            ItemTemplate="{TemplateBinding SearchSuggestionTemplate}"
-                            ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
-                            SelectedItem="{Binding SelectedSuggestion, Mode=OneWayToSource}"
-                            Style="{StaticResource SimpleListView}">
-                            <ListView.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <Border
-                                                HorizontalAlignment="Stretch"
-                                                Background="#4c4c4c"
-                                                Visibility="{Binding ElementName=Self, Path=DataContext.SourceSelectVisibility, Mode=OneWay}">
+                                <ToggleButton
+                                    Width="{Binding ElementName=sourseList, Path=ActualWidth, Mode=OneWay}"
+                                    BorderThickness="0"
+                                    IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
+                                    Style="{TemplateBinding SourceSelectButtonStyle}">
+                                    <TextBlock Text="All Sources" />
+                                </ToggleButton>
+                                <ListView
+                                    x:Name="sourseList"
+                                    ItemContainerStyle="{StaticResource SimpleListItem}"
+                                    ItemsSource="{Binding SearchViewModel.Sources, Mode=OneWay}"
+                                    SelectedItem="{Binding SearchViewModel.ActiveSource, Mode=TwoWay}"
+                                    Style="{StaticResource SimpleListView}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type controls:ISearchSource}">
+                                            <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
                                                 <TextBlock
-                                                    Margin="8"
-                                                    FontSize="11"
-                                                    FontWeight="SemiBold"
-                                                    Foreground="White"
-                                                    Text="{Binding Name.DisplayName}"
+                                                    Padding="8"
+                                                    FontSize="12"
+                                                    Text="{Binding DisplayName, Mode=OneWay}"
                                                     TextWrapping="Wrap" />
                                             </Border>
                                         </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
-                            </ListView.GroupStyle>
-                        </ListView>
-                    </Border>
-                </Popup>
-                <Button
-                    Grid.Column="3"
-                    Command="{Binding SearchCommand, Mode=OneTime}"
-                    Style="{TemplateBinding SearchButtonStyle}" />
-                <Border
-                    Grid.Row="1"
-                    Grid.ColumnSpan="4"
-                    Background="White"
-                    Visibility="{Binding ResultViewVisibility, Mode=OneWay}">
-                    <Grid>
-                        <ListView
-                            MaxHeight="300"
-                            ItemContainerStyle="{StaticResource SimpleListItem}"
-                            ItemTemplate="{TemplateBinding SearchResultTemplate}"
-                            ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
-                            SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=OneWayToSource}"
-                            Style="{StaticResource SimpleListView}"
-                            Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}}" />
-                        <Border
-                            BorderThickness="0,1,0,0"
-                            Style="{TemplateBinding SearchBarBorderStyle}"
-                            Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
-                            <TextBlock
-                                Margin="8"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Text="{TemplateBinding NoResultMessage}" />
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackPanel>
                         </Border>
-                    </Grid>
-                </Border>
-                <ProgressBar
-                    Grid.Row="0"
-                    Grid.ColumnSpan="4"
-                    Height="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top"
-                    BorderBrush="Transparent"
-                    Foreground="#00619b"
-                    IsIndeterminate="True"
-                    Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-            </Grid>
-        </Border>
+                    </Popup>
+                    <TextBox
+                        x:Name="QueryEntry"
+                        Grid.Column="1"
+                        Style="{TemplateBinding QueryTextBoxStyle}"
+                        Text="{Binding SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Style="{TemplateBinding PlaceholderTextBlockStyle}"
+                        Text="{Binding SearchViewModel.ActivePlaceholder, Mode=OneWay}"
+                        Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
+                    <Button
+                        Grid.Column="2"
+                        Command="{Binding ClearCommand}"
+                        Style="{TemplateBinding ClearButtonStyle}"
+                        Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
+                    <Popup
+                        Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
+                        HorizontalOffset="-1"
+                        IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}"
+                        Placement="Bottom"
+                        Style="{TemplateBinding SuggestionPopupStyle}">
+                        <Popup.Resources>
+                            <CollectionViewSource x:Key="GroupedSuggestions" Source="{Binding SearchViewModel.Suggestions}">
+                                <CollectionViewSource.GroupDescriptions>
+                                    <PropertyGroupDescription PropertyName="OwningSource" />
+                                </CollectionViewSource.GroupDescriptions>
+                            </CollectionViewSource>
+                        </Popup.Resources>
+                        <Border BorderThickness="1,1,1,0" Style="{TemplateBinding SearchBarBorderStyle}">
+
+                            <ListView
+                                ItemContainerStyle="{StaticResource SimpleListItem}"
+                                ItemTemplate="{TemplateBinding SearchSuggestionTemplate}"
+                                ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
+                                SelectedItem="{Binding SelectedSuggestion, Mode=OneWayToSource}"
+                                Style="{StaticResource SimpleListView}">
+                                <ListView.GroupStyle>
+                                    <GroupStyle>
+                                        <GroupStyle.HeaderTemplate>
+                                            <DataTemplate>
+                                                <Border
+                                                    HorizontalAlignment="Stretch"
+                                                    Background="#4c4c4c"
+                                                    Visibility="{Binding ElementName=Self, Path=DataContext.SourceSelectVisibility, Mode=OneWay}">
+                                                    <TextBlock
+                                                        Margin="8"
+                                                        FontSize="11"
+                                                        FontWeight="SemiBold"
+                                                        Foreground="White"
+                                                        Text="{Binding Name.DisplayName}"
+                                                        TextWrapping="Wrap" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </GroupStyle.HeaderTemplate>
+                                    </GroupStyle>
+                                </ListView.GroupStyle>
+                            </ListView>
+                        </Border>
+                    </Popup>
+                    <Button
+                        Grid.Column="3"
+                        Command="{Binding SearchCommand, Mode=OneTime}"
+                        Style="{TemplateBinding SearchButtonStyle}" />
+                    <Border
+                        Grid.Row="1"
+                        Grid.ColumnSpan="4"
+                        Background="White"
+                        Visibility="{Binding ResultViewVisibility, Mode=OneWay}">
+                        <Grid>
+                            <ListView
+                                MaxHeight="300"
+                                ItemContainerStyle="{StaticResource SimpleListItem}"
+                                ItemTemplate="{TemplateBinding SearchResultTemplate}"
+                                ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
+                                SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=OneWayToSource}"
+                                Style="{StaticResource SimpleListView}"
+                                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}}" />
+                            <Border
+                                BorderThickness="0,1,0,0"
+                                Style="{TemplateBinding SearchBarBorderStyle}"
+                                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
+                                <TextBlock
+                                    Margin="8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{TemplateBinding NoResultMessage}" />
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ProgressBar
+                        Grid.Row="0"
+                        Grid.ColumnSpan="4"
+                        Height="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        BorderBrush="Transparent"
+                        Foreground="#00619b"
+                        IsIndeterminate="True"
+                        Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </Grid>
+            </Border>
+            <Button
+                Grid.Row="1"
+                Margin="0,8,0,0"
+                Padding="4"
+                HorizontalAlignment="Stretch"
+                Background="White"
+                BorderBrush="#007AC2"
+                BorderThickness="1"
+                Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
+                Content="Search Here"
+                Template="{StaticResource PlainButtonTemplate}"
+                Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+        </Grid>
     </ControlTemplate>
     <Style
         x:Key="SearchViewSearchButtonStyle"

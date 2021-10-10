@@ -291,7 +291,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             await SearchViewModel.UpdateSuggestions();
         }
 
-        private void HandleSelectedResultChanged()
+        private async Task HandleSelectedResultChanged()
         {
             NotifyPropertyChange(nameof(ResultViewVisibility));
 
@@ -304,7 +304,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (selectedResult.SelectionViewpoint != null && GeoView != null)
                 {
                     SearchViewModel.IgnoreAreaChangesFlag = true;
-                    GeoView.SetViewpoint(selectedResult.SelectionViewpoint);
+                    await GeoView.SetViewpointAsync(selectedResult.SelectionViewpoint);
                     SearchViewModel.IgnoreAreaChangesFlag = false;
                 }
 
@@ -319,7 +319,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void HandleResultsCollectionChanged()
+        private async Task HandleResultsCollectionChanged()
         {
             NotifyPropertyChange(nameof(ResultViewVisibility));
 
@@ -345,12 +345,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var newViewpoint = Geometry.GeometryEngine.CombineExtents(zoomableResults);
                     if (GeoView is MapView mv)
                     {
-                        _ = mv.SetViewpointGeometryAsync(newViewpoint, MultipleResultZoomBuffer);
+                        await mv.SetViewpointGeometryAsync(newViewpoint, MultipleResultZoomBuffer);
                     }
                     else
                     {
                         // TODO - figure out what this will mean with Scenes
-                        GeoView.SetViewpoint(new Viewpoint(newViewpoint));
+                        await GeoView.SetViewpointAsync(new Viewpoint(newViewpoint));
                     }
 
                     SearchViewModel.IgnoreAreaChangesFlag = false;

@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 SetPropertyChanged(value, ref _queryArea);
 
-                if (Results != null && value != null)
+                if (!IgnoreAreaChangesFlag && Results != null && value != null)
                 {
                     // TODO - update for new logic
                     IsEligibleForRequery = true;

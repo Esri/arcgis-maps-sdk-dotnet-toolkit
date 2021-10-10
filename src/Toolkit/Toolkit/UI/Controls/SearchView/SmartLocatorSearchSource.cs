@@ -113,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Add attributes expected from the World Geocoder Service if present, otherwise default to all attributes.
             if (Locator.Uri?.ToString() == WorldGeocoderUriString)
             {
-                var desiredAttributes = new[] { "LongLabel", "Type" };
+                var desiredAttributes = new[] { "LongLabel", "Place_addr", "Type" };
                 if (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false)
                 {
                     foreach (var attr in desiredAttributes)
@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var symbol = await SymbolForResult(r);
             string subtitle = $"Match percent: {r.Score}";
-            if (r.Attributes.ContainsKey("LongLabel") && r.Attributes["LongLabel"]?.ToString() is string subtitleString)
+            if (r.Attributes.ContainsKey("Place_addr") && r.Attributes["Place_addr"]?.ToString() is string subtitleString)
             {
                 subtitle = subtitleString;
             }
@@ -212,7 +212,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             cancellationToken?.ThrowIfCancellationRequested();
 
-            var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, cancellationToken ?? CancellationToken.None);
+            GeocodeParameters tempParams = new GeocodeParameters();
+            foreach (var attribute in GeocodeParameters.ResultAttributeNames)
+            {
+                tempParams.ResultAttributeNames.Add(attribute);
+            }
+
+            var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, tempParams, cancellationToken ?? CancellationToken.None);
 
             cancellationToken?.ThrowIfCancellationRequested();
 
@@ -286,6 +292,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
                 cancellationToken?.ThrowIfCancellationRequested();
             }
+
+            return await ResultToSearchResult(results);
+        }
+
+        /// <summary>
+        /// <inheritdoc />
+        /// </summary>
+        public override async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Geometry.Envelope queryArea, CancellationToken? cancellationToken)
+        {
+            await EnsureLoaded();
+
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            // Reset spatial parameters
+            GeocodeParameters.SearchArea = queryArea;
+            GeocodeParameters.MaxResults = MaximumResults;
+
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+            cancellationToken?.ThrowIfCancellationRequested();
 
             return await ResultToSearchResult(results);
         }
