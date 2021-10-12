@@ -110,9 +110,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                                        .ContinueWith(tt => _acceptingSuggestionFlag = false, TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
-            #if WINDOWS_UWP
+#if WINDOWS_UWP
             get => null;
-            #endif
+#endif
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void Sources_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ResultViewVisibility)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SourceSelectVisibility)));
         }
 
         private void HandleMapChange(object sender, PropertyChangedEventArgs e)
@@ -305,6 +305,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     SearchViewModel.IgnoreAreaChangesFlag = true;
                     await GeoView.SetViewpointAsync(selectedResult.SelectionViewpoint);
+                    await Task.Delay(1000);
                     SearchViewModel.IgnoreAreaChangesFlag = false;
                 }
 
@@ -353,6 +354,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         await GeoView.SetViewpointAsync(new Viewpoint(newViewpoint));
                     }
 
+                    await Task.Delay(1000);
                     SearchViewModel.IgnoreAreaChangesFlag = false;
                 }
             }

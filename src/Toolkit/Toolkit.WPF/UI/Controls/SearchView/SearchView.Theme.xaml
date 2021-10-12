@@ -167,6 +167,11 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
+                    <Border
+                        x:Name="PopupTarget"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Visibility="Hidden" />
                     <ToggleButton
                         x:Name="SourceSelectToggle"
                         Grid.Column="0"
@@ -176,19 +181,21 @@
                         Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
                         HorizontalOffset="-1"
                         IsOpen="{Binding ElementName=SourceSelectToggle, Path=IsChecked, Mode=TwoWay}"
+                        Placement="Bottom"
+                        PlacementTarget="{Binding ElementName=SourceSelectToggle}"
                         StaysOpen="False">
                         <Border BorderThickness="1" Style="{TemplateBinding SearchBarBorderStyle}">
                             <StackPanel>
 
                                 <ToggleButton
-                                    Width="{Binding ElementName=sourseList, Path=ActualWidth, Mode=OneWay}"
+                                    Width="{Binding ElementName=sourceList, Path=ActualWidth, Mode=OneWay}"
                                     BorderThickness="0"
                                     IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                                     Style="{TemplateBinding SourceSelectButtonStyle}">
                                     <TextBlock Text="All Sources" />
                                 </ToggleButton>
                                 <ListView
-                                    x:Name="sourseList"
+                                    x:Name="sourceList"
                                     ItemContainerStyle="{StaticResource SimpleListItem}"
                                     ItemsSource="{Binding SearchViewModel.Sources, Mode=OneWay}"
                                     SelectedItem="{Binding SearchViewModel.ActiveSource, Mode=TwoWay}"
@@ -228,6 +235,7 @@
                         HorizontalOffset="-1"
                         IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}"
                         Placement="Bottom"
+                        PlacementTarget="{Binding ElementName=PopupTarget}"
                         Style="{TemplateBinding SuggestionPopupStyle}">
                         <Popup.Resources>
                             <CollectionViewSource x:Key="GroupedSuggestions" Source="{Binding SearchViewModel.Suggestions}">

@@ -200,6 +200,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         public async Task CommitSearch()
         {
+            if (string.IsNullOrWhiteSpace(CurrentQuery))
+            {
+                return;
+            }
+
             if (_activeSearchCancellation != null)
             {
                 _activeSearchCancellation.Cancel();
