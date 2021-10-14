@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const int TypingDelayMilliseconds = 75;
         private GeoModel? _lastUsedGeomodel;
         private GraphicsOverlay? _resultOverlay;
-        private bool _hasViewpointChangedPostSearch;
+        private bool _isSourceSelectOpen;
 
         // Flag indicates whether control is waiting after user finished typing.
         private bool _waitFlag;
@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #region Binding support
+#region Binding support
 
         /// <summary>
         /// Sets the selected suggestion, triggering a search.
@@ -148,9 +148,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #endregion binding support
+        public bool IsSourceSelectOpen
+        {
+            get => _isSourceSelectOpen;
+            set
+            {
+                if (value != _isSourceSelectOpen)
+                {
+                    _isSourceSelectOpen = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSourceSelectOpen)));
+                }
+            }
+        }
 
-        #region events
+#endregion binding support
+
+#region events
 
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -199,6 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Sources_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SourceSelectVisibility)));
+            IsSourceSelectOpen = false;
         }
 
         private void HandleMapChange(object sender, PropertyChangedEventArgs e)
@@ -219,7 +233,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _lastUsedGeomodel = scene;
                 }
-
                 ConfigureForCurrentMap();
             }
         }
@@ -228,6 +241,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SearchViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            IsSourceSelectOpen = false;
             switch (e.PropertyName)
             {
                 case nameof(SearchViewModel.CurrentQuery):
@@ -365,9 +379,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             NotifyPropertyChange(nameof(ResultViewVisibility));
         }
 
-        #endregion events
+#endregion events
 
-        #region commands
+#region commands
 
         /// <summary>
         /// Gets a command that clears the current search.
@@ -400,9 +414,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             SearchViewModel?.RepeatSearchHere();
         }
-        #endregion commands
+#endregion commands
 
-        #region properties
+#region properties
 
         /// <summary>
         /// Gets or sets the GeoView associated with this view.
@@ -463,9 +477,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => (double)GetValue(MultipleResultZoomBufferProperty);
             set => SetValue(MultipleResultZoomBufferProperty, value);
         }
-        #endregion properties
+#endregion properties
 
-        #region dependency properties
+#region dependency properties
 
         /// <summary>
         /// Identifies the <see cref="NoResultMessage"/> dependency property.
@@ -502,7 +516,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty MultipleResultZoomBufferProperty =
             DependencyProperty.Register(nameof(MultipleResultZoomBuffer), typeof(double), typeof(SearchView), new PropertyMetadata(64.0));
-        #endregion dependency properties
+#endregion dependency properties
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler PropertyChanged;

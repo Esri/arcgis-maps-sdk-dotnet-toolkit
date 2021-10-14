@@ -8,73 +8,21 @@
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
     <converter:CollectionIsEmptyToVisibilityConverter x:Key="CollectionIsEmptyToVisibilityConverter" />
-    <SolidColorBrush x:Key="CalciteIconFill" Color="#6e6e6e" />
     <Color x:Key="ButtonHoverColor">#f3f3f3</Color>
     <Color x:Key="ButtonPressColor">#e2f1fb</Color>
+    <Color x:Key="BlueButtonColor">#007AC2</Color>
+    <Color x:Key="BlueButtonHoverColor">#00619B</Color>
+    <Color x:Key="BlueButtonPressColor">#004874</Color>
+    <Color x:Key="CommonGrayColor">#6e6e6e</Color>
+    <SolidColorBrush x:Key="CommonGrayBrush" Color="{StaticResource CommonGrayColor}" />
+    <SolidColorBrush x:Key="DefaultControlBackgroundBrush" Color="White" />
+    <SolidColorBrush x:Key="BlueButtonBrush" Color="{StaticResource BlueButtonColor}" />
+    <SolidColorBrush x:Key="BlueButtonHoverBrush" Color="{StaticResource BlueButtonHoverColor}" />
+    <SolidColorBrush x:Key="BlueButtonPressBrush" Color="{StaticResource BlueButtonPressColor}" />
     <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource ButtonHoverColor}" />
     <SolidColorBrush x:Key="ButtonPressBrush" Color="{StaticResource ButtonPressColor}" />
     <SolidColorBrush x:Key="ItemSeparatorBrush" Color="#6e6e6e4e" />
-    <Style x:Key="SimpleListView" TargetType="ListView">
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ListView">
-                    <Border Name="Border" BorderThickness="0">
-                        <ScrollViewer
-                            CanContentScroll="True"
-                            HorizontalScrollBarVisibility="Disabled"
-                            VerticalScrollBarVisibility="Auto">
-                            <ItemsPresenter />
-                        </ScrollViewer>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="SimpleListItem" TargetType="ListViewItem">
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ListBoxItem">
-                    <Border
-                        x:Name="Border"
-                        Margin="-5,0,0,0"
-                        Background="White"
-                        SnapsToDevicePixels="true">
-                        <ContentPresenter />
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Disabled" />
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="SelectionStates">
-                                <VisualState x:Name="Unselected" />
-                                <VisualState x:Name="Selected">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <ControlTemplate x:Key="PlainButtonTemplate" TargetType="ButtonBase">
+    <ControlTemplate x:Key="BarActionButtonTemplate" TargetType="ButtonBase">
         <Border
             x:Name="Border"
             Padding="{TemplateBinding Padding}"
@@ -84,17 +32,12 @@
             CornerRadius="0"
             TextBlock.Foreground="{TemplateBinding Foreground}">
             <Grid>
-                <ContentPresenter
-                    Margin="2"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    RecognizesAccessKey="True" />
-
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                 <Border
                     x:Name="DisabledScrim"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Background="White"
+                    Background="{StaticResource DefaultControlBackgroundBrush}"
                     Opacity="0" />
             </Grid>
             <VisualStateManager.VisualStateGroups>
@@ -130,21 +73,224 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <Style x:Key="BaseButtonStyle" TargetType="ButtonBase">
+    <ControlTemplate x:Key="FloatingButtonTemplate" TargetType="ButtonBase">
+        <Border
+            x:Name="Border"
+            Padding="{TemplateBinding Padding}"
+            Background="{StaticResource BlueButtonBrush}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="0"
+            TextBlock.Foreground="{TemplateBinding Foreground}">
+            <Grid>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <Border
+                    x:Name="DisabledScrim"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="{StaticResource DefaultControlBackgroundBrush}"
+                    Opacity="0" />
+            </Grid>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualStateGroup.Transitions>
+                        <VisualTransition GeneratedDuration="0:0:0.2" />
+                        <VisualTransition GeneratedDuration="0" To="Pressed" />
+                    </VisualStateGroup.Transitions>
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource BlueButtonHoverColor}" />
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource BlueButtonPressColor}" />
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Border>
+    </ControlTemplate>
+    <ControlTemplate x:Key="ProminentButtonTemplate" TargetType="ButtonBase">
+        <Border
+            x:Name="Border"
+            Padding="{TemplateBinding Padding}"
+            Background="{StaticResource BlueButtonBrush}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="0"
+            TextBlock.Foreground="{TemplateBinding Foreground}">
+            <Grid>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <Border
+                    x:Name="DisabledScrim"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="{StaticResource DefaultControlBackgroundBrush}"
+                    Opacity="0" />
+            </Grid>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualStateGroup.Transitions>
+                        <VisualTransition GeneratedDuration="0:0:0.2" />
+                        <VisualTransition GeneratedDuration="0" To="Pressed" />
+                    </VisualStateGroup.Transitions>
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsChecked" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource DefaultControlBackgroundBrush}" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BlueButtonBrush}" />
+                <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,0" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource HoverBrush}" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BlueButtonBrush}" />
+                <Setter TargetName="Border" Property="BorderThickness" Value="2,0,0,0" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="ListItemTemplate" TargetType="ListBoxItem">
+        <Border
+            x:Name="Border"
+            Margin="0,0,0,0"
+            Background="{StaticResource DefaultControlBackgroundBrush}"
+            SnapsToDevicePixels="true">
+            <ContentPresenter />
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonHoverColor}" />
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Disabled" />
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="SelectionStates">
+                    <VisualState x:Name="Unselected" />
+                    <VisualState x:Name="Selected">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource ButtonPressColor}" />
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource HoverBrush}" />
+                <Setter TargetName="Border" Property="BorderThickness" Value="2,0,0,0" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource BlueButtonBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <Style x:Key="BarActionButtonStyle" TargetType="ButtonBase">
         <Setter Property="Padding" Value="0" />
-        <Setter Property="Background" Value="White" />
+        <Setter Property="Background" Value="{StaticResource DefaultControlBackgroundBrush}" />
         <Setter Property="Width" Value="32" />
         <Setter Property="Height" Value="32" />
         <Setter Property="BorderThickness" Value="0,0,0,0" />
-        <Setter Property="BorderBrush" Value="#6e6e6e" />
-        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="BorderBrush" Value="{StaticResource CommonGrayBrush}" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Template" Value="{StaticResource PlainButtonTemplate}" />
+        <Setter Property="Template" Value="{StaticResource BarActionButtonTemplate}" />
     </Style>
 
-    <Style x:Key="ProminentButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="White" />
-        <Setter Property="Template" Value="{StaticResource PlainButtonTemplate}" />
+    <Style x:Key="ProminentButtonStyle" TargetType="ButtonBase">
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Template" Value="{StaticResource ProminentButtonTemplate}" />
+    </Style>
+
+    <DataTemplate x:Key="SourceTemplate" DataType="{x:Type controls:ISearchSource}">
+        <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
+            <TextBlock
+                Padding="8"
+                FontSize="12"
+                Text="{Binding DisplayName, Mode=OneWay}"
+                TextWrapping="Wrap" />
+        </Border>
+    </DataTemplate>
+    <Style x:Key="ResultAreaBorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource DefaultControlBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource CommonGrayBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style x:Key="ProgressIndicatorStyle" TargetType="ProgressBar">
+        <Setter Property="Height" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource BlueButtonHoverBrush}" />
+        <Setter Property="IsIndeterminate" Value="True" />
+    </Style>
+    <Style x:Key="BarContainerBorderStyle" TargetType="Border">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Background" Value="{StaticResource DefaultControlBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource CommonGrayBrush}" />
+    </Style>
+    <Style x:Key="QueryEntryStyle" TargetType="TextBox">
+        <Setter Property="Padding" Value="8,0,0,0" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="MaxLines" Value="1" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="QueryPlaceholderStyle" TargetType="TextBlock">
+        <Setter Property="Padding" Value="8,4,8,4" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource CommonGrayBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+    <Style x:Key="ListContainerStyle" TargetType="ListViewItem">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template" Value="{StaticResource ListItemTemplate}" />
+    </Style>
+    <Style x:Key="ListStyle" TargetType="ListView">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border Name="Border" BorderThickness="0">
+                        <ScrollViewer
+                            CanContentScroll="True"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <ControlTemplate x:Key="DefaultSearchViewTemplate" TargetType="{x:Type controls:SearchView}">
@@ -154,7 +300,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Border x:Name="Self" Style="{TemplateBinding SearchBarBorderStyle}">
+            <Border x:Name="Self" Style="{StaticResource BarContainerBorderStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -175,68 +321,77 @@
                     <ToggleButton
                         x:Name="SourceSelectToggle"
                         Grid.Column="0"
-                        Style="{TemplateBinding SourceSelectButtonStyle}"
-                        Visibility="{Binding SourceSelectVisibility, Mode=OneWay}" />
+                        BorderThickness="0,0,1,0"
+                        IsChecked="{Binding IsSourceSelectOpen, Mode=TwoWay}"
+                        Style="{StaticResource BarActionButtonStyle}"
+                        Visibility="{Binding SourceSelectVisibility, Mode=OneWay}">
+                        <Path
+                            Width="12"
+                            Height="12"
+                            Data="M13.1 6L8 11.1 2.9 6z"
+                            Stretch="Uniform"
+                            Stroke="{StaticResource CommonGrayBrush}"
+                            StrokeThickness="1" />
+                    </ToggleButton>
                     <Popup
                         Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
                         HorizontalOffset="-1"
-                        IsOpen="{Binding ElementName=SourceSelectToggle, Path=IsChecked, Mode=TwoWay}"
+                        IsOpen="{Binding IsSourceSelectOpen, Mode=TwoWay}"
                         Placement="Bottom"
                         PlacementTarget="{Binding ElementName=SourceSelectToggle}"
                         StaysOpen="False">
-                        <Border BorderThickness="1" Style="{TemplateBinding SearchBarBorderStyle}">
+                        <Border Style="{StaticResource ResultAreaBorderStyle}">
                             <StackPanel>
-
                                 <ToggleButton
                                     Width="{Binding ElementName=sourceList, Path=ActualWidth, Mode=OneWay}"
+                                    HorizontalContentAlignment="Left"
                                     BorderThickness="0"
                                     IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
-                                    Style="{TemplateBinding SourceSelectButtonStyle}">
+                                    Style="{StaticResource ProminentButtonStyle}">
                                     <TextBlock Text="All Sources" />
                                 </ToggleButton>
                                 <ListView
                                     x:Name="sourceList"
-                                    ItemContainerStyle="{StaticResource SimpleListItem}"
+                                    ItemContainerStyle="{StaticResource ListContainerStyle}"
+                                    ItemTemplate="{StaticResource SourceTemplate}"
                                     ItemsSource="{Binding SearchViewModel.Sources, Mode=OneWay}"
                                     SelectedItem="{Binding SearchViewModel.ActiveSource, Mode=TwoWay}"
-                                    Style="{StaticResource SimpleListView}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type controls:ISearchSource}">
-                                            <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
-                                                <TextBlock
-                                                    Padding="8"
-                                                    FontSize="12"
-                                                    Text="{Binding DisplayName, Mode=OneWay}"
-                                                    TextWrapping="Wrap" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
+                                    Style="{StaticResource ListStyle}" />
                             </StackPanel>
                         </Border>
                     </Popup>
                     <TextBox
                         x:Name="QueryEntry"
                         Grid.Column="1"
-                        Style="{TemplateBinding QueryTextBoxStyle}"
+                        Style="{StaticResource QueryEntryStyle}"
                         Text="{Binding SearchViewModel.CurrentQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock
                         Grid.Column="1"
-                        Style="{TemplateBinding PlaceholderTextBlockStyle}"
+                        Style="{StaticResource QueryPlaceholderStyle}"
                         Text="{Binding SearchViewModel.ActivePlaceholder, Mode=OneWay}"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                     <Button
                         Grid.Column="2"
                         Command="{Binding ClearCommand}"
-                        Style="{TemplateBinding ClearButtonStyle}"
-                        Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
+                        Style="{StaticResource BarActionButtonStyle}"
+                        ToolTip="Clear Search"
+                        Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}">
+                        <Path
+                            Width="12"
+                            Height="12"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M3.98 11.303L7.281 8 3.98 4.697l.707-.707L7.99 7.293l.01-.01.01.01 3.304-3.303.707.707L8.718 8l3.303 3.303-.707.707L8.01 8.707l-.01.01-.01-.01-3.304 3.303z"
+                            Fill="{StaticResource CommonGrayBrush}"
+                            Stretch="Uniform"
+                            StrokeThickness="0" />
+                    </Button>
                     <Popup
                         Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
                         HorizontalOffset="-1"
                         IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}"
                         Placement="Bottom"
-                        PlacementTarget="{Binding ElementName=PopupTarget}"
-                        Style="{TemplateBinding SuggestionPopupStyle}">
+                        PlacementTarget="{Binding ElementName=PopupTarget}">
                         <Popup.Resources>
                             <CollectionViewSource x:Key="GroupedSuggestions" Source="{Binding SearchViewModel.Suggestions}">
                                 <CollectionViewSource.GroupDescriptions>
@@ -244,21 +399,57 @@
                                 </CollectionViewSource.GroupDescriptions>
                             </CollectionViewSource>
                         </Popup.Resources>
-                        <Border BorderThickness="1,1,1,0" Style="{TemplateBinding SearchBarBorderStyle}">
-
+                        <Border BorderThickness="1,1,1,0" Style="{StaticResource ResultAreaBorderStyle}">
                             <ListView
-                                ItemContainerStyle="{StaticResource SimpleListItem}"
-                                ItemTemplate="{TemplateBinding SearchSuggestionTemplate}"
+                                ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding Source={StaticResource GroupedSuggestions}}"
                                 SelectedItem="{Binding SelectedSuggestion, Mode=OneWayToSource}"
-                                Style="{StaticResource SimpleListView}">
+                                Style="{StaticResource ListStyle}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type controls:SearchSuggestion}">
+                                        <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,0,0,1">
+                                            <Grid Margin="12,6,4,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="10" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Path
+                                                    Width="10"
+                                                    Height="10"
+                                                    Data="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"
+                                                    Stretch="Uniform"
+                                                    Stroke="{StaticResource CommonGrayBrush}"
+                                                    Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                                <Path
+                                                    Width="10"
+                                                    Height="10"
+                                                    Data="M8 0a4.96 4.96 0 0 0-4.9 5.086C3.1 7.893 5.778 11.692 8 16c2.222-4.308 4.9-8.107 4.9-10.914A4.96 4.96 0 0 0 8 0zm0 13.877c-.298-.543-.598-1.077-.89-1.6C5.561 9.514 4.1 6.906 4.1 5.085A3.954 3.954 0 0 1 8 1a3.954 3.954 0 0 1 3.9 4.086c0 1.82-1.462 4.429-3.01 7.19-.292.524-.592 1.058-.89 1.601zM8 2.834A2.166 2.166 0 1 0 10.13 5 2.147 2.147 0 0 0 8 2.834zm0 3.332A1.167 1.167 0 1 1 9.13 5 1.15 1.15 0 0 1 8 6.166z"
+                                                    Stretch="Uniform"
+                                                    Stroke="{StaticResource CommonGrayBrush}"
+                                                    Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    Margin="12,0,0,0"
+                                                    Text="{Binding DisplayTitle, Mode=OneTime}"
+                                                    TextWrapping="Wrap" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                                 <ListView.GroupStyle>
+
                                     <GroupStyle>
+                                        <GroupStyle.Panel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Margin="-5,0,0,0" />
+                                            </ItemsPanelTemplate>
+                                        </GroupStyle.Panel>
                                         <GroupStyle.HeaderTemplate>
+
                                             <DataTemplate>
                                                 <Border
                                                     HorizontalAlignment="Stretch"
-                                                    Background="#4c4c4c"
+                                                    Background="{StaticResource CommonGrayBrush}"
                                                     Visibility="{Binding ElementName=Self, Path=DataContext.SourceSelectVisibility, Mode=OneWay}">
                                                     <TextBlock
                                                         Margin="8"
@@ -277,25 +468,66 @@
                     </Popup>
                     <Button
                         Grid.Column="3"
+                        BorderThickness="1,0,0,0"
                         Command="{Binding SearchCommand, Mode=OneTime}"
-                        Style="{TemplateBinding SearchButtonStyle}" />
+                        Style="{StaticResource BarActionButtonStyle}"
+                        ToolTip="Search">
+                        <Path
+                            Width="14"
+                            Height="14"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z"
+                            Fill="{StaticResource CommonGrayBrush}"
+                            Stretch="Uniform"
+                            StrokeThickness="0" />
+                    </Button>
                     <Border
                         Grid.Row="1"
                         Grid.ColumnSpan="4"
-                        Background="White"
                         Visibility="{Binding ResultViewVisibility, Mode=OneWay}">
                         <Grid>
                             <ListView
                                 MaxHeight="300"
-                                ItemContainerStyle="{StaticResource SimpleListItem}"
-                                ItemTemplate="{TemplateBinding SearchResultTemplate}"
+                                ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=OneWayToSource}"
-                                Style="{StaticResource SimpleListView}"
-                                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}}" />
+                                Style="{StaticResource ListStyle}"
+                                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type controls:SearchResult}">
+                                        <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
+                                            <Grid Margin="8,4,4,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="24" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Image
+                                                    Width="16"
+                                                    Height="16"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Source="{Binding Path=MarkerImageData, Mode=OneWay}" />
+                                                <StackPanel
+                                                    Grid.Column="1"
+                                                    Margin="8,0,0,0"
+                                                    Orientation="Vertical">
+                                                    <TextBlock Text="{Binding Path=DisplayTitle}" TextWrapping="Wrap" />
+                                                    <TextBlock
+                                                        Foreground="{StaticResource CommonGrayBrush}"
+                                                        Text="{Binding Path=DisplaySubtitle}"
+                                                        TextTrimming="CharacterEllipsis"
+                                                        Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+
+                                </ListView.ItemTemplate>
+                            </ListView>
                             <Border
                                 BorderThickness="0,1,0,0"
-                                Style="{TemplateBinding SearchBarBorderStyle}"
+                                Style="{StaticResource ResultAreaBorderStyle}"
                                 Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
                                 <TextBlock
                                     Margin="8"
@@ -308,171 +540,26 @@
                     <ProgressBar
                         Grid.Row="0"
                         Grid.ColumnSpan="4"
-                        Height="2"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top"
-                        BorderBrush="Transparent"
-                        Foreground="#00619b"
-                        IsIndeterminate="True"
+                        Style="{StaticResource ProgressIndicatorStyle}"
                         Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </Grid>
             </Border>
             <Button
                 Grid.Row="1"
                 Margin="0,8,0,0"
-                Padding="4"
                 HorizontalAlignment="Stretch"
-                Background="White"
-                BorderBrush="#007AC2"
-                BorderThickness="1"
+                BorderThickness="0"
                 Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
                 Content="Search Here"
-                Template="{StaticResource PlainButtonTemplate}"
+                Foreground="White"
+                Style="{StaticResource ProminentButtonStyle}"
+                Template="{StaticResource FloatingButtonTemplate}"
                 Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
         </Grid>
     </ControlTemplate>
-    <Style
-        x:Key="SearchViewSearchButtonStyle"
-        BasedOn="{StaticResource BaseButtonStyle}"
-        TargetType="ButtonBase">
-        <Setter Property="BorderThickness" Value="1,0,0,0" />
-        <Setter Property="ToolTip" Value="Search" />
-        <Setter Property="Content">
-            <Setter.Value>
-                <Path
-                    Width="14"
-                    Height="14"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z"
-                    Fill="{StaticResource CalciteIconFill}"
-                    Stretch="Uniform"
-                    StrokeThickness="0" />
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style
-        x:Key="SarchClearButtonStyle"
-        BasedOn="{StaticResource SearchViewSearchButtonStyle}"
-        TargetType="ButtonBase">
-        <Setter Property="Content">
-            <Setter.Value>
-                <Path
-                    Width="12"
-                    Height="12"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M3.98 11.303L7.281 8 3.98 4.697l.707-.707L7.99 7.293l.01-.01.01.01 3.304-3.303.707.707L8.718 8l3.303 3.303-.707.707L8.01 8.707l-.01.01-.01-.01-3.304 3.303z"
-                    Fill="{StaticResource CalciteIconFill}"
-                    Stretch="Uniform"
-                    StrokeThickness="0" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="ToolTip" Value="Clear search" />
-    </Style>
-    <Style
-        x:Key="SourceSelectStyle"
-        BasedOn="{StaticResource SearchViewSearchButtonStyle}"
-        TargetType="ButtonBase">
-        <Setter Property="BorderThickness" Value="0,0,1,0" />
-        <Setter Property="Content">
-            <Setter.Value>
-                <Path
-                    Width="12"
-                    Height="12"
-                    Data="M13.1 6L8 11.1 2.9 6z"
-                    Stretch="Uniform"
-                    Stroke="{StaticResource CalciteIconFill}"
-                    StrokeThickness="1" />
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style x:Key="BarContainerStyle" TargetType="Border">
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Background" Value="White" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="#6e6e6e" />
-    </Style>
-    <Style x:Key="SearchViewTextBlockStyle" TargetType="TextBox">
-        <Setter Property="Padding" Value="8,0,8,0" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="MaxLines" Value="1" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-    </Style>
-    <Style x:Key="PlaceholderStyle" TargetType="TextBlock">
-        <Setter Property="Padding" Value="8,4,8,4" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="Foreground" Value="#6e6e6e" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="IsHitTestVisible" Value="False" />
-    </Style>
-    <Style x:Key="DefaultSuggestionPopupStyle" TargetType="Popup" />
-    <DataTemplate x:Key="DefaultSearchResultTemplate" DataType="{x:Type controls:SearchResult}">
-        <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
 
-            <Grid Margin="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="24" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Image
-                    Width="16"
-                    Height="16"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Source="{Binding Path=MarkerImageData, Mode=OneWay}" />
-                <StackPanel Grid.Column="1" Orientation="Vertical">
-                    <TextBlock Text="{Binding Path=DisplayTitle}" TextWrapping="Wrap" />
-                    <TextBlock
-                        Foreground="#4a4a4a"
-                        Text="{Binding Path=DisplaySubtitle}"
-                        TextTrimming="CharacterEllipsis"
-                        Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
-                </StackPanel>
-            </Grid>
-        </Border>
-    </DataTemplate>
-    <DataTemplate x:Key="DefaultSearchSuggestionTemplate" DataType="{x:Type controls:SearchSuggestion}">
-        <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,0,0,1">
-            <Grid Margin="4,6,4,6">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Path
-                    Width="10"
-                    Height="10"
-                    Data="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"
-                    Stretch="Uniform"
-                    Stroke="Gray"
-                    Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}}" />
-                <Path
-                    Width="10"
-                    Height="10"
-                    Data="M8 0a4.96 4.96 0 0 0-4.9 5.086C3.1 7.893 5.778 11.692 8 16c2.222-4.308 4.9-8.107 4.9-10.914A4.96 4.96 0 0 0 8 0zm0 13.877c-.298-.543-.598-1.077-.89-1.6C5.561 9.514 4.1 6.906 4.1 5.085A3.954 3.954 0 0 1 8 1a3.954 3.954 0 0 1 3.9 4.086c0 1.82-1.462 4.429-3.01 7.19-.292.524-.592 1.058-.89 1.601zM8 2.834A2.166 2.166 0 1 0 10.13 5 2.147 2.147 0 0 0 8 2.834zm0 3.332A1.167 1.167 0 1 1 9.13 5 1.15 1.15 0 0 1 8 6.166z"
-                    Stretch="Uniform"
-                    Stroke="Gray"
-                    Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="4,0,0,0"
-                    Text="{Binding DisplayTitle, Mode=OneTime}"
-                    TextWrapping="Wrap" />
-            </Grid>
-        </Border>
-    </DataTemplate>
     <Style TargetType="{x:Type controls:SearchView}">
         <Setter Property="Template" Value="{StaticResource DefaultSearchViewTemplate}" />
-        <Setter Property="SearchButtonStyle" Value="{StaticResource SearchViewSearchButtonStyle}" />
-        <Setter Property="SourceSelectButtonStyle" Value="{StaticResource SourceSelectStyle}" />
-        <Setter Property="SearchBarBorderStyle" Value="{StaticResource BarContainerStyle}" />
-        <Setter Property="ClearButtonStyle" Value="{StaticResource SarchClearButtonStyle}" />
-        <Setter Property="QueryTextBoxStyle" Value="{StaticResource SearchViewTextBlockStyle}" />
-        <Setter Property="PlaceholderTextBlockStyle" Value="{StaticResource PlaceholderStyle}" />
-        <Setter Property="SearchResultTemplate" Value="{StaticResource DefaultSearchResultTemplate}" />
-        <Setter Property="SearchSuggestionTemplate" Value="{StaticResource DefaultSearchSuggestionTemplate}" />
-        <Setter Property="SuggestionPopupStyle" Value="{StaticResource DefaultSuggestionPopupStyle}" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Width" Value="256" />

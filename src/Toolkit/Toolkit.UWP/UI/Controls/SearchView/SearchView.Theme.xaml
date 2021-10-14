@@ -217,14 +217,5 @@
   </DataTemplate>
   <Style TargetType="controls:SearchView">
     <Setter Property="Template" Value="{StaticResource DefaultSearchViewTemplate}" />
-    <Setter Property="SearchButtonStyle" Value="{StaticResource SearchViewSearchButtonStyle}" />
-    <Setter Property="SourceSelectButtonStyle" Value="{StaticResource SourceSelectStyle}" />
-    <Setter Property="SearchBarBorderStyle" Value="{StaticResource BarContainerStyle}" />
-    <Setter Property="ClearButtonStyle" Value="{StaticResource SarchClearButtonStyle}" />
-    <Setter Property="QueryTextBoxStyle" Value="{StaticResource SearchViewTextBlockStyle}" />
-    <Setter Property="PlaceholderTextBlockStyle" Value="{StaticResource PlaceholderStyle}" />
-    <Setter Property="SearchResultTemplate" Value="{StaticResource DefaultSearchResultTemplate}" />
-    <Setter Property="SearchSuggestionTemplate" Value="{StaticResource DefaultSearchSuggestionTemplate}" />
-    <Setter Property="SuggestionPopupStyle" Value="{StaticResource DefaultSuggestionPopupStyle}" />
   </Style>
 </ResourceDictionary>

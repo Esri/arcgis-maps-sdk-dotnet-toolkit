@@ -218,6 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _activeSearchCancellation = searchCancellation;
                     Suggestions = null;
                     Results = null;
+                    SelectedResult = null;
                     IsEligibleForRequery = false;
                     var sourcesToSearch = SourcesToSearch();
 
@@ -266,6 +267,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _activeSearchCancellation = searchCancellation;
                     Suggestions = null;
                     Results = null;
+                    SelectedResult = null;
                     IsEligibleForRequery = false;
                     var sourcesToSearch = SourcesToSearch();
                     foreach (var source in sourcesToSearch)
@@ -352,15 +354,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     IsSearchInProgress = true;
                     _activeSearchCancellation = searchCancellation;
+                    SelectedResult = null;
                     Suggestions = null;
                     Results = null;
                     SelectedResult = null;
                     IsEligibleForRequery = false;
-
-                    if (suggestion == null)
-                    {
-                        return;
-                    }
 
                     // Update the UI just so it matches user expectation
                     CurrentQuery = suggestion.DisplayTitle;
@@ -368,6 +366,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var selectedSource = suggestion.OwningSource;
                     var results = await selectedSource.SearchAsync(suggestion, searchCancellation.Token);
 
+                    // TODO - work on this, decide how to handle when search has a single result.
                     switch (SearchMode)
                     {
                         case SearchResultMode.Single:
@@ -519,7 +518,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void OnPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /// <inheritdoc/>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         #endregion
     }
 }
