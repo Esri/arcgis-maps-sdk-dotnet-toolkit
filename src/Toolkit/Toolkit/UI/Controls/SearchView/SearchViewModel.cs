@@ -42,9 +42,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private string? _defaultPlaceholder = "Find a place or address";
         private SearchResultMode _searchMode = SearchResultMode.Automatic;
         private Geometry.Geometry? _queryArea;
+        private Geometry.Geometry? _lastSetArea;
         private MapPoint? _queryCenter;
         private List<SearchResult>? _results;
         private List<SearchSuggestion>? _suggestions;
+        private SearchSuggestion? _lastSuggestion;
 
         private bool _searchInProgress;
         private bool _suggestInProgress;
@@ -65,18 +67,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether a search operation is in progress.
+        /// </summary>
         public bool IsSearchInProgress
         {
             get => _searchInProgress;
-            set => SetPropertyChanged(value, ref _searchInProgress, nameof(IsSearchInProgress), nameof(IsWaiting));
+            private set => SetPropertyChanged(value, ref _searchInProgress, nameof(IsSearchInProgress), nameof(IsWaiting));
         }
 
+        /// <summary>
+        /// Gets a value indicating whether a suggestion request is in progress.
+        /// </summary>
         public bool IsSuggestInProgress
         {
             get => _suggestInProgress;
-            set => SetPropertyChanged(value, ref _suggestInProgress, nameof(IsSuggestInProgress), nameof(IsWaiting));
+            private set => SetPropertyChanged(value, ref _suggestInProgress, nameof(IsSuggestInProgress), nameof(IsWaiting));
         }
 
+        /// <summary>
+        /// Gets a value indicating whether a waiting operation (search, suggestion) is in progress.
+        /// </summary>
+        /// <remarks>
+        /// This can be used to implement activity indicator or progress bar display.
+        /// </remarks>
         public bool IsWaiting
         {
             get => IsSearchInProgress || IsSuggestInProgress;
@@ -135,10 +149,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 SetPropertyChanged(value, ref _queryArea);
 
-                if (!IgnoreAreaChangesFlag && Results != null && value != null)
+                if (IgnoreAreaChangesFlag)
                 {
-                    // TODO - update for new logic
-                    IsEligibleForRequery = true;
+                    // Store set viewpoint for comparison.
+                    _lastSetArea = value;
+                }
+                else if (Results != null && _lastSetArea?.Extent is Envelope oldView && value?.Extent is Envelope newView)
+                {
+                    double avgSize = (oldView.Width + oldView.Height) / 2;
+                    double threshold = avgSize / 4;
+                    double distance = GeometryEngine.Distance(oldView.GetCenter(), newView.GetCenter());
+                    double newAvgSize = (newView.Width + newView.Height) / 2;
+                    IsEligibleForRequery = distance > threshold || newAvgSize > avgSize * 1.25 || newAvgSize < avgSize * 0.75;
                 }
             }
         }
@@ -200,37 +222,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         public async Task CommitSearch()
         {
-            if (string.IsNullOrWhiteSpace(CurrentQuery))
-            {
-                return;
-            }
-
             if (_activeSearchCancellation != null)
             {
                 _activeSearchCancellation.Cancel();
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentQuery))
+            {
+                return;
             }
 
             using (CancellationTokenSource searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds))
             {
                 try
                 {
-                    IsSearchInProgress = true;
                     _activeSearchCancellation = searchCancellation;
-                    Suggestions = null;
-                    Results = null;
-                    SelectedResult = null;
-                    IsEligibleForRequery = false;
+                    PrepareForNewSearch();
+                    _lastSuggestion = null;
                     var sourcesToSearch = SourcesToSearch();
 
-                    foreach (var source in sourcesToSearch)
+                    foreach (var source in SourcesToSearch())
                     {
                         source.SearchArea = QueryArea;
                         source.PreferredSearchLocation = QueryCenter;
                     }
 
-                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.SearchAsync(CurrentQuery, _activeSearchCancellation.Token)));
+                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.SearchAsync(CurrentQuery!, _activeSearchCancellation.Token)));
 
-                    Results = allResults.SelectMany(l => l).ToList();
+                    ApplyNewResult(allResults.SelectMany(l => l).ToList(), null);
                 }
                 catch (Exception)
                 {
@@ -253,22 +272,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         public async Task RepeatSearchHere()
         {
-            // TODO - be smarter about remembering suggestions and using those for repeated searches if possible
             if (_activeSearchCancellation != null)
             {
                 _activeSearchCancellation.Cancel();
+            }
+
+            if (string.IsNullOrWhiteSpace(CurrentQuery) || QueryArea?.Extent == null)
+            {
+                return;
             }
 
             using (CancellationTokenSource searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds))
             {
                 try
                 {
-                    IsSearchInProgress = true;
                     _activeSearchCancellation = searchCancellation;
-                    Suggestions = null;
-                    Results = null;
-                    SelectedResult = null;
-                    IsEligibleForRequery = false;
+                    PrepareForNewSearch();
                     var sourcesToSearch = SourcesToSearch();
                     foreach (var source in sourcesToSearch)
                     {
@@ -276,9 +295,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         source.PreferredSearchLocation = QueryCenter;
                     }
 
-                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.RepeatSearchAsync(CurrentQuery, QueryArea?.Extent, _activeSearchCancellation.Token)));
+                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.RepeatSearchAsync(CurrentQuery!, QueryArea.Extent, _activeSearchCancellation.Token)));
 
-                    Results = allResults.SelectMany(l => l).ToList();
+                    ApplyNewResult(allResults.SelectMany(l => l).ToList(), _lastSuggestion);
                 }
                 catch (Exception)
                 {
@@ -302,6 +321,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _activeSuggestCancellation.Cancel();
             }
 
+            if (string.IsNullOrWhiteSpace(CurrentQuery))
+            {
+                return;
+            }
+
             using (CancellationTokenSource suggestCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds))
             {
                 try
@@ -309,10 +333,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     IsSuggestInProgress = true;
                     _activeSuggestCancellation = suggestCancellation;
                     Suggestions = null;
-                    if (string.IsNullOrWhiteSpace(CurrentQuery))
-                    {
-                        return;
-                    }
 
                     var sourcesToSearch = SourcesToSearch();
                     foreach (var source in sourcesToSearch)
@@ -321,7 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         source.PreferredSearchLocation = QueryCenter;
                     }
 
-                    var allSuggestions = await Task.WhenAll(sourcesToSearch.Select(s => s.SuggestAsync(CurrentQuery, suggestCancellation.Token)));
+                    var allSuggestions = await Task.WhenAll(sourcesToSearch.Select(s => s.SuggestAsync(CurrentQuery!, suggestCancellation.Token)));
 
                     Suggestions = allSuggestions.SelectMany(l => l).ToList();
                 }
@@ -352,13 +372,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 try
                 {
-                    IsSearchInProgress = true;
                     _activeSearchCancellation = searchCancellation;
-                    SelectedResult = null;
-                    Suggestions = null;
-                    Results = null;
-                    SelectedResult = null;
-                    IsEligibleForRequery = false;
+                    PrepareForNewSearch();
+
+                    _lastSuggestion = suggestion;
 
                     // Update the UI just so it matches user expectation
                     CurrentQuery = suggestion.DisplayTitle;
@@ -366,33 +383,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     var selectedSource = suggestion.OwningSource;
                     var results = await selectedSource.SearchAsync(suggestion, searchCancellation.Token);
 
-                    // TODO - work on this, decide how to handle when search has a single result.
-                    switch (SearchMode)
-                    {
-                        case SearchResultMode.Single:
-                            Results = new List<SearchResult> { results.First() };
-                            SelectedResult = Results.First();
-                            break;
-                        case SearchResultMode.Multiple:
-                            Results = results.ToList();
-                            break;
-                        case SearchResultMode.Automatic:
-                            if (suggestion.IsCollection)
-                            {
-                                Results = results.ToList();
-                            }
-                            else
-                            {
-                                Results = new List<SearchResult>() { results.First() };
-                            }
-
-                            if (Results?.Count == 1)
-                            {
-                                SelectedResult = Results.First();
-                            }
-
-                            break;
-                    }
+                    ApplyNewResult(results, suggestion);
                 }
                 catch (Exception)
                 {
@@ -403,6 +394,61 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _activeSearchCancellation = null;
                     IsSearchInProgress = false;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Cancels any previous operations, clears results, and gets ready for a new search.
+        /// </summary>
+        private void PrepareForNewSearch()
+        {
+            SelectedResult = null;
+            Suggestions = null;
+            Results = null;
+            IsEligibleForRequery = false;
+            IsSearchInProgress = true;
+        }
+
+        private void ApplyNewResult(IList<SearchResult> results, SearchSuggestion? originatingSuggestion)
+        {
+            if (!results.Any())
+            {
+                Results = new List<SearchResult>();
+                return;
+            }
+
+            if (results.Count() == 1)
+            {
+                Results = results.ToList();
+                SelectedResult = results.First();
+                return;
+            }
+
+            switch (SearchMode)
+            {
+                case SearchResultMode.Single:
+                    Results = new List<SearchResult> { results.First() };
+                    SelectedResult = Results.First();
+                    break;
+                case SearchResultMode.Multiple:
+                    Results = results.ToList();
+                    break;
+                case SearchResultMode.Automatic:
+                    if (originatingSuggestion?.IsCollection ?? false)
+                    {
+                        Results = results.ToList();
+                    }
+                    else
+                    {
+                        Results = new List<SearchResult>() { results.First() };
+                    }
+
+                    break;
+            }
+
+            if (Results?.Count == 1)
+            {
+                SelectedResult = Results.First();
             }
         }
 
@@ -459,6 +505,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Suggestions = null;
             CurrentQuery = null;
             IsEligibleForRequery = false;
+            _lastSuggestion = null;
         }
 
         /// <summary>

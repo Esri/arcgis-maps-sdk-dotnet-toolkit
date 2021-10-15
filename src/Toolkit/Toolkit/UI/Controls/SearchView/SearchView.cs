@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Controls how long the control waits after typing stops before looking for suggestions.
         private const int TypingDelayMilliseconds = 75;
         private GeoModel? _lastUsedGeomodel;
-        private GraphicsOverlay? _resultOverlay;
+        private GraphicsOverlay _resultOverlay;
         private bool _isSourceSelectOpen;
 
         // Flag indicates whether control is waiting after user finished typing.
@@ -77,11 +77,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (GeoView is MapView mv && mv.Map is Map map)
             {
-                _ = SearchViewModel.ConfigureFromMap(map);
+                _ = SearchViewModel?.ConfigureFromMap(map);
             }
             else if (GeoView is SceneView sv && sv.Scene is Scene sp)
             {
-                _ = SearchViewModel.ConfigureFromMap(sp);
+                _ = SearchViewModel?.ConfigureFromMap(sp);
             }
         }
 
@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#region Binding support
+        #region Binding support
 
         /// <summary>
         /// Sets the selected suggestion, triggering a search.
@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (value is SearchSuggestion userSelection)
                 {
                     _acceptingSuggestionFlag = true;
-                    _ = SearchViewModel.AcceptSuggestion(userSelection)
+                    _ = SearchViewModel?.AcceptSuggestion(userSelection)
                                        .ContinueWith(tt => _acceptingSuggestionFlag = false, TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
@@ -122,12 +122,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get
             {
-                if (!EnableResultListView || SearchViewModel.SearchMode == SearchResultMode.Single || SearchViewModel.SelectedResult != null)
+                if (!EnableResultListView || SearchViewModel?.SearchMode == SearchResultMode.Single || SearchViewModel?.SelectedResult != null)
                 {
                     return Visibility.Collapsed;
                 }
 
-                if (SearchViewModel.Results != null)
+                if (SearchViewModel?.Results != null)
                 {
                     return Visibility.Visible;
                 }
@@ -136,18 +136,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Gets the visibility for the source selection button.
+        /// </summary>
         public Visibility SourceSelectVisibility
         {
             get
             {
-                if (SearchViewModel.Sources.Count() > 1)
+                if (SearchViewModel?.Sources.Count() > 1)
                 {
                     return Visibility.Visible;
                 }
+
                 return Visibility.Collapsed;
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the source selection view is being displayed.
+        /// </summary>
         public bool IsSourceSelectOpen
         {
             get => _isSourceSelectOpen;
@@ -161,9 +168,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#endregion binding support
+        #endregion binding support
 
-#region events
+        #region events
 
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -176,7 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     oldGeoView.ViewpointChanged -= sender.GeoView_ViewpointChanged;
                     sender._lastUsedGeomodel = null;
                     (oldGeoView as INotifyPropertyChanged).PropertyChanged -= sender.HandleMapChange;
-                    if (oldGeoView.GraphicsOverlays.Contains(sender._resultOverlay))
+                    if (oldGeoView.GraphicsOverlays?.Contains(sender._resultOverlay) ?? false)
                     {
                         oldGeoView.GraphicsOverlays.Remove(sender._resultOverlay);
                     }
@@ -186,7 +193,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     (newGeoView as INotifyPropertyChanged).PropertyChanged += sender.HandleMapChange;
                     newGeoView.ViewpointChanged += sender.GeoView_ViewpointChanged;
-                    newGeoView.GraphicsOverlays.Add(sender._resultOverlay);
+                    newGeoView.GraphicsOverlays?.Add(sender._resultOverlay);
                 }
             }
         }
@@ -209,13 +216,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void Sources_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Sources_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SourceSelectVisibility)));
             IsSourceSelectOpen = false;
         }
 
-        private void HandleMapChange(object sender, PropertyChangedEventArgs e)
+        private void HandleMapChange(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Map) || e.PropertyName == nameof(Scene))
             {
@@ -233,13 +240,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _lastUsedGeomodel = scene;
                 }
+
                 ConfigureForCurrentMap();
             }
         }
 
         private static void OnEnableResultListViewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => (d as SearchView)?.NotifyPropertyChange(nameof(ResultViewVisibility));
 
-        private void SearchViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void SearchViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             IsSourceSelectOpen = false;
             switch (e.PropertyName)
@@ -251,26 +259,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     HandleSearchModeChanged();
                     break;
                 case nameof(SearchViewModel.Results):
-                    HandleResultsCollectionChanged();
+                    _ = HandleResultsCollectionChanged();
                     break;
                 case nameof(SearchViewModel.SelectedResult):
-                    HandleSelectedResultChanged();
+                    _ = HandleSelectedResultChanged();
                     break;
             }
         }
 
-        private void GeoView_ViewpointChanged(object sender, EventArgs e) => HandleViewpointChanged();
+        private void GeoView_ViewpointChanged(object? sender, EventArgs e) => HandleViewpointChanged();
 
         /// <summary>
         /// Updates <see cref="SearchViewModel"/> with the current viewpoint.
         /// </summary>
         private void HandleViewpointChanged()
         {
+            if (SearchViewModel == null)
+            {
+                return;
+            }
+
             if (GeoView is MapView mv)
             {
                 if (mv.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Geometry.Geometry newView)
                 {
-                    SearchViewModel.QueryCenter = (newView as Envelope).GetCenter();
+                    SearchViewModel.QueryCenter = (newView as Envelope)?.GetCenter();
                     SearchViewModel.QueryArea = newView;
                 }
             }
@@ -293,7 +306,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         private async Task HandleQueryChanged()
         {
-            if (_waitFlag || _acceptingSuggestionFlag)
+            if (_waitFlag || _acceptingSuggestionFlag || SearchViewModel == null)
             {
                 return;
             }
@@ -309,9 +322,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             NotifyPropertyChange(nameof(ResultViewVisibility));
 
-            if (SearchViewModel.SelectedResult is SearchResult selectedResult)
+            if (SearchViewModel?.SelectedResult is SearchResult selectedResult)
             {
-                _resultOverlay.Graphics.Clear();
+                _resultOverlay?.Graphics.Clear();
                 AddResultToGeoView(selectedResult);
 
                 // Zoom to the feature
@@ -330,34 +343,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else
             {
-                GeoView.DismissCallout();
+                GeoView?.DismissCallout();
             }
         }
 
         private async Task HandleResultsCollectionChanged()
         {
+            if (SearchViewModel == null)
+            {
+                return;
+            }
+
             NotifyPropertyChange(nameof(ResultViewVisibility));
 
             if (SearchViewModel.Results == null)
             {
-                _resultOverlay.Graphics.Clear();
+                _resultOverlay?.Graphics?.Clear();
             }
             else if (SearchViewModel.SelectedResult == null && GeoView != null)
             {
-                _resultOverlay.Graphics.Clear();
+                _resultOverlay?.Graphics?.Clear();
                 foreach (var result in SearchViewModel.Results)
                 {
                     AddResultToGeoView(result);
                 }
 
                 var zoomableResults = SearchViewModel.Results
-                                        .Where(res => res.GeoElement?.Geometry != null)
-                                        .Select(res => res.GeoElement.Geometry).ToList();
+                                        .Select(res => res.GeoElement?.Geometry).OfType<Geometry.Geometry>().ToList();
 
-                if (zoomableResults.Count > 1)
+                if (zoomableResults != null && zoomableResults.Count > 1)
                 {
                     SearchViewModel.IgnoreAreaChangesFlag = true;
-                    var newViewpoint = Geometry.GeometryEngine.CombineExtents(zoomableResults);
+                    var newViewpoint = GeometryEngine.CombineExtents(zoomableResults);
                     if (GeoView is MapView mv)
                     {
                         await mv.SetViewpointGeometryAsync(newViewpoint, MultipleResultZoomBuffer);
@@ -379,9 +396,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             NotifyPropertyChange(nameof(ResultViewVisibility));
         }
 
-#endregion events
+        #endregion events
 
-#region commands
+        #region commands
 
         /// <summary>
         /// Gets a command that clears the current search.
@@ -414,9 +431,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             SearchViewModel?.RepeatSearchHere();
         }
-#endregion commands
+        #endregion commands
 
-#region properties
+        #region properties
 
         /// <summary>
         /// Gets or sets the GeoView associated with this view.
@@ -477,9 +494,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => (double)GetValue(MultipleResultZoomBufferProperty);
             set => SetValue(MultipleResultZoomBufferProperty, value);
         }
-#endregion properties
+        #endregion properties
 
-#region dependency properties
+        #region dependency properties
 
         /// <summary>
         /// Identifies the <see cref="NoResultMessage"/> dependency property.
@@ -516,10 +533,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty MultipleResultZoomBufferProperty =
             DependencyProperty.Register(nameof(MultipleResultZoomBuffer), typeof(double), typeof(SearchView), new PropertyMetadata(64.0));
-#endregion dependency properties
+        #endregion dependency properties
 
         /// <inheritdoc/>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChange(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
