@@ -61,7 +61,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DataContext = this;
             SearchViewModel = new SearchViewModel();
             NoResultMessage = "No Results";
-            EnableAutomaticConfiguration = true;
             _resultOverlay = new GraphicsOverlay { Id = "SearchView_Result_Overlay" };
             ClearCommand = new DelegateCommand(HandleClearSearchCommand);
             SearchCommand = new DelegateCommand(HandleSearchCommand);
@@ -122,12 +121,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get
             {
-                if (!EnableResultListView || SearchViewModel?.SearchMode == SearchResultMode.Single || SearchViewModel?.SelectedResult != null)
+                if (!EnableResultListView)
                 {
                     return Visibility.Collapsed;
                 }
 
-                if (SearchViewModel?.Results != null)
+                if (!EnableIndividualResultDisplay && (SearchViewModel?.SearchMode == SearchResultMode.Single || SearchViewModel?.SelectedResult != null))
+                {
+                    return Visibility.Collapsed;
+                }
+
+                if (SearchViewModel?.Results?.Any() ?? false)
                 {
                     return Visibility.Visible;
                 }
@@ -381,7 +385,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     else
                     {
-                        // TODO - figure out what this will mean with Scenes
                         await GeoView.SetViewpointAsync(new Viewpoint(newViewpoint));
                     }
 
@@ -417,7 +420,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleClearSearchCommand()
         {
-            // TODO - have separate cancel button for search in progress?
             SearchViewModel?.CancelSearch();
             SearchViewModel?.ClearSearch();
         }
@@ -475,6 +477,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether a 'Repeat Search' button will be displayed
+        /// when the user pans the map a sufficient amount after a search completes.
+        /// </summary>
+        /// <remarks>
+        /// Some consumer applications will display this button in a separate area of the UI from the search bar, often centered over the map.
+        /// This property is intended to allow hiding the default button if using a custom 'Repeat Search' implementation.
+        /// See <see cref="RepeatSearchHereCommand"/> and <see cref="SearchViewModel.IsEligibleForRequery"/> to enable a custom button implementation.
+        /// </remarks>
+        public bool EnableRepeatSearchHereButton
+        {
+            get => (bool)GetValue(EnableRepeatSearchHereButtonProperty);
+            set => SetValue(EnableRepeatSearchHereButtonProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the result list view should be displayed when a result is selected.
+        /// </summary>
+        public bool EnableIndividualResultDisplay
+        {
+            get => (bool)GetValue(EnableIndividualResultDisplayProperty);
+            set => SetValue(EnableIndividualResultDisplayProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the default result list view will be shown.
         /// </summary>
         /// <remarks>
@@ -517,6 +543,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(EnableAutomaticConfiguration), typeof(bool), typeof(SearchView), new PropertyMetadata(true));
 
         /// <summary>
+        /// Identifies the <see cref="EnableRepeatSearchHereButton"/> dependency proeprty.
+        /// </summary>
+        public static readonly DependencyProperty EnableRepeatSearchHereButtonProperty =
+            DependencyProperty.Register(nameof(EnableRepeatSearchHereButton), typeof(bool), typeof(SearchView), new PropertyMetadata(true));
+
+        /// <summary>
         /// Identifies the <see cref="SearchViewModel"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SearchViewModelProperty =
@@ -527,6 +559,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty EnableResultListViewProperty =
             DependencyProperty.Register(nameof(EnableResultListView), typeof(bool), typeof(SearchView), new PropertyMetadata(true, OnEnableResultListViewChanged));
+
+        /// <summary>
+        /// Identifies the <see cref="EnableIndividualResultDisplay"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty EnableIndividualResultDisplayProperty =
+            DependencyProperty.Register(nameof(EnableIndividualResultDisplay), typeof(bool), typeof(SearchView), new PropertyMetadata(true, OnEnableResultListViewChanged));
 
         /// <summary>
         /// Identifies the <see cref="MultipleResultZoomBuffer"/> dependency property.

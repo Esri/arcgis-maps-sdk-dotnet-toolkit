@@ -462,15 +462,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         public async Task ConfigureFromMap(GeoModel? model)
         {
-            if (model is Map mp)
-            {
-                await mp.RetryLoadAsync();
-            }
-            else if (model is Scene sp)
-            {
-                await sp.RetryLoadAsync();
-            }
-
             // Clear existing properties
             ClearSearch();
             Sources.Clear();
@@ -478,10 +469,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             DefaultPlaceholder = "Find a place or address";
 
-            // TODO = Read default search hint from JSON
-            // TODO = Add any locators specified in JSON
-            // TODO = Determine if default locator source should be added
-            // TODO = Add any layer search sources specified in JSON
+            if (model is Map mp && mp.LoadStatus != LoadStatus.Loaded)
+            {
+                await mp.RetryLoadAsync();
+            }
+            else if (model is Scene sp && sp.LoadStatus != LoadStatus.Loaded)
+            {
+                await sp.RetryLoadAsync();
+            }
+
+            // Future = Determine if SearchView should be enabled
+            // Future = Read default search hint from JSON
+            // Future = Add any locators specified in JSON
+            // Future = Determine if default locator source should be added
+            // Future = Add any layer search sources specified in JSON
             bool includeDefault = true;
 
             if (includeDefault)

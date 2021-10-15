@@ -492,8 +492,7 @@
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=OneWayToSource}"
-                                Style="{StaticResource ListStyle}"
-                                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}}">
+                                Style="{StaticResource ListStyle}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchResult}">
                                         <Border BorderBrush="{StaticResource ItemSeparatorBrush}" BorderThickness="0,1,0,0">
@@ -544,17 +543,20 @@
                         Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </Grid>
             </Border>
-            <Button
+            <Grid
                 Grid.Row="1"
                 Margin="0,8,0,0"
-                HorizontalAlignment="Stretch"
-                BorderThickness="0"
-                Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
-                Content="Search Here"
-                Foreground="White"
-                Style="{StaticResource ProminentButtonStyle}"
-                Template="{StaticResource FloatingButtonTemplate}"
-                Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                Visibility="{Binding EnableRepeatSearchHereButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button
+                    HorizontalAlignment="Stretch"
+                    BorderThickness="0"
+                    Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
+                    Content="Search Here"
+                    Foreground="White"
+                    Style="{StaticResource ProminentButtonStyle}"
+                    Template="{StaticResource FloatingButtonTemplate}"
+                    Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </Grid>
         </Grid>
     </ControlTemplate>
 
