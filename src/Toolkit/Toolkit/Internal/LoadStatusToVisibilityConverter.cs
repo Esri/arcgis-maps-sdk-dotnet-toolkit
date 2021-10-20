@@ -31,6 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// *FOR INTERNAL USE* Returns visibility for the given load status.
     /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     internal sealed class LoadStatusToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc />

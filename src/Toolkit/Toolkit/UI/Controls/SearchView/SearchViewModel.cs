@@ -232,34 +232,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            using (CancellationTokenSource searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds))
+            using var searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds);
+            try
             {
-                try
-                {
-                    _activeSearchCancellation = searchCancellation;
-                    PrepareForNewSearch();
-                    _lastSuggestion = null;
-                    var sourcesToSearch = SourcesToSearch();
+                _activeSearchCancellation = searchCancellation;
+                PrepareForNewSearch();
+                _lastSuggestion = null;
+                var sourcesToSearch = SourcesToSearch();
 
-                    foreach (var source in SourcesToSearch())
-                    {
-                        source.SearchArea = QueryArea;
-                        source.PreferredSearchLocation = QueryCenter;
-                    }
-
-                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.SearchAsync(CurrentQuery!, _activeSearchCancellation.Token)));
-
-                    ApplyNewResult(allResults.SelectMany(l => l).ToList(), null);
-                }
-                catch (Exception)
+                foreach (var source in SourcesToSearch())
                 {
-                    // TODO - decide on error handling
+                    source.SearchArea = QueryArea;
+                    source.PreferredSearchLocation = QueryCenter;
                 }
-                finally
-                {
-                    _activeSearchCancellation = null;
-                    IsSearchInProgress = false;
-                }
+
+                var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.SearchAsync(CurrentQuery!, _activeSearchCancellation.Token)));
+
+                ApplyNewResult(allResults.SelectMany(l => l).ToList(), null);
+            }
+            catch (Exception)
+            {
+                // TODO - decide on error handling
+            }
+            finally
+            {
+                _activeSearchCancellation = null;
+                IsSearchInProgress = false;
             }
         }
 
@@ -282,32 +280,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            using (CancellationTokenSource searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds))
+            using var searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds);
+            try
             {
-                try
+                _activeSearchCancellation = searchCancellation;
+                PrepareForNewSearch();
+                var sourcesToSearch = SourcesToSearch();
+                foreach (var source in sourcesToSearch)
                 {
-                    _activeSearchCancellation = searchCancellation;
-                    PrepareForNewSearch();
-                    var sourcesToSearch = SourcesToSearch();
-                    foreach (var source in sourcesToSearch)
-                    {
-                        source.SearchArea = QueryArea;
-                        source.PreferredSearchLocation = QueryCenter;
-                    }
+                    source.SearchArea = QueryArea;
+                    source.PreferredSearchLocation = QueryCenter;
+                }
 
-                    var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.RepeatSearchAsync(CurrentQuery!, QueryArea.Extent, _activeSearchCancellation.Token)));
+                var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.RepeatSearchAsync(CurrentQuery!, QueryArea.Extent, _activeSearchCancellation.Token)));
 
-                    ApplyNewResult(allResults.SelectMany(l => l).ToList(), _lastSuggestion);
-                }
-                catch (Exception)
-                {
-                    // TODO - decide how to handle exceptions.
-                }
-                finally
-                {
-                    _activeSearchCancellation = null;
-                    IsSearchInProgress = false;
-                }
+                ApplyNewResult(allResults.SelectMany(l => l).ToList(), _lastSuggestion);
+            }
+            catch (Exception)
+            {
+                // TODO - decide how to handle exceptions.
+            }
+            finally
+            {
+                _activeSearchCancellation = null;
+                IsSearchInProgress = false;
             }
         }
 
@@ -326,33 +322,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            using (CancellationTokenSource suggestCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds))
+            using var suggestCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds);
+            try
             {
-                try
-                {
-                    IsSuggestInProgress = true;
-                    _activeSuggestCancellation = suggestCancellation;
-                    Suggestions = null;
+                IsSuggestInProgress = true;
+                _activeSuggestCancellation = suggestCancellation;
+                Suggestions = null;
 
-                    var sourcesToSearch = SourcesToSearch();
-                    foreach (var source in sourcesToSearch)
-                    {
-                        source.SearchArea = QueryArea;
-                        source.PreferredSearchLocation = QueryCenter;
-                    }
-
-                    var allSuggestions = await Task.WhenAll(sourcesToSearch.Select(s => s.SuggestAsync(CurrentQuery!, suggestCancellation.Token)));
-
-                    Suggestions = allSuggestions.SelectMany(l => l).ToList();
-                }
-                catch (Exception)
+                var sourcesToSearch = SourcesToSearch();
+                foreach (var source in sourcesToSearch)
                 {
+                    source.SearchArea = QueryArea;
+                    source.PreferredSearchLocation = QueryCenter;
                 }
-                finally
-                {
-                    _activeSuggestCancellation = null;
-                    IsSuggestInProgress = false;
-                }
+
+                var allSuggestions = await Task.WhenAll(sourcesToSearch.Select(s => s.SuggestAsync(CurrentQuery!, suggestCancellation.Token)));
+
+                Suggestions = allSuggestions.SelectMany(l => l).ToList();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                _activeSuggestCancellation = null;
+                IsSuggestInProgress = false;
             }
         }
 
@@ -368,32 +362,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _activeSearchCancellation.Cancel();
             }
 
-            using (CancellationTokenSource searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds))
+            using var searchCancellation = new CancellationTokenSource(QueryTimeoutMilliseconds);
+            try
             {
-                try
-                {
-                    _activeSearchCancellation = searchCancellation;
-                    PrepareForNewSearch();
+                _activeSearchCancellation = searchCancellation;
+                PrepareForNewSearch();
 
-                    _lastSuggestion = suggestion;
+                _lastSuggestion = suggestion;
 
-                    // Update the UI just so it matches user expectation
-                    CurrentQuery = suggestion.DisplayTitle;
+                // Update the UI just so it matches user expectation
+                CurrentQuery = suggestion.DisplayTitle;
 
-                    var selectedSource = suggestion.OwningSource;
-                    var results = await selectedSource.SearchAsync(suggestion, searchCancellation.Token);
+                var selectedSource = suggestion.OwningSource;
+                var results = await selectedSource.SearchAsync(suggestion, searchCancellation.Token);
 
-                    ApplyNewResult(results, suggestion);
-                }
-                catch (Exception)
-                {
-                    // TODO - decide how to report.
-                }
-                finally
-                {
-                    _activeSearchCancellation = null;
-                    IsSearchInProgress = false;
-                }
+                ApplyNewResult(results, suggestion);
+            }
+            catch (Exception)
+            {
+                // TODO - decide how to report.
+            }
+            finally
+            {
+                _activeSearchCancellation = null;
+                IsSearchInProgress = false;
             }
         }
 
@@ -417,7 +409,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            if (results.Count() == 1)
+            if (results.Count == 1)
             {
                 Results = results.ToList();
                 SelectedResult = results.First();

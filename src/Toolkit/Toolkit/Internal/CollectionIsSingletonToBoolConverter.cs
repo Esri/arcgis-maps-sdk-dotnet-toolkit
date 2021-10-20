@@ -17,7 +17,6 @@
 #if !XAMARIN
 using System;
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Culture = System.String;
 #else
@@ -29,28 +28,28 @@ using Culture = System.Globalization.CultureInfo;
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>
-    /// Converts a boolean value to a visibility. Specify 'Inverse' as parameter to invert result.
+    /// Converts collection size to bool, returning true if value is 1, false otherwise. Specify 'Inverse' parameter to invert.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     #if NETFX_CORE
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
     #endif
-    public class BoolToVisibilityConverter : IValueConverter
+    public class CollectionIsSingletonToBoolConverter : IValueConverter
     {
         /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, Culture culture)
         {
-            if (value is bool inputValue)
+            if (value is int collectionSize)
             {
-                if ("Inverse".Equals(parameter))
+                if (parameter is string stringparameter && stringparameter == "Inverse")
                 {
-                    return inputValue ? Visibility.Collapsed : Visibility.Visible;
+                    return collectionSize != 1;
                 }
 
-                return inputValue ? Visibility.Visible : Visibility.Collapsed;
+                return collectionSize == 1;
             }
 
-            return Visibility.Collapsed;
+            return false;
         }
 
         /// <inheritdoc/>

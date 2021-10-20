@@ -5,6 +5,7 @@
     xmlns:converter="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal">
     <converter:EmptyStringToVisibilityConverter x:Key="PlaceholderVisibilityConverter" />
     <converter:CollectionIsEmptyToBoolConverter x:Key="CollectionIsEmptyToBoolConverter" />
+    <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
     <converter:CollectionIsEmptyToVisibilityConverter x:Key="CollectionIsEmptyToVisibilityConverter" />
@@ -489,6 +490,7 @@
                         <Grid>
                             <ListView
                                 MaxHeight="300"
+                                IsEnabled="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=OneWayToSource}"

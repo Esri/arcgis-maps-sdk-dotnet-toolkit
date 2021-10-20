@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Controls how long the control waits after typing stops before looking for suggestions.
         private const int TypingDelayMilliseconds = 75;
         private GeoModel? _lastUsedGeomodel;
-        private GraphicsOverlay _resultOverlay;
+        private readonly GraphicsOverlay _resultOverlay;
         private bool _isSourceSelectOpen;
 
         // Flag indicates whether control is waiting after user finished typing.
@@ -95,10 +95,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         #region Binding support
 
         /// <summary>
-        /// Sets the selected suggestion, triggering a search.
+        /// Gets or sets the selected suggestion, triggering a search.
         /// </summary>
         public SearchSuggestion? SelectedSuggestion
         {
+            get => null;
             set
             {
                 // ListView calls selecteditem binding with null when collection is cleared.
@@ -109,9 +110,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                                        .ContinueWith(tt => _acceptingSuggestionFlag = false, TaskScheduler.FromCurrentSynchronizationContext());
                 }
             }
-#if WINDOWS_UWP
-            get => null;
-#endif
         }
 
         /// <summary>
@@ -147,7 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             get
             {
-                if (SearchViewModel?.Sources.Count() > 1)
+                if (SearchViewModel?.Sources.Count > 1)
                 {
                     return Visibility.Visible;
                 }
@@ -332,7 +330,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 AddResultToGeoView(selectedResult);
 
                 // Zoom to the feature
-                if (selectedResult.SelectionViewpoint != null && GeoView != null)
+                if (selectedResult.SelectionViewpoint != null && GeoView != null && SearchViewModel != null)
                 {
                     SearchViewModel.IgnoreAreaChangesFlag = true;
                     await GeoView.SetViewpointAsync(selectedResult.SelectionViewpoint);
@@ -492,8 +490,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the result list view should be displayed when a result is selected.
+        /// Gets or sets a value indicating whether the view will show the selected result.
+        /// If false, the result list is hidden automatically when a result is selected.
         /// </summary>
+        /// <remarks>
+        /// See <see cref="SearchViewModel.SelectedResult"/> to display custom UI for the selected result.
+        /// </remarks>
         public bool EnableIndividualResultDisplay
         {
             get => (bool)GetValue(EnableIndividualResultDisplayProperty);
@@ -564,7 +566,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="EnableIndividualResultDisplay"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty EnableIndividualResultDisplayProperty =
-            DependencyProperty.Register(nameof(EnableIndividualResultDisplay), typeof(bool), typeof(SearchView), new PropertyMetadata(true, OnEnableResultListViewChanged));
+            DependencyProperty.Register(nameof(EnableIndividualResultDisplay), typeof(bool), typeof(SearchView), new PropertyMetadata(false, OnEnableResultListViewChanged));
 
         /// <summary>
         /// Identifies the <see cref="MultipleResultZoomBuffer"/> dependency property.

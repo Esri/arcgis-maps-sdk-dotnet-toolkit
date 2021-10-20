@@ -145,21 +145,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new SearchResult(r.Label, subtitle, this, new Graphic(r.DisplayLocation, r.Attributes, symbol), viewpoint) { CalloutDefinition = DefaultCalloutDefinition };
         }
 
-        private async Task<Symbol> SymbolForResult(GeocodeResult r)
+        private async Task<Symbol?> SymbolForResult(GeocodeResult r)
         {
-            if (r.Attributes.ContainsKey("Type"))
+            if (r.Attributes.ContainsKey("Type") && ResultSymbolStyle != null && r.Attributes["Type"] is string typeAttrs)
             {
-                var typeAttrs = r.Attributes["Type"];
-
                 if (Locator.Uri?.ToString() == WorldGeocoderUriString)
                 {
-
                     var firstResult = await ResultSymbolStyle.GetSymbolAsync(new[] { typeAttrs.ToString().Replace(' ', '-').ToLower() });
                     if (firstResult != null)
                     {
                         return firstResult;
                     }
                 }
+
                 // TODO = verify this works
                 var symbParams = new SymbolStyleSearchParameters();
                 symbParams.Names.Add(typeAttrs.ToString());
@@ -212,7 +210,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             cancellationToken?.ThrowIfCancellationRequested();
 
-            GeocodeParameters tempParams = new GeocodeParameters();
+            var tempParams = new GeocodeParameters();
             foreach (var attribute in GeocodeParameters.ResultAttributeNames)
             {
                 tempParams.ResultAttributeNames.Add(attribute);
@@ -247,14 +245,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
             cancellationToken?.ThrowIfCancellationRequested();
 
-            if (RepeatSuggestResultThreshold > 0 && results.Count() < RepeatSuggestResultThreshold)
+            if (RepeatSuggestResultThreshold > 0 && results.Count < RepeatSuggestResultThreshold)
             {
                 SuggestParameters.SearchArea = null;
                 results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
                 cancellationToken?.ThrowIfCancellationRequested();
             }
 
-            if (RepeatSuggestResultThreshold > 0 && results.Count() < RepeatSuggestResultThreshold)
+            if (RepeatSuggestResultThreshold > 0 && results.Count < RepeatSuggestResultThreshold)
             {
                 SuggestParameters.PreferredSearchLocation = null;
                 results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
@@ -279,14 +277,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
             cancellationToken?.ThrowIfCancellationRequested();
 
-            if (RepeatSearchResultThreshold > 0 && results.Count() < RepeatSearchResultThreshold)
+            if (RepeatSearchResultThreshold > 0 && results.Count < RepeatSearchResultThreshold)
             {
                 GeocodeParameters.SearchArea = null;
                 results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
                 cancellationToken?.ThrowIfCancellationRequested();
             }
 
-            if (RepeatSearchResultThreshold > 0 && results.Count() < RepeatSearchResultThreshold)
+            if (RepeatSearchResultThreshold > 0 && results.Count < RepeatSearchResultThreshold)
             {
                 GeocodeParameters.PreferredSearchLocation = null;
                 results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);

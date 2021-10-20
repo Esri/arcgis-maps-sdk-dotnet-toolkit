@@ -33,7 +33,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class SearchResult : INotifyPropertyChanged
     {
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly - catch-22
         private byte[]? _markerData;
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         private RuntimeImage? _markerImage;
         #if WINDOWS_UWP
         private ImageSource _markerImageSource;
@@ -44,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ISearchSource _owningSource;
         private GeoElement? _geoElement;
         private Viewpoint? _selectionViewpoint;
-        private CalloutDefinition _calloutDefinition;
+        private CalloutDefinition? _calloutDefinition;
 
         /// <summary>
         /// Gets or sets the title that should be shown whenever the result is displayed.
@@ -130,9 +132,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="viewpoint">Sets the <see cref="SelectionViewpoint"/>.</param>
         public SearchResult(string title, string? subtitle, ISearchSource owner, GeoElement? geoElement, Viewpoint? viewpoint)
         {
-            DisplayTitle = title;
+            _displayTitle = title;
             DisplaySubtitle = subtitle;
-            OwningSource = owner;
+            _owningSource = owner;
             GeoElement = geoElement;
             SelectionViewpoint = viewpoint;
         }
@@ -144,7 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the image displayed for this result.
         /// </summary>
-        public RuntimeImage MarkerImage
+        public RuntimeImage? MarkerImage
         {
             get => _markerImage;
             private set => SetPropertyChanged(value, ref _markerImage);
@@ -153,7 +155,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the image displayed for this result, in a format useful for cross-platform scenarios.
         /// </summary>
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly - catch-22
         public byte[]? MarkerImageData
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             get => _markerData;
             set => SetPropertyChanged(value, ref _markerData);

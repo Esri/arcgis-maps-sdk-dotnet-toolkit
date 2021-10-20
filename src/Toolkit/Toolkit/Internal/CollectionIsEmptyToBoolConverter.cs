@@ -16,12 +16,7 @@
 
 #if !XAMARIN
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 #if NETFX_CORE
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Culture = System.String;
 #else
@@ -32,8 +27,16 @@ using Culture = System.Globalization.CultureInfo;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
+    /// <summary>
+    /// Takes a collection size and returns True if size is not 0, False otherwise. Specify "Empty" as parameter to invert.
+    /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    #if NETFX_CORE
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
+    #endif
     public class CollectionIsEmptyToBoolConverter : IValueConverter
     {
+        /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, Culture culture)
         {
             if (value is int collectionSize)
@@ -42,12 +45,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 {
                     return collectionSize == 0;
                 }
+
                 return collectionSize != 0;
             }
 
             return false;
         }
 
+        /// <inheritdoc/>
         public object ConvertBack(object value, Type targetType, object parameter, Culture culture)
         {
             throw new NotImplementedException();

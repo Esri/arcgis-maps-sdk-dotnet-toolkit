@@ -16,29 +16,32 @@
 
 #if !XAMARIN
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
-    public class DelegateCommand : ICommand
+    /// <summary>
+    /// Simple command implementation.
+    /// </summary>
+    internal class DelegateCommand : ICommand
     {
-        private Action _action;
+        private readonly Action _action;
+
         public DelegateCommand(Action inputAction)
         {
             _action = inputAction;
         }
-        public event EventHandler CanExecuteChanged;
 
-        public bool CanExecute(object parameter)
+        public event EventHandler? CanExecuteChanged;
+
+        public bool CanExecute(object? parameter)
         {
             return true;
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
-            _action?.Invoke();
+            _action.Invoke();
         }
     }
 }

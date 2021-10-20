@@ -16,10 +16,7 @@
 
 #if !XAMARIN
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-#if NETFX_CORE 
+#if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Culture = System.String;
@@ -31,8 +28,16 @@ using Culture = System.Globalization.CultureInfo;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
+    /// <summary>
+    /// Converts string to visibility. Returns Visible if string is empty, collapsed otherwise. Specify 'NotEmpty' for parameter to invert.
+    /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    #if NETFX_CORE
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
+    #endif
     public class EmptyStringToVisibilityConverter : IValueConverter
     {
+        /// <inheritdoc/>
         public object Convert(object value, Type targetType, object parameter, Culture culture)
         {
             if (value is string valueString)
@@ -48,6 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             return "NotEmpty".Equals(parameter) ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        /// <inheritdoc/>
         public object ConvertBack(object value, Type targetType, object parameter, Culture culture)
         {
             throw new NotImplementedException();

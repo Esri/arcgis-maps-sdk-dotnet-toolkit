@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (!_hasPerformedInitialLoad)
             {
-                if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator.LocatorInfo?.Name))
+                if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator?.LocatorInfo?.Name))
                 {
                     DisplayName = Locator?.LocatorInfo?.Name ?? "Locator";
                 }
