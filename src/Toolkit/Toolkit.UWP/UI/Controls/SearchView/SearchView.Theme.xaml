@@ -503,20 +503,23 @@
                         Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </Grid>
             </Border>
-            <Grid Grid.Row="1" Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}">
-                <Grid.Resources>
+            <Popup IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}" VerticalOffset="34">
+                <Popup.Resources>
                     <CollectionViewSource
                         x:Key="GroupedSuggestionsEx"
                         x:Name="GroupedSuggestionsEx"
                         IsSourceGrouped="True"
                         Source="{Binding GroupedSuggestions, Mode=OneWay}" />
-                </Grid.Resources>
+                </Popup.Resources>
                 <Border
+                    Width="{TemplateBinding Width}"
+                    HorizontalAlignment="Stretch"
                     BorderThickness="1,0,1,0"
                     Style="{StaticResource ResultAreaBorderStyle}"
                     Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty'}">
                     <Grid>
                         <ListView
+                            HorizontalAlignment="Stretch"
                             ItemTemplate="{StaticResource SuggestionTemplate}"
                             ItemsSource="{Binding SearchViewModel.Suggestions, Mode=OneWay}"
                             SelectedItem="{Binding SelectedSuggestion, Mode=TwoWay}"
@@ -557,7 +560,7 @@
                         </ListView>
                     </Grid>
                 </Border>
-            </Grid>
+            </Popup>
             <Border
                 Grid.Row="1"
                 Style="{StaticResource ResultAreaBorderStyle}"
@@ -581,8 +584,11 @@
                     </Border>
                 </Grid>
             </Border>
-            <Grid Grid.Row="1" Visibility="{Binding IsSourceSelectOpen, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}}">
-                <Border Style="{StaticResource ResultAreaBorderStyle}">
+            <Popup
+                IsLightDismissEnabled="True"
+                IsOpen="{Binding IsSourceSelectOpen, Mode=TwoWay}"
+                VerticalOffset="34">
+                <Border Width="{TemplateBinding Width}" Style="{StaticResource ResultAreaBorderStyle}">
                     <StackPanel>
                         <ToggleButton
                             HorizontalAlignment="Stretch"
@@ -599,7 +605,7 @@
                             Style="{StaticResource ListStyle}" />
                     </StackPanel>
                 </Border>
-            </Grid>
+            </Popup>
             <Grid
                 Grid.Row="2"
                 Margin="0,8,0,0"
