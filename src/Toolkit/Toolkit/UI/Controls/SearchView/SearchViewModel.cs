@@ -185,7 +185,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the list of available search sources, which can be updated dynamically.
         /// </summary>
-        /// <remarks>See <see cref="ConfigureFromMap(GeoModel?)"/> for a convenient method to populate this collection automatically.</remarks>
+        /// <remarks>See <see cref="ConfigureFromMap(GeoModel?, CancellationToken?)"/> for a convenient method to populate this collection automatically.</remarks>
         public ObservableCollection<ISearchSource> Sources { get; } = new ObservableCollection<ISearchSource>();
 
         /// <summary>
@@ -456,24 +456,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </remarks>
         public async Task ConfigureFromMap(GeoModel? model, CancellationToken? cancellationToken)
         {
-            // Clear existing properties
             cancellationToken?.ThrowIfCancellationRequested();
-            ClearSearch();
-            Sources.Clear();
-            ActiveSource = null;
-
             DefaultPlaceholder = "Find a place or address";
-            cancellationToken?.ThrowIfCancellationRequested();
 
             if (model is Map mp && mp.LoadStatus != LoadStatus.Loaded)
             {
                 await mp.RetryLoadAsync();
-                cancellationToken?.ThrowIfCancellationRequested();
             }
             else if (model is Scene sp && sp.LoadStatus != LoadStatus.Loaded)
             {
                 await sp.RetryLoadAsync();
-                cancellationToken?.ThrowIfCancellationRequested();
             }
 
             // Future = Determine if SearchView should be enabled
@@ -483,13 +475,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Future = Add any layer search sources specified in JSON
             bool includeDefault = true;
 
+            cancellationToken?.ThrowIfCancellationRequested();
+
+            // Clear existing properties
+            ClearSearch();
+            Sources.Clear();
+            ActiveSource = null;
+
             if (includeDefault)
             {
                 var locatorSource = new SmartLocatorSearchSource(
                     new LocatorTask(new Uri("https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer")),
                     await Symbology.SymbolStyle.OpenAsync("Esri2DPointSymbolsStyle", null));
                 Sources.Add(locatorSource);
-                cancellationToken?.ThrowIfCancellationRequested();
             }
         }
 

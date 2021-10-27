@@ -34,6 +34,7 @@ using System.Windows.Controls;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -59,8 +60,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Flag indicating that query text is changing as a result of selecting a suggestion; view should not request suggestions in response to the user suggesting a selection.
         private bool _acceptingSuggestionFlag;
 
-        private ListView _suggestionList;
-
         // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
         private bool _groupListSelectionFlag;
 
@@ -80,6 +79,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if NETFX_CORE
+        private ListView _suggestionList;
+
         /// <inheritdoc/>
         protected override void OnApplyTemplate()
         {
@@ -296,7 +297,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (e.PropertyName == nameof(Map) || e.PropertyName == nameof(Scene))
             {
-                ConfigureForCurrentMap();
+                _ = ConfigureForCurrentMap();
                 return;
             }
 
@@ -312,7 +313,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _lastUsedGeomodel = scene;
                 }
 
-                ConfigureForCurrentMap();
+                _ = ConfigureForCurrentMap();
             }
         }
 
@@ -655,7 +656,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void NotifyPropertyChange(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 #if NETFX_CORE
-
         private void HandleSuggestionsChanged()
         {
             UpdateGroupingForUWP();
