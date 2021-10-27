@@ -63,160 +63,6 @@
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
     <converter:CollectionIsEmptyToVisibilityConverter x:Key="CollectionIsEmptyToVisibilityConverter" />
-    <ControlTemplate x:Key="BarActionButtonTemplate" TargetType="ButtonBase">
-        <Border
-            x:Name="Border"
-            Padding="{TemplateBinding Padding}"
-            Background="{ThemeResource Search.Background.Brush}"
-            BorderBrush="{ThemeResource Border.Internal.Brush}"
-            BorderThickness="{TemplateBinding BorderThickness}"
-            CornerRadius="0">
-            <ContentPresenter
-                x:Name="ContentPresenter"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{ThemeResource Search.Foreground.Brush}" />
-            <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualStateGroup.Transitions>
-                        <VisualTransition GeneratedDuration="0:0:0.2" />
-                        <VisualTransition GeneratedDuration="0" To="Pressed" />
-                    </VisualStateGroup.Transitions>
-                    <VisualState x:Name="Normal">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Foreground.Hover.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Pressed">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Foreground.Press.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Checked">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>
-        </Border>
-    </ControlTemplate>
-    <ControlTemplate x:Key="AllSourceToggleTemplate" TargetType="ToggleButton">
-        <Border
-            x:Name="Border"
-            Padding="{TemplateBinding Padding}"
-            Background="{ThemeResource Search.Background.Brush}"
-            BorderBrush="Transparent"
-            BorderThickness="0,0,0,0"
-            CornerRadius="0">
-            <ContentPresenter
-                x:Name="ContentPresenter"
-                Margin="2,0,0,0"
-                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                Foreground="{ThemeResource Search.Foreground.Brush}" />
-            <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualStateGroup.Transitions>
-                        <VisualTransition GeneratedDuration="0:0:0.2" />
-                        <VisualTransition GeneratedDuration="0" To="Pressed" />
-                        <VisualTransition GeneratedDuration="0" To="Checked" />
-                    </VisualStateGroup.Transitions>
-                    <VisualState x:Name="Normal">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="Transparent" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Pressed">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Checked">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Highlight.Border.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="2,0,0,0" />
-                            </ObjectAnimationUsingKeyFrames>
-                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Margin">
-                                <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,0" />
-                            </ObjectAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>
-        </Border>
-    </ControlTemplate>
-    <ControlTemplate x:Key="FloatingButtonTemplate" TargetType="Button">
-        <Border
-            x:Name="Border"
-            Padding="{TemplateBinding Padding}"
-            Background="{ThemeResource Accent.Background.Brush}"
-            CornerRadius="0">
-            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-            <VisualStateManager.VisualStateGroups>
-                <VisualStateGroup x:Name="CommonStates">
-                    <VisualStateGroup.Transitions>
-                        <VisualTransition GeneratedDuration="0:0:0.2" />
-                        <VisualTransition GeneratedDuration="0" To="Pressed" />
-                    </VisualStateGroup.Transitions>
-                    <VisualState x:Name="Normal" />
-                    <VisualState x:Name="PointerOver">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Accent.Background.Hover.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Pressed">
-                        <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Accent.Background.Press.Color}" />
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </VisualState>
-                </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>
-        </Border>
-    </ControlTemplate>
     <ControlTemplate x:Key="ListItemTemplate" TargetType="ListViewItem">
         <Border
             x:Name="Border"
@@ -272,85 +118,6 @@
             </VisualStateManager.VisualStateGroups>
         </Border>
     </ControlTemplate>
-    <ControlTemplate x:Key="QueryEntryTemplate" TargetType="TextBox">
-        <Border Background="{ThemeResource Search.Background.Brush}" BorderThickness="0">
-            <Grid Margin="{TemplateBinding Padding}">
-                <Grid Visibility="Collapsed">
-                    <Border x:Name="BorderElement" />
-                    <Border x:Name="BackgroundElement" />
-                    <ContentPresenter
-                        x:Name="HeaderContentPresenter"
-                        x:DeferLoadStrategy="Lazy"
-                        Visibility="Collapsed" />
-                    <ContentControl x:Name="PlaceholderTextContentPresenter" Visibility="Collapsed" />
-                    <Button x:Name="DeleteButton" Visibility="Collapsed" />
-                </Grid>
-                <ContentPresenter
-                    x:Name="ContentElement"
-                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                    AutomationProperties.AccessibilityView="Raw"
-                    Foreground="{ThemeResource Search.Foreground.Brush}" />
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="PointerOver" />
-                        <VisualState x:Name="Focused" />
-                        <VisualState x:Name="Disabled" />
-                    </VisualStateGroup>
-                    <VisualStateGroup x:Name="ButtonStates">
-                        <VisualState x:Name="ButtonVisible" />
-                        <VisualState x:Name="ButtonCollapsed" />
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
-            </Grid>
-        </Border>
-    </ControlTemplate>
-    <DataTemplate x:Key="SuggestionTemplate">
-        <Border>
-            <Grid Margin="8,6,4,6">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Path
-                    Width="10"
-                    Height="10"
-                    Data="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"
-                    Fill="{ThemeResource Search.Foreground.Brush}"
-                    Stretch="Uniform"
-                    Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}}" />
-                <Path
-                    Width="10"
-                    Height="10"
-                    Data="M8 0a4.96 4.96 0 0 0-4.9 5.086C3.1 7.893 5.778 11.692 8 16c2.222-4.308 4.9-8.107 4.9-10.914A4.96 4.96 0 0 0 8 0zm0 13.877c-.298-.543-.598-1.077-.89-1.6C5.561 9.514 4.1 6.906 4.1 5.085A3.954 3.954 0 0 1 8 1a3.954 3.954 0 0 1 3.9 4.086c0 1.82-1.462 4.429-3.01 7.19-.292.524-.592 1.058-.89 1.601zM8 2.834A2.166 2.166 0 1 0 10.13 5 2.147 2.147 0 0 0 8 2.834zm0 3.332A1.167 1.167 0 1 1 9.13 5 1.15 1.15 0 0 1 8 6.166z"
-                    Fill="{ThemeResource Search.Foreground.Brush}"
-                    Stretch="Uniform"
-                    Visibility="{Binding IsCollection, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="8,0,0,0"
-                    VerticalAlignment="Center"
-                    Foreground="{ThemeResource Search.Foreground.Brush}"
-                    Text="{Binding DisplayTitle, Mode=OneTime}"
-                    TextWrapping="Wrap" />
-            </Grid>
-        </Border>
-    </DataTemplate>
-    <Style x:Key="BarActionButtonStyle" TargetType="ButtonBase">
-        <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="32" />
-        <Setter Property="Template" Value="{StaticResource BarActionButtonTemplate}" />
-    </Style>
-    <Style x:Key="AllSourceButtonStyle" TargetType="ToggleButton">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Padding" Value="8" />
-        <Setter Property="Template" Value="{StaticResource AllSourceToggleTemplate}" />
-    </Style>
-    <Style x:Key="FloatingButtonStyle" TargetType="Button">
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource FloatingButtonTemplate}" />
-    </Style>
-
     <DataTemplate x:Key="SourceTemplate">
         <Border>
             <TextBlock
@@ -392,6 +159,231 @@
             </Grid>
         </Border>
     </DataTemplate>
+    <DataTemplate x:Key="SuggestionTemplate">
+        <Border>
+            <Grid Margin="8,6,4,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Path
+                    Width="10"
+                    Height="10"
+                    Data="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"
+                    Fill="{ThemeResource Search.Foreground.Brush}"
+                    Stretch="Uniform"
+                    Visibility="{Binding IsCollection, Mode=OneTime}" />
+                <Path
+                    Width="10"
+                    Height="10"
+                    Data="M8 0a4.96 4.96 0 0 0-4.9 5.086C3.1 7.893 5.778 11.692 8 16c2.222-4.308 4.9-8.107 4.9-10.914A4.96 4.96 0 0 0 8 0zm0 13.877c-.298-.543-.598-1.077-.89-1.6C5.561 9.514 4.1 6.906 4.1 5.085A3.954 3.954 0 0 1 8 1a3.954 3.954 0 0 1 3.9 4.086c0 1.82-1.462 4.429-3.01 7.19-.292.524-.592 1.058-.89 1.601zM8 2.834A2.166 2.166 0 1 0 10.13 5 2.147 2.147 0 0 0 8 2.834zm0 3.332A1.167 1.167 0 1 1 9.13 5 1.15 1.15 0 0 1 8 6.166z"
+                    Fill="{ThemeResource Search.Foreground.Brush}"
+                    Stretch="Uniform"
+                    Visibility="{Binding IsCollection, Mode=OneTime, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource Search.Foreground.Brush}"
+                    Text="{Binding DisplayTitle, Mode=OneTime}"
+                    TextWrapping="Wrap" />
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <Style x:Key="ResultMessageStyle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="Foreground" Value="{ThemeResource Search.Foreground.Brush}" />
+    </Style>
+    <Style x:Key="GroupHeaderTextStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{ThemeResource GroupHeader.Foreground.Brush}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style x:Key="BarActionButtonStyle" TargetType="ButtonBase">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Border
+                        x:Name="Border"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{ThemeResource Search.Background.Brush}"
+                        BorderBrush="{ThemeResource Border.Internal.Brush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="0">
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource Search.Foreground.Brush}" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Foreground.Hover.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Foreground.Press.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="AllSourceButtonStyle" TargetType="ToggleButton">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border
+                        x:Name="Border"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{ThemeResource Search.Background.Brush}"
+                        BorderBrush="Transparent"
+                        BorderThickness="0,0,0,0"
+                        CornerRadius="0">
+                        <ContentPresenter
+                            x:Name="ContentPresenter"
+                            Margin="2,0,0,0"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Foreground="{ThemeResource Search.Foreground.Brush}" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                    <VisualTransition GeneratedDuration="0" To="Checked" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="Transparent" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Hover.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Press.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Search.Background.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Highlight.Border.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="2,0,0,0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Margin">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="FloatingButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="Border"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{ThemeResource Accent.Background.Brush}"
+                        CornerRadius="0">
+                        <ContentPresenter
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Foreground="White" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.2" />
+                                    <VisualTransition GeneratedDuration="0" To="Pressed" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Accent.Background.Hover.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Accent.Background.Press.Color}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="ResultAreaBorderStyle" TargetType="Border">
         <Setter Property="Background" Value="{ThemeResource Search.Background.Brush}" />
         <Setter Property="BorderBrush" Value="{ThemeResource Border.External.Brush}" />
@@ -416,7 +408,43 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Template" Value="{StaticResource QueryEntryTemplate}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{ThemeResource Search.Background.Brush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <Grid Visibility="Collapsed">
+                                <Border x:Name="BorderElement" />
+                                <Border x:Name="BackgroundElement" />
+                                <ContentPresenter
+                                    x:Name="HeaderContentPresenter"
+                                    x:DeferLoadStrategy="Lazy"
+                                    Visibility="Collapsed" />
+                                <ContentControl x:Name="PlaceholderTextContentPresenter" Visibility="Collapsed" />
+                                <Button x:Name="DeleteButton" Visibility="Collapsed" />
+                            </Grid>
+                            <ContentPresenter
+                                x:Name="ContentElement"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                AutomationProperties.AccessibilityView="Raw"
+                                Foreground="{ThemeResource Search.Foreground.Brush}" />
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="PointerOver" />
+                                    <VisualState x:Name="Focused" />
+                                    <VisualState x:Name="Disabled" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ButtonStates">
+                                    <VisualState x:Name="ButtonVisible" />
+                                    <VisualState x:Name="ButtonCollapsed" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style x:Key="QueryPlaceholderStyle" TargetType="TextBlock">
         <Setter Property="Padding" Value="8,4,4,4" />
@@ -425,12 +453,14 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="IsHitTestVisible" Value="False" />
     </Style>
-    <Style x:Key="ListContainerStyle" TargetType="ListViewItem">
-        <Setter Property="Template" Value="{StaticResource ListItemTemplate}" />
-    </Style>
     <Style x:Key="ListStyle" TargetType="ListView">
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource ListContainerStyle}" />
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template" Value="{StaticResource ListItemTemplate}" />
+                </Style>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
@@ -443,7 +473,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="ActionButtonPathStyle" TargetType="Path">
         <Setter Property="Width" Value="12" />
         <Setter Property="Height" Value="12" />
@@ -451,7 +480,6 @@
         <Setter Property="StrokeThickness" Value="0" />
         <Setter Property="Fill" Value="{ThemeResource Search.Foreground.Color}" />
     </Style>
-
     <ControlTemplate x:Key="DefaultSearchViewTemplate" TargetType="controls:SearchView">
         <Grid>
             <Grid.RowDefinitions>
@@ -482,7 +510,6 @@
                             StrokeThickness="1"
                             Style="{StaticResource ActionButtonPathStyle}" />
                     </ToggleButton>
-
                     <TextBox
                         x:Name="QueryEntry"
                         Grid.Column="1"
@@ -496,7 +523,7 @@
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}}" />
                     <Button
                         Grid.Column="2"
-                        BorderThickness="1,0,0,0"
+                        BorderThickness="0"
                         Command="{Binding ClearCommand, Mode=OneTime}"
                         Style="{StaticResource BarActionButtonStyle}"
                         ToolTipService.ToolTip="Clear Search"
@@ -511,31 +538,27 @@
                         ToolTipService.ToolTip="Search">
                         <Path Data="M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z" Style="{StaticResource ActionButtonPathStyle}" />
                     </Button>
-
                     <ProgressBar
                         Grid.Row="0"
                         Grid.ColumnSpan="4"
                         Style="{StaticResource ProgressIndicatorStyle}"
-                        Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay}" />
                 </Grid>
             </Border>
             <Popup IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}" VerticalOffset="34">
                 <Popup.Resources>
                     <CollectionViewSource
                         x:Key="GroupedSuggestionsEx"
-                        x:Name="GroupedSuggestionsEx"
                         IsSourceGrouped="True"
                         Source="{Binding GroupedSuggestions, Mode=OneWay}" />
                 </Popup.Resources>
                 <Border
                     Width="{TemplateBinding Width}"
-                    HorizontalAlignment="Stretch"
-                    BorderThickness="1,0,1,0"
+                    BorderThickness="1,0,1,1"
                     Style="{StaticResource ResultAreaBorderStyle}"
                     Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty'}">
                     <Grid>
                         <ListView
-                            HorizontalAlignment="Stretch"
                             ItemTemplate="{StaticResource SuggestionTemplate}"
                             ItemsSource="{Binding SearchViewModel.Suggestions, Mode=OneWay}"
                             SelectedItem="{Binding SelectedSuggestion, Mode=TwoWay}"
@@ -551,12 +574,7 @@
                                 <GroupStyle>
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
-                                            <TextBlock
-                                                FontSize="14"
-                                                FontWeight="SemiBold"
-                                                Foreground="{ThemeResource GroupHeader.Foreground.Brush}"
-                                                Text="{Binding Key.DisplayName}"
-                                                TextWrapping="Wrap" />
+                                            <TextBlock Style="{StaticResource GroupHeaderTextStyle}" Text="{Binding Key.DisplayName}" />
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                     <GroupStyle.HeaderContainerStyle>
@@ -583,26 +601,21 @@
             <Border
                 Grid.Row="1"
                 Style="{StaticResource ResultAreaBorderStyle}"
+                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}">
+                <TextBlock Style="{StaticResource ResultMessageStyle}" Text="{TemplateBinding NoResultMessage}" />
+            </Border>
+            <Border
+                Grid.Row="1"
+                Style="{StaticResource ResultAreaBorderStyle}"
                 Visibility="{Binding ResultViewVisibility, Mode=OneWay}">
                 <Grid>
                     <ListView
                         MaxHeight="300"
-                        Padding="0"
-                        BorderThickness="0"
                         IsEnabled="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
                         ItemTemplate="{StaticResource ResultTemplate}"
                         ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
                         SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=TwoWay}"
                         Style="{StaticResource ListStyle}" />
-
-                    <Border Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
-                        <TextBlock
-                            Margin="8"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="{ThemeResource Search.Foreground.Brush}"
-                            Text="{TemplateBinding NoResultMessage}" />
-                    </Border>
                 </Grid>
             </Border>
             <Popup
@@ -612,14 +625,10 @@
                 <Border Width="{TemplateBinding Width}" Style="{StaticResource ResultAreaBorderStyle}">
                     <StackPanel>
                         <ToggleButton
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Left"
-                            BorderThickness="0"
                             Content="All Sources"
                             IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                             Style="{StaticResource AllSourceButtonStyle}" />
                         <ListView
-                            x:Name="sourceList"
                             ItemTemplate="{StaticResource SourceTemplate}"
                             ItemsSource="{Binding SearchViewModel.Sources, Mode=OneWay}"
                             SelectedItem="{Binding SearchViewModel.ActiveSource, Mode=TwoWay}"
@@ -627,17 +636,16 @@
                     </StackPanel>
                 </Border>
             </Popup>
-            <Grid
+            <StackPanel
                 Grid.Row="2"
                 Margin="0,8,0,0"
-                Visibility="{Binding EnableRepeatSearchHereButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                Visibility="{Binding EnableRepeatSearchHereButton, Mode=OneWay}">
                 <Button
                     Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
                     Content="Search Here"
-                    Foreground="White"
                     Style="{StaticResource FloatingButtonStyle}"
-                    Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
-            </Grid>
+                    Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
+            </StackPanel>
         </Grid>
     </ControlTemplate>
 
