@@ -90,6 +90,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="EmbeddedResources\pin_red.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\pin_red.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
   </ItemGroup>
 

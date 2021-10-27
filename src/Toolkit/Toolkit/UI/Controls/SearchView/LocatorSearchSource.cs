@@ -16,7 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
@@ -87,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the default symbol to use when displaying results.
         /// </summary>
-        public Symbol? DefaultSymbol { get; set; } = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 4);
+        public Symbol? DefaultSymbol { get; set; } = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 2);
 
         /// <summary>
         /// Gets or sets a callback that can be used to customize or filter results before they are returned.
@@ -130,6 +132,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             else
             {
                 _loading = true;
+            }
+
+            Stream? resourceStream = Assembly.GetAssembly(typeof(LocatorSearchSource))?.GetManifestResourceStream(
+                "Esri.ArcGISRuntime.Toolkit.EmbeddedResources.pin_red.png");
+
+            if (resourceStream != null)
+            {
+                PictureMarkerSymbol pinSymbol = await PictureMarkerSymbol.CreateAsync(resourceStream);
+                pinSymbol.Width = 33;
+                pinSymbol.Height = 33;
+                pinSymbol.LeaderOffsetX = 16.5;
+                pinSymbol.OffsetY = 16.5;
+                DefaultSymbol = pinSymbol;
             }
 
             if (!_hasPerformedInitialLoad && Locator.LoadStatus != LoadStatus.Loaded)

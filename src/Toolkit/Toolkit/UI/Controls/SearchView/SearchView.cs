@@ -15,8 +15,11 @@
 //  ******************************************************************************/
 #if !XAMARIN
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Geometry;
@@ -38,6 +41,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// View for searching with locators or custom search sources.
     /// </summary>
+#if NETFX_CORE
+    [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
+#endif
     public partial class SearchView : Control, INotifyPropertyChanged
     {
         // Controls how long the control waits after typing stops before looking for suggestions.
@@ -45,12 +51,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeoModel? _lastUsedGeomodel;
         private readonly GraphicsOverlay _resultOverlay;
         private bool _isSourceSelectOpen;
+        private CancellationTokenSource _configurationCancellationToken;
 
         // Flag indicates whether control is waiting after user finished typing.
         private bool _waitFlag;
 
         // Flag indicating that query text is changing as a result of selecting a suggestion; view should not request suggestions in response to the user suggesting a selection.
         private bool _acceptingSuggestionFlag;
+
+        private ListView _suggestionList;
+
+        // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
+        private bool _groupListSelectionFlag;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchView"/> class.
@@ -67,20 +79,76 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
         }
 
-        private void ConfigureForCurrentMap()
+#if NETFX_CORE
+        /// <inheritdoc/>
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            if (_suggestionList != null)
+            {
+                _suggestionList.SelectionChanged -= SuggestionList_SelectionChanged;
+                _suggestionList = null;
+            }
+
+            var listview = GetTemplateChild("PART_SuggestionList");
+
+            if (listview is ListView newlistview)
+            {
+                _suggestionList = newlistview;
+                _suggestionList.SelectedIndex = -1;
+                _suggestionList.SelectionChanged += SuggestionList_SelectionChanged;
+            }
+        }
+
+        private void SuggestionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_groupListSelectionFlag)
+            {
+                _suggestionList.SelectedIndex = -1;
+                return;
+            }
+
+            if (e.AddedItems.FirstOrDefault() is SearchSuggestion suggestion)
+            {
+                SearchViewModel?.AcceptSuggestion(suggestion);
+            }
+
+            if (_suggestionList != null)
+            {
+                _suggestionList.SelectedIndex = -1;
+            }
+        }
+#endif
+
+        private async Task ConfigureForCurrentMap()
         {
             if (!EnableAutomaticConfiguration)
             {
                 return;
             }
 
-            if (GeoView is MapView mv && mv.Map is Map map)
+            if (_configurationCancellationToken != null)
             {
-                _ = SearchViewModel?.ConfigureFromMap(map);
+                _configurationCancellationToken.Cancel();
             }
-            else if (GeoView is SceneView sv && sv.Scene is Scene sp)
+
+            _configurationCancellationToken = new CancellationTokenSource();
+
+            try
             {
-                _ = SearchViewModel?.ConfigureFromMap(sp);
+                if (GeoView is MapView mv && mv.Map is Map map)
+                {
+                    await SearchViewModel?.ConfigureFromMap(map, _configurationCancellationToken.Token);
+                }
+                else if (GeoView is SceneView sv && sv.Scene is Scene sp)
+                {
+                    await SearchViewModel?.ConfigureFromMap(sp, _configurationCancellationToken.Token);
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore
             }
         }
 
@@ -178,8 +246,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (d is SearchView sender)
             {
-                sender.ConfigureForCurrentMap();
-
                 if (e.OldValue is GeoView oldGeoView)
                 {
                     oldGeoView.ViewpointChanged -= sender.GeoView_ViewpointChanged;
@@ -197,6 +263,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     newGeoView.ViewpointChanged += sender.GeoView_ViewpointChanged;
                     newGeoView.GraphicsOverlays?.Add(sender._resultOverlay);
                 }
+
+                _ = sender.ConfigureForCurrentMap();
             }
         }
 
@@ -229,6 +297,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (e.PropertyName == nameof(Map) || e.PropertyName == nameof(Scene))
             {
                 ConfigureForCurrentMap();
+                return;
             }
 
             // When binding, MapView is unreliable about notifying about map changes, especially when first connecting to the view
@@ -266,6 +335,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(SearchViewModel.SelectedResult):
                     _ = HandleSelectedResultChanged();
                     break;
+#if NETFX_CORE
+                case nameof(SearchViewModel.Suggestions):
+                    HandleSuggestionsChanged();
+                    break;
+#endif
             }
         }
 
@@ -579,6 +653,73 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChange(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+#if NETFX_CORE
+
+        private void HandleSuggestionsChanged()
+        {
+            UpdateGroupingForUWP();
+        }
+
+        private void UpdateGroupingForUWP()
+        {
+            _groupListSelectionFlag = true;
+            if (SearchViewModel?.Suggestions != null)
+            {
+                GroupedSuggestions = SearchViewModel.Suggestions.GroupBy(m => m.OwningSource, (key, list) => new SuggestionsGrouped(key, list)).ToList();
+            }
+            else
+            {
+                GroupedSuggestions = null;
+            }
+
+            _groupListSelectionFlag = false;
+        }
+
+        private List<SuggestionsGrouped> _groupedSuggestions;
+
+        /// <summary>
+        /// Gets the grouped list of suggestions.
+        /// </summary>
+        public List<SuggestionsGrouped>? GroupedSuggestions
+        {
+            get => _groupedSuggestions;
+            private set
+            {
+                if (value != _groupedSuggestions)
+                {
+                    _groupedSuggestions = value;
+                    NotifyPropertyChange(nameof(GroupedSuggestions));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Class to support grouping suggestions on UWP.
+        /// </summary>
+        public class SuggestionsGrouped : IGrouping<ISearchSource, SearchSuggestion>
+        {
+            private List<SearchSuggestion> _suggestions;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SuggestionsGrouped"/> class.
+            /// </summary>
+            internal SuggestionsGrouped(ISearchSource owningSource, IEnumerable<SearchSuggestion> suggestions)
+            {
+                Key = owningSource;
+                _suggestions = suggestions.ToList();
+            }
+
+            /// <inheritdoc />
+            public ISearchSource Key { get; private set; }
+
+            /// <inheritdoc />
+            public IEnumerator<SearchSuggestion> GetEnumerator() => _suggestions.GetEnumerator();
+
+            /// <inheritdoc />
+            IEnumerator IEnumerable.GetEnumerator() => _suggestions.GetEnumerator();
+        }
+#endif
     }
 }
 #endif
