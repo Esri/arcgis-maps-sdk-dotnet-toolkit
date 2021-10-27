@@ -8,7 +8,8 @@
             <Color x:Key="Search.Background.Color">White</Color>
             <Color x:Key="Search.Background.Hover.Color">#f3f3f3</Color>
             <Color x:Key="Search.Background.Press.Color">#e2f1fb</Color>
-            <Color x:Key="Search.Foreground.Color">#6e6e6e</Color>
+            <Color x:Key="Search.Foreground.Color">#404040</Color>
+            <Color x:Key="Search.Foreground.Alt.Color">#6e6e6e</Color>
             <Color x:Key="Search.Foreground.Hover.Color">#4e4e4e</Color>
             <Color x:Key="Search.Foreground.Press.Color">#2e2e2e</Color>
             <Color x:Key="Accent.Background.Color">#007AC2</Color>
@@ -18,14 +19,15 @@
             <Color x:Key="Border.Internal.Color">#6e6e6e</Color>
             <Color x:Key="Border.External.Color">#6e6e6e</Color>
             <Color x:Key="GroupHeader.Foreground.Color">White</Color>
-            <Color x:Key="GroupHeader.Background.Color">#6e6e6e</Color>
+            <Color x:Key="GroupHeader.Background.Color">#4e4e4e</Color>
             <Color x:Key="Border.Separator.Color">#4e6e6e6e</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <Color x:Key="Search.Background.Color">#242424</Color>
             <Color x:Key="Search.Background.Hover.Color">#303030</Color>
             <Color x:Key="Search.Background.Press.Color">#000</Color>
-            <Color x:Key="Search.Foreground.Color">#d1d1d1</Color>
+            <Color x:Key="Search.Foreground.Color">White</Color>
+            <Color x:Key="Search.Foreground.Alt.Color">#9f9f9f</Color>
             <Color x:Key="Search.Foreground.Hover.Color">#dddddd</Color>
             <Color x:Key="Search.Foreground.Press.Color">White</Color>
             <Color x:Key="Accent.Background.Color">#009AF2</Color>
@@ -43,6 +45,7 @@
     <SolidColorBrush x:Key="Search.Background.Hover.Brush" Color="{ThemeResource Search.Background.Hover.Color}" />
     <SolidColorBrush x:Key="Search.Background.Press.Brush" Color="{ThemeResource Search.Background.Press.Color}" />
     <SolidColorBrush x:Key="Search.Foreground.Brush" Color="{ThemeResource Search.Foreground.Color}" />
+    <SolidColorBrush x:Key="Search.Foreground.Alt.Brush" Color="{ThemeResource Search.Foreground.Alt.Color}" />
     <SolidColorBrush x:Key="Search.Foreground.Hover.Brush" Color="{ThemeResource Search.Foreground.Hover.Color}" />
     <SolidColorBrush x:Key="Search.Foreground.Press.Brush" Color="{ThemeResource Search.Foreground.Press.Color}" />
     <SolidColorBrush x:Key="Accent.Background.Brush" Color="{ThemeResource Accent.Background.Color}" />
@@ -123,10 +126,11 @@
             Padding="{TemplateBinding Padding}"
             Background="{ThemeResource Search.Background.Brush}"
             BorderBrush="Transparent"
-            BorderThickness="2,0,0,0"
+            BorderThickness="0,0,0,0"
             CornerRadius="0">
             <ContentPresenter
                 x:Name="ContentPresenter"
+                Margin="2,0,0,0"
                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                 Foreground="{ThemeResource Search.Foreground.Brush}" />
@@ -169,6 +173,12 @@
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
                                 <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Highlight.Border.Color}" />
                             </ColorAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="2,0,0,0" />
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Margin">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,0" />
+                            </ObjectAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
@@ -213,8 +223,8 @@
             Margin="0,0,0,0"
             Background="{ThemeResource Search.Background.Brush}"
             BorderBrush="Transparent"
-            BorderThickness="2,0,0,0">
-            <ContentPresenter />
+            BorderThickness="0,0,0,0">
+            <ContentPresenter x:Name="InnerContentPresenter" Margin="2,0,0,0" />
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal">
@@ -250,6 +260,12 @@
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="(BorderBrush).(SolidColorBrush.Color)">
                                 <EasingColorKeyFrame KeyTime="0" Value="{ThemeResource Highlight.Border.Color}" />
                             </ColorAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="2,0,0,0" />
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerContentPresenter" Storyboard.TargetProperty="Margin">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0,0,0,0" />
+                            </ObjectAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
@@ -368,7 +384,7 @@
                         Text="{Binding Path=DisplayTitle}"
                         TextWrapping="Wrap" />
                     <TextBlock
-                        Foreground="{ThemeResource Search.Foreground.Brush}"
+                        Foreground="{ThemeResource Search.Foreground.Alt.Brush}"
                         Text="{Binding Path=DisplaySubtitle}"
                         TextTrimming="CharacterEllipsis"
                         Visibility="{Binding Path=DisplaySubtitle, Mode=OneWay, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}" />
@@ -405,7 +421,7 @@
     <Style x:Key="QueryPlaceholderStyle" TargetType="TextBlock">
         <Setter Property="Padding" Value="8,4,4,4" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="Foreground" Value="{ThemeResource Search.Foreground.Brush}" />
+        <Setter Property="Foreground" Value="{ThemeResource Search.Foreground.Alt.Brush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="IsHitTestVisible" Value="False" />
     </Style>
@@ -536,19 +552,22 @@
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
                                             <TextBlock
+                                                FontSize="14"
+                                                FontWeight="SemiBold"
                                                 Foreground="{ThemeResource GroupHeader.Foreground.Brush}"
-                                                Style="{StaticResource BaseTextBlockStyle}"
-                                                Text="{Binding Key.DisplayName}" />
+                                                Text="{Binding Key.DisplayName}"
+                                                TextWrapping="Wrap" />
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                     <GroupStyle.HeaderContainerStyle>
                                         <Style TargetType="ListViewHeaderItem">
                                             <Setter Property="Margin" Value="0" />
+                                            <Setter Property="MinHeight" Value="0" />
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate TargetType="ListViewHeaderItem">
                                                         <Border Background="{ThemeResource GroupHeader.Background.Brush}">
-                                                            <ContentPresenter Margin="8,4,0,4" VerticalAlignment="Center" />
+                                                            <ContentPresenter Margin="8" VerticalAlignment="Center" />
                                                         </Border>
                                                     </ControlTemplate>
                                                 </Setter.Value>
@@ -568,6 +587,8 @@
                 <Grid>
                     <ListView
                         MaxHeight="300"
+                        Padding="0"
+                        BorderThickness="0"
                         IsEnabled="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsSingletonToBoolConverter}, ConverterParameter='Inverse'}"
                         ItemTemplate="{StaticResource ResultTemplate}"
                         ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
