@@ -15,7 +15,6 @@ namespace Toolkit.Samples.Forms.Samples
         {
             InitializeComponent();
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
-            MySceneView.Scene = new Scene(BasemapStyle.ArcGISImageryStandard);
         }
     }
 }

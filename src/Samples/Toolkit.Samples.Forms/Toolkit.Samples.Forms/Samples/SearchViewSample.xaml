@@ -10,8 +10,12 @@
              x:Class="Toolkit.Samples.Forms.Samples.SearchViewSample">
     <ContentPage.Content>
             <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="250" />
+            </Grid.RowDefinitions>
                 <esri:MapView x:Name="MyMapView" />
-                <esri:SceneView x:Name="MySceneView" IsVisible="False" />
-            </Grid>
+            <toolkit:SearchView GeoView="{Binding Source={Reference MyMapView}}" Grid.Row="1" />
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

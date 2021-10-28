@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
 using System;
 using System.Windows.Input;
 
@@ -23,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Simple command implementation.
     /// </summary>
-    internal class DelegateCommand : ICommand
+    public class DelegateCommand : ICommand
     {
         private readonly Action _action;
 
@@ -45,4 +44,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
     }
 }
-#endif
