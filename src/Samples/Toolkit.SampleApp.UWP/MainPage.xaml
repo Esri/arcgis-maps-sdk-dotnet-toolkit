@@ -18,7 +18,7 @@
 
         <SplitView  Grid.Row="1" x:Name="splitView">
             <SplitView.Pane>
-                <ListView x:Name="sampleView" Background="White" Grid.Row="1" SelectionMode="None"
+                <ListView x:Name="sampleView" Grid.Row="1" SelectionMode="None"
 										IsRightTapEnabled="False"
 										IsItemClickEnabled="True"
 										IsHoldingEnabled="False"
@@ -45,7 +45,7 @@
                 </ListView>
             </SplitView.Pane>
             <Grid>
-                <Frame x:Name="rootFrame" Background="#FF7CB27C" />
+                <Frame x:Name="rootFrame" Background="{ThemeResource ApplicationForegroundThemeBrush}" />
             </Grid>
         </SplitView>
      

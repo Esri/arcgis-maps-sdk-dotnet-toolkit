@@ -8,6 +8,7 @@
       xmlns:uwptoolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
       xmlns:telerikUI="using:Telerik.UI.Xaml.Controls.Grid"
       xmlns:telerikCore="using:Telerik.Data.Core"
+      RequestedTheme="Light"
       >
     <!-- This sample uses fields defined by this feature service
          http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessmentStatePlane/FeatureServer/0 -->

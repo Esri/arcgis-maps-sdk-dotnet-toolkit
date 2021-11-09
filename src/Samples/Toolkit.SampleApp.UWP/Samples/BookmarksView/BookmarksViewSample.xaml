@@ -8,6 +8,7 @@
     xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d"
+    RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <DataTemplate x:Key="ItemTemplateOne" x:DataType="mapping:Bookmark">
