@@ -49,7 +49,7 @@
       </Code>
     </Task>
   </UsingTask>
-  <Target Name="MakeAndroidResourcesInternal" AfterTargets="_UpdateAndroidResgen">
+  <Target Name="MakeAndroidResourcesInternal" AfterTargets="_UpdateAndroidResgen" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'!='true'" >
     <MakeAndroidResourcesInternalTask ResourceFilePath="$(_AndroidResourceDesignerFile)">
     </MakeAndroidResourcesInternalTask>
   </Target>

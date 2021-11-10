@@ -19,7 +19,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Android.Content;
+#if NET6_0_OR_GREATER
+using AndroidX.RecyclerView.Widget;
+#else
 using Android.Support.V7.Widget;
+#endif
 using Android.Views;
 using Esri.ArcGISRuntime.Mapping;
 
