@@ -138,6 +138,10 @@
                     Value="Wrap" />
             <Setter Property="TextTrimming"
                     Value="CharacterEllipsis" />
+            <Setter Property="FontStyle"
+                    Value="Italic" />
+            <Setter Property="Foreground"
+                    Value="Blue" />
         </Style>
         <Style x:Key="ProgressBarStyle1"
                TargetType="{x:Type ProgressBar}">
@@ -180,7 +184,7 @@
                         <Border x:Name="Bd"
                                 BorderBrush="Blue"
                                 BorderThickness="3"
-                                Background="Black"
+                                Background="LightPink"
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="true">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -199,7 +203,7 @@
                         <Border x:Name="Bd"
                                 BorderBrush="Blue"
                                 BorderThickness="3"
-                                Background="Black"
+                                Background="LightPink"
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="true">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"

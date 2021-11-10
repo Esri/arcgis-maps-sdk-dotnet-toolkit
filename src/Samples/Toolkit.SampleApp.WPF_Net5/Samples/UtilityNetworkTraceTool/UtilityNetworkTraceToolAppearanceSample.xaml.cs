@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Security;
+using Esri.ArcGISRuntime.UtilityNetworks;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,13 +12,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.UtilityNetworkTraceTool
     {
         private const string WebmapURL = "https://rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204";
         private readonly Tuple<string, string, string> _portal1Login = new Tuple<string, string, string>("https://rt-server109.esri.com/portal/sharing/rest", "publisher1", "test.publisher01");
+        private const string FeatureServerURL = "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer";
+        private readonly Tuple<string, string, string> _portal3Login = new Tuple<string, string, string>("https://sampleserver7.arcgisonline.com/portal/sharing/rest", "viewer01", "I68VGU^nMurF");
 
         public UtilityNetworkTraceToolAppearanceSample()
         {
             InitializeComponent();
             Initialize();
 
-            MyMapView.Map = new Map(new Uri(WebmapURL));
         }
 
         private async void Initialize()
@@ -26,6 +28,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.UtilityNetworkTraceTool
             {
                 var portal1Credential = await AuthenticationManager.Current.GenerateCredentialAsync(new Uri(_portal1Login.Item1), _portal1Login.Item2, _portal1Login.Item3);
                 AuthenticationManager.Current.AddCredential(portal1Credential);
+
+                var portal3Credential = await AuthenticationManager.Current.GenerateCredentialAsync(new Uri(_portal3Login.Item1), _portal3Login.Item2, _portal3Login.Item3);
+                AuthenticationManager.Current.AddCredential(portal3Credential);
+
+                var map = new Map(new Uri(WebmapURL));
+                await map.LoadAsync();
+                map.UtilityNetworks.Add(new UtilityNetwork(new Uri(FeatureServerURL)));
+                foreach (var un in map.UtilityNetworks)
+                    await un.LoadAsync();
+
+                MyMapView.Map = map;
             }
             catch (Exception ex)
             {

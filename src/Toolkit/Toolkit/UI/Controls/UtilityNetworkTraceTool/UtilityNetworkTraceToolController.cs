@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     && traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
                 _traceTool.EnableTrace(TraceParameters?.StartingLocations.Count >= minimum);
                 _traceTool.UpdateStartingPointsVisibility(isVisible: _startingPoints.Count > 0);
-              };
+            };
 
             _functionResults.CollectionChanged += (s, e) =>
             {
@@ -352,10 +352,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         else
                         {
                             var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(utilityNetwork)
-                              {
-                                  OnEventAction = (instance, source, eventArgs) => OnUtilityNetworkLoaded(source, eventArgs),
-                                  OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent,
-                              };
+                            {
+                                OnEventAction = (instance, source, eventArgs) => OnUtilityNetworkLoaded(source, eventArgs),
+                                OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent,
+                            };
                             utilityNetwork.Loaded += listener.OnEvent;
                             _ = utilityNetwork.LoadAsync();
                         }
@@ -431,7 +431,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     oldGeoView.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
                 }
-                else if(oldGeoView is SceneView)
+                else if (oldGeoView is SceneView)
                 {
                     oldGeoView.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
                 }
@@ -470,11 +470,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #elif NETFX_CORE
                 if (newGeoView is MapView)
                 {
-                    newGeoView.RegisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
+                    _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(MapView.MapProperty, OnGeoModelPropertyChanged);
                 }
-                else if(newGeoView is SceneView)
+                else if (newGeoView is SceneView)
                 {
-                    newGeoView.RegisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
+                    _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(SceneView.SceneProperty, OnGeoModelPropertyChanged);
                 }
 #else
                 if (newGeoView is MapView)
