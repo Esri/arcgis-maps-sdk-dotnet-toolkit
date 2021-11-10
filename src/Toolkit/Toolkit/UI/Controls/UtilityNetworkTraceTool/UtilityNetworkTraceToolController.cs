@@ -479,11 +479,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #else
                 if (newGeoView is MapView)
                 {
-                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(oldGeoView, OnGeoModelPropertyChanged);
+                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
                 }
                 else if (newGeoView is SceneView)
                 {
-                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(oldGeoView, OnGeoModelPropertyChanged);
+                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
                 }
 #endif
                 if (newGeoView.GraphicsOverlays != null)
