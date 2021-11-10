@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !__IOS__ && !__ANDROID__
 using System.Windows.Input;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
@@ -26,18 +27,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     {
         internal StartingPointModel(UtilityElement startingPoint,
             DelegateCommand updateCommand,
-            DelegateCommand zoomToCommand,
             DelegateCommand deleteCommand)
         {
             StartingPoint = startingPoint;
             UpdateCommand = updateCommand;
-            ZoomToCommand = zoomToCommand;
             DeleteCommand = deleteCommand;
         }
 
-        internal UtilityElement StartingPoint { get; }
+        public UtilityElement StartingPoint { get; }
 
-        internal double FractionAlongEdge
+        public double FractionAlongEdge
         {
             get => StartingPoint.FractionAlongEdge;
             set
@@ -50,10 +49,30 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        internal ICommand UpdateCommand { get; }
+        public ICommand UpdateCommand { get; }
 
-        internal ICommand ZoomToCommand { get; }
+        public ICommand DeleteCommand { get; }
 
-        internal ICommand DeleteCommand { get; }
+        public bool TerminalPickerVisible
+        {
+            get
+            {
+                if (StartingPoint?.AssetType?.TerminalConfiguration is UtilityTerminalConfiguration terminalConfig)
+                {
+                    return terminalConfig.Terminals.Count > 1;
+                }
+
+                return false;
+            }
+        }
+
+        public bool FractionSliderVisible
+        {
+            get
+            {
+                return StartingPoint?.NetworkSource?.SourceType == UtilityNetworkSourceType.Edge;
+            }
+        }
     }
 }
+#endif

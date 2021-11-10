@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [TemplatePart(Name = "PART_UtilityNetworksPicker", Type = typeof(ComboBox))]
     [TemplatePart(Name = "PART_TraceTypesPicker", Type = typeof(ComboBox))]
-    [TemplatePart(Name = "PART_IsAddStartingPointsToggle", Type = typeof(ToggleButton))]
+    [TemplatePart(Name = "PART_IsAddStartingPointToggle", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "PART_ResetButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_TraceButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_BusyIndicator", Type = typeof(ProgressBar))]
@@ -41,7 +41,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         private ComboBox? _utilityNetworksPicker;
         private ComboBox? _traceTypesPicker;
-        private ToggleButton? _addStartingPointsToggle;
+        private ToggleButton? _addStartingPointToggle;
         private Button? _traceButton;
         private ProgressBar? _busyIndicator;
         private TextBlock? _statusLabel;
@@ -77,21 +77,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 };
             }
 
-            if (GetTemplateChild("PART_AddStartingPointsToggle") is ToggleButton addStartingPointsToggle)
+            if (GetTemplateChild("PART_AddStartingPointToggle") is ToggleButton addStartingPointToggle)
             {
-                _addStartingPointsToggle = addStartingPointsToggle;
+                _addStartingPointToggle = addStartingPointToggle;
 #if NETFX_CORE
-                _addStartingPointsToggle.IsOn = IsAddingStartingPoints;
-                _addStartingPointsToggle.Toggled += (s, e) =>
+                _addStartingPointToggle.IsOn = IsAddingStartingPoints;
+                _addStartingPointToggle.Toggled += (s, e) =>
                 {
-                    _controller.HandleAddStartingPointsToggled(((ToggleButton)s).IsOn);
+                    _controller.HandleAddStartingPointToggled(((ToggleButton)s).IsOn);
                 };
 #else
-                _addStartingPointsToggle.IsChecked = IsAddingStartingPoints;
-                _addStartingPointsToggle.Click += (s, e) =>
+                _addStartingPointToggle.IsChecked = IsAddingStartingPoints;
+                _addStartingPointToggle.Click += (s, e) =>
                 {
                     var isToggleChecked = ((ToggleButton)s).IsChecked == true;
-                    _controller.HandleAddStartingPointsToggled(isToggleChecked);
+                    _controller.HandleAddStartingPointToggled(isToggleChecked);
                 };
 #endif
             }
@@ -127,7 +127,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 };
             }
 
-            if (GetTemplateChild("PART_FunctionResultsList") is ItemsControl functionResultList)
+            if (GetTemplateChild("PART_FunctionResultsList") is ListView functionResultList)
             {
                 _functionResultsList = functionResultList;
                 _functionResultsList.ItemsSource = _controller.FunctionResults;
@@ -282,17 +282,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the <see cref="Style"/> that is applied to the add starting points <see cref="ToggleButton"/>.
         /// </summary>
         /// <value>A <see cref="Style"/> for the trace <see cref="ToggleButton"/>.</value>
-        public Style? AddStartingPointsToggleButtonStyle
+        public Style? AddStartingPointToggleButtonStyle
         {
-            get => GetValue(AddStartingPointsToggleButtonStyleProperty) as Style;
-            set => SetValue(AddStartingPointsToggleButtonStyleProperty, value);
+            get => GetValue(AddStartingPointToggleButtonStyleProperty) as Style;
+            set => SetValue(AddStartingPointToggleButtonStyleProperty, value);
         }
 
         /// <summary>
-        /// Identifies the <see cref="AddStartingPointsToggleButtonStyleProperty"/> dependency property.
+        /// Identifies the <see cref="AddStartingPointToggleButtonStyle"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty AddStartingPointsToggleButtonStyleProperty =
-            DependencyProperty.Register(nameof(AddStartingPointsToggleButtonStyle),
+        public static readonly DependencyProperty AddStartingPointToggleButtonStyleProperty =
+            DependencyProperty.Register(nameof(AddStartingPointToggleButtonStyle),
                 typeof(Style), typeof(UtilityNetworkTraceTool), new PropertyMetadata(null));
 
         /// <summary>

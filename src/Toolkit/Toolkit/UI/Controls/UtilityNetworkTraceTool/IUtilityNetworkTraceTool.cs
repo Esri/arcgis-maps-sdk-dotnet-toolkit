@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !__IOS__ && !__ANDROID__
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -57,6 +58,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal void SelectStartingPoint(StartingPointModel? startingPoint);
 
+        internal void UpdateUtilityNetworksVisibility(bool isVisible);
+
+        internal void UpdateTraceTypesVisibility(bool isVisible);
+
+        internal void UpdateStartingPointsVisibility(bool isVisible);
+
+        internal void UpdateFunctionResultsVisibility(bool isVisible);
+
         internal void EnableTrace(bool isTraceEnabled);
 
         internal void SetIsBusy(bool isBusy);
@@ -69,3 +78,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             IEnumerable<UtilityTraceResult>? results, Exception? error);
     }
 }
+#endif

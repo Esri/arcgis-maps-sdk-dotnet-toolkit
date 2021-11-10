@@ -13,9 +13,41 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
-        <esri:MapView x:Name="MyMapView" />
+        <ContentControl x:Name="GeoViewControl" />
         <controls:UtilityNetworkTraceTool x:Name="UtilityNetworkTraceTool"
-                                          GeoView="{Binding ElementName=MyMapView}"
+                                          GeoView="{Binding ElementName=GeoViewControl, Path=Content}"
+                                          UtilityNetworkChanged="OnUtilityNetworkChanged"
+                                          UtilityNetworkTraceCompleted="OnUtilityNetworkTraceCompleted"
                                           Grid.Column="1" />
+        <Border Width="250"
+                Margin="8"
+                Padding="8"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="White">
+            <StackPanel>
+                <ComboBox x:Name="GeoViewInputs" SelectionChanged="OnGeoViewInputChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Content="Add/Remove UtilityNetworks"
+                        Click="OnAddOrRemoveUtilityNetworks" />
+                <Button Content="Clear UtilityNetworks"
+                        Click="OnClearUtilityNetworks" />
+                <Button Content="Add StartingPoints"
+                        Click="OnAddStartingPoints" />
+                <Button Content="Clear StartingPoints"
+                        Click="OnClearStartingPoints" />
+                <Button Content="Update Symbols"
+                        Click="OnUpdateSymbols" />
+                <CheckBox Content="AddStartingPoint"
+                          IsChecked="{Binding ElementName=UtilityNetworkTraceTool, Path=IsAddingStartingPoints, Mode=TwoWay}" />
+                <CheckBox Content="AutoZoomToTraceResults"
+                          IsChecked="{Binding ElementName=UtilityNetworkTraceTool, Path=AutoZoomToTraceResults, Mode=TwoWay}" />
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

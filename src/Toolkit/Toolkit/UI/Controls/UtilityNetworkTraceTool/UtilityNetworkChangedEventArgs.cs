@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !__IOS__ && !__ANDROID__
 using System;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
@@ -38,3 +39,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public UtilityNetwork UtilityNetwork { get; }
     }
 }
+#endif

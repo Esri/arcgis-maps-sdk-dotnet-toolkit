@@ -54,6 +54,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller = new UtilityNetworkTraceToolController(this);
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="UtilityNetworkTraceTool"/> class.
+        /// </summary>
+        ~UtilityNetworkTraceTool()
+        {
+            if (_controller is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+
         #region Convenience Properties
 
         /// <summary>
@@ -297,6 +308,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_startingPointsList != null)
             {
                 _startingPointsList.SelectedItem = startingPoint;
+            }
+        }
+
+        void IUtilityNetworkTraceTool.UpdateUtilityNetworksVisibility(bool isVisible)
+        {
+            if (_utilityNetworksPicker != null)
+            {
+                _utilityNetworksPicker.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        void IUtilityNetworkTraceTool.UpdateTraceTypesVisibility(bool isVisible)
+        {
+            if (_traceTypesPicker != null)
+            {
+                _traceTypesPicker.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        void IUtilityNetworkTraceTool.UpdateStartingPointsVisibility(bool isVisible)
+        {
+            if (_startingPointsList != null)
+            {
+                _startingPointsList.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        void IUtilityNetworkTraceTool.UpdateFunctionResultsVisibility(bool isVisible)
+        {
+            if (_functionResultsList != null)
+            {
+                _functionResultsList.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 

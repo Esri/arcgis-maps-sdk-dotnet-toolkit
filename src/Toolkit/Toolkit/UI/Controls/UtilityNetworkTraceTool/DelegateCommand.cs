@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !__IOS__ && !__ANDROID__
 using System;
 using System.Windows.Input;
 
@@ -39,3 +40,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public void Execute(object? parameter) => _onExecute?.Invoke(parameter);
     }
 }
+#endif
