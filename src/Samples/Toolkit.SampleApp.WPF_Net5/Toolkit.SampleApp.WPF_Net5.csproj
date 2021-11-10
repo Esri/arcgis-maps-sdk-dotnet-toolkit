@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>;$(NetWindowsTargetFramework)</TargetFramework>
+    <TargetFramework>$(NetWindowsTargetFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
   </PropertyGroup>
