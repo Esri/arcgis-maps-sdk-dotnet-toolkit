@@ -40,6 +40,14 @@
   <ItemGroup>
     <None Remove="Assets\BasemapDark.png" />
     <None Remove="Assets\BasemapLight.png" />
+    <None Remove="Assets\caret-down-small.png" />
+    <None Remove="Assets\caret-down.png" />
+    <None Remove="Assets\pin-tear-small.png" />
+    <None Remove="Assets\pin-tear.png" />
+    <None Remove="Assets\search-small.png" />
+    <None Remove="Assets\search.png" />
+    <None Remove="Assets\x-small.png" />
+    <None Remove="Assets\x.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +82,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\BasemapDark.png" />
     <EmbeddedResource Include="Assets\BasemapLight.png" />
+    <EmbeddedResource Include="Assets\caret-down-small.png" />
+    <EmbeddedResource Include="Assets\caret-down.png" />
+    <EmbeddedResource Include="Assets\pin-tear-small.png" />
+    <EmbeddedResource Include="Assets\pin-tear.png" />
+    <EmbeddedResource Include="Assets\search-small.png" />
+    <EmbeddedResource Include="Assets\search.png" />
+    <EmbeddedResource Include="Assets\x-small.png" />
+    <EmbeddedResource Include="Assets\x.png" />
   </ItemGroup>
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">

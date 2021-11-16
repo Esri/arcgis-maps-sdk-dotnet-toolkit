@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Geometry;
@@ -30,6 +31,7 @@ using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
+using Grid = Xamarin.Forms.Grid;
 using XForms = Xamarin.Forms.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -51,62 +53,151 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private bool _acceptingSuggestionFlag;
 
         private Entry? PART_Entry;
-        private Button? PART_CancelButton;
-        private Button? PART_SearchButton;
-        private Button? PART_SourceSelectButton;
+        private ImageButton? PART_CancelButton;
+        private ImageButton? PART_SearchButton;
+        private ImageButton? PART_SourceSelectButton;
         private Label? PART_ResultLabel;
         private ListView? PART_SuggestionsView;
         private ListView? PART_ResultView;
         private ListView? PART_SourcesView;
         private Button? PART_RepeatButton;
+        private Grid? PART_ResultContainer;
         private static readonly DataTemplate DefaultResultTemplate;
         private static readonly DataTemplate DefaultSuggestionTemplate;
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly ByteArrayToImageSourceConverter ImageSourceConverter;
+        private static readonly BoolToCollectionIconImageConverter CollectionIconConverter;
+        private static readonly EmptyStringToBoolConverter EmptyStringConverter;
 
         static SearchView()
         {
             ImageSourceConverter = new ByteArrayToImageSourceConverter();
+            CollectionIconConverter = new BoolToCollectionIconImageConverter();
+            EmptyStringConverter = new EmptyStringToBoolConverter();
             DefaultSuggestionTemplate = new DataTemplate(() =>
             {
-                var defaultCell = new ImageCell();
-                defaultCell.SetBinding(ImageCell.TextProperty, nameof(SearchSuggestion.DisplayTitle));
-                defaultCell.SetBinding(ImageCell.DetailProperty, nameof(SearchSuggestion.DisplaySubtitle));
-                // TODO - add icons for collection and non-collection searches
-                return defaultCell;
+                var viewCell = new ViewCell();
+
+                Grid containingGrid = new Grid();
+
+                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+                Grid textStack = new Grid();
+                textStack.VerticalOptions = LayoutOptions.Center;
+                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+                Image imageView = new Image();
+                imageView.SetBinding(Image.SourceProperty, nameof(SearchSuggestion.IsCollection), converter: CollectionIconConverter);
+                imageView.WidthRequest = 16;
+                imageView.HeightRequest = 16;
+                imageView.Margin = new Thickness(4);
+                imageView.VerticalOptions = LayoutOptions.Center;
+
+                Label titleLabel = new Label();
+                titleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplayTitle));
+                titleLabel.VerticalOptions = LayoutOptions.End;
+                titleLabel.VerticalTextAlignment = TextAlignment.End;
+
+                Label subtitleLabel = new Label();
+                subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplaySubtitle));
+                subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchSuggestion.DisplaySubtitle), converter: EmptyStringConverter);
+                subtitleLabel.VerticalOptions = LayoutOptions.Start;
+                subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
+
+                textStack.Children.Add(titleLabel);
+                textStack.Children.Add(subtitleLabel);
+                Grid.SetRow(titleLabel, 0);
+                Grid.SetRow(subtitleLabel, 1);
+
+                containingGrid.Children.Add(imageView);
+                containingGrid.Children.Add(textStack);
+
+                Grid.SetColumn(textStack, 1);
+                Grid.SetColumn(imageView, 0);
+
+                viewCell.View = containingGrid;
+                return viewCell;
             });
             DefaultResultTemplate = new DataTemplate(() =>
             {
-                var defaultCell = new ImageCell();
-                defaultCell.SetBinding(ImageCell.TextProperty, nameof(SearchResult.DisplayTitle));
-                defaultCell.SetBinding(ImageCell.DetailProperty, nameof(SearchResult.DisplaySubtitle));
-                defaultCell.SetBinding(ImageCell.ImageSourceProperty, nameof(SearchResult.MarkerImageData), converter: ImageSourceConverter);
-                return defaultCell;
+                var viewCell = new ViewCell();
+
+                Grid containingGrid = new Grid();
+                containingGrid.Padding = new Thickness(2,4,2,4);
+
+                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+                Grid textStack = new Grid();
+                textStack.VerticalOptions = LayoutOptions.Center;
+                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+                Image imageView = new Image();
+                imageView.SetBinding(Image.SourceProperty, nameof(SearchResult.MarkerImageData), converter: ImageSourceConverter);
+                imageView.WidthRequest = 24;
+                imageView.HeightRequest = 24;
+                imageView.Margin = new Thickness(4);
+                imageView.VerticalOptions = LayoutOptions.Center;
+
+                Label titleLabel = new Label();
+                titleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplayTitle));
+                titleLabel.FontAttributes = FontAttributes.Bold;
+                titleLabel.VerticalOptions = LayoutOptions.End;
+                titleLabel.VerticalTextAlignment = TextAlignment.End;
+
+                Label subtitleLabel = new Label();
+                subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplaySubtitle));
+                subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchResult.DisplaySubtitle), converter: EmptyStringConverter);
+                subtitleLabel.VerticalOptions = LayoutOptions.Start;
+                subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
+
+                textStack.Children.Add(titleLabel);
+                textStack.Children.Add(subtitleLabel);
+                Grid.SetRow(titleLabel, 0);
+                Grid.SetRow(subtitleLabel, 1);
+
+                containingGrid.Children.Add(imageView);
+                containingGrid.Children.Add(textStack);
+
+                Grid.SetColumn(textStack, 1);
+                Grid.SetColumn(imageView, 0);
+
+                viewCell.View = containingGrid;
+                return viewCell;
             });
 
             string template =
 $@"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
-<Grid BackgroundColor=""White"">
+<Grid RowSpacing=""0"" ColumnSpacing=""0"">
     <Grid.ColumnDefinitions>
     <ColumnDefinition Width=""Auto"" />
     <ColumnDefinition Width=""*"" />
-    <ColumnDefinition Width=""120"" />
+    <ColumnDefinition Width=""32"" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-    <RowDefinition Height=""Auto"" />
-    <RowDefinition Height=""Auto"" />
-    <RowDefinition Height=""Auto"" />
+    <RowDefinition Height=""40"" />
+    <RowDefinition Height=""*"" />
     </Grid.RowDefinitions>
-    <Button x:Name=""{nameof(PART_SourceSelectButton)}"" Text=""Source"" Grid.Column=""0"" />
+    <Grid Grid.Row=""0"" Grid.ColumnSpan=""3"" BackgroundColor=""White"" />
+    <ImageButton x:Name=""{nameof(PART_SourceSelectButton)}"" Grid.Column=""0"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" Margin=""0"" />
     <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" />
-    <Button x:Name=""{nameof(PART_CancelButton)}"" Text=""X"" Grid.Column=""1"" HorizontalOptions=""End"" />
-    <Button x:Name=""{nameof(PART_SearchButton)}"" Text=""Search"" Grid.Column=""2"" />
-    <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" />
-    <ListView x:Name=""{nameof(PART_SuggestionsView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" />
-    <ListView x:Name=""{nameof(PART_ResultView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" />
-    <Label x:Name=""{nameof(PART_ResultLabel)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" />
-    <Button x:Name=""{nameof(PART_RepeatButton)}"" Text=""Repeat Search Here"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""2"" />
+    <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
+    <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
+    <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" />
+    <ListView x:Name=""{nameof(PART_SuggestionsView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" HasUnevenRows=""true"" IsGroupingEnabled=""true"" BackgroundColor=""White"">
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate><ViewCell><Grid BackgroundColor=""#4e4e4e""><Label Text=""{{Binding Key.DisplayName}}"" Margin=""4"" TextColor=""White"" FontSize=""14"" /></Grid></ViewCell></DataTemplate>
+        </ListView.GroupHeaderTemplate>
+    </ListView>
+    <ListView x:Name=""{nameof(PART_ResultView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" HasUnevenRows=""true"" BackgroundColor=""White"" />
+    <Grid x:Name=""{nameof(PART_ResultContainer)}"" BackgroundColor=""White"" Grid.ColumnSpan=""3"" Grid.Row=""1""><Label x:Name=""{nameof(PART_ResultLabel)}"" /></Grid>
+    <Button x:Name=""{nameof(PART_RepeatButton)}"" Text=""Repeat Search Here"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""1"" BackgroundColor=""#007AC2"" TextColor=""White"" VerticalOptions=""Start"" />
 </Grid>
 </ControlTemplate>";
             DefaultControlTemplate = XForms.Extensions.LoadFromXaml(new ControlTemplate(), template);
@@ -117,6 +208,23 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
             ResultTemplate = DefaultResultTemplate;
             SuggestionTemplate = DefaultSuggestionTemplate;
             ControlTemplate = DefaultControlTemplate;
+
+            string suffix = Device.RuntimePlatform == Device.UWP ? "-small" : string.Empty;
+            if (GetTemplateChild(nameof(PART_SourceSelectButton)) is ImageButton newSourceButton)
+            {
+                newSourceButton.Source = ImageSource.FromResource($"Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.caret-down{suffix}.png", Assembly.GetAssembly(typeof(SearchView)));
+            }
+
+            if (GetTemplateChild(nameof(PART_SearchButton)) is ImageButton newsearchButton)
+            {
+                newsearchButton.Source = ImageSource.FromResource($"Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.search{suffix}.png", Assembly.GetAssembly(typeof(SearchView)));
+            }
+
+            if (GetTemplateChild(nameof(PART_CancelButton)) is ImageButton cancelButton)
+            {
+                cancelButton.Source = ImageSource.FromResource($"Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.x{suffix}.png", Assembly.GetAssembly(typeof(SearchView)));
+            }
+
             BindingContext = this;
             SearchViewModel = new SearchViewModel();
             NoResultMessage = "No Results";
@@ -157,6 +265,11 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
                 PART_ResultLabel = null;
             }
 
+            if (PART_ResultContainer != null)
+            {
+                PART_ResultContainer = null;
+            }
+
             if (PART_SourcesView != null)
             {
                 PART_SourcesView.ItemTapped -= PART_SourcesView_ItemTapped;
@@ -185,7 +298,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
 
             base.OnApplyTemplate();
 
-            if (GetTemplateChild(nameof(PART_SourceSelectButton)) is Button newSourceButton)
+            if (GetTemplateChild(nameof(PART_SourceSelectButton)) is ImageButton newSourceButton)
             {
                 PART_SourceSelectButton = newSourceButton;
                 PART_SourceSelectButton.Clicked += PART_SourceSelectButton_Clicked;
@@ -200,14 +313,14 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
                 PART_Entry.TextChanged += PART_Entry_TextChanged;
             }
 
-            if (GetTemplateChild(nameof(PART_CancelButton)) is Button newCancel)
+            if (GetTemplateChild(nameof(PART_CancelButton)) is ImageButton newCancel)
             {
                 PART_CancelButton = newCancel;
                 PART_CancelButton.IsVisible = !string.IsNullOrEmpty(PART_Entry?.Text);
                 PART_CancelButton.Clicked += PART_CancelButton_Clicked;
             }
 
-            if (GetTemplateChild(nameof(PART_SearchButton)) is Button newSearch)
+            if (GetTemplateChild(nameof(PART_SearchButton)) is ImageButton newSearch)
             {
                 PART_SearchButton = newSearch;
                 PART_SearchButton.Clicked += PART_SearchButton_Clicked;
@@ -217,7 +330,13 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
             {
                 PART_ResultLabel = newResultLabel;
                 PART_ResultLabel.Text = NoResultMessage;
-                PART_ResultLabel.IsVisible = SearchViewModel?.Results != null && SearchViewModel.Results.Any();
+                PART_ResultLabel.IsVisible = SearchViewModel?.Results != null && !SearchViewModel.Results.Any();
+            }
+
+            if (GetTemplateChild(nameof(PART_ResultContainer)) is Grid newResultContainer)
+            {
+                PART_ResultContainer = newResultContainer;
+                PART_ResultContainer.IsVisible = SearchViewModel?.Results != null && !SearchViewModel.Results.Any();
             }
 
             if (GetTemplateChild(nameof(PART_SourcesView)) is ListView newSourceSelectView)
@@ -272,9 +391,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
 
         private void PART_SuggestionsView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if (e.SelectedItemIndex != -1)
+            if (e.SelectedItem is SearchSuggestion suggestion)
             {
-                SearchViewModel.AcceptSuggestion(SearchViewModel.Suggestions[e.SelectedItemIndex]);
+                SearchViewModel.AcceptSuggestion(suggestion);
                 PART_SuggestionsView.SelectedItem = null;
             }
         }
@@ -468,7 +587,10 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
 
         private void Sources_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            PART_SourceSelectButton.IsVisible = SearchViewModel?.Sources?.Count > 1;
+            if (PART_SourceSelectButton != null)
+            {
+                PART_SourceSelectButton.IsVisible = SearchViewModel?.Sources?.Count > 1;
+            }
         }
 
         private void HandleMapChange(object? sender, PropertyChangedEventArgs e)
@@ -506,14 +628,18 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
                     PART_Entry.Placeholder = SearchViewModel.ActivePlaceholder;
                     break;
                 case nameof(SearchViewModel.Suggestions):
-                    PART_SuggestionsView.ItemsSource = SearchViewModel.Suggestions;
+                    PART_SuggestionsView.ItemsSource = SearchViewModel.Suggestions?.GroupBy(item => item.OwningSource);
+                    //PART_SuggestionsView.GroupDisplayBinding = new Binding("Key.DisplayName");
+                    //PART_SuggestionsView.GroupShortNameBinding = new Binding("Key.DisplayName");
                     PART_SuggestionsView.IsVisible = (SearchViewModel.Suggestions?.Any() ?? false) && SearchViewModel.Results == null;
                     PART_ResultLabel.IsVisible = SearchViewModel.Suggestions != null && SearchViewModel.Suggestions.Count == 0;
+                    PART_ResultContainer.IsVisible = PART_ResultLabel.IsVisible;
                     break;
                 case nameof(SearchViewModel.Results):
                     PART_ResultView.ItemsSource = SearchViewModel.Results;
                     PART_ResultView.IsVisible = ResultViewbool;
                     PART_ResultLabel.IsVisible = SearchViewModel.Results != null && SearchViewModel.Results.Count == 0;
+                    PART_ResultContainer.IsVisible = PART_ResultLabel.IsVisible;
                     PART_SuggestionsView.IsVisible = (SearchViewModel.Suggestions?.Any() ?? false) && SearchViewModel.Results == null;
                     _ = HandleResultsCollectionChanged();
                     break;

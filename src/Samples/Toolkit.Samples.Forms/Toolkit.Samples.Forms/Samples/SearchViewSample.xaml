@@ -9,13 +9,14 @@
              Title="SearchView"
              x:Class="Toolkit.Samples.Forms.Samples.SearchViewSample">
     <ContentPage.Content>
-            <Grid>
+            <Grid RowSpacing="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="32" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="250" />
             </Grid.RowDefinitions>
-                <esri:MapView x:Name="MyMapView" />
-            <toolkit:SearchView GeoView="{Binding Source={Reference MyMapView}}" Grid.Row="1" />
+                <esri:MapView x:Name="MyMapView" Grid.Row="1" Grid.RowSpan="2" />
+            <toolkit:SearchView GeoView="{Binding Source={Reference MyMapView}}" Grid.Row="0" Grid.RowSpan="2" HeightRequest="250" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>
