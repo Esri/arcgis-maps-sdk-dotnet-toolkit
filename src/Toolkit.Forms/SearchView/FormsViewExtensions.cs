@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,33 +13,22 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
-using System;
-using System.Globalization;
-using System.IO;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
-    internal class ByteArrayToImageSourceConverter : IValueConverter
+    /// <summary>
+    /// Extensions for manipulating views.
+    /// </summary>
+    internal static class FormsViewExtensions
     {
-        /// <summary>
-        /// Converts a byte array to an image source for display in Xamarin.Forms.
-        /// </summary>
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public static void SetVisibilityExtension(this View? view, bool inputVisibility)
         {
-            if (value is byte[] rawBuffer)
+            if (view is { })
             {
-                return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
+                view.IsVisible = inputVisibility;
+                view.InputTransparent = !inputVisibility;
             }
-
-            return null;
-        }
-
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

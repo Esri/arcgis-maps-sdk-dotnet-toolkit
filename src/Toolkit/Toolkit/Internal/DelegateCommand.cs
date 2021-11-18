@@ -22,22 +22,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <summary>
     /// Simple command implementation.
     /// </summary>
-    public class DelegateCommand : ICommand
+    internal class DelegateCommand : ICommand
     {
         private readonly Action _action;
 
-        public DelegateCommand(Action inputAction)
-        {
-            _action = inputAction;
-        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
+        /// </summary>
+        public DelegateCommand(Action inputAction) => _action = inputAction;
 
+        /// <inheritdoc/>
         public event EventHandler? CanExecuteChanged;
 
+        /// <inheritdoc/>
         public bool CanExecute(object? parameter)
         {
             return true;
         }
 
+        /// <inheritdoc/>
         public void Execute(object? parameter)
         {
             _action.Invoke();

@@ -7,7 +7,7 @@
              xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
              mc:Ignorable="d"
              Title="SearchView"
-             x:Class="Toolkit.Samples.Forms.Samples.SearchViewSample">
+             x:Class="Toolkit.Samples.Forms.Samples.SearchViewSceneSample">
     <ContentPage.Content>
             <Grid RowSpacing="0">
             <Grid.RowDefinitions>
@@ -15,8 +15,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-                <esri:MapView x:Name="MyMapView" Grid.Row="1" Grid.RowSpan="2" />
-            <toolkit:SearchView GeoView="{Binding Source={Reference MyMapView}}" Grid.Row="0" Grid.RowSpan="2" />
+            <esri:SceneView x:Name="MySceneView" Grid.Row="1" Grid.RowSpan="2" />
+            <toolkit:SearchView GeoView="{Binding Source={Reference MySceneView}}" Grid.Row="0" Grid.RowSpan="2" HeightRequest="250"  />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -15,8 +15,6 @@
 //  ******************************************************************************/
 #if !XAMARIN
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -31,6 +29,8 @@ using Esri.ArcGISRuntime.UI.Controls;
 using System.Windows;
 using System.Windows.Controls;
 #else
+using System.Collections;
+using System.Collections.Generic;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -52,16 +52,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private GeoModel? _lastUsedGeomodel;
         private readonly GraphicsOverlay _resultOverlay;
         private bool _isSourceSelectOpen;
-        private CancellationTokenSource _configurationCancellationToken;
+        private CancellationTokenSource? _configurationCancellationToken;
 
         // Flag indicates whether control is waiting after user finished typing.
         private bool _waitFlag;
 
         // Flag indicating that query text is changing as a result of selecting a suggestion; view should not request suggestions in response to the user suggesting a selection.
         private bool _acceptingSuggestionFlag;
-
-        // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
-        private bool _groupListSelectionFlag;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchView"/> class.
@@ -80,6 +77,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
 #if NETFX_CORE
         private ListView _suggestionList;
+
+        // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
+        private bool _groupListSelectionFlag;
 
         /// <inheritdoc/>
         protected override void OnApplyTemplate()
@@ -140,11 +140,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (GeoView is MapView mv && mv.Map is Map map)
                 {
-                    await SearchViewModel?.ConfigureFromMap(map, _configurationCancellationToken.Token);
+                    await (SearchViewModel?.ConfigureFromMap(map, _configurationCancellationToken.Token) ?? Task.CompletedTask);
                 }
                 else if (GeoView is SceneView sv && sv.Scene is Scene sp)
                 {
-                    await SearchViewModel?.ConfigureFromMap(sp, _configurationCancellationToken.Token);
+                    await (SearchViewModel?.ConfigureFromMap(sp, _configurationCancellationToken.Token) ?? Task.CompletedTask);
                 }
             }
             catch (Exception)

@@ -138,7 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <summary>
         /// Gets or sets the query area to use when searching and getting suggestions.
-        /// When used in conjunction with a <see cref="GeoView"/>, this property should be set every time navigation completes,
+        /// When used in conjunction with a GeoView, this property should be set every time navigation completes,
         /// to enable automatic update of the <see cref="IsEligibleForRequery"/> property.
         /// </summary>
         public Geometry.Geometry? QueryArea
@@ -484,8 +484,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (includeDefault)
             {
                 var locatorSource = new SmartLocatorSearchSource(
-                    new LocatorTask(new Uri("https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer")),
-                    await Symbology.SymbolStyle.OpenAsync("Esri2DPointSymbolsStyle", null));
+                    new LocatorTask(new Uri("https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer")), null);
                 Sources.Add(locatorSource);
             }
         }
@@ -536,7 +535,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return selectedSources;
         }
 
-        #region INPC helpers
         private void SetPropertyChanged<T>(T value, ref T field, [CallerMemberName] string propertyName = "")
         {
             if (!Equals(value, field))
@@ -563,6 +561,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
-        #endregion
     }
 }

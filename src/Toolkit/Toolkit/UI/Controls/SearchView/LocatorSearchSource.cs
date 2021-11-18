@@ -251,8 +251,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return ResultToSearchResult(results);
         }
 
-        #region process raw results
-
         /// <summary>
         /// Converts geocode result list into list of results, applying result limits and calling necessary callbacks.
         /// </summary>
@@ -299,7 +297,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             return new SearchSuggestion(r.Label, this) { IsCollection = r.IsCollection, UnderlyingObject = r };
         }
-
-        #endregion process raw results
     }
 }

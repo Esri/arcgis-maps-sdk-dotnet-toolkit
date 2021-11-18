@@ -139,8 +139,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SelectionViewpoint = viewpoint;
         }
 
-        #region graphics display
-
         // TODO - cache these operations; multiple roundtrips to core for images is not fast
 
         /// <summary>
@@ -205,8 +203,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _imageRequestFlag = false;
             }
         }
-
-        #endregion
 
         private void SetPropertyChanged<T>(T value, ref T field, [CallerMemberName] string propertyName = "")
         {
