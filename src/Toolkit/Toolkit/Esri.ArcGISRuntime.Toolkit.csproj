@@ -75,7 +75,6 @@
     <Compile Include="UI\Controls\SearchView\SearchResult.cs" />
     <Compile Include="UI\Controls\SearchView\SearchResultMode.cs" />
     <Compile Include="UI\Controls\SearchView\SearchSuggestion.cs" />
-    <Compile Include="UI\Controls\SearchView\SuggestionComparer.cs" />
     <Compile Include="Internal\StringExtensions.cs" />
     <Compile Include="Internal\DelegateCommand.cs" />
   </ItemGroup>

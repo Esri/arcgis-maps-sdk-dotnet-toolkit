@@ -68,7 +68,7 @@ Displays current scale reference.
 
 ### SearchView
 
-Enables searching using one or more locators, with support for suggestions, automatic zooming, and custom search sources.Enables searching one or more locators, with support for suggestions.
+Enables searching using one or more locators, with support for suggestions, automatic zooming, and custom search sources.
 
 ![SearchView](https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png)
 

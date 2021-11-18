@@ -62,7 +62,6 @@
     <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
-    <converter:CollectionIsEmptyToVisibilityConverter x:Key="CollectionIsEmptyToVisibilityConverter" />
     <ControlTemplate x:Key="ListItemTemplate" TargetType="ListViewItem">
         <Border
             x:Name="Border"

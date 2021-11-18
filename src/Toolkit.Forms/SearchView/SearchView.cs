@@ -25,7 +25,6 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 using Grid = Xamarin.Forms.Grid;
-using XForms = Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
@@ -184,6 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 PART_SuggestionsView = newSuggestionList;
                 PART_SuggestionsView.ItemTemplate = SuggestionTemplate;
                 PART_SuggestionsView.ItemSelected += PART_SuggestionsView_ItemSelected;
+                PART_SuggestionsView.IsGroupingEnabled = SearchViewModel?.Sources?.Count > 1;
             }
 
             if (GetTemplateChild(nameof(PART_RepeatButton)) is Button newRepeatButton)
@@ -480,7 +480,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     UpdateVisibility();
                     break;
                 case nameof(SearchViewModel.Suggestions):
-                    PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel?.Suggestions?.GroupBy(item => item.OwningSource));
+                    // Only group if there are multiple sources
+                    if (SearchViewModel.Sources.Count > 1)
+                    {
+                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel?.Suggestions?.GroupBy(item => item.OwningSource));
+                    }
+                    else
+                    {
+                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel?.Suggestions);
+                    }
+
                     UpdateVisibility();
                     break;
                 case nameof(SearchViewModel.Results):
@@ -488,7 +497,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     _ = HandleResultsCollectionChanged();
                     break;
                 case nameof(SearchViewModel.CurrentQuery):
-                    PART_CancelButton?.SetVisibilityExtension(!string.IsNullOrEmpty(SearchViewModel?.CurrentQuery));
+                    PART_CancelButton?.SetValue(View.IsVisibleProperty, !string.IsNullOrEmpty(SearchViewModel?.CurrentQuery));
                     PART_Entry?.SetValue(Entry.TextProperty, SearchViewModel?.CurrentQuery);
                     _ = HandleQueryChanged();
                     break;
@@ -626,13 +635,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void UpdateVisibility()
         {
-            PART_SuggestionsView?.SetVisibilityExtension(SuggestionsViewVisibility);
-            PART_ResultView?.SetVisibilityExtension(ResultViewVisibility);
-            PART_ResultContainer?.SetVisibilityExtension(ResultLabelVisibility);
-            PART_ResultLabel?.SetVisibilityExtension(ResultLabelVisibility);
-            PART_SourceSelectButton?.SetVisibilityExtension(SourceSelectVisibility);
-            PART_RepeatButton?.SetVisibilityExtension(RepeatSearchButtonVisibility);
-            PART_SourcesView?.SetVisibilityExtension(SourcePopupVisibility);
+            PART_SuggestionsView?.SetValue(View.IsVisibleProperty, SuggestionsViewVisibility);
+            PART_ResultView?.SetValue(View.IsVisibleProperty, ResultViewVisibility);
+            PART_ResultContainer?.SetValue(View.IsVisibleProperty, ResultLabelVisibility);
+            PART_ResultLabel?.SetValue(View.IsVisibleProperty, ResultLabelVisibility);
+            PART_SourceSelectButton?.SetValue(View.IsVisibleProperty, SourceSelectVisibility);
+            PART_RepeatButton?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
+            PART_SourcesView?.SetValue(View.IsVisibleProperty, SourcePopupVisibility);
+
+            // Ensure group headers are only shown with multiple sources.
+            PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, SourceSelectVisibility);
         }
 
         #endregion events
