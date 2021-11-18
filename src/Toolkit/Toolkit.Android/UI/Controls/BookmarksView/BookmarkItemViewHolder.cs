@@ -15,9 +15,13 @@
 //  ******************************************************************************/
 
 using System;
-using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+#if NET6_0_OR_GREATER
+using AndroidX.RecyclerView.Widget;
+#else
+using Android.Support.V7.Widget;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {

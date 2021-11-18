@@ -19,7 +19,12 @@ using System.Diagnostics.CodeAnalysis;
 using Android.Content;
 using Android.Graphics;
 using Android.Runtime;
+
+#if NET6_0_OR_GREATER
+using AndroidX.ConstraintLayout.Widget;
+#else
 using Android.Support.Constraints;
+#endif
 using Android.Util;
 using Android.Views;
 using Android.Widget;

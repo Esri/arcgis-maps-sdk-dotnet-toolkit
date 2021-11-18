@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework);$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
     <Description>Preview package containing new features under development in the Toolkit for ArcGIS Runtime SDK for .NET.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit.Preview</RootNamespace>
