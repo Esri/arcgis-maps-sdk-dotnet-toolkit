@@ -351,27 +351,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private void HandleViewpointChanged()
         {
-            if (SearchViewModel == null)
+            if (SearchViewModel == null || GeoView == null)
             {
                 return;
             }
 
-            if (GeoView is MapView mv)
+            if (GeoView.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Envelope targetEnvelope)
             {
-                if (mv.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Geometry.Geometry newView)
-                {
-                    SearchViewModel.QueryCenter = (newView as Envelope)?.GetCenter();
-                    SearchViewModel.QueryArea = newView;
-                }
-            }
-            else if (GeoView is SceneView sv)
-            {
-                var newviewpoint = sv.GetCurrentViewpoint(ViewpointType.CenterAndScale);
-                if (newviewpoint?.TargetGeometry is MapPoint mp)
-                {
-                    SearchViewModel.QueryArea = null;
-                    SearchViewModel.QueryCenter = mp;
-                }
+                SearchViewModel.QueryArea = targetEnvelope;
+                SearchViewModel.QueryCenter = targetEnvelope.GetCenter();
             }
         }
 

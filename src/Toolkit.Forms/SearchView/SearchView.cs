@@ -192,6 +192,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 PART_RepeatButton.Clicked += PART_RepeatButton_Clicked;
             }
 
+            if (GetTemplateChild(nameof(PART_RepeatButtonContainer)) is Grid newRepeatButtonContainer)
+            {
+                PART_RepeatButtonContainer = newRepeatButtonContainer;
+            }
+
             UpdateVisibility();
         }
 
@@ -525,22 +530,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 return;
             }
 
-            if (GeoView is MapView mv)
+            if (GeoView.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Envelope targetEnvelope)
             {
-                if (mv.GetCurrentViewpoint(ViewpointType.BoundingGeometry)?.TargetGeometry is Geometry.Geometry newView)
-                {
-                    SearchViewModel.QueryCenter = (newView as Envelope)?.GetCenter();
-                    SearchViewModel.QueryArea = newView;
-                }
-            }
-            else if (GeoView is SceneView sv)
-            {
-                var newviewpoint = sv.GetCurrentViewpoint(ViewpointType.CenterAndScale);
-                if (newviewpoint?.TargetGeometry is MapPoint mp)
-                {
-                    SearchViewModel.QueryArea = null;
-                    SearchViewModel.QueryCenter = mp;
-                }
+                SearchViewModel.QueryArea = targetEnvelope;
+                SearchViewModel.QueryCenter = targetEnvelope.GetCenter();
             }
         }
 
@@ -641,6 +634,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             PART_ResultLabel?.SetValue(View.IsVisibleProperty, ResultLabelVisibility);
             PART_SourceSelectButton?.SetValue(View.IsVisibleProperty, SourceSelectVisibility);
             PART_RepeatButton?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
+            PART_RepeatButtonContainer?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
             PART_SourcesView?.SetValue(View.IsVisibleProperty, SourcePopupVisibility);
 
             // Ensure group headers are only shown with multiple sources.

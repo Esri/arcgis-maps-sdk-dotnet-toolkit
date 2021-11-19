@@ -34,6 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private ListView? PART_SourcesView;
         private Button? PART_RepeatButton;
         private Grid? PART_ResultContainer;
+        private Grid? PART_RepeatButtonContainer;
 #pragma warning restore SA1306, SA1310, SX1309 // Field names should begin with lower-case letter
 
         private static readonly DataTemplate DefaultResultTemplate;
@@ -172,7 +173,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
     <ListView x:Name=""{nameof(PART_ResultView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""200"" />
     <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" HeightRequest=""200"" />
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" BackgroundColor=""White"" Grid.ColumnSpan=""3"" Grid.Row=""1"" HeightRequest=""80""><Label x:Name=""{nameof(PART_ResultLabel)}"" /></Grid>
-    <Button x:Name=""{nameof(PART_RepeatButton)}"" Text=""Repeat Search Here"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2"" BackgroundColor=""#007AC2"" TextColor=""White"" VerticalOptions=""Start"" />
+    <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" BackgroundColor=""White"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2"">
+        <Button x:Name=""{nameof(PART_RepeatButton)}"" Text=""Repeat Search Here"" BackgroundColor=""#007AC2"" TextColor=""White"" />
+    </Grid>
 </Grid>
 </ControlTemplate>";
             DefaultControlTemplate = XForms.Extensions.LoadFromXaml(new ControlTemplate(), template);
