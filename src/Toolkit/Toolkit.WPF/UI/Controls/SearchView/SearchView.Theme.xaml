@@ -536,16 +536,16 @@
                                     VerticalAlignment="Center"
                                     Text="{TemplateBinding NoResultMessage}" />
                             </Border>
-							<Border
-	                            BorderThickness="0,1,0,0"
-								Style="{StaticResource ResultAreaBorderStyle}"
-								Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
-								<TextBlock
+                            <Border
+                                BorderThickness="0,1,0,0"
+                                Style="{StaticResource ResultAreaBorderStyle}"
+                                Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
+                                <TextBlock
                                     Margin="8"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Text="{TemplateBinding NoResultMessage}" />
-							</Border>
+                            </Border>
                         </Grid>
                     </Border>
                     <ProgressBar
@@ -578,10 +578,10 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Width" Value="256" />
         <Setter Property="Margin" Value="4" />
-		<Setter Property="NoResultMessage" Value="No Results" />
-		<Setter Property="AllSourceSelectText" Value="All Sources" />
-		<Setter Property="ClearSearchTooltipText" Value="Clear Search" />
-		<Setter Property="SearchTooltipText" Value="Search" />
-		<Setter Property="RepeatSearchButtonText" Value="Repeat Search Here" />
+        <Setter Property="NoResultMessage" Value="No Results" />
+        <Setter Property="AllSourceSelectText" Value="All Sources" />
+        <Setter Property="ClearSearchTooltipText" Value="Clear Search" />
+        <Setter Property="SearchTooltipText" Value="Search" />
+        <Setter Property="RepeatSearchButtonText" Value="Repeat Search Here" />
     </Style>
 </ResourceDictionary>

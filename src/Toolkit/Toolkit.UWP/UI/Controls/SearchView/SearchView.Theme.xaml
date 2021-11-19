@@ -597,7 +597,7 @@
                     </Grid>
                 </Border>
             </Popup>
-			<Border
+            <Border
                 Grid.Row="1"
                 Style="{StaticResource ResultAreaBorderStyle}"
                 Visibility="{Binding ResultViewVisibility, Mode=OneWay}">
@@ -609,8 +609,14 @@
                         ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
                         SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=TwoWay}"
                         Style="{StaticResource ListStyle}" />
-				    <TextBlock Style="{StaticResource ResultMessageStyle}" Text="{TemplateBinding NoResultMessage}" Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
-				    <TextBlock Style="{StaticResource ResultMessageStyle}" Text="{TemplateBinding NoResultMessage}" Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
+                    <TextBlock
+                        Style="{StaticResource ResultMessageStyle}"
+                        Text="{TemplateBinding NoResultMessage}"
+                        Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
+                    <TextBlock
+                        Style="{StaticResource ResultMessageStyle}"
+                        Text="{TemplateBinding NoResultMessage}"
+                        Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
                 </Grid>
             </Border>
             <Popup
@@ -651,9 +657,9 @@
         <Setter Property="Width" Value="256" />
         <Setter Property="Margin" Value="4" />
         <Setter Property="NoResultMessage" Value="No Results" />
-		<Setter Property="AllSourceSelectText" Value="All Sources" />
-		<Setter Property="ClearSearchTooltipText" Value="Clear Search" />
-		<Setter Property="SearchTooltipText" Value="Search" />
-		<Setter Property="RepeatSearchButtonText" Value="Repeat Search Here" />
+        <Setter Property="AllSourceSelectText" Value="All Sources" />
+        <Setter Property="ClearSearchTooltipText" Value="Clear Search" />
+        <Setter Property="SearchTooltipText" Value="Search" />
+        <Setter Property="RepeatSearchButtonText" Value="Repeat Search Here" />
     </Style>
 </ResourceDictionary>
