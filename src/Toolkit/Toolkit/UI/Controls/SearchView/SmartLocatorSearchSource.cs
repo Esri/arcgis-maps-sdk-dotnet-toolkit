@@ -142,7 +142,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var viewpoint = r.Extent == null ? null : new Mapping.Viewpoint(r.Extent);
 
-            return new SearchResult(r.Label, subtitle, this, new Graphic(r.DisplayLocation, r.Attributes, symbol), viewpoint) { CalloutDefinition = DefaultCalloutDefinition };
+            var graphic = new Graphic(r.DisplayLocation, r.Attributes, symbol);
+
+            CalloutDefinition callout = new CalloutDefinition(graphic) { Text = r.Label, DetailText = subtitle };
+
+            return new SearchResult(r.Label, subtitle, this, graphic, viewpoint) { CalloutDefinition = callout };
         }
 
         private async Task<Symbol?> SymbolForResult(GeocodeResult r)

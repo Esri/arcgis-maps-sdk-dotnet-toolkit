@@ -570,6 +570,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 _resultOverlay?.Graphics.Clear();
                 AddResultToGeoView(selectedResult);
 
+                if (GeoView != null && selectedResult.CalloutDefinition != null && selectedResult.GeoElement != null)
+                {
+                    GeoView.ShowCalloutForGeoElement(selectedResult.GeoElement, new Point(0, 0), selectedResult.CalloutDefinition);
+                }
+
                 // Zoom to the feature
                 if (selectedResult.SelectionViewpoint != null && GeoView != null && SearchViewModel != null)
                 {
@@ -577,11 +582,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     await GeoView.SetViewpointAsync(selectedResult.SelectionViewpoint);
                     await Task.Delay(1000);
                     SearchViewModel.IgnoreAreaChangesFlag = false;
-                }
-
-                if (GeoView != null && selectedResult.CalloutDefinition != null && selectedResult.GeoElement != null)
-                {
-                    GeoView.ShowCalloutForGeoElement(selectedResult.GeoElement, new Point(0, 0), selectedResult.CalloutDefinition);
                 }
             }
             else
