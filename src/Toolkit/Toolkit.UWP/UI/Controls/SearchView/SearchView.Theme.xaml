@@ -525,7 +525,7 @@
                         BorderThickness="0"
                         Command="{Binding ClearCommand, Mode=OneTime}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        ToolTipService.ToolTip="Clear Search"
+                        ToolTipService.ToolTip="{TemplateBinding ClearSearchTooltipText}"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}">
                         <Path Data="M3.98 11.303L7.281 8 3.98 4.697l.707-.707L7.99 7.293l.01-.01.01.01 3.304-3.303.707.707L8.718 8l3.303 3.303-.707.707L8.01 8.707l-.01.01-.01-.01-3.304 3.303z" Style="{StaticResource ActionButtonPathStyle}" />
                     </Button>
@@ -534,7 +534,7 @@
                         BorderThickness="1,0,0,0"
                         Command="{Binding SearchCommand, Mode=OneTime}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        ToolTipService.ToolTip="Search">
+                        ToolTipService.ToolTip="{TemplateBinding SearchTooltipText}">
                         <Path Data="M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z" Style="{StaticResource ActionButtonPathStyle}" />
                     </Button>
                     <ProgressBar
@@ -597,13 +597,7 @@
                     </Grid>
                 </Border>
             </Popup>
-            <Border
-                Grid.Row="1"
-                Style="{StaticResource ResultAreaBorderStyle}"
-                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}">
-                <TextBlock Style="{StaticResource ResultMessageStyle}" Text="{TemplateBinding NoResultMessage}" />
-            </Border>
-            <Border
+			<Border
                 Grid.Row="1"
                 Style="{StaticResource ResultAreaBorderStyle}"
                 Visibility="{Binding ResultViewVisibility, Mode=OneWay}">
@@ -615,6 +609,8 @@
                         ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
                         SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=TwoWay}"
                         Style="{StaticResource ListStyle}" />
+				    <TextBlock Style="{StaticResource ResultMessageStyle}" Text="{TemplateBinding NoResultMessage}" Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
+				    <TextBlock Style="{StaticResource ResultMessageStyle}" Text="{TemplateBinding NoResultMessage}" Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
                 </Grid>
             </Border>
             <Popup
@@ -624,7 +620,7 @@
                 <Border Width="{TemplateBinding Width}" Style="{StaticResource ResultAreaBorderStyle}">
                     <StackPanel>
                         <ToggleButton
-                            Content="All Sources"
+                            Content="{TemplateBinding AllSourceSelectText}"
                             IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                             Style="{StaticResource AllSourceButtonStyle}" />
                         <ListView
@@ -641,7 +637,7 @@
                 Visibility="{Binding EnableRepeatSearchHereButton, Mode=OneWay}">
                 <Button
                     Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
-                    Content="Search Here"
+                    Content="{TemplateBinding RepeatSearchButtonText}"
                     Style="{StaticResource FloatingButtonStyle}"
                     Visibility="{Binding SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
             </StackPanel>
@@ -654,5 +650,10 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Width" Value="256" />
         <Setter Property="Margin" Value="4" />
+        <Setter Property="NoResultMessage" Value="No Results" />
+		<Setter Property="AllSourceSelectText" Value="All Sources" />
+		<Setter Property="ClearSearchTooltipText" Value="Clear Search" />
+		<Setter Property="SearchTooltipText" Value="Search" />
+		<Setter Property="RepeatSearchButtonText" Value="Repeat Search Here" />
     </Style>
 </ResourceDictionary>

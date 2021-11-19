@@ -172,9 +172,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
     </ListView>
     <ListView x:Name=""{nameof(PART_ResultView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""200"" />
     <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" HeightRequest=""200"" />
-    <Grid x:Name=""{nameof(PART_ResultContainer)}"" BackgroundColor=""White"" Grid.ColumnSpan=""3"" Grid.Row=""1"" HeightRequest=""80""><Label x:Name=""{nameof(PART_ResultLabel)}"" /></Grid>
+    <Grid x:Name=""{nameof(PART_ResultContainer)}"" BackgroundColor=""White"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" BackgroundColor=""White"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2"">
-        <Button x:Name=""{nameof(PART_RepeatButton)}"" Text=""Repeat Search Here"" BackgroundColor=""#007AC2"" TextColor=""White"" />
+        <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""#007AC2"" TextColor=""White"" />
     </Grid>
 </Grid>
 </ControlTemplate>";

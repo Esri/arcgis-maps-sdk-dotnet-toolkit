@@ -349,7 +349,7 @@
                                     BorderThickness="0"
                                     IsChecked="{Binding SearchViewModel.ActiveSource, Mode=TwoWay, Converter={StaticResource NullToBoolSelectionConverter}}"
                                     Style="{StaticResource ProminentButtonStyle}">
-                                    <TextBlock Text="All Sources" />
+                                    <TextBlock Text="{TemplateBinding AllSourceSelectText}" />
                                 </ToggleButton>
                                 <ListView
                                     x:Name="sourceList"
@@ -375,7 +375,7 @@
                         Grid.Column="2"
                         Command="{Binding ClearCommand}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        ToolTip="Clear Search"
+                        ToolTip="{TemplateBinding ClearSearchTooltipText}"
                         Visibility="{Binding ElementName=QueryEntry, Path=Text, Converter={StaticResource PlaceholderVisibilityConverter}, ConverterParameter='NotEmpty'}">
                         <Path
                             Width="12"
@@ -472,7 +472,7 @@
                         BorderThickness="1,0,0,0"
                         Command="{Binding SearchCommand, Mode=OneTime}"
                         Style="{StaticResource BarActionButtonStyle}"
-                        ToolTip="Search">
+                        ToolTip="{TemplateBinding SearchTooltipText}">
                         <Path
                             Width="14"
                             Height="14"
@@ -536,6 +536,16 @@
                                     VerticalAlignment="Center"
                                     Text="{TemplateBinding NoResultMessage}" />
                             </Border>
+							<Border
+	                            BorderThickness="0,1,0,0"
+								Style="{StaticResource ResultAreaBorderStyle}"
+								Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
+								<TextBlock
+                                    Margin="8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{TemplateBinding NoResultMessage}" />
+							</Border>
                         </Grid>
                     </Border>
                     <ProgressBar
@@ -553,7 +563,7 @@
                     HorizontalAlignment="Stretch"
                     BorderThickness="0"
                     Command="{Binding RepeatSearchHereCommand, Mode=OneTime}"
-                    Content="Search Here"
+                    Content="{TemplateBinding RepeatSearchButtonText}"
                     Foreground="White"
                     Style="{StaticResource ProminentButtonStyle}"
                     Template="{StaticResource FloatingButtonTemplate}"
@@ -568,5 +578,10 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Width" Value="256" />
         <Setter Property="Margin" Value="4" />
+		<Setter Property="NoResultMessage" Value="No Results" />
+		<Setter Property="AllSourceSelectText" Value="All Sources" />
+		<Setter Property="ClearSearchTooltipText" Value="Clear Search" />
+		<Setter Property="SearchTooltipText" Value="Search" />
+		<Setter Property="RepeatSearchButtonText" Value="Repeat Search Here" />
     </Style>
 </ResourceDictionary>

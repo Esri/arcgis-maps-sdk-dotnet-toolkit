@@ -68,7 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DefaultStyleKey = typeof(SearchView);
             DataContext = this;
             SearchViewModel = new SearchViewModel();
-            NoResultMessage = "No Results";
             _resultOverlay = new GraphicsOverlay { Id = "SearchView_Result_Overlay" };
             ClearCommand = new DelegateCommand(HandleClearSearchCommand);
             SearchCommand = new DelegateCommand(HandleSearchCommand);
@@ -191,6 +190,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (!EnableResultListView)
                 {
                     return Visibility.Collapsed;
+                }
+
+                // Ensure no result message is visible
+                if ((SearchViewModel?.Results != null && SearchViewModel.Results.Count == 0) || (SearchViewModel?.Suggestions != null && SearchViewModel.Suggestions.Count == 0))
+                {
+                    return Visibility.Visible;
                 }
 
                 if (!EnableIndividualResultDisplay && (SearchViewModel?.SearchMode == SearchResultMode.Single || SearchViewModel?.SelectedResult != null))
@@ -336,11 +341,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(SearchViewModel.SelectedResult):
                     _ = HandleSelectedResultChanged();
                     break;
-#if NETFX_CORE
                 case nameof(SearchViewModel.Suggestions):
                     HandleSuggestionsChanged();
                     break;
-#endif
             }
         }
 
@@ -585,6 +588,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => (double)GetValue(MultipleResultZoomBufferProperty);
             set => SetValue(MultipleResultZoomBufferProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets the text to display for the button used to select all search sources.
+        /// </summary>
+        public string? AllSourceSelectText
+        {
+            get => GetValue(AllSourceSelectTextProperty) as string;
+            set => SetValue(AllSourceSelectTextProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the tooltip text to display for the clear/cancel search button.
+        /// </summary>
+        public string? ClearSearchTooltipText
+        {
+            get => GetValue(ClearSearchTooltipTextProperty) as string;
+            set => SetValue(ClearSearchTooltipTextProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the tooltip text to display for the search button.
+        /// </summary>
+        public string? SearchTooltipText
+        {
+            get => GetValue(SearchTooltipTextProperty) as string;
+            set => SetValue(SearchTooltipTextProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text to display in the 'Repeat Search' button.
+        /// </summary>
+        public string? RepeatSearchButtonText
+        {
+            get => GetValue(RepeatSearchButtonTextProperty) as string;
+            set => SetValue(RepeatSearchButtonTextProperty, value);
+        }
+
         #endregion properties
 
         #region dependency properties
@@ -636,19 +676,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty MultipleResultZoomBufferProperty =
             DependencyProperty.Register(nameof(MultipleResultZoomBuffer), typeof(double), typeof(SearchView), new PropertyMetadata(64.0));
-        #endregion dependency properties
 
+        /// <summary>
+        /// Identifies the <see cref="AllSourceSelectText"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AllSourceSelectTextProperty =
+            DependencyProperty.Register(nameof(AllSourceSelectText), typeof(string), typeof(SearchView), null);
+
+        /// <summary>
+        /// Identifies the <see cref="ClearSearchTooltipText"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ClearSearchTooltipTextProperty =
+            DependencyProperty.Register(nameof(ClearSearchTooltipText), typeof(string), typeof(SearchView), null);
+
+        /// <summary>
+        /// Identifies the <see cref="SearchTooltipText"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SearchTooltipTextProperty =
+            DependencyProperty.Register(nameof(SearchTooltipText), typeof(string), typeof(SearchView), null);
+
+        /// <summary>
+        /// Identifies the <see cref="RepeatSearchButtonText"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RepeatSearchButtonTextProperty =
+            DependencyProperty.Register(nameof(RepeatSearchButtonText), typeof(string), typeof(SearchView), null);
+        #endregion dependency properties
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChange(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-#if NETFX_CORE
         private void HandleSuggestionsChanged()
         {
+            NotifyPropertyChange(nameof(ResultViewVisibility));
+            #if NETFX_CORE
             UpdateGroupingForUWP();
+            #endif
         }
 
+#if NETFX_CORE
         private void UpdateGroupingForUWP()
         {
             _groupListSelectionFlag = true;

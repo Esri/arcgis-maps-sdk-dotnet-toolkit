@@ -76,6 +76,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindingContext = this;
             SearchViewModel = new SearchViewModel();
             NoResultMessage = "No Results";
+            AllSourcesSelectText = "All Sources";
+            RepeatSearchButtonText = "Repeat Search Here";
             _resultOverlay = new GraphicsOverlay { Id = "SearchView_Result_Overlay" };
         }
 
@@ -189,6 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (GetTemplateChild(nameof(PART_RepeatButton)) is Button newRepeatButton)
             {
                 PART_RepeatButton = newRepeatButton;
+                PART_RepeatButton.Text = RepeatSearchButtonText;
                 PART_RepeatButton.Clicked += PART_RepeatButton_Clicked;
             }
 
@@ -354,7 +357,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private bool SourceSelectVisibility => SearchViewModel?.Sources?.Count > 1;
 
-        private bool ResultLabelVisibility => SearchViewModel?.Suggestions != null && SearchViewModel?.Suggestions?.Count == 0;
+        private bool ResultLabelVisibility => (SearchViewModel?.Suggestions != null && SearchViewModel?.Suggestions?.Count == 0) ||
+            (SearchViewModel?.Results != null && SearchViewModel?.Results?.Count == 0);
 
         private bool RepeatSearchButtonVisibility => EnableRepeatSearchHereButton && (SearchViewModel?.IsEligibleForRequery ?? false);
 
@@ -427,6 +431,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         private static void OnEnableResultListViewChanged(BindableObject sender, object? oldValue, object? newValue) =>
             (sender as SearchView)?.UpdateVisibility();
 
+        private static void OnRepeatSearchButtonTextChanged(BindableObject sender, object? oldValue, object? newValue) =>
+            (sender as SearchView)?.PART_RepeatButton?.SetValue(Button.TextProperty, newValue);
+
+        private static void OnNoResultMessagePropertyChanged(BindableObject sender, object? oldValue, object? newValue) =>
+            (sender as SearchView)?.PART_ResultLabel?.SetValue(Label.TextProperty, newValue);
+
         private void Sources_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             UpdateSearchSourceList();
@@ -440,7 +450,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 return;
             }
 
-            var sources = new[] { "All Sources" }.Concat(SearchViewModel.Sources.Select(source => source.DisplayName)).ToList();
+            var sources = new[] { AllSourcesSelectText ?? "All" }.Concat(SearchViewModel.Sources.Select(source => source.DisplayName)).ToList();
             PART_SourcesView.ItemsSource = sources;
 
             if (SearchViewModel.ActiveSource == null)
@@ -685,6 +695,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
+        /// Gets or sets the text to show in the button for selecting all search sources.
+        /// </summary>
+        public string? AllSourcesSelectText
+        {
+            get => GetValue(AllSourcesSelectTextProperty) as string;
+            set => SetValue(AllSourcesSelectTextProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the text to show in the 'Repeat search' button.
+        /// </summary>
+        public string? RepeatSearchButtonText
+        {
+            get => GetValue(RepeatSearchButtonTextProperty) as string;
+            set => SetValue(RepeatSearchButtonTextProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the viewmodel that implements core search behavior.
         /// </summary>
         public SearchViewModel? SearchViewModel
@@ -770,7 +798,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="NoResultMessage"/> bindable property.
         /// </summary>
         public static readonly BindableProperty NoResultMessageProperty =
-            BindableProperty.Create(nameof(NoResultMessage), typeof(string), typeof(SearchView), null);
+            BindableProperty.Create(nameof(NoResultMessage), typeof(string), typeof(SearchView), propertyChanged: OnNoResultMessagePropertyChanged);
 
         /// <summary>
         /// Identifies the <see cref="GeoView"/> bindable property.
@@ -813,6 +841,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public static readonly BindableProperty MultipleResultZoomBufferProperty =
             BindableProperty.Create(nameof(MultipleResultZoomBuffer), typeof(double), typeof(SearchView), 64.0);
+
+        /// <summary>
+        /// Identifies the <see cref="AllSourcesSelectText"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty AllSourcesSelectTextProperty =
+            BindableProperty.Create(nameof(AllSourcesSelectText), typeof(string), typeof(SearchView), null);
+
+        /// <summary>
+        /// Identifies the <see cref="RepeatSearchButtonText"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty RepeatSearchButtonTextProperty =
+            BindableProperty.Create(nameof(RepeatSearchButtonText), typeof(string), typeof(SearchView), propertyChanged: OnRepeatSearchButtonTextChanged);
         #endregion bindable properties
     }
 }
