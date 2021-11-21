@@ -28,10 +28,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Search source intended for use with the World Geocode Service and similarly-configured geocode services.
     /// </summary>
-    public class SmartLocatorSearchSource : LocatorSearchSource
+    internal class WorldGeocoderSearchSource : LocatorSearchSource
     {
-        private const string WorldGeocoderUriString = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-
         /// <summary>
         /// Gets or sets the minimum number of results to attempt to return.
         /// If there are too few results, the search is repeated with loosened parameters until enough results are accumulated.
@@ -66,11 +64,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public SymbolStyle? ResultSymbolStyle { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SmartLocatorSearchSource"/> class.
+        /// Initializes a new instance of the <see cref="WorldGeocoderSearchSource"/> class.
         /// </summary>
         /// <param name="locator">Locator to use.</param>
         /// <param name="style">Symbol style to use to find results.</param>
-        public SmartLocatorSearchSource(LocatorTask locator, SymbolStyle? style)
+        public WorldGeocoderSearchSource(LocatorTask locator, SymbolStyle? style)
             : base(locator)
         {
             if (style != null)
@@ -90,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                await Locator.RetryLoadAsync();
+                await Locator.LoadAsync();
             }
             catch (Exception)
             {
@@ -184,11 +182,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             IEnumerable<SearchResult> results = await Task.WhenAll(input.Select(i => GeocodeResultToSearchResult(i)));
 
-            if (ResultCustomizationCallback != null)
-            {
-                results = results.Select(ResultCustomizationCallback).OfType<SearchResult>();
-            }
-
             return results.Take(MaximumResults).ToList();
         }
 
@@ -199,20 +192,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var results = input.Select(i => SuggestResultToSearchSuggestion(i));
 
-            if (SuggestionCustomizationCallback != null)
-            {
-                results = results.Select(SuggestionCustomizationCallback).OfType<SearchSuggestion>();
-            }
-
             return results.Take(MaximumResults).ToList();
         }
 
         /// <inheritdoc />
-        public override async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken? cancellationToken)
+        public override async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             var tempParams = new GeocodeParameters();
             foreach (var attribute in GeocodeParameters.ResultAttributeNames)
@@ -220,9 +208,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 tempParams.ResultAttributeNames.Add(attribute);
             }
 
-            var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, tempParams, cancellationToken ?? CancellationToken.None);
+            var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, tempParams, cancellationToken);
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return await ResultToSearchResult(results);
         }
@@ -236,63 +224,63 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-        public override async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken)
+        public override async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
             SuggestParameters.MaxResults = MaximumSuggestions;
             SuggestParameters.SearchArea = SearchArea;
 
-            var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
-            cancellationToken?.ThrowIfCancellationRequested();
+            var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (RepeatSuggestResultThreshold > 0 && results.Count < RepeatSuggestResultThreshold)
             {
                 SuggestParameters.SearchArea = null;
-                results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
-                cancellationToken?.ThrowIfCancellationRequested();
+                results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             if (RepeatSuggestResultThreshold > 0 && results.Count < RepeatSuggestResultThreshold)
             {
                 SuggestParameters.PreferredSearchLocation = null;
-                results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
-                cancellationToken?.ThrowIfCancellationRequested();
+                results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             return SuggestionToSearchSuggestion(results);
         }
 
         /// <inheritdoc/>
-        public override async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken)
+        public override async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
             GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
             GeocodeParameters.SearchArea = SearchArea;
             GeocodeParameters.MaxResults = MaximumResults;
 
-            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
-            cancellationToken?.ThrowIfCancellationRequested();
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (RepeatSearchResultThreshold > 0 && results.Count < RepeatSearchResultThreshold)
             {
                 GeocodeParameters.SearchArea = null;
-                results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
-                cancellationToken?.ThrowIfCancellationRequested();
+                results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             if (RepeatSearchResultThreshold > 0 && results.Count < RepeatSearchResultThreshold)
             {
                 GeocodeParameters.PreferredSearchLocation = null;
-                results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
-                cancellationToken?.ThrowIfCancellationRequested();
+                results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             return await ResultToSearchResult(results);
@@ -301,18 +289,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// <inheritdoc />
         /// </summary>
-        public override async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Geometry.Envelope queryArea, CancellationToken? cancellationToken)
+        public override async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Geometry.Envelope queryArea, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
             GeocodeParameters.SearchArea = queryArea;
             GeocodeParameters.MaxResults = MaximumResults;
 
-            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
-            cancellationToken?.ThrowIfCancellationRequested();
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
 
             return await ResultToSearchResult(results);
         }

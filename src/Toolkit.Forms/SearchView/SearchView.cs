@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -274,7 +276,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private async Task ConfigureForCurrentMap()
         {
-            if (!EnableAutomaticConfiguration || _configureMapFlag)
+            if (!EnableDefaultWorldGeocoder || _configureMapFlag)
             {
                 return;
             }
@@ -283,14 +285,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             try
             {
-                if (GeoView is MapView mv && mv.Map is Map map)
-                {
-                    await (SearchViewModel?.ConfigureFromMap(map, null) ?? Task.CompletedTask);
-                }
-                else if (GeoView is SceneView sv && sv.Scene is Scene sp)
-                {
-                    await (SearchViewModel?.ConfigureFromMap(sp, null) ?? Task.CompletedTask);
-                }
+                SearchViewModel.Sources.Clear();
+                SearchViewModel.Sources.Add(await LocatorSearchSource.CreateDefaultSourceAsync());
             }
             catch (Exception)
             {
@@ -417,13 +413,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 if (oldValue is SearchViewModel oldModel)
                 {
                     oldModel.PropertyChanged -= sendingView.SearchViewModel_PropertyChanged;
-                    oldModel.Sources.CollectionChanged -= sendingView.Sources_CollectionChanged;
+                    if (oldModel.Sources is INotifyCollectionChanged oldSources)
+                    {
+                        oldSources.CollectionChanged -= sendingView.Sources_CollectionChanged;
+                    }
                 }
 
                 if (newValue is SearchViewModel newModel)
                 {
                     newModel.PropertyChanged += sendingView.SearchViewModel_PropertyChanged;
-                    newModel.Sources.CollectionChanged += sendingView.Sources_CollectionChanged;
+                    if (newModel.Sources is INotifyCollectionChanged newSources)
+                    {
+                        newSources.CollectionChanged += sendingView.Sources_CollectionChanged;
+                    }
                 }
             }
         }
@@ -523,6 +525,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     _ = HandleSelectedResultChanged();
                     break;
                 case nameof(SearchViewModel.IsEligibleForRequery):
+                    UpdateVisibility();
+                    break;
+                case nameof(SearchViewModel.Sources):
+                    UpdateSearchSourceList();
                     UpdateVisibility();
                     break;
             }
@@ -722,12 +728,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether <see cref="SearchView"/> will automatically configure search settings based on the associated <see cref="GeoView"/>'s <see cref="GeoModel"/>.
+        /// Gets or sets a value indicating whether <see cref="SearchViewModel"/> will include the Esri World Geocoder service by default.
         /// </summary>
-        public bool EnableAutomaticConfiguration
+        public bool EnableDefaultWorldGeocoder
         {
-            get => (bool)GetValue(EnableAutomaticConfigurationProperty);
-            set => SetValue(EnableAutomaticConfigurationProperty, value);
+            get => (bool)GetValue(EnableDefaultWorldGeocoderProperty);
+            set => SetValue(EnableDefaultWorldGeocoderProperty, value);
         }
 
         /// <summary>
@@ -807,10 +813,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(SearchView), null, propertyChanged: OnGeoViewPropertyChanged);
 
         /// <summary>
-        /// Identifies the <see cref="EnableAutomaticConfiguration"/> bindable property.
+        /// Identifies the <see cref="EnableDefaultWorldGeocoder"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty EnableAutomaticConfigurationProperty =
-            BindableProperty.Create(nameof(EnableAutomaticConfiguration), typeof(bool), typeof(SearchView), true);
+        public static readonly BindableProperty EnableDefaultWorldGeocoderProperty =
+            BindableProperty.Create(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), true);
 
         /// <summary>
         /// Identifies the <see cref="EnableRepeatSearchHereButton"/> bindable proeprty.

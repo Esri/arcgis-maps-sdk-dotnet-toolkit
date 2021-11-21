@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="queryString">Text of the query.</param>
         /// <param name="cancellationToken">Token used to cancel requests (e.g. because the search text has changed).</param>
         /// <returns>Task returning a list of suggestions.</returns>
-        Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken);
+        Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a list of search results for the given query.
@@ -91,7 +91,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="queryString">Text of the query.</param>
         /// <param name="cancellationToken">Token used to cancel requests (e.g. because the search was changed or canceled).</param>
         /// <returns>Task returning list of search results.</returns>
-        Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken);
+        Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets a list of search results for the given suggestions.
@@ -99,7 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="suggestion">Suggestion to use for the search.</param>
         /// <param name="cancellationToken">Token used to cancel searches.</param>
         /// <returns>Task returning a list of results.</returns>
-        Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken? cancellationToken);
+        Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken);
 
         /// <summary>
         /// Repeats the last search, with results restricted to the current visible area.
@@ -108,7 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <param name="queryExtent">Extent used to limit the results.</param>
         /// <param name="cancellationToken">Token used to cancel search.</param>
         /// <returns>Task returning a list of results.</returns>
-        Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken? cancellationToken);
+        Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken cancellationToken);
 
         /// <summary>
         /// Used to notify the source when the <see cref="SearchViewModel"/> has selected a result.
@@ -123,25 +123,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>This can be used to implement custom selection behavior (e.g. when using a <see cref="FeatureLayer"/>).</remarks>
         /// <param name="result">The result that has been deselected.</param>
         void NotifyDeselected(SearchResult? result);
-
-        /// <summary>
-        /// Gets or sets a callback used to customize search results before they are returned.
-        /// </summary>
-        /// <remarks>
-        /// This can be used to customize results before display without writing a custom search source.
-        /// Implementers of <see cref="ISearchSource"/> must call this function if defined and update results before returning them.
-        /// If the function is defined and returns null for a result, that result should be removed from the result list.
-        /// </remarks>
-        Func<SearchResult, SearchResult?>? ResultCustomizationCallback { get; set; }
-
-        /// <summary>
-        /// Gets or sets a callback used to customize search suggestions before they are returned.
-        /// </summary>
-        /// <remarks>
-        /// This can be used to customize suggestion before display without writing a custom search source.
-        /// Implementers of <see cref="ISearchSource"/> must call this function if defined and update suggestion before returning them.
-        /// If the function is defined and returns null for a suggestion, that suggestion should be removed from the suggestion list.
-        /// </remarks>
-        Func<SearchSuggestion, SearchSuggestion?>? SuggestionCustomizationCallback { get; set; }
     }
 }

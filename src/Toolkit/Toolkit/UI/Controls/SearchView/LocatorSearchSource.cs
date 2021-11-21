@@ -31,9 +31,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Basic search source implementation for generic locators.
     /// </summary>
-    /// <seealso cref="SmartLocatorSearchSource" />
     public class LocatorSearchSource : ISearchSource
     {
+        internal const string WorldGeocoderUriString = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
+
+        private static LocatorTask? _worldGeocoderTask;
+
+        public static async Task<LocatorSearchSource> CreateDefaultSourceAsync(CancellationToken token = default)
+        {
+            token.ThrowIfCancellationRequested();
+
+            if (_worldGeocoderTask == null)
+            {
+                _worldGeocoderTask = new LocatorTask(new Uri(WorldGeocoderUriString));
+                await _worldGeocoderTask.LoadAsync();
+            }
+
+            token.ThrowIfCancellationRequested();
+
+            return new WorldGeocoderSearchSource(_worldGeocoderTask, null);
+        }
+
         private bool _loading;
         private bool _hasPerformedInitialLoad;
 
@@ -90,16 +108,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the default symbol to use when displaying results.
         /// </summary>
         public Symbol? DefaultSymbol { get; set; } = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 2);
-
-        /// <summary>
-        /// Gets or sets a callback that can be used to customize or filter results before they are returned.
-        /// </summary>
-        public Func<SearchResult, SearchResult?>? ResultCustomizationCallback { get; set; }
-
-        /// <summary>
-        /// Gets or sets a callback that can be used to customize or filter suggestions before they are returned.
-        /// </summary>
-        public Func<SearchSuggestion, SearchSuggestion?>? SuggestionCustomizationCallback { get; set; }
 
         /// <inheritdoc />
         public double DefaultZoomScale { get; set; } = 100_000;
@@ -184,69 +192,69 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken? cancellationToken)
+        public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
             SuggestParameters.MaxResults = MaximumSuggestions;
 
-            var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken ?? CancellationToken.None);
+            var results = await Locator.SuggestAsync(queryString, SuggestParameters, cancellationToken);
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return SuggestionToSearchSuggestion(results);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken? cancellationToken)
+        public virtual async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, cancellationToken ?? CancellationToken.None);
+            var results = await Locator.GeocodeAsync(suggestion.UnderlyingObject as SuggestResult, cancellationToken);
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return ResultToSearchResult(results);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken? cancellationToken)
+        public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
             GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
             GeocodeParameters.MaxResults = MaximumResults;
 
-            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken);
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return ResultToSearchResult(results);
         }
 
         /// <inheritdoc />
-        public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken? cancellationToken)
+        public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken cancellationToken = default)
         {
             await EnsureLoaded();
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
             GeocodeParameters.PreferredSearchLocation = PreferredSearchLocation;
             GeocodeParameters.SearchArea = queryExtent;
             GeocodeParameters.MaxResults = MaximumResults;
 
-            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken ?? CancellationToken.None);
+            var results = await Locator.GeocodeAsync(queryString, GeocodeParameters, cancellationToken);
 
-            cancellationToken?.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return ResultToSearchResult(results);
         }
@@ -258,11 +266,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var results = input.Select(i => GeocodeResultToSearchResult(i));
 
-            if (ResultCustomizationCallback != null)
-            {
-                results = results.Select(ResultCustomizationCallback).OfType<SearchResult>();
-            }
-
             return results.Take(MaximumResults).ToList();
         }
 
@@ -272,11 +275,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private IList<SearchSuggestion> SuggestionToSearchSuggestion(IReadOnlyList<SuggestResult> input)
         {
             var results = input.Select(i => SuggestResultToSearchSuggestion(i));
-
-            if (SuggestionCustomizationCallback != null)
-            {
-                results = results.Select(SuggestionCustomizationCallback).OfType<SearchSuggestion>();
-            }
 
             return results.Take(MaximumResults).ToList();
         }

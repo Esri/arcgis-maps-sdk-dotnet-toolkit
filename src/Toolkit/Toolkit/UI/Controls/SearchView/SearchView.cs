@@ -25,6 +25,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
+using System.Collections.ObjectModel;
 #if !NETFX_CORE
 using System.Windows;
 using System.Windows.Controls;
@@ -137,14 +138,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                if (GeoView is MapView mv && mv.Map is Map map)
-                {
-                    await (SearchViewModel?.ConfigureFromMap(map, _configurationCancellationToken.Token) ?? Task.CompletedTask);
-                }
-                else if (GeoView is SceneView sv && sv.Scene is Scene sp)
-                {
-                    await (SearchViewModel?.ConfigureFromMap(sp, _configurationCancellationToken.Token) ?? Task.CompletedTask);
-                }
+                SearchViewModel.Sources.Clear();
+                SearchViewModel.Sources.Add(await LocatorSearchSource.CreateDefaultSourceAsync(_configurationCancellationToken.Token));
             }
             catch (Exception)
             {
@@ -281,18 +276,29 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (e.OldValue is SearchViewModel oldModel)
                 {
                     oldModel.PropertyChanged -= sendingView.SearchViewModel_PropertyChanged;
-                    oldModel.Sources.CollectionChanged -= sendingView.Sources_CollectionChanged;
+                    if (oldModel.Sources is ObservableCollection<ISearchSource> oldSources)
+                    {
+                        oldSources.CollectionChanged -= sendingView.Sources_CollectionChanged;
+                    }
                 }
 
                 if (e.NewValue is SearchViewModel newModel)
                 {
                     newModel.PropertyChanged += sendingView.SearchViewModel_PropertyChanged;
-                    newModel.Sources.CollectionChanged += sendingView.Sources_CollectionChanged;
+                    if (newModel.Sources is ObservableCollection<ISearchSource> newSources)
+                    {
+                        newSources.CollectionChanged += sendingView.Sources_CollectionChanged;
+                    }
                 }
             }
         }
 
         private void Sources_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            HandleSourcesChange();
+        }
+
+        private void HandleSourcesChange()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SourceSelectVisibility)));
             IsSourceSelectOpen = false;
@@ -343,6 +349,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     break;
                 case nameof(SearchViewModel.Suggestions):
                     HandleSuggestionsChanged();
+                    break;
+                case nameof(SearchViewModel.Sources):
+                    HandleSourcesChange();
                     break;
             }
         }

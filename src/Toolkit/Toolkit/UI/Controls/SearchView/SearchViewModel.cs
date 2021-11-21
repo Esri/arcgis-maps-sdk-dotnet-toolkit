@@ -43,8 +43,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Geometry.Geometry? _queryArea;
         private Geometry.Geometry? _lastSetArea;
         private MapPoint? _queryCenter;
-        private List<SearchResult>? _results;
-        private List<SearchSuggestion>? _suggestions;
+        private IList<SearchResult>? _results;
+        private IList<SearchSuggestion>? _suggestions;
         private SearchSuggestion? _lastSuggestion;
 
         private bool _searchInProgress;
@@ -182,21 +182,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public bool IgnoreAreaChangesFlag { get; set; }
 
         /// <summary>
-        /// Gets the list of available search sources, which can be updated dynamically.
+        /// Gets or sets the list of available search sources, which can be updated dynamically.
         /// </summary>
         /// <remarks>See <see cref="ConfigureFromMap(GeoModel?, CancellationToken?)"/> for a convenient method to populate this collection automatically.</remarks>
-        public ObservableCollection<ISearchSource> Sources { get; } = new ObservableCollection<ISearchSource>();
+        public IList<ISearchSource> Sources { get; set; } = new ObservableCollection<ISearchSource>();
 
         /// <summary>
         /// Gets the list of search results for the most-recently completed query.
         /// Clearing a search via <see cref="ClearSearch"/> will set this collection to <c>null</c>.
         /// </summary>
-        public List<SearchResult>? Results { get => _results; private set => SetPropertyChanged(value, ref _results); }
+        public IList<SearchResult>? Results { get => _results; private set => SetPropertyChanged(value, ref _results); }
 
         /// <summary>
         /// Gets the list of search suggestions. This value is set after calls to <see cref="UpdateSuggestions"/>.
         /// </summary>
-        public List<SearchSuggestion>? Suggestions { get => _suggestions; private set => SetPropertyChanged(value, ref _suggestions); }
+        public IList<SearchSuggestion>? Suggestions { get => _suggestions; private set => SetPropertyChanged(value, ref _suggestions); }
 
         private bool _viewpointChangedSinceResultReturned;
 
@@ -441,51 +441,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (Results?.Count == 1)
             {
                 SelectedResult = Results.First();
-            }
-        }
-
-        /// <summary>
-        /// Configures the view for the given map or scene.
-        /// If no value is provided, the Esri World Geocoder is used as a single source by default.
-        /// </summary>
-        /// <param name="model">Optional web map or scene to use for configuration.</param>
-        /// <param name="cancellationToken">Optional cancellation token.</param>
-        /// <remarks>
-        /// Automatic configuration is not fully supported when using maps or scenes from offline packages.
-        /// </remarks>
-        public async Task ConfigureFromMap(GeoModel? model, CancellationToken? cancellationToken)
-        {
-            cancellationToken?.ThrowIfCancellationRequested();
-            DefaultPlaceholder = "Find a place or address";
-
-            if (model is Map mp && mp.LoadStatus != LoadStatus.Loaded)
-            {
-                await mp.RetryLoadAsync();
-            }
-            else if (model is Scene sp && sp.LoadStatus != LoadStatus.Loaded)
-            {
-                await sp.RetryLoadAsync();
-            }
-
-            // Future = Determine if SearchView should be enabled
-            // Future = Read default search hint from JSON
-            // Future = Add any locators specified in JSON
-            // Future = Determine if default locator source should be added
-            // Future = Add any layer search sources specified in JSON
-            bool includeDefault = true;
-
-            cancellationToken?.ThrowIfCancellationRequested();
-
-            // Clear existing properties
-            ClearSearch();
-            Sources.Clear();
-            ActiveSource = null;
-
-            if (includeDefault)
-            {
-                var locatorSource = new SmartLocatorSearchSource(
-                    new LocatorTask(new Uri("https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer")), null);
-                Sources.Add(locatorSource);
             }
         }
 
