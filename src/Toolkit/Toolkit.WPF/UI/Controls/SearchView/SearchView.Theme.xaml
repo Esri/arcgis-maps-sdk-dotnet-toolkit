@@ -8,7 +8,6 @@
     <converter:CollectionIsSingletonToBoolConverter x:Key="CollectionIsSingletonToBoolConverter" />
     <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converter:NullToBoolSelectionConverter x:Key="NullToBoolSelectionConverter" />
-    <converter:CollectionIsEmptyToVisibilityConverter x:Key="CollectionIsEmptyToVisibilityConverter" />
     <Color x:Key="ButtonHoverColor">#f3f3f3</Color>
     <Color x:Key="ButtonPressColor">#e2f1fb</Color>
     <Color x:Key="BlueButtonColor">#007AC2</Color>
@@ -529,17 +528,7 @@
                             <Border
                                 BorderThickness="0,1,0,0"
                                 Style="{StaticResource ResultAreaBorderStyle}"
-                                Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
-                                <TextBlock
-                                    Margin="8"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Text="{TemplateBinding NoResultMessage}" />
-                            </Border>
-                            <Border
-                                BorderThickness="0,1,0,0"
-                                Style="{StaticResource ResultAreaBorderStyle}"
-                                Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToVisibilityConverter}, ConverterParameter='Empty'}">
+                                Visibility="{Binding ResultMessageVisibility, Mode=OneWay}">
                                 <TextBlock
                                     Margin="8"
                                     HorizontalAlignment="Center"

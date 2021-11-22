@@ -612,11 +612,7 @@
                     <TextBlock
                         Style="{StaticResource ResultMessageStyle}"
                         Text="{TemplateBinding NoResultMessage}"
-                        Visibility="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
-                    <TextBlock
-                        Style="{StaticResource ResultMessageStyle}"
-                        Text="{TemplateBinding NoResultMessage}"
-                        Visibility="{Binding SearchViewModel.Results.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='Empty', FallbackValue=Collapsed}" />
+                        Visibility="{Binding ResultMessageVisibility, Mode=OneWay}" />
                 </Grid>
             </Border>
             <Popup

@@ -89,7 +89,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GeoElement)));
 
                     // Start loading image
-                    // TODO = decide if it would be better to expose a top-level symbol property
                     if (_geoElement is Graphic graphic && graphic.Symbol is Symbol symbol)
                     {
                         _ = LoadImage(symbol);
@@ -138,8 +137,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             GeoElement = geoElement;
             SelectionViewpoint = viewpoint;
         }
-
-        // TODO - cache these operations; multiple roundtrips to core for images is not fast
 
         /// <summary>
         /// Gets the image displayed for this result.

@@ -249,10 +249,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 ApplyNewResult(allResults.SelectMany(l => l).ToList(), null);
             }
-            catch (Exception)
-            {
-                // TODO - decide on error handling
-            }
             finally
             {
                 _activeSearchCancellation = null;
@@ -294,10 +290,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var allResults = await Task.WhenAll(sourcesToSearch.Select(s => s.RepeatSearchAsync(CurrentQuery!, QueryArea.Extent, _activeSearchCancellation.Token)));
 
                 ApplyNewResult(allResults.SelectMany(l => l).ToList(), _lastSuggestion);
-            }
-            catch (Exception)
-            {
-                // TODO - decide how to handle exceptions.
             }
             finally
             {
@@ -377,10 +369,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var results = await selectedSource.SearchAsync(suggestion, searchCancellation.Token);
 
                 ApplyNewResult(results, suggestion);
-            }
-            catch (Exception)
-            {
-                // TODO - decide how to report.
             }
             finally
             {
@@ -473,6 +461,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public void CancelSuggestion()
         {
             _activeSuggestCancellation?.Cancel();
+        }
+
+        /// <summary>
+        /// Configures the viewmodel with a search source optimized for use with the Esri World Geocoder service.
+        /// </summary>
+        /// <param name="token">Token used for cancellation.</param>
+        public async Task ConfigureDefaultWorldGeocoder(CancellationToken token = default)
+        {
+            Sources.Clear();
+            Sources.Add(await LocatorSearchSource.CreateDefaultSourceAsync(token));
         }
 
         private List<ISearchSource> SourcesToSearch()

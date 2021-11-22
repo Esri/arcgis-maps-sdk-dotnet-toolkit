@@ -26,6 +26,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 #if !NETFX_CORE
 using System.Windows;
 using System.Windows.Controls;
@@ -124,7 +125,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task ConfigureForCurrentMap()
         {
-            if (!EnableAutomaticConfiguration)
+            if (!EnableDefaultWorldGeocoder)
             {
                 return;
             }
@@ -138,8 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                SearchViewModel.Sources.Clear();
-                SearchViewModel.Sources.Add(await LocatorSearchSource.CreateDefaultSourceAsync(_configurationCancellationToken.Token));
+                await SearchViewModel.ConfigureDefaultWorldGeocoder(_configurationCancellationToken.Token);
             }
             catch (Exception)
             {
@@ -224,6 +224,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
+        /// Gets the visibility for the presentation of the <see cref="NoResultMessage"/>.
+        /// </summary>
+        public Visibility ResultMessageVisibility
+        {
+            get
+            {
+                if (SearchViewModel?.Suggestions?.Count == 0 || SearchViewModel?.Results?.Count == 0)
+                {
+                    return Visibility.Visible;
+                }
+
+                return Visibility.Collapsed;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the source selection view is being displayed.
         /// </summary>
         public bool IsSourceSelectOpen
@@ -276,7 +292,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (e.OldValue is SearchViewModel oldModel)
                 {
                     oldModel.PropertyChanged -= sendingView.SearchViewModel_PropertyChanged;
-                    if (oldModel.Sources is ObservableCollection<ISearchSource> oldSources)
+                    if (oldModel.Sources is INotifyCollectionChanged oldSources)
                     {
                         oldSources.CollectionChanged -= sendingView.Sources_CollectionChanged;
                     }
@@ -285,7 +301,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 if (e.NewValue is SearchViewModel newModel)
                 {
                     newModel.PropertyChanged += sendingView.SearchViewModel_PropertyChanged;
-                    if (newModel.Sources is ObservableCollection<ISearchSource> newSources)
+                    if (newModel.Sources is INotifyCollectionChanged newSources)
                     {
                         newSources.CollectionChanged += sendingView.Sources_CollectionChanged;
                     }
@@ -432,6 +448,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             NotifyPropertyChange(nameof(ResultViewVisibility));
+            NotifyPropertyChange(nameof(ResultMessageVisibility));
 
             if (SearchViewModel.Results == null)
             {
@@ -541,12 +558,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether <see cref="SearchView"/> will automatically configure search settings based on the associated <see cref="GeoView"/>'s <see cref="GeoModel"/>.
+        /// Gets or sets a value indicating whether <see cref="SearchViewModel"/> will include the Esri World Geocoder service by default.
         /// </summary>
-        public bool EnableAutomaticConfiguration
+        public bool EnableDefaultWorldGeocoder
         {
-            get => (bool)GetValue(EnableAutomaticConfigurationProperty);
-            set => SetValue(EnableAutomaticConfigurationProperty, value);
+            get => (bool)GetValue(EnableDefaultWorldGeocoderProperty);
+            set => SetValue(EnableDefaultWorldGeocoderProperty, value);
         }
 
         /// <summary>
@@ -651,10 +668,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(GeoView), typeof(GeoView), typeof(SearchView), new PropertyMetadata(null, OnGeoViewPropertyChanged));
 
         /// <summary>
-        /// Identifies the <see cref="EnableAutomaticConfiguration"/> dependency property.
+        /// Identifies the <see cref="EnableDefaultWorldGeocoder"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty EnableAutomaticConfigurationProperty =
-            DependencyProperty.Register(nameof(EnableAutomaticConfiguration), typeof(bool), typeof(SearchView), new PropertyMetadata(true));
+        public static readonly DependencyProperty EnableDefaultWorldGeocoderProperty =
+            DependencyProperty.Register(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), new PropertyMetadata(true));
 
         /// <summary>
         /// Identifies the <see cref="EnableRepeatSearchHereButton"/> dependency proeprty.
@@ -718,6 +735,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void HandleSuggestionsChanged()
         {
             NotifyPropertyChange(nameof(ResultViewVisibility));
+            NotifyPropertyChange(nameof(ResultMessageVisibility));
             #if NETFX_CORE
             UpdateGroupingForUWP();
             #endif

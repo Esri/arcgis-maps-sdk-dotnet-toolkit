@@ -285,8 +285,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             try
             {
-                SearchViewModel.Sources.Clear();
-                SearchViewModel.Sources.Add(await LocatorSearchSource.CreateDefaultSourceAsync());
+                await SearchViewModel.ConfigureDefaultWorldGeocoder();
             }
             catch (Exception)
             {

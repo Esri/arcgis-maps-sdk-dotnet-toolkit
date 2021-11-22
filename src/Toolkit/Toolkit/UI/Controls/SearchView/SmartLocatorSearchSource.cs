@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -30,6 +29,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     internal class WorldGeocoderSearchSource : LocatorSearchSource
     {
+        private const string AddressAttributeKey = "Place_addr";
+
+        // Attribute used to identify the type of result coming from the locaotr.
+        private const string LocatorIconAttributeKey = "Type";
+
+        private Task _additionalLoadTask;
+
         /// <summary>
         /// Gets or sets the minimum number of results to attempt to return.
         /// If there are too few results, the search is repeated with loosened parameters until enough results are accumulated.
@@ -71,29 +77,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public WorldGeocoderSearchSource(LocatorTask locator, SymbolStyle? style)
             : base(locator)
         {
+            SubtitleAttributKey = AddressAttributeKey;
             if (style != null)
             {
                 ResultSymbolStyle = style;
             }
 
-            _ = EnsureLoaded();
+            _additionalLoadTask = EnsureLoaded();
         }
 
         private async Task EnsureLoaded()
         {
-            if (Locator.LoadStatus == LoadStatus.Loaded)
-            {
-                return;
-            }
-
-            try
-            {
-                await Locator.LoadAsync();
-            }
-            catch (Exception)
-            {
-                // TODO  - decide how tohandle this
-            }
+            await _loadTask;
 
             if (Locator.LocatorInfo is LocatorInfo info)
             {
@@ -109,80 +104,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             // Add attributes expected from the World Geocoder Service if present, otherwise default to all attributes.
-            if (Locator.Uri?.ToString() == WorldGeocoderUriString)
+            if (Locator.Uri?.ToString() == WorldGeocoderUriString &&
+                (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false))
             {
-                var desiredAttributes = new[] { "LongLabel", "Place_addr", "Type" };
-                if (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false)
+                var desiredAttributes = new[] { AddressAttributeKey, LocatorIconAttributeKey};
+                foreach (var attr in desiredAttributes.OfType<string>())
                 {
-                    foreach (var attr in desiredAttributes)
+                    if (Locator.LocatorInfo.ResultAttributes.Where(at => at.Name == attr).Any())
                     {
-                        if (Locator.LocatorInfo.ResultAttributes.Where(at => at.Name == attr).Any())
-                        {
-                            GeocodeParameters.ResultAttributeNames.Add(attr);
-                        }
+                        GeocodeParameters.ResultAttributeNames.Add(attr);
                     }
                 }
-                else
-                {
-                    GeocodeParameters.ResultAttributeNames.Add("*");
-                }
             }
-        }
-
-        private async Task<SearchResult> GeocodeResultToSearchResult(GeocodeResult r)
-        {
-            var symbol = await SymbolForResult(r);
-            string subtitle = $"Match percent: {r.Score}";
-            if (r.Attributes.ContainsKey("Place_addr") && r.Attributes["Place_addr"]?.ToString() is string subtitleString)
+            else
             {
-                subtitle = subtitleString;
+                GeocodeParameters.ResultAttributeNames.Add("*");
             }
-
-            var viewpoint = r.Extent == null ? null : new Mapping.Viewpoint(r.Extent);
-
-            var graphic = new Graphic(r.DisplayLocation, r.Attributes, symbol);
-
-            CalloutDefinition callout = new CalloutDefinition(graphic) { Text = r.Label, DetailText = subtitle };
-
-            return new SearchResult(r.Label, subtitle, this, graphic, viewpoint) { CalloutDefinition = callout };
-        }
-
-        private async Task<Symbol?> SymbolForResult(GeocodeResult r)
-        {
-            if (r.Attributes.ContainsKey("Type") && ResultSymbolStyle != null && r.Attributes["Type"] is string typeAttrs)
-            {
-                if (Locator.Uri?.ToString() == WorldGeocoderUriString)
-                {
-                    var firstResult = await ResultSymbolStyle.GetSymbolAsync(new[] { typeAttrs.ToString().Replace(' ', '-').ToLower() });
-                    if (firstResult != null)
-                    {
-                        return firstResult;
-                    }
-                }
-
-                // TODO = verify this works
-                var symbParams = new SymbolStyleSearchParameters();
-                symbParams.Names.Add(typeAttrs.ToString());
-                symbParams.NamesStrictlyMatch = false;
-                var symbolResult = await ResultSymbolStyle.SearchSymbolsAsync(symbParams);
-
-                if (symbolResult.Any())
-                {
-                    return await symbolResult.First().GetSymbolAsync();
-                }
-            }
-
-            return DefaultSymbol;
-        }
-
-        /// <summary>
-        /// Converts geocode result list into list of results, applying result limits and calling necessary callbacks.
-        /// </summary>
-        private async Task<IList<SearchResult>> ResultToSearchResult(IReadOnlyList<GeocodeResult> input)
-        {
-            IEnumerable<SearchResult> results = await Task.WhenAll(input.Select(i => GeocodeResultToSearchResult(i)));
-
-            return results.Take(MaximumResults).ToList();
         }
 
         /// <summary>
@@ -198,8 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public override async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
-
+            await _additionalLoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             var tempParams = new GeocodeParameters();
@@ -226,8 +162,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public override async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
-
+            await _additionalLoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             SuggestParameters.PreferredSearchLocation = PreferredSearchLocation;
@@ -257,8 +192,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public override async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
-
+            await _additionalLoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
@@ -291,8 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public override async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Geometry.Envelope queryArea, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
-
+            await _additionalLoadTask;
             cancellationToken.ThrowIfCancellationRequested();
 
             // Reset spatial parameters
@@ -304,5 +237,61 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             return await ResultToSearchResult(results);
         }
+
+        private async Task<SearchResult> GeocodeResultToSearchResult(GeocodeResult r)
+        {
+            var symbol = await SymbolForResult(r);
+            string subtitle = null;
+            if (SubtitleAttributKey != null && r.Attributes.ContainsKey(SubtitleAttributKey) && r.Attributes[SubtitleAttributKey] is string subtitleString)
+            {
+                subtitle = subtitleString;
+            }
+
+            var viewpoint = r.Extent == null ? null : new Mapping.Viewpoint(r.Extent);
+
+            var graphic = new Graphic(r.DisplayLocation, r.Attributes, symbol);
+
+            CalloutDefinition callout = new CalloutDefinition(graphic) { Text = r.Label, DetailText = subtitle };
+
+            return new SearchResult(r.Label, subtitle, this, graphic, viewpoint) { CalloutDefinition = callout };
+        }
+
+        private async Task<Symbol?> SymbolForResult(GeocodeResult r)
+        {
+            if (ResultSymbolStyle != null && r.Attributes.ContainsKey(LocatorIconAttributeKey) && r.Attributes[LocatorIconAttributeKey] is string typeAttrs)
+            {
+                if (Locator.Uri?.ToString() == WorldGeocoderUriString && ResultSymbolStyle.StyleName == "Esri2DPointSymbolsStyle")
+                {
+                    var firstResult = await ResultSymbolStyle.GetSymbolAsync(new[] { typeAttrs.ToString().Replace(' ', '-').ToLower() });
+                    if (firstResult != null)
+                    {
+                        return firstResult;
+                    }
+                }
+
+                var symbParams = new SymbolStyleSearchParameters();
+                symbParams.Names.Add(typeAttrs.ToString());
+                symbParams.NamesStrictlyMatch = false;
+                var symbolResult = await ResultSymbolStyle.SearchSymbolsAsync(symbParams);
+
+                if (symbolResult.Any())
+                {
+                    return await symbolResult.First().GetSymbolAsync();
+                }
+            }
+
+            return DefaultSymbol;
+        }
+
+        /// <summary>
+        /// Converts geocode result list into list of results, applying result limits and calling necessary callbacks.
+        /// </summary>
+        private async Task<IList<SearchResult>> ResultToSearchResult(IReadOnlyList<GeocodeResult> input)
+        {
+            IEnumerable<SearchResult> results = await Task.WhenAll(input.Select(i => GeocodeResultToSearchResult(i)));
+
+            return results.Take(MaximumResults).ToList();
+        }
+
     }
 }

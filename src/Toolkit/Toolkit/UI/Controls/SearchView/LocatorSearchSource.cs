@@ -52,8 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return new WorldGeocoderSearchSource(_worldGeocoderTask, null);
         }
 
-        private bool _loading;
-        private bool _hasPerformedInitialLoad;
+        protected Task? _loadTask;
 
         /// <summary>
         /// Gets or sets the name of the locator. Defaults to the locator's name, or "locator" if not set.
@@ -119,6 +118,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public MapPoint? PreferredSearchLocation { get; set; }
 
         /// <summary>
+        /// Gets or sets the attribute key to use as the subtitle when returning results. Key must be included in <see cref="GeocodeParameters.ResultAttributeNames"/>.
+        /// </summary>
+        public string? SubtitleAttributKey { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LocatorSearchSource"/> class.
         /// <seealso cref="SmartLocatorSearchSource"/> for a search source with advanced features intended for use with the World Geocoder Service.
         /// </summary>
@@ -127,20 +131,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Locator = locator;
 
-            _ = EnsureLoaded();
+            _loadTask = EnsureLoaded();
         }
 
         private async Task EnsureLoaded()
         {
-            // TODO = find a better way of handling this
-            if (_loading || _hasPerformedInitialLoad)
-            {
-                return;
-            }
-            else
-            {
-                _loading = true;
-            }
+            await Locator.LoadAsync();
 
             Stream? resourceStream = Assembly.GetAssembly(typeof(LocatorSearchSource))?.GetManifestResourceStream(
                 "Esri.ArcGISRuntime.Toolkit.EmbeddedResources.pin_red.png");
@@ -155,24 +151,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 DefaultSymbol = pinSymbol;
             }
 
-            if (!_hasPerformedInitialLoad && Locator.LoadStatus != LoadStatus.Loaded)
+            if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator?.LocatorInfo?.Name))
             {
-                // TODO = decide how to handle locators that throw.
-                await Locator.LoadAsync();
+                DisplayName = Locator?.LocatorInfo?.Name ?? "Locator";
             }
 
-            if (!_hasPerformedInitialLoad)
-            {
-                if (DisplayName != Locator?.LocatorInfo?.Name && !string.IsNullOrWhiteSpace(Locator?.LocatorInfo?.Name))
-                {
-                    DisplayName = Locator?.LocatorInfo?.Name ?? "Locator";
-                }
-
-                GeocodeParameters.ResultAttributeNames.Add("*");
-            }
-
-            _hasPerformedInitialLoad = true;
-            _loading = false;
+            GeocodeParameters.ResultAttributeNames.Add("*");
         }
 
         /// <summary>
@@ -194,7 +178,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchSuggestion>> SuggestAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
+            await _loadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -211,7 +195,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchResult>> SearchAsync(SearchSuggestion suggestion, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
+            await _loadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -225,7 +209,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
         public virtual async Task<IList<SearchResult>> SearchAsync(string queryString, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
+            await _loadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -243,7 +227,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc />
         public virtual async Task<IList<SearchResult>> RepeatSearchAsync(string queryString, Envelope queryExtent, CancellationToken cancellationToken = default)
         {
-            await EnsureLoaded();
+            await _loadTask;
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -284,8 +268,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private SearchResult GeocodeResultToSearchResult(GeocodeResult r)
         {
+            string? subtitle = null;
+            if (SubtitleAttributKey != null && r.Attributes.ContainsKey(SubtitleAttributKey))
+            {
+                subtitle = r.Attributes[SubtitleAttributKey]?.ToString();
+            }
+
             Mapping.Viewpoint? selectionViewpoint = r.Extent == null ? null : new Mapping.Viewpoint(r.Extent);
-            return new SearchResult(r.Label, null, this, new Graphic(r.DisplayLocation, r.Attributes, DefaultSymbol), selectionViewpoint) { CalloutDefinition = DefaultCalloutDefinition };
+            return new SearchResult(r.Label, subtitle, this, new Graphic(r.DisplayLocation, r.Attributes, DefaultSymbol), selectionViewpoint) { CalloutDefinition = DefaultCalloutDefinition };
         }
 
         /// <summary>
