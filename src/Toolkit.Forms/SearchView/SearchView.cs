@@ -384,6 +384,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 if (oldValue is GeoView oldGeoView)
                 {
+                    oldGeoView.DismissCallout();
                     oldGeoView.ViewpointChanged -= sendingView.GeoView_ViewpointChanged;
                     sendingView._lastUsedGeomodel = null;
                     (oldGeoView as INotifyPropertyChanged).PropertyChanged -= sendingView.HandleMapChange;

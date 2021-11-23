@@ -112,7 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets or sets the default placeholder to use when there is no <see cref="ActiveSource"/> or the <see cref="ActiveSource"/> does not have a placeholder defined.
         /// Consumers should always display the <see cref="ActivePlaceholder"/> in the UI, rather than accessing this property directly.
         /// </summary>
-        public string? DefaultPlaceholder { get => _defaultPlaceholder; set => SetPropertyChanged(value, ref _defaultPlaceholder); }
+        public string? DefaultPlaceholder { get => _defaultPlaceholder; set => SetPropertyChanged(value, ref _defaultPlaceholder, nameof(DefaultPlaceholder), nameof(ActivePlaceholder)); }
 
         /// <summary>
         /// Gets the correct placeholder to display in the UI.
@@ -262,6 +262,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 ApplyNewResult(allResults.SelectMany(l => l).ToList(), null);
             }
+            catch (TaskCanceledException)
+            {
+                ApplyNewResult(new List<SearchResult>(0), null);
+            }
             finally
             {
                 _activeSearchCancellation = null;
@@ -304,6 +308,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 ApplyNewResult(allResults.SelectMany(l => l).ToList(), _lastSuggestion);
             }
+            catch (TaskCanceledException)
+            {
+                ApplyNewResult(new List<SearchResult>(0), _lastSuggestion);
+            }
             finally
             {
                 _activeSearchCancellation = null;
@@ -345,8 +353,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 Suggestions = allSuggestions.SelectMany(l => l).ToList();
             }
-            catch (Exception)
+            catch (TaskCanceledException)
             {
+                Suggestions = new List<SearchSuggestion>(0);
             }
             finally
             {
@@ -382,6 +391,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var results = await selectedSource.SearchAsync(suggestion, searchCancellation.Token);
 
                 ApplyNewResult(results, suggestion);
+            }
+            catch (TaskCanceledException)
+            {
+                ApplyNewResult(new List<SearchResult>(0), suggestion);
             }
             finally
             {

@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
-        private async Task ConfigureForCurrentMap()
+        private async Task ConfigureViewModel()
         {
             if (!EnableDefaultWorldGeocoder)
             {
@@ -264,6 +264,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (e.OldValue is GeoView oldGeoView)
                 {
+                    oldGeoView.DismissCallout();
                     oldGeoView.ViewpointChanged -= sender.GeoView_ViewpointChanged;
                     sender._lastUsedGeomodel = null;
                     (oldGeoView as INotifyPropertyChanged).PropertyChanged -= sender.HandleMapChange;
@@ -280,8 +281,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     newGeoView.GraphicsOverlays?.Add(sender._resultOverlay);
                 }
 
-                _ = sender.ConfigureForCurrentMap();
+                _ = sender.ConfigureViewModel();
             }
+        }
+
+        private static void OnEnableDefualtWorldGeocoderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            _ = (d as SearchView)?.ConfigureViewModel();
         }
 
         private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -323,7 +329,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (e.PropertyName == nameof(Map) || e.PropertyName == nameof(Scene))
             {
-                _ = ConfigureForCurrentMap();
+                _ = ConfigureViewModel();
                 return;
             }
 
@@ -339,7 +345,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _lastUsedGeomodel = scene;
                 }
 
-                _ = ConfigureForCurrentMap();
+                _ = ConfigureViewModel();
             }
         }
 
@@ -670,7 +676,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="EnableDefaultWorldGeocoder"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty EnableDefaultWorldGeocoderProperty =
-            DependencyProperty.Register(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), new PropertyMetadata(false, OnEnableDefualtWorldGeocoderPropertyChanged));
 
         /// <summary>
         /// Identifies the <see cref="EnableRepeatSearchHereButton"/> dependency proeprty.

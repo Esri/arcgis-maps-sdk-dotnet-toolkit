@@ -541,7 +541,7 @@
                         Grid.Row="0"
                         Grid.ColumnSpan="4"
                         Style="{StaticResource ProgressIndicatorStyle}"
-                        Visibility="{Binding SearchViewModel.IsSearchInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        Visibility="{Binding SearchViewModel.IsWaiting, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                 </Grid>
             </Border>
             <Grid
@@ -572,5 +572,6 @@
         <Setter Property="ClearSearchTooltipText" Value="Clear Search" />
         <Setter Property="SearchTooltipText" Value="Search" />
         <Setter Property="RepeatSearchButtonText" Value="Repeat Search Here" />
+		<Setter Property="EnableDefaultWorldGeocoder" Value="True" />
     </Style>
 </ResourceDictionary>
