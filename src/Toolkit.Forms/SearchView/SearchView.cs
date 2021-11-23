@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 using System;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -285,7 +284,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             try
             {
-                await SearchViewModel.ConfigureDefaultWorldGeocoder();
+                await (SearchViewModel?.ConfigureDefaultWorldGeocoder() ?? Task.CompletedTask);
             }
             catch (Exception)
             {
@@ -489,32 +488,37 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void SearchViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (SearchViewModel == null)
+            {
+                return;
+            }
+
             switch (e.PropertyName)
             {
                 case nameof(SearchViewModel.ActivePlaceholder):
-                    PART_Entry?.SetValue(Entry.PlaceholderProperty, SearchViewModel?.ActivePlaceholder);
+                    PART_Entry?.SetValue(Entry.PlaceholderProperty, SearchViewModel.ActivePlaceholder);
                     UpdateVisibility();
                     break;
                 case nameof(SearchViewModel.Suggestions):
                     // Only group if there are multiple sources
                     if (SearchViewModel.Sources.Count > 1)
                     {
-                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel?.Suggestions?.GroupBy(item => item.OwningSource));
+                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel.Suggestions?.GroupBy(item => item.OwningSource));
                     }
                     else
                     {
-                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel?.Suggestions);
+                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel.Suggestions);
                     }
 
                     UpdateVisibility();
                     break;
                 case nameof(SearchViewModel.Results):
-                    PART_ResultView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel?.Results);
+                    PART_ResultView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel.Results);
                     _ = HandleResultsCollectionChanged();
                     break;
                 case nameof(SearchViewModel.CurrentQuery):
-                    PART_CancelButton?.SetValue(View.IsVisibleProperty, !string.IsNullOrEmpty(SearchViewModel?.CurrentQuery));
-                    PART_Entry?.SetValue(Entry.TextProperty, SearchViewModel?.CurrentQuery);
+                    PART_CancelButton?.SetValue(View.IsVisibleProperty, !string.IsNullOrEmpty(SearchViewModel.CurrentQuery));
+                    PART_Entry?.SetValue(Entry.TextProperty, SearchViewModel.CurrentQuery);
                     _ = HandleQueryChanged();
                     break;
                 case nameof(SearchViewModel.SearchMode):
@@ -540,7 +544,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         private void HandleViewpointChanged()
         {
-            if (SearchViewModel == null)
+            if (SearchViewModel == null || GeoView == null)
             {
                 return;
             }

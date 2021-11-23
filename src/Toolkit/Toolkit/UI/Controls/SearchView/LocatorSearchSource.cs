@@ -37,9 +37,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static LocatorTask? _worldGeocoderTask;
 
-        public static async Task<LocatorSearchSource> CreateDefaultSourceAsync(CancellationToken token = default)
+        /// <summary>
+        /// Creates a <see cref="LocatorSearchSource"/> configured for use with the Esri World Geocoder service.
+        /// </summary>
+        /// <param name="cancellationToken">Token used for cancellation.</param>
+        /// <remarks>This method will re-use a static LocatorTask instance to improve performance.</remarks>
+        public static async Task<LocatorSearchSource> CreateDefaultSourceAsync(CancellationToken cancellationToken = default)
         {
-            token.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             if (_worldGeocoderTask == null)
             {
@@ -47,12 +52,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 await _worldGeocoderTask.LoadAsync();
             }
 
-            token.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return new WorldGeocoderSearchSource(_worldGeocoderTask, null);
         }
 
-        protected Task? _loadTask;
+        private readonly Task _loadTask;
+
+        /// <summary>
+        /// Gets the task used to perform initial locator setup.
+        /// </summary>
+        protected Task LoadTask => _loadTask;
 
         /// <summary>
         /// Gets or sets the name of the locator. Defaults to the locator's name, or "locator" if not set.
@@ -124,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocatorSearchSource"/> class.
-        /// <seealso cref="SmartLocatorSearchSource"/> for a search source with advanced features intended for use with the World Geocoder Service.
+        /// <seealso cref="CreateDefaultSourceAsync(CancellationToken)"/> to create a source configured for use with the Esri World Geocoder.
         /// </summary>
         /// <param name="locator">Locator to be used.</param>
         public LocatorSearchSource(LocatorTask locator)

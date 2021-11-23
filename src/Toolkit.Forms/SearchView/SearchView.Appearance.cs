@@ -156,7 +156,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
     <ColumnDefinition Width=""32"" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-    <RowDefinition Height=""40"" />
+    <RowDefinition Height=""Auto"" />
     <RowDefinition Height=""Auto"" />
     <RowDefinition Height=""Auto"" />
     </Grid.RowDefinitions>

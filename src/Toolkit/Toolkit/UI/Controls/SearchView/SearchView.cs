@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 #if !XAMARIN
 using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -25,8 +26,6 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 #if !NETFX_CORE
 using System.Windows;
 using System.Windows.Controls;
@@ -139,7 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             try
             {
-                await SearchViewModel.ConfigureDefaultWorldGeocoder(_configurationCancellationToken.Token);
+                await (SearchViewModel?.ConfigureDefaultWorldGeocoder(_configurationCancellationToken.Token) ?? Task.CompletedTask);
             }
             catch (Exception)
             {
@@ -727,6 +726,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty RepeatSearchButtonTextProperty =
             DependencyProperty.Register(nameof(RepeatSearchButtonText), typeof(string), typeof(SearchView), null);
         #endregion dependency properties
+
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -780,7 +780,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public class SuggestionsGrouped : IGrouping<ISearchSource, SearchSuggestion>
         {
-            private List<SearchSuggestion> _suggestions;
+            private readonly List<SearchSuggestion> _suggestions;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="SuggestionsGrouped"/> class.

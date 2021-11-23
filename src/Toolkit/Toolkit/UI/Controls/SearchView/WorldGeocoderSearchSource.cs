@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         // Attribute used to identify the type of result coming from the locaotr.
         private const string LocatorIconAttributeKey = "Type";
 
-        private Task _additionalLoadTask;
+        private readonly Task _additionalLoadTask;
 
         /// <summary>
         /// Gets or sets the minimum number of results to attempt to return.
@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async Task EnsureLoaded()
         {
-            await _loadTask;
+            await LoadTask;
 
             if (Locator.LocatorInfo is LocatorInfo info)
             {
@@ -107,7 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (Locator.Uri?.ToString() == WorldGeocoderUriString &&
                 (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false))
             {
-                var desiredAttributes = new[] { AddressAttributeKey, LocatorIconAttributeKey};
+                var desiredAttributes = new[] { AddressAttributeKey, LocatorIconAttributeKey };
                 foreach (var attr in desiredAttributes.OfType<string>())
                 {
                     if (Locator.LocatorInfo.ResultAttributes.Where(at => at.Name == attr).Any())
@@ -241,7 +241,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private async Task<SearchResult> GeocodeResultToSearchResult(GeocodeResult r)
         {
             var symbol = await SymbolForResult(r);
-            string subtitle = null;
+            string? subtitle = null;
             if (SubtitleAttributKey != null && r.Attributes.ContainsKey(SubtitleAttributKey) && r.Attributes[SubtitleAttributKey] is string subtitleString)
             {
                 subtitle = subtitleString;
@@ -292,6 +292,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             return results.Take(MaximumResults).ToList();
         }
-
     }
 }

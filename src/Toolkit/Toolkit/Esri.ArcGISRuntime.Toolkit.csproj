@@ -71,7 +71,7 @@
     <Compile Include="UI\Controls\SearchView\SearchViewModel.cs" />
     <Compile Include="UI\Controls\SearchView\ISearchSource.cs" />
     <Compile Include="UI\Controls\SearchView\LocatorSearchSource.cs" />
-    <Compile Include="UI\Controls\SearchView\SmartLocatorSearchSource.cs" />
+    <Compile Include="UI\Controls\SearchView\WorldGeocoderSearchSource.cs" />
     <Compile Include="UI\Controls\SearchView\SearchResult.cs" />
     <Compile Include="UI\Controls\SearchView\SearchResultMode.cs" />
     <Compile Include="UI\Controls\SearchView\SearchSuggestion.cs" />

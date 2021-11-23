@@ -146,6 +146,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get => _queryArea;
             set
             {
+                if (value != null)
+                {
+                    value = GeometryEngine.NormalizeCentralMeridian(value);
+                }
+
                 SetPropertyChanged(value, ref _queryArea);
 
                 if (IgnoreAreaChangesFlag)
@@ -170,7 +175,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public MapPoint? QueryCenter
         {
             get => _queryCenter;
-            set => SetPropertyChanged(value, ref _queryCenter);
+            set
+            {
+                if (value != null)
+                {
+                    value = GeometryEngine.NormalizeCentralMeridian(value) as MapPoint;
+                }
+
+                SetPropertyChanged(value, ref _queryCenter);
+            }
         }
 
         /// <summary>
@@ -184,7 +197,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the list of available search sources, which can be updated dynamically.
         /// </summary>
-        /// <remarks>See <see cref="ConfigureFromMap(GeoModel?, CancellationToken?)"/> for a convenient method to populate this collection automatically.</remarks>
+        /// <remarks>See <see cref="ConfigureDefaultWorldGeocoder(CancellationToken)"/> for a convenient method to populate this collection automatically.</remarks>
         public IList<ISearchSource> Sources { get; set; } = new ObservableCollection<ISearchSource>();
 
         /// <summary>
