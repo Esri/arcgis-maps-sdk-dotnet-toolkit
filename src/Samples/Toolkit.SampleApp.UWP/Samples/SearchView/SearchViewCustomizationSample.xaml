@@ -1,0 +1,40 @@
+﻿<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView.SearchViewCustomizationSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+    <Grid>
+        <esri:MapView x:Name="MyMapView" />
+        <toolkit:SearchView x:Name="MySearchView" />
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8" Padding="4" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Width="200">
+            <StackPanel>
+                <CheckBox x:Name="EnableGeoViewBindingCheck" Content="Enable Binding to GeoView" IsChecked="True" Checked="GeoViewConnection_Checked" Unchecked="GeoViewConnection_Checked" />
+                <CheckBox Content="Enable individual result display" IsChecked="{Binding ElementName=MySearchView, Path=EnableIndividualResultDisplay, Mode=TwoWay}" />
+                <CheckBox Content="Enable built-in repeat button" IsChecked="{Binding ElementName=MySearchView, Path=EnableRepeatSearchHereButton,Mode=TwoWay}" />
+                <CheckBox Content="Enable built-in result list" IsChecked="{Binding ElementName=MySearchView, Path=EnableResultListView, Mode=TwoWay}" />
+                <TextBlock Text="Text customization:" FontWeight="SemiBold" />
+                    <TextBox Text="{Binding ElementName=MySearchView, Path=SearchTooltipText, Mode=TwoWay}" Header="Search Tooltip" />
+                    <TextBox Text="{Binding ElementName=MySearchView, Path=ClearSearchTooltipText, Mode=TwoWay}" Header="Clear Tooltip" />
+                    <TextBox Text="{Binding ElementName=MySearchView, Path=AllSourceSelectText, Mode=TwoWay}" Header="All Sources button text" />
+                    <TextBox Text="{Binding ElementName=MySearchView, Path=SearchViewModel.DefaultPlaceholder, Mode=TwoWay}" Header="Default Placeholder" />
+                    <TextBox Text="{Binding ElementName=MySearchView, Path=NoResultMessage, Mode=TwoWay}" Header="No result message" />
+                    <TextBox Text="{Binding ElementName=MySearchView, Path=RepeatSearchButtonText, Mode=TwoWay}" Header="Repeat search button text" />
+                <Button Content="Repeat Search" Command="{Binding ElementName=MySearchView, Path=RepeatSearchHereCommand, Mode=OneWay}"
+                        IsEnabled="{Binding ElementName=MySearchView, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}" HorizontalAlignment="Stretch" />
+                <Button Content="Clear Search" Command="{Binding ElementName=MySearchView, Path=ClearCommand, Mode=OneWay}" HorizontalAlignment="Stretch" />
+                <ListView ItemsSource="{Binding ElementName=MySearchView, Path=SearchViewModel.Results, Mode=OneWay}" Header="Results:"
+                          SelectedItem="{Binding ElementName=MySearchView, Path=SearchViewModel.SelectedResult, Mode=TwoWay}" DisplayMemberPath="DisplayTitle" />
+                <ListView ItemsSource="{Binding ElementName=MySearchView, Path=SearchViewModel.Sources, Mode=OneWay}" Header="Sources:"
+                          SelectedItem="{Binding ElementName=MySearchView, Path=SearchViewModel.ActiveSource, Mode=TwoWay}" DisplayMemberPath="DisplayName" />
+                <Button Content="Add World Geocoder with Name:" Click="AddDefaultLocator_Click" HorizontalAlignment="Stretch" />
+                <TextBox Text="Name" x:Name="GeocoderNameTextBox" />
+                <Button Content="Remove Last Search Source" Click="RemoveLocator_Click" HorizontalAlignment="Stretch" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Page>

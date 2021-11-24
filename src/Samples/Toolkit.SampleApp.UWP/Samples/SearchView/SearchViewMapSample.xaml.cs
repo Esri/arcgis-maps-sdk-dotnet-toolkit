@@ -3,9 +3,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView
 {
-    public sealed partial class SearchViewSample : Page
+    public sealed partial class SearchViewMapSample : Page
     {
-        public SearchViewSample()
+        public SearchViewMapSample()
         {
             InitializeComponent();
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
