@@ -5,6 +5,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    [SampleInfoAttribute(Category = "SearchView", Description = "Demonstrates SearchView used with a scene.")]
     public partial class SearchViewSceneSample : ContentPage
     {
         public SearchViewSceneSample()

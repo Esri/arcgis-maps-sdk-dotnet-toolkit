@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.SearchView
             }
         }
 
-        private async  void AddSMPLocator_Click(object sender, RoutedEventArgs e)
+        private async void AddSMPLocator_Click(object sender, RoutedEventArgs e)
         {
             // NOTE: You can download a sample of StreetMap Premium for testing purposes by visiting the downloads section of the ArcGIS Developer dashboard.
             string path = LocatorPathText.Text;
@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.SearchView
                     MySearchView.SearchViewModel.Sources.Add(new LocatorSearchSource(packagedLocator));
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error", ex.Message);
             }
@@ -72,6 +72,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.SearchView
             if (MySearchView.SearchViewModel?.Sources?.Count > 0)
             {
                 MySearchView.SearchViewModel.Sources.RemoveAt(MySearchView.SearchViewModel.Sources.Count - 1);
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (SearchModeCombo.SelectedIndex)
+            {
+                case 0:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Automatic;
+                    break;
+                case 1:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Single;
+                    break;
+                case 2:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Multiple;
+                    break;
             }
         }
     }

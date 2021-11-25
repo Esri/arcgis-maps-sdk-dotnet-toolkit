@@ -1,13 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
-             mc:Ignorable="d"
-             Title="SearchView"
-             x:Class="Toolkit.Samples.Forms.Samples.SearchViewCustomizationSample">
+<ContentPage
+    x:Class="Toolkit.Samples.Forms.Samples.SearchViewCustomizationSample"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+    Title="SearchView"
+    mc:Ignorable="d">
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
@@ -16,35 +17,57 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="150" />
             </Grid.RowDefinitions>
-            <esri:MapView x:Name="MyMapView" Grid.Row="1" Grid.RowSpan="2" />
-            <toolkit:SearchView x:Name="MySearchView" Grid.Row="0" Grid.RowSpan="2" />
+            <esri:MapView
+                x:Name="MyMapView"
+                Grid.Row="1"
+                Grid.RowSpan="2" />
+            <toolkit:SearchView
+                x:Name="MySearchView"
+                Grid.Row="0"
+                Grid.RowSpan="2" />
             <ScrollView Grid.Row="3">
-            <StackLayout Padding="4" Spacing="2">
+                <StackLayout Padding="4" Spacing="2">
                     <StackLayout Orientation="Horizontal" Spacing="2">
                         <Label Text="Enable binding to GeoView:" />
-                        <CheckBox x:Name="EnableGeoViewBindingCheck" IsChecked="True" CheckedChanged="GeoViewConnection_Checked" />
+                        <CheckBox
+                            x:Name="EnableGeoViewBindingCheck"
+                            CheckedChanged="GeoViewConnection_Checked"
+                            IsChecked="True" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Spacing="2">
-                        <Label  Text="Enable Individual result display"/>
+                        <Label Text="Enable Individual result display" />
                         <CheckBox IsChecked="{Binding Source={Reference MySearchView}, Path=EnableIndividualResultDisplay, Mode=TwoWay}" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Spacing="2">
                         <Label Text="Enable built-in repeat button" />
-                        <CheckBox IsChecked="{Binding Source={Reference MySearchView}, Path=EnableRepeatSearchHereButton,Mode=TwoWay}" />
+                        <CheckBox IsChecked="{Binding Source={Reference MySearchView}, Path=EnableRepeatSearchHereButton, Mode=TwoWay}" />
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Spacing="2">
                         <Label Text="Enable built-in result list" />
-                <CheckBox IsChecked="{Binding Source={Reference MySearchView}, Path=EnableResultListView, Mode=TwoWay}" />
+                        <CheckBox IsChecked="{Binding Source={Reference MySearchView}, Path=EnableResultListView, Mode=TwoWay}" />
                     </StackLayout>
+                    <Label Text="Search Result Mode:" />
+                    <Picker
+                        x:Name="SearchModePicker"
+                        SelectedIndex="0"
+                        SelectedIndexChanged="SearchModePicker_SelectedIndexChanged">
+                        <Picker.Items>
+                            <x:String>Automatic</x:String>
+                            <x:String>Single</x:String>
+                            <x:String>Multiple</x:String>
+                        </Picker.Items>
+                    </Picker>
                     <Label Text="Default Placeholder:" />
                     <Entry Text="{Binding Source={Reference MySearchView}, Path=SearchViewModel.DefaultPlaceholder, Mode=TwoWay}" />
                     <Label Text="No result message:" />
                     <Entry Text="{Binding Source={Reference MySearchView}, Path=NoResultMessage, Mode=TwoWay}" />
                     <Label Text="Repeat search button text:" />
                     <Entry Text="{Binding Source={Reference MySearchView}, Path=RepeatSearchButtonText, Mode=TwoWay}" />
-                <Button Text="Repeat Search" Command="{Binding Source={Reference MySearchView}, Path=RepeatSearchHereCommand, Mode=OneWay}"
-                        IsEnabled="{Binding Source={Reference MySearchView}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}" />
-                <Button Text="Clear Search" Command="{Binding Source={Reference MySearchView}, Path=ClearCommand, Mode=OneWay}" />
+                    <Button
+                        Command="{Binding Source={Reference MySearchView}, Path=RepeatSearchHereCommand, Mode=OneWay}"
+                        IsEnabled="{Binding Source={Reference MySearchView}, Path=SearchViewModel.IsEligibleForRequery, Mode=OneWay}"
+                        Text="Repeat Search" />
+                    <Button Command="{Binding Source={Reference MySearchView}, Path=ClearCommand, Mode=OneWay}" Text="Clear Search" />
                     <StackLayout Orientation="Horizontal" Spacing="2">
                         <Label Text="Selected Result:" />
                         <Label Text="{Binding Source={Reference MySearchView}, Path=SearchViewModel.SelectedResult.DisplayTitle, Mode=OneWay}" />
@@ -69,10 +92,10 @@
                         <Label Text="Selected Search Source:" />
                         <Label Text="{Binding Source={Reference MySearchView}, Path=SearchViewModel.ActiveSource.DisplayName, Mode=OneWay}" />
                     </StackLayout>
-                <Button Text="Add World Geocoder with Name:" Clicked="AddDefaultLocator_Click" />
-                <Entry Text="Name" x:Name="GeocoderNameEntry" />
-                <Button Text="Remove Last Search Source" Clicked="RemoveLocator_Click" />
-            </StackLayout>
+                    <Button Clicked="AddDefaultLocator_Click" Text="Add World Geocoder with Name:" />
+                    <Entry x:Name="GeocoderNameEntry" Text="Name" />
+                    <Button Clicked="RemoveLocator_Click" Text="Remove Last Search Source" />
+                </StackLayout>
             </ScrollView>
         </Grid>
     </ContentPage.Content>

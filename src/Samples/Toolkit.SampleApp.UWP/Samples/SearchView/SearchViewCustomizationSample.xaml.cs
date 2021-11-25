@@ -1,8 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
-using System.IO;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -49,6 +47,22 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView
             if (MySearchView.SearchViewModel?.Sources?.Count > 0)
             {
                 MySearchView.SearchViewModel.Sources.RemoveAt(MySearchView.SearchViewModel.Sources.Count - 1);
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (SearchModeCombo.SelectedIndex)
+            {
+                case 0:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Automatic;
+                    break;
+                case 1:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Single;
+                    break;
+                case 2:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Multiple;
+                    break;
             }
         }
     }

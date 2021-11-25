@@ -7,6 +7,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    [SampleInfoAttribute(Category = "SearchView", Description = "Exercises bindings and advanced customization options.")]
     public partial class SearchViewCustomizationSample : ContentPage
     {
         public SearchViewCustomizationSample()
@@ -47,6 +48,22 @@ namespace Toolkit.Samples.Forms.Samples
             if (MySearchView.SearchViewModel?.Sources?.Count > 0)
             {
                 MySearchView.SearchViewModel.Sources.RemoveAt(MySearchView.SearchViewModel.Sources.Count - 1);
+            }
+        }
+
+        private void SearchModePicker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (SearchModePicker.SelectedIndex)
+            {
+                case 0:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Automatic;
+                    break;
+                case 1:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Single;
+                    break;
+                case 2:
+                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Multiple;
+                    break;
             }
         }
     }
