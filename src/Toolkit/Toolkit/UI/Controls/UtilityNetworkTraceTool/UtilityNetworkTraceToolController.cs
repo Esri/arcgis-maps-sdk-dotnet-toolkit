@@ -96,32 +96,51 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     SelectedUtilityNetwork = _utilityNetworks[0];
                 }
-                else
-                {
-                    _traceTool.SetStatus(GetStatus());
-                }
-
-                var minimum = SelectedTraceType is UtilityNamedTraceConfiguration traceType
-                    && traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
-                _traceTool.EnableTrace(TraceParameters?.StartingLocations.Count >= minimum);
 
                 _traceTool.UpdateUtilityNetworksVisibility(isVisible: _utilityNetworks.Count > 1);
+                if (_utilityNetworks.Count > 1)
+                {
+                    _traceTool.SetStatus($"Select a utility network");
+                }
             };
 
             _traceTypes.CollectionChanged += (s, e) =>
             {
-                var minimum = SelectedTraceType is UtilityNamedTraceConfiguration traceType
-                    && traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
-                _traceTool.EnableTrace(TraceParameters?.StartingLocations.Count >= minimum);
+                if (_traceTypes.Count == 1)
+                {
+                    SelectedTraceType = _traceTypes[0];
+                }
+
                 _traceTool.UpdateTraceTypesVisibility(isVisible: _traceTypes.Count > 1);
+                if (_traceTypes.Count > 1)
+                {
+                    _traceTool.SetStatus($"Select a trace type");
+                }
             };
 
             _startingPoints.CollectionChanged += (s, e) =>
             {
-                var minimum = SelectedTraceType is UtilityNamedTraceConfiguration traceType
-                    && traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
-                _traceTool.EnableTrace(TraceParameters?.StartingLocations.Count >= minimum);
+                if (SelectedTraceType is UtilityNamedTraceConfiguration traceType &&
+                TraceParameters is UtilityTraceParameters traceParameters)
+                {
+                    traceParameters.StartingLocations.Clear();
+                    if (_startingPoints.Any())
+                    {
+                        foreach (var startingPoint in _startingPoints.Select(p => p.StartingPoint))
+                        {
+                            traceParameters.StartingLocations.Add(startingPoint);
+                        }
+                    }
+
+                    var minimum = traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
+                    _traceTool.EnableTrace(traceParameters?.StartingLocations.Count >= minimum);
+                }
+
                 _traceTool.UpdateStartingPointsVisibility(isVisible: _startingPoints.Count > 0);
+                if (_startingPoints.Any())
+                {
+                    _traceTool.SetStatus($"{_startingPoints.Count} starting points");
+                }
             };
 
             _functionResults.CollectionChanged += (s, e) =>
@@ -262,6 +281,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void OnUtilityNetworksCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            _traceTool.SetIsBusy(true);
             _traceTool.SetStatus("Loading utility networks...");
 
             if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -364,9 +384,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 catch (Exception ex)
                 {
                     _traceTool.SetStatus($"Loading utility networks failed ({ex.GetType().Name}): {ex.Message}");
-                }
-                finally
-                {
                     _traceTool.SetIsBusy(false);
                 }
             });
@@ -380,6 +397,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             if (geoModel != null)
             {
                 Reset(true);
+                _traceTool.SetIsBusy(true);
                 _traceTool.SetStatus("Loading utility networks...");
 
                 if (geoModel.LoadStatus == LoadStatus.Loaded)
@@ -414,6 +432,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             Reset(true);
 
+            _traceTool.SetIsBusy(true);
             _traceTool.SetStatus("Loading utility networks...");
 
             var graphicsOverlays = new[] { _startingPointGraphicsOverlay, _resultGraphicsOverlay };
@@ -496,6 +515,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         }
                     }
                 }
+
+                OnGeoModelPropertyChanged(null, null);
             }
         }
 
@@ -507,8 +528,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (element.NetworkSource.SourceType == UtilityNetworkSourceType.Edge
                     && feature.Geometry is Polyline polyline)
                 {
-                    _traceTool.SetStatus("Computing fraction along edge...");
-
                     if (polyline.HasZ && GeometryEngine.RemoveZ(polyline) is Polyline polyline2d)
                     {
                         polyline = polyline2d;
@@ -536,7 +555,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 else if (element.NetworkSource.SourceType == UtilityNetworkSourceType.Junction
                     && element.AssetType?.TerminalConfiguration?.Terminals.Count > 1)
                 {
-                    _traceTool.SetStatus("Selecting a terminal...");
                     element.Terminal = element.AssetType.TerminalConfiguration.Terminals[0];
                 }
 
@@ -599,11 +617,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     }));
                 _startingPoints.Add(model);
             }
-
-            var minimum = SelectedTraceType is UtilityNamedTraceConfiguration traceType
-                && traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
-            _traceTool.EnableTrace(TraceParameters?.StartingLocations.Count >= minimum);
-            _traceTool.SetStatus(GetStatus());
         }
 
         private void RemoveStartingPoint(ArcGISFeature feature)
@@ -633,11 +646,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 _startingPoints.Remove(model);
             }
-
-            var minimum = SelectedTraceType is UtilityNamedTraceConfiguration traceType
-                && traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
-            _traceTool.EnableTrace(TraceParameters?.StartingLocations.Count >= minimum);
-            _traceTool.SetStatus(GetStatus());
         }
 
         private void UpdateStartingPoint(UtilityElement startingPoint)
@@ -738,7 +746,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             catch (TaskCanceledException)
             {
-                _traceTool.SetStatus("Identifying a starting point was canceled");
+                // Do nothing when canceled
             }
             catch (Exception ex)
             {
@@ -746,6 +754,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             finally
             {
+                _traceTool.SetStatus(GetStatus());
                 _traceTool.SetIsBusy(false);
             }
         }
@@ -772,19 +781,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         _traceTypes.Add(traceType);
                     }
                 }
-
-                if (_traceTypes.Count == 1)
-                {
-                    SelectedTraceType = _traceTypes[0];
-                }
-                else
-                {
-                    _traceTool.SetStatus(GetStatus());
-                }
             }
             catch (TaskCanceledException)
             {
-                _traceTool.SetStatus("Loading trace types was canceled");
+                // Do nothing when canceled
             }
             catch (Exception ex)
             {
@@ -792,6 +792,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             finally
             {
+                _traceTool.SetStatus(GetStatus());
                 _traceTool.SetIsBusy(false);
             }
         }
@@ -845,7 +846,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
 
                 _traceCts = new CancellationTokenSource();
-                _traceCts.Token.Register(() => _traceTool.SetStatus("Running a trace type was canceled"));
                 traceResults = await SelectedUtilityNetwork.TraceAsync(TraceParameters, _traceCts.Token);
 
                 Envelope? elementExtent = null;
@@ -859,7 +859,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                     if (traceResult is UtilityElementTraceResult elementTraceResult)
                     {
-                        _traceTool.SetStatus($"'{elementTraceResult.Elements.Count}' element(s) found.");
+                        _traceTool.SetStatus($"{elementTraceResult.Elements.Count} elements found.");
 
                         if (_getFeaturesForElementsCts != null)
                         {
@@ -867,10 +867,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         }
 
                         _getFeaturesForElementsCts = new CancellationTokenSource();
-                        _getFeaturesForElementsCts.Token.Register(() => _traceTool.SetStatus("Get features for element results was canceled"));
                         var features = await SelectedUtilityNetwork.GetFeaturesForElementsAsync(elementTraceResult.Elements, _getFeaturesForElementsCts.Token);
 
-                        _traceTool.SetStatus($"Selecting '{features.Count()}' feature(s).");
+                        _traceTool.SetStatus($"Selecting {features.Count()} features.");
 
                         bool getElementExtent = _traceTool.AutoZoomToTraceResults && !traceResults.Any(r => r is UtilityGeometryTraceResult);
 
@@ -913,7 +912,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                                 selected += selectedFeatures.Count();
                             }
 
-                            _traceTool.SetStatus($"'{features.Count()}' feature(s) selected.");
+                            _traceTool.SetStatus($"{features.Count()} features selected.");
                         }
                     }
                     else if (traceResult is UtilityGeometryTraceResult geometryTraceResult)
@@ -955,7 +954,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             catch (TaskCanceledException)
             {
-                // Do nothing when canceled; cancellation token was registered to set status on cancel.
+                // Do nothing when canceled
             }
             catch (Exception ex)
             {
@@ -964,6 +963,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             finally
             {
+                _traceTool.SetStatus(GetStatus());
                 _traceTool.SetIsBusy(false);
             }
 
@@ -1037,6 +1037,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             catch (Exception ex)
             {
                 _traceTool.SetStatus($"Loading starting points failed ({ex.GetType().Name}): {ex.Message}");
+            }
+            finally
+            {
+                _traceTool.SetIsBusy(false);
             }
         }
 
@@ -1147,6 +1151,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             _identifyLayersCts?.Cancel();
             _traceCts?.Cancel();
             _getFeaturesForElementsCts?.Cancel();
+
+            _traceTool.SetIsBusy(false);
+            _traceTool.SetStatus(GetStatus());
 
             ClearResults();
         }
