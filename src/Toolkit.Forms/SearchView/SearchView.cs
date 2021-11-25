@@ -19,8 +19,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
@@ -80,7 +82,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             AllSourcesSelectText = "All Sources";
             RepeatSearchButtonText = "Repeat Search Here";
             _resultOverlay = new GraphicsOverlay { Id = "SearchView_Result_Overlay" };
+            ClearCommand = new DelegateCommand(HandleClearSearchCommand);
+            SearchCommand = new DelegateCommand(HandleSearchCommand);
+            RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
         }
+
+        /// <summary>
+        /// Gets a command that clears the current search.
+        /// </summary>
+        public ICommand ClearCommand { get; private set; }
+
+        /// <summary>
+        /// Gets a command that starts a search with current parameters.
+        /// </summary>
+        public ICommand SearchCommand { get; private set; }
+
+        /// <summary>
+        ///  Gets a command that repeats the last search with new geometry.
+        /// </summary>
+        public ICommand RepeatSearchHereCommand { get; private set; }
 
         /// <inheritdoc/>
         protected override void OnApplyTemplate()
@@ -204,6 +224,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             UpdateVisibility();
         }
 
+        private void HandleClearSearchCommand()
+        {
+            SearchViewModel?.CancelSearch();
+            SearchViewModel?.ClearSearch();
+        }
+
+        private void HandleSearchCommand()
+        {
+            SearchViewModel?.CommitSearch();
+        }
+
+        private void HandleRepeatSearchHereCommand()
+        {
+            SearchViewModel?.RepeatSearchHere();
+        }
+
         private void PART_SourcesView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (SearchViewModel == null)
@@ -273,7 +309,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void PART_SearchButton_Clicked(object sender, EventArgs e) => SearchViewModel?.CommitSearch();
 
-        private async Task ConfigureForCurrentMap()
+        private async Task ConfigureForCurrentConfiguration()
         {
             if (!EnableDefaultWorldGeocoder || _configureMapFlag)
             {
@@ -401,9 +437,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     newGeoView.GraphicsOverlays?.Add(sendingView._resultOverlay);
                 }
 
-                _ = sendingView.ConfigureForCurrentMap();
+                _ = sendingView.ConfigureForCurrentConfiguration();
             }
         }
+
+        private static void OnEnableDefaultWorldGeocoderPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
+        {
+            if (sender is SearchView sendingView)
+            {
+                _ = sendingView.ConfigureForCurrentConfiguration();
+            }
+        }
+
+        private static void OnEnableRepeatSearchButtonChanged(BindableObject sender, object? oldValue, object? newValue) => (sender as SearchView)?.UpdateVisibility();
 
         private static void OnViewModelChanged(BindableObject sender, object? oldValue, object? newValue)
         {
@@ -468,7 +514,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (e.PropertyName == nameof(Map) || e.PropertyName == nameof(Scene))
             {
-                _ = ConfigureForCurrentMap();
+                _ = ConfigureForCurrentConfiguration();
                 return;
             }
 
@@ -483,7 +529,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     _lastUsedGeomodel = scene;
                 }
 
-                _ = ConfigureForCurrentMap();
+                _ = ConfigureForCurrentConfiguration();
             }
         }
 
@@ -580,6 +626,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             if (SearchViewModel?.SelectedResult is SearchResult selectedResult)
             {
+                PART_ResultView?.SetValue(ListView.SelectedItemProperty, selectedResult);
                 _resultOverlay?.Graphics.Clear();
                 AddResultToGeoView(selectedResult);
 
@@ -599,6 +646,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
             else
             {
+                PART_ResultView?.SetValue(ListView.SelectedItemProperty, null);
                 GeoView?.DismissCallout();
             }
         }
@@ -820,13 +868,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="EnableDefaultWorldGeocoder"/> bindable property.
         /// </summary>
         public static readonly BindableProperty EnableDefaultWorldGeocoderProperty =
-            BindableProperty.Create(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), true);
+            BindableProperty.Create(nameof(EnableDefaultWorldGeocoder), typeof(bool), typeof(SearchView), true, propertyChanged: OnEnableDefaultWorldGeocoderPropertyChanged);
 
         /// <summary>
         /// Identifies the <see cref="EnableRepeatSearchHereButton"/> bindable proeprty.
         /// </summary>
         public static readonly BindableProperty EnableRepeatSearchHereButtonProperty =
-            BindableProperty.Create(nameof(EnableRepeatSearchHereButton), typeof(bool), typeof(SearchView), true);
+            BindableProperty.Create(nameof(EnableRepeatSearchHereButton), typeof(bool), typeof(SearchView), true, propertyChanged: OnEnableRepeatSearchButtonChanged);
 
         /// <summary>
         /// Identifies the <see cref="SearchViewModel"/> bindable property.

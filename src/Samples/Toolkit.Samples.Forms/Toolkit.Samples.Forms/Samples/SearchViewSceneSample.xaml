@@ -1,22 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
-             mc:Ignorable="d"
-             Title="SearchView"
-             x:Class="Toolkit.Samples.Forms.Samples.SearchViewSceneSample">
+<ContentPage
+    x:Class="Toolkit.Samples.Forms.Samples.SearchViewSceneSample"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+    Title="SearchView"
+    mc:Ignorable="d">
     <ContentPage.Content>
-            <Grid RowSpacing="0">
+        <Grid RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="32" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <esri:SceneView x:Name="MySceneView" Grid.Row="1" Grid.RowSpan="2" />
-            <toolkit:SearchView GeoView="{Binding Source={Reference MySceneView}}" Grid.Row="0" Grid.RowSpan="2"  />
+            <esri:SceneView
+                x:Name="MySceneView"
+                Grid.Row="1"
+                Grid.RowSpan="2" />
+            <toolkit:SearchView
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                GeoView="{Binding Source={Reference MySceneView}}" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

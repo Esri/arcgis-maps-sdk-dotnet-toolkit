@@ -165,13 +165,13 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
     <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" BackgroundColor=""White"" TextColor=""Black"" />
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
     <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
-    <ListView x:Name=""{nameof(PART_SuggestionsView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""200"">
+    <ListView x:Name=""{nameof(PART_SuggestionsView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""175"">
         <ListView.GroupHeaderTemplate>
             <DataTemplate><ViewCell><Grid BackgroundColor=""#4e4e4e""><Label Text=""{{Binding Key.DisplayName}}"" Margin=""4"" TextColor=""White"" FontSize=""14"" VerticalTextAlignment=""Center"" /></Grid></ViewCell></DataTemplate>
         </ListView.GroupHeaderTemplate>
     </ListView>
     <ListView x:Name=""{nameof(PART_ResultView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""200"" />
-    <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" HeightRequest=""200"" />
+    <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" HeightRequest=""150"" />
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" BackgroundColor=""White"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" BackgroundColor=""White"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2"">
         <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""#007AC2"" TextColor=""White"" />
