@@ -59,6 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             ResultTemplate = DefaultResultTemplate;
             SuggestionTemplate = DefaultSuggestionTemplate;
             ControlTemplate = DefaultControlTemplate;
+            SuggestionGroupHeaderTemplate = DefaultSuggestionGroupHeaderTemplate;
 
             string suffix = Device.RuntimePlatform == Device.UWP ? "-small" : string.Empty;
             if (GetTemplateChild(nameof(PART_SourceSelectButton)) is ImageButton newSourceButton)
@@ -205,7 +206,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 PART_SuggestionsView = newSuggestionList;
                 PART_SuggestionsView.ItemTemplate = SuggestionTemplate;
                 PART_SuggestionsView.ItemSelected += PART_SuggestionsView_ItemSelected;
-                PART_SuggestionsView.IsGroupingEnabled = SearchViewModel?.Sources?.Count > 1;
+                PART_SuggestionsView.IsGroupingEnabled = SearchViewModel?.Sources?.Count > 1 && SearchViewModel?.ActiveSource == null;
             }
 
             if (GetTemplateChild(nameof(PART_RepeatButton)) is Button newRepeatButton)
@@ -413,6 +414,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
         }
 
+        private static void OnSuggestionGroupHeaderTemplateChanged(BindableObject sender, object? oldValue, object? newValue)
+        {
+            if (sender is SearchView originatingview && originatingview.PART_SuggestionsView != null)
+            {
+                originatingview.PART_SuggestionsView.GroupHeaderTemplate = newValue as DataTemplate;
+            }
+        }
+
         private static void OnGeoViewPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             if (sender is SearchView sendingView)
@@ -467,7 +476,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 {
                     sendingView.PART_Entry?.SetValue(Entry.TextProperty, newModel.CurrentQuery);
                     sendingView.PART_Entry?.SetValue(Entry.PlaceholderProperty, newModel.ActivePlaceholder);
-                    sendingView.PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, newModel.Sources?.Count > 1);
+                    sendingView.PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, newModel.Sources?.Count > 1 && newModel.ActiveSource == null);
                     newModel.PropertyChanged += sendingView.SearchViewModel_PropertyChanged;
                     if (newModel.Sources is INotifyCollectionChanged newSources)
                     {
@@ -550,9 +559,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     break;
                 case nameof(SearchViewModel.Suggestions):
                     // Only group if there are multiple sources
-                    if (SearchViewModel.Sources.Count > 1)
+                    bool groupingEnabled = SearchViewModel.Sources.Count > 1 && SearchViewModel.ActiveSource == null;
+                    PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, groupingEnabled);
+                    if (groupingEnabled)
                     {
-                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel.Suggestions?.GroupBy(item => item.OwningSource));
+                        var grouped = SearchViewModel.Suggestions?.GroupBy(item => item.OwningSource);
+
+                        // IGrouping.Key is being linked away in release mode, breaking the group header display. This ugly block of code prevents that.
+                        // https://docs.microsoft.com/en-us/xamarin/android/deploy-test/linker#falseflag
+                        bool falseFlag = false;
+                        if (falseFlag)
+                        {
+                            Console.WriteLine(grouped.First().Key);
+                        }
+
+                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, grouped);
                     }
                     else
                     {
@@ -706,9 +727,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             PART_RepeatButton?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
             PART_RepeatButtonContainer?.SetValue(View.IsVisibleProperty, RepeatSearchButtonVisibility);
             PART_SourcesView?.SetValue(View.IsVisibleProperty, SourcePopupVisibility);
-
-            // Ensure group headers are only shown with multiple sources.
-            PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, SourceSelectVisibility);
         }
 
         #endregion events
@@ -731,6 +749,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             get => GetValue(ResultTemplateProperty) as DataTemplate;
             set => SetValue(ResultTemplateProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the template used to display the header that groups suggestion results by source.
+        /// </summary>
+        public DataTemplate? SuggestionGroupHeaderTemplate
+        {
+            get => GetValue(SuggestionGroupHeaderTemplateProperty) as DataTemplate;
+            set => SetValue(SuggestionGroupHeaderTemplateProperty, value);
         }
 
         /// <summary>
@@ -853,6 +880,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public static readonly BindableProperty SuggestionTemplateProperty =
             BindableProperty.Create(nameof(SuggestionTemplate), typeof(DataTemplate), typeof(SearchView), propertyChanged: OnSuggestionTemplateChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="SuggestionGroupHeaderTemplate"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty SuggestionGroupHeaderTemplateProperty =
+            BindableProperty.Create(nameof(SuggestionGroupHeaderTemplate), typeof(DataTemplate), typeof(SearchView), propertyChanged: OnSuggestionGroupHeaderTemplateChanged);
 
         /// <summary>
         /// Identifies the <see cref="NoResultMessage"/> bindable property.

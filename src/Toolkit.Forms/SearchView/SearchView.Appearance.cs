@@ -39,6 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private static readonly DataTemplate DefaultResultTemplate;
         private static readonly DataTemplate DefaultSuggestionTemplate;
+        private static readonly DataTemplate DefaultSuggestionGroupHeaderTemplate;
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly ByteArrayToImageSourceConverter ImageSourceConverter;
         private static readonly BoolToCollectionIconImageConverter CollectionIconConverter;
@@ -49,6 +50,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             ImageSourceConverter = new ByteArrayToImageSourceConverter();
             CollectionIconConverter = new BoolToCollectionIconImageConverter();
             EmptyStringConverter = new EmptyStringToBoolConverter();
+            DefaultSuggestionGroupHeaderTemplate = new DataTemplate(() =>
+            {
+                var viewcell = new ViewCell();
+                Grid containingGrid = new Grid();
+                containingGrid.BackgroundColor = Color.FromHex("#4e4e4e");
+
+                Label textLabel = new Label();
+                textLabel.SetBinding(Label.TextProperty, "Key.DisplayName");
+                textLabel.Margin = new Thickness(4);
+                textLabel.TextColor = Color.White;
+                textLabel.FontSize = 14;
+                textLabel.VerticalTextAlignment = TextAlignment.Center;
+                containingGrid.Children.Add(textLabel);
+                viewcell.View = containingGrid;
+                return viewcell;
+            });
             DefaultSuggestionTemplate = new DataTemplate(() =>
             {
                 var viewCell = new ViewCell();
@@ -75,12 +92,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 titleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplayTitle));
                 titleLabel.VerticalOptions = LayoutOptions.End;
                 titleLabel.VerticalTextAlignment = TextAlignment.End;
+                titleLabel.TextColor = Color.Black;
 
                 Label subtitleLabel = new Label();
                 subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplaySubtitle));
                 subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchSuggestion.DisplaySubtitle), converter: EmptyStringConverter);
                 subtitleLabel.VerticalOptions = LayoutOptions.Start;
                 subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
+                subtitleLabel.TextColor = Color.Black;
 
                 textStack.Children.Add(titleLabel);
                 textStack.Children.Add(subtitleLabel);
@@ -124,10 +143,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 titleLabel.FontAttributes = FontAttributes.Bold;
                 titleLabel.VerticalOptions = LayoutOptions.End;
                 titleLabel.VerticalTextAlignment = TextAlignment.End;
+                titleLabel.TextColor = Color.Black;
 
                 Label subtitleLabel = new Label();
                 subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplaySubtitle));
                 subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchResult.DisplaySubtitle), converter: EmptyStringConverter);
+                subtitleLabel.TextColor = Color.Black;
                 subtitleLabel.VerticalOptions = LayoutOptions.Start;
                 subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
 
@@ -165,16 +186,12 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
     <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" BackgroundColor=""White"" TextColor=""Black"" />
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
     <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
-    <ListView x:Name=""{nameof(PART_SuggestionsView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""175"">
-        <ListView.GroupHeaderTemplate>
-            <DataTemplate><ViewCell><Grid BackgroundColor=""#4e4e4e""><Label Text=""{{Binding Key.DisplayName}}"" Margin=""4"" TextColor=""White"" FontSize=""14"" VerticalTextAlignment=""Center"" /></Grid></ViewCell></DataTemplate>
-        </ListView.GroupHeaderTemplate>
-    </ListView>
+    <ListView x:Name=""{nameof(PART_SuggestionsView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""175"" />
     <ListView x:Name=""{nameof(PART_ResultView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""200"" />
     <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" HeightRequest=""150"" />
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" BackgroundColor=""White"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" BackgroundColor=""White"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2"">
-        <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""#007AC2"" TextColor=""White"" />
+        <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""#007AC2"" TextColor=""White"" CornerRadius=""0"" />
     </Grid>
 </Grid>
 </ControlTemplate>";
