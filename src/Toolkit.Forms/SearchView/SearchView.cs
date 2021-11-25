@@ -185,7 +185,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (GetTemplateChild(nameof(PART_ResultContainer)) is Grid newResultContainer)
             {
                 PART_ResultContainer = newResultContainer;
-                PART_ResultContainer.IsVisible = SearchViewModel?.Results != null && !SearchViewModel.Results.Any();
             }
 
             if (GetTemplateChild(nameof(PART_SourcesView)) is ListView newSourceSelectView)
@@ -466,6 +465,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
                 if (newValue is SearchViewModel newModel)
                 {
+                    sendingView.PART_Entry?.SetValue(Entry.TextProperty, newModel.CurrentQuery);
+                    sendingView.PART_Entry?.SetValue(Entry.PlaceholderProperty, newModel.ActivePlaceholder);
+                    sendingView.PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, newModel.Sources?.Count > 1);
                     newModel.PropertyChanged += sendingView.SearchViewModel_PropertyChanged;
                     if (newModel.Sources is INotifyCollectionChanged newSources)
                     {
