@@ -172,9 +172,6 @@
     <Compile Include="Samples\SearchView\SearchViewCustomizationSample.xaml.cs">
       <DependentUpon>SearchViewCustomizationSample.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Samples\SearchView\SearchViewDisconnectedSample.xaml.cs">
-      <DependentUpon>SearchViewDisconnectedSample.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Samples\SymbolDisplay\SymbolEditorSample.xaml.cs">
       <DependentUpon>SymbolEditorSample.xaml</DependentUpon>
     </Compile>
@@ -273,10 +270,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\SearchView\SearchViewCustomizationSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Samples\SearchView\SearchViewDisconnectedSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
