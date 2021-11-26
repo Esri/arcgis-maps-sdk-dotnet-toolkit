@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,19 +42,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the callout definition used for results by default.
         /// </summary>
-        public CalloutDefinition? DefaultCalloutDefinition { get; set; }
+        CalloutDefinition? DefaultCalloutDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets the symbol to be used for results by default.
         /// </summary>
-        public Symbol? DefaultSymbol { get; set; }
+        Symbol? DefaultSymbol { get; set; }
 
         /// <summary>
         /// Gets or sets the default zoom scale to be used for results from this source.</summary>
         /// <remarks>This value should be ignored when the underlying provider (e.g. LocatorTask) provides a viewpoint.
         /// Otherwise this zoom scale should be used to create the viewpoint for point results.
         /// </remarks>
-        public double DefaultZoomScale { get; set; }
+        double DefaultZoomScale { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum number of results to return when completing a search.
