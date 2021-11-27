@@ -32,7 +32,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     public class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
     {
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
         private byte[]? _thumbnailData;
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         private RuntimeImage? _thumbnailOverride;
         private string? _tooltipOverride;
         private string? _nameOverride;
@@ -76,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 if (Basemap != null && Basemap.LoadStatus != LoadStatus.Loaded)
                 {
-                    await Basemap.RetryLoadAsync();
+                    await Basemap.LoadAsync();
                 }
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
@@ -182,7 +184,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets thumbnail as a byte array.
         /// </summary>
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
         public byte[]? ThumbnailData
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             get => _thumbnailData;
             private set

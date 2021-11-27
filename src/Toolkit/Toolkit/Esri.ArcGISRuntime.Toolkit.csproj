@@ -66,7 +66,6 @@
     <Compile Include="UI\ILayerContentItem.cs" />
     <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryViewStyle.cs" />
     <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryItem.cs" />
-    <Compile Include="UI\Controls\BasemapGallery\IBasemapGallery.cs" />
     <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryController.cs" />
     <Compile Include="Internal\StringExtensions.cs" />
   </ItemGroup>
