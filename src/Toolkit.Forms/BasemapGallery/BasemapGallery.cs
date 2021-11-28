@@ -56,8 +56,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 case nameof(BasemapGalleryController.AvailableBasemaps):
                     AvailableBasemaps = _controller.AvailableBasemaps;
                     break;
-                case nameof(BasemapGalleryController.GeoModel):
-                    break;
                 case nameof(BasemapGalleryController.IsLoading):
                     _loadingScrim?.SetValue(View.IsVisibleProperty, _controller.IsLoading);
                     break;
@@ -68,8 +66,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                         BasemapSelected?.Invoke(this, _controller.SelectedBasemap);
                     }
 
-                    break;
-                case nameof(BasemapGalleryController.Portal):
                     break;
             }
         }
@@ -143,7 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (sender is BasemapGallery gallery)
             {
-                _ = gallery._controller.Portal = newValue as ArcGISPortal;
+                gallery._controller.Portal = newValue as ArcGISPortal;
             }
         }
 
@@ -171,7 +167,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public ArcGISPortal? Portal
         {
-            get => (ArcGISPortal)GetValue(PortalProperty);
+            get => GetValue(PortalProperty) as ArcGISPortal;
             set => SetValue(PortalProperty, value);
         }
 

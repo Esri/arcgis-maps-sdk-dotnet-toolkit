@@ -113,12 +113,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             IsLoading = true;
             try
             {
-                if (Thumbnail != null && Thumbnail.LoadStatus != LoadStatus.Loaded)
-                {
-                    await Thumbnail.RetryLoadAsync();
-                }
+                await (Thumbnail?.LoadAsync() ?? Task.CompletedTask);
 
-                if (Thumbnail != null && Thumbnail.LoadStatus == LoadStatus.Loaded)
+                if (Thumbnail?.LoadStatus == LoadStatus.Loaded)
                 {
                     var stream = await Thumbnail.GetEncodedBufferAsync();
                     var buffer = new byte[stream.Length];

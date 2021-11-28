@@ -64,8 +64,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(BasemapGalleryController.AvailableBasemaps):
                     AvailableBasemaps = _controller.AvailableBasemaps;
                     break;
-                case nameof(BasemapGalleryController.GeoModel):
-                    break;
                 case nameof(BasemapGalleryController.IsLoading):
                     _loadingScrim?.SetValue(FrameworkElement.VisibilityProperty, _controller.IsLoading ? Visibility.Visible : Visibility.Collapsed);
                     break;
@@ -75,8 +73,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         BasemapSelected?.Invoke(this, _controller.SelectedBasemap);
                     }
 
-                    break;
-                case nameof(BasemapGalleryController.Portal):
                     break;
             }
         }
