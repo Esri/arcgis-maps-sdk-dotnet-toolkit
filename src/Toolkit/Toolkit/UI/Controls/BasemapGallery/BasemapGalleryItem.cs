@@ -124,9 +124,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     var buffer = new byte[stream.Length];
                     await stream.ReadAsync(buffer, 0, (int)stream.Length);
                     ThumbnailData = buffer;
-                    #if WINDOWS_UWP
+#if WINDOWS_UWP
                     ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();
-                    #endif
+#endif
                 }
             }
             catch (Exception)
@@ -199,7 +199,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        #if WINDOWS_UWP
+#if WINDOWS_UWP
         private ImageSource? _thumbnailBitmap;
 
         /// <summary>

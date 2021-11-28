@@ -298,9 +298,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 listOfBasemaps.Add(new BasemapGalleryItem(item));
             }
 
-            #if !WINDOWS_UWP && !NETCOREAPP && !NETCOREAPP3_1
+#if !WINDOWS_UWP && !NETCOREAPP && !NETCOREAPP3_1
             await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
-            #else
+#else
             foreach (var item in listOfBasemaps)
             {
                 try
@@ -311,7 +311,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                 }
             }
-            #endif
+#endif
 
             return listOfBasemaps;
         }
@@ -322,7 +322,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             var results = await defaultPortal.GetDeveloperBasemapsAsync();
 
-            List<BasemapGalleryItem> listOfBasemaps = new List<BasemapGalleryItem>();
+            var listOfBasemaps = new List<BasemapGalleryItem>();
 
             foreach (var basemap in results)
             {

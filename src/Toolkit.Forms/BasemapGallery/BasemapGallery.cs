@@ -15,14 +15,11 @@
 //  ******************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.Toolkit.UI;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -37,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     public partial class BasemapGallery
     {
         private CollectionView? _listView;
-        private BasemapGalleryController _controller;
+        private readonly BasemapGalleryController _controller;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
@@ -155,7 +152,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (sender is BasemapGallery gallery)
             {
                 gallery.ListView?.SetValue(CollectionView.ItemsSourceProperty, newValue);
-                if (newValue != gallery._controller?.AvailableBasemaps)
+                if (newValue != gallery._controller.AvailableBasemaps)
                 {
                     gallery._controller.AvailableBasemaps = newValue as IList<BasemapGalleryItem>;
                 }

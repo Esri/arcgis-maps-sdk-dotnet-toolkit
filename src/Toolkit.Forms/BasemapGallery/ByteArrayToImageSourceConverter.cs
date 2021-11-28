@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Converts a byte array to an image source for display in Xamarin.Forms.
         /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is byte[] rawBuffer)
             {
