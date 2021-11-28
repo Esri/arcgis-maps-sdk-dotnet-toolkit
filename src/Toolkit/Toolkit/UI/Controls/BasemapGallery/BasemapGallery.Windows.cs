@@ -68,6 +68,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _loadingScrim?.SetValue(FrameworkElement.VisibilityProperty, _controller.IsLoading ? Visibility.Visible : Visibility.Collapsed);
                     break;
                 case nameof(BasemapGalleryController.SelectedBasemap):
+                    ListView?.SetValue(ListView.SelectedItemProperty, _controller.SelectedBasemap);
+                    SelectedBasemap = _controller.SelectedBasemap;
                     if (_controller.SelectedBasemap != null)
                     {
                         BasemapSelected?.Invoke(this, _controller.SelectedBasemap);
@@ -122,7 +124,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return;
             }
 
-            _controller.SelectedBasemap = ListView.SelectedItem as BasemapGalleryItem;
+            SelectedBasemap = ListView.SelectedItem as BasemapGalleryItem;
         }
 
         private static void PortalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -60,7 +60,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     _loadingScrim?.SetValue(View.IsVisibleProperty, _controller.IsLoading);
                     break;
                 case nameof(BasemapGalleryController.SelectedBasemap):
-                    ListView?.SetValue(CollectionView.SelectedItemProperty, _controller.SelectedBasemap);
+                    SelectedBasemap = _controller.SelectedBasemap;
+                    _listView?.SetValue(CollectionView.SelectedItemProperty, _controller.SelectedBasemap);
                     if (_controller.SelectedBasemap != null)
                     {
                         BasemapSelected?.Invoke(this, _controller.SelectedBasemap);
@@ -121,13 +122,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             if (e.CurrentSelection.Count == 0)
             {
-                _controller.SelectedBasemap = null;
+                SelectedBasemap = null;
             }
             else if (e.CurrentSelection.FirstOrDefault() is BasemapGalleryItem selectedItem)
             {
                 if (selectedItem.IsValid)
                 {
-                    _controller.SelectedBasemap = selectedItem;
+                    SelectedBasemap = selectedItem;
                 }
             }
         }
