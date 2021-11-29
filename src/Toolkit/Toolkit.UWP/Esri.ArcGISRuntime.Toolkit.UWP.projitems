@@ -10,19 +10,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Delete.scale-200.png" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)**\*.rd.xml" />
     <Page Include="$(MSBuildThisFileDirectory)**\*.xaml" Exclude="$(MSBuildThisFileDirectory)**\bin\**\*.xaml;$(MSBuildThisFileDirectory)**\obj\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="$(MSBuildThisFileDirectory)**\*.xaml.cs" DependentUpon="%(Filename).xaml" />
     <Content Include="$(MSBuildThisFileDirectory)**\*.png" Exclude="$(MSBuildThisFileDirectory)**\bin\**\*.png;$(MSBuildThisFileDirectory)**\obj\**\*.png" />
-	<PRIResource Include="$(MSBuildThisFileDirectory)**\*.resw" />
+    <PRIResource Include="$(MSBuildThisFileDirectory)**\*.resw" />
   </ItemGroup>
   <Target Name="CopyResources" BeforeTargets="Build;Rebuild">
-   <ItemGroup>  
-        <WPFResourceFiles Include="$(MSBuildThisFileDirectory)..\WPF\LocalizedStrings\*.resx"/>  
-		<UWPResourceFiles Include="$(MSBuildThisFileDirectory)LocalizedStrings\en-US\*.resw"/>  
-    </ItemGroup>  
-    <Copy
-      SourceFiles="@(WPFResourceFiles)"
-      DestinationFiles="@(UWPResourceFiles)" SkipUnchangedFiles="True" />
+    <ItemGroup>
+      <WPFResourceFiles Include="$(MSBuildThisFileDirectory)..\WPF\LocalizedStrings\*.resx" />
+      <UWPResourceFiles Include="$(MSBuildThisFileDirectory)LocalizedStrings\en-US\*.resw" />
+    </ItemGroup>
+    <Copy SourceFiles="@(WPFResourceFiles)" DestinationFiles="@(UWPResourceFiles)" SkipUnchangedFiles="True" />
   </Target>
 </Project>
