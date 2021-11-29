@@ -457,8 +457,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #else
                 if (oldGeoView is MapView)
                 {
-                DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
-                                }
+                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
+                }
                 else if (oldGeoView is SceneView)
                 {
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
@@ -523,7 +523,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private void AddStartingPoint(ArcGISFeature feature, MapPoint? location = null)
         {
             Geometry.Geometry? geometry = feature.Geometry;
-            if (SelectedUtilityNetwork?.CreateElement(feature) is UtilityElement element)
+            UtilityElement? element = null;
+            try
+            {
+                element = SelectedUtilityNetwork?.CreateElement(feature);
+            }
+            catch (Exception ex)
+            {
+                _traceTool.SetStatus($"CreateElement failed ({ex.GetType().Name}): {ex.Message}");
+            }
+
+            if (element != null)
             {
                 if (element.NetworkSource.SourceType == UtilityNetworkSourceType.Edge
                     && feature.Geometry is Polyline polyline)
