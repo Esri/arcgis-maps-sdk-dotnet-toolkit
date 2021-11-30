@@ -42,22 +42,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             DefaultGridDataTemplate = new DataTemplate(() =>
             {
-                var outerScrimContainer = new Grid();
+                Grid outerScrimContainer = new Grid();
                 outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = 128 });
 
-                var parentLayout = new StackLayout { Orientation = StackOrientation.Vertical };
+                StackLayout parentLayout = new StackLayout() { Orientation = StackOrientation.Vertical };
                 parentLayout.Padding = new Thickness(8);
-                var imageContainer = new Grid { Margin = new Thickness(0, 0, 0, 8) };
-                var fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
+                Grid imageContainer = new Grid { Margin = new Thickness(0, 0, 0, 8) };
+                Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
                 fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
-                var thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
-                var nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), HorizontalTextAlignment = TextAlignment.Center };
+                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
+                Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), HorizontalTextAlignment = TextAlignment.Center };
                 imageContainer.Children.Add(fallback);
                 imageContainer.Children.Add(thumbnail);
                 parentLayout.Children.Add(imageContainer);
                 parentLayout.Children.Add(nameLabel);
 
-                var scrimGrid = new Grid { BackgroundColor = Color.White };
+                Grid scrimGrid = new Grid { BackgroundColor = Color.White };
                 scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
                 parentLayout.Children.Add(scrimGrid);
 
@@ -73,23 +73,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             DefaultListDataTemplate = new DataTemplate(() =>
             {
-                var parentLayout = new Grid();
+                Grid parentLayout = new Grid() { };
                 parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
                 parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(72) });
                 parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
 
-                var imageContainer = new Grid();
-                var fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
+                Grid imageContainer = new Grid();
+                Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
                 fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
-                var thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
-                var nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center };
+                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
+                Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center };
                 imageContainer.Children.Add(fallback);
                 imageContainer.Children.Add(thumbnail);
 
                 parentLayout.Children.Add(imageContainer);
                 parentLayout.Children.Add(nameLabel);
 
-                var scrimGrid = new Grid { BackgroundColor = Color.White };
+                Grid scrimGrid = new Grid { BackgroundColor = Color.White };
                 scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
                 parentLayout.Children.Add(scrimGrid);
 
