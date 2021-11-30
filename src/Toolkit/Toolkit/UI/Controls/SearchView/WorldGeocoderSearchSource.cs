@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public WorldGeocoderSearchSource(LocatorTask locator, SymbolStyle? style)
             : base(locator)
         {
-            SubtitleAttributKey = AddressAttributeKey;
+            SubtitleAttributeKey = AddressAttributeKey;
             if (style != null)
             {
                 ResultSymbolStyle = style;
@@ -242,7 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var symbol = await SymbolForResult(r);
             string? subtitle = null;
-            if (SubtitleAttributKey != null && r.Attributes.ContainsKey(SubtitleAttributKey) && r.Attributes[SubtitleAttributKey] is string subtitleString)
+            if (SubtitleAttributeKey != null && r.Attributes.ContainsKey(SubtitleAttributeKey) && r.Attributes[SubtitleAttributeKey] is string subtitleString)
             {
                 subtitle = subtitleString;
             }

@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the attribute key to use as the subtitle when returning results. Key must be included in <see cref="GeocodeParameters.ResultAttributeNames"/>.
         /// </summary>
-        public string? SubtitleAttributKey { get; set; }
+        public string? SubtitleAttributeKey { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocatorSearchSource"/> class.
@@ -279,9 +279,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private SearchResult GeocodeResultToSearchResult(GeocodeResult r)
         {
             string? subtitle = null;
-            if (SubtitleAttributKey != null && r.Attributes.ContainsKey(SubtitleAttributKey))
+            if (SubtitleAttributeKey != null && r.Attributes.ContainsKey(SubtitleAttributeKey))
             {
-                subtitle = r.Attributes[SubtitleAttributKey]?.ToString();
+                subtitle = r.Attributes[SubtitleAttributeKey]?.ToString();
             }
 
             Mapping.Viewpoint? selectionViewpoint = r.Extent == null ? null : new Mapping.Viewpoint(r.Extent);
