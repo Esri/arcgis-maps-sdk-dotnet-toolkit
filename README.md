@@ -27,6 +27,7 @@ There are two ways to add Toolkit to your project:
 - [**OverviewMap**](https://esri.github.io/arcgis-toolkit-dotnet/overview-map.html): Displays an interactive inset map for a map or scene.
 - **PopupViewer**: Display details and media, edit attributes, geometry and related records, and manage the attachments of features and graphics (popups are defined in the popup property of features and graphics).
 - **ScaleLine**: Displays current scale reference.
+- **[SearchView](https://esri.github.io/arcgis-toolkit-dotnet/search-view.html)**: Enables searching using one or more locators, with support for suggestions, automatic zooming, and custom search sources.
 - **SymbolDisplay**: Renders a symbol in a control.
 - **TimeSlider**: Allows interactively defining a temporal range (i.e. time extent) and animating time moving forward or backward.  Can be used to manipulate the time extent in a MapView or SceneView.
 

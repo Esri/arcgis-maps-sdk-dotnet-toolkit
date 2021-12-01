@@ -67,7 +67,15 @@
     <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryViewStyle.cs" />
     <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryItem.cs" />
     <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryController.cs" />
+    <Compile Include="UI\Controls\SearchView\SearchViewModel.cs" />
+    <Compile Include="UI\Controls\SearchView\ISearchSource.cs" />
+    <Compile Include="UI\Controls\SearchView\LocatorSearchSource.cs" />
+    <Compile Include="UI\Controls\SearchView\WorldGeocoderSearchSource.cs" />
+    <Compile Include="UI\Controls\SearchView\SearchResult.cs" />
+    <Compile Include="UI\Controls\SearchView\SearchResultMode.cs" />
+    <Compile Include="UI\Controls\SearchView\SearchSuggestion.cs" />
     <Compile Include="Internal\StringExtensions.cs" />
+    <Compile Include="Internal\DelegateCommand.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -88,6 +96,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="EmbeddedResources\pin_red.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\pin_red.png" />
   </ItemGroup>
 
   <ItemGroup>

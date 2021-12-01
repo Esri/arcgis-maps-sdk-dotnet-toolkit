@@ -1,0 +1,15 @@
+﻿<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView.SearchViewSceneSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <esri:SceneView x:Name="MySceneView" />
+        <toolkit:SearchView GeoView="{Binding ElementName=MySceneView}" />
+    </Grid>
+</Page>
