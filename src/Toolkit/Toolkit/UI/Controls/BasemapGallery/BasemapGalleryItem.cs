@@ -32,7 +32,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     public class BasemapGalleryItem : INotifyPropertyChanged, IEquatable<BasemapGalleryItem>
     {
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
         private byte[]? _thumbnailData;
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         private RuntimeImage? _thumbnailOverride;
         private string? _tooltipOverride;
         private string? _nameOverride;
@@ -76,7 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 if (Basemap != null && Basemap.LoadStatus != LoadStatus.Loaded)
                 {
-                    await Basemap.RetryLoadAsync();
+                    await Basemap.LoadAsync();
                 }
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
@@ -111,20 +113,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             IsLoading = true;
             try
             {
-                if (Thumbnail != null && Thumbnail.LoadStatus != LoadStatus.Loaded)
-                {
-                    await Thumbnail.RetryLoadAsync();
-                }
+                await (Thumbnail?.LoadAsync() ?? Task.CompletedTask);
 
-                if (Thumbnail != null && Thumbnail.LoadStatus == LoadStatus.Loaded)
+                if (Thumbnail?.LoadStatus == LoadStatus.Loaded)
                 {
                     var stream = await Thumbnail.GetEncodedBufferAsync();
                     var buffer = new byte[stream.Length];
                     await stream.ReadAsync(buffer, 0, (int)stream.Length);
                     ThumbnailData = buffer;
-                    #if WINDOWS_UWP
+#if WINDOWS_UWP
                     ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();
-                    #endif
+#endif
                 }
             }
             catch (Exception)
@@ -182,7 +181,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets thumbnail as a byte array.
         /// </summary>
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
         public byte[]? ThumbnailData
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         {
             get => _thumbnailData;
             private set
@@ -195,7 +196,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        #if WINDOWS_UWP
+#if WINDOWS_UWP
         private ImageSource? _thumbnailBitmap;
 
         /// <summary>

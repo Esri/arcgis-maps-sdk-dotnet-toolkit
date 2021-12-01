@@ -15,14 +15,11 @@
 //  ******************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.Toolkit.UI;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Xamarin.Forms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
@@ -34,21 +31,44 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
     /// If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
     /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
     /// </remarks>
-    public partial class BasemapGallery : IBasemapGallery
+    public partial class BasemapGallery
     {
         private CollectionView? _listView;
-        private BasemapGalleryController _controller;
+        private readonly BasemapGalleryController _controller;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
         /// </summary>
         public BasemapGallery()
         {
-            _controller = new BasemapGalleryController(this);
+            _controller = new BasemapGalleryController();
+            _controller.PropertyChanged += HandleControllerPropertyChanged;
             ListItemTemplate = DefaultListDataTemplate;
             GridItemTemplate = DefaultGridDataTemplate;
             ControlTemplate = DefaultControlTemplate;
             _ = _controller.LoadFromDefaultPortal();
+        }
+
+        private void HandleControllerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(BasemapGalleryController.AvailableBasemaps):
+                    AvailableBasemaps = _controller.AvailableBasemaps;
+                    break;
+                case nameof(BasemapGalleryController.IsLoading):
+                    _loadingScrim?.SetValue(View.IsVisibleProperty, _controller.IsLoading);
+                    break;
+                case nameof(BasemapGalleryController.SelectedBasemap):
+                    SelectedBasemap = _controller.SelectedBasemap;
+                    _listView?.SetValue(CollectionView.SelectedItemProperty, _controller.SelectedBasemap);
+                    if (_controller.SelectedBasemap != null)
+                    {
+                        BasemapSelected?.Invoke(this, _controller.SelectedBasemap);
+                    }
+
+                    break;
+            }
         }
 
         private CollectionView? ListView
@@ -67,7 +87,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
                     if (_listView != null)
                     {
-                        _controller.HandleListViewChanged();
                         _listView.SelectionChanged += ListViewSelectionChanged;
                         HandleTemplateChange(Width);
                     }
@@ -79,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (sender is BasemapGallery gallery)
             {
-                gallery._controller.HandleSelectedBasemapChanged();
+                gallery._controller.SelectedBasemap = newValue as BasemapGalleryItem;
             }
         }
 
@@ -90,23 +109,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (sender is BasemapGallery gallery)
             {
-                if (oldValue is GeoModel oldModel)
-                {
-                    oldModel.PropertyChanged -= gallery.GeoModelPropertyChanged;
-                }
-
-                gallery._controller.HandleGeoModelChanged();
-
-                if (newValue is GeoModel newModel)
-                {
-                    newModel.PropertyChanged += gallery.GeoModelPropertyChanged;
-                }
+                gallery._controller.GeoModel = newValue as GeoModel;
             }
-        }
-
-        private void GeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            _controller.HandleGeoModelPropertyChanged(e.PropertyName);
         }
 
         private void ListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -118,13 +122,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             if (e.CurrentSelection.Count == 0)
             {
-                _controller.HandleListViewSelectionChanged(null);
+                SelectedBasemap = null;
             }
             else if (e.CurrentSelection.FirstOrDefault() is BasemapGalleryItem selectedItem)
             {
                 if (selectedItem.IsValid)
                 {
-                    _controller.HandleListViewSelectionChanged(e.CurrentSelection.FirstOrDefault() as BasemapGalleryItem);
+                    SelectedBasemap = selectedItem;
                 }
             }
         }
@@ -136,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (sender is BasemapGallery gallery)
             {
-                _ = gallery._controller.HandlePortalChanged();
+                gallery._controller.Portal = newValue as ArcGISPortal;
             }
         }
 
@@ -144,23 +148,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (sender is BasemapGallery gallery)
             {
-                if (oldValue is ObservableCollection<BasemapGalleryItem> oldAvailableBasemaps)
+                gallery.ListView?.SetValue(CollectionView.ItemsSourceProperty, newValue);
+                if (newValue != gallery._controller.AvailableBasemaps)
                 {
-                    oldAvailableBasemaps.CollectionChanged -= gallery.AvailableBasemapsCollectionChanged;
-                }
-
-                gallery._controller.HandleAvailableBasemapsChanged();
-
-                if (newValue is ObservableCollection<BasemapGalleryItem> newAvailableBasemaps)
-                {
-                    newAvailableBasemaps.CollectionChanged += gallery.AvailableBasemapsCollectionChanged;
+                    gallery._controller.AvailableBasemaps = newValue as IList<BasemapGalleryItem>;
                 }
             }
-        }
-
-        private void AvailableBasemapsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            _controller.HandleAvailableBasemapsCollectionChanged(e);
         }
 
         /// <summary>
@@ -175,7 +168,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         public ArcGISPortal? Portal
         {
-            get => (ArcGISPortal)GetValue(PortalProperty);
+            get => GetValue(PortalProperty) as ArcGISPortal;
             set => SetValue(PortalProperty, value);
         }
 
@@ -239,40 +232,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         #endregion Bindable Properties
 
-        #region Controller Callbacks
-
-        void IBasemapGallery.SetListViewSource(IList<BasemapGalleryItem>? newSource)
-        {
-            if (ListView != null)
-            {
-                ListView.ItemsSource = newSource;
-            }
-        }
-
-        void IBasemapGallery.SetListViewSelection(BasemapGalleryItem? item)
-        {
-            if (ListView != null)
-            {
-                ListView.SelectedItem = item;
-            }
-        }
-
-        void IBasemapGallery.NotifyBasemapSelected(BasemapGalleryItem item)
-        {
-            BasemapSelected?.Invoke(this, item);
-        }
-
-        void IBasemapGallery.SetIsLoading(bool isLoading)
-        {
-            if (isLoading && _loadingScrim != null)
-            {
-                _loadingScrim.IsVisible = true;
-            }
-            else if (_loadingScrim != null)
-            {
-                _loadingScrim.IsVisible = false;
-            }
-        }
-        #endregion Controller Callbacks
     }
 }

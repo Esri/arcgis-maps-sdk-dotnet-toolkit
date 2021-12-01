@@ -17,35 +17,124 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms")]
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
-    internal class BasemapGalleryController
+    internal class BasemapGalleryController : INotifyPropertyChanged
     {
-        private IBasemapGallery _gallery;
+        private ArcGISPortal? _portal;
         private bool _ignoreEventsFlag;
+        private IList<BasemapGalleryItem>? _availableBasemaps;
+        private GeoModel? _geoModel;
+        private BasemapGalleryItem? _selectedBasemap;
+        private bool _isLoading;
 
-        public BasemapGalleryController(IBasemapGallery gallery)
+        public bool IsLoading
         {
-            _gallery = gallery;
+            get => _isLoading;
+            set
+            {
+                if (value != _isLoading)
+                {
+                    _isLoading = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+                }
+            }
         }
 
-        public void HandleAvailableBasemapsChanged()
+        public IList<BasemapGalleryItem>? AvailableBasemaps
+        {
+            get => _availableBasemaps;
+            set
+            {
+                if (value != _availableBasemaps)
+                {
+                    if (_availableBasemaps is INotifyCollectionChanged oldIncc)
+                    {
+                        oldIncc.CollectionChanged -= HandleAvailableBasemapsCollectionChanged;
+                    }
+
+                    _availableBasemaps = value;
+
+                    if (_availableBasemaps is INotifyCollectionChanged newIncc)
+                    {
+                        newIncc.CollectionChanged += HandleAvailableBasemapsCollectionChanged;
+                    }
+
+                    HandleAvailableBasemapsChanged();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AvailableBasemaps)));
+                }
+            }
+        }
+
+        public BasemapGalleryItem? SelectedBasemap
+        {
+            get => _selectedBasemap;
+            set
+            {
+                if (_selectedBasemap != value)
+                {
+                    _selectedBasemap = value;
+                    HandleSelectedBasemapChanged();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedBasemap)));
+                }
+            }
+        }
+
+        public GeoModel? GeoModel
+        {
+            get => _geoModel;
+            set
+            {
+                if (value != _geoModel)
+                {
+                    if (_geoModel is INotifyPropertyChanged oldGeoModel)
+                    {
+                        oldGeoModel.PropertyChanged -= HandleGeoModelPropertyChanged;
+                    }
+
+                    _geoModel = value;
+
+                    if (_geoModel is INotifyPropertyChanged newGeoModel)
+                    {
+                        newGeoModel.PropertyChanged += HandleGeoModelPropertyChanged;
+                    }
+
+                    HandleGeoModelChanged();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GeoModel)));
+                }
+            }
+        }
+
+        public ArcGISPortal? Portal
+        {
+            get => _portal;
+            set
+            {
+                if (value != _portal)
+                {
+                    _portal = value;
+                    _ = HandlePortalChanged();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Portal)));
+                }
+            }
+        }
+
+        private void HandleAvailableBasemapsChanged()
         {
             _ignoreEventsFlag = true;
 
             try
             {
                 // Update validity
-                _gallery.AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(_gallery.GeoModel));
-
-                // Show new items in UI
-                _gallery.SetListViewSource(_gallery.AvailableBasemaps);
+                AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(GeoModel));
 
                 // Update selection.
                 _ = UpdateSelectionForGeoModelBasemap();
@@ -56,7 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public void HandleAvailableBasemapsCollectionChanged(NotifyCollectionChangedEventArgs e)
+        private void HandleAvailableBasemapsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -64,7 +153,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 case NotifyCollectionChangedAction.Move:
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
-                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(_gallery.GeoModel));
+                    e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(GeoModel));
                     _ = UpdateSelectionForGeoModelBasemap();
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -73,88 +162,53 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public void HandleGeoModelChanged()
+        private void HandleGeoModelChanged()
         {
-            _gallery.AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(_gallery.GeoModel));
+            AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
             _ = UpdateSelectionForGeoModelBasemap();
         }
 
-        public void HandleGeoModelPropertyChanged(string propertyName)
+        private void HandleGeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (propertyName == nameof(GeoModel.Basemap) && !_ignoreEventsFlag)
+            if (e.PropertyName == nameof(GeoModel.Basemap) && !_ignoreEventsFlag)
             {
                 _ = UpdateSelectionForGeoModelBasemap();
             }
-            else if (propertyName == nameof(GeoModel.SpatialReference))
+            else if (e.PropertyName == nameof(GeoModel.SpatialReference))
             {
-                _gallery.AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(_gallery.GeoModel));
+                AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
             }
         }
 
-        public void HandleListViewChanged()
+        private async Task HandlePortalChanged()
         {
-            _gallery.SetListViewSource(_gallery.AvailableBasemaps);
-            _gallery.SetListViewSelection(_gallery.SelectedBasemap);
-        }
-
-        public void HandleListViewSelectionChanged(BasemapGalleryItem? newSelection)
-        {
-            if (_ignoreEventsFlag)
-            {
-                return;
-            }
-
+            IsLoading = true;
             try
             {
-                _ignoreEventsFlag = true;
-                _gallery.SelectedBasemap = newSelection;
-            }
-            catch (Exception)
-            {
-                // Ignore
-            }
-            finally
-            {
-                _ignoreEventsFlag = false;
-            }
-        }
-
-        public async Task HandlePortalChanged()
-        {
-            _gallery.SetIsLoading(true);
-            try
-            {
-                if (_gallery.Portal is ArcGISPortal portal)
+                if (Portal is ArcGISPortal portal)
                 {
                     if (await PopulateBasemapsForPortal(portal) is List<BasemapGalleryItem> portalItems)
                     {
-                        _gallery.AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>(portalItems);
+                        AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>(portalItems);
                     }
                 }
             }
             finally
             {
-                _gallery.SetIsLoading(false);
+                IsLoading = false;
             }
         }
 
-        public void HandleSelectedBasemapChanged()
+        private void HandleSelectedBasemapChanged()
         {
             try
             {
                 // Stop listening to list events
                 _ignoreEventsFlag = true;
 
-                _gallery.SetListViewSelection(_gallery.SelectedBasemap);
-
-                if (_gallery.GeoModel != null && (!_gallery.SelectedBasemap?.EqualsBasemap(_gallery.GeoModel.Basemap) ?? true))
+                if (GeoModel != null && (!SelectedBasemap?.EqualsBasemap(GeoModel.Basemap) ?? true))
                 {
-                    _gallery.GeoModel.Basemap = _gallery.SelectedBasemap?.Basemap?.Clone();
-                }
-
-                if (_gallery.SelectedBasemap is BasemapGalleryItem selectedItem)
-                {
-                    _gallery.NotifyBasemapSelected(selectedItem);
+                    GeoModel.Basemap = SelectedBasemap?.Basemap?.Clone();
                 }
             }
             catch (Exception)
@@ -170,41 +224,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public async Task LoadFromDefaultPortal()
         {
-            _gallery.SetIsLoading(true);
+            IsLoading = true;
             try
             {
-                var portalItems = await PopulateFromDefaultList();
-                if (portalItems != null)
-                {
-                    _gallery.AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>(portalItems);
-                }
+                AvailableBasemaps = await PopulateFromDefaultList();
             }
             finally
             {
-                _gallery.SetIsLoading(false);
+                IsLoading = false;
             }
         }
 
-        public async Task UpdateSelectionForGeoModelBasemap()
+        private async Task UpdateSelectionForGeoModelBasemap()
         {
-            if (_gallery.GeoModel?.Basemap is Basemap inputBasemap)
+            if (GeoModel?.Basemap is Basemap inputBasemap)
             {
                 if (await BasemapIsActuallyNotABasemap(inputBasemap))
                 {
-                    _gallery.SelectedBasemap = null;
+                    SelectedBasemap = null;
                 }
-                else if (_gallery.AvailableBasemaps?.FirstOrDefault(bmgi => bmgi.EqualsBasemap(inputBasemap)) is BasemapGalleryItem selectedItem)
+                else if (AvailableBasemaps?.FirstOrDefault(bmgi => bmgi.EqualsBasemap(inputBasemap)) is BasemapGalleryItem selectedItem)
                 {
-                    _gallery.SelectedBasemap = selectedItem;
+                    SelectedBasemap = selectedItem;
                 }
                 else
                 {
-                    _gallery.SelectedBasemap = null;
+                    SelectedBasemap = null;
                 }
             }
             else
             {
-                _gallery.SelectedBasemap = null;
+                SelectedBasemap = null;
             }
         }
 
@@ -222,7 +272,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return false;
         }
 
-        private static async Task<List<BasemapGalleryItem>?> PopulateBasemapsForPortal(ArcGISPortal? portal)
+        private static async Task<IList<BasemapGalleryItem>?> PopulateBasemapsForPortal(ArcGISPortal? portal)
         {
             if (portal == null)
             {
@@ -241,16 +291,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             var basemaps = await getBasemapsTask;
 
-            List<BasemapGalleryItem> listOfBasemaps = new List<BasemapGalleryItem>();
+            IList<BasemapGalleryItem> listOfBasemaps = new List<BasemapGalleryItem>();
 
             foreach (var item in basemaps)
             {
                 listOfBasemaps.Add(new BasemapGalleryItem(item));
             }
 
-            #if !WINDOWS_UWP && !NETCOREAPP && !NETCOREAPP3_1
+#if !WINDOWS_UWP && !NETCOREAPP && !NETCOREAPP3_1
             await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
-            #else
+#else
             foreach (var item in listOfBasemaps)
             {
                 try
@@ -261,18 +311,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                 }
             }
-            #endif
+#endif
 
             return listOfBasemaps;
         }
 
-        private static async Task<List<BasemapGalleryItem>> PopulateFromDefaultList()
+        private static async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList()
         {
             ArcGISPortal defaultPortal = await ArcGISPortal.CreateAsync();
 
             var results = await defaultPortal.GetDeveloperBasemapsAsync();
 
-            List<BasemapGalleryItem> listOfBasemaps = new List<BasemapGalleryItem>();
+            var listOfBasemaps = new List<BasemapGalleryItem>();
 
             foreach (var basemap in results)
             {
@@ -293,7 +343,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
             }
 #endif
-            return listOfBasemaps;
+            return new ObservableCollection<BasemapGalleryItem>(listOfBasemaps);
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }
