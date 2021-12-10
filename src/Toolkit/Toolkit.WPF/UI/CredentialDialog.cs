@@ -40,10 +40,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             _info = info ?? throw new ArgumentNullException(nameof(info));
         }
 
-        // Shows the dialog in the current active window.
-        public bool ShowDialog() => ShowDialog(null);
-
         // Shows the dialog in the specified window.
+        // If no window is specified, uses the current active window.
         public bool ShowDialog(Window? owner)
         {
             var handle = owner is null

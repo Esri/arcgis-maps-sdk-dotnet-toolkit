@@ -15,7 +15,10 @@
 //  ******************************************************************************/
 
 using System;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows;
+using System.Windows.Interop;
 using Esri.ArcGISRuntime.Security;
 
 namespace Esri.ArcGISRuntime.Toolkit.Authentication
@@ -29,12 +32,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
         /// Requests the user to pick a certificate from the Current User's <see cref="StoreLocation"/>.
         /// </summary>
         /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/>.</param>
+        /// <param name="window">The current window.</param>
         /// <returns>A certificate picked by the user.</returns>
-        public static X509Certificate2? SelectCertificate(CredentialRequestInfo info)
+        public static X509Certificate2? SelectCertificate(CredentialRequestInfo info, Window? window)
         {
             using (var store = new X509Store(StoreName.My, StoreLocation.CurrentUser))
             {
-                return SelectCertificate(info, store);
+                return SelectCertificate(info, store, window);
             }
         }
 
@@ -43,8 +47,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
         /// </summary>
         /// <param name="info">The Credential request info from the <see cref="AuthenticationManager"/>.</param>
         /// <param name="x509Store">The certificate store.</param>
+        /// <param name="window">The current window.</param>
         /// <returns>A certificate picked by the user.</returns>
-        public static X509Certificate2? SelectCertificate(CredentialRequestInfo info, X509Store x509Store)
+        public static X509Certificate2? SelectCertificate(CredentialRequestInfo info, X509Store x509Store, Window? window)
         {
             if (info is null)
             {
@@ -56,10 +61,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
                 throw new ArgumentNullException(nameof(x509Store));
             }
 
+            var handle = window != null ? new WindowInteropHelper(window).Handle : GetActiveWindow();
+
             x509Store.Open(OpenFlags.ReadOnly);
 
             X509Certificate2Collection col = x509Store.Certificates;
-            X509Certificate2Collection sel = X509Certificate2UI.SelectFromCollection(col, "Credentials Required", $"Certificate required for '{info.ServiceUri!.Host}'.", X509SelectionFlag.SingleSelection);
+            X509Certificate2Collection sel = X509Certificate2UI.SelectFromCollection(col, "Credentials Required", $"Certificate required for '{info.ServiceUri!.Host}'.", X509SelectionFlag.SingleSelection, handle);
 
             X509Certificate2Enumerator en = sel.GetEnumerator();
             if (en.MoveNext())
@@ -69,5 +76,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
 
             return null;
         }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        private static extern IntPtr GetActiveWindow();
     }
 }

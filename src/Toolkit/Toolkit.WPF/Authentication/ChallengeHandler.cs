@@ -17,7 +17,7 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using System.Windows.Threading;
+using System.Windows;
 using Esri.ArcGISRuntime.Security;
 using Esri.ArcGISRuntime.Toolkit.UI;
 
@@ -28,25 +28,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
     /// </summary>
     public class ChallengeHandler : ChallengeHandlerBase
     {
-        private readonly Dispatcher _dispatcher;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChallengeHandler"/> class.
+        /// </summary>
+        public ChallengeHandler()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChallengeHandler"/> class.
         /// </summary>
-        /// <param name="dispatcher">The dispatcher for the application.</param>
-        public ChallengeHandler(Dispatcher dispatcher)
+        /// <param name="mainWindow">The main window of the application.</param>
+        public ChallengeHandler(Window? mainWindow)
         {
-            _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
+            MainWindow = mainWindow;
         }
 
         /// <inheritdoc/>
         protected override Task<System.Net.NetworkCredential> RequestUsernamePasswordAsync(CredentialRequestInfo info)
         {
             var tcs = new TaskCompletionSource<System.Net.NetworkCredential>();
-            _dispatcher.Invoke(() =>
+            DispatchIfNeeded(() =>
             {
                 var dialog = new CredentialDialog(info);
-                if (dialog.ShowDialog())
+                if (dialog.ShowDialog(MainWindow))
                 {
                     tcs.TrySetResult(new System.Net.NetworkCredential(dialog.UserName, dialog.Password));
                 }
@@ -62,9 +67,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
         protected override Task<X509Certificate2> RequestCertificateAsync(CredentialRequestInfo info)
         {
             var tcs = new TaskCompletionSource<X509Certificate2>();
-            _dispatcher.Invoke(() =>
+            DispatchIfNeeded(() =>
             {
-                var certificate = CertificateHelper.SelectCertificate(info);
+                var certificate = CertificateHelper.SelectCertificate(info, MainWindow);
                 if (certificate != null)
                 {
                     tcs.TrySetResult(certificate);
@@ -76,5 +81,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
             });
             return tcs.Task;
         }
+
+        // Executes the specified callback using the application dispatcher if needed.
+        private void DispatchIfNeeded(Action callback)
+        {
+            var dispatcher = MainWindow?.Dispatcher ?? Application.Current.Dispatcher;
+            if (!dispatcher.CheckAccess())
+            {
+                dispatcher.Invoke(callback);
+            }
+            else
+            {
+                callback();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the main window of the application.
+        /// </summary>
+        /// <remarks>
+        /// If no window is specified, the challenge handler will attempt to use the current active window.
+        /// </remarks>
+        public Window? MainWindow { get; set; }
     }
 }
