@@ -59,15 +59,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Authentication
 
         private Task<Credential> OnTokenAsync(CredentialRequestInfo info)
         {
-            // try to determine whether OAuth is requested for this resource
+            // test whether OAuth is requested for this server
             if (info.GenerateTokenOptions?.TokenAuthenticationType != TokenAuthenticationType.ArcGISToken)
             {
                 return OnOAuthTokenAsync(info);
             }
-            else
+
+            // cannot check GenerateTokenOptions, check server configuration
+            var serverInfo = AuthenticationManager.Current.FindServerInfo(info.ServiceUri!);
+            if (serverInfo != null && serverInfo.TokenAuthenticationType != TokenAuthenticationType.ArcGISToken)
             {
-                return OnArcGISTokenAsync(info);
+                return OnOAuthTokenAsync(info);
             }
+
+            return OnArcGISTokenAsync(info);
         }
 
         private async Task<Credential> OnArcGISTokenAsync(CredentialRequestInfo info)

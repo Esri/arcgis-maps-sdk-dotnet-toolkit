@@ -75,14 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             var username = _usernameTextField?.Text;
             var password = _passwordTextField?.Text;
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-            {
-                _signInAction.Enabled = true;
-            }
-            else
-            {
-                _signInAction.Enabled = false;
-            }
+            _signInAction.Enabled = !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password);
         }
 
         private void OnAccept(UIAlertAction a)

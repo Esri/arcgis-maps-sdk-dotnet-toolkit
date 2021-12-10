@@ -24,6 +24,7 @@ using Esri.ArcGISRuntime.Security;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
+    // Prompts for username/password credentials using the Windows credential UI.
     internal class CredentialDialog
     {
         private const int MaxUserNameLength = 256 + 1 + 256;
@@ -56,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             // Prepare CREDUI_INFO struct
             var caption = "Credentials Required";
             var host = _info.ProxyServiceUri?.Host ?? _info.ServiceUri?.Host;
-            var message = string.IsNullOrEmpty(host) ? "You need to sign in." : $"You need to sign in to access '{host}'."; ;
+            var message = string.IsNullOrEmpty(host) ? "You need to sign in." : $"You need to sign in to access '{host}'.";
             var info = new CredUIInfo
             {
                 Size = Marshal.SizeOf<CredUIInfo>(),

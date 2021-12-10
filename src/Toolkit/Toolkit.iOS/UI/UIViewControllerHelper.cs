@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using UIKit;
@@ -58,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        // MOdally presents the view controller on the top-most view.
+        // Modally presents the view controller on the top-most view.
         public static void PresentViewControllerOnTop(UIViewController viewController)
         {
             Dispatcher.RunAsyncAction(() =>
