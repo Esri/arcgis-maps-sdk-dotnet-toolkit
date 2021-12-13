@@ -18,6 +18,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Security;
+using Foundation;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
@@ -25,16 +26,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     internal class UsernamePasswordChallenge
     {
         private readonly CredentialRequestInfo _info;
-        private readonly UIAlertController _alertController;
+        private UIAlertController? _alertController;
         private UITextField? _usernameTextField;
         private UITextField? _passwordTextField;
-        private UIAlertAction _signInAction;
+        private UIAlertAction? _signInAction;
         private TaskCompletionSource<NetworkCredential?>? _tcs;
 
         public UsernamePasswordChallenge(CredentialRequestInfo info)
         {
             _info = info ?? throw new ArgumentNullException(nameof(info));
+            NSRunLoop.Main.InvokeOnMainThread(CreateAlert);
+        }
 
+        // Creates the UIAlertController. Must be called from the UI thread.
+        private void CreateAlert()
+        {
             var host = _info.ProxyServiceUri?.Host ?? _info.ServiceUri?.Host;
             var message = string.IsNullOrEmpty(host) ? "You need to sign in." : $"You need to sign in to access '{host}'.";
             _alertController = UIAlertController.Create("Credentials Required", message, UIAlertControllerStyle.Alert);
@@ -66,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public Task<NetworkCredential?> ShowAsync()
         {
             _tcs = new TaskCompletionSource<NetworkCredential?>();
-            UIViewControllerHelper.PresentViewControllerOnTop(_alertController);
+            UIViewControllerHelper.PresentViewControllerOnTop(_alertController!);
             return _tcs.Task;
         }
 
@@ -75,14 +81,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             var username = _usernameTextField?.Text;
             var password = _passwordTextField?.Text;
-            _signInAction.Enabled = !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password);
+            _signInAction!.Enabled = !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password);
         }
 
         private void OnAccept(UIAlertAction a)
         {
             var username = _usernameTextField?.Text;
             var password = _passwordTextField?.Text;
-            _alertController.DismissViewController(true, () =>
+            _alertController!.DismissViewController(true, () =>
             {
                 if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
                 {
@@ -97,7 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void OnCancel(UIAlertAction a)
         {
-            _alertController.DismissViewController(true, () => _tcs?.SetResult(null));
+            _alertController!.DismissViewController(true, () => _tcs?.SetResult(null));
         }
     }
 }
