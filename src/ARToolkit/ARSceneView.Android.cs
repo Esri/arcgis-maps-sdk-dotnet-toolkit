@@ -274,6 +274,14 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
+        protected override void OnDetachedFromWindow()
+        {
+            ArSceneView?.Session.Close();
+            ArSceneView?.Destroy();
+            Google.AR.Sceneform.SceneView.DestroyAllResources();
+            base.OnDetachedFromWindow();
+        }
+
         private void OnStopTracking()
         {
             _orientationListener?.Disable();
