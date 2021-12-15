@@ -1,7 +1,8 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework);$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>$(iOSTargetFramework);$(AndroidTargetFramework);$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) and '$(MSBuildRuntimeType)' == 'Full'">$(TargetFrameworks);$(DotNetTargetFramework);$(NetWindowsTargetFramework);$(UWPTargetFramework)</TargetFrameworks>
     <Description>Preview package containing new features under development in the Toolkit for ArcGIS Runtime SDK for .NET.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit.Preview</RootNamespace>
@@ -19,7 +20,7 @@
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(TargetFramework)' == '$(DotNetTargetFramework)'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(TargetFramework)' == '$(DotNetTargetFramework)'">
     <UseWpf>true</UseWpf>
   </PropertyGroup>
   

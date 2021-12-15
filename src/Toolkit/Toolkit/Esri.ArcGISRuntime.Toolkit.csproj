@@ -1,7 +1,8 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
-    <TargetFrameworks>$(iOSTargetFramework);$(UWPTargetFramework);$(AndroidTargetFramework);$(DotNetTargetFramework);$(NetCoreTargetFramework);$(NetWindowsTargetFramework);$(NetAndroidTargetFramework);$(NetiOSTargetFramework);netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework);$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) and '$(MSBuildRuntimeType)' == 'Full'">$(TargetFrameworks);$(DotNetTargetFramework);$(NetWindowsTargetFramework);$(UWPTargetFramework)</TargetFrameworks>
     <Description>ArcGIS Runtime controls and utilities for Universal Windows Platform (UWP), Windows Presentation Foundation (WPF), Xamarin.Android, and Xamarin.iOS apps.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D UWP WPF Xamarin Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
@@ -19,7 +20,7 @@
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreTargetFramework)' OR '$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(IsDotNetFramework)' == 'true'">
+  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(IsDotNetFramework)' == 'true'">
     <UseWpf>true</UseWpf>
   </PropertyGroup>
 
@@ -29,7 +30,7 @@
 
   <ItemGroup Condition="'$(IsTargetingAndroid)' == 'true'">
     <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
-    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="1.1.2" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'!='true'" />
+    <PackageReference Include="Xamarin.Android.Support.Constraint.Layout" Version="2.0.1" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'!='true'" />
     <PackageReference Include="Xamarin.Android.Support.v7.RecyclerView" Version="28.0.0.3" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'!='true'" />
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout" Version="2.1.1.2" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'=='true'" />
     <PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.2.1.3" Condition="'$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), &quot;net6.0&quot;))'=='true'" />
