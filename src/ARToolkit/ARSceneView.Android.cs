@@ -274,6 +274,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
+        /// <inheritdoc />
         protected override void OnDetachedFromWindow()
         {
             ArSceneView?.Session.Close();
