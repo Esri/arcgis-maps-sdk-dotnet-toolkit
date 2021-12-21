@@ -13,7 +13,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
-	<string>12.1</string>
+	<string>13.0</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
@@ -36,10 +36,9 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>For showing the current location in a map</string>
-  <key>NSCameraUsageDescription</key>
-  <string>For Augmented Reality</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>For showing the current location in a map</string>
+	<key>NSCameraUsageDescription</key>
+	<string>For Augmented Reality</string>
 </dict>
 </plist>

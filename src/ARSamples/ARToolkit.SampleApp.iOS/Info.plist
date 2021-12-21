@@ -12,8 +12,6 @@
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>MinimumOSVersion</key>
-	<string>12.1</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>
@@ -44,10 +42,11 @@
 	<string>Main</string>
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>Main</string>
-
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>For showing the current location in a map</string>
-  <key>NSCameraUsageDescription</key>
-  <string>For Augmented Reality</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>For showing the current location in a map</string>
+	<key>NSCameraUsageDescription</key>
+	<string>For Augmented Reality</string>
+	<key>MinimumOSVersion</key>
+	<string>13.0</string>
 </dict>
 </plist>
