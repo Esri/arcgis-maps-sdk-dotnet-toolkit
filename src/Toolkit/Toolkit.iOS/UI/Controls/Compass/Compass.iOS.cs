@@ -128,6 +128,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             context.DrawPath(CGPathDrawingMode.Fill);
         }
 
+        /// <inheritdoc/>
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+
+            // Ensure that the view is re-rendered upon resize
+            SetNeedsDisplay();
+        }
+
         private void UpdateCompassRotation(bool transition)
         {
             if (AutoHide)
