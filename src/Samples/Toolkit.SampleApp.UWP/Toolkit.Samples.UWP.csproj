@@ -20,6 +20,7 @@
     <PackageCertificateKeyFile>Toolkit.Samples.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>EA6451EED9A5E048A1949FB52EFD7B4808C41EB3</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+    <SuppressXamlWarnings>1500</SuppressXamlWarnings>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
