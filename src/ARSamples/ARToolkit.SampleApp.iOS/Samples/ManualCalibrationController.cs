@@ -117,9 +117,9 @@ namespace ARToolkit.SampleApp.Samples
                     ARView.OriginCamera = ARView.OriginCamera.MoveTo(location);
                     ARView.ResetTracking();
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    //Failed to snap location to terrain
+                    System.Diagnostics.Debug.WriteLine($"Failed to snap location to terrain. Message: {ex.Message}");
                 }
             }
         }
