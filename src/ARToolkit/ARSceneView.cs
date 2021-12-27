@@ -271,7 +271,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             get => _controller?.OriginCamera ?? throw new InvalidOperationException();  // Only null in design mode
             set
             {
-                if (_controller != null && value != OriginCamera && value?.IsEqual(OriginCamera) == false)
+                if (_controller != null && value != OriginCamera)
                 {
                     _controller.OriginCamera = value;
                 } 
