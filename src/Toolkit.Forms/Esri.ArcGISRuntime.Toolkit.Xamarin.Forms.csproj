@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);monoandroid10.0</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) and '$(MSBuildRuntimeType)' == 'Full'">$(TargetFrameworks);$(UWPTargetFramework)</TargetFrameworks>
+    <AndroidTargetFramework>monoandroid10.0</AndroidTargetFramework>
     <Authors>ESRI Inc.</Authors>
     <Description>ArcGIS Runtime controls and utilities for Xamarin.Forms apps (Android, iOS, and UWP).</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D Android iOS UWP Xamarin.Forms Xamarin Mobile toolkit</PackageTags>
@@ -69,9 +70,6 @@
     <Compile Include="..\Toolkit\Toolkit\WeakEventListener.cs" Link="WeakEventListener.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Nullable)'=='annotations'">
-    <Compile Include="..\Toolkit\NullableAttributes.cs" />
-  </ItemGroup>
   <ItemGroup Condition="'$(Nullable)'=='enable' AND '$(TargetFramework)' != '$(NetWindowsTargetFramework)' ">
     <Compile Include="..\Toolkit\NullableAttributesNotNet5.cs" />
     <!-- Adds some null annotations for pre-.net5 targets that already supports some annotations -->
