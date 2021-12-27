@@ -6,9 +6,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Legend
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    [Obsolete]
     public sealed partial class LayerLegendSample : Page
     {
         public LayerLegendSample()

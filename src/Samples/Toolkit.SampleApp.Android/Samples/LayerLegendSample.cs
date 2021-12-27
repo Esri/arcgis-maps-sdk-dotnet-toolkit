@@ -22,13 +22,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
     {
         private MapView mapView;
 
-        protected async override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.LayerLegendSample);
             mapView = FindViewById<MapView>(Resource.Id.mapView);
             mapView.Map = CreateMap();
+#pragma warning disable CS0618 // Type or member is obsolete
             var legend = FindViewById<UI.Controls.LayerLegend>(Resource.Id.layerLegend);
+#pragma warning restore CS0618 // Type or member is obsolete
             legend.LayerContent = mapView.Map.OperationalLayers[0];
         }
 
