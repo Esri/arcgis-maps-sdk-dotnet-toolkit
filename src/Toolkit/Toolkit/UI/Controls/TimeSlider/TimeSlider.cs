@@ -60,7 +60,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control
     /// to enhance the viewing of geographic features that have attributes based upon Date/Time information.
     /// </summary>
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CA1001
     public partial class TimeSlider
+#pragma warning restore CA1001
+#pragma warning restore IDE0079 // Remove unnecessary suppression
     {
         #region Fields
 

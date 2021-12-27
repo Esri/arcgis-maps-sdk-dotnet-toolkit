@@ -46,7 +46,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #if NETFX_CORE
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
 #endif
+#pragma warning disable IDE0079
+#pragma warning disable CA1001
     public partial class SearchView : Control, INotifyPropertyChanged
+#pragma warning restore CA1001
+#pragma warning restore IDE0079
     {
         // Controls how long the control waits after typing stops before looking for suggestions.
         private const int TypingDelayMilliseconds = 75;
