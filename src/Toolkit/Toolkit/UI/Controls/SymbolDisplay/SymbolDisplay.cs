@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Symbology;
 #if NETFX_CORE
@@ -67,33 +68,40 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                     {
-                        Refresh();
+                        _ = Refresh();
                     },
                     OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 newValue.PropertyChanged += _inpcListener.OnEvent;
             }
 
-            Refresh();
+            _ = Refresh();
         }
 
-        private async void Refresh()
+        private async Task Refresh()
         {
-            if (_currentUpdateTask != null)
+            try
             {
-                // Instead of refreshing immediately when a refresh is already in progress, avoid updating too frequently, but just flag it dirty
-                // This avoid multiple refreshes where properties change very frequently, but just the latest state gets refreshed.
-                _isRefreshRequired = true;
-                return;
-            }
+                if (_currentUpdateTask != null)
+                {
+                    // Instead of refreshing immediately when a refresh is already in progress, avoid updating too frequently, but just flag it dirty
+                    // This avoid multiple refreshes where properties change very frequently, but just the latest state gets refreshed.
+                    _isRefreshRequired = true;
+                    return;
+                }
 
-            _isRefreshRequired = false;
-            var task = _currentUpdateTask = UpdateSwatchAsync();
-            await task;
-            _currentUpdateTask = null;
-            if (_isRefreshRequired)
+                _isRefreshRequired = false;
+                var task = _currentUpdateTask = UpdateSwatchAsync();
+                await task;
+                _currentUpdateTask = null;
+                if (_isRefreshRequired)
+                {
+                    await Refresh();
+                }
+            }
+            catch (Exception)
             {
-                Refresh();
+                // Ignore
             }
         }
 
