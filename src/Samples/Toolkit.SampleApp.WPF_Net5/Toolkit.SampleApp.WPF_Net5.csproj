@@ -12,7 +12,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <Content Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+    <Page Remove="bin\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.WPF">
       <Version>$(ArcGISRuntimePackageVersion)</Version>
