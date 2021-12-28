@@ -47,7 +47,7 @@
                 </Style>
               </CheckBox.Style>
             </CheckBox>
-            <TextBlock Text="{Binding Content.Name, Mode=OneWay}" Grid.Column="1" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Content.Name, Mode=OneWay}" Grid.Column="1" VerticalAlignment="Center" Margin="5,0" />
           </Grid>
         </HierarchicalDataTemplate>
       </Setter.Value>
