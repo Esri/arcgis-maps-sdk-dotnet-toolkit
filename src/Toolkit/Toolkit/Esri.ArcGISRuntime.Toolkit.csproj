@@ -59,6 +59,13 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <EmbeddedResource Remove="**\*.*" />
     <Compile Remove="**\*.cs" />
+    <!-- Starting with VS2022, all non-.NET standard files are hidden in solution explorer by default. Includes are targeted to avoid obj\ -->
+    <None Include="*.cs" />
+    <None Include="Internal\**\*.cs" />
+    <None Include="LocalizedStrings\*.resx" />
+	<None Include="Properties\**\*.cs" />
+	<None Include="Resources\**\*.axml" />
+	<None Include="UI\**\*.*" />
     <Compile Include="UI\Controls\TimeSlider\LoopMode.cs" />
     <Compile Include="UI\Controls\TimeSlider\PlaybackDirection.cs" />
     <Compile Include="UI\Controls\TimeSlider\TimeExtentChangedEventArgs.cs" />
@@ -81,7 +88,6 @@
 
   <ItemGroup>
     <_ResxFiles Remove="**\*.resx" />
-    <None Remove="**\*.axml" />
   </ItemGroup>
   <ItemGroup Condition="'$(IsUWP)' == 'true'">
     <Compile Remove="LocalizedStrings\Resources.Designer.cs" />
