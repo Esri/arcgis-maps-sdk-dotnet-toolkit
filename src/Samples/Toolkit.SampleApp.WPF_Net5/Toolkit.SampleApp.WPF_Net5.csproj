@@ -5,6 +5,7 @@
     <TargetFramework>$(NetWindowsTargetFramework)</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
+    <NoWarn>$(NoWarn);NU5105;MC3074;MSB4181;MC1000;MC3066</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
