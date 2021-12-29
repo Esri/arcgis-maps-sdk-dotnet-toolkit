@@ -1,46 +1,92 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
 {
-    /// <summary>
-    /// Interaction logic for TimeSliderSample.xaml
-    /// </summary>
     public partial class TimeSliderSample : UserControl
     {
+        public Map Map { get; } = new Map(Basemap.CreateLightGrayCanvas());
+
+        private Dictionary<string, Uri> _namedLayers = new Dictionary<string, Uri>
+        {
+            {"Hurricanes", new Uri("https://services.arcgis.com/XSeYKQzfXnEgju9o/ArcGIS/rest/services/Hurricanes_1950_to_2015/FeatureServer/0") },
+            {"Human Life Expectancy", new Uri("http://services1.arcgis.com/VAI453sU9tG9rSmh/arcgis/rest/services/WorldGeo_HumanCulture_LifeExpectancy_features/FeatureServer/0") }
+        };
+
         public TimeSliderSample()
         {
             InitializeComponent();
-            //var layer = new FeatureLayer(new Uri("https://services.arcgis.com/XSeYKQzfXnEgju9o/ArcGIS/rest/services/Hurricanes_1950_to_2015/FeatureServer/0"));
-            var layer = new FeatureLayer(new Uri("http://services1.arcgis.com/VAI453sU9tG9rSmh/arcgis/rest/services/WorldGeo_HumanCulture_LifeExpectancy_features/FeatureServer/0"));
-            Map.OperationalLayers.Add(layer);
+            slider.CurrentExtentChanged += Slider_CurrentExtentChanged;
             this.DataContext = this;
-            InitSlider(layer);
+            LayerSelectionBox.ItemsSource = _namedLayers.Keys;
+            LayerSelectionBox.SelectedIndex = 0;
+            _ = HandleSelectionChanged();
+            LayerSelectionBox.SelectionChanged += LayerSelectionBox_SelectionChanged;
         }
 
-        private async void InitSlider(FeatureLayer layer)
+        private void Slider_CurrentExtentChanged(object sender, UI.TimeExtentChangedEventArgs e)
         {
-            await layer.LoadAsync();
-            if(layer.IsTimeFilteringEnabled)
+            mapView.TimeExtent = e.NewExtent;
+        }
+
+        private void LayerSelectionBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _ = HandleSelectionChanged();
+        }
+
+        private async Task HandleSelectionChanged()
+        {
+            Map.OperationalLayers.Clear();
+            var selectedLayer = LayerSelectionBox.SelectedItem.ToString();
+
+            var layer = new FeatureLayer(_namedLayers[selectedLayer]);
+            Map.OperationalLayers.Add(layer);
+            await slider.InitializeTimePropertiesAsync(layer);
+
+            IsTimeAwareLabel.Text = layer.SupportsTimeFiltering ? "Yes" : "No";
+        }
+
+        private void StepForward_Click(object sender, RoutedEventArgs e)
+        {
+            try
             {
-                //Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.
-                await slider.InitializeTimePropertiesAsync(layer);
+                var intervals = int.Parse(StepCountBox.Text);
+                slider.StepForward(intervals);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
-        public Map Map { get; } = new Map(Basemap.CreateLightGrayCanvas());
+        private void StepBack_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var intervals = int.Parse(StepCountBox.Text);
+                slider.StepBack(intervals);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ConfigureIntervals_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var intervals = int.Parse(IntervalCountBox.Text);
+                slider.InitializeTimeSteps(intervals);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
