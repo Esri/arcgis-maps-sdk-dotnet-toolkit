@@ -1290,7 +1290,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Updates the time slider to have the specified number of time steps.
         /// </summary>
-        /// <param name="count">The number of time steps.</param>
+        /// <param name="count">The number of time steps. Values less than one are ignored.</param>
         /// <remarks>This method divides the TimeSlider instance's <see cref="FullExtent"/> into the number of steps specified,
         /// updating the <see cref="TimeStepInterval"/> and <see cref="TimeSteps"/> properties.  The method will attempt to set
         /// the interval to a TimeValue with the smallest duration and largest time unit that will fit evenly (i.e. without
@@ -1301,7 +1301,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Note that, if the TimeSlider instance's FullExtent property is not set, invoking this method will have no effect.</remarks>
         public void InitializeTimeSteps(int count)
         {
-            if (FullExtent == null)
+            if (FullExtent == null || count < 1)
             {
                 return;
             }
