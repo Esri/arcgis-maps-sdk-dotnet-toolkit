@@ -69,6 +69,7 @@
     <Compile Include="Samples\BookmarksView\BookmarksModalSampleViewController.cs" />
     <Compile Include="Samples\BookmarksView\BookmarksMapEventTestController.cs" />
     <Compile Include="Samples\BookmarksView\BookmarksViewSceneViewViewController.cs" />
+    <Compile Include="Samples\TimeSliderController.cs" />
     <Compile Include="Samples\LayerLegendViewController.cs" />
     <Compile Include="Samples\LegendViewController.cs" />
     <Compile Include="Samples\ScaleLineViewController.cs" />
