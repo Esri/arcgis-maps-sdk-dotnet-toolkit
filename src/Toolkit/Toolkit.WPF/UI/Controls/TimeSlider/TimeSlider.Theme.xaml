@@ -161,19 +161,6 @@
                                                         Background="Transparent"
                                                         BorderBrush="Transparent" 
                                                         BorderThickness="0">
-                                                    <Grid Margin="1" Background="Transparent">
-                                                        <Border x:Name="BackgroundAnimation" Opacity="0" Background="#FF448DCA"/>
-                                                        <Rectangle x:Name="BackgroundGradient">
-                                                            <Rectangle.Fill>
-                                                                <LinearGradientBrush EndPoint=".7,1" StartPoint=".7,0">
-                                                                    <GradientStop Color="#FFFFFFFF" Offset="0"/>
-                                                                    <GradientStop Color="#F9FFFFFF" Offset="0.375"/>
-                                                                    <GradientStop Color="#E5FFFFFF" Offset="0.625"/>
-                                                                    <GradientStop Color="#C6FFFFFF" Offset="1"/>
-                                                                </LinearGradientBrush>
-                                                            </Rectangle.Fill>
-                                                        </Rectangle>
-                                                    </Grid>
                                                 </Border>
                                                 <Grid HorizontalAlignment="Center"
                                                       Margin="{TemplateBinding Padding}"
