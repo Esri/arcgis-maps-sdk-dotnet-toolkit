@@ -276,6 +276,13 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
+                        <!-- Corrects layout issues that would otherwise happen. -->
+						<Border Background="{TemplateBinding Background}" Grid.RowSpan="4" Grid.Column="0" />
+						<Border Background="{TemplateBinding Background}" Grid.RowSpan="4" Grid.Column="1" />
+						<Border Background="{TemplateBinding Background}" Grid.RowSpan="4" Grid.Column="2" />
+						<Border Background="{TemplateBinding Background}" Grid.RowSpan="4" Grid.Column="3" />
+						<Border Background="{TemplateBinding Background}" Grid.RowSpan="4" Grid.Column="4" />
+
                         <!-- start time label -->
                         <TextBlock x:Name="FullExtentStartTimeLabel"
                                    Text="{Binding FullExtent.StartTime,
