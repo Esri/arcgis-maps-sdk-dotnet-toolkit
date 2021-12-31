@@ -857,6 +857,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             for (var nextStep = startTime.AddTimeValue(timeStep); nextStep <= endTime; nextStep = nextStep.AddTimeValue(timeStep))
             {
+                // TODO = come up with a more rigorous definition or expose API
+                if (endTime.Subtract(nextStep).TotalMinutes < 10)
+                {
+                    nextStep = endTime;
+                }
+
                 steps.Add(nextStep);
             }
 
