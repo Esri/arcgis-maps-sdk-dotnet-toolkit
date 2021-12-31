@@ -9,7 +9,7 @@
     mc:Ignorable="d">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="220" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
@@ -54,11 +54,13 @@
                     <Button
                         Grid.Row="3"
                         Grid.Column="0"
+                        HorizontalAlignment="Stretch"
                         Click="StepBack_Click"
                         Content="Step Back" />
                     <Button
                         Grid.Row="3"
                         Grid.Column="1"
+                        HorizontalAlignment="Stretch"
                         Click="StepForward_Click"
                         Content="Step Forward" />
                 </Grid>
@@ -67,7 +69,10 @@
                 <StackPanel Orientation="Vertical">
                     <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="Choose Interval Count" />
                     <TextBox x:Name="IntervalCountBox" Text="?" />
-                    <Button Click="ConfigureIntervals_Click" Content="Configure Intervals" />
+                    <Button
+                        HorizontalAlignment="Stretch"
+                        Click="ConfigureIntervals_Click"
+                        Content="Configure Intervals" />
                 </StackPanel>
             </Border>
             <Border Padding="4">

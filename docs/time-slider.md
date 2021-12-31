@@ -34,7 +34,7 @@ See the API reference for full details.
 - `IsPlaying` - Gets or sets a value indicating whether the time slider is animating
 - `PlaybackInterval` - Controls how long (in user time) the time slider waits before stepping the current extent when `IsPlaying` is true.
 - `PlaybackDirection` - Controls whether playback is moving forward or backward
-- `PlaybackLoopMode` - Controls the behavior whent the time slider reaches the end of the animation
+- `PlaybackLoopMode` - Controls the behavior when the time slider reaches the end of the animation
 
 ### Labeling
 
