@@ -1323,7 +1323,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <returns>Task.</returns>
         public async Task InitializeTimePropertiesAsync(GeoView? geoView)
         {
-            if (geoView is null)
+            if (geoView is MapView mv && mv.Map != null)
+            {
+                await mv.Map.LoadAsync();
+            }
+            else if (geoView is SceneView sv && sv.Scene != null)
+            {
+                await sv.Scene.LoadAsync();
+            }
+            else if (geoView is null)
             {
                 throw new ArgumentNullException(nameof(geoView));
             }
@@ -1367,7 +1375,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // If the geoview has a temporal extent defined, use that.  Otherwise, initialize the current extent to either the
             // full extent's start (if instantaneous time-filtering can be used), or to the entire full extent.
-            CurrentExtent = geoView.TimeExtent == null ? geoView.TimeExtent : fullExtent is null ? null : canUseInstantaneousTime ?
+            CurrentExtent = geoView.TimeExtent != null ? geoView.TimeExtent : fullExtent is null ? null : canUseInstantaneousTime ?
                 new TimeExtent(fullExtent.StartTime) : new TimeExtent(fullExtent.StartTime, fullExtent.EndTime);
         }
 
