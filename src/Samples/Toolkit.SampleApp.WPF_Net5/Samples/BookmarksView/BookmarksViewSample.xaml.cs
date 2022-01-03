@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView
         private const string webMapOneUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=e50fafe008ac4ce4ad2236de7fd149c3";
         private const string webMapTwoUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2";
         private const string webSceneOne = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=6b6588041965408e84ba319e12d9d7ad";
-        private const string webSceneTwo = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=c6e7476998c649b482849eb92b967761";
+        private const string webSceneTwo = "https://www.arcgis.com/home/webscene/viewer.html?webscene=b9ad8372ff884bc4a4e78d936b170f7d";
 
         private Random _randomizer = new Random();
 
@@ -44,7 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView
         {
             InitializeComponent();
 
-            MyMapView.Map = new Map(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2"));
+            MyMapView.Map = new Map(new Uri(webMapTwoUrl));
+            MySceneView.Scene = new Scene(new Uri(webSceneOne));
         }
 
         private void SetMapViewBinding_Click(object sender, RoutedEventArgs e)
