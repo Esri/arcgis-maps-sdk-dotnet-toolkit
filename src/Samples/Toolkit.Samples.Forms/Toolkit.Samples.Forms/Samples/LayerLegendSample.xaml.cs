@@ -13,7 +13,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "Legend", Description = "Render a legend for a layer")]
+    [SampleInfoAttribute(Category = "LayerLegend", Description = "[Obsolete - see Legend]")]
     public partial class LayerLegendSample : ContentPage
 	{
 		public LayerLegendSample()

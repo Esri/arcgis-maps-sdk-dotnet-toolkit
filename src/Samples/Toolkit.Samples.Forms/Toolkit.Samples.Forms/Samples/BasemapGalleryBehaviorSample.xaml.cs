@@ -9,7 +9,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Exercises various bindings, properties, and interaction behaviors.")]
+    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Exercises various bindings, properties, and interaction behaviors")]
     public partial class BasemapGalleryBehaviorSample : ContentPage
     {
         public BasemapGalleryBehaviorSample()

@@ -6,7 +6,7 @@
              xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
              xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
              mc:Ignorable="d"
-             Title="Bookmarks - MapView"
+             Title="Bookmarks - templating"
              x:Class="Toolkit.Samples.Forms.Samples.BookmarksViewTemplatedSample">
     <ContentPage.Content>
         <Grid>

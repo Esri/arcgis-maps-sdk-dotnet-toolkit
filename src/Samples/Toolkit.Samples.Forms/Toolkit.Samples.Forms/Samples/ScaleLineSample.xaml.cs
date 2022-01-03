@@ -11,7 +11,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "ScaleLine")]
+    [SampleInfoAttribute(Category = "ScaleLine", Description = "Demonstrates ScaleLine.")]
     public partial class ScaleLineSample : ContentPage
 	{
 		public ScaleLineSample ()
