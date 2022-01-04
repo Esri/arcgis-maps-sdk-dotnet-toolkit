@@ -51,9 +51,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
             }
         }
         
-        private async void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            var btn = (sender as System.Windows.Controls.Button);
+            if (sender is Button btn)
+            {
+                _ = HandleApply(btn);
+            }
+        }
+
+        private async Task HandleApply(Button btn)
+        {
             var feature = btn.DataContext as ArcGISFeature;
             if(feature != null)
             {

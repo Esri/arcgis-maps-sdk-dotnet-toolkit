@@ -1,6 +1,7 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -29,7 +30,9 @@ namespace Toolkit.Samples.Forms.Samples
             }
         }
 
-        private async void AddDefaultLocator_Click(object sender, EventArgs e)
+        private void AddDefaultLocator_Click(object sender, EventArgs e) => _ = HandleAddDefault();
+
+        private async Task HandleAddDefault()
         {
             try
             {

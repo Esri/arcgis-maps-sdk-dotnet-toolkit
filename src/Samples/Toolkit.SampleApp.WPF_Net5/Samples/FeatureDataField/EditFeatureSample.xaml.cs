@@ -34,7 +34,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
 
         private System.Threading.CancellationTokenSource tcs;
 
-        private async void mapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
+        private void mapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e) => _ = HandleTap(e);
+
+        private async Task HandleTap(ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
             if (tcs != null)
                 tcs.Cancel();
@@ -49,8 +51,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
                     return;
                 ShowEditPanel(feature);
             }
-            catch(System.Exception)
+            catch(Exception ex)
             {
+                MessageBox.Show(ex.Message);
             }
             finally
             {
@@ -77,14 +80,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
             mapView.Effect = null;
         }
 
-        private async void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void ApplyButton_Click(object sender, RoutedEventArgs e) => _ = HandleApply(sender as Button);
+
+        private async Task HandleApply(Button btn)
         {
             if(DamageField.ValidationException != null || OccupantsField.ValidationException != null || DescriptionField.ValidationException != null)
             {
                 MessageBox.Show("Some fields contain an invalid value");
                 return;
             }
-            var btn = (sender as System.Windows.Controls.Button);
             var feature = btn.DataContext as ArcGISFeature;
             if (feature != null)
             {
@@ -105,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
                     var result = await table.ApplyEditsAsync(); //Push edits back to the server
                     CloseEditPanel();
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show("Failed to submit data back to the server: " + ex.Message);
                 }

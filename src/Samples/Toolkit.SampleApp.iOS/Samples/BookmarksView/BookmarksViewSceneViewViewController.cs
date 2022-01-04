@@ -2,6 +2,7 @@
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
+using System.Threading.Tasks;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
@@ -24,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
 
-            configureSlides();
+            _ = configureSlides();
 
             this.View.AddSubview(_sceneView);
 
@@ -47,17 +48,24 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             _bookmarksView.View.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
         }
 
-        private async void configureSlides()
+        private async Task configureSlides()
         {
-            // Note: adding bookmarks manually because RT doesn't support reading bookmarks from web scenes as of 100.7
-            Scene scene = _sceneView.Scene;
-            await scene.LoadAsync();
+            try
+            {
+                // Note: adding bookmarks manually because RT doesn't support reading bookmarks from web scenes as of 100.7
+                Scene scene = _sceneView.Scene;
+                await scene.LoadAsync();
 
-            Viewpoint vp = new Viewpoint(0, 0, 1500, new Camera(0, 0, 150000, 60, 35, 20));
-            scene.Bookmarks.Add(new Bookmark("0,0", vp));
+                Viewpoint vp = new Viewpoint(0, 0, 1500, new Camera(0, 0, 150000, 60, 35, 20));
+                scene.Bookmarks.Add(new Bookmark("0,0", vp));
 
-            Viewpoint vp2 = new Viewpoint(47.876126, -121.779435, 1000, new Camera(47.876126, -121.779435, 1500, 100, 35, 0));
-            scene.Bookmarks.Add(new Bookmark("🍎 Apples", vp2));
+                Viewpoint vp2 = new Viewpoint(47.876126, -121.779435, 1000, new Camera(47.876126, -121.779435, 1500, 100, 35, 0));
+                scene.Bookmarks.Add(new Bookmark("🍎 Apples", vp2));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
         }
     }
 }

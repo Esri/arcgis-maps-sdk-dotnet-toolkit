@@ -6,6 +6,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Visibility = Windows.UI.Xaml.Visibility;
@@ -43,10 +44,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
             }
         }
 
+        private void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e) => _ = HandleTapped(e);
 
-        private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
+        private async Task HandleTapped(GeoViewInputEventArgs e)
         {
-            Exception error = null;
             try
             {
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
@@ -75,10 +76,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
             }
             catch (Exception ex)
             {
-                error = ex;
+                await new MessageDialog(ex.Message, ex.GetType().Name).ShowAsync();
             }
-            if (error != null)
-                await new MessageDialog(error.Message, error.GetType().Name).ShowAsync();
         }
 
         private Popup GetPopup(IdentifyLayerResult result)

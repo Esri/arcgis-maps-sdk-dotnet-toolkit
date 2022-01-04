@@ -2,6 +2,8 @@
 using Esri.ArcGISRuntime.Toolkit.UI;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -32,25 +34,31 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
             }
         }
 
-        private async void Button_Load_Portal(object sender, RoutedEventArgs e)
+        private void Button_Load_Portal(object sender, RoutedEventArgs e) => _ = HandleLoadPortal();
+
+        private async Task HandleLoadPortal()
         {
             try
             {
                 Gallery.Portal = await Portal.ArcGISPortal.CreateAsync(new Uri("https://arcgisruntime.maps.arcgis.com/"));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                await new MessageDialog(ex.Message).ShowAsync();
             }
         }
 
-        private async void Button_Load_AGOL(object sender, RoutedEventArgs e)
+        private void Button_Load_AGOL(object sender, RoutedEventArgs e) => _ = HandleLoadAGOL();
+        private async Task HandleLoadAGOL()
         {
             try
             {
                 Gallery.Portal = await Portal.ArcGISPortal.CreateAsync();
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                await new MessageDialog(ex.Message).ShowAsync();
+            }
         }
 
         private void Button_Switch_To_Map(object sender, RoutedEventArgs e)
@@ -74,17 +82,26 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
             Gallery.GeoModel = null;
         }
 
-        private async void Button_Add_Last(object sender, RoutedEventArgs e)
-        {
-            BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
-            item.Name = "With Thumbnail";
-            item.Tooltip = Guid.NewGuid().ToString();
-            item.Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
-            Gallery.AvailableBasemaps.Add(item);
+        private void Button_Add_Last(object sender, RoutedEventArgs e) => _ = HandleAddLast();
 
-            BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
-            item2.Name = "Without Thumbnail";
-            Gallery.AvailableBasemaps.Add(item2);
+        private async Task HandleAddLast()
+        {
+            try
+            {
+                BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
+                item.Name = "With Thumbnail";
+                item.Tooltip = Guid.NewGuid().ToString();
+                item.Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
+                Gallery.AvailableBasemaps.Add(item);
+
+                BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
+                item2.Name = "Without Thumbnail";
+                Gallery.AvailableBasemaps.Add(item2);
+            }
+            catch (Exception ex)
+            {
+                await new MessageDialog(ex.Message).ShowAsync();
+            }
         }
 
         private void Button_Remove_Last(object sender, RoutedEventArgs e)

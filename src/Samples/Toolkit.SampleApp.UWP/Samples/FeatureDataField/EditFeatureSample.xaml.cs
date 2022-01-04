@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -36,7 +38,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
 
         private System.Threading.CancellationTokenSource tcs;
 
-        private async void mapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
+        private void mapView_GeoViewTapped(object sender, ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e) => _ = HandleTapped(e);
+
+        private async Task HandleTapped(ArcGISRuntime.UI.Controls.GeoViewInputEventArgs e)
         {
             if (tcs != null)
                 tcs.Cancel();
@@ -50,8 +54,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
                     return;
                 ShowEditPanel(feature);
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
+                await new MessageDialog(ex.Message).ShowAsync();
             }
         }
         
@@ -83,14 +88,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
                 AnimationExtensions.Blur(mapView, 0).Start();
         }
 
-        private async void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void ApplyButton_Click(object sender, RoutedEventArgs e) => _ = HandleApply(sender as Button);
+
+        private async Task HandleApply(Button btn)
         {
             if (DamageField.ValidationException != null || OccupantsField.ValidationException != null || DescriptionField.ValidationException != null)
             {
                 var _ = new Windows.UI.Popups.MessageDialog("Some fields contain an invalid value").ShowAsync();
                 return;
             }
-            var btn = (sender as Button);
             var feature = btn.DataContext as ArcGISFeature;
             if (feature != null)
             {
