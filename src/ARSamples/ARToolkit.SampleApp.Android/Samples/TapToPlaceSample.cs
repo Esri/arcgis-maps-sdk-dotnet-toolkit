@@ -1,23 +1,9 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Runtime;
 using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
 using Esri.ArcGISRuntime.Mapping;
-using Android.Opengl;
-using Google.AR.Core;
-using Google.AR.Core.Exceptions;
-using System;
-using Javax.Microedition.Khronos.Egl;
-using Javax.Microedition.Khronos.Opengles;
-using Android.Support.V4.Content;
-using Android.Support.V4.App;
-using Android.Support.Design.Widget;
-using System.Collections.Generic;
-using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.UI.Controls;
 using System.Threading.Tasks;
-using Android.Views;
 
 namespace ARToolkit.SampleApp.Samples
 {
@@ -30,9 +16,14 @@ namespace ARToolkit.SampleApp.Samples
         Description = "This demonstrates the table-top experience, where you can double-tap a surface to place the scene on that surface")]
     public class TapToPlaceSample : ARActivityBase
     {
-        protected override async void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            _ = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
             try
             {
                 var p = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
@@ -46,7 +37,7 @@ namespace ARToolkit.SampleApp.Samples
                 scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
                 ARView.Scene = scene;
                 //We'll set the origin of the scene in the middle so we can use that as the tie-point
-                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(39.9579126, -75.1705827, 9.64, 0, 90, 0);
+                ARView.OriginCamera = new Camera(39.9579126, -75.1705827, 9.64, 0, 90, 0);
                 ARView.TranslationFactor = 1000; // By increasing the translation factor, the scene appears as if it's at scale 1:1000
                 ARView.NorthAlign = false;
                 //Set the clipping distance to only render a circular area around the origin

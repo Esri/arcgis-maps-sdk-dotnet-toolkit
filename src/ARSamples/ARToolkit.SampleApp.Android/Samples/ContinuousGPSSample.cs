@@ -1,27 +1,13 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Runtime;
-using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.Mapping;
-using Android.Opengl;
-using Google.AR.Core;
-using Google.AR.Core.Exceptions;
-using System;
-using Javax.Microedition.Khronos.Egl;
-using Javax.Microedition.Khronos.Opengles;
-using Android.Support.V4.Content;
-using Android.Support.V4.App;
-using Android.Support.Design.Widget;
-using System.Collections.Generic;
-using Esri.ArcGISRuntime.Geometry;
-using System.Threading.Tasks;
-using Android.Content.PM;
-using Esri.ArcGISRuntime.Location;
-using Esri.ArcGISRuntime.ARToolkit;
 using Android.Views;
-using Android.Hardware;
+using Android.Widget;
+using Esri.ArcGISRuntime.ARToolkit;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
+using Esri.ArcGISRuntime.Mapping;
+using System;
+using System.Threading.Tasks;
 
 namespace ARToolkit.SampleApp.Samples
 {
@@ -39,13 +25,18 @@ namespace ARToolkit.SampleApp.Samples
         protected override ARSceneView SetContentView()
         {
             SetContentView(Resource.Layout.fullscalear);            
-            return FindViewById<Esri.ArcGISRuntime.ARToolkit.ARSceneView>(Resource.Id.sceneView1);
+            return FindViewById<ARSceneView>(Resource.Id.sceneView1);
         }
 
-        protected override async void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
+            _ = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
             //Configure ARView for 1:1 AR
             ARView.TranslationFactor = 1; // 1:1 AR Scale
             //ARView.UseCompass = true; // Attempt to align with north
@@ -79,7 +70,7 @@ namespace ARToolkit.SampleApp.Samples
             {
                 await Scene.LoadAsync();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Toast.MakeText(this, "Failed to load scene: \n" + ex.Message, ToastLength.Long).Show();
                 return;
@@ -115,13 +106,13 @@ namespace ARToolkit.SampleApp.Samples
         }
 
         [Java.Interop.Export("btnSurfaceClick")]
-        public void btnSurfaceClick(View v) => SnapToSurface(ARView.Camera?.Location);
+        public void btnSurfaceClick(View v) => _ = SnapToSurface(ARView.Camera?.Location);
         [Java.Interop.Export("btnUpClick")]
         public void btnUpClick(View v) => AdjustElevation(1);
         [Java.Interop.Export("btnDownClick")]
         public void btnDownClick(View v) => AdjustElevation(-1);
 
-        private async void SnapToSurface(MapPoint location)
+        private async Task SnapToSurface(MapPoint location)
         {
             if (location == null) return;
             if (Scene?.Basemap?.LoadStatus == Esri.ArcGISRuntime.LoadStatus.Loaded)
@@ -139,7 +130,7 @@ namespace ARToolkit.SampleApp.Samples
                     ARView.OriginCamera = ARView.OriginCamera.MoveTo(location);
                     ARView.ResetTracking();
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Toast.MakeText(this, "Failed to snap location to terrain\n" + ex.Message, ToastLength.Short).Show();
                 }
