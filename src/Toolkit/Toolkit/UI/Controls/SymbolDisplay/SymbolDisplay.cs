@@ -90,14 +90,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     return;
                 }
 
-                _isRefreshRequired = false;
-                var task = _currentUpdateTask = UpdateSwatchAsync();
-                await task;
-                _currentUpdateTask = null;
-                if (_isRefreshRequired)
+                do
                 {
-                    await Refresh();
-                }
+                    _isRefreshRequired = false;
+                    var task = _currentUpdateTask = UpdateSwatchAsync();
+                    await task;
+                } while (_isRefreshRequired);
+                _currentUpdateTask = null;
             }
             catch (Exception)
             {
