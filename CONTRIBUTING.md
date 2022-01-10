@@ -31,7 +31,7 @@ This guide describes how you can contribute improvements to the ArcGIS Runtime S
 
 1. Push the changes in your feature branch to your repo.
 2. Submit a [pull request](https://help.github.com/articles/using-pull-requests) against the "main" branch.
-3. In the pull request comments, add a reference to the issue the pull request resolves. For example, if the pull request resolves issue 45, add a comment to the pull request that includes "#45" (no quotes).
+3. In the pull request comments, add a reference to the issue the pull request resolves. For example, if the pull request resolves issue 45, add a comment to the pull request that includes `#45`.
 
 ### Code reviews
 

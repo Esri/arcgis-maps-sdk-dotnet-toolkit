@@ -10,7 +10,7 @@
 
 # ArcGIS Runtime SDK for .NET - Toolkit
 
-The ArcGIS Runtime SDK for .NET Toolkit contains controls and components you can use to accelerate your development with [ArcGIS Runtime SDK for .NET](https://developers.arcgis.com/net/).
+The ArcGIS Runtime SDK for .NET Toolkit contains controls and components to accelerate your development with [ArcGIS Runtime SDK for .NET](https://developers.arcgis.com/net/).
 
 [![Link: Toolkit Guide](https://img.shields.io/badge/%F0%9F%93%84-Toolkit%20Guide-633b9b?style=flat-square)](https://esri.github.io/arcgis-toolkit-dotnet/controls.html)
 [![Link: Toolkit API Reference (landing page)](https://img.shields.io/badge/Toolkit%20API%20Reference:-fff?style=flat-square)](https://esri.github.io/arcgis-toolkit-dotnet/api/index.html)
@@ -20,8 +20,22 @@ The ArcGIS Runtime SDK for .NET Toolkit contains controls and components you can
 [![Link: Toolkit API Reference - WPF](https://img.shields.io/badge/WPF-0078d6?style=flat-square&labelColor=gray&logo=windowsxp)](https://esri.github.io/arcgis-toolkit-dotnet/api/netfx/index.html)
 [![Link: Toolkit API Reference - UWP](https://img.shields.io/badge/UWP-0078d6?style=flat-square&labelColor=gray&logo=windows)](https://esri.github.io/arcgis-toolkit-dotnet/api/uwp/index.html)
 
-| <img width="150" alt="Basemap Gallery" src="https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png" /> | <img alt="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" /> | <img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" width="150" alt="Overview Map" /> | <img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" alt="Legend" /> |
-| --- | ---- | ---- | ---- |
+<table aria-hidden="true">
+<tr>
+<td>
+<img width="150" title="Basemap Gallery" src="https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png" />
+</td>
+<td>
+<img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" width="150" title="Overview Map" />
+</td>
+<td>
+<img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" title="Legend" />
+</td>
+<td>
+<img title="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" />
+</td>
+</tr>
+</table>
 
 ## Features
 
@@ -55,11 +69,13 @@ The simplest way to get started is to add the NuGet package(s) to your projects:
 
 ## Customize
 
-Toolkit is provided as an open source project to enable you to customize for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
+The ArcGIS Runtime SDK Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
 ## Contribute
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
+
+Toolkit is provided as an open source project to enable you to customize for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
 Find a bug or want to request a new feature? Please let us know by [submitting an issue](https://github.com/Esri/arcgis-toolkit-dotnet/issues/new).
 
