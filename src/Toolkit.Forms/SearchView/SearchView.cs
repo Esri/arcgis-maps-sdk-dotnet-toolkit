@@ -438,6 +438,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     }
                 }
 
+                sendingView.HandleViewpointChanged();
+
                 if (newValue is GeoView newGeoView)
                 {
                     (newGeoView as INotifyPropertyChanged).PropertyChanged += sendingView.HandleMapChange;
@@ -614,8 +616,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// </summary>
         private void HandleViewpointChanged()
         {
-            if (SearchViewModel == null || GeoView == null)
+            if (SearchViewModel == null)
             {
+                return;
+            }
+
+            if (GeoView == null)
+            {
+                SearchViewModel.QueryArea = null;
+                SearchViewModel.QueryCenter = null;
                 return;
             }
 
