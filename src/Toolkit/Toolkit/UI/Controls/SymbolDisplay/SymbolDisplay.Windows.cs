@@ -45,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
-            _ = Refresh();
+            Refresh();
         }
 
         /// <summary>

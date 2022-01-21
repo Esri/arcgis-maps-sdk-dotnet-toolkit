@@ -68,17 +68,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     OnEventAction = (instance, source, eventArgs) =>
                     {
-                        _ = Refresh();
+                        Refresh();
                     },
                     OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 newValue.PropertyChanged += _inpcListener.OnEvent;
             }
 
-            _ = Refresh();
+            Refresh();
         }
 
-        private async Task Refresh()
+        private async void Refresh()
         {
             try
             {
