@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Symbology;
 #if NETFX_CORE
@@ -79,21 +80,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void Refresh()
         {
-            if (_currentUpdateTask != null)
+            try
             {
-                // Instead of refreshing immediately when a refresh is already in progress, avoid updating too frequently, but just flag it dirty
-                // This avoid multiple refreshes where properties change very frequently, but just the latest state gets refreshed.
-                _isRefreshRequired = true;
-                return;
-            }
+                if (_currentUpdateTask != null)
+                {
+                    // Instead of refreshing immediately when a refresh is already in progress, avoid updating too frequently, but just flag it dirty
+                    // This avoid multiple refreshes where properties change very frequently, but just the latest state gets refreshed.
+                    _isRefreshRequired = true;
+                    return;
+                }
 
-            _isRefreshRequired = false;
-            var task = _currentUpdateTask = UpdateSwatchAsync();
-            await task;
-            _currentUpdateTask = null;
-            if (_isRefreshRequired)
+                do
+                {
+                    _isRefreshRequired = false;
+                    var task = _currentUpdateTask = UpdateSwatchAsync();
+                    await task;
+                } while (_isRefreshRequired);
+                _currentUpdateTask = null;
+            }
+            catch (Exception)
             {
-                Refresh();
+                // Ignore
             }
         }
 
