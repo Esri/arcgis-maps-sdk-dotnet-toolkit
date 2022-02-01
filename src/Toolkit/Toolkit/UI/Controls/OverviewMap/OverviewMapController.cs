@@ -29,7 +29,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 #endif
 
 #if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.FormsShared
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls.Forms
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
