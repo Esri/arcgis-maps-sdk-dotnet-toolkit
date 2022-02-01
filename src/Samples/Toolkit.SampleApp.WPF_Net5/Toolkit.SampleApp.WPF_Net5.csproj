@@ -9,10 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="**\*.png">
+    <Content Include="**\*.png" Exclude="bin\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Remove="bin\**" />
   </ItemGroup>
 
   <ItemGroup>

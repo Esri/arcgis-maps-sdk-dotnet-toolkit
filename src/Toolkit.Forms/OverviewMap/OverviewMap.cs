@@ -16,7 +16,6 @@
 
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls.Forms;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
