@@ -12,14 +12,7 @@
     <Content Include="**\*.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="bin\**" />
     <Content Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-    <Page Remove="bin\**" />
   </ItemGroup>
 
   <ItemGroup>
