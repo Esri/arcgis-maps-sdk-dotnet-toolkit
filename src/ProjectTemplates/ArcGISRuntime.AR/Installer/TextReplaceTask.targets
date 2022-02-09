@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="TextReplaceTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Filename ParameterType="System.String" Required="true" />
+      <OutFilename ParameterType="System.String" Required="false" />
+      <OldText ParameterType="System.String" Required="true" />
+      <NewText ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Core" />
+      <Reference Include="System.IO.Compression" />
+      <Reference Include="System.IO.Compression.FileSystem" />
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.IO.Compression" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Collections.Generic" />
+      <Using Namespace="Microsoft.Build.Framework" />
+      <Using Namespace="Microsoft.Build.Utilities" />
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+            string[] files = new string[] { Filename };
+            if(Filename.Contains("*"))
+            {
+                if (!string.IsNullOrEmpty(OutFilename))
+                    throw new ArgumentException("OutFilename parameter is not supported with wildcards");
+                var pattern = Filename.Substring(Filename.LastIndexOf("\\") + 1);
+                if (Filename.Contains("\\**\\"))
+                {
+                    string directory = Filename.Substring(0, Filename.IndexOf("\\**\\"));
+                    files = Directory.GetFiles(directory, pattern, SearchOption.AllDirectories);
+                }
+                else
+                {
+                    string directory = Filename.Substring(0, Filename.Length - pattern.Length - 1);
+                    files = Directory.GetFiles(directory, pattern, SearchOption.TopDirectoryOnly);
+                }
+            }
+            bool replacedStrings = false;
+            foreach (var file in files)
+            {
+                Log.LogMessage(MessageImportance.High, "Replacing string '" + OldText + "' with '" + NewText + "' in file '" + file + "'");
+                FileInfo fileInfo = new FileInfo(file);
+                if (!fileInfo.Exists)
+                {
+                    continue;
+                }
+                if (fileInfo.Extension.ToLower() == ".zip")
+                {
+                
+                    ZipArchive z = null;
+                    if(!string.IsNullOrEmpty(OutFilename))
+                    {
+                        var fi = new FileInfo(OutFilename);
+                        if (!fi.Directory.Exists) fi.Directory.Create();
+                        File.Copy(file, OutFilename, true);
+                        z = ZipFile.Open(OutFilename, ZipArchiveMode.Update);
+                    }
+                    else
+                        z = ZipFile.Open(file, ZipArchiveMode.Update);
+                    foreach (var entry in z.Entries)
+                    {
+                        string text = "";
+                        using (var sr = new StreamReader(entry.Open()))
+                        {
+                            text = sr.ReadToEnd();
+                        }
+                        if (text.Contains(OldText))
+                        {
+                            replacedStrings = true;
+                            text = text.Replace(OldText, NewText);
+                            using (var sw = new StreamWriter(entry.Open()))
+                            {
+                                sw.Write(text);
+                            }
+                        }
+                    }
+                    z.Dispose();
+                }
+                else
+                {
+                    var s = File.ReadAllText(file);
+                    bool contains = s.Contains(OldText);
+                    if (contains || !string.IsNullOrEmpty(OutFilename))
+                    {
+                        replacedStrings = replacedStrings | contains;
+                        s = s.Replace(OldText, NewText);
+                        if(string.IsNullOrEmpty(OutFilename)) {
+                            File.WriteAllText(file, s);
+                            Log.LogMessage(MessageImportance.High, "Replacement of string '" + OldText + "' saved to file '" + file + "'");
+                        }
+                        else
+                        {
+                           var fi = new FileInfo(OutFilename);
+                           if (!fi.Directory.Exists) fi.Directory.Create();
+                           File.WriteAllText(OutFilename, s);
+                           if(contains)
+                               Log.LogMessage(MessageImportance.High, "---Replacement of string '" + OldText + "' saved to file '" + OutFilename + "'");
+                        }
+                    }
+                }
+            }
+            if(!replacedStrings) 
+               Log.LogWarning("The replacement string '" + OldText + "' was not found in file(s) '" + Filename + "'");
+            ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>

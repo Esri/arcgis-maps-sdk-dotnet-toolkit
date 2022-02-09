@@ -1,0 +1,79 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>ArcGIS Runtime Augmented Reality App (Xamarin.Android)</Name>
+    <Description>An ArcGIS Runtime SDK for .NET project for creating an Augmented Reality (AR) application based on Android ARCore with ArcGIS Runtime functionality.</Description>
+    <Icon>TemplateIcon.ico</Icon>
+    <TemplateID>Esri.CS.AR.Android.ARApplication</TemplateID>
+    <DefaultName>ArcGISARApp</DefaultName>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+        <LocationField>Enabled</LocationField>
+        <PreviewImage>PreviewImage.PNG</PreviewImage>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>android</PlatformTag>
+    <ProjectTypeTag>mobile</ProjectTypeTag>
+    <ProjectTypeTag>ArcGIS</ProjectTypeTag>
+
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$safeprojectname$.csproj" File="Android.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="MainActivity.cs"  OpenInEditor="true" OpenOrder="10">MainActivity.cs</ProjectItem>
+      <Folder Name="Assets" TargetFolderName="Assets">
+        <ProjectItem ReplaceParameters="false" TargetFileName="AboutAssets.txt">AboutAssets.txt</ProjectItem>
+      </Folder>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AndroidManifest.xml">AndroidManifest.xml</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Resources" TargetFolderName="Resources">
+        <Folder Name="layout" TargetFolderName="layout">
+          <ProjectItem ReplaceParameters="false" TargetFileName="main.axml">main.axml</ProjectItem>
+        </Folder>
+        <Folder Name="mipmap-anydpi-v26" TargetFolderName="mipmap-anydpi-v26">
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher.xml">ic_launcher.xml</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_round.xml">ic_launcher_round.xml</ProjectItem>
+        </Folder>
+        <Folder Name="mipmap-hdpi" TargetFolderName="mipmap-hdpi">
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher.png">ic_launcher.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_foreground.png">ic_launcher_foreground.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_round.png">ic_launcher_round.png</ProjectItem>
+        </Folder>
+        <Folder Name="mipmap-mdpi" TargetFolderName="mipmap-mdpi">
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher.png">ic_launcher.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_foreground.png">ic_launcher_foreground.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_round.png">ic_launcher_round.png</ProjectItem>
+        </Folder>
+        <Folder Name="mipmap-xhdpi" TargetFolderName="mipmap-xhdpi">
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher.png">ic_launcher.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_foreground.png">ic_launcher_foreground.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_round.png">ic_launcher_round.png</ProjectItem>
+        </Folder>
+        <Folder Name="mipmap-xxhdpi" TargetFolderName="mipmap-xxhdpi">
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher.png">ic_launcher.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_foreground.png">ic_launcher_foreground.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_round.png">ic_launcher_round.png</ProjectItem>
+        </Folder>
+        <Folder Name="mipmap-xxxhdpi" TargetFolderName="mipmap-xxxhdpi">
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher.png">ic_launcher.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_foreground.png">ic_launcher_foreground.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_round.png">ic_launcher_round.png</ProjectItem>
+        </Folder>
+        <Folder Name="values" TargetFolderName="values">
+          <ProjectItem ReplaceParameters="false" TargetFileName="ic_launcher_background.xml">ic_launcher_background.xml</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="colors.xml">colors.xml</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="Strings.xml">Strings.xml</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="styles.xml">styles.xml</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="false" TargetFileName="AboutResources.txt">AboutResources.txt</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Resource.Designer.cs">Resource.Designer.cs</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+    <WizardExtension>
+        <Assembly>Xamarin.VisualStudio.TemplateWizards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756</Assembly>
+        <FullClassName>Xamarin.VisualStudio.TemplateWizards.AndroidTargetFrameworkVersionWizard</FullClassName>
+    </WizardExtension>
+</VSTemplate>

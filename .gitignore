@@ -123,3 +123,4 @@ src/ARToolkit/.vs/
 .tools
 src/Samples/Toolkit.SampleApp.Android/Resources/Resource.Designer.cs
 src/Samples/Toolkit.Samples.Forms/Toolkit.Samples.Forms.UWP/BundleArtifacts
+src/ProjectTemplates/.vs
