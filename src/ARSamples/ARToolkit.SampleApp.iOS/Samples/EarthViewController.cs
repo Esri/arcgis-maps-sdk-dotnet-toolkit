@@ -30,10 +30,10 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor)
             });
 
-            _ = InitializeAsync();
+            InitializeAsync();
         }
 
-        private async Task InitializeAsync()
+        private async void InitializeAsync()
         {
             var scene = new Scene(Basemap.CreateImagery());
             scene.BaseSurface = new Surface();
@@ -56,7 +56,7 @@ namespace ARToolkit.SampleApp.Samples
             if (ARView != null)
             {
                 ARView.LocationDataSource = new SystemLocationDataSource();
-                _ = ARView.StartTrackingAsync();
+                ARView.StartTrackingAsync();
             }
         }
 
@@ -66,7 +66,7 @@ namespace ARToolkit.SampleApp.Samples
 
             if (ARView != null)
             {
-                _ = ARView.StopTrackingAsync();
+                ARView.StopTrackingAsync();
             }
         }
     }

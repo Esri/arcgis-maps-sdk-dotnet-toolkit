@@ -86,11 +86,11 @@ namespace ARToolkit.SampleApp.Samples
 
             if (ARView != null)
             {
-                _ = LoadAndStart();
+                LoadAndStart();
             }
         }
 
-        private async Task LoadAndStart()
+        private async void LoadAndStart()
         {
             await _loadTask;
             ARView.LocationDataSource = new SystemLocationDataSource();
@@ -103,7 +103,7 @@ namespace ARToolkit.SampleApp.Samples
 
             if (ARView != null)
             {
-                _ = ARView.StopTrackingAsync();
+                ARView.StopTrackingAsync();
             }
         }
     }

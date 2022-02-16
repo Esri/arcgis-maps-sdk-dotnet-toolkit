@@ -27,7 +27,7 @@ namespace ARToolkit.SampleApp.Samples
                 {
                     new UIBarButtonItem("Up", UIBarButtonItemStyle.Plain, (s,e) => MoveVertical(1d)),
                     new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
-                    new UIBarButtonItem("Snap", UIBarButtonItemStyle.Plain, (s,e) => _ = SnapToSurface(ARView.Camera?.Location)),
+                    new UIBarButtonItem("Snap", UIBarButtonItemStyle.Plain, (s,e) => SnapToSurface(ARView.Camera?.Location)),
                     new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace),
                     new UIBarButtonItem("Down", UIBarButtonItemStyle.Plain, (s,e) => MoveVertical(-1d))
                 }
@@ -46,10 +46,10 @@ namespace ARToolkit.SampleApp.Samples
                 toolbar.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor)
             });
 
-            _ = InitializeAsync();
+            InitializeAsync();
         }
 
-        private async Task InitializeAsync()
+        private async void InitializeAsync()
         {
             var scene = new Scene(Basemap.CreateImagery());
             scene.Basemap.BaseLayers[0].Opacity = .5;
@@ -107,7 +107,7 @@ namespace ARToolkit.SampleApp.Samples
             if (ARView != null)
             {
                 ARView.LocationDataSource = new SystemLocationDataSource();
-                _ = ARView.StartTrackingAsync(ARLocationTrackingMode.Initial);
+                ARView.StartTrackingAsync(ARLocationTrackingMode.Initial);
             }
         }
 
@@ -117,7 +117,7 @@ namespace ARToolkit.SampleApp.Samples
 
             if (ARView != null)
             {
-                _ = ARView.StopTrackingAsync();
+                ARView.StopTrackingAsync();
             }
         }
     }

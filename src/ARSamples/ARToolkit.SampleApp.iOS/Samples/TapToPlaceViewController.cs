@@ -42,10 +42,10 @@ namespace ARToolkit.SampleApp.Samples
                 _planeSwitch.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor)
             });
 
-            _ = InitializeAsync();
+            InitializeAsync();
         }
 
-        private async Task InitializeAsync()
+        private async void InitializeAsync()
         {
             try
             {
@@ -112,7 +112,7 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.PlanesDetectedChanged += ARView_PlanesDetectedChanged;
                 ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
                 _planeSwitch.ValueChanged += Sw_ValueChanged;
-                _ = ARView.StartTrackingAsync();
+                ARView.StartTrackingAsync();
             }
         }
 
@@ -125,7 +125,7 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.PlanesDetectedChanged -= ARView_PlanesDetectedChanged;
                 ARView.GeoViewDoubleTapped -= ArView_GeoViewDoubleTapped;
                 _planeSwitch.ValueChanged -= Sw_ValueChanged;
-                _ = ARView.StopTrackingAsync();
+                ARView.StopTrackingAsync();
             }
         }
     }
