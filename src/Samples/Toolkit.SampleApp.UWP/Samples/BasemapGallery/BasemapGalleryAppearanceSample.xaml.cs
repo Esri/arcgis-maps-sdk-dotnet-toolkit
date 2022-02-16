@@ -2,8 +2,6 @@
 using Esri.ArcGISRuntime.Toolkit.UI;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -37,26 +35,17 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
             }
         }
 
-        private void Button_Add_Last(object sender, RoutedEventArgs e) => _ = HandleAddLast();
-
-        private async Task HandleAddLast()
+        private async void Button_Add_Last(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
-                item.Name = "With Thumbnail";
-                item.Tooltip = Guid.NewGuid().ToString();
-                item.Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
-                Gallery.AvailableBasemaps.Add(item);
+            BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
+            item.Name = "With Thumbnail";
+            item.Tooltip = Guid.NewGuid().ToString();
+            item.Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
+            Gallery.AvailableBasemaps.Add(item);
 
-                BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
-                item2.Name = "Without Thumbnail";
-                Gallery.AvailableBasemaps.Add(item2);
-            }
-            catch (Exception ex)
-            {
-                await new MessageDialog(ex.Message).ShowAsync();
-            }
+            BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
+            item2.Name = "Without Thumbnail";
+            Gallery.AvailableBasemaps.Add(item2);
         }
 
         private void Button_Remove_Last(object sender, RoutedEventArgs e)

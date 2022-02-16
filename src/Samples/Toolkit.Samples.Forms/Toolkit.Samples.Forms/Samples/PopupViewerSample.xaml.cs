@@ -34,9 +34,7 @@ namespace Toolkit.Samples.Forms.Samples
         }  // Used in Callout to see feature details in PopupViewer
         private RuntimeImage InfoIcon => new RuntimeImage(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png"));
 
-        private void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e) => _ = HandleTapped(e);
-
-        private async Task HandleTapped(GeoViewInputEventArgs e)
+        private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             Exception error = null;
             try

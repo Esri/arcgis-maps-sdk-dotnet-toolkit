@@ -31,19 +31,19 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Compass
         public Map Map { get; } = new Map(new Uri("http://www.arcgis.com/home/webmap/viewer.html?webmap=c50de463235e4161b206d000587af18b"));
 
 
-        private void RotateLeft_Click(object sender, RoutedEventArgs e)
+        private async void RotateLeft_Click(object sender, RoutedEventArgs e)
         {
-            _ = mapView.SetViewpointRotationAsync(mapView.MapRotation - 30);
+            await mapView.SetViewpointRotationAsync(mapView.MapRotation - 30);
         }
 
-        private void RotateRight_Click(object sender, RoutedEventArgs e)
+        private async void RotateRight_Click(object sender, RoutedEventArgs e)
         {
-            _ = mapView.SetViewpointRotationAsync(mapView.MapRotation + 30);
+            await mapView.SetViewpointRotationAsync(mapView.MapRotation + 30);
         }
 
-        private void Reset_Click(object sender, RoutedEventArgs e)
+        private async void Reset_Click(object sender, RoutedEventArgs e)
         {
-            _ = mapView.SetViewpointRotationAsync(0);
+            await mapView.SetViewpointRotationAsync(0);
         }
     }
 }

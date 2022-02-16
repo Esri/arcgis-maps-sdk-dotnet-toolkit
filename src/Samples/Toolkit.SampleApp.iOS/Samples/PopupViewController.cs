@@ -8,7 +8,6 @@ using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
@@ -23,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
         }
 
         private RuntimeImage InfoIcon;
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
             // Used to demonstrate display of EditSummary in PopupViewer
@@ -46,29 +45,24 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             mapView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
             
             // Used in Callout to see feature details in PopupViewer
+            InfoIcon = await UIImage.FromBundle("info.png")?.ToRuntimeImageAsync();
             mapView.GeoViewTapped += mapView_GeoViewTapped;
 
             // Webmap configured with Popup
             mapView.Map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
-        }
 
+        }
         public override void ViewDidDisappear(bool animated)
         {
             AuthenticationManager.Current.ChallengeHandler = null;
             base.ViewDidDisappear(animated);
         }
 
-        private void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e) => _ = HandleTap(e);
-
-        private async Task HandleTap(GeoViewInputEventArgs e)
+        private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             Exception error = null;
             try
             {
-                if (InfoIcon == null)
-                {
-                    InfoIcon = await UIImage.FromBundle("info.png")?.ToRuntimeImageAsync();
-                }
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
                 // Retrieves or builds Popup from IdentifyLayerResult
                 var popup = GetPopup(result);

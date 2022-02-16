@@ -11,7 +11,7 @@ using System.Linq;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.Security;
 using System.IO;
-using System.Threading.Tasks;
+
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
@@ -19,15 +19,20 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
     [SampleInfoAttribute(Category = "Popup", Description = "Use PopupViewer to display detailed feature information")]
     public class PopupSampleActivity : Activity
     {
-        private RuntimeImage InfoIcon = null;
+        private RuntimeImage _infoIcon = null;
+        private RuntimeImage InfoIcon => _infoIcon;
 
         UI.Controls.PopupViewer popupViewer;
         MapView mapView;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected async override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.PopupViewerSample);
+
+
+            // Used in Callout to see feature details in PopupViewer
+            _infoIcon = await RuntimeImage.FromStreamAsync(Assets.Open("info.png"));
 
             // Used to demonstrate display of EditSummary in PopupViewer
             // Provides credentials to token-secured layer that has editor-tracking enabled
@@ -46,18 +51,11 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             popupViewer = FindViewById<UI.Controls.PopupViewer>(Resource.Id.popupViewer);
         }
 
-        private void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e) => _ = HandleTapped(e);
-
-        private async Task HandleTapped(GeoViewInputEventArgs e)
+        private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             Exception error = null;
             try
             {
-                if (InfoIcon == null)
-                {
-                    InfoIcon = await RuntimeImage.FromStreamAsync(Assets.Open("info.png"));
-                }
-
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
 
                 // Retrieves or builds Popup from IdentifyLayerResult

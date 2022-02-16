@@ -3,7 +3,6 @@ using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -30,9 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.SearchView
             }
         }
 
-        private void AddDefaultLocator_Click(object sender, System.Windows.RoutedEventArgs e) => _ = HandleAddDefaultLocator();
-
-        private async Task HandleAddDefaultLocator()
+        private async void AddDefaultLocator_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try
             {
@@ -46,9 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.SearchView
             }
         }
 
-        private void AddSMPLocator_Click(object sender, RoutedEventArgs e) => _ = HandleAddSMPLocator();
-
-        private async Task HandleAddSMPLocator()
+        private async void AddSMPLocator_Click(object sender, RoutedEventArgs e)
         {
             // NOTE: You can download a sample of StreetMap Premium for testing purposes by visiting the downloads section of the ArcGIS Developer dashboard.
             string path = LocatorPathText.Text;

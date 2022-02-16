@@ -3,7 +3,6 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -36,32 +35,25 @@ namespace Toolkit.Samples.Forms.Samples
             }
         }
 
-        private void Button_Load_Portal(object sender, EventArgs e) => _ = HandleLoadPortal();
-
-        private async Task HandleLoadPortal()
+        private async void Button_Load_Portal(object sender, EventArgs e)
         {
             try
             {
                 Gallery.Portal = await Esri.ArcGISRuntime.Portal.ArcGISPortal.CreateAsync(new Uri("https://arcgisruntime.maps.arcgis.com/"));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await DisplayAlert("Error", ex.Message, "OK");
+
             }
         }
 
-        private void Button_Load_AGOL(object sender, EventArgs e) => _ = HandleLoadAGOL();
-
-        private async Task HandleLoadAGOL()
+        private async void Button_Load_AGOL(object sender, EventArgs e)
         {
             try
             {
                 Gallery.Portal = await Esri.ArcGISRuntime.Portal.ArcGISPortal.CreateAsync();
             }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
+            catch (Exception) { }
         }
 
         private void Button_Switch_To_Map(object sender, EventArgs e)
@@ -85,9 +77,7 @@ namespace Toolkit.Samples.Forms.Samples
             Gallery.GeoModel = null;
         }
 
-        private void Button_Add_Last(object sender, EventArgs e) => _ = HandleAddLast();
-
-        private async Task HandleAddLast()
+        private async void Button_Add_Last(object sender, EventArgs e)
         {
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
             item.Name = "With Thumbnail";

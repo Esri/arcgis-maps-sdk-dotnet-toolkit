@@ -5,7 +5,6 @@ using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -25,9 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
         // Used in Callout to see feature details in PopupViewer
         private RuntimeImage InfoIcon { get; } = new RuntimeImage(new Uri("Samples/PopupViewer/info.png", UriKind.Relative));
 
-        private void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e) => _ = HandleTap(e);
-
-        private async Task HandleTap(GeoViewInputEventArgs e)
+        private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             try
             {

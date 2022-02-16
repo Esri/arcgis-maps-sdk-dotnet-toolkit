@@ -3,7 +3,6 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,9 +18,7 @@ namespace Toolkit.Samples.Forms.Samples
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
         }
 
-        private void Button_Add_Item(object sender, EventArgs e) => _ = HandleAddItem();
-
-        private async Task HandleAddItem()
+        private async void Button_Add_Item(object sender, EventArgs e)
         {
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
             item.Name = "With Thumbnail";

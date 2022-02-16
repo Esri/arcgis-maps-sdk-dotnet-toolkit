@@ -1,7 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System;
-using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,9 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView
             }
         }
 
-        private void AddDefaultLocator_Click(object sender, RoutedEventArgs e) => _ = HandleAddDefault();
-
-        private async Task HandleAddDefault()
+        private async void AddDefaultLocator_Click(object sender, RoutedEventArgs e)
         {
             try
             {

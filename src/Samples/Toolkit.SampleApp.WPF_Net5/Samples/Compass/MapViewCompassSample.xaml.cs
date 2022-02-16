@@ -23,46 +23,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Compass
             InitializeComponent();
         }
         
-        private void RotateLeft_Click(object sender, RoutedEventArgs e) => _ = HandleRotateLeft();
-
-        private async Task HandleRotateLeft()
+        private async void RotateLeft_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                await mapView.SetViewpointRotationAsync(mapView.MapRotation - 30);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            await mapView.SetViewpointRotationAsync(mapView.MapRotation - 30);
         }
 
-        private void RotateRight_Click(object sender, RoutedEventArgs e) => _ = HandleRotateRight();
-
-        private async Task HandleRotateRight()
+        private async void RotateRight_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                await mapView.SetViewpointRotationAsync(mapView.MapRotation + 30);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            await mapView.SetViewpointRotationAsync(mapView.MapRotation + 30);
         }
 
-        private void Reset_Click(object sender, RoutedEventArgs e) => _ = HandleResetClick();
-
-        private async Task HandleResetClick()
+        private async void Reset_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                await mapView.SetViewpointRotationAsync(0);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            await mapView.SetViewpointRotationAsync(0);
         }
     }
 }
