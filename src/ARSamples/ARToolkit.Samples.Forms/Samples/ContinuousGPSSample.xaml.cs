@@ -19,7 +19,7 @@ namespace ARToolkit.SampleApp.Forms.Samples
             InitializeComponent();
         }
 
-        private async Task Init()
+        private async void Init()
         {
             try
             {
@@ -54,13 +54,13 @@ namespace ARToolkit.SampleApp.Forms.Samples
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _ = Init();
+            Init();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            _ = ARView.StopTrackingAsync();
+            ARView.StopTrackingAsync();
         }
 
         private void CompassOffset_ValueChanged(object sender, ValueChangedEventArgs e)

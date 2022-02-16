@@ -15,10 +15,10 @@ namespace ARToolkit.SampleApp.Forms.Samples
 		public TapToPlaceSample()
 		{
 			InitializeComponent();
-            _ = Init();
+            Init();
         }
 
-        private async Task Init()
+        private async void Init()
         {
             try
             {
@@ -61,13 +61,13 @@ namespace ARToolkit.SampleApp.Forms.Samples
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _ = ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+            ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            _ = ARView.StopTrackingAsync();
+            ARView.StopTrackingAsync();
         }
     }
 }

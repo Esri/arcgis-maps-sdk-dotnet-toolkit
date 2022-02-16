@@ -31,15 +31,11 @@ namespace ARToolkit.SampleApp.Samples
             return FindViewById<ARSceneView>(Resource.Id.sceneView1);
         }
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
-            _ = InitializeAsync();
-        }
 
-        private async Task InitializeAsync()
-        {
             // Configure ARView for 1:1 AR
             ARView.TranslationFactor = 1; // 1:1 AR Scale
             ARView.LocationDataSource = new SystemLocationDataSource();
@@ -109,7 +105,7 @@ namespace ARToolkit.SampleApp.Samples
 
 
         [Java.Interop.Export("btnSurfaceClick")]
-        public void btnSurfaceClick(View v) => _ = SnapToSurface(ARView.Camera?.Location);
+        public void btnSurfaceClick(View v) => SnapToSurface(ARView.Camera?.Location);
         [Java.Interop.Export("btnUpClick")]
         public void btnUpClick(View v) => AdjustElevation(1);
         [Java.Interop.Export("btnUpSmallClick")]
@@ -121,7 +117,7 @@ namespace ARToolkit.SampleApp.Samples
         [Java.Interop.Export("btnLeftClick")]
         public void btnLeftClick(View v) => AdjustHeading(1);
 
-        private async Task SnapToSurface(MapPoint location)
+        private async void SnapToSurface(MapPoint location)
         {
             if (location == null) return;
             if (Scene?.Basemap?.LoadStatus == Esri.ArcGISRuntime.LoadStatus.Loaded)

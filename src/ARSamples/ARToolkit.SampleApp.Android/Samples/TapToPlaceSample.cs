@@ -16,14 +16,9 @@ namespace ARToolkit.SampleApp.Samples
         Description = "This demonstrates the table-top experience, where you can double-tap a surface to place the scene on that surface")]
     public class TapToPlaceSample : ARActivityBase
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            _ = InitializeAsync();
-        }
-
-        private async Task InitializeAsync()
-        {
             try
             {
                 var p = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);

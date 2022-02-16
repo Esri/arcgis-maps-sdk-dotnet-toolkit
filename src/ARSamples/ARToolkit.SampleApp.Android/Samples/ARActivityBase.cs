@@ -59,9 +59,7 @@ namespace ARToolkit.SampleApp.Samples
             renderPlanes = turnOn;
         }
 
-        private void ARView_GeoViewTapped(object sender, GeoViewInputEventArgs e) => _ = HandleTap(e);
-
-        private async Task HandleTap(GeoViewInputEventArgs e)
+        private async void ARView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             var loc = await arView.ScreenToLocationAsync(e.Position);
             if (loc != null && loc.SpatialReference != null)
@@ -98,7 +96,7 @@ namespace ARToolkit.SampleApp.Samples
         protected override void OnPause()
         {
             base.OnPause();
-            _ = arView.StopTrackingAsync();
+            arView.StopTrackingAsync();
         }
 
         public override void OnWindowFocusChanged(bool hasFocus)

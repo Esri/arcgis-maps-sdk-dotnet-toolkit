@@ -15,14 +15,9 @@ namespace ARToolkit.SampleApp.Samples
     [SampleInfo(DisplayName = "Earth", Description = "Shows the entire earth hovering in front of you allowing you to walk around it")]
     public class EarthSample : ARActivityBase
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            _ = InitializeAsync();
-        }
-
-        private async Task InitializeAsync()
-        {
             try
             {
                 var scene = new Scene(Basemap.CreateImagery());

@@ -14,10 +14,10 @@ namespace ARToolkit.SampleApp.Forms.Samples
 		public EarthSample()
 		{
 			InitializeComponent();
-            _ = Init();
+            Init();
 		}
 
-        private async Task Init()
+        private async void Init()
         {
             try
             {

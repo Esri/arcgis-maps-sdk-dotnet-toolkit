@@ -18,12 +18,6 @@ namespace ARToolkit.SampleApp.Samples
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            _ = InitializeAsync();
-        }
-
-        private async Task InitializeAsync()
-        {
             try
             {
                 ARView.RenderVideoFeed = false;
@@ -36,7 +30,7 @@ namespace ARToolkit.SampleApp.Samples
                     BaseSurface = sceneSurface
                 };
                 ARView.Scene = scene;
-                await ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+                ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
             }
             catch (Exception ex)
             {
