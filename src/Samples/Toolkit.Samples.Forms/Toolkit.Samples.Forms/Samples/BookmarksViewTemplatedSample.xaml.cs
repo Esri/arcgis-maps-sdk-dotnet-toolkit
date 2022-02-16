@@ -6,6 +6,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    [SampleInfoAttribute(Category = "BookmarksView", Description = "BookmarksView with custom item templates")]
     public partial class BookmarksViewTemplatedSample : ContentPage
     {
         public BookmarksViewTemplatedSample()

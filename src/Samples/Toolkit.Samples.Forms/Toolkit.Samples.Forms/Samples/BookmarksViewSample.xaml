@@ -6,7 +6,7 @@
              xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
              xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
              mc:Ignorable="d"
-             Title="Bookmarks - MapView"
+             Title="Bookmarks - customization"
              x:Class="Toolkit.Samples.Forms.Samples.BookmarksViewSample">
     <ContentPage.Resources>
         <DataTemplate x:Key="ItemTemplateOne">

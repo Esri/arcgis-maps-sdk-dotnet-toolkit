@@ -1,21 +1,9 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Runtime;
 using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.Mapping;
-using Android.Opengl;
-using Google.AR.Core;
-using Google.AR.Core.Exceptions;
-using System;
-using Javax.Microedition.Khronos.Egl;
-using Javax.Microedition.Khronos.Opengles;
-using Android.Support.V4.Content;
-using Android.Support.V4.App;
-using Android.Support.Design.Widget;
-using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using System;
 using System.Threading.Tasks;
 
 namespace ARToolkit.SampleApp.Samples
@@ -36,16 +24,16 @@ namespace ARToolkit.SampleApp.Samples
                 scene.BaseSurface = new Surface();
                 scene.BaseSurface.BackgroundGrid.IsVisible = false;
                 scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
-                scene.BaseSurface.ElevationExaggeration = 10;
+                scene.BaseSurface.ElevationExaggeration = 50;
                 scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
                 ARView.TranslationFactor = 100000000;
                 // Set pitch to 0 so looking forward looks "down" on earth from space
-                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84), 0, 0, 0);
+                ARView.OriginCamera = new Camera(new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84), 0, 0, 0);
                 ARView.NorthAlign = false;
                 await scene.LoadAsync();
                 ARView.Scene = scene;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Toast.MakeText(this, "Failed to load scene: \n" + ex.Message, ToastLength.Long).Show();
             }

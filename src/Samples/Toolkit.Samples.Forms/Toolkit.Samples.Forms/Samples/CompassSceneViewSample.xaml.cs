@@ -11,7 +11,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "Compass", Description = "Compass used with a SceneView")]
+    [SampleInfoAttribute(Category = "Compass", Description = "Compass with SceneView sample")]
     public partial class CompassSceneViewSample : ContentPage
     {
         public CompassSceneViewSample()

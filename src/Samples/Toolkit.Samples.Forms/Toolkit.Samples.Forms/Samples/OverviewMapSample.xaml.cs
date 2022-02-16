@@ -7,7 +7,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "OverviewMap", Description = "OverviewMap sample")]
+    [SampleInfoAttribute(Category = "OverviewMap", Description = "Demonstrates various scenarios for the OverviewMap control.")]
     public partial class OverviewMapSample : ContentPage
     {
         private bool _symbolToggle;

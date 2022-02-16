@@ -16,7 +16,7 @@
                 <Label Text="AutoHide Compass" />
                 <Switch IsToggled="{Binding AutoHide, Source={x:Reference compass}}" />
                 <Label Text="Size" />
-                <Slider Value="30" Maximum="100" Minimum="10" ValueChanged="Slider_ValueChanged" MaximumTrackColor="Gray" />
+                <Slider Maximum="100" Minimum="10" Value="30" ValueChanged="Slider_ValueChanged" MaximumTrackColor="Gray" />
             </StackLayout>
 
         </Grid>

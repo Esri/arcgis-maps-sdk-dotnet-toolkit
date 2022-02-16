@@ -1,22 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using Esri.ArcGISRuntime.Data;
+﻿using Esri.ArcGISRuntime.ARToolkit;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Security;
-using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Tasks;
-using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UI.Controls;
+using System;
+using System.Threading.Tasks;
 using UIKit;
-using Esri.ArcGISRuntime.ARToolkit;
-using ARKit;
 
 namespace ARToolkit.SampleApp.Samples
 {
@@ -26,25 +14,12 @@ namespace ARToolkit.SampleApp.Samples
     {
         ARSceneView ARView;
 
-        public ManualCalibrationController() : base()
-        {
-        }
-        public ManualCalibrationController(IntPtr handle) : base(handle)
-        {
-        }
-
-        public override void ViewDidDisappear(bool animated)
-        {
-            ARView.StopTrackingAsync();
-            base.ViewDidDisappear(animated);
-        }
-
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
             // Create a new AR Scene View, set its scene, and provide the coordinates for laying it out
-            ARView = new ARSceneView() { TranslatesAutoresizingMaskIntoConstraints = false };
+            ARView = new ARSceneView() { TranslatesAutoresizingMaskIntoConstraints = false, RenderPlanes = true };
             UIToolbar toolbar = new UIToolbar()
             {
                 TranslatesAutoresizingMaskIntoConstraints = false,
@@ -57,7 +32,7 @@ namespace ARToolkit.SampleApp.Samples
                     new UIBarButtonItem("Down", UIBarButtonItemStyle.Plain, (s,e) => MoveVertical(-1d))
                 }
             };
-            ARView.RenderPlanes = true;
+
             View.AddSubviews(ARView, toolbar);
 
             NSLayoutConstraint.ActivateConstraints(new[]
@@ -71,7 +46,6 @@ namespace ARToolkit.SampleApp.Samples
                 toolbar.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor)
             });
 
-            var p = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
             var scene = new Scene(Basemap.CreateImagery());
             scene.Basemap.BaseLayers[0].Opacity = .5;
             scene.BaseSurface = new Surface();
@@ -89,8 +63,6 @@ namespace ARToolkit.SampleApp.Samples
 
             await scene.LoadAsync();
             ARView.Scene = scene;
-            ARView.LocationDataSource = new SystemLocationDataSource();
-            _ = ARView.StartTrackingAsync(ARLocationTrackingMode.Initial);
         }
 
         private void MoveVertical(double offset)
@@ -99,7 +71,7 @@ namespace ARToolkit.SampleApp.Samples
             ARView.OriginCamera = ARView.OriginCamera.MoveTo(new MapPoint(l.X, l.Y, l.Z + offset, l.SpatialReference));
         }
 
-        private async void SnapToSurface(MapPoint location)
+        private async Task SnapToSurface(MapPoint location)
         {
             if (location == null) return;
             if (ARView?.Scene?.Basemap?.LoadStatus == Esri.ArcGISRuntime.LoadStatus.Loaded)
@@ -117,10 +89,30 @@ namespace ARToolkit.SampleApp.Samples
                     ARView.OriginCamera = ARView.OriginCamera.MoveTo(location);
                     ARView.ResetTracking();
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
-                    //Failed to snap location to terrain
+                    // Failed to snap location to terrain
                 }
+            }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            if (ARView != null)
+            {
+                ARView.LocationDataSource = new SystemLocationDataSource();
+                ARView.StartTrackingAsync(ARLocationTrackingMode.Initial);
+            }
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            if (ARView != null)
+            {
+                ARView.StopTrackingAsync();
             }
         }
     }

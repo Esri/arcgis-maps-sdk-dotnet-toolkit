@@ -1,24 +1,11 @@
-﻿using Android.App;
-using Android.OS;
+﻿using Android.OS;
 using Android.Support.V7.App;
-using Android.Runtime;
-using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.Mapping;
-using Android.Opengl;
-using Google.AR.Core;
-using Google.AR.Core.Exceptions;
-using System;
-using Javax.Microedition.Khronos.Egl;
-using Javax.Microedition.Khronos.Opengles;
-using Android.Support.V4.Content;
-using Android.Support.V4.App;
-using Android.Support.Design.Widget;
-using System.Collections.Generic;
-using Esri.ArcGISRuntime.Geometry;
-using System.Threading.Tasks;
 using Android.Views;
-using System.Linq;
+using Android.Widget;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.UI.Controls;
+using System;
+using System.Threading.Tasks;
 
 namespace ARToolkit.SampleApp.Samples
 {
@@ -77,7 +64,7 @@ namespace ARToolkit.SampleApp.Samples
             var loc = await arView.ScreenToLocationAsync(e.Position);
             if (loc != null && loc.SpatialReference != null)
             {
-                Toast.MakeText(this, "Location: " + Esri.ArcGISRuntime.Geometry.CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 4), ToastLength.Short).Show();
+                Toast.MakeText(this, "Location: " + CoordinateFormatter.ToLatitudeLongitude(loc, LatitudeLongitudeFormat.DegreesDecimalMinutes, 4), ToastLength.Short).Show();
             }
         }
 
@@ -99,7 +86,7 @@ namespace ARToolkit.SampleApp.Samples
                     OnPlanesDetected(false);
                 }
             }
-            catch(System.Exception ex)
+            catch(Exception ex)
             {
                 Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
                 Finish();
@@ -118,13 +105,13 @@ namespace ARToolkit.SampleApp.Samples
 
             if (hasFocus)
             {
-                Window.AddFlags(Android.Views.WindowManagerFlags.KeepScreenOn);
+                Window.AddFlags(WindowManagerFlags.KeepScreenOn);
             }
         }
 
         protected virtual void OnPlanesDetected(bool detected)
         {
-            this.RunOnUiThread(() =>
+            RunOnUiThread(() =>
             {
                 var statusView = FindViewById<TextView>(Resource.Id.trackingStatus);
                 if(statusView != null) statusView.Visibility = detected ? ViewStates.Gone : ViewStates.Visible;

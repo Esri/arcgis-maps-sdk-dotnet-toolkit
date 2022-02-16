@@ -21,7 +21,9 @@
             <Slider Minimum="0" Maximum="360" Value="{Binding Symbol.Angle, Mode=TwoWay}" />
         </StackPanel>
 
-        <esri:SymbolDisplay Symbol="{Binding Symbol}" Grid.Column="1" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border BorderBrush="LightGray" BorderThickness="1" Grid.Column="1" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <esri:SymbolDisplay Symbol="{Binding Symbol}" />
+        </Border>
         
     </Grid>
 </UserControl>

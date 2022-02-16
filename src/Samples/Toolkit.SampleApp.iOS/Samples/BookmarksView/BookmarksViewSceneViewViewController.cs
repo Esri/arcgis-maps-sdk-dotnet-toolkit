@@ -6,7 +6,7 @@ using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
-    [SampleInfoAttribute(Category = "BookmarksView", DisplayName = "BookmarksView Scene Split", Description = "Shows bookmarks with a map")]
+    [SampleInfoAttribute(Category = "BookmarksView", DisplayName = "BookmarksView Scene Split", Description = "Shows bookmarks with a scene")]
     public partial class BookmarksViewSceneViewViewController : UIViewController
     {
         private BookmarksView _bookmarksView;
