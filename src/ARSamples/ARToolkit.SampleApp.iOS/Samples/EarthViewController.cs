@@ -14,7 +14,7 @@ namespace ARToolkit.SampleApp.Samples
     {
         ARSceneView ARView;
 
-        public override void ViewDidLoad()
+        public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
@@ -30,11 +30,6 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor)
             });
 
-            InitializeAsync();
-        }
-
-        private async void InitializeAsync()
-        {
             var scene = new Scene(Basemap.CreateImagery());
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;

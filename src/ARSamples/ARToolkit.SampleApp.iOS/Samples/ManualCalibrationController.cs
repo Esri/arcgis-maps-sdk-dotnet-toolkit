@@ -14,7 +14,7 @@ namespace ARToolkit.SampleApp.Samples
     {
         ARSceneView ARView;
 
-        public override void ViewDidLoad()
+        public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
@@ -46,11 +46,6 @@ namespace ARToolkit.SampleApp.Samples
                 toolbar.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor)
             });
 
-            InitializeAsync();
-        }
-
-        private async void InitializeAsync()
-        {
             var scene = new Scene(Basemap.CreateImagery());
             scene.Basemap.BaseLayers[0].Opacity = .5;
             scene.BaseSurface = new Surface();

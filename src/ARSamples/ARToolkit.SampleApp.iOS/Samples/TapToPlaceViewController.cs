@@ -17,7 +17,7 @@ namespace ARToolkit.SampleApp.Samples
         UILabel lbl;
         UISwitch _planeSwitch;
 
-        public override void ViewDidLoad()
+        public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
@@ -42,11 +42,6 @@ namespace ARToolkit.SampleApp.Samples
                 _planeSwitch.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor)
             });
 
-            InitializeAsync();
-        }
-
-        private async void InitializeAsync()
-        {
             try
             {
                 var p = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
