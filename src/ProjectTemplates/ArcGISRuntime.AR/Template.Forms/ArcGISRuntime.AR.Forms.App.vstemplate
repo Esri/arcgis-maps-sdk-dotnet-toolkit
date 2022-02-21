@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="ProjectGroup" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+    <TemplateData>
+        <Name>ArcGIS Runtime Augmented Reality App (Xamarin.Forms)</Name>
+        <Description>An ArcGIS Runtime SDK for .NET project for creating an Augmented Reality (AR) application for Android and iOS with ArcGIS Runtime functionality.</Description>
+        <Icon>TemplateIcon.ico</Icon>
+        <TemplateID>Esri.CS.AR.Forms.ARApplication</TemplateID>
+        <DefaultName>ArcGISARApp</DefaultName>
+        <ProjectType>CSharp</ProjectType>
+        <CreateInPlace>true</CreateInPlace>
+        <SortOrder>1000</SortOrder>
+        <CreateNewFolder>true</CreateNewFolder>
+        <LocationField>Enabled</LocationField>
+        <PreviewImage>PreviewImage.PNG</PreviewImage>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+        <ProvideDefaultName>true</ProvideDefaultName>
+        <LanguageTag>csharp</LanguageTag>
+        <PlatformTag>ios</PlatformTag>
+        <PlatformTag>android</PlatformTag>
+        <ProjectTypeTag>mobile</ProjectTypeTag>
+        <ProjectTypeTag>ArcGIS</ProjectTypeTag>
+    </TemplateData>
+    <TemplateContent>
+    <ProjectCollection>
+        <ProjectTemplateLink ProjectName="$safeprojectname$" CopyParameters="true">
+        App\App.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.iOS" CopyParameters="true">
+        iOS\iOS.vstemplate
+        </ProjectTemplateLink>
+        <ProjectTemplateLink ProjectName="$safeprojectname$.Android" CopyParameters="true">
+        Android\Android.vstemplate
+        </ProjectTemplateLink>
+    </ProjectCollection>
+    </TemplateContent>
+</VSTemplate>

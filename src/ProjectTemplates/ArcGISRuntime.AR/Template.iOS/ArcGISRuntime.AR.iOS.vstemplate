@@ -1,0 +1,56 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>ArcGIS Runtime Augmented Reality App (Xamarin.iOS)</Name>
+    <Description>An ArcGIS Runtime SDK for .NET project for creating an Augmented Reality (AR) application based on iOS ARKit with ArcGIS Runtime functionality.</Description>
+    <Icon>TemplateIcon.ico</Icon>
+    <TemplateID>Esri.CS.AR.iOS.ARApplication</TemplateID>
+    <DefaultName>ArcGISARApp</DefaultName>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+        <LocationField>Enabled</LocationField>
+        <PreviewImage>PreviewImage.PNG</PreviewImage>
+        <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+    <ProvideDefaultName>true</ProvideDefaultName>
+	<CreateInPlace>true</CreateInPlace> <!-- Workaround for files not visible in csproj not being created -->
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>ios</PlatformTag>
+    <ProjectTypeTag>mobile</ProjectTypeTag>
+    <ProjectTypeTag>ArcGIS</ProjectTypeTag>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="$safeprojectname$.csproj" File="iOS.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="AppDelegate.cs">AppDelegate.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Entitlements.plist">Entitlements.plist</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Info.plist">Info.plist</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="LaunchScreen.storyboard">LaunchScreen.storyboard</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Main.cs">Main.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ViewController.cs">ViewController.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="ViewController.designer.cs">ViewController.designer.cs</ProjectItem>
+      <Folder Name="Assets.xcassets" TargetFolderName="Assets.xcassets">
+        <Folder Name="AppIcon.appiconset" TargetFolderName="AppIcon.appiconset">
+          <ProjectItem ReplaceParameters="false" TargetFileName="Contents.json">Contents.json</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon1024.png">Icon1024.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon120.png">Icon120.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon152.png">Icon152.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon167.png">Icon167.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon180.png">Icon180.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon20.png">Icon20.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon29.png">Icon29.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon40.png">Icon40.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon58.png">Icon58.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon60.png">Icon60.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon76.png">Icon76.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon80.png">Icon80.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Icon87.png">Icon87.png</ProjectItem>
+        </Folder>
+      </Folder>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Resources" TargetFolderName="Resources">
+        <ProjectItem ReplaceParameters="true" TargetFileName="LaunchScreen.xib">LaunchScreen.xib</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+</VSTemplate>
