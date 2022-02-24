@@ -1413,9 +1413,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (timeStepInterval != null)
             {
-                // Check whether the time-aware layer supports filtering based on a time instant
-                var canUseInstantaneousTime = await CanUseInstantaneousTimeAsync(timeAwareLayer);
-
                 // Apply full extent and time step interval to slider properties
                 FullExtent = fullExtent;
                 TimeStepInterval = timeStepInterval;
@@ -1423,8 +1420,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // TODO: Double-check whether we can choose a better default for current extent - does not seem to be exposed
                 // at all in service metadata
                 CurrentExtent = fullExtent is null ? null :
-                    canUseInstantaneousTime || TimeSteps is null ?
-                    new TimeExtent(fullExtent.StartTime) : new TimeExtent(fullExtent.StartTime, TimeSteps.ElementAt(1));
+                    TimeSteps is null ? new TimeExtent(fullExtent.StartTime) : new TimeExtent(fullExtent.StartTime, TimeSteps.ElementAt(1));
 
                 // TODO: Initialize time-zone (will require converting time zone string to strong type)
             }
