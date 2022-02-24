@@ -2,30 +2,21 @@
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ARToolkit.SampleApp.Forms.Samples
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfo(DisplayName = "Continuous GPS Full-scale AR", Description = "Uses the device's GPS to continously snap the origin to your current location. Best results are achieved with a very high-accuracy GPS, and a good compass alignment.")]
     public partial class ContinuousGPSSample : ContentPage
 	{
         private Scene Scene;
-        private double verticalOffsetFromTerrain = 1.2;
 
         public ContinuousGPSSample()
 		{
             InitializeComponent();
-            var t = typeof(Esri.ArcGISRuntime.Location.LocationDataSource).Assembly.GetType("Esri.ArcGISRuntime.Location.SystemLocationDataSource");
-            var locationDataSource = (LocationDataSource)Activator.CreateInstance(t);
-            ARView.LocationDataSource = locationDataSource;
         }
 
         private async void Init()
@@ -50,9 +41,10 @@ namespace ARToolkit.SampleApp.Forms.Samples
 
                 await Scene.LoadAsync();
                 ARView.Scene = Scene;
+                ARView.LocationDataSource = LocationDataSource.CreateDefault();
                 await ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Continuous);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 await DisplayAlert("Failed to load scene", ex.Message, "OK");
                 await Navigation.PopAsync();
@@ -78,7 +70,6 @@ namespace ARToolkit.SampleApp.Forms.Samples
 
         private void VerticalOffset_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            verticalOffsetFromTerrain = e.NewValue;
             ARView.OriginCamera = ARView.OriginCamera.MoveTo(new MapPoint(ARView.OriginCamera.Location.X, ARView.OriginCamera.Location.Y, ARView.OriginCamera.Location.Z + e.NewValue - e.OldValue, ARView.OriginCamera.Location.SpatialReference));
         }
 

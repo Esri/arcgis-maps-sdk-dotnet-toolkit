@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AR", "AR", "{59CBA572-E567-4272-80D0-2177A7449E43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGISRuntime.AR.Forms.App", "ArcGISRuntime.AR\Template.Forms\ArcGISRuntime.AR.Forms.App.csproj", "{33CE3B91-CECD-45BC-94E3-7E00660C5FD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGISRuntime.AR.VsixInstaller", "ArcGISRuntime.AR\Installer\ArcGISRuntime.AR.VsixInstaller.csproj", "{DA30EA02-871C-44F9-897C-21FB3D8475DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{33CE3B91-CECD-45BC-94E3-7E00660C5FD0} = {33CE3B91-CECD-45BC-94E3-7E00660C5FD0}
+		{05B741D6-3318-41E4-BC7B-D17644D5F545} = {05B741D6-3318-41E4-BC7B-D17644D5F545}
+		{460D36E8-29B9-4F09-9F3E-A66ECC0C38CD} = {460D36E8-29B9-4F09-9F3E-A66ECC0C38CD}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGISRuntime.AR.Android", "ArcGISRuntime.AR\Template.Android\ArcGISRuntime.AR.Android.csproj", "{05B741D6-3318-41E4-BC7B-D17644D5F545}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGISRuntime.AR.iOS", "ArcGISRuntime.AR\Template.iOS\ArcGISRuntime.AR.iOS.csproj", "{460D36E8-29B9-4F09-9F3E-A66ECC0C38CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33CE3B91-CECD-45BC-94E3-7E00660C5FD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33CE3B91-CECD-45BC-94E3-7E00660C5FD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33CE3B91-CECD-45BC-94E3-7E00660C5FD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33CE3B91-CECD-45BC-94E3-7E00660C5FD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA30EA02-871C-44F9-897C-21FB3D8475DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA30EA02-871C-44F9-897C-21FB3D8475DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA30EA02-871C-44F9-897C-21FB3D8475DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA30EA02-871C-44F9-897C-21FB3D8475DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05B741D6-3318-41E4-BC7B-D17644D5F545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05B741D6-3318-41E4-BC7B-D17644D5F545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05B741D6-3318-41E4-BC7B-D17644D5F545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05B741D6-3318-41E4-BC7B-D17644D5F545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460D36E8-29B9-4F09-9F3E-A66ECC0C38CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460D36E8-29B9-4F09-9F3E-A66ECC0C38CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460D36E8-29B9-4F09-9F3E-A66ECC0C38CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460D36E8-29B9-4F09-9F3E-A66ECC0C38CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{33CE3B91-CECD-45BC-94E3-7E00660C5FD0} = {59CBA572-E567-4272-80D0-2177A7449E43}
+		{DA30EA02-871C-44F9-897C-21FB3D8475DD} = {59CBA572-E567-4272-80D0-2177A7449E43}
+		{05B741D6-3318-41E4-BC7B-D17644D5F545} = {59CBA572-E567-4272-80D0-2177A7449E43}
+		{460D36E8-29B9-4F09-9F3E-A66ECC0C38CD} = {59CBA572-E567-4272-80D0-2177A7449E43}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C72F2B9-EDD5-4085-8269-A4FA18D5F807}
+	EndGlobalSection
+EndGlobal

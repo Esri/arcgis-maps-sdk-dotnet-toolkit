@@ -9,7 +9,7 @@ using Xamarin.Forms.Xaml;
 namespace Toolkit.Samples.Forms.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Sample showing customization options related to appearance.")]
+    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Appearance customization sample")]
     public partial class BasemapGalleryAppearanceSample : ContentPage
     {
         public BasemapGalleryAppearanceSample()

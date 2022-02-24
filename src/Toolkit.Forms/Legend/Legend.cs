@@ -38,14 +38,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 var nameLabel = new Label { FontSize = 18, VerticalOptions = LayoutOptions.Center };
                 nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(Layer.Name)}");
-                return new ViewCell() { View = nameLabel };
+                return nameLabel;
             });
 
             s_DefaultSublayerItemTemplate = new DataTemplate(() =>
             {
                 var nameLabel = new Label { FontSize = 14, VerticalOptions = LayoutOptions.Center };
                 nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(ILayerContent.Name)}");
-                return new ViewCell() { View = nameLabel };
+                return nameLabel;
             });
 
             s_DefaultLegendInfoItemTemplate = new DataTemplate(() =>
@@ -57,15 +57,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 var nameLabel = new Label { FontSize = 12, VerticalOptions = LayoutOptions.Center };
                 nameLabel.SetBinding(Label.TextProperty, $"{nameof(LegendEntry.Content)}.{nameof(LegendInfo.Name)}");
                 sl.Children.Add(nameLabel);
-                return new ViewCell() { View = sl };
+                return sl;
             });
 
             string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
-                                    <ListView x:Name=""ListView"" HorizontalOptions=""Fill"" VerticalOptions=""Fill"" SelectionMode=""None"" SeparatorVisibility=""None"" >
-                                        <x:Arguments>
-                                            <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-                                        </x:Arguments>
-                                    </ListView>
+                                    <CollectionView x:Name=""ListView"" HorizontalOptions=""Fill"" VerticalOptions=""Fill"" />
                                 </ControlTemplate>";
             s_DefaultControlTemplate = global::Xamarin.Forms.Xaml.Extensions.LoadFromXaml<ControlTemplate>(new ControlTemplate(), template);
         }
@@ -89,7 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <inheritdoc />
         protected override void OnApplyTemplate()
         {
-            var list = GetTemplateChild("ListView") as ItemsView<Cell>;
+            var list = GetTemplateChild("ListView") as ItemsView;
             if (list != null)
             {
                 list.ItemTemplate = new LegendItemTemplateSelector(this);

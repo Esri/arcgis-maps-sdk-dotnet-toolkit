@@ -1,28 +1,14 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Runtime;
-using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.Mapping;
-using Android.Opengl;
-using Google.AR.Core;
-using Google.AR.Core.Exceptions;
-using System;
-using Javax.Microedition.Khronos.Egl;
-using Javax.Microedition.Khronos.Opengles;
-using Android.Support.V4.Content;
-using Android.Support.V4.App;
-using Android.Support.Design.Widget;
-using System.Collections.Generic;
-using Esri.ArcGISRuntime.Geometry;
-using System.Threading.Tasks;
-using Android.Content.PM;
-using Esri.ArcGISRuntime.Location;
-using Esri.ArcGISRuntime.ARToolkit;
 using Android.Views;
-using Android.Hardware;
+using Android.Widget;
+using Esri.ArcGISRuntime.ARToolkit;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
+using System;
+using System.Threading.Tasks;
 
 namespace ARToolkit.SampleApp.Samples
 {
@@ -42,7 +28,7 @@ namespace ARToolkit.SampleApp.Samples
             TrackingMode = ARLocationTrackingMode.Initial;
             SetContentView(Resource.Layout.manualcalibration);
             statusText = FindViewById<TextView>(Resource.Id.statusText);
-            return FindViewById<Esri.ArcGISRuntime.ARToolkit.ARSceneView>(Resource.Id.sceneView1);
+            return FindViewById<ARSceneView>(Resource.Id.sceneView1);
         }
 
         protected override async void OnCreate(Bundle savedInstanceState)
@@ -50,13 +36,13 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
 
 
-            //Configure ARView for 1:1 AR
+            // Configure ARView for 1:1 AR
             ARView.TranslationFactor = 1; // 1:1 AR Scale
             ARView.LocationDataSource = new SystemLocationDataSource();
             ARView.ViewpointChanged += ARView_ViewpointChanged; // Used for reporting the current heading on the UI
             TrackingMode = ARLocationTrackingMode.Initial; // Get the GPS location once, and snap origin to there
 
-            //Configure scene
+            // Configure scene
             Scene = new Scene(Basemap.CreateStreets());
             Scene.Basemap.BaseLayers[0].Opacity = .75;
             Scene.BaseSurface = new Esri.ArcGISRuntime.Mapping.Surface();
@@ -87,14 +73,13 @@ namespace ARToolkit.SampleApp.Samples
             {
                 await Scene.LoadAsync();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Toast.MakeText(this, "Failed to load scene: \n" + ex.Message, ToastLength.Long).Show();
                 return;
             }
             ARView.Scene = Scene;
         }
-
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {

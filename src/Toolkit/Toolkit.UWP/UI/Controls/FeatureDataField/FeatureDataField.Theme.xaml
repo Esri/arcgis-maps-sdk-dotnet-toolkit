@@ -146,7 +146,7 @@
                                                                            Foreground="{StaticResource TextBoxButtonForegroundThemeBrush}"
                                                                            FontFamily="{StaticResource SymbolThemeFontFamily}"
                                                                            HorizontalAlignment="Center"
-                                                                           Text="&#xE0A4;"
+                                                                           Text="&#xE711;"
                                                                            VerticalAlignment="Center" />
                                                             </Border>
                                                         </Grid>

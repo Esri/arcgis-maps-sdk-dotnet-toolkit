@@ -166,6 +166,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     double newAvgSize = (newView.Width + newView.Height) / 2;
                     IsEligibleForRequery = distance > threshold || newAvgSize > avgSize * 1.25 || newAvgSize < avgSize * 0.75;
                 }
+                else if (value == null)
+                {
+                    IsEligibleForRequery = false;
+                }
             }
         }
 

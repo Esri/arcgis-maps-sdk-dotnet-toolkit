@@ -1,23 +1,19 @@
 ﻿using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ARToolkit.SampleApp.Forms.Samples
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfo(DisplayName = "Earth", Description = "Shows the entire earth hovering in front of you, allowing you to walk around it")]
     public partial class EarthSample : ContentPage
 	{
-		public EarthSample ()
+		public EarthSample()
 		{
-			InitializeComponent ();
+			InitializeComponent();
             Init();
 		}
 
@@ -33,12 +29,12 @@ namespace ARToolkit.SampleApp.Forms.Samples
                 scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
                 ARView.TranslationFactor = 50000000;
                 // Set pitch to 0 so looking forward looks "down" on earth from space
-                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(0, 0, 10000000, SpatialReferences.Wgs84), 0, 0, 0);
+                ARView.OriginCamera = new Camera(new MapPoint(0, 0, 10000000, SpatialReferences.Wgs84), 0, 0, 0);
 
                 await scene.LoadAsync();
                 ARView.Scene = scene;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 await DisplayAlert("Failed to load scene", ex.Message, "OK");
                 await Navigation.PopAsync();

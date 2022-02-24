@@ -26,8 +26,10 @@
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
     <IsSampleProject Condition="'$(IsSampleProject)'!='true'">$(MSBuildProjectName.Contains('.SampleApp.'))</IsSampleProject>
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
-    <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true'">false</IsToolkitLibrary>
-    <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true'">true</IsToolkitLibrary>
+    <IsTemplateProject>$(MSBuildProjectDirectory.Contains('ProjectTemplates'))</IsTemplateProject>
+    
+    <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true' or $(IsTemplateProject) == 'true'">false</IsToolkitLibrary>
+    <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true'">true</IsToolkitLibrary>
 
     <!--Framework versions-->
     <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">18362</ArcGISRuntime_MinimumSupportedWindowsBuild>
@@ -86,7 +88,13 @@
     </None>
   </ItemGroup>
 
-   
+  <ItemGroup Condition="'$(TargetFramework.StartsWith(&quot;net6.0-windows&quot;))'=='true' AND '$(UseWPF)'=='true'">
+    <!-- Workaround for https://github.com/dotnet/core/issues/7176 - only applies to .NET 6 (not NET7+) -->
+    <FrameworkReference
+        Update="Microsoft.WindowsDesktop.App;Microsoft.WindowsDesktop.App.WPF;Microsoft.WindowsDesktop.App.WindowsForms"
+        TargetingPackVersion="6.0.0" />
+  </ItemGroup>
+
     <!--
     // This task disable doc warnings in the auto-generated XamlTypeInfo.g.cs file,
     // and also hides the public class from intellisense.

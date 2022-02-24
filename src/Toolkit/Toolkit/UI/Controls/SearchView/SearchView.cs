@@ -278,6 +278,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                 }
 
+                sender.HandleViewpointChanged();
+
                 if (e.NewValue is GeoView newGeoView)
                 {
                     (newGeoView as INotifyPropertyChanged).PropertyChanged += sender.HandleMapChange;
@@ -388,8 +390,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         private void HandleViewpointChanged()
         {
-            if (SearchViewModel == null || GeoView == null)
+            if (SearchViewModel == null)
             {
+                return;
+            }
+
+            if (GeoView == null)
+            {
+                SearchViewModel.QueryArea = null;
+                SearchViewModel.QueryCenter = null;
                 return;
             }
 

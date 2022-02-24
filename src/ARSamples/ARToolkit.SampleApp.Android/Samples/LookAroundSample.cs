@@ -1,21 +1,9 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V7.App;
-using Android.Runtime;
 using Android.Widget;
-using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.Mapping;
-using Android.Opengl;
-using Google.AR.Core;
-using Google.AR.Core.Exceptions;
-using System;
-using Javax.Microedition.Khronos.Egl;
-using Javax.Microedition.Khronos.Opengles;
-using Android.Support.V4.Content;
-using Android.Support.V4.App;
-using Android.Support.Design.Widget;
-using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using System;
 using System.Threading.Tasks;
 
 namespace ARToolkit.SampleApp.Samples
@@ -33,7 +21,7 @@ namespace ARToolkit.SampleApp.Samples
             try
             {
                 ARView.RenderVideoFeed = false;
-                ARView.OriginCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
+                ARView.OriginCamera = new Camera(new MapPoint(-119.622075, 37.720650, 2105), 0, 90, 0); //Yosemite
 
                 Surface sceneSurface = new Surface();
                 sceneSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
@@ -44,7 +32,7 @@ namespace ARToolkit.SampleApp.Samples
                 ARView.Scene = scene;
                 ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 Toast.MakeText(this, "Failed to load scene: \n" + ex.Message, ToastLength.Long).Show();
             }
