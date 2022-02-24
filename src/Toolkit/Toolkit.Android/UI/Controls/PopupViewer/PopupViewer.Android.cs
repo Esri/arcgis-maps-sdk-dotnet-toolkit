@@ -86,7 +86,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 ChoiceMode = ChoiceMode.None,
                 LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent),
                 ScrollingCacheEnabled = false,
-                PersistentDrawingCache = PersistentDrawingCaches.NoCache,
             };
 
             _rootLayout.AddView(_detailsList);

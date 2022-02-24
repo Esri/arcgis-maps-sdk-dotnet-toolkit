@@ -68,7 +68,7 @@ namespace ARToolkit.SampleApp
 
                 if(!item.IsDeviceSupported)
                 {
-                    UIAlertView _error = new UIAlertView("Not supported", "This device does not support running this sample.", del: null, "Ok");
+                    UIAlertView _error = new UIAlertView("Not supported", "This device does not support running this sample.", (IUIAlertViewDelegate)null, "Ok");
                     _error.Show();
                     return;
                 }
@@ -87,7 +87,7 @@ namespace ARToolkit.SampleApp
                     }
                     catch (System.Exception ex)
                     {
-                        UIAlertView _error = new UIAlertView("Failed to download data", ex.Message, null, "Ok");
+                        UIAlertView _error = new UIAlertView("Failed to download data", ex.Message, (IUIAlertViewDelegate)null, "Ok");
                         _error.Show();
                         return;
                     }

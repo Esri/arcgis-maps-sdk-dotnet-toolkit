@@ -38,25 +38,25 @@ namespace Esri.ArcGISRuntime.Toolkit
         }
 
         /// <inheritdoc />
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             return sourceType == typeof(string) || sourceType == typeof(TimeExtent);
         }
 
         /// <inheritdoc />
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             return destinationType == typeof(string) || destinationType == typeof(TimeExtent) || base.CanConvertTo(context, destinationType);
         }
 
         /// <inheritdoc />
-        public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object? value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object? value)
         {
             return Convert(value as string, culture);
         }
 
         /// <inheritdoc />
-        public override object? ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object? value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             if (destinationType == null)
             {
@@ -71,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        private TimeExtent? Convert(string? timeExtentString, CultureInfo culture)
+        private TimeExtent? Convert(string? timeExtentString, CultureInfo? culture)
         {
             if (string.IsNullOrEmpty(timeExtentString))
             {
@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit
             }
         }
 
-        private string? Convert(TimeExtent? timeExtent, CultureInfo culture)
+        private string? Convert(TimeExtent? timeExtent, CultureInfo? culture)
         {
             if (timeExtent == null)
             {

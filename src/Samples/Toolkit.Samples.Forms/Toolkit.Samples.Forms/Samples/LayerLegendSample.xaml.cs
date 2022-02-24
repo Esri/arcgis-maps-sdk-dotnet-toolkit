@@ -12,6 +12,7 @@ using Xamarin.Forms.Xaml;
 
 namespace Toolkit.Samples.Forms.Samples
 {
+    [Obsolete]
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfoAttribute(Category = "LayerLegend", Description = "[Obsolete - see Legend]")]
     public partial class LayerLegendSample : ContentPage

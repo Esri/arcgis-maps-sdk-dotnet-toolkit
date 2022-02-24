@@ -188,11 +188,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 ctx.SetStrokeColor(BorderColor.CGColor);
 
                 var path = CornerRadius > 0 ? UIBezierPath.FromRoundedRect(renderTarget, (nfloat)CornerRadius) : UIBezierPath.FromRect(renderTarget);
-                ctx.AddPath(path.CGPath);
-                ctx.FillPath();
-                ctx.SetLineWidth((nfloat)BorderWidth);
-                ctx.AddPath(path.CGPath);
-                ctx.StrokePath();
+                if (path.CGPath is CGPath corePath)
+                {
+                    ctx.AddPath(corePath);
+                    ctx.FillPath();
+                    ctx.SetLineWidth((nfloat)BorderWidth);
+                    ctx.AddPath(corePath);
+                    ctx.StrokePath();
+                }
             }
             else
             {

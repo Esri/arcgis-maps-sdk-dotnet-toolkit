@@ -15,13 +15,14 @@ namespace ARToolkit.SampleApp
 {
     internal class SampleScreenAdapter : BaseAdapter<Sample>, ISectionIndexer
     {
-        private SampleDatasource items;
+        private SampleDatasource _items;
         private List<Sample> sampleItems;
         private Activity context;
 
         public SampleScreenAdapter(Activity context, SampleDatasource items) : base()
         {
             this.context = context;
+            _items = items;
             sampleItems = new List<Sample>();
             foreach (var item in items.SamplesByCategory)
             {
@@ -59,7 +60,7 @@ namespace ARToolkit.SampleApp
         {
             int i = 0;
             int count = 0;
-            foreach (var item in items.SamplesByCategory)
+            foreach (var item in _items.SamplesByCategory)
             {
                 if (i >= sectionIndex)
                     break;
@@ -73,7 +74,7 @@ namespace ARToolkit.SampleApp
         {
             int i = 0;
             int count = 0;
-            foreach (var item in items.SamplesByCategory)
+            foreach (var item in _items.SamplesByCategory)
             {
                 if (i > position)
                     return count;
@@ -88,7 +89,7 @@ namespace ARToolkit.SampleApp
 
         public Java.Lang.Object[] GetSections()
         {
-            return (items.SamplesByCategory.Select(t => new Java.Lang.String(t.Key)).ToArray());
+            return (_items.SamplesByCategory.Select(t => new Java.Lang.String(t.Key)).ToArray());
         }
     }
 }

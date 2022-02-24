@@ -70,8 +70,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Content Include="..\Toolkit.SampleApp.WPF_Net5\**\*.png">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <Content Include="..\Toolkit.SampleApp.WPF_Net5\Samples\PopupViewer\info.png">
+      <Link>Samples\PopupViewer\info.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

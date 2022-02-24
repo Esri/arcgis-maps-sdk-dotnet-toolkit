@@ -10,6 +10,7 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <LangVersion>9.0</LangVersion>
+    <NoWarn>MSB4181;MC3074;CA1060;WMC1006</NoWarn>
   </PropertyGroup>
 
   <Import Project="..\..\CommonProperties.targets" />

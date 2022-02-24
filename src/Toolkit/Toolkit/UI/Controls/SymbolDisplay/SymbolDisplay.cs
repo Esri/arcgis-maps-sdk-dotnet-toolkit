@@ -90,12 +90,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     return;
                 }
 
+#pragma warning disable SA1500 // Braces for multi-line statements should not share line
+
                 do
                 {
                     _isRefreshRequired = false;
                     var task = _currentUpdateTask = UpdateSwatchAsync();
                     await task;
                 } while (_isRefreshRequired);
+
+#pragma warning restore SA1500 // Braces for multi-line statements should not share line
+
                 _currentUpdateTask = null;
             }
             catch (Exception)
@@ -104,6 +109,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
+        // Even though this code doesn't apply to .NET standard build, Visual Studio sill warns about it.
+        // Visual Studio knows that CS0108 doesn't apply because this code isn't includes in .NET standard build,
+        // which causes IDE0079
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CS0108
         /// <summary>
         /// Triggered when the image source has updated
         /// </summary>
@@ -113,5 +123,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
         public event System.EventHandler? SourceUpdated;
 #endif
+#pragma warning restore CS0108
+#pragma warning restore IDE0079
     }
 }

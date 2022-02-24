@@ -31,8 +31,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public DelegateCommand(Action inputAction) => _action = inputAction;
 
+#pragma warning disable CS0067 // event is required by interface, so this warning shouldn't happen
         /// <inheritdoc/>
         public event EventHandler? CanExecuteChanged;
+#pragma warning restore CS0067
 
         /// <inheritdoc/>
         public bool CanExecute(object? parameter)

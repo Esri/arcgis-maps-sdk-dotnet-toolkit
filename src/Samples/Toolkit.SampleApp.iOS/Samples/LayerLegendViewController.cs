@@ -16,7 +16,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
     [SampleInfoAttribute(Category = "Legend", DisplayName = "LayerLegend", Description = "Renders a legend for a single layer")]
     public partial class LayerLegendViewController : UIViewController
     {
+#pragma warning disable CS0618 // Type or member is obsolete
         private LayerLegend legend;
+#pragma warning restore CS0618 // Type or member is obsolete
         private MapView mapView;
 
         public LayerLegendViewController()
@@ -39,7 +41,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             mapView.Map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Wildfire/MapServer")));
             this.View.AddSubview(mapView);
 
+#pragma warning disable CS0618 // Type or member is obsolete
             legend = new LayerLegend()
+#pragma warning restore CS0618 // Type or member is obsolete
             {
                 LayerContent = mapView.Map.OperationalLayers[0],
                 TranslatesAutoresizingMaskIntoConstraints = false,

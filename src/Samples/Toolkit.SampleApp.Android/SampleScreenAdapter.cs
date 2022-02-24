@@ -118,13 +118,14 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 
     internal class SampleScreenAdapter : BaseAdapter<Sample>, ISectionIndexer
     {
-        private SampleDatasource items;
-        private List<Sample> sampleItems;
-        private Activity context;
+        private readonly SampleDatasource _items;
+        private readonly List<Sample> sampleItems;
+        private readonly Activity context;
 
         public SampleScreenAdapter(Activity context, SampleDatasource items) : base()
         {
             this.context = context;
+            _items = items;
             sampleItems = new List<Sample>();
             foreach (var item in items.SamplesByCategory)
             {
@@ -162,7 +163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         {
             int i = 0;
             int count = 0;
-            foreach (var item in items.SamplesByCategory)
+            foreach (var item in _items.SamplesByCategory)
             {
                 if (i >= sectionIndex)
                     break;
@@ -176,7 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         {
             int i = 0;
             int count = 0;
-            foreach (var item in items.SamplesByCategory)
+            foreach (var item in _items.SamplesByCategory)
             {
                 if (i > position)
                     return count;
@@ -191,7 +192,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 
         public Java.Lang.Object[] GetSections()
         {
-            return (items.SamplesByCategory.Select(t => new Java.Lang.String(t.Key)).ToArray());
+            return (_items.SamplesByCategory.Select(t => new Java.Lang.String(t.Key)).ToArray());
         }
     }
 }

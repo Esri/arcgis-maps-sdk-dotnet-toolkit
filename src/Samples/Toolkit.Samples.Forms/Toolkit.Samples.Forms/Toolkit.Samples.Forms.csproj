@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <NoWarn>CS0612</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,95 +24,5 @@
       </ItemGroup>
     </Otherwise>
   </Choose>
-
-  <ItemGroup>
-    <Compile Update="Samples\BasemapGalleryAppearanceSample.xaml.cs">
-      <DependentUpon>BasemapGalleryAppearanceSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\BasemapGalleryBehaviorSample.xaml.cs">
-      <DependentUpon>BasemapGalleryBehaviorSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\BookmarksViewTemplatedSample.xaml.cs">
-      <DependentUpon>BookmarksViewTemplatedSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\BookmarksViewSample.xaml.cs">
-      <DependentUpon>BookmarksViewSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\OverviewMapSample.xaml.cs">
-      <DependentUpon>OverviewMapSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\CompassSceneViewSample.xaml.cs">
-      <DependentUpon>CompassSceneViewSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\CompassMapViewSample.xaml.cs">
-      <DependentUpon>CompassMapViewSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\LayerLegendSample.xaml.cs">
-      <DependentUpon>LayerLegendSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\PopupViewerSample.xaml.cs">
-      <DependentUpon>PopupViewerSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\SearchViewSample.xaml.cs">
-      <DependentUpon>SearchViewSample.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Samples\SymbolEditorSample.xaml.cs">
-      <DependentUpon>SymbolEditorSample.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Samples\BasemapGalleryAppearanceSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\BasemapGalleryBehaviorSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\BookmarksViewSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\CompassMapViewSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\LegendSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\PopupViewerSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\ScaleLineSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\SearchViewSample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Samples\SymbolDisplaySample.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Samples\CompassMapViewSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Samples\CompassSceneViewSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Samples\LegendSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Samples\PopupViewerSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Samples\ScaleLineSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-  </ItemGroup>
 
 </Project>

@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 if (Control == null)
                 {
 #if __ANDROID__
-                    UI.Controls.LayerLegend ctrl = new UI.Controls.LayerLegend(Context);
+                    UI.Controls.LayerLegend ctrl = new UI.Controls.LayerLegend(Context!);
 #else
                     UI.Controls.LayerLegend ctrl = new UI.Controls.LayerLegend();
 #endif
