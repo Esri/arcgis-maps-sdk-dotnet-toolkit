@@ -90,12 +90,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     return;
                 }
 
+#pragma warning disable SA1500 // Braces for multi-line statements should not share line
+
                 do
                 {
                     _isRefreshRequired = false;
                     var task = _currentUpdateTask = UpdateSwatchAsync();
                     await task;
                 } while (_isRefreshRequired);
+
+#pragma warning restore SA1500 // Braces for multi-line statements should not share line
+
                 _currentUpdateTask = null;
             }
             catch (Exception)
