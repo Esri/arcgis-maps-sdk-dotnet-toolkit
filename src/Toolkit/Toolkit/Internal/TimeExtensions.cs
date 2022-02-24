@@ -213,21 +213,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 // The full time extent cannot be divided into a non-fractional time step interval.  Fall back to the smallest fractional
                 // time step interval with a unit of days or less that is greater than one.  Avoid units of months or greater since the
                 // temporal value of a fractional month is dependent on when in the calendar year the value is applied.
-                if (millisecondsPerTimeStep / millisecondsPerSecond > 1)
+                if (millisecondsPerTimeStep / millisecondsPerDay > 1)
                 {
-                    return new TimeValue((int)(millisecondsPerTimeStep / millisecondsPerSecond), TimeUnit.Seconds);
-                }
-                else if (millisecondsPerTimeStep / millisecondsPerMinute > 1)
-                {
-                    return new TimeValue((int)(millisecondsPerTimeStep / millisecondsPerMinute), TimeUnit.Minutes);
+                    return new TimeValue(millisecondsPerTimeStep / millisecondsPerDay, TimeUnit.Days);
                 }
                 else if (millisecondsPerTimeStep / millisecondsPerHour > 1)
                 {
-                    return new TimeValue((int)(millisecondsPerTimeStep / millisecondsPerHour), TimeUnit.Hours);
+                    return new TimeValue(millisecondsPerTimeStep / millisecondsPerHour, TimeUnit.Hours);
                 }
-                else if (millisecondsPerTimeStep / millisecondsPerDay > 1)
+                else if (millisecondsPerTimeStep / millisecondsPerMinute > 1)
                 {
-                    return new TimeValue((int)(millisecondsPerTimeStep / millisecondsPerDay), TimeUnit.Days);
+                    return new TimeValue(millisecondsPerTimeStep / millisecondsPerMinute, TimeUnit.Minutes);
+                }
+                else if (millisecondsPerTimeStep / millisecondsPerSecond > 1)
+                {
+                    return new TimeValue(millisecondsPerTimeStep / millisecondsPerSecond, TimeUnit.Seconds);
                 }
                 else
                 {

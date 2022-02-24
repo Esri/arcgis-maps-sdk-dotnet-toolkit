@@ -857,13 +857,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             for (var nextStep = startTime.AddTimeValue(timeStep); nextStep <= endTime; nextStep = nextStep.AddTimeValue(timeStep))
             {
-                // TODO = come up with a more rigorous definition or expose API
-                if (endTime.Subtract(nextStep).TotalMinutes < 10)
+                steps.Add(nextStep);
+            }
+
+            if (steps.LastOrDefault() is DateTimeOffset lastTime && lastTime < endTime)
+            {
+                // if difference is less than half a step, replace the last step with the end time
+                if (endTime.Subtract(lastTime).TotalMilliseconds < (timeStep.ToMilliseconds() / 2))
                 {
-                    nextStep = endTime;
+                    steps.Remove(steps.Last());
                 }
 
-                steps.Add(nextStep);
+                steps.Add(endTime);
             }
 
             TimeSteps = steps.AsReadOnly();
