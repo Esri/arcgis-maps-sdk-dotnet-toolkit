@@ -14,7 +14,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
         private Dictionary<string, Uri> _namedLayers = new Dictionary<string, Uri>
         {
             {"Hurricanes", new Uri("https://services.arcgis.com/XSeYKQzfXnEgju9o/ArcGIS/rest/services/Hurricanes_1950_to_2015/FeatureServer/0") },
-            {"Human Life Expectancy", new Uri("http://services1.arcgis.com/VAI453sU9tG9rSmh/arcgis/rest/services/WorldGeo_HumanCulture_LifeExpectancy_features/FeatureServer/0") }
+            {"Human Life Expectancy", new Uri("https://services1.arcgis.com/VAI453sU9tG9rSmh/arcgis/rest/services/WorldGeo_HumanCulture_LifeExpectancy_features/FeatureServer/0") }
         };
 
         public TimeSliderSample()
