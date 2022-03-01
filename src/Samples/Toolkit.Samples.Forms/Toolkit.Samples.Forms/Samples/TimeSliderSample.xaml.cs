@@ -1,13 +1,17 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Toolkit.Samples.Forms.Samples
 {
-    public partial class TimeSliderSample : UserControl
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    [SampleInfoAttribute(Category = "TimeSlider", Description = "TimeSlider")]
+    public partial class TimeSliderSample : ContentPage
     {
         public Map Map { get; } = new Map(Basemap.CreateLightGrayCanvas());
 
@@ -20,20 +24,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
         public TimeSliderSample()
         {
             InitializeComponent();
+            mapView.Map = this.Map;
             slider.CurrentExtentChanged += Slider_CurrentExtentChanged;
-            this.DataContext = this;
-            LayerSelectionBox.ItemsSource = _namedLayers.Keys;
+            LayerSelectionBox.ItemsSource = _namedLayers.Keys.ToList();
             LayerSelectionBox.SelectedIndex = 0;
             _ = HandleSelectionChanged();
-            LayerSelectionBox.SelectionChanged += LayerSelectionBox_SelectionChanged;
+            LayerSelectionBox.SelectedIndexChanged += LayerSelectionBox_SelectedIndexChanged;
         }
 
-        private void Slider_CurrentExtentChanged(object sender, UI.TimeExtentChangedEventArgs e)
+        private void Slider_CurrentExtentChanged(object sender, Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs e)
         {
             mapView.TimeExtent = e.NewExtent;
         }
 
-        private void LayerSelectionBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LayerSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _ = HandleSelectionChanged();
         }
@@ -50,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             IsTimeAwareLabel.Text = layer.SupportsTimeFiltering ? "Yes" : "No";
         }
 
-        private void StepForward_Click(object sender, RoutedEventArgs e)
+        private void StepForward_Click(object sender, EventArgs e)
         {
             try
             {
@@ -59,11 +63,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                this.DisplayAlert("Error", ex.Message, "Ok");
             }
         }
 
-        private void StepBack_Click(object sender, RoutedEventArgs e)
+        private void StepBack_Click(object sender, EventArgs e)
         {
             try
             {
@@ -72,11 +76,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                this.DisplayAlert("Error", ex.Message, "Ok");
             }
         }
 
-        private void ConfigureIntervals_Click(object sender, RoutedEventArgs e)
+        private void ConfigureIntervals_Click(object sender, EventArgs e)
         {
             try
             {
@@ -85,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                this.DisplayAlert("Error", ex.Message, "Ok");
             }
         }
     }

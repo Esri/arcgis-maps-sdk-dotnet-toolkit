@@ -864,6 +864,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 steps.Add(nextStep);
             }
 
+            if (steps.LastOrDefault() is DateTimeOffset lastTime && lastTime < endTime)
+            {
+                // if difference is less than half a step, replace the last step with the end time
+                if (endTime.Subtract(lastTime).TotalMilliseconds < (timeStep.ToMilliseconds() / 2))
+                {
+                    steps.Remove(steps.Last());
+                }
+
+                steps.Add(endTime);
+            }
+
             TimeSteps = steps.AsReadOnly();
             _calculateTimeStepsTcs.TrySetResult(true);
         }
@@ -1305,6 +1316,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Note that, if the TimeSlider instance's FullExtent property is not set, invoking this method will have no effect.</remarks>
         public void InitializeTimeSteps(int count)
         {
+            if (count < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
             if (FullExtent == null)
             {
                 return;
@@ -1321,7 +1337,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <returns>Task.</returns>
         public async Task InitializeTimePropertiesAsync(GeoView? geoView)
         {
-            if (geoView is null)
+            if (geoView is MapView mv && mv.Map != null)
+            {
+                await mv.Map.LoadAsync();
+            }
+            else if (geoView is SceneView sv && sv.Scene != null)
+            {
+                await sv.Scene.LoadAsync();
+            }
+            else if (geoView is null)
             {
                 throw new ArgumentNullException(nameof(geoView));
             }
@@ -1365,7 +1389,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // If the geoview has a temporal extent defined, use that.  Otherwise, initialize the current extent to either the
             // full extent's start (if instantaneous time-filtering can be used), or to the entire full extent.
-            CurrentExtent = geoView.TimeExtent == null ? geoView.TimeExtent : fullExtent is null ? null : canUseInstantaneousTime ?
+            CurrentExtent = geoView.TimeExtent != null ? geoView.TimeExtent : fullExtent is null ? null : canUseInstantaneousTime ?
                 new TimeExtent(fullExtent.StartTime) : new TimeExtent(fullExtent.StartTime, fullExtent.EndTime);
         }
 
@@ -1393,9 +1417,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (timeStepInterval != null)
             {
-                // Check whether the time-aware layer supports filtering based on a time instant
-                var canUseInstantaneousTime = await CanUseInstantaneousTimeAsync(timeAwareLayer);
-
                 // Apply full extent and time step interval to slider properties
                 FullExtent = fullExtent;
                 TimeStepInterval = timeStepInterval;
@@ -1403,8 +1424,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // TODO: Double-check whether we can choose a better default for current extent - does not seem to be exposed
                 // at all in service metadata
                 CurrentExtent = fullExtent is null ? null :
-                    canUseInstantaneousTime || TimeSteps is null ?
-                    new TimeExtent(fullExtent.StartTime) : new TimeExtent(fullExtent.StartTime, TimeSteps.ElementAt(1));
+                    TimeSteps is null ? new TimeExtent(fullExtent.StartTime) : new TimeExtent(fullExtent.StartTime, TimeSteps.ElementAt(1));
 
                 // TODO: Initialize time-zone (will require converting time zone string to strong type)
             }

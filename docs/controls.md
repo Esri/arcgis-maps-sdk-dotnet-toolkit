@@ -83,6 +83,8 @@ Renders a symbol in a control.
 
 Allows interactively defining a temporal range (i.e. time extent) and animating time moving forward or backward.  Can be used to manipulate the time extent in a MapView or SceneView.
 
+![TimeSlider on UWP](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png)
+
 
 ## Feature availability by platform/API
 
@@ -103,5 +105,5 @@ Allows interactively defining a temporal range (i.e. time extent) and animating 
 |SignInForm   |   | Preview |   |   |   |
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |TableOfContents   | N/A | Preview | N/A  | N/A | N/A |
-|TimeSlider   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|[TimeSlider](time-slider.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 

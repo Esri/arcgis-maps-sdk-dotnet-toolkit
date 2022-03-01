@@ -29,7 +29,8 @@ using Windows.UI.Xaml.Media;
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
-    /// The Compass Control showing the heading on the map when the rotation is not North up / 0.
+    /// The TimeSlider is a utility Control that emits TimeExtent values typically for use with the Map Control
+    /// to enhance the viewing of geographic features that have attributes based upon Date/Time information.
     /// </summary>
     public class TimeSlider : View
     {
@@ -220,7 +221,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(FullExtent), typeof(TimeExtent), typeof(TimeSlider), null, BindingMode.OneWay, null, OnFullExtentPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
+        /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance.
         /// </summary>
         public TimeExtent? FullExtent
         {
@@ -251,7 +252,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(TimeStepInterval), typeof(TimeValue), typeof(TimeSlider), null, BindingMode.OneWay, null, OnTimeStepIntervalPropertyChanged);
 
         /// <summary>
-        /// Gets or sets the <see cref="TimeValue" /> associated with the visual thumbs(s) displayed on the TimeSlider.
+        /// Gets or sets the time step intervals for the time slider.  The slider thumbs will snap to and tick marks will be shown at this interval.
         /// </summary>
         public TimeValue? TimeStepInterval
         {
@@ -965,7 +966,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Updates the time slider to have the specified number of time steps.
         /// </summary>
-        /// <param name="count">The number of time steps.</param>
+        /// <param name="count">The number of time steps. Values less than one are ignored.</param>
         /// <remarks>This method divides the TimeSlider instance's <see cref="FullExtent"/> into the number of steps specified,
         /// updating the <see cref="TimeStepInterval"/> and <see cref="TimeSteps"/> properties.  The method will attempt to set
         /// the interval to a TimeValue with the smallest duration and largest time unit that will fit evenly (i.e. without

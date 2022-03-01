@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
+namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.TimeSlider
 {
-    public partial class TimeSliderSample : UserControl
+    public sealed partial class TimeSliderSample : Page
     {
         public Map Map { get; } = new Map(Basemap.CreateLightGrayCanvas());
 
@@ -59,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = new MessageDialog(ex.Message).ShowAsync();
             }
         }
 
@@ -72,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = new MessageDialog(ex.Message).ShowAsync();
             }
         }
 
@@ -85,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.TimeSlider
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = new MessageDialog(ex.Message).ShowAsync();
             }
         }
     }
