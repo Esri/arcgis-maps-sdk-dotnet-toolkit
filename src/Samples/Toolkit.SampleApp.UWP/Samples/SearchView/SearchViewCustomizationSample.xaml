@@ -74,6 +74,8 @@
                     HorizontalAlignment="Stretch"
                     Click="RemoveLocator_Click"
                     Content="Remove Last Search Source" />
+                <Button Click="AddTestLocator_Click" Content="Add event test search source" />
+                <TextBlock Text="Expectation: test locator shows message when results (de)selected" TextWrapping="Wrap" />
             </StackPanel>
         </Border>
     </Grid>

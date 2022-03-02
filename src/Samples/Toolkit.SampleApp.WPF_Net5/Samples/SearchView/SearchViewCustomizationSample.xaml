@@ -77,6 +77,8 @@
                 <Button Click="AddSMPLocator_Click" Content="Add Locator from StreetMap Premium MMPK:" />
                 <TextBox x:Name="LocatorPathText" Text="Path ex:C:\Greater_Los_Angeles.mmpk" />
                 <Button Click="RemoveLocator_Click" Content="Remove Last Search Source" />
+                <Button Click="AddTestLocator_Click" Content="Add event test search source" />
+                <TextBlock Text="Expectation: test locator shows message when results (de)selected" TextWrapping="Wrap" />
             </StackPanel>
         </Border>
     </Grid>
