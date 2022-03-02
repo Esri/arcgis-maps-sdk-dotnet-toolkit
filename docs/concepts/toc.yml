@@ -9,9 +9,17 @@
   items:
   - name: List of controls
     href: ../controls.md
-  - name: Bookmarks View
-    href: ../bookmarks-view.md
   - name: Augmented Reality View
     href: ../ar.md
+  - name: Basemap Gallery
+    href: ../basemap-gallery.md
+  - name: Bookmarks View
+    href: ../bookmarks-view.md
+  - name: Overview Map
+    href: ../overview-map.md
+  - name: Search View
+    href: ../search-view.md
+  - name: Time Slider
+    href: ../time-slider.md
 - name: API Reference
   href: ../api/index.md
