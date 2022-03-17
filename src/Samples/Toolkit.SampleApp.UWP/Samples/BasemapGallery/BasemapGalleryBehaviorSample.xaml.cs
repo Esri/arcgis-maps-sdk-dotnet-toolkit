@@ -87,6 +87,12 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
             Gallery.AvailableBasemaps.Add(item2);
         }
 
+        private async void Button_Add_WGS84(object sender, RoutedEventArgs e)
+        {
+            BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=1396c369fa3b44a2a5437f18412f8032")));
+            Gallery.AvailableBasemaps.Add(item);
+        }
+
         private void Button_Remove_Last(object sender, RoutedEventArgs e)
         {
             if (Gallery.AvailableBasemaps.Any())

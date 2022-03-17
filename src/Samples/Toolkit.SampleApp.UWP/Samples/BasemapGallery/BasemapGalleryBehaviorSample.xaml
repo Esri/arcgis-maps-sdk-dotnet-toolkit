@@ -48,6 +48,10 @@
                     Margin="0,4,0,4"
                     Click="Button_Add_Last"
                     Content="Add special items" />
+                <Button
+                    Margin="0,4,0,4"
+                    Click="Button_Add_WGS84"
+                    Content="Add WGS84 basemap" />
                 <Button Click="Button_Remove_Last" Content="Remove last item" />
                 <TextBlock Text="Currently selected Basemap:" />
                 <TextBlock Text="{Binding ElementName=Gallery, Path=SelectedBasemap.Name, Mode=OneWay}" />
