@@ -39,6 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private string? _tooltipOverride;
         private string? _nameOverride;
         private bool _isLoading;
+        private bool _isLoadingThumbnail;
         private bool _isValid = true;
         private bool _hasLoaded;
         private SpatialReference? _spatialReference;
@@ -83,19 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Tooltip)));
-                await LoadImage();
-
-                // Load the SR.
-                if (Basemap != null)
-                {
-                    var clone = Basemap.Clone();
-                    var map = new Map(clone);
-                    await map.LoadAsync();
-                    if (map.LoadStatus == LoadStatus.Loaded)
-                    {
-                        SpatialReference = map.SpatialReference;
-                    }
-                }
+                _ = LoadImage();
             }
             catch (Exception)
             {
@@ -104,13 +93,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             finally
             {
                 IsLoading = false;
-                _hasLoaded = true;
             }
         }
 
         private async Task LoadImage()
         {
-            IsLoading = true;
+            IsLoadingThumbnail = true;
             try
             {
                 await (Thumbnail?.LoadAsync() ?? Task.CompletedTask);
@@ -132,24 +120,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             finally
             {
-                IsLoading = false;
+                IsLoadingThumbnail = false;
             }
         }
 
-        internal void NotifySpatialReferenceChanged(GeoModel? gm)
+        internal async void NotifySpatialReferenceChanged(GeoModel? gm)
         {
-            // Scenes return a spatial reference of 4326 even when the basemap is 3857
-            _lastNotifiedSpatialReference = gm is Scene scene && scene.SceneViewTilingScheme == SceneViewTilingScheme.WebMercator
-                ? SpatialReferences.WebMercator
-                : gm?.SpatialReference;
+            try
+            {
+                // Scenes return a spatial reference of 4326 even when the basemap is 3857
+                _lastNotifiedSpatialReference = gm is Scene scene && scene.SceneViewTilingScheme == SceneViewTilingScheme.WebMercator
+                    ? SpatialReferences.WebMercator
+                    : gm?.SpatialReference;
 
-            if (_lastNotifiedSpatialReference == null || _lastNotifiedSpatialReference == SpatialReference)
-            {
-                IsValid = true;
+                // Load the SR.
+                if (Basemap is Basemap inputBasemap && SpatialReference == null)
+                {
+                    var clone = inputBasemap.Clone();
+                    var map = new Map(clone);
+                    await map.LoadAsync();
+                    if (map.LoadStatus == LoadStatus.Loaded)
+                    {
+                        SpatialReference = map.SpatialReference;
+                    }
+                }
+
+                if (_lastNotifiedSpatialReference == null || _lastNotifiedSpatialReference == SpatialReference || SpatialReference == null)
+                {
+                    IsValid = true;
+                }
+                else
+                {
+                    IsValid = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                IsValid = false;
+                System.Diagnostics.Debug.WriteLine($"ArcGIS Toolkit - Error loading basemap item:{ex}");
             }
         }
 
@@ -353,7 +360,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this gallery item is actively loading the basemap or image.
+        /// Gets or sets a value indicating whether this gallery item is actively loading the basemap.
         /// </summary>
         public bool IsLoading
         {
@@ -364,6 +371,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     _isLoading = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoading)));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this gallery item is actively loading the <see cref="Thumbnail"/>.
+        /// </summary>
+        public bool IsLoadingThumbnail
+        {
+            get => _isLoadingThumbnail;
+            set
+            {
+                if (_isLoadingThumbnail != value)
+                {
+                    _isLoadingThumbnail = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLoadingThumbnail)));
                 }
             }
         }
