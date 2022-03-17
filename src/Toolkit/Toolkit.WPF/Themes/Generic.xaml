@@ -6,6 +6,7 @@
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/BasemapGallery/BasemapGallery.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/BookmarksView/BookmarksView.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Compass/Compass.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Legend/Legend.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
