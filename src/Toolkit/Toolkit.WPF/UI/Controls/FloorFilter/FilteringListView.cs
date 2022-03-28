@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN && !WINDOWS_UWP
+#if IsWPF
 
 using System.Collections.Specialized;
 using System.Linq;
@@ -190,20 +190,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             base.OnApplyTemplate();
 
-            if (GetTemplateChild("PART_Placeholder") is UIElement placeholderView)
-            {
-                _placeholderView = placeholderView;
-            }
+            _placeholderView = GetTemplateChild("PART_Placeholder") as UIElement;
+            _noResultsLabel = GetTemplateChild("PART_NoResultsLabel") as UIElement;
 
             if (GetTemplateChild("PART_ClearButton") is Button clearButton)
             {
                 _clearButton = clearButton;
                 _clearButton.Click += HandleClearButtonClick;
-            }
-
-            if (GetTemplateChild("PART_NoResultsLabel") is UIElement element)
-            {
-                _noResultsLabel = element;
             }
         }
 

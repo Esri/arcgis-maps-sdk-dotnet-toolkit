@@ -13,18 +13,12 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
+#if IsWPF
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    #if !XAMARIN && !NETSTANDARD && !WINDOWS_UWP
     /// <summary>
     /// Defines the selection modes for the <see cref="FloorFilter"/>.
     /// </summary>
-    #else
-    /// <summary>
-    /// Defines the selection modes for the FloorFilter.
-    /// </summary>
-    #endif
     public enum AutomaticSelectionMode
     {
         /// <summary>
@@ -43,3 +37,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         AlwaysNonClearing,
     }
 }
+#endif

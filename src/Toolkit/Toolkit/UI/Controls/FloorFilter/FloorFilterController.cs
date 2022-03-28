@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if IsWPF
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets a value indicating whether all levels should be visible simultaneously.
         /// </summary>
-        public bool AllLevelsSelect => _allLevels;
+        public bool AllLevelsSelected => _allLevels;
 
         /// <summary>
         /// Gets or sets the viewpoint observed from an associated MapView or SceneView.
@@ -327,7 +329,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_selectedLevel != null)
             {
-                SetPropertyChanged(false, ref _allLevels, nameof(AllLevelsSelect));
+                SetPropertyChanged(false, ref _allLevels, nameof(AllLevelsSelected));
             }
 
             OnPropertyChanged(nameof(SelectedLevel));
@@ -343,12 +345,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public void SelectAllLevels()
         {
             _previousSelection = _selectedLevel;
-            SetPropertyChanged(true, ref _allLevels, nameof(AllLevelsSelect), () => SetSelectedLevel(null, false));
+            SetPropertyChanged(true, ref _allLevels, nameof(AllLevelsSelected), () => SetSelectedLevel(null, false));
         }
 
         public void UndoSelectAllLevels()
         {
-            SetPropertyChanged(false, ref _allLevels, nameof(AllLevelsSelect), () => SetSelectedLevel(_previousSelection, false));
+            SetPropertyChanged(false, ref _allLevels, nameof(AllLevelsSelected), () => SetSelectedLevel(_previousSelection, false));
         }
 
         private async Task HandleLoad()
@@ -401,7 +403,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 visibilityState[level] = false;
             }
 
-            if (AllLevelsSelect && SelectedFacility != null)
+            if (AllLevelsSelected && SelectedFacility != null)
             {
                 foreach (var level in SelectedFacility.Levels)
                 {
@@ -661,3 +663,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         Ground,
     }
 }
+#endif

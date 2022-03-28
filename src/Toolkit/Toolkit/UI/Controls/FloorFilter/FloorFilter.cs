@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN && !WINDOWS_UWP
+#if IsWPF
 
 using System;
 using System.Collections.Generic;
@@ -39,12 +39,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_FacilitiesListView", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_AllFacilitiesListView", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_FacilitiesNoSitesListView", Type = typeof(ListView))]
+    [TemplatePart(Name = "PART_ZoomButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_CloseBrowseButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_BackButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_AllButton", Type = typeof(Button))]
     public partial class FloorFilter : Control, INotifyPropertyChanged
     {
         private readonly FloorFilterController _controller = new FloorFilterController();
 
         // View wraps everything else, to enable FloorFilter to automatically hide itself when used with a non-floor-aware map/scene.
         private UIElement? _autoVisibilityWrapper;
+
+        private Button? _zoomButton;
+        private Button? _closeBrowseButton;
+        private Button? _backButton;
+        private Button? _allButton;
 
         // Most ListView selection properties are set in XAML, but special event behavior is needed for the browsing view navigation experience.
         private ListView? _siteListView;
@@ -60,11 +69,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public FloorFilter()
         {
             DefaultStyleKey = typeof(FloorFilter);
-
-            ZoomCommand = new NotifyingDelegateCommand(() => _controller?.ForceZoomToSelection());
-            CloseBrowseCommand = new NotifyingDelegateCommand(() => IsBrowseOpen = false);
-            GoBackCommand = new NotifyingDelegateCommand(() => SetTabSelection(0));
-            ShowAllFacilitiesCommand = new NotifyingDelegateCommand(() => SetTabSelection(2));
 
             DataContext = this;
 
@@ -102,11 +106,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _siteListView = null;
             }
 
-            // Add and subscribe
-            if (GetTemplateChild("PART_AutoVisibilityWrapper") is UIElement autoVisibilityWrapper)
+            if (_zoomButton != null)
             {
-                _autoVisibilityWrapper = autoVisibilityWrapper;
+                _zoomButton.Click -= HandleZoomButtonClick;
+                _zoomButton = null;
             }
+
+            if (_closeBrowseButton != null)
+            {
+                _closeBrowseButton.Click -= HandleCloseBrowseClick;
+                _closeBrowseButton = null;
+            }
+
+            if (_backButton != null)
+            {
+                _backButton.Click -= HandleBackClick;
+                _backButton = null;
+            }
+
+            if (_allButton != null)
+            {
+                _allButton.Click -= HandleAllButtonClick;
+                _allButton = null;
+            }
+
+            // Add and subscribe
+            _autoVisibilityWrapper = GetTemplateChild("PART_AutoVisibilityWrapper") as UIElement;
 
             if (GetTemplateChild("PART_SiteListView") is ListView siteListView)
             {
@@ -131,7 +156,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _facilitiesNoSitesListView = facilitiesNoSitesListView;
                 _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
             }
+
+            if (GetTemplateChild("PART_ZoomButton") is Button zoomButton)
+            {
+                _zoomButton = zoomButton;
+                _zoomButton.Click += HandleZoomButtonClick;
+            }
+
+            if (GetTemplateChild("PART_CloseBrowseButton") is Button closeButton)
+            {
+                _closeBrowseButton = closeButton;
+                _closeBrowseButton.Click += HandleCloseBrowseClick;
+            }
+
+            if (GetTemplateChild("PART_BackButton") is Button backButton)
+            {
+                _backButton = backButton;
+                _backButton.Click += HandleBackClick;
+            }
+
+            if (GetTemplateChild("PART_AllButton") is Button allButton)
+            {
+                _allButton = allButton;
+                _allButton.Click += HandleAllButtonClick;
+            }
         }
+
+        private void HandleAllButtonClick(object sender, EventArgs e) => SetTabSelection(2);
+
+        private void HandleBackClick(object sender, EventArgs e) => SetTabSelection(0);
+
+        private void HandleCloseBrowseClick(object sender, RoutedEventArgs e) => IsBrowseOpen = false;
+
+        private void HandleZoomButtonClick(object sender, RoutedEventArgs e) => _controller?.ForceZoomToSelection();
 
         private void HandleControllerPropertyChanges(object? sender, PropertyChangedEventArgs e)
         {
@@ -175,8 +232,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(_controller.ShouldDisplayFloorPicker):
                     _autoVisibilityWrapper?.SetValue(VisibilityProperty, _controller.ShouldDisplayFloorPicker ? Visibility.Visible : Visibility.Collapsed);
                     break;
-                case nameof(_controller.AllLevelsSelect):
-                    OnPropertyChanged(nameof(AllLevelsSelected));
+                case nameof(_controller.AllLevelsSelected):
+                    OnPropertyChanged(nameof(AllLevelsSelecteded));
                     break;
             }
         }
@@ -201,7 +258,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Esri Toolkit - error seting viewpoint: {ex}");
+                System.Diagnostics.Debug.WriteLine($"Esri Toolkit - error setting viewpoint: {ex}");
             }
         }
 
@@ -312,12 +369,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             OnPropertyChanged(nameof(ShowAllFloorsButton));
             if (GeoView is MapView mv && mv.Map is ILoadable mapLoadable)
             {
-                // Listen for load completion
-                // mapLoadable.Loaded
-                // var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(mapLoadable);
-                // listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
-                // listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
-                // mapLoadable.Loaded += listener.OnEvent;
                 if (mapLoadable.LoadStatus == LoadStatus.Loaded)
                 {
                     HandleGeoModelLoaded();
@@ -332,11 +383,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             else if (GeoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
             {
-                // Listen for load completion
-                // var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(sceneLoadable);
-                // listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
-                // listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
-                // sceneLoadable.Loaded += listener.OnEvent;
                 if (sceneLoadable.LoadStatus == LoadStatus.Loaded)
                 {
                     HandleGeoModelLoaded();
@@ -482,9 +528,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// This is used for showing an entire facility in 3D.
         /// </remarks>
-        public bool AllLevelsSelected
+        public bool AllLevelsSelecteded
         {
-            get => _controller.AllLevelsSelect;
+            get => _controller.AllLevelsSelected;
             set
             {
                 if (value)
@@ -580,52 +626,6 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
         }
         #endregion
 
-        #region Commands
-
-        /// <summary>
-        /// Gets the command that zooms to the currently-selected item.
-        /// </summary>
-        public ICommand ZoomCommand { get; }
-
-        /// <summary>
-        /// Gets the command that closes the browsing view.
-        /// </summary>
-        public ICommand CloseBrowseCommand { get; }
-
-        /// <summary>
-        /// Gets the command that navigates back to the sites view in the browsing view.
-        /// </summary>
-        public ICommand GoBackCommand { get; }
-
-        /// <summary>
-        /// Gets the command that navigates to the all sites view in the browsing view.
-        /// </summary>
-        public ICommand ShowAllFacilitiesCommand { get; }
-
-        private class NotifyingDelegateCommand : ICommand
-        {
-            private Action _action;
-            private bool _canExecute = true;
-
-            public NotifyingDelegateCommand(Action action)
-            {
-                _action = action;
-            }
-
-            public event EventHandler? CanExecuteChanged;
-
-            public bool CanExecute(object? parameter) => _canExecute;
-
-            public void Execute(object? parameter) => _action();
-
-            internal void NotifyExecuteState(bool newValue)
-            {
-                _canExecute = newValue;
-                CanExecuteChanged?.Invoke(this, new EventArgs());
-            }
-        }
-        #endregion Commands
-
         #region UI State Management
 
         /// <summary>
@@ -685,11 +685,11 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
 
             if (index != 0 && index != 3)
             {
-                (GoBackCommand as NotifyingDelegateCommand)?.NotifyExecuteState(true);
+                _backButton?.SetValue(VisibilityProperty, Visibility.Visible);
             }
             else
             {
-                (GoBackCommand as NotifyingDelegateCommand)?.NotifyExecuteState(false);
+                _backButton?.SetValue(VisibilityProperty, Visibility.Collapsed);
             }
 
             SelectedBrowseTab = index;

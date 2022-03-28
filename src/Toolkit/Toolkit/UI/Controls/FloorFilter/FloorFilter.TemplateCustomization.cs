@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN && !WINDOWS_UWP
+#if IsWPF
 
 using System.Windows;
 using Esri.ArcGISRuntime.Mapping.Floor;
