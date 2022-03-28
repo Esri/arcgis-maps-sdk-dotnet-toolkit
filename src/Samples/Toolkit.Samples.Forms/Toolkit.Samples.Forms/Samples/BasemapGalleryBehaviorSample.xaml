@@ -80,23 +80,27 @@
                     Grid.Column="1"
                     Clicked="Button_Remove_Last"
                     Text="Remove last item" />
+                <Button Grid.Row="5" Grid.Column="0"
+                    Margin="0,4,0,4"
+                    Clicked="Button_Add_WGS84"
+                    Text="Add WGS84" />
                 <Label
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Grid.Column="0"
                     HorizontalTextAlignment="End"
                     Text="Selection:" />
                 <Label
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Grid.Column="1"
                     Text="{Binding Source={x:Reference Gallery}, Path=SelectedBasemap.Name, FallbackValue='None', Mode=OneWay}" />
                 <Label
-                    Grid.Row="6"
+                    Grid.Row="7"
                     Grid.Column="0"
                     HorizontalTextAlignment="End"
                     Text="Basemap selection event last raised:" />
                 <Label
                     x:Name="LastSelectedDateLabel"
-                    Grid.Row="6"
+                    Grid.Row="7"
                     Grid.Column="1"
                     Text="Never" />
             </Grid>
