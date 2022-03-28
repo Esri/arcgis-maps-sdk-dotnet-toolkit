@@ -356,9 +356,13 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 var hitResults = frame.HitTest(screenPoint.X, screenPoint.Y);
                 foreach (var item in hitResults)
                 {
-                    var t = item.HitPose.GetTranslation();
-                    var r = item.HitPose.GetRotationQuaternion();
-                    return TransformationMatrix.Create(r[0], r[1], r[2], r[3], t[0], t[1], t[2]);
+                    if (item.Trackable is Plane pl && pl.IsPoseInPolygon(item.HitPose) ||
+                        item.Trackable is Point pnt && pnt.GetOrientationMode() == Point.OrientationMode.EstimatedSurfaceNormal)
+                    {
+                        var t = item.HitPose.GetTranslation();
+                        var r = item.HitPose.GetRotationQuaternion();
+                        return TransformationMatrix.Create(r[0], r[1], r[2], r[3], t[0], t[1], t[2]);
+                    }
                 }
             }
 
