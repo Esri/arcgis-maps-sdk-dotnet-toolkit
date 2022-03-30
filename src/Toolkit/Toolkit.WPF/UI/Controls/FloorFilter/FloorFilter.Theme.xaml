@@ -302,7 +302,7 @@
                         <!--  All floors button  -->
                         <RowDefinition Height="Auto" />
                         <!--  Floor List  -->
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                         <!--  Zoom button  -->
                         <RowDefinition Height="Auto" />
                         <!--  Expand/Collapse Button  -->
@@ -312,13 +312,13 @@
                     <ToggleButton
                         x:Name="BrowseToggle"
                         Grid.Row="0"
-                        HorizontalContentAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
                         IsChecked="{Binding IsBrowseOpen, Mode=TwoWay}"
                         Style="{TemplateBinding BrowseButtonStyle}"
                         ToolTip="{TemplateBinding BrowseLabel}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="48" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Path
@@ -327,7 +327,7 @@
                                 Style="{StaticResource FloorFilterPathIconStyle}" />
                             <Grid Grid.Column="1" Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <TextBlock
-                                    Margin="-8,0,8,0"
+                                    Margin="8,0,8,0"
                                     HorizontalAlignment="Left"
                                     Text="Browse" />
                             </Grid>
@@ -336,14 +336,14 @@
                     <ToggleButton
                         x:Name="AllButton"
                         Grid.Row="1"
-                        HorizontalContentAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
                         IsChecked="{Binding AllLevelsSelected, Mode=TwoWay}"
                         Style="{TemplateBinding BrowseButtonStyle}"
                         ToolTip="{TemplateBinding AllFloorsLabel}"
                         Visibility="{Binding ShowAllFloorsButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="48" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Path
@@ -352,7 +352,7 @@
                                 Style="{StaticResource FloorFilterPathIconStyle}" />
                             <Grid Grid.Column="1" Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <TextBlock
-                                    Margin="-8,0,0,0"
+                                    Margin="8,0,8,0"
                                     HorizontalAlignment="Left"
                                     Text="All"
                                     TextAlignment="Left" />
@@ -376,12 +376,12 @@
                     <Button
                         x:Name="PART_ZoomButton"
                         Grid.Row="3"
-                        HorizontalContentAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
                         Style="{TemplateBinding ZoomToButtonStyle}"
                         ToolTip="{TemplateBinding ZoomToLabel}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="48" />
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Path
@@ -390,7 +390,7 @@
                                 Style="{StaticResource FloorFilterPathIconStyle}" />
                             <Grid Grid.Column="1" Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <TextBlock
-                                    Margin="-8,0,8,0"
+                                    Margin="8,0,8,0"
                                     Foreground="{Binding ElementName=PART_ZoomButton, Path=Foreground, Mode=OneWay}"
                                     Text="{TemplateBinding ZoomToLabel}" />
                             </Grid>
@@ -427,7 +427,7 @@
                                 Grid.Column="1"
                                 Margin="-8,0,16,0"
                                 Foreground="{StaticResource FloorFilterDefaultForegroundBrush}"
-                                Text="Collapse"
+                                Text="{TemplateBinding CollapseLabel}"
                                 Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                         </Grid>
                     </ToggleButton>

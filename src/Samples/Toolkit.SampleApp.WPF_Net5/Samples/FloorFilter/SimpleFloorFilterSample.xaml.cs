@@ -10,7 +10,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FloorFilter
         public SimpleFloorFilterSample()
         {
             InitializeComponent();
-            MyMapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=f133a698536f44c8884ad81f80b6cfc7"));
+            MyMapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=b4b599a43a474d33946cf0df526426f5"));
         }
     }
 }
