@@ -108,7 +108,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             Grid.SetRow(_searchBar, 1);
             Grid.SetColumnSpan(_searchBar, 3);
 
-            // TODO = be less obviously bad about the circular dependency
             _unfilteredListView = new ListView();
             Grid.SetRow(_unfilteredListView, 2);
             Grid.SetColumnSpan(_unfilteredListView, 3);

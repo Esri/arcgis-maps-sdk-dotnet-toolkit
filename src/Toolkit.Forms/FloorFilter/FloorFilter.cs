@@ -168,11 +168,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             try
             {
                 await Navigation.PopModalAsync();
-                _navigationStackCounter--;
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Toolkit exception while navigating - {ex}");
+            }
+            finally
+            {
+                _navigationStackCounter--;
             }
         }
 
@@ -553,6 +556,31 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
         }
 
+        #endregion Read-only list properties
+
+        #region Configuration
+
+        /// <summary>
+        /// Gets or sets the value that defines how the <see cref="SelectedFacility"/> is updated as the <see cref="GeoView"/>'s viewpoint changes.
+        /// </summary>
+        public AutomaticSelectionMode AutomaticSelectionMode
+        {
+            get => (AutomaticSelectionMode)GetValue(AutomaticSelectionModeProperty);
+            set => SetValue(AutomaticSelectionModeProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="AutomaticSelectionMode"/> dependency property.
+        /// </summary>
+        public static readonly BindableProperty AutomaticSelectionModeProperty =
+            BindableProperty.Create(nameof(AutomaticSelectionMode), typeof(AutomaticSelectionMode), typeof(FloorFilter), AutomaticSelectionMode.Always, propertyChanged: OnAutomaticSelectionModePropertyChanged);
+
+        private static void OnAutomaticSelectionModePropertyChanged(BindableObject d, object oldValue, object newValue) =>
+            ((FloorFilter)d)._controller.AutomaticSelectionMode = (AutomaticSelectionMode)newValue;
+        #endregion Configuration
+
+        #region UI State Management
+
         /// <summary>
         /// Updates the size of the level list and manages scroll position and scroll bar visibility
         /// to ensure a good experience regardless of whether the list should be scrollable.
@@ -608,31 +636,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 }
             }
         }
-
-        #endregion Read-only list properties
-
-        #region Configuration
-
-        /// <summary>
-        /// Gets or sets the value that defines how the <see cref="SelectedFacility"/> is updated as the <see cref="GeoView"/>'s viewpoint changes.
-        /// </summary>
-        public AutomaticSelectionMode AutomaticSelectionMode
-        {
-            get => (AutomaticSelectionMode)GetValue(AutomaticSelectionModeProperty);
-            set => SetValue(AutomaticSelectionModeProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="AutomaticSelectionMode"/> dependency property.
-        /// </summary>
-        public static readonly BindableProperty AutomaticSelectionModeProperty =
-            BindableProperty.Create(nameof(AutomaticSelectionMode), typeof(AutomaticSelectionMode), typeof(FloorFilter), AutomaticSelectionMode.Always, propertyChanged: OnAutomaticSelectionModePropertyChanged);
-
-        private static void OnAutomaticSelectionModePropertyChanged(BindableObject d, object oldValue, object newValue) =>
-            ((FloorFilter)d)._controller.AutomaticSelectionMode = (AutomaticSelectionMode)newValue;
-        #endregion Configuration
-
-        #region UI State Management
 
         /// <summary>
         /// Gets a value indicating whether the floor filter should display an 'All Floors' button.

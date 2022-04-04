@@ -18,7 +18,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="48" />
                 <ColumnDefinition Width="*" />
-
             </Grid.ColumnDefinitions>
             <esri:MapView
                 x:Name="MyMapView"

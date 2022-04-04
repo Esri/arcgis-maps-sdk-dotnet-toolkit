@@ -115,7 +115,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             Grid.SetRow(_filteredListView, 2);
             Grid.SetColumnSpan(_filteredListView, 2);
 
-            // TODO = handle null AllSites
             _allSitesButton = new Button
             {
                 Text = ff.AllFacilitiesLabel,
