@@ -13,7 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-#if IsWPF
+
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
@@ -37,4 +37,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         AlwaysNonClearing,
     }
 }
-#endif

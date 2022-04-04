@@ -23,6 +23,8 @@ FloorFilter allows users to take advantage of floor-aware maps and scenes by sur
 
 ## Customization
 
+> **NOTE**: Some properties aren't available on all platforms due to platform-specific differences in how the view is implemented.
+
 The following properties enable customization of the view:
 
 - `ZoomToButtonStyle`
@@ -49,9 +51,35 @@ The following properties enable customization or localization of text displayed 
 
 ## Usage
 
-```xaml
+WPF:
+
+```xml
 <Grid>
     <esri:MapView x:Name="MyMapView" />
     <esri:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
+```
+
+Xamarin.Forms:
+
+```xml
+<Grid>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="48" />
+        <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <esri:MapView
+        x:Name="MyMapView"
+        Grid.RowSpan="2"
+        Grid.ColumnSpan="2" />
+    <toolkit:FloorFilter
+        Grid.Row="1"
+        Grid.Column="0"
+        Margin="8,8,8,32"
+        GeoView="{x:Reference MyMapView}" />
 </Grid>
 ```

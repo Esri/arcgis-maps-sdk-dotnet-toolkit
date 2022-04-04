@@ -14,8 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if IsWPF
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -663,4 +661,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         Ground,
     }
 }
-#endif
