@@ -137,17 +137,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 $@"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
     xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms""
     x:DataType=""controls:FloorFilter"" x:Name=""Self"">
-    <Grid RowSpacing=""0"" x:Name=""PART_VisibilityWrapper"" IsVisible=""True"" BackgroundColor=""White"" >
-        <Grid.ColumnDefinitions >
+    <Grid RowSpacing=""0"" x:Name=""PART_VisibilityWrapper"" IsVisible=""True"" BackgroundColor=""White"">
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width=""48"" />
-        </Grid.ColumnDefinitions >
-        <Grid.RowDefinitions >
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""*"" />
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
-        </Grid.RowDefinitions >
+        </Grid.RowDefinitions>
 <Frame HasShadow=""False"" BackgroundColor=""White"" Grid.RowSpan=""5"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" />
         <Button x:Name=""{nameof(PART_BrowseButton)}"" Margin=""0"" WidthRequest=""48"" HeightRequest=""48""
            CornerRadius=""0"" BackgroundColor=""White"" Padding=""16"" FontFamily=""calcite-ui-icons-24""
@@ -158,7 +158,7 @@ $@"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""ht
            Grid.Row=""1"" />
         <Frame x:Name=""{nameof(PART_LevelListContainer)}"" Grid.Row=""2"" BackgroundColor=""White"" BorderColor=""#aa6e6e6e""
            Padding=""1"" Margin=""0,-1,0,0"" IsClippedToBounds=""True""
-           HasShadow=""False"" CornerRadius=""0"" >
+           HasShadow=""False"" CornerRadius=""0"">
               <ListView x:Name=""{nameof(PART_LevelListView)}""
                  Grid.Row=""2""
                  RowHeight=""48"" SeparatorColor=""#aa6e6e6e""
@@ -167,13 +167,13 @@ $@"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""ht
                  Background=""White""
                  HeightRequest=""0""
                  Margin=""0"" />
-        </Frame >
+        </Frame>
         <Button x:Name=""{nameof(PART_ZoomButton)}"" Text=""{IconFont.ZoomToObject}"" Margin=""0,-1,0,0"" WidthRequest=""48"" HeightRequest=""48""
            BorderColor=""#aa6e6e6e"" BorderWidth=""1"" FontFamily=""calcite-ui-icons-24""
            CornerRadius=""0"" Background=""White"" TextColor=""Accent""
            Grid.Row=""3""
            IsVisible=""True"" />
-   </Grid >
+   </Grid>
 </ControlTemplate >";
             DefaultControlTemplate = XForms.Extensions.LoadFromXaml(new ControlTemplate(), template);
         }
