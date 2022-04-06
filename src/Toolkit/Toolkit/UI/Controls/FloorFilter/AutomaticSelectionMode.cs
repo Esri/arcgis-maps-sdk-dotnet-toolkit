@@ -17,7 +17,7 @@
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// Defines the selection modes for the <see cref="FloorFilter"/>.
+    /// Defines the selection modes for the FloorFilter.
     /// </summary>
     public enum AutomaticSelectionMode
     {

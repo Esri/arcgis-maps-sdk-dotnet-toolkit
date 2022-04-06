@@ -14,9 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if IsWPF
+#if IsWPF || WINDOWS_UWP
 
+#if IsWPF
 using System.Windows;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml;
+#endif
 using Esri.ArcGISRuntime.Mapping.Floor;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

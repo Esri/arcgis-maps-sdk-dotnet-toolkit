@@ -100,7 +100,7 @@ Allows interactively defining a temporal range (i.e. time extent) and animating 
 |[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
-|[FloorFilter](floor-filter.md) | ❌ | ✔ | ❌ | ❌ | ✔ |
+|[FloorFilter](floor-filter.md) | ✔  | ✔ | ❌ | ❌ | ✔ |
 |Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |

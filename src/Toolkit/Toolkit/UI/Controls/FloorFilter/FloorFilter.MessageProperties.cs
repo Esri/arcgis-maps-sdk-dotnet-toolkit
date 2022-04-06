@@ -14,9 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if IsWPF
+#if IsWPF || WINDOWS_UWP
 
+#if IsWPF
 using System.Windows;
+#else
+using Windows.UI.Xaml;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if IsWPF
+#if IsWPF || WINDOWS_UWP
 
 using System;
 using System.Collections.Generic;
@@ -22,12 +22,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
 using Esri.ArcGISRuntime.UI.Controls;
+
+#if IsWPF
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using PropertyMetadata = System.Windows.FrameworkPropertyMetadata;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -77,7 +84,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
+#if IsWPF
         public override void OnApplyTemplate()
+#elif WINDOWS_UWP
+        protected override void OnApplyTemplate()
+#endif
         {
             base.OnApplyTemplate();
 
@@ -182,9 +193,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void HandleAllButtonClick(object sender, EventArgs e) => SetTabSelection(2);
+        private void HandleAllButtonClick(object sender, RoutedEventArgs e) => SetTabSelection(2);
 
-        private void HandleBackClick(object sender, EventArgs e) => SetTabSelection(0);
+        private void HandleBackClick(object sender, RoutedEventArgs e) => SetTabSelection(0);
 
         private void HandleCloseBrowseClick(object sender, RoutedEventArgs e) => IsBrowseOpen = false;
 
@@ -216,15 +227,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                     break;
                 case nameof(_controller.AllFacilities):
-                    SetValue(AllFacilitiesPropertyKey, _controller.AllFacilities);
+                    AllFacilities = _controller.AllFacilities;
                     SetTabSelection(0);
                     break;
                 case nameof(_controller.DisplaySites):
-                    SetValue(AllSitesPropertyKey, _controller.DisplaySites);
+                    AllSites = _controller.DisplaySites;
                     SetTabSelection(0);
                     break;
                 case nameof(_controller.DisplayLevels):
-                    SetValue(AllLevelsPropertyKey, _controller.DisplayLevels);
+                    AllLevels = _controller.DisplayLevels;
                     break;
                 case nameof(_controller.RequestedViewpoint):
                     SetViewpointFromControllerAsync();
@@ -280,7 +291,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #region GeoView, GeoModel, Viewpoint management
+#region GeoView, GeoModel, Viewpoint management
 
         /// <summary>
         /// Gets or sets the GeoView associated with this view.
@@ -300,6 +311,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((FloorFilter)d).SetGeoView(e.OldValue as GeoView, e.NewValue as GeoView);
 
+#if WINDOWS_UWP
+        private long _propertyChangedCallbackToken = 0;
+#endif
+
         private void SetGeoView(GeoView? oldView, GeoView? newView)
         {
             if (oldView == newView)
@@ -311,11 +326,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (oldView is MapView mapview)
                 {
+#if WINDOWS_UWP
+                    mapview.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
+#else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(mapview, HandleGeoModelChanged);
+#endif
                 }
                 else if (oldView is SceneView sceneview)
                 {
+#if WINDOWS_UWP
+                    sceneview.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
+#else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, HandleGeoModelChanged);
+#endif
                 }
 
                 oldView.ViewpointChanged -= HandleGeoViewViewpointChanged;
@@ -326,11 +349,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (newView is MapView mapview)
                 {
+#if WINDOWS_UWP
+                    _propertyChangedCallbackToken = mapview.RegisterPropertyChangedCallback(MapView.MapProperty, HandleGeoModelChanged);
+#else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(mapview, HandleGeoModelChanged);
+#endif
                 }
                 else if (newView is SceneView sceneview)
                 {
+#if WINDOWS_UWP
+                    _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, HandleGeoModelChanged);
+#else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, HandleGeoModelChanged);
+#endif
                 }
 
                 newView.ViewpointChanged += HandleGeoViewViewpointChanged;
@@ -401,7 +432,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleGeoModelLoaded()
         {
+#if WINDOWS_UWP
+            _ = Windows.ApplicationModel.Core.CoreApplication.MainView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+#else
             Dispatcher.Invoke(() =>
+#endif
             {
                 if (GeoView is MapView mv)
                 {
@@ -413,9 +448,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             });
         }
-        #endregion GeoView, GeoModel, Viewpoint management
+#endregion GeoView, GeoModel, Viewpoint management
 
-        #region Selection
+#region Selection
 
         /// <summary>
         /// Gets or sets the currently selected site.
@@ -543,14 +578,65 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-        #endregion Selection
+#endregion Selection
 
-        #region Read-only list properties
+#region Read-only list properties
+
+#if WINDOWS_UWP
 
         /// <summary>
         /// Gets the list of available sites.
         /// </summary>
-        public IList<FloorSite>? AllSites => GetValue(AllSitesPropertyKey.DependencyProperty) as IList<FloorSite>;
+        public IList<FloorSite>? AllSites
+        {
+            get { return (IList<FloorSite>?)GetValue(AllSitesProperty); }
+            private set { SetValue(AllSitesProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets the list of all facilities in the floor-aware map or scene.
+        /// </summary>
+        public IList<FloorFacility>? AllFacilities
+        {
+            get => GetValue(AllFacilitiesProperty) as IList<FloorFacility>;
+            private set => SetValue(AllFacilitiesProperty, value);
+        }
+
+        /// <summary>
+        /// Gets the list of levels in the currently-selected facility.
+        /// </summary>
+        public IList<FloorLevel>? AllLevels
+        {
+            get => GetValue(AllLevelsProperty) as IList<FloorLevel>;
+            private set => SetValue(AllLevelsProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="AllSites"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AllSitesProperty =
+            DependencyProperty.Register(nameof(AllSites), typeof(IList<FloorSite>), typeof(FloorFilter), null);
+
+        /// <summary>
+        /// Identiies the <see cref="AllFacilities"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AllFacilitiesProperty =
+            DependencyProperty.Register(nameof(AllFacilities), typeof(IList<FloorFacility>), typeof(FloorFilter), null);
+
+        /// <summary>
+        /// Identifies the <see cref="AllLevels"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty AllLevelsProperty =
+            DependencyProperty.Register(nameof(AllLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
+#else
+        /// <summary>
+        /// Gets the list of available sites.
+        /// </summary>
+        public IList<FloorSite>? AllSites
+        {
+            get => GetValue(AllSitesPropertyKey.DependencyProperty) as IList<FloorSite>;
+            private set => SetValue(AllSitesPropertyKey, value);
+        }
 
         private static readonly DependencyPropertyKey AllSitesPropertyKey =
             DependencyProperty.RegisterReadOnly(nameof(AllSites), typeof(IList<FloorSite>), typeof(FloorFilter), null);
@@ -561,7 +647,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// To get a list of all facilities in the selected site, see <see cref="SelectedSite"/> and <see cref="FloorSite.Facilities"/>.
         /// </remarks>
-        public IList<FloorFacility>? AllFacilities => GetValue(AllFacilitiesPropertyKey.DependencyProperty) as IList<FloorFacility>;
+        public IList<FloorFacility>? AllFacilities
+        {
+            get => GetValue(AllFacilitiesPropertyKey.DependencyProperty) as IList<FloorFacility>;
+            private set => SetValue(AllFacilitiesPropertyKey, value);
+        }
 
         private static readonly DependencyPropertyKey AllFacilitiesPropertyKey =
             DependencyProperty.RegisterReadOnly(nameof(AllFacilities), typeof(IList<FloorFacility>), typeof(FloorFilter), null);
@@ -569,13 +659,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the list of available levels in the currently selected facility.
         /// </summary>
-        public IList<FloorLevel>? AllLevels => GetValue(AllLevelsPropertyKey.DependencyProperty) as IList<FloorLevel>;
+        public IList<FloorLevel>? AllLevels
+        {
+            get => GetValue(AllLevelsPropertyKey.DependencyProperty) as IList<FloorLevel>;
+            private set => SetValue(AllLevelsPropertyKey.DependencyProperty, value);
+        }
 
         private static readonly DependencyPropertyKey AllLevelsPropertyKey =
 DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
-        #endregion Read-only list properties
+#endif
+#endregion Read-only list properties
 
-        #region Configuration
+#region Configuration
 
         /// <summary>
         /// Gets or sets the value that defines how the <see cref="SelectedFacility"/> is updated as the <see cref="GeoView"/>'s viewpoint changes.
@@ -594,9 +689,9 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
 
         private static void OnAutomaticSelectionModePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((FloorFilter)d)._controller.AutomaticSelectionMode = (AutomaticSelectionMode)e.NewValue;
-        #endregion Configuration
+#endregion Configuration
 
-        #region Attached Properties
+#region Attached Properties
 
         /// <summary>
         /// Gets a value indicating whether the given dependency object is in an expanded state.
@@ -612,10 +707,14 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
         /// Identifies the "IsExpanded" attached property.
         /// </summary>
         public static readonly DependencyProperty IsExpandedProperty =
-            DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
-        #endregion Attached Properties
+#if WINDOWS_UWP
+            DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new PropertyMetadata(false));
+#else
+            DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new PropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
+#endif
+#endregion Attached Properties
 
-        #region INPC
+#region INPC
 
         /// <inheritdoc />
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -624,9 +723,9 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
+#endregion
 
-        #region UI State Management
+#region UI State Management
 
         /// <summary>
         /// Gets a value indicating whether the floor filter should display an 'All Floors' button.
@@ -671,6 +770,23 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
                 {
                     _selectedTab = value;
                     OnPropertyChanged();
+#if WINDOWS_UWP
+                    switch (_selectedTab)
+                    {
+                        case 0:
+                            VisualStateManager.GoToState(this, "Sites0", false);
+                            break;
+                        case 1:
+                            VisualStateManager.GoToState(this, "Facilities1", false);
+                            break;
+                        case 2:
+                            VisualStateManager.GoToState(this, "AllFacilities2", false);
+                            break;
+                        case 3:
+                            VisualStateManager.GoToState(this, "Simple3", false);
+                            break;
+                    }
+#endif
                 }
             }
         }
@@ -738,7 +854,7 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
             }
         }
 
-        #endregion UI State Management
+#endregion UI State Management
     }
 }
 #endif

@@ -1,0 +1,714 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:converter="using:Esri.ArcGISRuntime.Toolkit.Internal">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <Color x:Key="FloorFilterDefaultBackgroundColor">White</Color>
+            <Color x:Key="FloorFilterDefaultForegroundColor">#6e6e6e</Color>
+            <Color x:Key="FloorFilterAlternateBackgroundColor">#f3f3f3</Color>
+            <Color x:Key="FloorFilterAlternateForegroundColor">#2e2e2e</Color>
+            <Color x:Key="FloorFilterSelectedBackgroundColor">#e2f1fb</Color>
+            <Color x:Key="FloorFilterSelectedForegroundColor">#005e95</Color>
+            <Color x:Key="FloorFilterMutedBorderColor">#6e6e6eaa</Color>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <Color x:Key="FloorFilterDefaultBackgroundColor">#353535</Color>
+            <Color x:Key="FloorFilterDefaultForegroundColor">#fff</Color>
+            <Color x:Key="FloorFilterAlternateBackgroundColor">#2b2b2b</Color>
+            <Color x:Key="FloorFilterAlternateForegroundColor">#aaa</Color>
+            <Color x:Key="FloorFilterSelectedBackgroundColor">#202020</Color>
+            <Color x:Key="FloorFilterSelectedForegroundColor">#009af2</Color>
+            <Color x:Key="FloorFilterMutedBorderColor">#aa404040</Color>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <x:Double x:Key="FloorFilterCollapsedWidth">48</x:Double>
+    <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+    <SolidColorBrush x:Key="FloorFilterDefaultBackgroundBrush" Color="{ThemeResource FloorFilterDefaultBackgroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterDefaultForegroundBrush" Color="{ThemeResource FloorFilterDefaultForegroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterAlternateBackgroundBrush" Color="{ThemeResource FloorFilterAlternateBackgroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterAlternateForegroundBrush" Color="{ThemeResource FloorFilterAlternateForegroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterSelectedBackgroundBrush" Color="{ThemeResource FloorFilterSelectedBackgroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterSelectedForegroundBrush" Color="{ThemeResource FloorFilterSelectedForegroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterMutedBorderBrush" Color="{ThemeResource FloorFilterMutedBorderColor}" />
+
+    <x:String x:Key="FloorFilterBrowseBuildingsIcon">M13 9h-1V6h4v10h-1V7h-2zM5 5v5h1V3h1V0h2.62L11 1.867V9h-1V2.197L9.115 1H8v3H7v12H0V7h1V5zm-2 6v-1h1V6H2v2H1v7h5v-4zm7-1h4v6H8v-4h2zm1 1v2H9v2h4v-4zm-8 2h2v-1H3z</x:String>
+    <x:String x:Key="FloorFilterChevronLeftIcon">M10.207 4l-4 4 4 4H8.793l-4-4 4-4z</x:String>
+    <x:String x:Key="FloorFilterCloseIcon">M3.98 11.303L7.281 8 3.98 4.697l.707-.707L7.99 7.293l.01-.01.01.01 3.304-3.303.707.707L8.718 8l3.303 3.303-.707.707L8.01 8.707l-.01.01-.01-.01-3.304 3.303z</x:String>
+    <x:String x:Key="FloorFilterCollapseIcon">M7.793 12l4-4-4-4h1.414l4 4-4 4zm-4.586 0l4-4-4-4H1.793l4 4-4 4z</x:String>
+    <x:String x:Key="FloorFilterExpandIcon">M8.207 4l-4 4 4 4H6.793l-4-4 4-4zm4.586 0l-4 4 4 4h1.414l-4-4 4-4z</x:String>
+    <x:String x:Key="FloorFilterSearchIcon">M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z</x:String>
+    <x:String x:Key="FloorFilterZoomToIcon">M15.293 16L12 12.707V15h-1v-4h4v1h-2.293L16 15.293zm0-16L12 3.293V1h-1v4h4V4h-2.293L16 .707zM8 6a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm0 1a1 1 0 1 0 1 1 1 1 0 0 0-1-1zm-7 5h2.293L0 15.293.707 16 4 12.707V15h1v-4H1zm3-8.707L.707 0 0 .707 3.293 4H1v1h4V1H4z</x:String>
+    <x:String x:Key="FloorFilterAllFloorsIcon">M.088.482A.358.358 0 0 1 .305.205a5.075 5.075 0 0 1 4.104.6c.031.022.06.047.091.069L2.704 3.651c-.023-.013-.046-.022-.068-.037a1.407 1.407 0 0 1-.527-2.009 1.599 1.599 0 0 1 1.227-.604 3.737 3.737 0 0 0-2.6-.099 3.455 3.455 0 0 0 1.647 3.244l-.376.581A3.95 3.95 0 0 1 .088.482zM4 7V6H3v1zm2-6H5v1h1zm2 1H7v1h1zm2 1H9v1h1zM6 8H5v1h1zm-4 5h1v-1H2zm2-1v1h1v-1zm9-5h1V6h-1zm0 2h1V8h-1zm0 2h1v-1h-1zm0 2h1v-1h-1zm-2-4h1V8h-1zm0 2h1v-1h-1zm0 2h1v-1h-1zM9 6v9H6.969v-5H0v6h16V1.002zm-3 9H1v-4h5zm9 0h-5V6.515l5-3.57z</x:String>
+
+    <Style x:Key="FloorFilterBaseContainerStyle" TargetType="ListViewItem">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <Border
+                        x:Name="ContentBorder"
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="Stretch"
+                        Background="{StaticResource FloorFilterDefaultBackgroundBrush}"
+                        BorderBrush="Transparent"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid
+                            x:Name="ContentPresenterGrid"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            Background="Transparent">
+                            <ContentControl
+                                x:Name="ContentPresenter"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        </Grid>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOverSelected">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+
+                                </VisualState>
+                                <VisualState x:Name="PressedSelected">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ContentBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.3"
+                                            Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FloorFilterBarToggleButton" TargetType="ToggleButton">
+        <Setter Property="Height" Value="{StaticResource FloorFilterCollapsedWidth}" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <ContentPresenter
+                        x:Name="ContentPresenter"
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        AutomationProperties.AccessibilityView="Raw"
+                        Background="{TemplateBinding Background}"
+                        BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterSelectedForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="CheckedPointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterSelectedForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="CheckedPressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </ContentPresenter>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FloorFilterBarBasicButton" TargetType="Button">
+        <Setter Property="Height" Value="{StaticResource FloorFilterCollapsedWidth}" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter
+                        x:Name="ContentPresenter"
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        AutomationProperties.AccessibilityView="Raw"
+                        Background="{TemplateBinding Background}"
+                        BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </ContentPresenter>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FloorFilterPathIconStyle" TargetType="Path">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Stretch" Value="None" />
+    </Style>
+
+    <Style x:Key="FloorFilterClearButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+    </Style>
+
+    <Style x:Key="FloorFilterCloseButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="BackgroundSizing" Value="OuterBorderEdge" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Padding" Value="8,4,8,4" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter
+                        x:Name="ContentPresenter"
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        AutomationProperties.AccessibilityView="Raw"
+                        Background="{TemplateBinding Background}"
+                        BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        ContentTransitions="{TemplateBinding ContentTransitions}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FloorFilterAlternateForegroundBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="ContentPresenter" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </ContentPresenter>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="FloorFilterLevelDataTemplate">
+        <Border
+            x:Name="Container"
+            Width="{StaticResource FloorFilterCollapsedWidth}"
+            Height="{StaticResource FloorFilterCollapsedWidth}">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                HorizontalTextAlignment="Center"
+                Text="{Binding ShortName, Mode=OneTime}"
+                TextAlignment="Center" />
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FloorFilterSiteDataTemplate">
+        <Border Height="{StaticResource FloorFilterCollapsedWidth}">
+            <TextBlock
+                Padding="8"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="{Binding Name, Mode=OneTime}" />
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FloorFilterFacilityDataTemplate">
+        <Border MinHeight="{StaticResource FloorFilterCollapsedWidth}">
+            <TextBlock
+                Padding="8,8,8,4"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="14"
+                FontWeight="SemiBold"
+                Text="{Binding Name, Mode=OneTime}" />
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FloorFilterDifferentiatingFacilityDataTemplate">
+        <Border MinHeight="{StaticResource FloorFilterCollapsedWidth}">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock
+                    Padding="8,8,8,4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Text="{Binding Name, Mode=OneTime}" />
+                <TextBlock
+                    Padding="8,0,8,8"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="10"
+                    Text="{Binding Site.Name, Mode=OneTime}" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <Style x:Key="FloorFilterTabToggleStyle" TargetType="ButtonBase">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Padding" Value="8" />
+    </Style>
+
+    <Style x:Key="FloorFilterListStyle" TargetType="ListView">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource FloorFilterBaseContainerStyle}" />
+    </Style>
+
+    <ControlTemplate x:Key="FloorFilterTemplate" TargetType="toolkit:FloorFilter">
+        <Grid
+            x:Name="PART_AutoVisibilityWrapper"
+            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+            Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="48" />
+            </Grid.ColumnDefinitions>
+            <Border
+                x:Name="BarContainer"
+                Grid.Column="1"
+                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                Background="{StaticResource FloorFilterDefaultBackgroundBrush}"
+                BorderBrush="{StaticResource FloorFilterMutedBorderBrush}"
+                BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ToggleButton
+                        x:Name="BrowseToggle"
+                        Grid.Row="0"
+                        HorizontalContentAlignment="Center"
+                        IsChecked="{Binding IsBrowseOpen, Mode=TwoWay}"
+                        Style="{TemplateBinding BrowseButtonStyle}"
+                        ToolTipService.ToolTip="{TemplateBinding BrowseLabel}">
+                        <Path
+                            Data="{StaticResource FloorFilterBrowseBuildingsIcon}"
+                            Fill="{Binding ElementName=BrowseToggle, Path=Foreground, Mode=OneWay}"
+                            Style="{StaticResource FloorFilterPathIconStyle}" />
+                    </ToggleButton>
+                    <ToggleButton
+                        x:Name="AllButton"
+                        Grid.Row="1"
+                        HorizontalContentAlignment="Center"
+                        IsChecked="{Binding AllLevelsSelected, Mode=TwoWay}"
+                        Style="{TemplateBinding BrowseButtonStyle}"
+                        ToolTipService.ToolTip="{TemplateBinding AllFloorsLabel}"
+                        Visibility="{Binding ShowAllFloorsButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Path
+                            Data="{StaticResource FloorFilterAllFloorsIcon}"
+                            Fill="{Binding ElementName=AllButton, Path=Foreground, Mode=OneWay}"
+                            Style="{StaticResource FloorFilterPathIconStyle}" />
+                    </ToggleButton>
+                    <ListView
+                        Grid.Row="2"
+                        ItemTemplate="{TemplateBinding LevelDataTemplate}"
+                        ItemsSource="{Binding AllLevels, Mode=OneWay}"
+                        SelectedItem="{Binding SelectedLevel, Mode=TwoWay}"
+                        Style="{TemplateBinding CommonListStyle}" />
+                    <Button
+                        x:Name="PART_ZoomButton"
+                        Grid.Row="3"
+                        HorizontalContentAlignment="Center"
+                        Style="{TemplateBinding ZoomToButtonStyle}"
+                        ToolTipService.ToolTip="{TemplateBinding ZoomToLabel}">
+                        <Path
+                            Data="{StaticResource FloorFilterZoomToIcon}"
+                            Fill="{Binding ElementName=PART_ZoomButton, Path=Foreground, Mode=OneWay}"
+                            Style="{StaticResource FloorFilterPathIconStyle}" />
+                    </Button>
+                </Grid>
+            </Border>
+            <Border
+                x:Name="BrowseContainer"
+                Grid.Column="0"
+                MaxWidth="250"
+                Margin="8,0,8,0"
+                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                Background="{StaticResource FloorFilterDefaultBackgroundBrush}"
+                BorderBrush="{StaticResource FloorFilterMutedBorderBrush}"
+                BorderThickness="1"
+                Visibility="{Binding IsBrowseOpen, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        x:Name="PART_BackButton"
+                        Width="24"
+                        Padding="0"
+                        VerticalAlignment="Stretch"
+                        Style="{StaticResource FloorFilterCloseButtonStyle}"
+                        ToolTipService.ToolTip="{TemplateBinding BackButtonLabel}">
+                        <Path
+                            Data="{StaticResource FloorFilterChevronLeftIcon}"
+                            Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
+                            Style="{StaticResource FloorFilterPathIconStyle}" />
+                    </Button>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="4"
+                        VerticalAlignment="Center">
+
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{TemplateBinding BrowseLabel}" />
+                        <TextBlock
+                            Margin="0,4,0,0"
+                            Text="{Binding SelectedSite.Name, Mode=OneWay}"
+                            TextWrapping="Wrap"
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ShowSiteNameSubtitle, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    </StackPanel>
+                    <Button
+                        x:Name="PART_CloseBrowseButton"
+                        Grid.Column="2"
+                        Width="32"
+                        MinHeight="32"
+                        Margin="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Style="{StaticResource FloorFilterCloseButtonStyle}"
+                        ToolTipService.ToolTip="{TemplateBinding CloseLabel}">
+                        <Path
+                            Data="{StaticResource FloorFilterCloseIcon}"
+                            Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
+                            Style="{StaticResource FloorFilterPathIconStyle}" />
+                    </Button>
+                    <!--  Browse Facilities/Sites  -->
+                    <Grid
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        MinWidth="200"
+                        MaxHeight="300"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        BorderThickness="0">
+                        <Grid x:Name="PART_Browsing_Sites_List" Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ListView
+                                x:Name="PART_SiteListView"
+                                Grid.Row="0"
+                                ItemTemplate="{TemplateBinding SiteDataTemplate}"
+                                ItemsSource="{Binding AllSites, Mode=OneWay}"
+                                SelectedItem="{Binding SelectedSite, Mode=TwoWay}"
+                                Style="{StaticResource FloorFilterListStyle}" />
+                            <Button
+                                x:Name="PART_AllButton"
+                                Grid.Row="1"
+                                HorizontalAlignment="Stretch"
+                                Content="{TemplateBinding AllFacilitiesLabel}"
+                                Style="{StaticResource FloorFilterBarBasicButton}" />
+                        </Grid>
+                        <ListView
+                            x:Name="PART_FacilitiesListView"
+                            Grid.Row="1"
+                            ItemTemplate="{TemplateBinding FacilityDataTemplate}"
+                            ItemsSource="{Binding SelectedSite.Facilities}"
+                            SelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
+                            Style="{StaticResource FloorFilterListStyle}" />
+                        <ListView
+                            x:Name="PART_AllFacilitiesListView"
+                            ItemTemplate="{TemplateBinding DifferentiatingFacilityDataTemplate}"
+                            ItemsSource="{Binding AllFacilities}"
+                            SelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
+                            Style="{StaticResource FloorFilterListStyle}" />
+                        <ListView
+                            x:Name="PART_FacilitiesNoSitesListView"
+                            ItemTemplate="{StaticResource FloorFilterFacilityDataTemplate}"
+                            ItemsSource="{Binding AllFacilities}"
+                            SelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
+                            Style="{StaticResource FloorFilterListStyle}" />
+                    </Grid>
+                </Grid>
+            </Border>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="BrowsingStates">
+                    <VisualState x:Name="Sites0">
+                        <VisualState.Setters>
+                            <Setter Target="PART_Browsing_Sites_List.Visibility" Value="Visible" />
+                            <Setter Target="PART_FacilitiesListView.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_AllFacilitiesListView.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_FacilitiesNoSitesListView.Visibility" Value="Collapsed" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Facilities1">
+                        <VisualState.Setters>
+                            <Setter Target="PART_Browsing_Sites_List.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_FacilitiesListView.Visibility" Value="Visible" />
+                            <Setter Target="PART_AllFacilitiesListView.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_FacilitiesNoSitesListView.Visibility" Value="Collapsed" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="AllFacilities2">
+                        <VisualState.Setters>
+                            <Setter Target="PART_Browsing_Sites_List.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_FacilitiesListView.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_AllFacilitiesListView.Visibility" Value="Visible" />
+                            <Setter Target="PART_FacilitiesNoSitesListView.Visibility" Value="Collapsed" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Simple3">
+                        <VisualState.Setters>
+                            <Setter Target="PART_Browsing_Sites_List.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_FacilitiesListView.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_AllFacilitiesListView.Visibility" Value="Collapsed" />
+                            <Setter Target="PART_FacilitiesNoSitesListView.Visibility" Value="Visible" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+
+            </VisualStateManager.VisualStateGroups>
+        </Grid>
+    </ControlTemplate>
+
+    <Style TargetType="toolkit:FloorFilter">
+        <Setter Property="BrowseLabel" Value="Browse" />
+        <Setter Property="CloseLabel" Value="Close" />
+        <Setter Property="CollapseLabel" Value="Collapse" />
+        <Setter Property="ExpandLabel" Value="Expand" />
+        <Setter Property="ZoomToLabel" Value="Zoom To" />
+        <Setter Property="NoResultsMessage" Value="No results found." />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="AllFacilitiesLabel" Value="All" />
+        <Setter Property="BackButtonLabel" Value="Go Back" />
+        <Setter Property="AllFloorsLabel" Value="All Floors" />
+        <Setter Property="SearchPlaceholder" Value="Search" />
+        <Setter Property="Margin" Value="8,8,8,24" />
+        <Setter Property="MaxHeight" Value="360" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="toolkit:FloorFilter.IsExpanded" Value="False" />
+        <Setter Property="LevelDataTemplate" Value="{StaticResource FloorFilterLevelDataTemplate}" />
+        <Setter Property="SiteDataTemplate" Value="{StaticResource FloorFilterSiteDataTemplate}" />
+        <Setter Property="FacilityDataTemplate" Value="{StaticResource FloorFilterFacilityDataTemplate}" />
+        <Setter Property="DifferentiatingFacilityDataTemplate" Value="{StaticResource FloorFilterDifferentiatingFacilityDataTemplate}" />
+        <Setter Property="CommonListStyle" Value="{StaticResource FloorFilterListStyle}" />
+        <Setter Property="ExpandCollapseButtonStyle" Value="{StaticResource FloorFilterBarToggleButton}" />
+        <Setter Property="BrowseButtonStyle" Value="{StaticResource FloorFilterBarToggleButton}" />
+        <Setter Property="ZoomToButtonStyle" Value="{StaticResource FloorFilterBarBasicButton}" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterTemplate}" />
+    </Style>
+</ResourceDictionary>

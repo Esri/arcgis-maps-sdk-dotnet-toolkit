@@ -83,3 +83,12 @@ Xamarin.Forms:
         GeoView="{x:Reference MyMapView}" />
 </Grid>
 ```
+
+UWP:
+
+```xml
+<Grid>
+    <esri:MapView x:Name="MyMapView" />
+    <esri:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
+```
