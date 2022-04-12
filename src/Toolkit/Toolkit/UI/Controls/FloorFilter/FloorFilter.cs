@@ -752,7 +752,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public IList<FloorLevel>? AllLevels
         {
             get => GetValue(AllLevelsPropertyKey.DependencyProperty) as IList<FloorLevel>;
-            private set => SetValue(AllLevelsPropertyKey.DependencyProperty, value);
+            private set => SetValue(AllLevelsPropertyKey, value);
         }
 
         private static readonly DependencyPropertyKey AllLevelsPropertyKey =
