@@ -6,12 +6,12 @@ FloorFilter allows users to take advantage of floor-aware maps and scenes by sur
 
 ## Features
 
-- Automatically hides the floor browsing view then the associated map or scene is not floor-aware
+- Automatically hides the floor browsing view when the associated map or scene is not floor-aware
 - Selects the facility in view automatically
     - This behavior can be configured through the `AutomaticSelectionMode` property
-- View is space-efficient and can be expanded/collapsed
+- View is space-efficient and can be expanded/collapsed (WPF only)
 - Shows the selected facility's levels in proper vertical order
-- Filters the data to show the selected level
+- Filters the map/scene content to show the selected level
 - Allows browsing the full floor-aware hierarchy of sites, facilities, and levels
     - When consuming simpler maps, simplifies the UI as needed; for example, the site browsing experience is hidden when there is only one (or no) sites
 - When browsing, allows dynamic filtering of lists

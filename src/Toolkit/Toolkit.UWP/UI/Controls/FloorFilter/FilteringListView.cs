@@ -40,8 +40,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         private bool _waitFlag;
 
-        private List<WrappedListItem>? _filteredList;
-        private List<WrappedListItem>? _unfilteredList;
+        private List<object>? _filteredList;
+        private List<object>? _unfilteredList;
         private object? _lastSetItemsSource;
 
         public FilteringListView()
@@ -66,11 +66,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 if (ItemsSource is IEnumerable enumerable)
                 {
-                    _unfilteredList = enumerable.OfType<object>().Select(m => new WrappedListItem(m)).ToList();
+                    _unfilteredList = enumerable.OfType<object>().ToList();
                 }
                 else
                 {
-                    _unfilteredList = new List<WrappedListItem>();
+                    _unfilteredList = new List<object>();
                 }
 
                 _lastSetItemsSource = ItemsSource;
@@ -85,7 +85,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // Update filtered list and both views' visibilities
             if (_searchBox?.Text?.ToLower() is string searchString && !string.IsNullOrWhiteSpace(searchString))
             {
-                _filteredList = _unfilteredList.Where(m => m.FilterName.Contains(searchString)).ToList();
+                _filteredList = _unfilteredList.Where(m => AsFilterString(m).Contains(searchString)).ToList();
                 _filteredListView?.SetValue(ItemsSourceProperty, _filteredList);
                 _filteredListView?.SetValue(VisibilityProperty, Visibility.Visible);
                 _unfilteredListView?.SetValue(VisibilityProperty, Visibility.Collapsed);
@@ -109,13 +109,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
 
             // Update selection
-            if (_unfilteredList?.FirstOrDefault(item => item.UnderlyingItem == SelectedItem) is WrappedListItem item)
+            if (_unfilteredList?.FirstOrDefault(item => item == SelectedItem) is object item)
             {
                 _unfilteredListView?.SetValue(SelectedItemProperty, item);
                 _unfilteredListView?.ScrollIntoView(item);
             }
 
-            if (_filteredList?.FirstOrDefault(item => item.UnderlyingItem == SelectedItem) is WrappedListItem filteredItem)
+            if (_filteredList?.FirstOrDefault(item => item == SelectedItem) is object filteredItem)
             {
                 _filteredListView?.SetValue(SelectedItemProperty, filteredItem);
                 _filteredListView?.ScrollIntoView(filteredItem);
@@ -218,43 +218,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         private void InnerListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (e.ClickedItem is WrappedListItem wrapped)
+            if (e.ClickedItem is object newobject)
             {
-                SelectedItem = wrapped.UnderlyingItem;
-                SelectionChanged2?.Invoke(this, new SelectionChangedEventArgs(new List<object>(), new List<object>() { wrapped.UnderlyingItem }));
+                SelectedItem = newobject;
+                SelectionChanged2?.Invoke(this, new SelectionChangedEventArgs(new List<object>(), new List<object>() { newobject }));
             }
 
             UpdateForCurrentState();
         }
 
         public event SelectionChangedEventHandler SelectionChanged2;
-    }
 
-#pragma warning disable SA1402 // File may only contain a single type
-    internal class WrappedListItem
-#pragma warning restore SA1402 // File may only contain a single type
-    {
-        public object UnderlyingItem { get; private set; }
-
-        public string Name { get; private set; }
-
-        public string FilterName { get; private set; }
-
-        public FloorSite Site => (UnderlyingItem as FloorFacility)?.Site;
-
-        public WrappedListItem(object input)
+        private static string AsFilterString(object input)
         {
-            if (input is FloorSite site)
+            if (input is string inputString)
             {
-                UnderlyingItem = site;
-                Name = site.Name;
-                FilterName = Name.ToLower();
+                return inputString;
             }
-            else if (input is FloorFacility facility)
+            else if (input is FloorFacility facilityInput)
             {
-                UnderlyingItem = facility;
-                Name = facility.Name;
-                FilterName = Name.ToLower();
+                return facilityInput.Name.ToLower();
+            }
+            else if (input is FloorSite siteInput)
+            {
+                return siteInput.Name.ToLower();
+            }
+            else
+            {
+                return input?.ToString() ?? string.Empty;
             }
         }
     }
