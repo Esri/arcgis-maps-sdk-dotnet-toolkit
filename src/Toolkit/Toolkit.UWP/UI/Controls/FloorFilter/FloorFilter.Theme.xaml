@@ -25,6 +25,8 @@
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
+
+
     <x:Double x:Key="FloorFilterCollapsedWidth">48</x:Double>
     <FontFamily x:Key="CalciteIconFont">ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/calcite-ui-icons-24.ttf#calcite-ui-icons-24</FontFamily>
     <internal:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -149,6 +151,77 @@
         </Setter>
     </Style>
 
+    <Style x:Key="FilteringListViewStyle" TargetType="internal:FilteringListView">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource FloorFilterBaseContainerStyle}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="internal:FilteringListView">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border
+                            Grid.Row="0"
+                            Grid.ColumnSpan="3"
+                            Background="{ThemeResource FloorFilterAlternateBackgroundBrush}" />
+                        <TextBlock
+                            Grid.Column="0"
+                            FontFamily="{StaticResource CalciteIconFont}"
+                            Foreground="{StaticResource FloorFilterAlternateForegroundBrush}"
+							VerticalAlignment="Center"
+                            Text="&#xe268;"
+                            TextAlignment="Center" />
+                        <TextBox
+                            x:Name="PART_SearchBox"
+                            Grid.Column="1"
+                            Padding="8"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Foreground="{ThemeResource FloorFilterAlternateForegroundBrush}"
+                            HorizontalTextAlignment="Left" />
+                        <TextBlock
+                            x:Name="PART_Placeholder"
+                            Grid.Column="1"
+                            Padding="8"
+                            IsHitTestVisible="False" />
+                        <TextBlock
+                            x:Name="PART_NoResultsLabel"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="8"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontWeight="SemiBold"
+                            HorizontalTextAlignment="Center"
+                            TextAlignment="Center" />
+                        <ListView
+                            x:Name="PART_FilteredListView"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            IsItemClickEnabled="True"
+                            SelectionMode="Single" />
+                        <ListView
+                            x:Name="PART_UnfilteredListView"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            IsItemClickEnabled="True"
+                            SelectionMode="Single" />
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="FloorFilterBarToggleButton" TargetType="ToggleButton">
         <Setter Property="Height" Value="{StaticResource FloorFilterCollapsedWidth}" />
         <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
@@ -177,8 +250,7 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal">
-                                    <Storyboard>
-                                    </Storyboard>
+                                    <Storyboard />
                                 </VisualState>
                                 <VisualState x:Name="PointerOver">
                                     <Storyboard>
@@ -573,13 +645,15 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ListView
+                            <internal:FilteringListView
                                 x:Name="PART_SiteListView"
                                 Grid.Row="0"
                                 ItemTemplate="{TemplateBinding SiteDataTemplate}"
                                 ItemsSource="{Binding AllSites, Mode=OneWay}"
+                                NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                                Placeholder="{TemplateBinding SearchPlaceholder}"
                                 SelectedItem="{Binding SelectedSite, Mode=TwoWay}"
-                                Style="{StaticResource FloorFilterListStyle}" />
+                                Style="{StaticResource FilteringListViewStyle}" />
                             <Button
                                 x:Name="PART_AllButton"
                                 Grid.Row="1"
@@ -587,25 +661,31 @@
                                 Content="{TemplateBinding AllFacilitiesLabel}"
                                 Style="{StaticResource FloorFilterBarBasicButton}" />
                         </Grid>
-                        <ListView
+                        <internal:FilteringListView
                             x:Name="PART_FacilitiesListView"
                             Grid.Row="1"
                             ItemTemplate="{TemplateBinding FacilityDataTemplate}"
                             ItemsSource="{Binding SelectedSite.Facilities}"
+                            NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                            Placeholder="{TemplateBinding SearchPlaceholder}"
                             SelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
-                            Style="{StaticResource FloorFilterListStyle}" />
-                        <ListView
+                            Style="{StaticResource FilteringListViewStyle}" />
+                        <internal:FilteringListView
                             x:Name="PART_AllFacilitiesListView"
                             ItemTemplate="{TemplateBinding DifferentiatingFacilityDataTemplate}"
                             ItemsSource="{Binding AllFacilities}"
+                            NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                            Placeholder="{TemplateBinding SearchPlaceholder}"
                             SelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
-                            Style="{StaticResource FloorFilterListStyle}" />
-                        <ListView
+                            Style="{StaticResource FilteringListViewStyle}" />
+                        <internal:FilteringListView
                             x:Name="PART_FacilitiesNoSitesListView"
                             ItemTemplate="{StaticResource FloorFilterFacilityDataTemplate}"
                             ItemsSource="{Binding AllFacilities}"
+                            NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                            Placeholder="{TemplateBinding SearchPlaceholder}"
                             SelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
-                            Style="{StaticResource FloorFilterListStyle}" />
+                            Style="{StaticResource FilteringListViewStyle}" />
                     </Grid>
                 </Grid>
             </Border>
@@ -676,4 +756,5 @@
         <Setter Property="ZoomToButtonStyle" Value="{StaticResource FloorFilterBarBasicButton}" />
         <Setter Property="Template" Value="{StaticResource FloorFilterTemplate}" />
     </Style>
+
 </ResourceDictionary>

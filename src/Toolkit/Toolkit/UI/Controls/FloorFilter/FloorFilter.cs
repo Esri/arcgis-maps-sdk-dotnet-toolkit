@@ -24,6 +24,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 
 #if IsWPF
@@ -95,25 +96,69 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Remove old handlers
             if (_allFacilitiesListView != null)
             {
+                #if IsWPF
                 _allFacilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
+                #elif WINDOWS_UWP
+                if (_allFacilitiesListView is FilteringListView faflv)
+                {
+                    faflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
+                }
+                else
+                {
+                    _allFacilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
+                }
+                #endif
                 _allFacilitiesListView = null;
             }
 
             if (_facilitiesListView != null)
             {
+                #if IsWPF
                 _facilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
+                #elif WINDOWS_UWP
+                if (_facilitiesListView is FilteringListView fflv)
+                {
+                    fflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
+                }
+                else
+                {
+                    _facilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
+                }
+                #endif
                 _facilitiesListView = null;
             }
 
             if (_facilitiesNoSitesListView != null)
             {
+#if IsWPF
                 _facilitiesNoSitesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
+#elif WINDOWS_UWP
+                if (_facilitiesListView is FilteringListView fnsflv)
+                {
+                    fnsflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
+                }
+                else
+                {
+                    _facilitiesNoSitesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
+                }
+#endif
                 _facilitiesNoSitesListView = null;
             }
 
             if (_siteListView != null)
             {
+                #if IsWPF
                 _siteListView.SelectionChanged -= HandleControlDrivenSiteSelection;
+                #elif WINDOWS_UWP
+                if (_siteListView is FilteringListView fslv)
+                {
+                    fslv.SelectionChanged2 -= HandleControlDrivenSiteSelection;
+                }
+                else
+                {
+                    _siteListView.SelectionChanged -= HandleControlDrivenSiteSelection;
+                }
+                #endif
                 _siteListView = null;
             }
 
@@ -147,25 +192,70 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_SiteListView") is ListView siteListView)
             {
                 _siteListView = siteListView;
+                #if IsWPF
                 _siteListView.SelectionChanged += HandleControlDrivenSiteSelection;
+                #elif WINDOWS_UWP
+                if (_siteListView is FilteringListView nfslv)
+                {
+                    nfslv.SelectionChanged2 += HandleControlDrivenSiteSelection;
+                }
+                else
+                {
+                    _siteListView.SelectionChanged += HandleControlDrivenSiteSelection;
+                }
+                #endif
             }
 
             if (GetTemplateChild("PART_FaciltiesListView") is ListView facilitiesListView)
             {
                 _facilitiesListView = facilitiesListView;
+                #if IsWPF
                 _facilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
+                #elif WINDOWS_UWP
+                if (_facilitiesListView is FilteringListView nfflv)
+                {
+                    nfflv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
+                }
+                else
+                {
+                    _facilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
+                }
+                #endif
             }
 
             if (GetTemplateChild("PART_AllFacilitiesListView") is ListView allFacilitiesListView)
             {
                 _allFacilitiesListView = allFacilitiesListView;
+                #if IsWPF
                 _allFacilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
+                #elif WINDOWS_UWP
+                if (_allFacilitiesListView is FilteringListView nfaflv)
+                {
+                    nfaflv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
+                }
+                else
+                {
+                    _allFacilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
+                }
+
+                #endif
             }
 
             if (GetTemplateChild("PART_FacilitiesNoSitesListView") is ListView facilitiesNoSitesListView)
             {
                 _facilitiesNoSitesListView = facilitiesNoSitesListView;
+                #if IsWPF
                 _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
+                #elif WINDOWS_UWP
+                if (_facilitiesNoSitesListView is FilteringListView nfnslv)
+                {
+                    nfnslv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
+                }
+                else
+                {
+                    _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
+                }
+                #endif
             }
 
             if (GetTemplateChild("PART_ZoomButton") is Button zoomButton)
@@ -756,7 +846,7 @@ DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>)
         public static readonly DependencyProperty IsBrowseOpenProperty =
             DependencyProperty.Register(nameof(IsBrowseOpen), typeof(bool), typeof(FloorFilter), new PropertyMetadata(false));
 
-        private int _selectedTab = 0;
+        private int _selectedTab = -1;
 
         /// <summary>
         /// Gets or sets the tab in the browsing experience that should be active.
