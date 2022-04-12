@@ -19,20 +19,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
-using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
-
 #if IsWPF
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using PropertyMetadata = System.Windows.FrameworkPropertyMetadata;
 #elif WINDOWS_UWP
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 #endif

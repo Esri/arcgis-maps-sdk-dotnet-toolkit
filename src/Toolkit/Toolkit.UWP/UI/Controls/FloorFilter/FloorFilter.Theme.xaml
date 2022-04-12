@@ -172,9 +172,9 @@
                             Background="{ThemeResource FloorFilterAlternateBackgroundBrush}" />
                         <TextBlock
                             Grid.Column="0"
+                            VerticalAlignment="Center"
                             FontFamily="{StaticResource CalciteIconFont}"
                             Foreground="{StaticResource FloorFilterAlternateForegroundBrush}"
-							VerticalAlignment="Center"
                             Text="&#xe268;"
                             TextAlignment="Center" />
                         <TextBox
