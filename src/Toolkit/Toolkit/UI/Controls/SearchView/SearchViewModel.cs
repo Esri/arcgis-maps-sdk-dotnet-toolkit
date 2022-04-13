@@ -98,7 +98,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the selected search result.
         /// </summary>
-        public SearchResult? SelectedResult { get => _selectedResult; set => SetPropertyChanged(value, ref _selectedResult); }
+        public SearchResult? SelectedResult
+        {
+            get => _selectedResult;
+            set
+            {
+                if (_selectedResult != null)
+                {
+                    _selectedResult.OwningSource.NotifyDeselected(_selectedResult);
+                }
+
+                SetPropertyChanged(value, ref _selectedResult);
+
+                if (value != null)
+                {
+                    value.OwningSource.NotifySelected(value);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets or sets the current query.

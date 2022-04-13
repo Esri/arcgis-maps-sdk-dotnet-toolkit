@@ -95,6 +95,7 @@
                     <Button Clicked="AddDefaultLocator_Click" Text="Add World Geocoder with Name:" />
                     <Entry x:Name="GeocoderNameEntry" Text="Name" />
                     <Button Clicked="RemoveLocator_Click" Text="Remove Last Search Source" />
+                    <Button Clicked="AddTestLocator_Click" Text="Add event test source" />
                 </StackLayout>
             </ScrollView>
         </Grid>
