@@ -554,14 +554,14 @@
                         HorizontalContentAlignment="Center"
                         Content="&#x32f6;"
                         FontFamily="{StaticResource CalciteIconFont}"
-                        IsChecked="{Binding AllLevelsSelected, Mode=TwoWay}"
+                        IsChecked="{Binding AllDisplayLevelsSelected, Mode=TwoWay}"
                         Style="{TemplateBinding BrowseButtonStyle}"
                         ToolTipService.ToolTip="{TemplateBinding AllFloorsLabel}"
                         Visibility="{Binding ShowAllFloorsButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                     <ListView
                         Grid.Row="2"
                         ItemTemplate="{TemplateBinding LevelDataTemplate}"
-                        ItemsSource="{Binding AllLevels, Mode=OneWay}"
+                        ItemsSource="{Binding DisplayLevels, Mode=OneWay}"
                         SelectedItem="{Binding SelectedLevel, Mode=TwoWay}"
                         Style="{TemplateBinding CommonListStyle}" />
                     <Button

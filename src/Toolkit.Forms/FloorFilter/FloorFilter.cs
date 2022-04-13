@@ -20,7 +20,7 @@ using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 using Xamarin.Forms;
 
@@ -114,7 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             {
                 PART_LevelListView.ItemTemplate = LevelDataTemplate;
                 PART_LevelListView.BindingContext = this;
-                PART_LevelListView.SetBinding(ListView.ItemsSourceProperty, new Binding(nameof(AllLevels), BindingMode.OneWay));
+                PART_LevelListView.SetBinding(ListView.ItemsSourceProperty, new Binding(nameof(DisplayLevels), BindingMode.OneWay));
                 PART_LevelListView.SetBinding(ListView.SelectedItemProperty, new Binding(nameof(SelectedLevel), BindingMode.TwoWay));
             }
         }
@@ -206,11 +206,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 case nameof(_controller.AllFacilities):
                     AllFacilities = _controller.AllFacilities;
                     break;
-                case nameof(_controller.DisplaySites):
-                    AllSites = _controller.DisplaySites;
+                case nameof(_controller.AllSites):
+                    AllSites = _controller.AllSites;
                     break;
                 case nameof(_controller.DisplayLevels):
-                    AllLevels = _controller.DisplayLevels;
+                    DisplayLevels = _controller.DisplayLevels;
                     break;
                 case nameof(_controller.RequestedViewpoint):
                     SetViewpointFromControllerAsync();
@@ -218,8 +218,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 case nameof(_controller.ShouldDisplayFloorPicker):
                     PART_VisibilityWrapper?.SetValue(IsVisibleProperty, _controller.ShouldDisplayFloorPicker);
                     break;
-                case nameof(_controller.AllLevelsSelected):
-                    OnPropertyChanged(nameof(AllLevelsSelecteded));
+                case nameof(_controller.AllDisplayLevelsSelected):
+                    OnPropertyChanged(nameof(AllDisplayLevelsSelected));
                     break;
             }
         }
@@ -228,7 +228,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             PART_AllButton?.SetValue(IsVisibleProperty, ShowAllFloorsButton);
 
-            if (AllLevels == null || AllLevels.Count == 0)
+            if (DisplayLevels == null || DisplayLevels.Count == 0)
             {
                 PART_LevelListContainer?.SetValue(IsVisibleProperty, false);
             }
@@ -357,9 +357,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 else
                 {
                     mapLoadable.Loaded += ForwardGeoModelLoaded;
-
-                    // Ensure event is raised even if already loaded
-                    _ = mapLoadable.LoadAsync();
+                    HandleGeoModelLoaded();
                 }
             }
             else if (GeoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
@@ -371,9 +369,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 else
                 {
                     sceneLoadable.Loaded += ForwardGeoModelLoaded;
-
-                    // Ensure event is raised even if already loaded
-                    _ = sv.Scene.LoadAsync();
+                    HandleGeoModelLoaded();
                 }
             }
         }
@@ -384,11 +380,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             Dispatcher.BeginInvokeOnMainThread(() =>
             {
-                if (GeoView is MapView mv)
+                if (GeoView is MapView mv && mv.Map is Map mapLoadable && mapLoadable.LoadStatus == LoadStatus.Loaded)
                 {
-                    _controller.FloorManager = mv.Map?.FloorManager;
+                    _controller.FloorManager = mapLoadable.FloorManager;
                 }
-                else if (GeoView is SceneView sv)
+                else if (GeoView is SceneView sv && sv.Scene is Scene sceneLoadable && sceneLoadable.LoadStatus == LoadStatus.Loaded)
                 {
                     _controller.FloorManager = sv.Scene?.FloorManager;
                 }
@@ -482,25 +478,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <remarks>
         /// This is used for showing an entire facility in 3D.
         /// </remarks>
-        public bool AllLevelsSelecteded
+        public bool AllDisplayLevelsSelected
         {
-            get => _controller.AllLevelsSelected;
+            get => _controller.AllDisplayLevelsSelected;
             set
             {
                 if (value)
                 {
-                    _controller.SelectAllLevels();
+                    _controller.SelectAllDisplayLevels();
                 }
                 else
                 {
-                    _controller.UndoSelectAllLevels();
+                    _controller.UndoSelectAllDisplayLevels();
                 }
             }
         }
         #endregion Selection
 
         #region Read-only list properties
-        private IList<FloorLevel>? _allLevels;
+        private IList<FloorLevel>? _displayLevels;
         private IList<FloorSite>? _allSites;
         private IList<FloorFacility>? _allFacilities;
 
@@ -542,16 +538,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// <summary>
         /// Gets the list of available levels in the currently selected facility.
         /// </summary>
-        public IList<FloorLevel>? AllLevels
+        public IList<FloorLevel>? DisplayLevels
         {
-            get => _allLevels;
+            get => _displayLevels;
             private set
             {
-                if (value != _allLevels)
+                if (value != _displayLevels)
                 {
-                    _allLevels = value;
+                    _displayLevels = value;
                     HandleLevelsListChanges();
-                    OnPropertyChanged(nameof(AllLevels));
+                    OnPropertyChanged(nameof(DisplayLevels));
                 }
             }
         }
@@ -589,13 +585,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (PART_LevelListView != null)
             {
-                if (AllLevels == null || AllLevels.Count < 1)
+                if (DisplayLevels == null || DisplayLevels.Count < 1)
                 {
                     PART_LevelListContainer?.SetValue(IsVisibleProperty, false);
                 }
 
                 const int maxHeight = 320;
-                var desiredHeight = (_allLevels?.Count ?? 0) * 48;
+                var desiredHeight = (_displayLevels?.Count ?? 0) * 48;
                 PART_LevelListView.HeightRequest = Math.Min(maxHeight, desiredHeight);
 
                 if (desiredHeight > maxHeight)
@@ -618,7 +614,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                         }
                     }
                 }
-                else if (AllLevels?.Any() ?? false)
+                else if (DisplayLevels?.Any() ?? false)
                 {
                     PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Never;
                     try
@@ -626,7 +622,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                         // There is a crash on iOS only
                         if (Device.RuntimePlatform != Device.iOS)
                         {
-                            PART_LevelListView.ScrollTo(AllLevels.Last(), ScrollToPosition.Start, false);
+                            PART_LevelListView.ScrollTo(DisplayLevels.Last(), ScrollToPosition.Start, false);
                         }
                     }
                     catch (Exception ex)

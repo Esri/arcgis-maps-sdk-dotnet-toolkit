@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if IsWPF || WINDOWS_UWP
+#if WINDOWS
 
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
 using Esri.ArcGISRuntime.UI.Controls;
-#if IsWPF
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using PropertyMetadata = System.Windows.FrameworkPropertyMetadata;
@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-#if IsWPF
+#if WPF
         public override void OnApplyTemplate()
 #elif WINDOWS_UWP
         protected override void OnApplyTemplate()
@@ -92,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Remove old handlers
             if (_allFacilitiesListView != null)
             {
-                #if IsWPF
+                #if WPF
                 _allFacilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
                 #elif WINDOWS_UWP
                 if (_allFacilitiesListView is FilteringListView faflv)
@@ -109,7 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_facilitiesListView != null)
             {
-                #if IsWPF
+                #if WPF
                 _facilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
                 #elif WINDOWS_UWP
                 if (_facilitiesListView is FilteringListView fflv)
@@ -126,7 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_facilitiesNoSitesListView != null)
             {
-#if IsWPF
+#if WPF
                 _facilitiesNoSitesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
 #elif WINDOWS_UWP
                 if (_facilitiesListView is FilteringListView fnsflv)
@@ -143,7 +143,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_siteListView != null)
             {
-                #if IsWPF
+                #if WPF
                 _siteListView.SelectionChanged -= HandleControlDrivenSiteSelection;
                 #elif WINDOWS_UWP
                 if (_siteListView is FilteringListView fslv)
@@ -188,7 +188,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_SiteListView") is ListView siteListView)
             {
                 _siteListView = siteListView;
-                #if IsWPF
+                #if WPF
                 _siteListView.SelectionChanged += HandleControlDrivenSiteSelection;
                 #elif WINDOWS_UWP
                 if (_siteListView is FilteringListView nfslv)
@@ -205,7 +205,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_FaciltiesListView") is ListView facilitiesListView)
             {
                 _facilitiesListView = facilitiesListView;
-                #if IsWPF
+                #if WPF
                 _facilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
                 #elif WINDOWS_UWP
                 if (_facilitiesListView is FilteringListView nfflv)
@@ -222,7 +222,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_AllFacilitiesListView") is ListView allFacilitiesListView)
             {
                 _allFacilitiesListView = allFacilitiesListView;
-                #if IsWPF
+                #if WPF
                 _allFacilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
                 #elif WINDOWS_UWP
                 if (_allFacilitiesListView is FilteringListView nfaflv)
@@ -240,7 +240,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_FacilitiesNoSitesListView") is ListView facilitiesNoSitesListView)
             {
                 _facilitiesNoSitesListView = facilitiesNoSitesListView;
-                #if IsWPF
+                #if WPF
                 _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
                 #elif WINDOWS_UWP
                 if (_facilitiesNoSitesListView is FilteringListView nfnslv)
@@ -316,12 +316,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     AllFacilities = _controller.AllFacilities;
                     SetTabSelection(0);
                     break;
-                case nameof(_controller.DisplaySites):
-                    AllSites = _controller.DisplaySites;
+                case nameof(_controller.AllSites):
+                    AllSites = _controller.AllSites;
                     SetTabSelection(0);
                     break;
                 case nameof(_controller.DisplayLevels):
-                    AllLevels = _controller.DisplayLevels;
+                    DisplayLevels = _controller.DisplayLevels;
                     break;
                 case nameof(_controller.RequestedViewpoint):
                     SetViewpointFromControllerAsync();
@@ -329,8 +329,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 case nameof(_controller.ShouldDisplayFloorPicker):
                     _autoVisibilityWrapper?.SetValue(VisibilityProperty, _controller.ShouldDisplayFloorPicker ? Visibility.Visible : Visibility.Collapsed);
                     break;
-                case nameof(_controller.AllLevelsSelected):
-                    OnPropertyChanged(nameof(AllLevelsSelecteded));
+                case nameof(_controller.AllDisplayLevelsSelected):
+                    OnPropertyChanged(nameof(AllDisplayLevelsSelecteded));
                     break;
             }
         }
@@ -493,9 +493,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else
                 {
                     mapLoadable.Loaded += ForwardGeoModelLoaded;
-
-                    // Ensure event is raised even if already loaded
-                    _ = mapLoadable.LoadAsync();
+                    HandleGeoModelLoaded();
                 }
             }
             else if (GeoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
@@ -507,9 +505,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 else
                 {
                     sceneLoadable.Loaded += ForwardGeoModelLoaded;
-
-                    // Ensure event is raised even if already loaded
-                    _ = sv.Scene.LoadAsync();
+                    HandleGeoModelLoaded();
                 }
             }
         }
@@ -519,16 +515,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void HandleGeoModelLoaded()
         {
 #if WINDOWS_UWP
-            _ = Windows.ApplicationModel.Core.CoreApplication.MainView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
 #else
             Dispatcher.Invoke(() =>
 #endif
             {
-                if (GeoView is MapView mv)
+                if (GeoView is MapView mv && mv.Map is Map mapLoadable && mapLoadable.LoadStatus == LoadStatus.Loaded)
                 {
-                    _controller.FloorManager = mv.Map?.FloorManager;
+                    _controller.FloorManager = mapLoadable.FloorManager;
                 }
-                else if (GeoView is SceneView sv)
+                else if (GeoView is SceneView sv && sv.Scene is Scene sceneLoadable && sceneLoadable.LoadStatus == LoadStatus.Loaded)
                 {
                     _controller.FloorManager = sv.Scene?.FloorManager;
                 }
@@ -649,18 +645,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// This is used for showing an entire facility in 3D.
         /// </remarks>
-        public bool AllLevelsSelecteded
+        public bool AllDisplayLevelsSelecteded
         {
-            get => _controller.AllLevelsSelected;
+            get => _controller.AllDisplayLevelsSelected;
             set
             {
                 if (value)
                 {
-                    _controller.SelectAllLevels();
+                    _controller.SelectAllDisplayLevels();
                 }
                 else
                 {
-                    _controller.UndoSelectAllLevels();
+                    _controller.UndoSelectAllDisplayLevels();
                 }
             }
         }
@@ -691,10 +687,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the list of levels in the currently-selected facility.
         /// </summary>
-        public IList<FloorLevel>? AllLevels
+        public IList<FloorLevel>? DisplayLevels
         {
-            get => GetValue(AllLevelsProperty) as IList<FloorLevel>;
-            private set => SetValue(AllLevelsProperty, value);
+            get => GetValue(DisplayLevelsProperty) as IList<FloorLevel>;
+            private set => SetValue(DisplayLevelsProperty, value);
         }
 
         /// <summary>
@@ -710,10 +706,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(AllFacilities), typeof(IList<FloorFacility>), typeof(FloorFilter), null);
 
         /// <summary>
-        /// Identifies the <see cref="AllLevels"/> dependency property.
+        /// Identifies the <see cref="DisplayLevels"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty AllLevelsProperty =
-            DependencyProperty.Register(nameof(AllLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
+        public static readonly DependencyProperty DisplayLevelsProperty =
+            DependencyProperty.Register(nameof(DisplayLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
 #else
         /// <summary>
         /// Gets the list of available sites.
@@ -745,14 +741,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets the list of available levels in the currently selected facility.
         /// </summary>
-        public IList<FloorLevel>? AllLevels
+        public IList<FloorLevel>? DisplayLevels
         {
-            get => GetValue(AllLevelsPropertyKey.DependencyProperty) as IList<FloorLevel>;
-            private set => SetValue(AllLevelsPropertyKey, value);
+            get => GetValue(DisplayLevelsPropertyKey.DependencyProperty) as IList<FloorLevel>;
+            private set => SetValue(DisplayLevelsPropertyKey, value);
         }
 
-        private static readonly DependencyPropertyKey AllLevelsPropertyKey =
-DependencyProperty.RegisterReadOnly(nameof(AllLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
+        private static readonly DependencyPropertyKey DisplayLevelsPropertyKey =
+DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
 #endif
 #endregion Read-only list properties
 

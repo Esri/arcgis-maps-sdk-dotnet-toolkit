@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
     /// Defines the selection modes for the FloorFilter.

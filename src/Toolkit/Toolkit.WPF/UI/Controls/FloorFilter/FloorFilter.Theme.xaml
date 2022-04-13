@@ -337,7 +337,7 @@
                         x:Name="AllButton"
                         Grid.Row="1"
                         HorizontalContentAlignment="Center"
-                        IsChecked="{Binding AllLevelsSelected, Mode=TwoWay}"
+                        IsChecked="{Binding AllDisplayLevelsSelected, Mode=TwoWay}"
                         Style="{TemplateBinding BrowseButtonStyle}"
                         ToolTip="{TemplateBinding AllFloorsLabel}"
                         Visibility="{Binding ShowAllFloorsButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -362,14 +362,14 @@
                     <ListView
                         Grid.Row="2"
                         ItemTemplate="{TemplateBinding LevelDataTemplate}"
-                        ItemsSource="{Binding AllLevels, Mode=OneWay}"
+                        ItemsSource="{Binding DisplayLevels, Mode=OneWay}"
                         SelectedItem="{Binding SelectedLevel, Mode=TwoWay}"
                         Style="{TemplateBinding CommonListStyle}"
                         Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
                     <ListView
                         Grid.Row="2"
                         ItemTemplate="{TemplateBinding LevelDataTemplate}"
-                        ItemsSource="{Binding AllLevels, Mode=OneWay}"
+                        ItemsSource="{Binding DisplayLevels, Mode=OneWay}"
                         SelectedItem="{Binding SelectedLevel, Mode=TwoWay}"
                         Style="{TemplateBinding CommonListStyle}"
                         Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />

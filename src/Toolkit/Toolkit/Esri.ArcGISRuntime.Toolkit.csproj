@@ -22,7 +22,7 @@
   
   <PropertyGroup Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(IsDotNetFramework)' == 'true'">
     <UseWpf>true</UseWpf>
-    <DefineConstants>$(DefineConstants);IsWPF</DefineConstants>
+    <DefineConstants>$(DefineConstants);WPF</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsUWP)' == 'true'">

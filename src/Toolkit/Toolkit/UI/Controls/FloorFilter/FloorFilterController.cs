@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     internal class FloorFilterController : INotifyPropertyChanged
     {
@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private AutomaticSelectionMode _automaticSelectionMode = AutomaticSelectionMode.Always;
 
         // Enable easy toggle between all levels and single selected level in 3D
-        private bool _allLevels;
+        private bool _allDisplayLevelsSelected;
         private FloorLevel? _previousSelection;
 
         public FloorManager? FloorManager
@@ -75,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets a value indicating whether all levels should be visible simultaneously.
         /// </summary>
-        public bool AllLevelsSelected => _allLevels;
+        public bool AllDisplayLevelsSelected => _allDisplayLevelsSelected;
 
         /// <summary>
         /// Gets or sets the viewpoint observed from an associated MapView or SceneView.
@@ -126,7 +126,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets all of the sites in the floor manager.
         /// </summary>
-        public IList<FloorSite>? DisplaySites => _allSites;
+        public IList<FloorSite>? AllSites => _allSites;
 
         public AutomaticSelectionMode AutomaticSelectionMode
         {
@@ -149,7 +149,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SetSelectedFacility(null, false);
             SetDisplayFacilities(null, false);
             SetSelectedSite(null, false);
-            SetDisplaySites(null, false);
+            SetAllSites(null, false);
 
             // Reset ShouldDisplayFloorPicker property
             ShouldDisplayFloorPicker = false;
@@ -157,7 +157,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Clear viewpoint
             RequestedViewpoint = null;
             ObservedViewpoint = null;
-            _allLevels = false;
+            _allDisplayLevelsSelected = false;
             _previousSelection = null;
 
             // Explicitly don't clear floor manager
@@ -327,7 +327,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_selectedLevel != null)
             {
-                SetPropertyChanged(false, ref _allLevels, nameof(AllLevelsSelected));
+                SetPropertyChanged(false, ref _allDisplayLevelsSelected, nameof(AllDisplayLevelsSelected));
             }
 
             OnPropertyChanged(nameof(SelectedLevel));
@@ -340,15 +340,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        public void SelectAllLevels()
+        public void SelectAllDisplayLevels()
         {
             _previousSelection = _selectedLevel;
-            SetPropertyChanged(true, ref _allLevels, nameof(AllLevelsSelected), () => SetSelectedLevel(null, false));
+            SetPropertyChanged(true, ref _allDisplayLevelsSelected, nameof(AllDisplayLevelsSelected), () => SetSelectedLevel(null, false));
         }
 
-        public void UndoSelectAllLevels()
+        /// <summary>
+        /// Deselects all levels, then reselects the level that was selected at the time that <see cref="SelectAllDisplayLevels"/> was called.
+        /// </summary>
+        public void UndoSelectAllDisplayLevels()
         {
-            SetPropertyChanged(false, ref _allLevels, nameof(AllLevelsSelected), () => SetSelectedLevel(_previousSelection, false));
+            SetPropertyChanged(false, ref _allDisplayLevelsSelected, nameof(AllDisplayLevelsSelected), () => SetSelectedLevel(_previousSelection, false));
         }
 
         private async Task HandleLoad()
@@ -366,7 +369,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // Populate sites
                 if (FloorManager.Sites.Any())
                 {
-                    SetDisplaySites(FloorManager.Sites.ToList(), true);
+                    SetAllSites(FloorManager.Sites.ToList(), true);
                 }
 
                 if (FloorManager.Facilities.Any())
@@ -401,7 +404,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 visibilityState[level] = false;
             }
 
-            if (AllLevelsSelected && SelectedFacility != null)
+            if (AllDisplayLevelsSelected && SelectedFacility != null)
             {
                 foreach (var level in SelectedFacility.Levels)
                 {
@@ -572,8 +575,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void SetDisplayFacilities(IList<FloorFacility>? newValue, bool blockAutomaticZoom)
             => SetPropertyChanged(newValue, ref _facilitiesForSelectedSite, nameof(_facilitiesForSelectedSite), () => SelectSingleFacility(blockAutomaticZoom));
 
-        private void SetDisplaySites(IList<FloorSite>? newValue, bool blockAutomaticZoom)
-            => SetPropertyChanged(newValue, ref _allSites, nameof(DisplaySites), () => SelectSingleSite(blockAutomaticZoom));
+        private void SetAllSites(IList<FloorSite>? newValue, bool blockAutomaticZoom)
+            => SetPropertyChanged(newValue, ref _allSites, nameof(AllSites), () => SelectSingleSite(blockAutomaticZoom));
 
         private void SelectSingleFacility(bool blockAutomaticZoom)
         {

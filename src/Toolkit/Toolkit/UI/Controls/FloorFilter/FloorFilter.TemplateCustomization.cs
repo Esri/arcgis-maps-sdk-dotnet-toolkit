@@ -14,9 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if IsWPF || WINDOWS_UWP
+#if WINDOWS
 
-#if IsWPF
+#if WPF
 using System.Windows;
 #elif WINDOWS_UWP
 using Windows.UI.Xaml;

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if IsWPF
+#if WPF
 
 using System.Collections.Specialized;
 using System.Linq;
