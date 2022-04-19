@@ -49,6 +49,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     VerticalTextAlignment = TextAlignment.Center,
                     HorizontalTextAlignment = TextAlignment.Center,
                     TextColor = foregroundColor,
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
                 };
                 textLabel.SetBinding(Label.TextProperty, "ShortName");
 

@@ -174,7 +174,7 @@
                             Grid.Column="0"
                             VerticalAlignment="Center"
                             FontFamily="{StaticResource CalciteIconFont}"
-                            Foreground="{StaticResource FloorFilterAlternateForegroundBrush}"
+                            Foreground="{ThemeResource FloorFilterAlternateForegroundBrush}"
                             Text="&#xe268;"
                             TextAlignment="Center" />
                         <TextBox
@@ -187,7 +187,6 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             BorderThickness="0"
-                            Foreground="{ThemeResource FloorFilterAlternateForegroundBrush}"
                             HorizontalTextAlignment="Left" />
                         <TextBlock
                             x:Name="PART_Placeholder"
@@ -612,7 +611,13 @@
                         <TextBlock
                             FontSize="16"
                             FontWeight="SemiBold"
-                            Text="{TemplateBinding BrowseLabel}" />
+                            Text="{TemplateBinding BrowseSitesLabel}"
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ShowFacilityBrowseLabel, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{TemplateBinding BrowseFacilitiesLabel}"
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ShowFacilityBrowseLabel, Converter={StaticResource BoolToVisibilityConverter}}" />
                         <TextBlock
                             Margin="0,4,0,0"
                             Text="{Binding SelectedSite.Name, Mode=OneWay}"
@@ -731,6 +736,8 @@
 
     <Style TargetType="toolkit:FloorFilter">
         <Setter Property="BrowseLabel" Value="Browse" />
+        <Setter Property="BrowseSitesLabel" Value="Selct a Site" />
+        <Setter Property="BrowseFacilitiesLabel" Value="Select a Facility" />
         <Setter Property="CloseLabel" Value="Close" />
         <Setter Property="CollapseLabel" Value="Collapse" />
         <Setter Property="ExpandLabel" Value="Expand" />
@@ -738,10 +745,10 @@
         <Setter Property="NoResultsMessage" Value="No results found." />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="AllFacilitiesLabel" Value="All" />
+        <Setter Property="AllFacilitiesLabel" Value="All Sites" />
         <Setter Property="BackButtonLabel" Value="Go Back" />
         <Setter Property="AllFloorsLabel" Value="All Floors" />
-        <Setter Property="SearchPlaceholder" Value="Search" />
+        <Setter Property="SearchPlaceholder" Value="Filter" />
         <Setter Property="Margin" Value="8,8,8,24" />
         <Setter Property="MaxHeight" Value="360" />
         <Setter Property="FontSize" Value="14" />

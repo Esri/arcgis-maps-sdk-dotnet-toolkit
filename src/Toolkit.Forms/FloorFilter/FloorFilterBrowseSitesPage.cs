@@ -57,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             _browseLabel = new Label
             {
-                Text = ff.BrowseLabel,
+                Text = ff.BrowseSitesLabel,
                 VerticalTextAlignment = TextAlignment.Center,
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,

@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="SearchPlaceholder"/> bindable property.
         /// </summary>
         public static readonly BindableProperty SearchPlaceholderProperty =
-            BindableProperty.Create(nameof(SearchPlaceholder), typeof(string), typeof(FloorFilter), "Search");
+            BindableProperty.Create(nameof(SearchPlaceholder), typeof(string), typeof(FloorFilter), "Filter");
 
         /// <summary>
         /// Gets or sets the message shown to the user when a list or filtered list is empty.
@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(NoResultsMessage), typeof(string), typeof(FloorFilter), "No results");
 
         /// <summary>
-        /// Gets or sets the label or tooltip shown on the button that opens the browsing view and in the browsing view header.
+        /// Gets or sets the label or tooltip shown on the button that opens the browsing view.
         /// </summary>
         public string? BrowseLabel
         {
@@ -67,6 +67,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             BindableProperty.Create(nameof(BrowseLabel), typeof(string), typeof(FloorFilter), "Browse");
 
         /// <summary>
+        /// Gets or sets the label shown on the browsing view header for sites.
+        /// </summary>
+        public string? BrowseSitesLabel
+        {
+            get => GetValue(BrowseSitesLabelProperty) as string;
+            set => SetValue(BrowseSitesLabelProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BrowseSitesLabel"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty BrowseSitesLabelProperty =
+            BindableProperty.Create(nameof(BrowseSitesLabel), typeof(string), typeof(FloorFilter), "Select a Site");
+
+        /// <summary>
+        /// Gets or sets the label shown on the browsing view for facilities.
+        /// </summary>
+        public string? BrowseFacilitiesLabel
+        {
+            get => GetValue(BrowseFacilitiesLabelProperty) as string;
+            set => SetValue(BrowseFacilitiesLabelProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BrowseFacilitiesLabel"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty BrowseFacilitiesLabelProperty =
+            BindableProperty.Create(nameof(BrowseFacilitiesLabel), typeof(string), typeof(FloorFilter), "Select a Facility");
+
+        /// <summary>
         /// Gets or sets the label or tooltip shown for the button that is used to navigate to the list of sites in all facilities when the site browsing view is open.
         /// </summary>
         public string? AllFacilitiesLabel
@@ -79,6 +109,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Identifies the <see cref="AllFacilitiesLabel"/> bindable property.
         /// </summary>
         public static readonly BindableProperty AllFacilitiesLabelProperty =
-            BindableProperty.Create(nameof(AllFacilitiesLabel), typeof(string), typeof(FloorFilter), "All");
+            BindableProperty.Create(nameof(AllFacilitiesLabel), typeof(string), typeof(FloorFilter), "All Sites");
     }
 }

@@ -57,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             DependencyProperty.Register(nameof(NoResultsMessage), typeof(string), typeof(FloorFilter), null);
 
         /// <summary>
-        /// Gets or sets the label or tooltip shown on the button that opens the browsing view and in the browsing view header.
+        /// Gets or sets the label or tooltip shown on the button that opens the browsing view.
         /// </summary>
         public string? BrowseLabel
         {
@@ -70,6 +70,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty BrowseLabelProperty =
             DependencyProperty.Register(nameof(BrowseLabel), typeof(string), typeof(FloorFilter), null);
+
+        /// <summary>
+        /// Gets or sets the label or tooltip shown on the browsing view header for sites.
+        /// </summary>
+        public string? BrowseSitesLabel
+        {
+            get => GetValue(BrowseSitesLabelProperty) as string;
+            set => SetValue(BrowseSitesLabelProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BrowseSitesLabel"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty BrowseSitesLabelProperty =
+            DependencyProperty.Register(nameof(BrowseSitesLabel), typeof(string), typeof(FloorFilter), null);
+
+        /// <summary>
+        /// Gets or sets the label shown on the browsing view header for facilities.
+        /// </summary>
+        public string? BrowseFacilitiesLabel
+        {
+            get => GetValue(BrowseFacilitiesLabelProperty) as string;
+            set => SetValue(BrowseFacilitiesLabelProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BrowseFacilitiesLabel"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty BrowseFacilitiesLabelProperty =
+            DependencyProperty.Register(nameof(BrowseFacilitiesLabel), typeof(string), typeof(FloorFilter), null);
 
         /// <summary>
         /// Gets or sets the label or tooltip shown on the button that zooms to the currently selected site or facility.

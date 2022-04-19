@@ -57,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             parentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); // Browse label
             parentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Close button
 
-            _browseLabel = new Label { Text = ff.BrowseLabel };
+            _browseLabel = new Label { Text = ff.BrowseFacilitiesLabel };
             _browseLabel.VerticalTextAlignment = TextAlignment.Center;
             _browseLabel.Margin = new Thickness(8, 2);
             _browseLabel.FontAttributes = FontAttributes.Bold;

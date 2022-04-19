@@ -92,9 +92,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Remove old handlers
             if (_allFacilitiesListView != null)
             {
-                #if WPF
+#if WPF
                 _allFacilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
-                #elif WINDOWS_UWP
+#elif WINDOWS_UWP
                 if (_allFacilitiesListView is FilteringListView faflv)
                 {
                     faflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
@@ -103,15 +103,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _allFacilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
                 }
-                #endif
+#endif
                 _allFacilitiesListView = null;
             }
 
             if (_facilitiesListView != null)
             {
-                #if WPF
+#if WPF
                 _facilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
-                #elif WINDOWS_UWP
+#elif WINDOWS_UWP
                 if (_facilitiesListView is FilteringListView fflv)
                 {
                     fflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
@@ -120,7 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _facilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
                 }
-                #endif
+#endif
                 _facilitiesListView = null;
             }
 
@@ -143,9 +143,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_siteListView != null)
             {
-                #if WPF
+#if WPF
                 _siteListView.SelectionChanged -= HandleControlDrivenSiteSelection;
-                #elif WINDOWS_UWP
+#elif WINDOWS_UWP
                 if (_siteListView is FilteringListView fslv)
                 {
                     fslv.SelectionChanged2 -= HandleControlDrivenSiteSelection;
@@ -154,7 +154,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _siteListView.SelectionChanged -= HandleControlDrivenSiteSelection;
                 }
-                #endif
+#endif
                 _siteListView = null;
             }
 
@@ -188,9 +188,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_SiteListView") is ListView siteListView)
             {
                 _siteListView = siteListView;
-                #if WPF
+#if WPF
                 _siteListView.SelectionChanged += HandleControlDrivenSiteSelection;
-                #elif WINDOWS_UWP
+#elif WINDOWS_UWP
                 if (_siteListView is FilteringListView nfslv)
                 {
                     nfslv.SelectionChanged2 += HandleControlDrivenSiteSelection;
@@ -199,15 +199,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _siteListView.SelectionChanged += HandleControlDrivenSiteSelection;
                 }
-                #endif
+#endif
             }
 
             if (GetTemplateChild("PART_FaciltiesListView") is ListView facilitiesListView)
             {
                 _facilitiesListView = facilitiesListView;
-                #if WPF
+#if WPF
                 _facilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
-                #elif WINDOWS_UWP
+#elif WINDOWS_UWP
                 if (_facilitiesListView is FilteringListView nfflv)
                 {
                     nfflv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
@@ -216,15 +216,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _facilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
                 }
-                #endif
+#endif
             }
 
             if (GetTemplateChild("PART_AllFacilitiesListView") is ListView allFacilitiesListView)
             {
                 _allFacilitiesListView = allFacilitiesListView;
-                #if WPF
+#if WPF
                 _allFacilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
-                #elif WINDOWS_UWP
+#elif WINDOWS_UWP
                 if (_allFacilitiesListView is FilteringListView nfaflv)
                 {
                     nfaflv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
@@ -234,15 +234,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _allFacilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
                 }
 
-                #endif
+#endif
             }
 
             if (GetTemplateChild("PART_FacilitiesNoSitesListView") is ListView facilitiesNoSitesListView)
             {
                 _facilitiesNoSitesListView = facilitiesNoSitesListView;
-                #if WPF
+#if WPF
                 _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
-                #elif WINDOWS_UWP
+#elif WINDOWS_UWP
                 if (_facilitiesNoSitesListView is FilteringListView nfnslv)
                 {
                     nfnslv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
@@ -251,7 +251,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
                 }
-                #endif
+#endif
             }
 
             if (GetTemplateChild("PART_ZoomButton") is Button zoomButton)
@@ -377,7 +377,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#region GeoView, GeoModel, Viewpoint management
+        #region GeoView, GeoModel, Viewpoint management
 
         /// <summary>
         /// Gets or sets the GeoView associated with this view.
@@ -530,9 +530,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             });
         }
-#endregion GeoView, GeoModel, Viewpoint management
+        #endregion GeoView, GeoModel, Viewpoint management
 
-#region Selection
+        #region Selection
 
         /// <summary>
         /// Gets or sets the currently selected site.
@@ -660,9 +660,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-#endregion Selection
+        #endregion Selection
 
-#region Read-only list properties
+        #region Read-only list properties
 
 #if WINDOWS_UWP
 
@@ -750,9 +750,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static readonly DependencyPropertyKey DisplayLevelsPropertyKey =
 DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
 #endif
-#endregion Read-only list properties
+        #endregion Read-only list properties
 
-#region Configuration
+        #region Configuration
 
         /// <summary>
         /// Gets or sets the value that defines how the <see cref="SelectedFacility"/> is updated as the <see cref="GeoView"/>'s viewpoint changes.
@@ -771,9 +771,9 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
 
         private static void OnAutomaticSelectionModePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((FloorFilter)d)._controller.AutomaticSelectionMode = (AutomaticSelectionMode)e.NewValue;
-#endregion Configuration
+        #endregion Configuration
 
-#region Attached Properties
+        #region Attached Properties
 
         /// <summary>
         /// Gets a value indicating whether the given dependency object is in an expanded state.
@@ -794,9 +794,9 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
 #else
             DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new PropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
 #endif
-#endregion Attached Properties
+        #endregion Attached Properties
 
-#region INPC
+        #region INPC
 
         /// <inheritdoc />
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -805,9 +805,9 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-#endregion
+        #endregion
 
-#region UI State Management
+        #region UI State Management
 
         /// <summary>
         /// Gets a value indicating whether the floor filter should display an 'All Floors' button.
@@ -822,6 +822,11 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
         /// The site name label is redundant when browsing all sites and when on the site tab.
         /// </remarks>
         public bool ShowSiteNameSubtitle { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the browse view should show <see cref="BrowseFacilitiesLabel"/> rather than <see cref="BrowseSitesLabel"/>.
+        /// </summary>
+        public bool ShowFacilityBrowseLabel { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the browsing view is open.
@@ -911,12 +916,18 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
                         _siteListView.ScrollIntoView(_siteListView.SelectedItem);
                     }
 
+                    ShowFacilityBrowseLabel = false;
+                    OnPropertyChanged(nameof(ShowFacilityBrowseLabel));
+
                     break;
                 case 1:
                     if (_facilitiesListView?.SelectedItem != null)
                     {
                         _facilitiesListView.ScrollIntoView(_facilitiesListView.SelectedItem);
                     }
+
+                    ShowFacilityBrowseLabel = true;
+                    OnPropertyChanged(nameof(ShowFacilityBrowseLabel));
 
                     break;
                 case 2:
@@ -925,6 +936,9 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
                         _allFacilitiesListView.ScrollIntoView(_allFacilitiesListView.SelectedItem);
                     }
 
+                    ShowFacilityBrowseLabel = true;
+                    OnPropertyChanged(nameof(ShowFacilityBrowseLabel));
+
                     break;
                 case 3:
                     if (_facilitiesNoSitesListView?.SelectedItem != null)
@@ -932,11 +946,14 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
                         _facilitiesNoSitesListView.ScrollIntoView(_facilitiesNoSitesListView.SelectedItem);
                     }
 
+                    ShowFacilityBrowseLabel = true;
+                    OnPropertyChanged(nameof(ShowFacilityBrowseLabel));
+
                     break;
             }
         }
 
-#endregion UI State Management
+        #endregion UI State Management
     }
 }
 #endif
