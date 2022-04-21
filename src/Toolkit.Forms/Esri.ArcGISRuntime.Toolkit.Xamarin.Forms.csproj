@@ -38,6 +38,7 @@
   <ItemGroup>
     <None Remove="Assets\BasemapDark.png" />
     <None Remove="Assets\BasemapLight.png" />
+    <None Remove="Assets\calcite-ui-icons-24.ttf" />
     <None Remove="Assets\caret-down-small.png" />
     <None Remove="Assets\caret-down.png" />
     <None Remove="Assets\pin-tear-small.png" />
@@ -85,6 +86,9 @@
     <EmbeddedResource Include="Assets\search.png" />
     <EmbeddedResource Include="Assets\x-small.png" />
     <EmbeddedResource Include="Assets\x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\calcite-ui-icons-24.ttf" />
   </ItemGroup>
   <!-- Workaround issue with nuget re-packaging contents from UWP Toolkit library in this package as well -->
   <Target Name="FixGetPackagingOutputs" AfterTargets="GetPackagingOutputs">

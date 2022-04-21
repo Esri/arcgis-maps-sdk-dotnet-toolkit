@@ -31,6 +31,11 @@ Displays and optionally allows editing of a single field attribute of a feature.
 
 ![FeatureDataField](https://user-images.githubusercontent.com/1378165/73389879-ebaa9800-4289-11ea-8e4e-de153a6a371a.png)
 
+### FloorFilter
+
+Browse floor-aware maps and scenes and filter the view to show levels in a facility.
+
+![FloorFilter](https://user-images.githubusercontent.com/29742178/158746908-71a39e28-596f-44b6-9230-e2a04bdaeb9e.png)
 
 ### Legend
 
@@ -95,6 +100,7 @@ Allows interactively defining a temporal range (i.e. time extent) and animating 
 |[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
+|[FloorFilter](floor-filter.md) | ✔  | ✔ | ❌ | ❌ | ✔ |
 |Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |

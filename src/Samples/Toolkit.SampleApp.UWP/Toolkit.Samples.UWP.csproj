@@ -130,6 +130,9 @@
     <Compile Include="Samples\Compass\MapViewCompassSample.xaml.cs">
       <DependentUpon>MapViewCompassSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\FloorFilter\FloorFilterSample.xaml.cs">
+      <DependentUpon>FloorFilterSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Samples\TimeSlider\TimeSliderSample.xaml.cs">
       <DependentUpon>TimeSliderSample.xaml</DependentUpon>
     </Compile>
@@ -215,6 +218,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\BookmarksView\BookmarksViewSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\FloorFilter\FloorFilterSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

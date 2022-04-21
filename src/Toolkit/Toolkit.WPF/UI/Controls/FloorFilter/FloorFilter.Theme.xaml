@@ -1,0 +1,766 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:converter="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <system:Double x:Key="FloorFilterCollapsedWidth">48</system:Double>
+
+    <Color x:Key="FloorFilterDefaultBackgroundColor">White</Color>
+    <Color x:Key="FloorFilterDefaultForegroundColor">#6e6e6e</Color>
+    <Color x:Key="FloorFilterAlternateBackgroundColor">#f3f3f3</Color>
+    <Color x:Key="FloorFilterAlternateForegroundColor">#2e2e2e</Color>
+    <Color x:Key="FloorFilterSelectedBackgroundColor">#e2f1fb</Color>
+    <Color x:Key="FloorFilterSelectedForegroundColor">#005e95</Color>
+    <Color x:Key="FloorFilterMutedBorderColor">#6e6e6eaa</Color>
+
+    <SolidColorBrush x:Key="FloorFilterDefaultBackgroundBrush" Color="{StaticResource FloorFilterDefaultBackgroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterDefaultForegroundBrush" Color="{StaticResource FloorFilterDefaultForegroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterAlternateBackgroundBrush" Color="{StaticResource FloorFilterAlternateBackgroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterAlternateForegroundBrush" Color="{StaticResource FloorFilterAlternateForegroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterSelectedBackgroundBrush" Color="{StaticResource FloorFilterSelectedBackgroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterSelectedForegroundBrush" Color="{StaticResource FloorFilterSelectedForegroundColor}" />
+    <SolidColorBrush x:Key="FloorFilterMutedBorderBrush" Color="{StaticResource FloorFilterMutedBorderColor}" />
+
+    <Geometry x:Key="FloorFilterBrowseBuildingsIcon">M13 9h-1V6h4v10h-1V7h-2zM5 5v5h1V3h1V0h2.62L11 1.867V9h-1V2.197L9.115 1H8v3H7v12H0V7h1V5zm-2 6v-1h1V6H2v2H1v7h5v-4zm7-1h4v6H8v-4h2zm1 1v2H9v2h4v-4zm-8 2h2v-1H3z</Geometry>
+    <Geometry x:Key="FloorFilterChevronLeftIcon">M10.207 4l-4 4 4 4H8.793l-4-4 4-4z</Geometry>
+    <Geometry x:Key="FloorFilterCloseIcon">M3.98 11.303L7.281 8 3.98 4.697l.707-.707L7.99 7.293l.01-.01.01.01 3.304-3.303.707.707L8.718 8l3.303 3.303-.707.707L8.01 8.707l-.01.01-.01-.01-3.304 3.303z</Geometry>
+    <Geometry x:Key="FloorFilterCollapseIcon">M7.793 12l4-4-4-4h1.414l4 4-4 4zm-4.586 0l4-4-4-4H1.793l4 4-4 4z</Geometry>
+    <Geometry x:Key="FloorFilterExpandIcon">M8.207 4l-4 4 4 4H6.793l-4-4 4-4zm4.586 0l-4 4 4 4h1.414l-4-4 4-4z</Geometry>
+    <Geometry x:Key="FloorFilterSearchIcon">M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z</Geometry>
+    <Geometry x:Key="FloorFilterZoomToIcon">M15.293 16L12 12.707V15h-1v-4h4v1h-2.293L16 15.293zm0-16L12 3.293V1h-1v4h4V4h-2.293L16 .707zM8 6a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm0 1a1 1 0 1 0 1 1 1 1 0 0 0-1-1zm-7 5h2.293L0 15.293.707 16 4 12.707V15h1v-4H1zm3-8.707L.707 0 0 .707 3.293 4H1v1h4V1H4z</Geometry>
+    <Geometry x:Key="FloorFilterAllFloorsIcon">M.088.482A.358.358 0 0 1 .305.205a5.075 5.075 0 0 1 4.104.6c.031.022.06.047.091.069L2.704 3.651c-.023-.013-.046-.022-.068-.037a1.407 1.407 0 0 1-.527-2.009 1.599 1.599 0 0 1 1.227-.604 3.737 3.737 0 0 0-2.6-.099 3.455 3.455 0 0 0 1.647 3.244l-.376.581A3.95 3.95 0 0 1 .088.482zM4 7V6H3v1zm2-6H5v1h1zm2 1H7v1h1zm2 1H9v1h1zM6 8H5v1h1zm-4 5h1v-1H2zm2-1v1h1v-1zm9-5h1V6h-1zm0 2h1V8h-1zm0 2h1v-1h-1zm0 2h1v-1h-1zm-2-4h1V8h-1zm0 2h1v-1h-1zm0 2h1v-1h-1zM9 6v9H6.969v-5H0v6h16V1.002zm-3 9H1v-4h5zm9 0h-5V6.515l5-3.57z</Geometry>
+    <Style x:Key="FloorFilterBrowseTabControlStyle" TargetType="{x:Type TabControl}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="SelectedIndex" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Border
+                        x:Name="Border"
+                        BorderThickness="0"
+                        CornerRadius="0">
+                        <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FloorFilterPathIconStyle" TargetType="Path">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Stretch" Value="None" />
+    </Style>
+
+    <ControlTemplate x:Key="FloorFilterBrowseButtonTemplate" TargetType="ToggleButton">
+        <Border
+            x:Name="Border"
+            Height="48"
+            Background="{StaticResource FloorFilterDefaultBackgroundBrush}"
+            CornerRadius="0">
+            <ContentPresenter
+                x:Name="Presenter"
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <!--  Default/Normal  -->
+            <!--  Mouse over, unchecked  -->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+                <Setter TargetName="Presenter" Property="TextElement.Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+            </Trigger>
+            <!--  Pressed, unchecked  -->
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                <Setter TargetName="Presenter" Property="TextElement.Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+            </Trigger>
+            <!--  Checked all  -->
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource FloorFilterSelectedForegroundBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="FloorFilterAllFloorsButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Height" Value="{StaticResource FloorFilterCollapsedWidth}" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterBrowseButtonTemplate}" />
+    </Style>
+
+    <DataTemplate x:Key="FloorFilterLevelDataTemplate">
+        <Border x:Name="Container" Height="{StaticResource FloorFilterCollapsedWidth}">
+            <Grid>
+
+                <TextBlock
+                    x:Name="CollapsedTemplate"
+                    Padding="8,8,8,8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Text="{Binding ShortName, Mode=OneTime}" />
+                <TextBlock
+                    x:Name="ExpandedTemplate"
+                    Padding="16,8,8,8"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="{Binding LongName, Mode=OneTime}"
+                    TextAlignment="Left"
+                    Visibility="Collapsed" />
+            </Grid>
+        </Border>
+        <DataTemplate.Triggers>
+            <Trigger Property="controls:FloorFilter.IsExpanded" Value="False">
+                <Setter TargetName="Container" Property="Width" Value="{StaticResource FloorFilterCollapsedWidth}" />
+            </Trigger>
+            <Trigger Property="controls:FloorFilter.IsExpanded" Value="True">
+                <Setter TargetName="CollapsedTemplate" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="ExpandedTemplate" Property="Visibility" Value="Visible" />
+            </Trigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FloorFilterSiteDataTemplate">
+        <Border Height="{StaticResource FloorFilterCollapsedWidth}">
+            <TextBlock
+                Padding="8"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Text="{Binding Name, Mode=OneTime}" />
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FloorFilterFacilityDataTemplate">
+        <Border MinHeight="{StaticResource FloorFilterCollapsedWidth}">
+            <TextBlock
+                Padding="8,8,8,4"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontSize="14"
+                FontWeight="SemiBold"
+                Text="{Binding Name, Mode=OneTime}" />
+        </Border>
+    </DataTemplate>
+
+    <DataTemplate x:Key="FloorFilterDifferentiatingFacilityDataTemplate">
+        <Border MinHeight="{StaticResource FloorFilterCollapsedWidth}">
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock
+                    Padding="8,8,8,4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Text="{Binding Name, Mode=OneTime}" />
+                <TextBlock
+                    Padding="8,0,8,8"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="10"
+                    Text="{Binding Site.Name, Mode=OneTime}" />
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="FloorFilterCloseButtonTemplate" TargetType="Button">
+        <Border
+            x:Name="Border"
+            Background="{TemplateBinding Background}"
+            BorderThickness="0"
+            CornerRadius="0">
+            <ContentPresenter
+                x:Name="Presenter"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                <Setter Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                <Setter Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="FloorFilterClearButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterCloseButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="FloorFilterCloseButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterCloseButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="FloorFilterTabToggleStyle" TargetType="ButtonBase">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Border
+                        x:Name="Border"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{StaticResource FloorFilterDefaultBackgroundBrush}"
+                        CornerRadius="0">
+                        <ContentPresenter
+                            x:Name="Presenter"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!--  Default/Normal  -->
+                        <!--  Mouse over, unchecked  -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+                            <Setter TargetName="Presenter" Property="TextElement.Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                        </Trigger>
+                        <!--  Pressed, unchecked  -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                            <Setter TargetName="Presenter" Property="TextElement.Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                        </Trigger>
+                        <!--  Checked all  -->
+                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource FloorFilterSelectedForegroundBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FloorFilterListStyle" TargetType="ListView">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border
+                                    x:Name="Border"
+                                    Margin="0,0,0,0"
+                                    Background="{StaticResource FloorFilterDefaultBackgroundBrush}"
+                                    SnapsToDevicePixels="true">
+                                    <ContentPresenter Margin="0" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+                                        <Setter TargetName="Border" Property="TextBlock.Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+                                        <Setter TargetName="Border" Property="TextBlock.FontWeight" Value="SemiBold" />
+                                        <Setter TargetName="Border" Property="TextBlock.Foreground" Value="{StaticResource FloorFilterSelectedForegroundBrush}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="FloorFilterTemplate" TargetType="controls:FloorFilter">
+        <Grid x:Name="PART_AutoVisibilityWrapper" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <!--  Main picker  -->
+            <Border
+                x:Name="BarContainer"
+                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                BorderBrush="{StaticResource FloorFilterMutedBorderBrush}"
+                BorderThickness="1">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <!--  Browse button  -->
+                        <RowDefinition Height="Auto" />
+                        <!--  All floors button  -->
+                        <RowDefinition Height="Auto" />
+                        <!--  Floor List  -->
+                        <RowDefinition Height="*" />
+                        <!--  Zoom button  -->
+                        <RowDefinition Height="Auto" />
+                        <!--  Expand/Collapse Button  -->
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ToggleButton
+                        x:Name="BrowseToggle"
+                        Grid.Row="0"
+                        HorizontalContentAlignment="Center"
+                        IsChecked="{Binding IsBrowseOpen, Mode=TwoWay}"
+                        Style="{TemplateBinding BrowseButtonStyle}"
+                        ToolTip="{TemplateBinding BrowseLabel}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Path
+                                Data="{StaticResource FloorFilterBrowseBuildingsIcon}"
+                                Fill="{Binding ElementName=BrowseToggle, Path=Foreground, Mode=OneWay}"
+                                Style="{StaticResource FloorFilterPathIconStyle}" />
+                            <Grid Grid.Column="1" Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <TextBlock
+                                    Margin="8,0,8,0"
+                                    HorizontalAlignment="Left"
+                                    Text="Browse" />
+                            </Grid>
+                        </Grid>
+                    </ToggleButton>
+                    <ToggleButton
+                        x:Name="AllButton"
+                        Grid.Row="1"
+                        HorizontalContentAlignment="Center"
+                        IsChecked="{Binding AllDisplayLevelsSelected, Mode=TwoWay}"
+                        Style="{TemplateBinding BrowseButtonStyle}"
+                        ToolTip="{TemplateBinding AllFloorsLabel}"
+                        Visibility="{Binding ShowAllFloorsButton, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Path
+                                Data="{StaticResource FloorFilterAllFloorsIcon}"
+                                Fill="{Binding ElementName=AllButton, Path=Foreground, Mode=OneWay}"
+                                Style="{StaticResource FloorFilterPathIconStyle}" />
+                            <Grid Grid.Column="1" Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <TextBlock
+                                    Margin="8,0,8,0"
+                                    HorizontalAlignment="Left"
+                                    Text="All"
+                                    TextAlignment="Left" />
+                            </Grid>
+                        </Grid>
+                    </ToggleButton>
+                    <ListView
+                        Grid.Row="2"
+                        ItemTemplate="{TemplateBinding LevelDataTemplate}"
+                        ItemsSource="{Binding DisplayLevels, Mode=OneWay}"
+                        SelectedItem="{Binding SelectedLevel, Mode=TwoWay}"
+                        Style="{TemplateBinding CommonListStyle}"
+                        Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                    <ListView
+                        Grid.Row="2"
+                        ItemTemplate="{TemplateBinding LevelDataTemplate}"
+                        ItemsSource="{Binding DisplayLevels, Mode=OneWay}"
+                        SelectedItem="{Binding SelectedLevel, Mode=TwoWay}"
+                        Style="{TemplateBinding CommonListStyle}"
+                        Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    <Button
+                        x:Name="PART_ZoomButton"
+                        Grid.Row="3"
+                        HorizontalContentAlignment="Center"
+                        Style="{TemplateBinding ZoomToButtonStyle}"
+                        ToolTip="{TemplateBinding ZoomToLabel}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Path
+                                Data="{StaticResource FloorFilterZoomToIcon}"
+                                Fill="{Binding ElementName=PART_ZoomButton, Path=Foreground, Mode=OneWay}"
+                                Style="{StaticResource FloorFilterPathIconStyle}" />
+                            <Grid Grid.Column="1" Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <TextBlock
+                                    Margin="8,0,8,0"
+                                    Foreground="{Binding ElementName=PART_ZoomButton, Path=Foreground, Mode=OneWay}"
+                                    Text="{TemplateBinding ZoomToLabel}" />
+                            </Grid>
+                        </Grid>
+                    </Button>
+                    <!--  TODO: update tooltip to match state  -->
+                    <ToggleButton
+                        Grid.Row="4"
+                        IsChecked="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=TwoWay}"
+                        Style="{TemplateBinding ExpandCollapseButtonStyle}"
+                        ToolTip="{TemplateBinding ExpandLabel}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Path
+                                x:Name="FloorFilterCollapseIcon"
+                                Height="12"
+                                HorizontalAlignment="Center"
+                                Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
+                                Stretch="Uniform"
+                                Style="{StaticResource FloorFilterPathIconStyle}"
+                                Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            <Path
+                                x:Name="FloorFilterExpandIcon"
+                                Height="12"
+                                HorizontalAlignment="Center"
+                                Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
+                                Stretch="Uniform"
+                                Style="{StaticResource FloorFilterPathIconStyle}"
+                                Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Margin="-8,0,16,0"
+                                Foreground="{StaticResource FloorFilterDefaultForegroundBrush}"
+                                Text="{TemplateBinding CollapseLabel}"
+                                Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Grid>
+                    </ToggleButton>
+                </Grid>
+            </Border>
+            <Border
+                x:Name="BrowseContainer"
+                MaxWidth="250"
+                Margin="8,0,8,0"
+                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                Background="{StaticResource FloorFilterDefaultBackgroundBrush}"
+                BorderBrush="{StaticResource FloorFilterMutedBorderBrush}"
+                BorderThickness="1"
+                Visibility="{Binding IsBrowseOpen, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        x:Name="PART_BackButton"
+                        VerticalAlignment="Stretch"
+                        Style="{StaticResource FloorFilterCloseButtonStyle}"
+                        ToolTip="{TemplateBinding BackButtonLabel}">
+                        <Path
+                            Data="{StaticResource FloorFilterChevronLeftIcon}"
+                            Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
+                            Style="{StaticResource FloorFilterPathIconStyle}" />
+                    </Button>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="4"
+                        VerticalAlignment="Center">
+
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{TemplateBinding BrowseSitesLabel}"
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ShowFacilityBrowseLabel, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{TemplateBinding BrowseFacilitiesLabel}"
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ShowFacilityBrowseLabel, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        <TextBlock
+                            Margin="0,4,0,0"
+                            Text="{Binding SelectedSite.Name, Mode=OneWay}"
+                            TextWrapping="Wrap"
+                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ShowSiteNameSubtitle, Converter={StaticResource BoolToVisibilityConverter}}" />
+                    </StackPanel>
+                    <Button
+                        x:Name="PART_CloseBrowseButton"
+                        Grid.Column="2"
+                        Width="32"
+                        MinHeight="32"
+                        Margin="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"
+                        Style="{StaticResource FloorFilterCloseButtonStyle}"
+                        ToolTip="{TemplateBinding CloseLabel}">
+                        <Path
+                            Data="{StaticResource FloorFilterCloseIcon}"
+                            Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
+                            Style="{StaticResource FloorFilterPathIconStyle}" />
+                    </Button>
+                    <!--  Browse Facilities/Sites  -->
+                    <TabControl
+                        Grid.Row="2"
+                        Grid.ColumnSpan="3"
+                        MinWidth="200"
+                        MaxHeight="300"
+                        Padding="0"
+                        HorizontalAlignment="Stretch"
+                        BorderThickness="0"
+                        SelectedIndex="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedBrowseTab}"
+                        Style="{StaticResource FloorFilterBrowseTabControlStyle}">
+                        <TabItem Header="Sites">
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <controls:FilteringListView
+                                    x:Name="PART_SiteListView"
+                                    Grid.Row="0"
+                                    ItemTemplate="{TemplateBinding SiteDataTemplate}"
+                                    ItemsSource="{Binding AllSites, Mode=OneWay}"
+                                    NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                                    Placeholder="{TemplateBinding SearchPlaceholder}"
+                                    RememberingSelectedItem="{Binding SelectedSite, Mode=TwoWay}"
+                                    Style="{StaticResource FloorFilterListStyle}" />
+                                <Button
+                                    x:Name="PART_AllButton"
+                                    Grid.Row="1"
+                                    Content="{TemplateBinding AllFacilitiesLabel}"
+                                    Style="{StaticResource FloorFilterTabToggleStyle}" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Facilities">
+                            <controls:FilteringListView
+                                x:Name="PART_FacilitiesListView"
+                                Grid.Row="1"
+                                ItemTemplate="{TemplateBinding FacilityDataTemplate}"
+                                ItemsSource="{Binding SelectedSite.Facilities}"
+                                NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                                Placeholder="{TemplateBinding SearchPlaceholder}"
+                                RememberingSelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
+                                Style="{StaticResource FloorFilterListStyle}" />
+                        </TabItem>
+                        <TabItem Header="All">
+                            <controls:FilteringListView
+                                x:Name="PART_AllFacilitiesListView"
+                                ItemTemplate="{TemplateBinding DifferentiatingFacilityDataTemplate}"
+                                ItemsSource="{Binding AllFacilities}"
+                                NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                                Placeholder="{TemplateBinding SearchPlaceholder}"
+                                RememberingSelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
+                                Style="{StaticResource FloorFilterListStyle}" />
+                        </TabItem>
+                        <TabItem Header="NoSites">
+                            <controls:FilteringListView
+                                x:Name="PART_FacilitiesNoSitesListView"
+                                ItemTemplate="{StaticResource FloorFilterFacilityDataTemplate}"
+                                ItemsSource="{Binding AllFacilities}"
+                                NoResultsMessage="{TemplateBinding NoResultsMessage}"
+                                Placeholder="{TemplateBinding SearchPlaceholder}"
+                                RememberingSelectedItem="{Binding SelectedFacility, Mode=TwoWay}"
+                                Style="{StaticResource FloorFilterListStyle}" />
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="HorizontalAlignment" Value="Left">
+                <Setter TargetName="BrowseContainer" Property="Grid.Column" Value="1" />
+                <Setter TargetName="BarContainer" Property="Grid.Column" Value="0" />
+                <Setter TargetName="FloorFilterExpandIcon" Property="Data" Value="{StaticResource FloorFilterCollapseIcon}" />
+                <Setter TargetName="FloorFilterCollapseIcon" Property="Data" Value="{StaticResource FloorFilterExpandIcon}" />
+            </Trigger>
+            <Trigger Property="HorizontalAlignment" Value="Right">
+                <Setter TargetName="BrowseContainer" Property="Grid.Column" Value="0" />
+                <Setter TargetName="BarContainer" Property="Grid.Column" Value="1" />
+                <Setter TargetName="FloorFilterExpandIcon" Property="Data" Value="{StaticResource FloorFilterExpandIcon}" />
+                <Setter TargetName="FloorFilterCollapseIcon" Property="Data" Value="{StaticResource FloorFilterCollapseIcon}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="FloorFilterExpandCollapseButtonTemplate" TargetType="ToggleButton">
+        <Border
+            x:Name="Border"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{StaticResource FloorFilterAlternateBackgroundBrush}"
+            BorderThickness="0,1,0,0"
+            CornerRadius="0">
+            <ContentPresenter
+                x:Name="Presenter"
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                <Setter Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource FloorFilterAlternateForegroundBrush}" />
+                <Setter Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="FloorFilterZoomToButtonTemplate" TargetType="Button">
+        <Border
+            x:Name="Border"
+            Padding="0,0,0,0"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{StaticResource FloorFilterAlternateBackgroundBrush}"
+            BorderThickness="0,1,0,0"
+            CornerRadius="0">
+            <ContentPresenter
+                x:Name="Presenter"
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource FloorFilterAlternateBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource FloorFilterSelectedBackgroundBrush}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="FloorFilterExpandCollapseButtonStyle" TargetType="ToggleButton">
+        <Setter Property="MinWidth" Value="{StaticResource FloorFilterCollapsedWidth}" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterExpandCollapseButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="FloorFilterBrowseButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Height" Value="{StaticResource FloorFilterCollapsedWidth}" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterBrowseButtonTemplate}" />
+    </Style>
+
+    <Style x:Key="FloorFilterZoomToButtonStyle" TargetType="Button">
+        <Setter Property="MinWidth" Value="{StaticResource FloorFilterCollapsedWidth}" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource FloorFilterDefaultBackgroundBrush}" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterZoomToButtonTemplate}" />
+    </Style>
+
+    <Style TargetType="{x:Type controls:FilteringListView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:FilteringListView}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <Grid
+                                Grid.Row="0"
+                                Background="{StaticResource FloorFilterAlternateBackgroundBrush}"
+                                Visibility="{Binding Path=HasSearchCapability, RelativeSource={RelativeSource AncestorType=controls:FilteringListView}, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Path
+                                    Grid.Column="0"
+                                    Margin="8,0,0,0"
+                                    Data="{StaticResource FloorFilterSearchIcon}"
+                                    Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
+                                    Style="{StaticResource FloorFilterPathIconStyle}" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Height="40"
+                                    Margin="0"
+                                    Padding="8,4,8,4"
+                                    VerticalContentAlignment="Center"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Text="{Binding Path=SearchString, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock
+                                    x:Name="PART_Placeholder"
+                                    Grid.Column="1"
+                                    Margin="0"
+                                    Padding="8,4,8,4"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource FloorFilterAlternateForegroundBrush}"
+                                    IsHitTestVisible="False"
+                                    Text="{TemplateBinding Placeholder}" />
+                                <Button
+                                    x:Name="PART_ClearButton"
+                                    Grid.Column="1"
+                                    Width="40"
+                                    Height="40"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource FloorFilterClearButtonStyle}"
+                                    Visibility="Collapsed">
+                                    <Path
+                                        Data="{StaticResource FloorFilterCloseIcon}"
+                                        Fill="{StaticResource FloorFilterAlternateForegroundBrush}"
+                                        Style="{StaticResource FloorFilterPathIconStyle}" />
+                                </Button>
+                            </Grid>
+                            <ScrollViewer
+                                Grid.Row="1"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                            <TextBlock
+                                x:Name="PART_NoResultsLabel"
+                                Grid.Row="1"
+                                Margin="8"
+                                Text="{TemplateBinding NoResultsMessage}"
+                                TextAlignment="Center"
+                                Visibility="Collapsed" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="controls:FloorFilter">
+        <Setter Property="BrowseLabel" Value="Browse" />
+        <Setter Property="BrowseSitesLabel" Value="Select a Site" />
+        <Setter Property="BrowseFacilitiesLabel" Value="Select a Facility" />
+        <Setter Property="CloseLabel" Value="Close" />
+        <Setter Property="CollapseLabel" Value="Collapse" />
+        <Setter Property="ExpandLabel" Value="Expand" />
+        <Setter Property="ZoomToLabel" Value="Zoom To" />
+        <Setter Property="NoResultsMessage" Value="No results found." />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="AllFacilitiesLabel" Value="All Sites" />
+        <Setter Property="BackButtonLabel" Value="Go Back" />
+        <Setter Property="AllFloorsLabel" Value="All Floors" />
+        <Setter Property="SearchPlaceholder" Value="Filter" />
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="controls:FloorFilter.IsExpanded" Value="False" />
+        <Setter Property="LevelDataTemplate" Value="{StaticResource FloorFilterLevelDataTemplate}" />
+        <Setter Property="SiteDataTemplate" Value="{StaticResource FloorFilterSiteDataTemplate}" />
+        <Setter Property="FacilityDataTemplate" Value="{StaticResource FloorFilterFacilityDataTemplate}" />
+        <Setter Property="DifferentiatingFacilityDataTemplate" Value="{StaticResource FloorFilterDifferentiatingFacilityDataTemplate}" />
+        <Setter Property="CommonListStyle" Value="{StaticResource FloorFilterListStyle}" />
+        <Setter Property="ExpandCollapseButtonStyle" Value="{StaticResource FloorFilterExpandCollapseButtonStyle}" />
+        <Setter Property="BrowseButtonStyle" Value="{StaticResource FloorFilterBrowseButtonStyle}" />
+        <Setter Property="ZoomToButtonStyle" Value="{StaticResource FloorFilterZoomToButtonStyle}" />
+        <Setter Property="Template" Value="{StaticResource FloorFilterTemplate}" />
+    </Style>
+</ResourceDictionary>

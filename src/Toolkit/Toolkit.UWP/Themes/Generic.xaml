@@ -13,6 +13,7 @@
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
