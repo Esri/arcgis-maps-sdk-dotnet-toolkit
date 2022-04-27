@@ -20,7 +20,7 @@
   <PropertyGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
-    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <GenerateLibraryLayout>false</GenerateLibraryLayout>
     <Nullable>annotations</Nullable>
   </PropertyGroup>
 
@@ -59,7 +59,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj" />
+      <ProjectReference Include="..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj" />       
   </ItemGroup>
 
   <ItemGroup>
