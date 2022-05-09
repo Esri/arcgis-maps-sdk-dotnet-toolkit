@@ -26,6 +26,8 @@ using Esri.ArcGISRuntime.Portal;
 using Esri.ArcGISRuntime.UI.Controls;
 using Esri.ArcGISRuntime.UtilityNetworks;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
+using System.Threading.Tasks;
+using System.Threading;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -41,8 +43,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// Represents a control that enables user to perform trace analysis with pre-configured trace types.
     /// </summary>
-    public partial class UtilityNetworkTraceTool : Control, IUtilityNetworkTraceTool
+    public partial class UtilityNetworkTraceTool : Control
     {
+        private CancellationTokenSource? _identifyLayersCts;
         private readonly UtilityNetworkTraceToolController _controller;
 
         /// <summary>
@@ -51,8 +54,346 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public UtilityNetworkTraceTool()
         {
             DefaultStyleKey = typeof(UtilityNetworkTraceTool);
-            _controller = new UtilityNetworkTraceToolController(this);
+            _controller = new UtilityNetworkTraceToolController();
+            _controller.PropertyChanged += _controller_PropertyChanged;
         }
+
+        private void _controller_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(_controller.RequestedViewpoint):
+                    if (_controller.RequestedViewpoint != null)
+                    {
+                        GeoView?.SetViewpoint(_controller.RequestedViewpoint);
+                    }
+                    break;
+                case nameof(_controller.RequestedCallout):
+                    if (_controller.RequestedCallout == null)
+                    {
+                        GeoView?.DismissCallout();
+                    }
+                    else
+                    {
+                        GeoView?.ShowCalloutAt(_controller.RequestedCallout.Item2, _controller.RequestedCallout.Item1);
+                    }
+                    break;
+                case nameof(_controller.Status):
+                    if (_statusLabel != null)
+                    {
+                        _statusLabel.Text = _controller.Status;
+                    }
+                    break;
+                case nameof(_controller.UtilityNetworks):
+                    if (_utilityNetworksPicker != null)
+                    {
+                        _utilityNetworksPicker.ItemsSource = _controller.UtilityNetworks;
+                    }
+                    break;
+                case nameof(_controller.SelectedUtilityNetwork):
+                    if (UtilityNetworkChanged != null)
+                    {
+                        UtilityNetworkChanged?.Invoke(this, new UtilityNetworkChangedEventArgs(_controller.SelectedUtilityNetwork));
+                    }
+                    if (_utilityNetworksPicker != null)
+                    {
+                        _utilityNetworksPicker.SelectedItem = _controller.SelectedUtilityNetwork;
+                    }
+                    break;
+                case nameof(_controller.SelectedTraceType):
+                    if (_traceTypesPicker != null)
+                    {
+                        _traceTypesPicker.SelectedItem = _controller.SelectedTraceType;
+                    }
+                    break;
+                case nameof(_controller.SelectedStartingPoint):
+                    if (_startingPointsList != null)
+                    {
+                        _startingPointsList.SelectedItem = _controller.SelectedStartingPoint;
+                    }
+                    break;
+                case nameof(_controller.CurrentResult):
+                    if (_controller?.CurrentResult?.Results != null)
+                    {
+                        UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(_controller.CurrentResult.Paremters, _controller.CurrentResult.Results));
+                    }
+
+                    if (_controller?.CurrentResult?.Error != null)
+                    {
+                        UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(_controller.CurrentResult.Paremters, _controller.CurrentResult.Error));
+                    }
+
+                    if (_controller?.CurrentResult == null)
+                    {
+                        if (GeoView is MapView mapView && mapView.Map is Map map)
+                        {
+                            foreach (var layer in map.OperationalLayers)
+                            {
+                                if (layer is FeatureLayer featureLayer)
+                                {
+                                    featureLayer.ClearSelection();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case nameof(_controller.StartingPoints):
+                    break;
+                //case nameof(_controller.ControllerStartingPoints):
+                //    if (_startingPointsList != null)
+                //    {
+                //        _startingPointsList.ItemsSource = _controller.ControllerStartingPoints;
+                //    }
+                //    break;
+                case nameof(_controller.EnableTrace):
+                    if (_traceButton != null)
+                    {
+                        _traceButton.IsEnabled = _controller.EnableTrace;
+                    }
+                    break;
+                case nameof(_controller.FunctionResults):
+                    if (_functionResultsList != null)
+                    {
+                        _functionResultsList.ItemsSource = _controller.FunctionResults;
+                    }
+                    break;
+                case nameof(_controller.IsBusy):
+                    if (_busyIndicator != null)
+                    {
+                        _busyIndicator.Visibility = _controller.IsBusy ? Visibility.Visible : Visibility.Collapsed;
+                        _busyIndicator.IsIndeterminate = _controller.IsBusy;
+                    }
+                    break;
+                case nameof(_controller.IsAddingStartingPoints):
+                    break;
+                case nameof(_controller.TraceTypes):
+                    if (_traceTypesPicker != null)
+                    {
+                        _traceTypesPicker.ItemsSource = _controller.TraceTypes;
+                    }
+                    break;
+                case nameof(_controller.StartingPointSymbol):
+                    break;
+                case nameof(_controller.ResultPointSymbol):
+                    break;
+                case nameof(_controller.ResultLineSymbol):
+                    break;
+                case nameof(_controller.ResultFillSymbol):
+                    break;
+                case nameof(_controller.ShowUtilityNetworks):
+                    if (_utilityNetworksPicker != null)
+                    {
+                        _utilityNetworksPicker.Visibility = _controller.ShowUtilityNetworks ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                    break;
+                case nameof(_controller.ShowTraceTypes):
+                    if (_traceTypesPicker != null)
+                    {
+                        _traceTypesPicker.Visibility = _controller.ShowTraceTypes ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                    break;
+                case nameof(_controller.ShowStartingPoints):
+                    if (_startingPointsList != null)
+                    {
+                        _startingPointsList.Visibility = _controller.ShowStartingPoints ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                    break;
+                case nameof(_controller.ShowFunctionResults):
+                    if (_functionResultsList != null)
+                    {
+                        _functionResultsList.Visibility = _controller.ShowFunctionResults ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                    break;
+            }
+        }
+
+#if NETFX_CORE && !XAMARIN_FORMS
+        private long _propertyChangedCallbackToken = 0;
+
+#endif
+        internal void HandleGeoViewChanged(GeoView? oldGeoView, GeoView? newGeoView)
+        {
+            _controller.Reset(true);
+
+            _controller.IsBusy = true;
+            _controller.Status = "Loading utility networks...";
+
+            var graphicsOverlays = new[] { _controller._startingPointGraphicsOverlay, _controller._resultGraphicsOverlay };
+
+            if (oldGeoView != null)
+            {
+                oldGeoView.GeoViewTapped -= OnGeoViewTapped;
+#if XAMARIN_FORMS
+                if (oldGeoView is INotifyPropertyChanged oldNpc)
+                {
+                    oldNpc.PropertyChanged -= OnGeoViewPropertyChanged;
+                }
+#elif NETFX_CORE
+                if (oldGeoView is MapView)
+                {
+                    oldGeoView.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
+                }
+                else if (oldGeoView is SceneView)
+                {
+                    oldGeoView.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
+                }
+#else
+                if (oldGeoView is MapView)
+                {
+                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
+                }
+                else if (oldGeoView is SceneView)
+                {
+                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
+                }
+#endif
+                if (oldGeoView.GraphicsOverlays != null)
+                {
+                    foreach (var graphicsOverlay in graphicsOverlays)
+                    {
+                        if (oldGeoView.GraphicsOverlays.Contains(graphicsOverlay))
+                        {
+                            oldGeoView.GraphicsOverlays.Remove(graphicsOverlay);
+                        }
+                    }
+                }
+            }
+
+            if (newGeoView != null)
+            {
+                newGeoView.GeoViewTapped += OnGeoViewTapped;
+
+#if XAMARIN
+                if (newGeoView is INotifyPropertyChanged newNpc)
+                {
+                    newNpc.PropertyChanged += OnGeoViewPropertyChanged;
+                }
+
+#elif NETFX_CORE
+                if (newGeoView is MapView)
+                {
+                    _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(MapView.MapProperty, OnGeoModelPropertyChanged);
+                }
+                else if (newGeoView is SceneView)
+                {
+                    _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(SceneView.SceneProperty, OnGeoModelPropertyChanged);
+                }
+#else
+                if (newGeoView is MapView)
+                {
+                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
+                }
+                else if (newGeoView is SceneView)
+                {
+                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
+                }
+#endif
+                if (newGeoView.GraphicsOverlays != null)
+                {
+                    foreach (var graphicsOverlay in graphicsOverlays)
+                    {
+                        if (!newGeoView.GraphicsOverlays.Contains(graphicsOverlay))
+                        {
+                            newGeoView.GraphicsOverlays.Add(graphicsOverlay);
+                        }
+                    }
+                }
+
+                OnGeoModelPropertyChanged(null, null);
+            }
+        }
+
+        private async void OnGeoViewTapped(object? sender, GeoViewInputEventArgs e)
+        {
+            if (e.Handled || !_controller.IsAddingStartingPoints || _controller.SelectedUtilityNetwork == null)
+            {
+                return;
+            }
+
+            try
+            {
+                _controller.Status = "Identifying a starting point...";
+                _controller.IsBusy = true;
+
+                if (sender is GeoView geoView)
+                {
+                    if (_identifyLayersCts != null)
+                    {
+                        _identifyLayersCts.Cancel();
+                    }
+
+                    _identifyLayersCts = new CancellationTokenSource();
+                    var identifyResults = await geoView.IdentifyLayersAsync(e.Position, 10d, false, _identifyLayersCts.Token);
+
+                    foreach (var identifyResult in identifyResults)
+                    {
+                        if (GetFeature(identifyResult) is ArcGISFeature feature)
+                        {
+                            _controller.AddStartingPoint(feature, e.Location);
+                        }
+                    }
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // Do nothing when canceled
+            }
+            catch (Exception ex)
+            {
+                _controller.Status = $"Identifying a starting point failed ({ex.GetType().Name}): {ex.Message}";
+            }
+            finally
+            {
+                _controller.Status = _controller.GetStatus();
+                _controller.IsBusy = false;
+            }
+        }
+
+        private ArcGISFeature? GetFeature(IdentifyLayerResult layerResult)
+        {
+            foreach (var geoElement in layerResult.GeoElements)
+            {
+                if (geoElement is ArcGISFeature feature)
+                {
+                    return feature;
+                }
+            }
+
+            return GetFeature(layerResult.SublayerResults);
+        }
+
+        private ArcGISFeature? GetFeature(IEnumerable<IdentifyLayerResult> layerResults)
+        {
+            foreach (var layerResult in layerResults)
+            {
+                if (GetFeature(layerResult) is ArcGISFeature element)
+                {
+                    return element;
+                }
+            }
+
+            return null;
+        }
+        private void OnGeoModelPropertyChanged(object? sender, object? e)
+        {
+            if (GeoView is MapView mv && mv.Map is Map newMap)
+            {
+                _controller.ApplyNewMap(newMap);
+            }
+            else
+            {
+                _controller.Reset();
+            }
+        }
+
+        private void OnGeoViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(GeoModel))
+            {
+                OnGeoModelPropertyChanged(sender, e);
+            }
+        }
+
 
         /// <summary>
         /// Finalizes an instance of the <see cref="UtilityNetworkTraceTool"/> class.
@@ -176,7 +517,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (d is UtilityNetworkTraceTool traceTool)
             {
-                traceTool._controller.HandleGeoViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
+                traceTool.HandleGeoViewChanged(e.OldValue as GeoView, e.NewValue as GeoView);
             }
         }
 
@@ -200,7 +541,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty IsAddingStartingPointsProperty =
             DependencyProperty.Register(nameof(IsAddingStartingPoints), typeof(bool),
-                typeof(UtilityNetworkTraceTool), new PropertyMetadata(true));
+                typeof(UtilityNetworkTraceTool), new PropertyMetadata(true, OnIsAddingStartingPointChanged));
+
+        private static void OnIsAddingStartingPointChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is UtilityNetworkTraceTool traceTool)
+            {
+                traceTool._controller.IsAddingStartingPoints = (bool)e.NewValue;
+            }
+        }
 
         /// <summary>
         /// Identifies the <see cref="AutoZoomToTraceResults"/> dependency property.
@@ -284,116 +633,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public event EventHandler<UtilityNetworkTraceCompletedEventArgs>? UtilityNetworkTraceCompleted;
 
         #endregion Events
-
-        #region Controller Callbacks
-
-        void IUtilityNetworkTraceTool.SelectUtilityNetwork(UtilityNetwork? utilityNetwork)
-        {
-            if (_utilityNetworksPicker != null)
-            {
-                _utilityNetworksPicker.SelectedItem = utilityNetwork;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.SelectTraceType(UtilityNamedTraceConfiguration? traceType)
-        {
-            if (_traceTypesPicker != null)
-            {
-                _traceTypesPicker.SelectedItem = traceType;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.SelectStartingPoint(StartingPointModel? startingPoint)
-        {
-            if (_startingPointsList != null)
-            {
-                _startingPointsList.SelectedItem = startingPoint;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.UpdateUtilityNetworksVisibility(bool isVisible)
-        {
-            if (_utilityNetworksPicker != null)
-            {
-                _utilityNetworksPicker.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.UpdateTraceTypesVisibility(bool isVisible)
-        {
-            if (_traceTypesPicker != null)
-            {
-                _traceTypesPicker.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.UpdateStartingPointsVisibility(bool isVisible)
-        {
-            if (_startingPointsList != null)
-            {
-                _startingPointsList.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.UpdateFunctionResultsVisibility(bool isVisible)
-        {
-            if (_functionResultsList != null)
-            {
-                _functionResultsList.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.EnableTrace(bool isTraceEnabled)
-        {
-            if (_traceButton != null)
-            {
-                _traceButton.IsEnabled = isTraceEnabled;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.SetIsBusy(bool isBusy)
-        {
-            if (_busyIndicator != null)
-            {
-                _busyIndicator.Visibility = isBusy ? Visibility.Visible : Visibility.Collapsed;
-                _busyIndicator.IsIndeterminate = isBusy;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.SetStatus(string status)
-        {
-            if (_statusLabel != null)
-            {
-                _statusLabel.Text = status;
-            }
-        }
-
-        void IUtilityNetworkTraceTool.NotifyUtilityNetworkChanged(UtilityNetwork utilityNetwork)
-        {
-            if (UtilityNetworkChanged != null)
-            {
-                UtilityNetworkChanged?.Invoke(this, new UtilityNetworkChangedEventArgs(utilityNetwork));
-            }
-        }
-
-        void IUtilityNetworkTraceTool.NotifyUtilityNetworkTraceCompleted(UtilityTraceParameters parameters,
-            IEnumerable<UtilityTraceResult>? results, Exception? error)
-        {
-            if (UtilityNetworkTraceCompleted != null)
-            {
-                if (results != null)
-                {
-                    UtilityNetworkTraceCompleted.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(parameters, results));
-                }
-
-                if (error != null)
-                {
-                    UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(parameters, error));
-                }
-            }
-        }
-
-        #endregion Controller Callbacks
     }
 }
 #endif

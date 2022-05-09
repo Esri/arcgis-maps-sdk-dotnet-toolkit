@@ -84,14 +84,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _addStartingPointToggle.IsOn = IsAddingStartingPoints;
                 _addStartingPointToggle.Toggled += (s, e) =>
                 {
-                    _controller.HandleAddStartingPointToggled(((ToggleButton)s).IsOn);
+                    _controller.IsAddingStartingPoints = ((ToggleButton)s).IsOn;
                 };
 #else
                 _addStartingPointToggle.IsChecked = IsAddingStartingPoints;
                 _addStartingPointToggle.Click += (s, e) =>
                 {
                     var isToggleChecked = ((ToggleButton)s).IsChecked == true;
-                    _controller.HandleAddStartingPointToggled(isToggleChecked);
+                    _controller.IsAddingStartingPoints = isToggleChecked;
                 };
 #endif
             }
@@ -120,7 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_StartingPointsList") is ListView startingPointsList)
             {
                 _startingPointsList = startingPointsList;
-                _startingPointsList.ItemsSource = _controller.StartingPoints;
+                _startingPointsList.ItemsSource = _controller.ControllerStartingPoints;
                 _startingPointsList.SelectionChanged += (s, e) =>
                 {
                     _controller.UpdateSelectedStartingPoint(((ListView)s).SelectedItem as StartingPointModel);

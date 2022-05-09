@@ -22,6 +22,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,9 +38,8 @@ using Esri.ArcGISRuntime.UtilityNetworks;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
-    internal class UtilityNetworkTraceToolController : IDisposable
+    internal class UtilityNetworkTraceToolController : IDisposable, INotifyPropertyChanged
     {
-        private readonly IUtilityNetworkTraceTool _traceTool;
         private bool _ignoreEventsFlag;
 
         private readonly ObservableCollection<UtilityNetwork> _utilityNetworks
@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private readonly ObservableCollection<StartingPointModel> _startingPoints
             = new ObservableCollection<StartingPointModel>();
 
-        internal ObservableCollection<StartingPointModel> StartingPoints => _startingPoints;
+        public ObservableCollection<StartingPointModel> ControllerStartingPoints => _startingPoints;
 
         private readonly Symbol _defaultStartingLocationSymbol
             = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.LimeGreen, 20d);
@@ -75,19 +75,42 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             = new SimpleFillSymbol(SimpleFillSymbolStyle.ForwardDiagonal, Color.Blue,
                 new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Blue, 2d));
 
-        private readonly GraphicsOverlay _startingPointGraphicsOverlay = new GraphicsOverlay();
-        private readonly GraphicsOverlay _resultGraphicsOverlay = new GraphicsOverlay();
+        internal readonly GraphicsOverlay _startingPointGraphicsOverlay = new GraphicsOverlay();
+        internal readonly GraphicsOverlay _resultGraphicsOverlay = new GraphicsOverlay();
 
         private readonly SynchronizationContext _synchronizationContext;
 
         private CancellationTokenSource? _getTraceTypesCts;
-        private CancellationTokenSource? _identifyLayersCts;
         private CancellationTokenSource? _traceCts;
         private CancellationTokenSource? _getFeaturesForElementsCts;
 
-        public UtilityNetworkTraceToolController(IUtilityNetworkTraceTool traceTool)
+        public void ApplyNewMap(Map newMap)
         {
-            _traceTool = traceTool;
+            Map = newMap;
+            if (Map != null)
+            {
+                Reset(true);
+                IsBusy = true;
+                Status = "Loading utility networks...";
+
+                if (Map.LoadStatus == LoadStatus.Loaded)
+                {
+                    OnGeoModelLoaded(Map, EventArgs.Empty);
+                }
+                else
+                {
+                    var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(Map)
+                    {
+                        OnEventAction = (instance, source, eventArgs) => OnGeoModelLoaded(source, eventArgs),
+                        OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent,
+                    };
+                    Map.Loaded += listener.OnEvent;
+                }
+            }
+        }
+
+        public UtilityNetworkTraceToolController()
+        {
             _synchronizationContext = SynchronizationContext.Current ?? new SynchronizationContext();
 
             _utilityNetworks.CollectionChanged += (s, e) =>
@@ -97,10 +120,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     SelectedUtilityNetwork = _utilityNetworks[0];
                 }
 
-                _traceTool.UpdateUtilityNetworksVisibility(isVisible: _utilityNetworks.Count > 1);
+                ShowUtilityNetworks = _utilityNetworks.Count > 1;
                 if (_utilityNetworks.Count > 1)
                 {
-                    _traceTool.SetStatus($"Select a utility network");
+                    Status = "Select a utility network";
                 }
             };
 
@@ -111,10 +134,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     SelectedTraceType = _traceTypes[0];
                 }
 
-                _traceTool.UpdateTraceTypesVisibility(isVisible: _traceTypes.Count > 1);
+                ShowTraceTypes = _traceTypes.Count > 1;
                 if (_traceTypes.Count > 1)
                 {
-                    _traceTool.SetStatus($"Select a trace type");
+                    Status = "Select a trace type";
                 }
             };
 
@@ -133,19 +156,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     }
 
                     var minimum = traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
-                    _traceTool.EnableTrace(traceParameters?.StartingLocations.Count >= minimum);
+                    EnableTrace = TraceParameters?.StartingLocations.Count >= minimum;
                 }
 
-                _traceTool.UpdateStartingPointsVisibility(isVisible: _startingPoints.Count > 0);
+                ShowStartingPoints = _startingPoints.Any();
                 if (_startingPoints.Any())
                 {
-                    _traceTool.SetStatus($"{_startingPoints.Count} starting points");
+                    Status = $"{_startingPoints.Count} starting points";
                 }
             };
 
             _functionResults.CollectionChanged += (s, e) =>
             {
-                _traceTool.UpdateFunctionResultsVisibility(isVisible: _functionResults.Count > 0);
+                ShowFunctionResults = _functionResults.Any();
             };
         }
 
@@ -156,7 +179,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private UtilityNetwork? _selectedUtilityNetwork;
 
-        private UtilityNetwork? SelectedUtilityNetwork
+        public UtilityNetwork? SelectedUtilityNetwork
         {
             get => _selectedUtilityNetwork;
             set
@@ -166,7 +189,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     Reset(clearTraceTypes: true);
                     _selectedUtilityNetwork = value;
                     _ignoreEventsFlag = true;
-                    _traceTool.SelectUtilityNetwork(_selectedUtilityNetwork);
+                    OnPropertyChanged();
                     _ = LoadTraceTypesAsync();
                 }
             }
@@ -184,7 +207,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private UtilityNamedTraceConfiguration? _selectedTraceType;
 
-        private UtilityNamedTraceConfiguration? SelectedTraceType
+        public UtilityNamedTraceConfiguration? SelectedTraceType
         {
             get => _selectedTraceType;
             set
@@ -192,17 +215,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (_selectedTraceType != value)
                 {
                     _selectedTraceType = value;
-                    if (!_ignoreEventsFlag)
-                    {
-                        _traceTool.SelectTraceType(_selectedTraceType);
-                    }
+
+                    OnPropertyChanged();
 
                     if (_selectedTraceType is UtilityNamedTraceConfiguration traceType)
                     {
                         TraceParameters = new UtilityTraceParameters(traceType,
                             _startingPoints.Select(p => p.StartingPoint));
                         var minimum = traceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
-                        _traceTool.EnableTrace(TraceParameters?.StartingLocations.Count >= minimum);
+                        EnableTrace = TraceParameters?.StartingLocations.Count >= minimum;
                     }
                     else
                     {
@@ -221,7 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private StartingPointModel? _selectedStartingPoint;
 
-        private StartingPointModel? SelectedStartingPoint
+        public StartingPointModel? SelectedStartingPoint
         {
             get => _selectedStartingPoint;
             set
@@ -231,7 +252,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     _selectedStartingPoint = value;
                     if (!_ignoreEventsFlag)
                     {
-                        _traceTool.SelectStartingPoint(_selectedStartingPoint);
+                        OnPropertyChanged();
                     }
 
                     SelectStartingPoint();
@@ -248,7 +269,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void SelectStartingPoint()
         {
-            _traceTool.GeoView?.DismissCallout();
+            RequestedCallout = null;
 
             if (SelectedStartingPoint?.StartingPoint is UtilityElement startingPoint
              && _startingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
@@ -256,10 +277,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 _startingPointGraphicsOverlay.ClearSelection();
                 graphic.IsSelected = true;
-                if (_traceTool.GeoView is GeoView geoView && graphic.Geometry is MapPoint location)
+                if (graphic.Geometry is MapPoint location)
                 {
                     var calloutDefinition = new CalloutDefinition(startingPoint.NetworkSource.Name, startingPoint.AssetGroup.Name);
-                    geoView.ShowCalloutAt(location, calloutDefinition);
+                    RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
                 }
             }
         }
@@ -274,15 +295,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (_traceParameters != value)
                 {
                     _traceParameters = value;
-                    _traceTool.SetStatus(GetStatus());
+                    Status = GetStatus();
                 }
             }
         }
 
         private void OnUtilityNetworksCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            _traceTool.SetIsBusy(true);
-            _traceTool.SetStatus("Loading utility networks...");
+            IsBusy = true;
+            Status = "Loading utility networks...";
 
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
@@ -347,8 +368,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 try
                 {
-                    _traceTool.SetIsBusy(true);
-                    _traceTool.SetStatus("Loading utility networks...");
+                    IsBusy = true;
+                    Status = "Loading utility networks";
                     _utilityNetworks.Clear();
 
                     var utilityNetworks = (sender is Map map ? map.UtilityNetworks : null) ?? throw new ArgumentException("No UtilityNetworks found.");
@@ -383,144 +404,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
                 catch (Exception ex)
                 {
-                    _traceTool.SetStatus($"Loading utility networks failed ({ex.GetType().Name}): {ex.Message}");
-                    _traceTool.SetIsBusy(false);
+                    Status = $"Loading utility networks failed ({ex.GetType().Name}): {ex.Message}";
+                    IsBusy = false;
                 }
             });
         }
 
-        private void OnGeoModelPropertyChanged(object? sender, object? e)
-        {
-            GeoModel? geoModel = _traceTool.GeoView is MapView mapView ? mapView.Map :
-                (_traceTool.GeoView is SceneView sceneView ? sceneView.Scene : null);
 
-            if (geoModel != null)
-            {
-                Reset(true);
-                _traceTool.SetIsBusy(true);
-                _traceTool.SetStatus("Loading utility networks...");
 
-                if (geoModel.LoadStatus == LoadStatus.Loaded)
-                {
-                    OnGeoModelLoaded(geoModel, EventArgs.Empty);
-                }
-                else
-                {
-                    var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(geoModel)
-                    {
-                        OnEventAction = (instance, source, eventArgs) => OnGeoModelLoaded(source, eventArgs),
-                        OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent,
-                    };
-                    geoModel.Loaded += listener.OnEvent;
-                }
-            }
-        }
 
-#if NETFX_CORE && !XAMARIN_FORMS
-        private long _propertyChangedCallbackToken = 0;
-#endif
 
-        private void OnGeoViewPropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(GeoModel))
-            {
-                OnGeoModelPropertyChanged(sender, e);
-            }
-        }
-
-        internal void HandleGeoViewChanged(GeoView? oldGeoView, GeoView? newGeoView)
-        {
-            Reset(true);
-
-            _traceTool.SetIsBusy(true);
-            _traceTool.SetStatus("Loading utility networks...");
-
-            var graphicsOverlays = new[] { _startingPointGraphicsOverlay, _resultGraphicsOverlay };
-
-            if (oldGeoView != null)
-            {
-                oldGeoView.GeoViewTapped -= OnGeoViewTapped;
-#if XAMARIN_FORMS
-                if (oldGeoView is INotifyPropertyChanged oldNpc)
-                {
-                    oldNpc.PropertyChanged -= OnGeoViewPropertyChanged;
-                }
-#elif NETFX_CORE
-                if (oldGeoView is MapView)
-                {
-                    oldGeoView.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
-                }
-                else if (oldGeoView is SceneView)
-                {
-                    oldGeoView.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
-                }
-#else
-                if (oldGeoView is MapView)
-                {
-                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
-                }
-                else if (oldGeoView is SceneView)
-                {
-                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(oldGeoView, OnGeoModelPropertyChanged);
-                }
-#endif
-                if (oldGeoView.GraphicsOverlays != null)
-                {
-                    foreach (var graphicsOverlay in graphicsOverlays)
-                    {
-                        if (oldGeoView.GraphicsOverlays.Contains(graphicsOverlay))
-                        {
-                            oldGeoView.GraphicsOverlays.Remove(graphicsOverlay);
-                        }
-                    }
-                }
-            }
-
-            if (newGeoView != null)
-            {
-                newGeoView.GeoViewTapped += OnGeoViewTapped;
-
-#if XAMARIN
-                if (newGeoView is INotifyPropertyChanged newNpc)
-                {
-                    newNpc.PropertyChanged += OnGeoViewPropertyChanged;
-                }
-
-#elif NETFX_CORE
-                if (newGeoView is MapView)
-                {
-                    _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(MapView.MapProperty, OnGeoModelPropertyChanged);
-                }
-                else if (newGeoView is SceneView)
-                {
-                    _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(SceneView.SceneProperty, OnGeoModelPropertyChanged);
-                }
-#else
-                if (newGeoView is MapView)
-                {
-                    DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
-                }
-                else if (newGeoView is SceneView)
-                {
-                    DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(newGeoView, OnGeoModelPropertyChanged);
-                }
-#endif
-                if (newGeoView.GraphicsOverlays != null)
-                {
-                    foreach (var graphicsOverlay in graphicsOverlays)
-                    {
-                        if (!newGeoView.GraphicsOverlays.Contains(graphicsOverlay))
-                        {
-                            newGeoView.GraphicsOverlays.Add(graphicsOverlay);
-                        }
-                    }
-                }
-
-                OnGeoModelPropertyChanged(null, null);
-            }
-        }
-
-        private void AddStartingPoint(ArcGISFeature feature, MapPoint? location = null)
+        public void AddStartingPoint(ArcGISFeature feature, MapPoint? location = null)
         {
             Geometry.Geometry? geometry = feature.Geometry;
             UtilityElement? element = null;
@@ -530,7 +424,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             catch (Exception ex)
             {
-                _traceTool.SetStatus($"CreateElement failed ({ex.GetType().Name}): {ex.Message}");
+                Status = $"CreateElement failed ({ex.GetType().Name}): {ex.Message}";
             }
 
             if (element != null)
@@ -568,10 +462,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     element.Terminal = element.AssetType.TerminalConfiguration.Terminals[0];
                 }
 
-                if (_traceTool.StartingPoints == null)
+                if (StartingPoints == null)
                 {
-                    _traceTool.StartingPoints = new ObservableCollection<ArcGISFeature>();
-                    if (_traceTool.StartingPoints is INotifyCollectionChanged incc)
+                    StartingPoints = new ObservableCollection<ArcGISFeature>();
+                    if (StartingPoints is INotifyCollectionChanged incc)
                     {
                         var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                         {
@@ -582,10 +476,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     }
                 }
 
-                if (!_traceTool.StartingPoints.Any(f => f.Attributes["GlobalId"] is Guid guid
+                if (!StartingPoints.Any(f => f.Attributes["GlobalId"] is Guid guid
                    && guid.Equals(element.GlobalId)))
                 {
-                    _traceTool.StartingPoints.Add(feature);
+                    StartingPoints.Add(feature);
                 }
 
                 AddStartingPoint(element, geometry, location);
@@ -604,7 +498,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 graphic.Attributes["AssetGroup"] = element.AssetGroup.Name;
                 graphic.Attributes["AssetType"] = element.AssetType?.Name;
                 graphic.Attributes["Geometry"] = geometry?.ToJson();
-                graphic.Symbol = _traceTool.StartingPointSymbol ?? _defaultStartingLocationSymbol;
+                graphic.Symbol = StartingPointSymbol ?? _defaultStartingLocationSymbol;
                 _startingPointGraphicsOverlay.Graphics.Add(graphic);
             }
 
@@ -634,10 +528,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             if (feature.FeatureTable is ArcGISFeatureTable table && !string.IsNullOrEmpty(table.GlobalIdField)
                    && feature.GetAttributeValue(table.GlobalIdField) is Guid globalId)
             {
-                if (_traceTool.StartingPoints?.FirstOrDefault(f => f.Attributes["GlobalId"] is Guid guid
+                if (StartingPoints?.FirstOrDefault(f => f.Attributes["GlobalId"] is Guid guid
                    && guid.Equals(globalId)) is ArcGISFeature featureToDelete)
                 {
-                    _traceTool.StartingPoints.Remove(featureToDelete);
+                    StartingPoints.Remove(featureToDelete);
                 }
 
                 RemoveStartingPoint(globalId);
@@ -688,95 +582,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void ZoomToStartingPoint(UtilityElement startingPoint)
         {
-            if (_traceTool.GeoView is GeoView geoView
-                && _startingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
+            if (_startingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
                 && guid.Equals(startingPoint.GlobalId)) is Graphic graphic
                 && graphic.Geometry is Geometry.Geometry geometry)
             {
-                geoView.SetViewpoint(new Viewpoint(geometry));
+                RequestedViewpoint = new Viewpoint(geometry);
             }
         }
 
-        private ArcGISFeature? GetFeature(IdentifyLayerResult layerResult)
-        {
-            foreach (var geoElement in layerResult.GeoElements)
-            {
-                if (geoElement is ArcGISFeature feature)
-                {
-                    return feature;
-                }
-            }
+ 
 
-            return GetFeature(layerResult.SublayerResults);
-        }
 
-        private ArcGISFeature? GetFeature(IEnumerable<IdentifyLayerResult> layerResults)
-        {
-            foreach (var layerResult in layerResults)
-            {
-                if (GetFeature(layerResult) is ArcGISFeature element)
-                {
-                    return element;
-                }
-            }
-
-            return null;
-        }
-
-        private async void OnGeoViewTapped(object? sender, GeoViewInputEventArgs e)
-        {
-            if (e.Handled || !_traceTool.IsAddingStartingPoints || SelectedUtilityNetwork == null)
-            {
-                return;
-            }
-
-            try
-            {
-                _traceTool.SetStatus("Identifying a starting point...");
-                _traceTool.SetIsBusy(true);
-
-                if (sender is GeoView geoView)
-                {
-                    if (_identifyLayersCts != null)
-                    {
-                        _identifyLayersCts.Cancel();
-                    }
-
-                    _identifyLayersCts = new CancellationTokenSource();
-                    var identifyResults = await geoView.IdentifyLayersAsync(e.Position, 10d, false, _identifyLayersCts.Token);
-
-                    foreach (var identifyResult in identifyResults)
-                    {
-                        if (GetFeature(identifyResult) is ArcGISFeature feature)
-                        {
-                            AddStartingPoint(feature, e.Location);
-                        }
-                    }
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                // Do nothing when canceled
-            }
-            catch (Exception ex)
-            {
-                _traceTool.SetStatus($"Identifying a starting point failed ({ex.GetType().Name}): {ex.Message}");
-            }
-            finally
-            {
-                _traceTool.SetStatus(GetStatus());
-                _traceTool.SetIsBusy(false);
-            }
-        }
 
         private async Task LoadTraceTypesAsync()
         {
             try
             {
-                _traceTool.SetIsBusy(true);
-                _traceTool.SetStatus("Loading trace types...");
+                IsBusy = true;
+                Status = "Loading trace types...";
 
-                if (_traceTool.GeoView is MapView mapView && mapView.Map is Map map
+                if (Map != null
                     && SelectedUtilityNetwork is UtilityNetwork utilityNetwork)
                 {
                     if (_getTraceTypesCts != null)
@@ -785,7 +610,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     }
 
                     _getTraceTypesCts = new CancellationTokenSource();
-                    var traceTypes = await map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, _getTraceTypesCts.Token);
+                    var traceTypes = await Map.GetNamedTraceConfigurationsFromUtilityNetworkAsync(utilityNetwork, _getTraceTypesCts.Token);
                     foreach (var traceType in traceTypes)
                     {
                         _traceTypes.Add(traceType);
@@ -798,12 +623,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             catch (Exception ex)
             {
-                _traceTool.SetStatus($"Loading trace types failed ({ex.GetType().Name}):{ex.Message}");
+                Status = $"Loading trace types failed ({ex.GetType().Name}):{ex.Message}";
             }
             finally
             {
-                _traceTool.SetStatus(GetStatus());
-                _traceTool.SetIsBusy(false);
+                Status = GetStatus();
+                IsBusy = false;
             }
         }
 
@@ -830,8 +655,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             try
             {
-                _traceTool.SetStatus("Running a trace type...");
-                _traceTool.SetIsBusy(true);
+                Status = "Running a trace type...";
+                IsBusy = true;
 
                 ClearResults();
 
@@ -864,12 +689,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     if (traceResult.Warnings.Count > 0)
                     {
-                        _traceTool.SetStatus($"Trace warnings: {string.Join("\n", traceResult.Warnings)}");
+                        Status = $"Trace warnings: {string.Join("\n", traceResult.Warnings)}";
                     }
 
                     if (traceResult is UtilityElementTraceResult elementTraceResult)
                     {
-                        _traceTool.SetStatus($"{elementTraceResult.Elements.Count} elements found.");
+                        Status = $"{elementTraceResult.Elements.Count} elements found.";
 
                         if (_getFeaturesForElementsCts != null)
                         {
@@ -879,14 +704,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         _getFeaturesForElementsCts = new CancellationTokenSource();
                         var features = await SelectedUtilityNetwork.GetFeaturesForElementsAsync(elementTraceResult.Elements, _getFeaturesForElementsCts.Token);
 
-                        _traceTool.SetStatus($"Selecting {features.Count()} features.");
+                        Status = $"Selecting {features.Count()} features.";
 
-                        bool getElementExtent = _traceTool.AutoZoomToTraceResults && !traceResults.Any(r => r is UtilityGeometryTraceResult);
+                        bool getElementExtent = AutoZoomToTraceResults && !traceResults.Any(r => r is UtilityGeometryTraceResult);
 
-                        if (_traceTool.GeoView is MapView mapView && mapView.Map is Map map && map.OperationalLayers != null)
+                        if (Map.OperationalLayers != null)
                         {
                             int selected = 0;
-                            foreach (var featureLayer in GetFeatureLayer(map.OperationalLayers))
+                            foreach (var featureLayer in GetFeatureLayer(Map.OperationalLayers))
                             {
                                 var featuresInLayer = features.Where(f => f.FeatureTable == featureLayer.FeatureTable);
 
@@ -922,27 +747,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                                 selected += selectedFeatures.Count();
                             }
 
-                            _traceTool.SetStatus($"{features.Count()} features selected.");
+                            Status = $"{features.Count()} features selected.";
                         }
                     }
                     else if (traceResult is UtilityGeometryTraceResult geometryTraceResult)
                     {
                         if (geometryTraceResult.Multipoint is Multipoint multipoint)
                         {
-                            _resultGraphicsOverlay.Graphics.Add(new Graphic(multipoint, _traceTool.ResultPointSymbol ?? _defaultResultPointSymbol));
+                            _resultGraphicsOverlay.Graphics.Add(new Graphic(multipoint, ResultPointSymbol ?? _defaultResultPointSymbol));
                         }
 
                         if (geometryTraceResult.Polyline is Polyline polyline)
                         {
-                            _resultGraphicsOverlay.Graphics.Add(new Graphic(polyline, _traceTool.ResultLineSymbol ?? _defaultResultLineSymbol));
+                            _resultGraphicsOverlay.Graphics.Add(new Graphic(polyline, ResultLineSymbol ?? _defaultResultLineSymbol));
                         }
 
                         if (geometryTraceResult.Polygon is Polygon polygon)
                         {
-                            _resultGraphicsOverlay.Graphics.Add(new Graphic(polygon, _traceTool.ResultFillSymbol ?? _defaultResultFillSymbol));
+                            _resultGraphicsOverlay.Graphics.Add(new Graphic(polygon, ResultFillSymbol ?? _defaultResultFillSymbol));
                         }
 
-                        _traceTool.SetStatus($"'{_resultGraphicsOverlay.Graphics.Count}' aggregated geometries found.");
+                        Status = $"'{_resultGraphicsOverlay.Graphics.Count}' aggregated geometries found.";
                     }
                     else if (traceResult is UtilityFunctionTraceResult functionTraceResult)
                     {
@@ -951,15 +776,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                             _functionResults.Add(functionOutput);
                         }
 
-                        _traceTool.SetStatus($"'{_functionResults.Count}' function result(s) found.");
+                        Status = $"'{_functionResults.Count}' function result(s) found.";
                     }
                 }
 
                 var resultExtent = elementExtent ?? _resultGraphicsOverlay.Extent;
-                if (_traceTool.AutoZoomToTraceResults && _traceTool.GeoView is GeoView geoView && resultExtent?.IsEmpty == false &&
+                if (AutoZoomToTraceResults && resultExtent?.IsEmpty == false &&
                     GeometryEngine.Buffer(resultExtent, 15) is Geometry.Geometry bufferedGeometry)
                 {
-                    _ = geoView.SetViewpointAsync(new Viewpoint(bufferedGeometry));
+                    RequestedViewpoint = new Viewpoint(bufferedGeometry);
                 }
             }
             catch (TaskCanceledException)
@@ -968,18 +793,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             catch (Exception ex)
             {
-                _traceTool.SetStatus($"Running a trace type failed ({ex.GetType().Name}): {ex.Message}");
+                Status = $"Running a trace type failed ({ex.GetType().Name}): {ex.Message}";
                 error = ex;
             }
             finally
             {
-                _traceTool.SetStatus(GetStatus());
-                _traceTool.SetIsBusy(false);
+                IsBusy = false;
+                Status = GetStatus();
             }
 
             if (TraceParameters is UtilityTraceParameters traceParameters)
             {
-                _traceTool.NotifyUtilityNetworkTraceCompleted(traceParameters, traceResults, error);
+                CurrentResult = new UtilityTraceOperationResult { Paremters = traceParameters, Results = traceResults, Error = error};
             }
         }
 
@@ -1023,10 +848,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             try
             {
-                _traceTool.SetIsBusy(true);
+                IsBusy = true;
                 _startingPoints.Clear();
 
-                if (_traceTool.StartingPoints is INotifyCollectionChanged incc)
+                // TODO = with refactoring, we might be able to rule this out
+                if (StartingPoints is INotifyCollectionChanged incc)
                 {
                     var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
                     {
@@ -1036,9 +862,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     incc.CollectionChanged += listener.OnEvent;
                 }
 
-                if (_traceTool.StartingPoints != null)
+                if (StartingPoints != null)
                 {
-                    foreach (var feature in _traceTool.StartingPoints)
+                    foreach (var feature in StartingPoints)
                     {
                         AddStartingPoint(feature);
                     }
@@ -1046,24 +872,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             catch (Exception ex)
             {
-                _traceTool.SetStatus($"Loading starting points failed ({ex.GetType().Name}): {ex.Message}");
+                Status = $"Loading starting points failed ({ex.GetType().Name}): {ex.Message}";
             }
             finally
             {
-                _traceTool.SetIsBusy(false);
+                IsBusy = false;
             }
-        }
-
-        internal void HandleAddStartingPointToggled(bool isAddingStartingPoints)
-        {
-            _traceTool.IsAddingStartingPoints = isAddingStartingPoints;
         }
 
         internal void HandleStartingPointSymbolChanged()
         {
             foreach (var graphic in _startingPointGraphicsOverlay.Graphics)
             {
-                graphic.Symbol = _traceTool.StartingPointSymbol;
+                graphic.Symbol = StartingPointSymbol;
             }
         }
 
@@ -1085,21 +906,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             switch (geometryType)
             {
                 case GeometryType.Multipoint:
-                    return _traceTool.ResultPointSymbol;
+                    return ResultPointSymbol;
                 case GeometryType.Polyline:
-                    return _traceTool.ResultLineSymbol;
+                    return ResultLineSymbol;
                 case GeometryType.Polygon:
-                    return _traceTool.ResultFillSymbol;
+                    return ResultFillSymbol;
             }
 
             return null;
         }
 
-        private string GetStatus()
+        public string GetStatus()
         {
             var status = new StringBuilder();
-            if (!(_traceTool.GeoView is MapView mapView) ||
-                (mapView.Map is Map map && map.UtilityNetworks.Count == 0))
+            //if (!(_traceTool.GeoView is MapView mapView) ||
+            //    (mapView.Map is Map map && map.UtilityNetworks.Count == 0))
+            if (UtilityNetworks == null || UtilityNetworks.Count == 0)
             {
                 status.AppendLine("No utility networks found.");
             }
@@ -1117,7 +939,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
             else if (SelectedUtilityNetwork != null)
             {
-                if (_traceTool.IsAddingStartingPoints)
+                if (IsAddingStartingPoints)
                 {
                     status.AppendLine("Tap a feature to identify a starting point.");
                 }
@@ -1153,17 +975,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 SelectedTraceType = null;
             }
 
-            _traceTool.StartingPoints?.Clear();
-            _startingPoints.Clear();
+            StartingPoints = null;
+            ControllerStartingPoints.Clear();
             _startingPointGraphicsOverlay.Graphics.Clear();
 
             _getTraceTypesCts?.Cancel();
-            _identifyLayersCts?.Cancel();
             _traceCts?.Cancel();
             _getFeaturesForElementsCts?.Cancel();
 
-            _traceTool.SetIsBusy(false);
-            _traceTool.SetStatus(GetStatus());
+            IsBusy = false;
+            Status = GetStatus();
 
             ClearResults();
         }
@@ -1172,17 +993,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             _resultGraphicsOverlay.Graphics.Clear();
             _functionResults.Clear();
-
-            if (_traceTool.GeoView is MapView mapView && mapView.Map is Map map)
-            {
-                foreach (var layer in map.OperationalLayers)
-                {
-                    if (layer is FeatureLayer featureLayer)
-                    {
-                        featureLayer.ClearSelection();
-                    }
-                }
-            }
+            CurrentResult = null;
         }
 
         /// <inheritdoc/>
@@ -1191,7 +1002,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             try
             {
                 _getTraceTypesCts?.Dispose();
-                _identifyLayersCts?.Dispose();
                 _traceCts?.Dispose();
                 _getFeaturesForElementsCts?.Dispose();
             }
@@ -1199,6 +1009,286 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
             }
         }
+
+        #region replacing interface
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+        // TODO = make INPC
+        private IList<ArcGISFeature>? _tvStartingPoints;
+        public IList<ArcGISFeature>? StartingPoints
+        {
+            get => _tvStartingPoints;
+            set
+            {
+                if (value != _tvStartingPoints)
+                {
+                    _tvStartingPoints = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isAddingStartingPoints;
+        public bool IsAddingStartingPoints
+        {
+            get => _isAddingStartingPoints;
+            set
+            {
+                if (value != _isAddingStartingPoints)
+                {
+                    _isAddingStartingPoints = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Tuple<CalloutDefinition, MapPoint>? _requestedCallout;
+        public Tuple<CalloutDefinition, MapPoint>? RequestedCallout
+        {
+            get => _requestedCallout;
+            set
+            {
+                if (value != _requestedCallout)
+                {
+                    _requestedCallout = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _autoZoomToTraceResults;
+        public bool AutoZoomToTraceResults
+        {
+            get => _autoZoomToTraceResults;
+            set
+            {
+                if (value != _autoZoomToTraceResults)
+                {
+                    _autoZoomToTraceResults = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Symbol? _startingPointSymbol;
+        private Symbol? _resultPointSymbol;
+        private Symbol? _resultLineSymbol;
+        private Symbol? _resultFillSymbol;
+
+        public Symbol? StartingPointSymbol
+        {
+            get => _startingPointSymbol;
+            set
+            {
+                if (value != _startingPointSymbol)
+                {
+                    _startingPointSymbol = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public Symbol? ResultPointSymbol
+        {
+            get => _resultPointSymbol;
+            set
+            {
+                if (value != _resultPointSymbol)
+                {
+                    _resultPointSymbol = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public Symbol? ResultLineSymbol
+        {
+            get => _resultLineSymbol;
+            set
+            {
+                if (value != _resultLineSymbol)
+                {
+                    _resultLineSymbol = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public Symbol? ResultFillSymbol
+        {
+            get => _resultFillSymbol;
+            set
+            {
+                if (value != _resultFillSymbol)
+                {
+                    _resultFillSymbol = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Map _map;
+
+        public Map? Map
+        {
+            get => _map;
+            set
+            {
+                if (value != _map)
+                {
+                    _map = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Viewpoint? _viewpoint;
+        public Viewpoint? RequestedViewpoint
+        {
+            get => _viewpoint;
+            set
+            {
+                if (value != _viewpoint)
+                {
+                    _viewpoint = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isBusy;
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                if (value != _isBusy)
+                {
+                    _isBusy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _showUtilityNetworks;
+
+        public bool ShowUtilityNetworks
+        {
+            get => _showUtilityNetworks;
+            set
+            {
+                if (value != _showUtilityNetworks)
+                {
+                    _showUtilityNetworks = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _showTraceTypes;
+
+        public bool ShowTraceTypes
+        {
+            get => _showTraceTypes;
+            set
+            {
+                if (value != _showTraceTypes)
+                {
+                    _showTraceTypes = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _showStartingPoints;
+
+        public bool ShowStartingPoints
+        {
+            get => _showStartingPoints;
+            set
+            {
+                if (value != _showStartingPoints)
+                {
+                    _showStartingPoints = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _showFunctionResults;
+
+        public bool ShowFunctionResults
+        {
+            get => _showFunctionResults;
+            set
+            {
+                if (value != _showFunctionResults)
+                {
+                    _showFunctionResults = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _enableTrace;
+
+        public bool EnableTrace
+        {
+            get => _enableTrace;
+            set
+            {
+                if (value != _enableTrace)
+                {
+                    _enableTrace = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _status;
+
+        public string Status
+        {
+            get => _status;
+            set
+            {
+                if (value != _status)
+                {
+                    _status = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private UtilityTraceOperationResult? _currentResult;
+
+        public UtilityTraceOperationResult? CurrentResult
+        {
+            get => _currentResult;
+            set
+            {
+                if (value != _currentResult)
+                {
+                    _currentResult = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
+
+    public class UtilityTraceOperationResult
+    {
+        public UtilityTraceParameters Paremters { get; set; }
+        public IEnumerable<UtilityTraceResult>? Results { get; set; }
+        public Exception? Error { get; set; }
+        public IList<string> Warnings { get; set; }
     }
 }
 #endif
