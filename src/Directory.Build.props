@@ -1,9 +1,9 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.14.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.14.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.2244</XamarinFormsPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.14.1</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.14.1</ArcGISRuntimePackageVersion>
+    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.2478</XamarinFormsPackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -40,8 +40,8 @@
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)</UWPTargetFramework>
     <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
-    <!--<NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
-    <NetiOSTargetFramework>net6.0-ios13.0</NetiOSTargetFramework>-->
+    <NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
+    <NetiOSTargetFramework>net6.0-ios13.6</NetiOSTargetFramework>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->
@@ -65,7 +65,7 @@
       </PropertyGroup>
       
       <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)../.git') AND '$(OS)' == 'Windows_NT'">
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
       </ItemGroup>
       <ItemGroup>
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" />
@@ -74,11 +74,11 @@
   </Choose>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.0.26</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.5.108</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(VersionOverride)'!='true'">
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.0.26" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.108" PrivateAssets="all" />
   </ItemGroup>
   
   <ItemGroup Condition="$(IsToolkitLibrary)">

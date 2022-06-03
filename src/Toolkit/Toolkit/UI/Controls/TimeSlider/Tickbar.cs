@@ -287,7 +287,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     var maxHeight = Math.Max(GetDesiredSize(d).Height, height);
                     height =
-#if __IOS__
+#if __IOS__ && NET6_0_OR_GREATER
+                        (System.Runtime.InteropServices.NFloat)maxHeight;
+#elif __IOS__
                         (nfloat)maxHeight;
 #else
                         maxHeight;

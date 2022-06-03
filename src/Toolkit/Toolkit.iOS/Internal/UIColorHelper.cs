@@ -19,6 +19,12 @@ using System.Collections.Generic;
 using System.Text;
 using UIKit;
 
+#if NET6_0_OR_GREATER
+using nfloat = System.Runtime.InteropServices.NFloat;
+#else
+using nfloat = System.nfloat;
+#endif
+
 namespace Esri.ArcGISRuntime.Toolkit
 {
     internal static class UIColorHelper
@@ -29,9 +35,17 @@ namespace Esri.ArcGISRuntime.Toolkit
         {
             _isIOS13OrNewer = UIDevice.CurrentDevice.CheckSystemVersion(13, 0);
         }
-
+#if NET6_0_OR_GREATER
+        public static UIColor LabelColor => _isIOS13OrNewer ? UIColor.Label : UIColor.Black;
+#else
         public static UIColor LabelColor => _isIOS13OrNewer ? UIColor.LabelColor : UIColor.Black;
+#endif
 
+#if NET6_0_OR_GREATER
+        public static UIColor SystemBackgroundColor => _isIOS13OrNewer ? UIColor.SystemBackground : UIColor.White;
+#else
         public static UIColor SystemBackgroundColor => _isIOS13OrNewer ? UIColor.SystemBackgroundColor : UIColor.White;
+#endif
+
     }
 }

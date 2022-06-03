@@ -20,6 +20,12 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using UIKit;
 
+#if NET6_0_OR_GREATER
+using nfloat = System.Runtime.InteropServices.NFloat;
+#else
+using nfloat = System.nfloat;
+#endif
+
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>

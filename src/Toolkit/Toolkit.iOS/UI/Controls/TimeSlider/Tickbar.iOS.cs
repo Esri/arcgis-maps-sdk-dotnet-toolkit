@@ -25,6 +25,12 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI;
 using UIKit;
 
+#if NET6_0_OR_GREATER
+using nfloat = System.Runtime.InteropServices.NFloat;
+#else
+using nfloat = System.nfloat;
+#endif
+
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class Tickbar : UIView
