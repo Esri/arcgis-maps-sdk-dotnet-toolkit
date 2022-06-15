@@ -15,16 +15,16 @@
 //  ******************************************************************************/
 
 #if !__IOS__ && !__ANDROID__
-using Esri.ArcGISRuntime.Data;
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UtilityNetworks;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UtilityNetworks;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
@@ -101,12 +101,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public List<ArcGISFeature> Features { get; } = new List<ArcGISFeature>();
 
         /// <summary>
-        /// Gets the error part of the trace result, if there is one.
+        /// Gets or sets the error part of the trace result, if there is one.
         /// </summary>
         public Exception? Error { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="UtilityTraceOperationResult"/>.
+        /// Initializes a new instance of the <see cref="UtilityTraceOperationResult"/> class.
         /// </summary>
         public UtilityTraceOperationResult(UtilityNamedTraceConfiguration configuration, UtilityTraceParameters parameters, IList<StartingPointModel> startingPoints)
         {
@@ -148,13 +148,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                             {
                                 outlineSymbol.Color = _visualizationColor;
                             }
+
                             fillSymbol.Color = _visualizationColor;
                         }
                     }
                 }
             }
         }
-        
+
         /// <summary>
         /// Gets or sets a value indicating whether feature results are selected. Setting this value will select or unselect features in their respective feature layers.
         /// </summary>
@@ -169,10 +170,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(VisualizationState));
                 }
+
                 if (Features != null)
                 {
                     var groups = Features.OfType<ArcGISFeature>().GroupBy(candidate => candidate.FeatureTable?.Layer);
-                    foreach(var grouping in groups)
+                    foreach (var grouping in groups)
                     {
                         if (grouping.Key is FeatureLayer featureLayer)
                         {
@@ -204,7 +206,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(VisualizationState));
                     ResultOverlay.Graphics.Clear();
-                    if(_areGraphicsShown && Graphics.Any())
+                    if (_areGraphicsShown && Graphics.Any())
                     {
                         ResultOverlay.Graphics.AddRange(Graphics);
                     }
@@ -227,8 +229,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     return false;
                 }
+
                 return null;
             }
+
             set
             {
                 if (value.HasValue)

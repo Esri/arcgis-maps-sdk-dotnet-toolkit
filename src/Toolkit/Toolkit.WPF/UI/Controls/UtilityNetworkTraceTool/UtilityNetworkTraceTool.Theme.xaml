@@ -3,220 +3,220 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal">
-	<ResourceDictionary.MergedDictionaries>
-		<ResourceDictionary Source="./UNVisualResources.xaml" />
-	</ResourceDictionary.MergedDictionaries>
-	<internal:VisibilityConverter x:Key="VisibilityConverter" />
-	<internal:ListSizeVisibilityConverter x:Key="ListSizeVisibilityConverter" />
-	<internal:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="./UNVisualResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <internal:VisibilityConverter x:Key="VisibilityConverter" />
+    <internal:ListSizeVisibilityConverter x:Key="ListSizeVisibilityConverter" />
+    <internal:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
-	<Style x:Key="UNTraceIcon32Danger" TargetType="Path">
-		<Setter Property="Width" Value="32" />
-		<Setter Property="Height" Value="32" />
-		<Setter Property="Fill" Value="{StaticResource UNTraceDangerNormal}" />
-		<Setter Property="HorizontalAlignment" Value="Center" />
-	</Style>
-	<Style
+    <Style x:Key="UNTraceIcon32Danger" TargetType="Path">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Fill" Value="{StaticResource UNTraceDangerNormal}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+    <Style
         x:Key="UNTraceIcon32Info"
         BasedOn="{StaticResource UNTraceIcon32Danger}"
         TargetType="Path">
-		<Setter Property="Fill" Value="{StaticResource UNTraceTintNormal}" />
-	</Style>
-	<Style
+        <Setter Property="Fill" Value="{StaticResource UNTraceTintNormal}" />
+    </Style>
+    <Style
         x:Key="UNTraceIcon32Warning"
         BasedOn="{StaticResource UNTraceIcon32Danger}"
         TargetType="Path">
-		<Setter Property="Fill" Value="{StaticResource UNTraceWarningNormal}" />
-		<Setter Property="Data" Value="{StaticResource UNTraceIconAlertWarning}" />
-	</Style>
-	<Style x:Key="UNTraceAlertText" TargetType="TextBlock">
-		<Setter Property="FontWeight" Value="SemiBold" />
-		<Setter Property="TextWrapping" Value="Wrap" />
-		<Setter Property="Grid.Column" Value="1" />
-		<Setter Property="Margin" Value="8" />
-	</Style>
-	<Style x:Key="UNTraceUnstyledListView" TargetType="ListView">
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="ListView">
-					<Border
+        <Setter Property="Fill" Value="{StaticResource UNTraceWarningNormal}" />
+        <Setter Property="Data" Value="{StaticResource UNTraceIconAlertWarning}" />
+    </Style>
+    <Style x:Key="UNTraceAlertText" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="Grid.Column" Value="1" />
+        <Setter Property="Margin" Value="8" />
+    </Style>
+    <Style x:Key="UNTraceUnstyledListView" TargetType="ListView">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <Border
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-						<ItemsPresenter Margin="{TemplateBinding Padding}" Focusable="False" />
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="ItemsPanel">
-			<Setter.Value>
-				<ItemsPanelTemplate>
-					<StackPanel Background="Transparent" Orientation="Vertical" />
-				</ItemsPanelTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="ItemContainerStyle">
-			<Setter.Value>
-				<Style TargetType="ListViewItem">
-					<Setter Property="Template">
-						<Setter.Value>
-							<ControlTemplate TargetType="ListViewItem">
-								<ContentPresenter />
-							</ControlTemplate>
-						</Setter.Value>
-					</Setter>
-					<Setter Property="Focusable" Value="False" />
-				</Style>
+                        <ItemsPresenter Margin="{TemplateBinding Padding}" Focusable="False" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Background="Transparent" Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Focusable" Value="False" />
+                </Style>
 
-			</Setter.Value>
-		</Setter>
-	</Style>
-	<Style
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
         x:Key="UNTraceTagsListViewStyle"
         BasedOn="{StaticResource UNTraceUnstyledListView}"
         TargetType="ListView">
-		<Setter Property="ItemTemplate">
-			<Setter.Value>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
 
-				<DataTemplate>
-					<Border
+                <DataTemplate>
+                    <Border
                         Margin="0,0,8,0"
                         Padding="8,4,8,4"
                         HorizontalAlignment="Left"
                         Background="{StaticResource UNTraceBackground3}"
                         CornerRadius="12">
-						<TextBlock
+                        <TextBlock
                             VerticalAlignment="Center"
                             Foreground="{StaticResource UNTraceForeground0}"
                             Text="{Binding}" />
-					</Border>
-				</DataTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="ItemsPanel">
-			<Setter.Value>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal" />
-				</ItemsPanelTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-	<Style x:Key="UNTraceFloatingWarningBorderStyle" TargetType="Border">
-		<Setter Property="Margin" Value="4" />
-		<Setter Property="Padding" Value="4" />
-		<Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
-		<Setter Property="BorderBrush" Value="{StaticResource UNTraceWarningNormal}" />
-		<Setter Property="BorderThickness" Value="0,2,0,0" />
-		<Setter Property="CornerRadius" Value="4" />
-		<Setter Property="Effect">
-			<Setter.Value>
-				<DropShadowEffect
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceFloatingWarningBorderStyle" TargetType="Border">
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceWarningNormal}" />
+        <Setter Property="BorderThickness" Value="0,2,0,0" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect
                     BlurRadius="10"
                     Direction="0"
                     Opacity="0.15"
                     ShadowDepth="2" />
-			</Setter.Value>
-		</Setter>
-	</Style>
-	<Style x:Key="UNTraceButtonEmbeddedIcon" TargetType="Path">
-		<Setter Property="Width" Value="16" />
-		<Setter Property="Height" Value="16" />
-		<Setter Property="Margin" Value="0,0,8,0" />
-		<Setter Property="HorizontalAlignment" Value="Center" />
-		<Setter Property="VerticalAlignment" Value="Center" />
-		<Setter Property="Stretch" Value="Uniform" />
-		<Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
-	</Style>
-	<Style TargetType="controls:UtilityNetworkTraceTool">
-		<Setter Property="UtilityNetworkItemTemplate">
-			<Setter.Value>
-				<DataTemplate>
-					<TextBlock Text="{Binding Name}" TextWrapping="NoWrap" />
-				</DataTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="TraceTypeItemTemplate">
-			<Setter.Value>
-				<DataTemplate>
-					<TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
-				</DataTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="ResultItemTemplate">
-			<Setter.Value>
-				<DataTemplate>
-					<Grid>
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="*" />
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-						<Grid>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto" />
-								<ColumnDefinition Width="*" />
-							</Grid.ColumnDefinitions>
-							<CheckBox
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceButtonEmbeddedIcon" TargetType="Path">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Margin" Value="0,0,8,0" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+    </Style>
+    <Style TargetType="controls:UtilityNetworkTraceTool">
+        <Setter Property="UtilityNetworkItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TraceTypeItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ResultItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox
                                 Margin="8,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding VisualizationState, Mode=TwoWay}"
                                 Style="{StaticResource UNTraceCheckBoxEye}" />
-							<UniformGrid
+                            <UniformGrid
                                 Grid.Column="1"
                                 Margin="4,8,4,8"
                                 Rows="1">
-								<Button
+                                <Button
                                     Margin="4,0,0,0"
                                     Command="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ZoomToResultCommand}"
                                     CommandParameter="{Binding}"
                                     Style="{StaticResource UNTraceSecondaryButton}"
                                     Visibility="{Binding HasAnyResults, Converter={StaticResource VisibilityConverter}}">
-									<StackPanel Orientation="Horizontal">
-										<Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-										<TextBlock
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
+                                        <TextBlock
                                             VerticalAlignment="Center"
                                             Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                             Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ZoomToLabel, Mode=OneTime}" />
-									</StackPanel>
-								</Button>
-								<Button
+                                    </StackPanel>
+                                </Button>
+                                <Button
                                     Margin="4,0,4,0"
                                     Command="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=DeleteResultCommand}"
                                     CommandParameter="{Binding}"
                                     Style="{StaticResource UNTraceSecondaryButton}">
-									<StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-										<Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-										<TextBlock VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=DiscardResultLabel, Mode=OneTime}" />
-									</StackPanel>
-								</Button>
-							</UniformGrid>
-						</Grid>
-						<StackPanel Grid.Row="1" Orientation="Vertical">
-							<StackPanel
+                                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                        <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=DiscardResultLabel, Mode=OneTime}" />
+                                    </StackPanel>
+                                </Button>
+                            </UniformGrid>
+                        </Grid>
+                        <StackPanel Grid.Row="1" Orientation="Vertical">
+                            <StackPanel
                                 MaxWidth="120"
                                 Margin="0,24,0,24"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical"
                                 Visibility="{Binding HasAnyResults, Converter={StaticResource VisibilityConverter}, ConverterParameter='Reverse'}">
-								<Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Info}" />
-								<TextBlock
+                                <Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Info}" />
+                                <TextBlock
                                     Margin="4"
                                     HorizontalAlignment="Center"
                                     Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=NoResultsFoundLabel, Mode=OneTime}"
                                     TextAlignment="Center"
                                     TextWrapping="Wrap" />
-							</StackPanel>
+                            </StackPanel>
 
-							<Expander
+                            <Expander
                                 Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=FunctionResultsSectionHeaderLabel, Mode=OneTime}"
                                 IsExpanded="True"
                                 Visibility="{Binding FunctionResults, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
-								<ListView
+                                <ListView
                                     Margin="8"
                                     HorizontalContentAlignment="Stretch"
                                     BorderBrush="{StaticResource UNTraceBorder1}"
@@ -225,198 +225,198 @@
                                     ItemsSource="{Binding FunctionResults}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                     Style="{StaticResource UNTraceUnstyledListView}">
-									<ListView.ItemTemplate>
-										<DataTemplate>
-											<Border BorderBrush="{StaticResource UNTraceBorder1}" BorderThickness="0,0,0,1">
-												<Grid Margin="2">
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="*" />
-														<ColumnDefinition Width="Auto" />
-													</Grid.ColumnDefinitions>
-													<Grid.RowDefinitions>
-														<RowDefinition Height="Auto" />
-														<RowDefinition Height="Auto" />
-													</Grid.RowDefinitions>
-													<TextBlock
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="{StaticResource UNTraceBorder1}" BorderThickness="0,0,0,1">
+                                                <Grid Margin="2">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock
                                                         Grid.Row="1"
                                                         Grid.Column="0"
                                                         Margin="2"
                                                         Text="{Binding Function.FunctionType, Mode=OneTime}"
                                                         TextWrapping="WrapWithOverflow" />
-													<TextBlock
+                                                    <TextBlock
                                                         Margin="2"
                                                         FontWeight="Bold"
                                                         Text="{Binding Function.NetworkAttribute.Name}"
                                                         TextWrapping="WrapWithOverflow" />
-													<TextBlock
+                                                    <TextBlock
                                                         Grid.RowSpan="2"
                                                         Grid.Column="1"
                                                         Margin="2"
                                                         VerticalAlignment="Center"
                                                         Text="{Binding Result, StringFormat='0.000'}"
                                                         TextWrapping="WrapWithOverflow" />
-												</Grid>
-											</Border>
-										</DataTemplate>
-									</ListView.ItemTemplate>
-								</ListView>
-							</Expander>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Expander>
 
-							<Expander
+                            <Expander
                                 Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=FeatureResultsSectionHeaderLabel, Mode=OneTime}"
                                 IsExpanded="True"
                                 Visibility="{Binding ElementResultsGrouped.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any', FallbackValue=Collapsed}">
-								<StackPanel>
-									<CheckBox
+                                <StackPanel>
+                                    <CheckBox
                                         Margin="8"
                                         Content="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultsSelectFeaturesCheckboxLabel, Mode=OneTime}"
                                         IsChecked="{Binding AreFeaturesSelected, Mode=TwoWay}" />
-									<ListView
+                                    <ListView
                                         Margin="8,0,8,8"
                                         BorderBrush="{StaticResource UNTraceBorder1}"
                                         BorderThickness="1,1,1,0"
                                         Focusable="False"
                                         ItemsSource="{Binding ElementResultsGrouped}"
                                         Style="{StaticResource UNTraceUnstyledListView}">
-										<ListView.ItemTemplate>
-											<DataTemplate>
-												<Border BorderBrush="{StaticResource UNTraceBorder1}" BorderThickness="0,0,0,1">
-													<Grid Margin="4">
-														<Grid.ColumnDefinitions>
-															<ColumnDefinition Width="*" />
-															<ColumnDefinition Width="Auto" />
-														</Grid.ColumnDefinitions>
-														<TextBlock FontWeight="SemiBold" Text="{Binding Key.Name, Mode=OneWay}" />
-														<TextBlock Grid.Column="1" Text="{Binding Count, Mode=OneWay}" />
-													</Grid>
-												</Border>
-											</DataTemplate>
-										</ListView.ItemTemplate>
-									</ListView>
-								</StackPanel>
-							</Expander>
-							<Expander
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="{StaticResource UNTraceBorder1}" BorderThickness="0,0,0,1">
+                                                    <Grid Margin="4">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Key.Name, Mode=OneWay}" />
+                                                        <TextBlock Grid.Column="1" Text="{Binding Count, Mode=OneWay}" />
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </StackPanel>
+                            </Expander>
+                            <Expander
                                 Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=VisualizationOptionsSectionHeaderLabel, Mode=OneTime}"
                                 IsExpanded="False"
                                 Visibility="{Binding Graphics, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
-								<StackPanel Margin="8,0,8,0">
-									<CheckBox
+                                <StackPanel Margin="8,0,8,0">
+                                    <CheckBox
                                         Margin="0,8,0,0"
                                         Content="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultsShowGraphicsCheckboxLabel, Mode=OneTime}"
                                         IsChecked="{Binding AreGraphicsShown, Mode=TwoWay}" />
-									<internal:ToolkitColorPalette Margin="0,8,0,0" SelectedColor="{Binding GraphicVisualizationColor, Mode=TwoWay}" />
-									<Grid Margin="8">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="*" />
-											<ColumnDefinition Width="Auto" />
-										</Grid.ColumnDefinitions>
-										<TextBlock
+                                    <internal:ToolkitColorPalette Margin="0,8,0,0" SelectedColor="{Binding GraphicVisualizationColor, Mode=TwoWay}" />
+                                    <Grid Margin="8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
                                             HorizontalAlignment="Right"
                                             FontWeight="SemiBold"
                                             Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=PreviewLabel, Mode=OneTime}" />
-										<ListView
+                                        <ListView
                                             Grid.Column="1"
                                             Focusable="False"
                                             ItemsSource="{Binding Graphics}"
                                             Style="{StaticResource UNTraceUnstyledListView}">
-											<ListView.ItemTemplate>
-												<DataTemplate>
-													<Grid>
-														<Grid.ColumnDefinitions>
-															<ColumnDefinition Width="40" />
-															<ColumnDefinition Width="*" />
-														</Grid.ColumnDefinitions>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="40" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
 
-														<controls:SymbolDisplay Focusable="False" Symbol="{Binding Symbol}" />
-													</Grid>
-												</DataTemplate>
-											</ListView.ItemTemplate>
-											<ListView.ItemsPanel>
-												<ItemsPanelTemplate>
-													<UniformGrid Rows="1" />
-												</ItemsPanelTemplate>
-											</ListView.ItemsPanel>
-										</ListView>
-									</Grid>
-								</StackPanel>
-							</Expander>
-							<Expander Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=TraceConfigurationDetailsSectionHeaderLabel, Mode=OneTime}">
-								<StackPanel Margin="8">
-									<GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionDescriptionLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
-										<TextBlock
+                                                        <controls:SymbolDisplay Focusable="False" Symbol="{Binding Symbol}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                            <ListView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Rows="1" />
+                                                </ItemsPanelTemplate>
+                                            </ListView.ItemsPanel>
+                                        </ListView>
+                                    </Grid>
+                                </StackPanel>
+                            </Expander>
+                            <Expander Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=TraceConfigurationDetailsSectionHeaderLabel, Mode=OneTime}">
+                                <StackPanel Margin="8">
+                                    <GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionDescriptionLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                        <TextBlock
                                             Margin="8,0,8,0"
                                             Text="{Binding Configuration.Description}"
                                             TextWrapping="Wrap" />
-									</GroupBox>
-									<GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionCreatorLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
-										<TextBlock
+                                    </GroupBox>
+                                    <GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionCreatorLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                        <TextBlock
                                             Margin="8,0,8,0"
                                             Text="{Binding Configuration.Creator}"
                                             TextWrapping="Wrap" />
-									</GroupBox>
-									<GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionTagsLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
-										<ListView
+                                    </GroupBox>
+                                    <GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionTagsLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                        <ListView
                                             Margin="8,0,8,0"
                                             ItemsSource="{Binding Configuration.Tags}"
                                             Style="{StaticResource UNTraceTagsListViewStyle}" />
-									</GroupBox>
-								</StackPanel>
-							</Expander>
-							<Expander
+                                    </GroupBox>
+                                </StackPanel>
+                            </Expander>
+                            <Expander
                                 Foreground="{StaticResource UNTraceWarningNormal}"
                                 Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultsWarningsSectionHeaderLabel, Mode=OneTime}"
                                 IsExpanded="True"
                                 Visibility="{Binding Warnings.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
-								<ListView
+                                <ListView
                                     Margin="16"
                                     BorderBrush="{StaticResource UNTraceWarningNormal}"
                                     BorderThickness="2,0,0,0"
                                     ItemsSource="{Binding Warnings}"
                                     Style="{StaticResource UNTraceUnstyledListView}">
-									<ListView.ItemTemplate>
-										<DataTemplate>
-											<TextBlock Style="{StaticResource UNTraceAlertText}" Text="{Binding}" />
-										</DataTemplate>
-									</ListView.ItemTemplate>
-								</ListView>
-							</Expander>
-						</StackPanel>
-						<Border
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Expander>
+                        </StackPanel>
+                        <Border
                             Grid.Row="2"
                             BorderBrush="{StaticResource UNTraceDangerNormal}"
                             Style="{StaticResource UNTraceFloatingWarningBorderStyle}"
                             Visibility="{Binding Error, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter='notnull'}">
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="40" />
-									<ColumnDefinition Width="*" />
-								</Grid.ColumnDefinitions>
-								<Path Data="{StaticResource UNTraceIconWarning}" Style="{StaticResource UNTraceIcon32Danger}" />
-								<TextBlock Style="{StaticResource UNTraceAlertText}" Text="{Binding Error.Message}" />
-							</Grid>
-						</Border>
-					</Grid>
-				</DataTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="StartingPointItemTemplate">
-			<Setter.Value>
-				<DataTemplate>
-					<Grid>
-						<Grid.Resources />
-						<Grid.RowDefinitions>
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto" />
-						</Grid.RowDefinitions>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="Auto" />
-						</Grid.ColumnDefinitions>
-						<controls:SymbolDisplay
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Path Data="{StaticResource UNTraceIconWarning}" Style="{StaticResource UNTraceIcon32Danger}" />
+                                <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{Binding Error.Message}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="StartingPointItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.Resources />
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <controls:SymbolDisplay
                             Grid.RowSpan="2"
                             Width="32"
                             Height="32"
@@ -425,19 +425,19 @@
                             VerticalAlignment="Center"
                             Focusable="False"
                             Symbol="{Binding Symbol, Mode=OneWay}" />
-						<TextBlock
+                        <TextBlock
                             Grid.Column="1"
                             Margin="2"
                             Text="{Binding StartingPoint.NetworkSource.Name}"
                             TextWrapping="Wrap" />
-						<TextBlock
+                        <TextBlock
                             Grid.Row="1"
                             Grid.Column="1"
                             Margin="2"
                             FontWeight="SemiBold"
                             Text="{Binding StartingPoint.AssetGroup.Name}"
                             TextWrapping="Wrap" />
-						<ComboBox
+                        <ComboBox
                             Grid.Row="2"
                             Grid.Column="0"
                             Grid.ColumnSpan="5"
@@ -448,13 +448,13 @@
                             Style="{StaticResource UNTraceTaggedComboBox}"
                             Tag="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=TerminalPickerLabel, Mode=OneTime}"
                             Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
-							<ComboBox.ItemTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
-								</DataTemplate>
-							</ComboBox.ItemTemplate>
-						</ComboBox>
-						<Slider
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Slider
                             x:Name="FractionAlongSlider"
                             Grid.Row="2"
                             Grid.Column="0"
@@ -465,7 +465,7 @@
                             Style="{StaticResource UNTraceSlider}"
                             Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}"
                             Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
-						<TextBox
+                        <TextBox
                             Grid.Row="2"
                             Grid.Column="3"
                             Grid.ColumnSpan="2"
@@ -474,7 +474,7 @@
                             Style="{StaticResource UNTraceTextBoxCompact}"
                             Text="{Binding ElementName=FractionAlongSlider, Path=Value, Mode=TwoWay, StringFormat=0.00}"
                             Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}" />
-						<Button
+                        <Button
                             Grid.RowSpan="2"
                             Grid.Column="2"
                             Margin="8,4,0,4"
@@ -484,9 +484,9 @@
                             CommandParameter="{Binding}"
                             KeyboardNavigation.TabIndex="1"
                             Style="{StaticResource UNTraceIconButton}">
-							<Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTracePathCommandIconStyle}" />
-						</Button>
-						<Button
+                            <Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                        </Button>
+                        <Button
                             Grid.RowSpan="2"
                             Grid.Column="3"
                             Margin="8,4,0,4"
@@ -495,9 +495,9 @@
                             CommandParameter="{Binding}"
                             KeyboardNavigation.TabIndex="2"
                             Style="{StaticResource UNTraceIconButton}">
-							<Path Data="{StaticResource UNTraceIconInspect}" Style="{StaticResource UNTracePathCommandIconStyle}" />
-						</Button>
-						<Button
+                            <Path Data="{StaticResource UNTraceIconInspect}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                        </Button>
+                        <Button
                             Grid.RowSpan="2"
                             Grid.Column="4"
                             Margin="8,4,0,4"
@@ -507,24 +507,24 @@
                             CommandParameter="{Binding}"
                             KeyboardNavigation.TabIndex="3"
                             Style="{StaticResource UNTraceIconButton}">
-							<Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTracePathCommandIconStyle}" />
-						</Button>
-					</Grid>
-				</DataTemplate>
-			</Setter.Value>
-		</Setter>
+                            <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
 
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="controls:UtilityNetworkTraceTool">
-					<ControlTemplate.Resources>
-						<Style BasedOn="{StaticResource UNTraceExpander}" TargetType="Expander" />
-						<Style BasedOn="{StaticResource UNTraceCheckBox}" TargetType="CheckBox" />
-						<Style TargetType="controls:SymbolDisplay">
-							<Setter Property="Focusable" Value="False" />
-						</Style>
-					</ControlTemplate.Resources>
-					<Border
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:UtilityNetworkTraceTool">
+                    <ControlTemplate.Resources>
+                        <Style BasedOn="{StaticResource UNTraceExpander}" TargetType="Expander" />
+                        <Style BasedOn="{StaticResource UNTraceCheckBox}" TargetType="CheckBox" />
+                        <Style TargetType="controls:SymbolDisplay">
+                            <Setter Property="Focusable" Value="False" />
+                        </Style>
+                    </ControlTemplate.Resources>
+                    <Border
                         MinWidth="{TemplateBinding MinWidth}"
                         MaxWidth="{TemplateBinding MaxWidth}"
                         Margin="{TemplateBinding Margin}"
@@ -532,77 +532,77 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-						<Grid>
-							<TabControl x:Name="PART_TabsControl" Style="{StaticResource UNTraceTabControl}">
-								<TabItem Header="{TemplateBinding NewTraceLabel}">
-									<Grid>
-										<Grid.RowDefinitions>
-											<RowDefinition Height="*" />
-											<RowDefinition Height="Auto" />
-											<RowDefinition Height="Auto" />
-										</Grid.RowDefinitions>
-										<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-											<StackPanel Background="{StaticResource UNTraceBackground0}">
-												<GroupBox
+                        <Grid>
+                            <TabControl x:Name="PART_TabsControl" Style="{StaticResource UNTraceTabControl}">
+                                <TabItem Header="{TemplateBinding NewTraceLabel}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                            <StackPanel Background="{StaticResource UNTraceBackground0}">
+                                                <GroupBox
                                                     Header="{TemplateBinding UtilityNetworksSectionHeaderLabel}"
                                                     Style="{StaticResource UNTraceGroupBox}"
                                                     Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=UtilityNetworks.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='multiple'}">
-													<ComboBox
+                                                    <ComboBox
                                                         ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
                                                         ItemTemplate="{TemplateBinding UtilityNetworkItemTemplate}"
                                                         ItemsSource="{TemplateBinding UtilityNetworks}"
                                                         SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedUtilityNetwork, Mode=TwoWay}"
                                                         Style="{StaticResource UNTraceComboBox}" />
-												</GroupBox>
-												<GroupBox
+                                                </GroupBox>
+                                                <GroupBox
                                                     Header="{TemplateBinding TraceConfigurationSectionHeaderLabel}"
                                                     Style="{StaticResource UNTraceGroupBox}"
                                                     Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=NamedTraceConfigurations.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
-													<ComboBox
+                                                    <ComboBox
                                                         ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
                                                         ItemTemplate="{TemplateBinding TraceTypeItemTemplate}"
                                                         ItemsSource="{TemplateBinding NamedTraceConfigurations}"
                                                         SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedTraceConfiguration, Mode=TwoWay}"
                                                         Style="{StaticResource UNTraceComboBox}" />
-												</GroupBox>
-												<GroupBox
+                                                </GroupBox>
+                                                <GroupBox
                                                     Header="{TemplateBinding StartingPointSectionHeaderLabel}"
                                                     Style="{StaticResource UNTraceGroupBox}"
                                                     Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedTraceConfiguration, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter='notnull'}">
-													<StackPanel Orientation="Vertical">
-														<internal:StartingPointListView
+                                                    <StackPanel Orientation="Vertical">
+                                                        <internal:StartingPointListView
                                                             ItemTemplate="{TemplateBinding StartingPointItemTemplate}"
                                                             ItemsSource="{TemplateBinding StartingPoints}"
                                                             SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedStartingPoint, Mode=TwoWay}"
                                                             Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=StartingPoints.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}"
                                                             ZoomToCommand="{TemplateBinding ZoomToCommand}">
-															<internal:StartingPointListView.InspectorViewTemplate>
-																<DataTemplate>
-																	<Border Background="Transparent">
-																		<StackPanel>
-																			<Grid>
-																				<Grid.ColumnDefinitions>
-																					<ColumnDefinition Width="*" />
-																					<ColumnDefinition Width="Auto" />
-																				</Grid.ColumnDefinitions>
-																				<Grid.RowDefinitions>
-																					<RowDefinition Height="Auto" />
-																					<RowDefinition Height="Auto" />
-																				</Grid.RowDefinitions>
-																				<TextBlock
+                                                            <internal:StartingPointListView.InspectorViewTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Background="Transparent">
+                                                                        <StackPanel>
+                                                                            <Grid>
+                                                                                <Grid.ColumnDefinitions>
+                                                                                    <ColumnDefinition Width="*" />
+                                                                                    <ColumnDefinition Width="Auto" />
+                                                                                </Grid.ColumnDefinitions>
+                                                                                <Grid.RowDefinitions>
+                                                                                    <RowDefinition Height="Auto" />
+                                                                                    <RowDefinition Height="Auto" />
+                                                                                </Grid.RowDefinitions>
+                                                                                <TextBlock
                                                                                     Grid.Row="0"
                                                                                     Grid.Column="0"
                                                                                     Margin="4"
                                                                                     FontSize="14"
                                                                                     FontWeight="SemiBold"
                                                                                     Text="{Binding StartingPoint.NetworkSource.Name}" />
-																				<TextBlock
+                                                                                <TextBlock
                                                                                     Grid.Row="1"
                                                                                     Grid.Column="0"
                                                                                     Margin="4"
                                                                                     FontWeight="SemiBold"
                                                                                     Text="{Binding StartingPoint.AssetGroup.Name}" />
-																				<controls:SymbolDisplay
+                                                                                <controls:SymbolDisplay
                                                                                     Grid.RowSpan="2"
                                                                                     Grid.Column="1"
                                                                                     Width="32"
@@ -611,317 +611,378 @@
                                                                                     VerticalAlignment="Center"
                                                                                     Focusable="False"
                                                                                     Symbol="{Binding Symbol, Mode=OneTime}" />
-																			</Grid>
-																			<GroupBox
+                                                                            </Grid>
+                                                                            <GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
                                                                                 Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=TerminalPickerLabel, Mode=OneTime}"
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
-																				<ComboBox
+                                                                                <ComboBox
                                                                                     DisplayMemberPath="Name"
                                                                                     ItemsSource="{Binding StartingPoint.AssetType.TerminalConfiguration.Terminals}"
                                                                                     SelectedItem="{Binding StartingPoint.Terminal, Mode=TwoWay}"
                                                                                     Style="{StaticResource UNTraceComboBox}" />
-																			</GroupBox>
-																			<GroupBox
+                                                                            </GroupBox>
+                                                                            <GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
                                                                                 Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=InspectorFractionAlongLabel, Mode=OneTime}"
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}">
-																				<Slider Style="{StaticResource UNTraceSlider}" Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
-																			</GroupBox>
-																			<GroupBox
+                                                                                <Slider Style="{StaticResource UNTraceSlider}" Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
+                                                                            </GroupBox>
+                                                                            <GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
                                                                                 Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=InspectorPopupLabel, Mode=OneTime}"
                                                                                 Style="{StaticResource UNTraceGroupBox}">
-																				<controls:PopupViewer PopupManager="{Binding PopupManager}" />
-																			</GroupBox>
-																		</StackPanel>
-																	</Border>
-																</DataTemplate>
-															</internal:StartingPointListView.InspectorViewTemplate>
-														</internal:StartingPointListView>
-														<TextBlock
+                                                                                <controls:PopupViewer PopupManager="{Binding PopupManager}">
+                                                                                    <controls:PopupViewer.Template>
+                                                                                        <ControlTemplate TargetType="{x:Type controls:PopupViewer}">
+                                                                                            <Border
+                                                                                                MinWidth="{TemplateBinding MinWidth}"
+                                                                                                MaxWidth="{TemplateBinding MaxWidth}"
+                                                                                                Margin="{TemplateBinding Margin}"
+                                                                                                Padding="{TemplateBinding Padding}"
+                                                                                                Background="{TemplateBinding Background}"
+                                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                                                                <Grid DataContext="{TemplateBinding PopupManager}">
+                                                                                                    <Grid.Resources>
+                                                                                                        <internal:VisibilityConverter x:Key="VisibilityConverter" />
+                                                                                                        <internal:HtmlToPlainTextConverter x:Key="HtmlToPlainTextConverter" />
+                                                                                                    </Grid.Resources>
+                                                                                                    <Grid.RowDefinitions>
+                                                                                                        <RowDefinition Height="Auto" />
+                                                                                                        <RowDefinition Height="*" />
+                                                                                                    </Grid.RowDefinitions>
+                                                                                                    <Grid Grid.Row="1">
+                                                                                                        <ItemsControl ItemsSource="{Binding DisplayedFields}" Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}, ConverterParameter=Reverse}">
+                                                                                                            <ItemsControl.ItemTemplate>
+                                                                                                                <DataTemplate>
+                                                                                                                    <Grid>
+                                                                                                                        <Grid.ColumnDefinitions>
+                                                                                                                            <ColumnDefinition Width="*" />
+                                                                                                                            <ColumnDefinition Width="*" />
+                                                                                                                        </Grid.ColumnDefinitions>
+                                                                                                                        <TextBlock
+                                                                                                                            FontWeight="SemiBold"
+                                                                                                                            Foreground="Black"
+                                                                                                                            Text="{Binding Field.Label}"
+                                                                                                                            TextWrapping="Wrap" />
+                                                                                                                        <TextBox
+                                                                                                                            Grid.Column="1"
+                                                                                                                            Margin="0"
+                                                                                                                            Padding="0"
+                                                                                                                            Background="Transparent"
+                                                                                                                            BorderThickness="0"
+                                                                                                                            IsReadOnly="True"
+                                                                                                                            Text="{Binding FormattedValue, Mode=OneWay}"
+                                                                                                                            TextWrapping="Wrap" />
+                                                                                                                    </Grid>
+                                                                                                                </DataTemplate>
+                                                                                                            </ItemsControl.ItemTemplate>
+                                                                                                        </ItemsControl>
+                                                                                                        <TextBox
+                                                                                                            Margin="0"
+                                                                                                            Padding="0"
+                                                                                                            Background="Transparent"
+                                                                                                            BorderThickness="0"
+                                                                                                            IsReadOnly="True"
+                                                                                                            Text="{Binding CustomDescriptionHtml, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}"
+                                                                                                            TextWrapping="Wrap"
+                                                                                                            Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}}" />
+                                                                                                    </Grid>
+                                                                                                </Grid>
+                                                                                            </Border>
+                                                                                        </ControlTemplate>
+                                                                                    </controls:PopupViewer.Template>
+                                                                                </controls:PopupViewer>
+                                                                            </GroupBox>
+                                                                        </StackPanel>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </internal:StartingPointListView.InspectorViewTemplate>
+                                                        </internal:StartingPointListView>
+                                                        <TextBlock
                                                             Margin="2"
                                                             FontWeight="SemiBold"
                                                             Text="{TemplateBinding AddStartingPointHelpTextLabel}"
                                                             TextAlignment="Center"
                                                             Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsAddingStartingPoints, Converter={StaticResource VisibilityConverter}}" />
-														<UniformGrid
+                                                        <UniformGrid
                                                             Margin="0,4,0,0"
                                                             Rows="1"
                                                             Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsAddingStartingPoints, Converter={StaticResource VisibilityConverter}, ConverterParameter='Reverse'}">
-															<Button
+                                                            <Button
                                                                 Margin="0,0,4,0"
                                                                 Command="{TemplateBinding ResetStartingPointsCommand}"
                                                                 Style="{StaticResource UNTraceSecondaryButton}"
                                                                 Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=StartingPoints.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
-																<StackPanel Orientation="Horizontal">
-																	<Path Data="{StaticResource UNTraceIconReset}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-																	<TextBlock Margin="0,0,4,0" Text="{TemplateBinding RemoveAllStartingPointsButtonLabel}" />
-																</StackPanel>
-															</Button>
-															<Button
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Path Data="{StaticResource UNTraceIconReset}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
+                                                                    <TextBlock Margin="0,0,4,0" Text="{TemplateBinding RemoveAllStartingPointsButtonLabel}" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                            <Button
                                                                 Grid.Column="1"
                                                                 Margin="0"
                                                                 Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SetIsAddingStartingPointsCommand}"
                                                                 CommandParameter="True"
                                                                 Style="{StaticResource UNTracePrimaryButton}">
-																<StackPanel Orientation="Horizontal">
-																	<Path Data="{StaticResource UNTraceIconPlus}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-																	<TextBlock Text="{TemplateBinding AddStartingPointButtonLabel}" />
-																</StackPanel>
-															</Button>
-														</UniformGrid>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Path Data="{StaticResource UNTraceIconPlus}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
+                                                                    <TextBlock Text="{TemplateBinding AddStartingPointButtonLabel}" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </UniformGrid>
 
-														<Button
+                                                        <Button
                                                             Margin="4"
                                                             Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SetIsAddingStartingPointsCommand}"
                                                             CommandParameter="False"
                                                             Content="{TemplateBinding CancelButtonLabel}"
                                                             Style="{StaticResource UNTracePrimaryButton}"
                                                             Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsAddingStartingPoints, Converter={StaticResource VisibilityConverter}}" />
-													</StackPanel>
-												</GroupBox>
-												<Expander Header="{TemplateBinding AdvancedOptionsSectionHeaderLabel}" Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedTraceConfiguration, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter='notnull'}">
-													<StackPanel Margin="8">
-														<CheckBox
+                                                    </StackPanel>
+                                                </GroupBox>
+                                                <Expander Header="{TemplateBinding AdvancedOptionsSectionHeaderLabel}" Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedTraceConfiguration, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter='notnull'}">
+                                                    <StackPanel Margin="8">
+                                                        <CheckBox
                                                             Margin="0,0,0,8"
                                                             Content="{TemplateBinding ZoomToResultSettingLabel}"
                                                             IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AutoZoomToTraceResults, Mode=TwoWay}" />
-														<GroupBox Header="{TemplateBinding ResultNameLabel}" Style="{StaticResource UNTraceLabelingGroupBox}">
-															<TextBox Style="{StaticResource UNTraceTextBox}" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TraceInProgressName, Mode=TwoWay}" />
-														</GroupBox>
-														<GroupBox
+                                                        <GroupBox Header="{TemplateBinding ResultNameLabel}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                                            <TextBox Style="{StaticResource UNTraceTextBox}" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TraceInProgressName, Mode=TwoWay}" />
+                                                        </GroupBox>
+                                                        <GroupBox
                                                             Margin="0,8,0,0"
                                                             Header="{TemplateBinding ResultVisualizationColorLabel}"
                                                             Style="{StaticResource UNTraceLabelingGroupBox}">
-															<StackPanel>
-																<internal:ToolkitColorPalette SelectedColor="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultVisualizationColor, Mode=TwoWay}" />
-																<Grid Margin="0,8,0,0">
-																	<Grid.ColumnDefinitions>
-																		<ColumnDefinition Width="*" />
-																		<ColumnDefinition Width="Auto" />
-																	</Grid.ColumnDefinitions>
-																	<TextBlock
+                                                            <StackPanel>
+                                                                <internal:ToolkitColorPalette SelectedColor="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultVisualizationColor, Mode=TwoWay}" />
+                                                                <Grid Margin="0,8,0,0">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*" />
+                                                                        <ColumnDefinition Width="Auto" />
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock
                                                                         HorizontalAlignment="Right"
                                                                         FontWeight="SemiBold"
                                                                         Text="{TemplateBinding PreviewLabel}" />
-																	<StackPanel Grid.Column="1" Orientation="Horizontal">
-																		<controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultPointSymbol}" />
-																		<controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultLineSymbol}" />
-																		<controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultFillSymbol}" />
-																	</StackPanel>
-																</Grid>
-															</StackPanel>
-														</GroupBox>
-													</StackPanel>
-												</Expander>
-												<StackPanel
+                                                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                        <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultPointSymbol}" />
+                                                                        <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultLineSymbol}" />
+                                                                        <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultFillSymbol}" />
+                                                                    </StackPanel>
+                                                                </Grid>
+                                                            </StackPanel>
+                                                        </GroupBox>
+                                                    </StackPanel>
+                                                </Expander>
+                                                <StackPanel
                                                     MaxWidth="240"
                                                     Margin="8"
                                                     VerticalAlignment="Center"
                                                     Orientation="Vertical"
                                                     Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=NamedTraceConfigurations.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='none'}">
-													<Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
-													<TextBlock
+                                                    <Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
+                                                    <TextBlock
                                                         Margin="0,4,0,0"
                                                         HorizontalAlignment="Center"
                                                         FontWeight="SemiBold"
                                                         Text="{TemplateBinding NoTraceConfigurationsFoundLabel}"
                                                         TextAlignment="Center"
                                                         TextWrapping="Wrap" />
-												</StackPanel>
-											</StackPanel>
-										</ScrollViewer>
-										<Grid Grid.Row="1" Background="{StaticResource UNTraceBackground0}">
-											<Border
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                        <Grid Grid.Row="1" Background="{StaticResource UNTraceBackground0}">
+                                            <Border
                                                 Grid.Row="1"
                                                 Style="{StaticResource UNTraceFloatingWarningBorderStyle}"
                                                 Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=HasInsufficientStartingPointsWarning, Converter={StaticResource VisibilityConverter}}">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="40" />
-														<ColumnDefinition Width="*" />
-													</Grid.ColumnDefinitions>
-													<Path Style="{StaticResource UNTraceIcon32Warning}" />
-													<TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding InsufficientStartingPointsWarningLabel}" />
-												</Grid>
-											</Border>
-											<Border
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="40" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Path Style="{StaticResource UNTraceIcon32Warning}" />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding InsufficientStartingPointsWarningLabel}" />
+                                                </Grid>
+                                            </Border>
+                                            <Border
                                                 Grid.Row="1"
                                                 Style="{StaticResource UNTraceFloatingWarningBorderStyle}"
                                                 Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ConfigurationDuplicatesExistingResultWarning, Converter={StaticResource VisibilityConverter}}">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="40" />
-														<ColumnDefinition Width="*" />
-													</Grid.ColumnDefinitions>
-													<Path Style="{StaticResource UNTraceIcon32Warning}" />
-													<TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding DuplicateTraceWarningLabel}" />
-												</Grid>
-											</Border>
-											<Border
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="40" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Path Style="{StaticResource UNTraceIcon32Warning}" />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding DuplicateTraceWarningLabel}" />
+                                                </Grid>
+                                            </Border>
+                                            <Border
                                                 Grid.Row="1"
                                                 BorderBrush="{StaticResource UNTraceTintNormal}"
                                                 Style="{StaticResource UNTraceFloatingWarningBorderStyle}"
                                                 Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=HasUnnecessaryStartingPointsWarning, Converter={StaticResource VisibilityConverter}}">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="40" />
-														<ColumnDefinition Width="*" />
-													</Grid.ColumnDefinitions>
-													<Path Data="{StaticResource UNTraceIconAlertInfo}" Style="{StaticResource UNTraceIcon32Info}" />
-													<TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding ExcessStartingPointsWarningLabel}" />
-												</Grid>
-											</Border>
-										</Grid>
-										<Button
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="40" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Path Data="{StaticResource UNTraceIconAlertInfo}" Style="{StaticResource UNTraceIcon32Info}" />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding ExcessStartingPointsWarningLabel}" />
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                        <Button
                                             Grid.Row="2"
                                             Margin="4"
                                             Command="{TemplateBinding RunTraceCommand}"
                                             Content="Run trace"
                                             IsEnabled="{TemplateBinding IsReadyToTrace}"
                                             Style="{StaticResource UNTracePrimaryButton}" />
-										<Grid
+                                        <Grid
                                             Grid.RowSpan="3"
                                             Background="{StaticResource UNTraceBackground0}"
                                             Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsTraceInProgress, Converter={StaticResource VisibilityConverter}}">
-											<StackPanel
+                                            <StackPanel
                                                 MaxWidth="120"
                                                 VerticalAlignment="Center"
                                                 Orientation="Vertical">
-												<TextBlock
+                                                <TextBlock
                                                     HorizontalAlignment="Center"
                                                     Text="Running trace..."
                                                     TextAlignment="Center" />
-												<ProgressBar Style="{StaticResource UNTraceProgressBar}" />
-												<Button
+                                                <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
+                                                <Button
                                                     Command="{TemplateBinding CancelOperationCommand}"
                                                     Content="Cancel"
                                                     Style="{StaticResource UNTracePrimaryButton}" />
-											</StackPanel>
-										</Grid>
-										<Grid
+                                            </StackPanel>
+                                        </Grid>
+                                        <Grid
                                             Grid.RowSpan="3"
                                             Background="{StaticResource UNTraceBackground0}"
                                             Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsIdentifyingStartingPoints, Converter={StaticResource VisibilityConverter}}">
-											<StackPanel
+                                            <StackPanel
                                                 MaxWidth="120"
                                                 VerticalAlignment="Center"
                                                 Orientation="Vertical">
-												<TextBlock
+                                                <TextBlock
                                                     HorizontalAlignment="Center"
                                                     Text="Identifying starting points..."
                                                     TextAlignment="Center"
                                                     TextWrapping="Wrap" />
-												<ProgressBar Style="{StaticResource UNTraceProgressBar}" />
-												<Button
+                                                <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
+                                                <Button
                                                     Command="{TemplateBinding CancelOperationCommand}"
                                                     Content="Cancel"
                                                     Style="{StaticResource UNTracePrimaryButton}" />
-											</StackPanel>
-										</Grid>
-									</Grid>
-								</TabItem>
-								<TabItem Header="{TemplateBinding ResultsTabLabel}" Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay, Path=TraceResults.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
-									<Grid Background="{StaticResource UNTraceBackground0}">
-										<Grid.RowDefinitions>
-											<RowDefinition Height="*" />
-											<RowDefinition Height="Auto" />
-											<RowDefinition Height="Auto" />
-										</Grid.RowDefinitions>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="{TemplateBinding ResultsTabLabel}" Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay, Path=TraceResults.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
+                                    <Grid Background="{StaticResource UNTraceBackground0}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
 
-										<ScrollViewer VerticalScrollBarVisibility="Auto">
-											<TabControl
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <TabControl
                                                 ContentTemplate="{TemplateBinding ResultItemTemplate}"
                                                 DisplayMemberPath="Name"
                                                 ItemsSource="{TemplateBinding TraceResults}"
                                                 SelectedItem="{TemplateBinding SelectedResult}"
                                                 Style="{StaticResource UNTraceHighCapacityTabControl}" />
-										</ScrollViewer>
+                                        </ScrollViewer>
 
-										<Button
+                                        <Button
                                             Grid.Row="2"
                                             Margin="4"
                                             Command="{TemplateBinding DeleteResultCommand}"
                                             Content="{TemplateBinding ClearAllLabel}"
                                             Style="{StaticResource UNTracePrimaryButton}" />
-									</Grid>
-								</TabItem>
-							</TabControl>
-							<Grid x:Name="PART_IneligibleScrim" Background="{StaticResource UNTraceBackground0}">
-								<StackPanel
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                            <Grid x:Name="PART_IneligibleScrim" Background="{StaticResource UNTraceBackground0}">
+                                <StackPanel
                                     MaxWidth="120"
                                     VerticalAlignment="Center"
                                     Orientation="Vertical">
-									<Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
-									<TextBlock
+                                    <Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
+                                    <TextBlock
                                         Margin="4"
                                         HorizontalAlignment="Center"
                                         FontWeight="SemiBold"
                                         Text="{TemplateBinding NoNetworksFoundLabel}"
                                         TextAlignment="Center"
                                         TextWrapping="Wrap" />
-								</StackPanel>
-							</Grid>
-							<Grid x:Name="PART_LoadingScrim" Background="{StaticResource UNTraceBackground0}">
-								<StackPanel
+                                </StackPanel>
+                            </Grid>
+                            <Grid x:Name="PART_LoadingScrim" Background="{StaticResource UNTraceBackground0}">
+                                <StackPanel
                                     MaxWidth="120"
                                     VerticalAlignment="Center"
                                     Orientation="Vertical">
-									<TextBlock
+                                    <TextBlock
                                         HorizontalAlignment="Center"
                                         Text="{TemplateBinding LoadingLabel}"
                                         TextAlignment="Center" />
-									<ProgressBar Style="{StaticResource UNTraceProgressBar}" />
-								</StackPanel>
-							</Grid>
-						</Grid>
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-		<Setter Property="Focusable" Value="False" />
-		<Setter Property="AddStartingPointHelpTextLabel" Value="Click on the map to identify starting points." />
-		<Setter Property="LoadingLabel" Value="Loading..." />
-		<Setter Property="NoNetworksFoundLabel" Value="No utility networks found." />
-		<Setter Property="ClearAllLabel" Value="Clear results" />
-		<Setter Property="ResultsTabLabel" Value="Results" />
-		<Setter Property="ExcessStartingPointsWarningLabel" Value="There are more starting points than required for the selected trace configuration." />
-		<Setter Property="DuplicateTraceWarningLabel" Value="The selected trace configuration has already been run with the selected starting points." />
-		<Setter Property="InsufficientStartingPointsWarningLabel" Value="The selected trace configuration requires additional starting points." />
-		<Setter Property="NoTraceConfigurationsFoundLabel" Value="No named trace configurations found for the selected utility network." />
-		<Setter Property="AdvancedOptionsSectionHeaderLabel" Value="Advanced options" />
-		<Setter Property="PreviewLabel" Value="Preview:" />
-		<Setter Property="ZoomToResultSettingLabel" Value="Zoom to result" />
-		<Setter Property="ResultVisualizationColorLabel" Value="Result visualization color" />
-		<Setter Property="ResultNameLabel" Value="Result name (optional)" />
-		<Setter Property="CancelButtonLabel" Value="Cancel" />
-		<Setter Property="AddStartingPointButtonLabel" Value="Add starting point" />
-		<Setter Property="RemoveAllStartingPointsButtonLabel" Value="Remove all" />
-		<Setter Property="StartingPointSectionHeaderLabel" Value="Starting points" />
-		<Setter Property="TraceConfigurationSectionHeaderLabel" Value="Trace configurations" />
-		<Setter Property="UtilityNetworksSectionHeaderLabel" Value="Utility networks" />
-		<Setter Property="NewTraceLabel" Value="New trace" />
-		<Setter Property="ZoomToLabel" Value="Zoom to" />
-		<Setter Property="DiscardResultLabel" Value="Discard" />
-		<Setter Property="VisualizationOptionsSectionHeaderLabel" Value="Visualization options" />
-		<Setter Property="ResultsWarningsSectionHeaderLabel" Value="Warnings" />
-		<Setter Property="TraceConfigurationDetailsSectionHeaderLabel" Value="Trace configuration details" />
-		<Setter Property="ResultsShowGraphicsCheckboxLabel" Value="Show graphics on map" />
-		<Setter Property="ResultDetailsSectionDescriptionLabel" Value="Description" />
-		<Setter Property="ResultDetailsSectionCreatorLabel" Value="Creator" />
-		<Setter Property="ResultDetailsSectionTagsLabel" Value="Tags" />
-		<Setter Property="FeatureResultsSectionHeaderLabel" Value="Feature results" />
-		<Setter Property="ResultsSelectFeaturesCheckboxLabel" Value="Select features on map" />
-		<Setter Property="FunctionResultsSectionHeaderLabel" Value="Function results" />
-		<Setter Property="NoResultsFoundLabel" Value="No results found." />
-		<Setter Property="TerminalPickerLabel" Value="Terminal" />
-		<Setter Property="InspectorFractionAlongLabel" Value="Position along line" />
-		<Setter Property="InspectorPopupLabel" Value="Asset details" />
-	</Style>
+                                    <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="AddStartingPointHelpTextLabel" Value="Click on the map to identify starting points." />
+        <Setter Property="LoadingLabel" Value="Loading..." />
+        <Setter Property="NoNetworksFoundLabel" Value="No utility networks found." />
+        <Setter Property="ClearAllLabel" Value="Clear results" />
+        <Setter Property="ResultsTabLabel" Value="Results" />
+        <Setter Property="ExcessStartingPointsWarningLabel" Value="There are more starting points than required for the selected trace configuration." />
+        <Setter Property="DuplicateTraceWarningLabel" Value="The selected trace configuration has already been run with the selected starting points." />
+        <Setter Property="InsufficientStartingPointsWarningLabel" Value="The selected trace configuration requires additional starting points." />
+        <Setter Property="NoTraceConfigurationsFoundLabel" Value="No named trace configurations found for the selected utility network." />
+        <Setter Property="AdvancedOptionsSectionHeaderLabel" Value="Advanced options" />
+        <Setter Property="PreviewLabel" Value="Preview:" />
+        <Setter Property="ZoomToResultSettingLabel" Value="Zoom to result" />
+        <Setter Property="ResultVisualizationColorLabel" Value="Result visualization color" />
+        <Setter Property="ResultNameLabel" Value="Result name (optional)" />
+        <Setter Property="CancelButtonLabel" Value="Cancel" />
+        <Setter Property="AddStartingPointButtonLabel" Value="Add starting point" />
+        <Setter Property="RemoveAllStartingPointsButtonLabel" Value="Remove all" />
+        <Setter Property="StartingPointSectionHeaderLabel" Value="Starting points" />
+        <Setter Property="TraceConfigurationSectionHeaderLabel" Value="Trace configurations" />
+        <Setter Property="UtilityNetworksSectionHeaderLabel" Value="Utility networks" />
+        <Setter Property="NewTraceLabel" Value="New trace" />
+        <Setter Property="ZoomToLabel" Value="Zoom to" />
+        <Setter Property="DiscardResultLabel" Value="Discard" />
+        <Setter Property="VisualizationOptionsSectionHeaderLabel" Value="Visualization options" />
+        <Setter Property="ResultsWarningsSectionHeaderLabel" Value="Warnings" />
+        <Setter Property="TraceConfigurationDetailsSectionHeaderLabel" Value="Trace configuration details" />
+        <Setter Property="ResultsShowGraphicsCheckboxLabel" Value="Show graphics on map" />
+        <Setter Property="ResultDetailsSectionDescriptionLabel" Value="Description" />
+        <Setter Property="ResultDetailsSectionCreatorLabel" Value="Creator" />
+        <Setter Property="ResultDetailsSectionTagsLabel" Value="Tags" />
+        <Setter Property="FeatureResultsSectionHeaderLabel" Value="Feature results" />
+        <Setter Property="ResultsSelectFeaturesCheckboxLabel" Value="Select features on map" />
+        <Setter Property="FunctionResultsSectionHeaderLabel" Value="Function results" />
+        <Setter Property="NoResultsFoundLabel" Value="No results found." />
+        <Setter Property="TerminalPickerLabel" Value="Terminal" />
+        <Setter Property="InspectorFractionAlongLabel" Value="Position along line" />
+        <Setter Property="InspectorPopupLabel" Value="Asset details" />
+    </Style>
 </ResourceDictionary>

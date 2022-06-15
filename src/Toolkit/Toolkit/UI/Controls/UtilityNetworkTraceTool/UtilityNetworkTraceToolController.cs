@@ -15,12 +15,6 @@
 //  ******************************************************************************/
 
 #if !__IOS__ && !__ANDROID__
-using Esri.ArcGISRuntime.Data;
-using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UtilityNetworks;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,6 +25,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.UtilityNetworks;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
@@ -41,39 +41,52 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     {
         private readonly SynchronizationContext _synchronizationContext;
         private Map? _map;
-        //Warnings
+
+        // Warnings
         private bool _insufficientStartingPointsWarning;
         private bool _tooManyStartingPointsWarning;
         private bool _duplicatedTraceWarning;
-        //Status
+
+        // Status
         private bool _isLoadingNetwork;
         private bool _isReadyToConfigure;
         private bool _isRunningTrace;
         private bool _isAddingStartingPoints;
-        //Symbology
+        private bool _enableTrace;
+
+        // Symbology
         private Color _resultColor = Color.Blue;
         private Symbol? _startingPointSymbol;
         private Symbol? _resultPointSymbol;
         private Symbol? _resultLineSymbol;
         private Symbol? _resultFillSymbol;
-        public readonly GraphicsOverlay _startingPointGraphicsOverlay = new GraphicsOverlay();
-        //Cancellation
-        public CancellationTokenSource? _getTraceTypesCts;
-        public CancellationTokenSource? _traceCts;
-        public CancellationTokenSource? _getFeaturesForElementsCts;
-        //Selection
+
+        public GraphicsOverlay StartingPointGraphicsOverlay { get; } = new GraphicsOverlay();
+
+        // Cancellation
+        private CancellationTokenSource? _getTraceTypesCts;
+#pragma warning disable SA1401 // Fields should be private
+        internal CancellationTokenSource? _traceCts;
+        internal CancellationTokenSource? _getFeaturesForElementsCts;
+#pragma warning restore SA1401 // Fields should be private
+
+        // Selection
         private UtilityNetwork? _selectedUtilityNetwork;
         private UtilityNamedTraceConfiguration? _selectedTraceType;
         private StartingPointModel? _selectedStartingPoint;
-        //Trace configuration
+
+        // Trace configuration
         private string? _activeTraceName;
-        //Options
+
+        // Options
         private bool _autoZoomToTraceResults;
-        //Interaction
+
+        // Interaction
         private Viewpoint? _viewpoint;
         private Tuple<CalloutDefinition, MapPoint>? _requestedCallout;
 
         #region Observable collections
+
         /// <summary>
         /// Gets the collection of results.
         /// </summary>
@@ -93,7 +106,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Gets the collection of starting points. Consumers should use <see cref="AddStartingPoint(ArcGISFeature, MapPoint?)"/> to add to this collection.
         /// </summary>
         public ObservableCollection<StartingPointModel> StartingPoints { get; } = new ObservableCollection<StartingPointModel>();
-
 
         private void UtilityNetworks_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
@@ -125,7 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 if (e.Action == NotifyCollectionChangedAction.Reset)
                 {
-                    _startingPointGraphicsOverlay.Graphics.Clear();
+                    StartingPointGraphicsOverlay.Graphics.Clear();
                 }
 
                 if (e.OldItems != null)
@@ -134,7 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     {
                         if (item.SelectionGraphic != null)
                         {
-                            _startingPointGraphicsOverlay.Graphics.Remove(item.SelectionGraphic);
+                            StartingPointGraphicsOverlay.Graphics.Remove(item.SelectionGraphic);
                         }
                     }
                 }
@@ -143,15 +155,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     foreach (var item in e.NewItems.OfType<StartingPointModel>())
                     {
-                        if (item.SelectionGraphic != null && !_startingPointGraphicsOverlay.Graphics.Contains(item.SelectionGraphic))
+                        if (item.SelectionGraphic != null && !StartingPointGraphicsOverlay.Graphics.Contains(item.SelectionGraphic))
                         {
-                            _startingPointGraphicsOverlay.Graphics.Add(item.SelectionGraphic);
+                            StartingPointGraphicsOverlay.Graphics.Add(item.SelectionGraphic);
                         }
                     }
 
                     // Automatically switch to filtering view/stop adding when points have been found
                     IsAddingStartingPoints = false;
                 }
+
                 ApplyWarnings();
             });
         }
@@ -159,7 +172,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         #endregion Observable collections
 
         /// <summary>
-        /// Initializes a new instance of <see cref="UtilityNetworkTraceToolController"/>.
+        /// Initializes a new instance of the <see cref="UtilityNetworkTraceToolController"/> class.
         /// </summary>
         public UtilityNetworkTraceToolController()
         {
@@ -180,6 +193,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         #region Utility Network and Trace Type Selection
+
         /// <summary>
         /// Gets or sets the selected utility network. Setting this value will reset the controller then update <see cref="TraceTypes"/>.
         /// </summary>
@@ -255,6 +269,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         #endregion Utility Network and Trace Type Selection
 
         #region GeoModel Loading
+
         /// <summary>
         /// Gets or sets the Map from which <see cref="UtilityNetworks"/> will be populated.
         /// </summary>
@@ -300,6 +315,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     {
                         Map.LoadStatusChanged -= OnGeoModelLoaded;
                     }
+
                     IsRunningTrace = false;
                     IsLoadingNetwork = true;
                     UtilityNetworks.Clear();
@@ -333,6 +349,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                             await utilityNetwork.LoadAsync();
                         }
                     }
+
                     if (UtilityNetworks.Any())
                     {
                         IsReadyToConfigure = true;
@@ -432,7 +449,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
 
             // Skip adding duplicate starting points.
-            if (_startingPointGraphicsOverlay.Graphics.Any(g => g.Attributes["GlobalId"] is Guid guid && guid.Equals(element.GlobalId)))
+            if (StartingPointGraphicsOverlay.Graphics.Any(g => g.Attributes["GlobalId"] is Guid guid && guid.Equals(element.GlobalId)))
             {
                 return;
             }
@@ -500,23 +517,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     RequestedCallout = null;
 
                     if (SelectedStartingPoint?.StartingPoint is UtilityElement startingPoint
-                     && _startingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
+                     && StartingPointGraphicsOverlay.Graphics.FirstOrDefault(g => g.Attributes["GlobalId"] is Guid guid
                      && guid.Equals(startingPoint.GlobalId)) is Graphic graphic)
                     {
-                        _startingPointGraphicsOverlay.ClearSelection();
+                        StartingPointGraphicsOverlay.ClearSelection();
                         graphic.IsSelected = true;
                         if (graphic.Geometry is MapPoint location)
                         {
-                            var calloutDefinition = new CalloutDefinition(new Graphic(SelectedStartingPoint.SelectionGraphic.Geometry, SelectedStartingPoint.Symbol))
-                            {
-                                Text = startingPoint.NetworkSource.Name,
-                                DetailText = startingPoint.AssetGroup.Name
-                            };
-                            RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
+                            _ = SetCallout(SelectedStartingPoint, location);
                         }
                     }
                 }
             }
+        }
+
+        private async Task SetCallout(StartingPointModel selectedStartingPoint, MapPoint location)
+        {
+            var calloutDefinition = new CalloutDefinition(selectedStartingPoint.StartingPoint.NetworkSource.Name, selectedStartingPoint.StartingPoint.AssetGroup.Name);
+            try
+            {
+                calloutDefinition.Icon = await selectedStartingPoint.Symbol.CreateSwatchAsync();
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
+
+            RequestedCallout = new Tuple<CalloutDefinition, MapPoint>(calloutDefinition, location);
         }
 
         public Tuple<CalloutDefinition, MapPoint>? RequestedCallout
@@ -534,10 +561,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         #endregion Starting Points
 
         #region Tracing
+
         /// <summary>
         /// Runs the trace operation. Results are added to <see cref="Results"/>.
         /// </summary>
-        /// <returns></returns>
         public async Task TraceAsync()
         {
             if (SelectedTraceType == null)
@@ -547,7 +574,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             var traceParameters = new UtilityTraceParameters(SelectedTraceType, StartingPoints.Select(sp => sp.StartingPoint));
 
-            UtilityTraceOperationResult resultInProgress = new UtilityTraceOperationResult(SelectedTraceType, traceParameters, StartingPoints.ToList());
+            UtilityTraceOperationResult resultInProgress = new UtilityTraceOperationResult(SelectedTraceType, traceParameters, StartingPoints.ToList()) { GraphicVisualizationColor = ResultColor };
 
             try
             {
@@ -629,6 +656,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                                 // Prevent sharing outlines
                                 simpleFillSymbol.Outline = (SimpleLineSymbol)outlineSymbol.Clone();
                             }
+
                             resultInProgress.Graphics.Add(graphic);
                             resultInProgress.ResultOverlay.Graphics.Add(graphic);
                         }
@@ -727,7 +755,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
 
             StartingPoints.Clear();
-            _startingPointGraphicsOverlay.Graphics.Clear();
+            StartingPointGraphicsOverlay.Graphics.Clear();
 
             _getTraceTypesCts?.Cancel();
             _traceCts?.Cancel();
@@ -740,6 +768,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 result.AreFeaturesSelected = false;
                 result.ResultOverlay.Graphics.Clear();
             }
+
             Results.Clear();
         }
 
@@ -778,6 +807,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         #endregion Status and Settings
 
         #region Symbology
+
         // Fallback symbols
         private readonly Symbol _defaultStartingLocationSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.LimeGreen, 20d);
         private readonly Symbol _defaultResultPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Blue, 20d);
@@ -875,6 +905,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     existingOutline.Color = _resultColor;
                 }
+
                 existingFill.Color = _resultColor;
             }
             else if (ResultFillSymbol == null && _defaultResultFillSymbol.Clone() is SimpleFillSymbol defaultFill)
@@ -885,6 +916,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     defaultFill.Outline = defaultOutline;
                     defaultOutline.Color = _resultColor;
                 }
+
                 defaultFill.Color = _resultColor;
             }
 
@@ -911,7 +943,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         public void HandleStartingPointSymbolChanged()
         {
-            foreach (var graphic in _startingPointGraphicsOverlay.Graphics)
+            foreach (var graphic in StartingPointGraphicsOverlay.Graphics)
             {
                 graphic.Symbol = StartingPointSymbol;
             }
@@ -970,8 +1002,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
             }
         }
-
-        private bool _enableTrace;
 
         public bool EnableTrace
         {
@@ -1035,6 +1065,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 return;
             }
+
             var minimum = SelectedTraceType.MinimumStartingLocations == UtilityMinimumStartingLocations.Many ? 2 : 1;
             EnableTrace = StartingPoints.Count >= minimum;
             InsufficientStartingPointsWarning = StartingPoints.Count < minimum;
@@ -1048,6 +1079,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     break;
                 }
             }
+
             DuplicatedTraceWarning = hasDuplicated;
         }
 

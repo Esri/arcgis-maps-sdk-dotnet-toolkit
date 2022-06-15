@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             StartingPoint = element;
             SelectionGraphic = selectionGraphic;
             ZoomToExtent = zoomToExtent;
-            
+
             // Create popup if possible.
             if (feature is ArcGISFeature arcFeature && arcFeature.FeatureTable?.PopupDefinition is PopupDefinition featurePopupDef)
             {
@@ -95,6 +95,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     StartingPoint.FractionAlongEdge = value;
                 }
+
                 if (SelectionGraphic != null && SelectionGraphic.Attributes.TryGetValue("Geometry", out var jsonObj) && jsonObj is string jsonString && Geometry.Geometry.FromJson(jsonString) is Polyline originalLine)
                 {
                     SelectionGraphic.Geometry = GeometryEngine.CreatePointAlong(originalLine, GeometryEngine.Length(originalLine) * FractionAlongEdge);
@@ -144,6 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 return true;
             }
+
             return false;
         }
     }

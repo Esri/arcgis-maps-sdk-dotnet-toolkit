@@ -325,8 +325,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty ExcessStartingPointsWarningLabelProperty =
             DependencyProperty.Register(nameof(ExcessStartingPointsWarningLabel), typeof(string), typeof(UtilityNetworkTraceTool), null);
 
-
-
         /// <summary>
         /// Gets or sets the warning label shown when the trace configuration duplicates an existing result.
         /// </summary>
@@ -371,7 +369,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty NoTraceConfigurationsFoundLabelProperty =
             DependencyProperty.Register(nameof(NoTraceConfigurationsFoundLabel), typeof(string), typeof(UtilityNetworkTraceTool), null);
-
 
         /// <summary>
         /// Gets or sets the label used to identify the previewed symbology for the symbology color pickers.
@@ -562,9 +559,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => SetValue(NoResultsFoundLabelProperty, value);
         }
 
-        ///<summary>
+        /// <summary>
         /// Identifies the <see cref="NoResultsFoundLabel" /> dependency property.
-        ///</summary>
+        /// </summary>
         public static readonly DependencyProperty NoResultsFoundLabelProperty =
             DependencyProperty.Register(nameof(NoResultsFoundLabel), typeof(string), typeof(UtilityNetworkTraceTool), null);
 

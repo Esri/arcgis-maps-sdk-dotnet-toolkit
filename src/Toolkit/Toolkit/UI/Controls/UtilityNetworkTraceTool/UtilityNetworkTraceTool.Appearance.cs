@@ -92,24 +92,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 typeof(UtilityNetworkTraceTool), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the <see cref="Style"/> that is applied to the container element generated for each
-        /// <see cref="UtilityNetwork"/> item.
-        /// </summary>
-        /// <value>A <see cref="Style"/> for a <see cref="UtilityNetwork"/> item.</value>
-        public Style? UtilityNetworkItemContainerStyle
-        {
-            get => GetValue(UtilityNetworkItemContainerStyleProperty) as Style;
-            set => SetValue(UtilityNetworkItemContainerStyleProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="UtilityNetworkItemContainerStyle"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty UtilityNetworkItemContainerStyleProperty =
-            DependencyProperty.Register(nameof(UtilityNetworkItemContainerStyle), typeof(Style),
-                typeof(UtilityNetworkTraceTool), new PropertyMetadata(null));
-
-        /// <summary>
         /// Gets or sets the <see cref="DataTemplate"/> used to display a pre-configured trace type, which is
         /// a <see cref="UtilityNamedTraceConfiguration"/> item.
         /// </summary>

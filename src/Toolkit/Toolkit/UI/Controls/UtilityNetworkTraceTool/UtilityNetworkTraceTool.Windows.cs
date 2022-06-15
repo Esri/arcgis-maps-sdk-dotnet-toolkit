@@ -560,7 +560,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _controller.IsRunningTrace = true;
 
-            var graphicsOverlays = new[] { _controller._startingPointGraphicsOverlay };
+            var graphicsOverlays = new[] { _controller.StartingPointGraphicsOverlay };
 
             if (oldGeoView != null)
             {

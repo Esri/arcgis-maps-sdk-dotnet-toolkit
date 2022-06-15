@@ -14,32 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 #if WINDOWS && !WINDOWS_UWP
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Esri.ArcGISRuntime.Data;
-using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.UtilityNetworks;
-using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
-#else
 using System.Windows;
 using System.Windows.Controls;
-#endif
+using System.Windows.Input;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -57,8 +37,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public StartingPointListView()
         {
             DefaultStyleKey = typeof(StartingPointListView);
-            CloseInspectorCommand = new DelegateCommand(obj => { IsInspecting = false; SelectedItem = null; });
-            OpenInspectorCommand = new DelegateCommand(obj => { SelectedItem = obj; IsInspecting = true; });
+            CloseInspectorCommand = new DelegateCommand(obj =>
+            {
+                IsInspecting = false;
+                SelectedItem = null;
+            });
+            OpenInspectorCommand = new DelegateCommand(obj =>
+            {
+                SelectedItem = obj;
+                IsInspecting = true;
+            });
             SelectNextItemCommand = new DelegateCommand(obj => SelectNextItem());
             SelectPreviousItemCommand = new DelegateCommand(obj => SelectPreviousItem());
             DeleteSelectedCommand = new DelegateCommand(obj => DeleteSelected(obj));
@@ -149,6 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 IsInspecting = false;
             }
+
             (CloseInspectorCommand as DelegateCommand)?.NotifyCanExecuteChanged(IsInspecting);
             (SelectNextItemCommand as DelegateCommand)?.NotifyCanExecuteChanged(Items.Count > 1);
             (SelectPreviousItemCommand as DelegateCommand)?.NotifyCanExecuteChanged(Items.Count > 1);
@@ -268,7 +257,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             DependencyProperty.Register(nameof(SelectPreviousItemCommand), typeof(ICommand), typeof(StartingPointListView), null);
 
         /// <summary>
-        /// Gets or set the command used to delete the selected item.
+        /// Gets or sets the command used to delete the selected item.
         /// </summary>
         public ICommand? DeleteSelectedCommand
         {
