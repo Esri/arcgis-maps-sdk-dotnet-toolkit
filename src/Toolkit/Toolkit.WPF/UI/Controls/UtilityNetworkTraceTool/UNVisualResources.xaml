@@ -1,0 +1,1502 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.Internal"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+
+    <SolidColorBrush x:Key="UNTraceBackground0" Color="#F8F8F8" />
+    <SolidColorBrush x:Key="UNTraceForeground0" Color="#151515" />
+    <SolidColorBrush x:Key="UNTraceBackground1" Color="#FFF" />
+    <SolidColorBrush x:Key="UNTraceBorder0" Color="#CACACA" />
+    <SolidColorBrush x:Key="UNTraceBackground2" Color="#F3F3F3" />
+    <SolidColorBrush x:Key="UNTraceBackground3" Color="#EAEAEA" />
+    <SolidColorBrush x:Key="UNTraceForeground3" Color="#6A6A6A" />
+    <SolidColorBrush x:Key="UNTraceBorder1" Color="#DFDFDF" />
+    <SolidColorBrush x:Key="UNTraceBorderInput" Color="#949494" />
+    <SolidColorBrush x:Key="ForegroundAlwaysLight" Color="#FFF" />
+    <SolidColorBrush x:Key="UNTraceTintNormal" Color="#007AC2" />
+    <SolidColorBrush x:Key="UNTraceTintHover" Color="#00619B" />
+    <SolidColorBrush x:Key="UNTraceTintPress" Color="#004874" />
+    <SolidColorBrush x:Key="UNTraceWarningNormal" Color="#EDD317" />
+    <SolidColorBrush x:Key="UNTraceDangerNormal" Color="#D83020" />
+
+    <Geometry x:Key="UNTraceIconCaretDown16">M 13.1,6 8,11.1 2.9,6 Z</Geometry>
+    <Geometry x:Key="UNTraceIconInspect">M8.5 6.5a1 1 0 1 1 1-1 1.002 1.002 0 0 1-1 1zM8 13h1V8H8zm2-1H7v1h3zm5.8-3.5a7.3 7.3 0 1 1-7.3-7.3 7.3 7.3 0 0 1 7.3 7.3zm-1 0a6.3 6.3 0 1 0-6.3 6.3 6.307 6.307 0 0 0 6.3-6.3z</Geometry>
+    <Geometry x:Key="UNTraceIconDelete">M12.854 4h1.003l-.79 11.071a1.004 1.004 0 0 1-.999.929H3.932a1.004 1.004 0 0 1-.998-.93L2.143 4h1.003l.786 11h8.136zm-9.78-1H1V2h4V1a1.001 1.001 0 0 1 1-1h4a1.001 1.001 0 0 1 1 1v1h4v1H3.074zM6 2h4V1H6zm3.5 11a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-1 0v7a.5.5 0 0 0 .5.5zm-3 0a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-1 0v7a.5.5 0 0 0 .5.5z</Geometry>
+    <Geometry x:Key="UNTraceIconZoomTo">M15.293 16L12 12.707V15h-1v-4h4v1h-2.293L16 15.293zm0-16L12 3.293V1h-1v4h4V4h-2.293L16 .707zM8 6a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm0 1a1 1 0 1 0 1 1 1 1 0 0 0-1-1zm-7 5h2.293L0 15.293.707 16 4 12.707V15h1v-4H1zm3-8.707L.707 0 0 .707 3.293 4H1v1h4V1H4z</Geometry>
+    <Geometry x:Key="UNTraceIconNoResult">M17 21h-1c0-2.959 1.227-3.919 2.371-5.207.916-1.031 1.639-1.846 1.629-3.264C20 10.104 18.08 9 16.167 9 14.16 9 12 10.194 12 12.817h-1a4.523 4.523 0 0 1 1.648-3.628A5.549 5.549 0 0 1 16.168 8C18.637 8 21 9.555 21 12.525a5.598 5.598 0 0 1-1.881 3.932C18.043 17.668 17 18.421 17 21zm.5 3.5a1 1 0 1 0-1 1 1.002 1.002 0 0 0 1-1zm12.3-8A13.3 13.3 0 1 1 16.5 3.2a13.3 13.3 0 0 1 13.3 13.3zm-1 0a12.3 12.3 0 1 0-12.3 12.3 12.314 12.314 0 0 0 12.3-12.3z</Geometry>
+    <Geometry x:Key="UNTraceIconFormDropdown">M6 10h8v1H6zm-2 4h1v-1H4zm2 0h8v-1H6zm0-6h8V7H6zM4 8h1V7H4zm0 3h1v-1H4zm11-9v2a1.001 1.001 0 0 1-1 1H2a1.001 1.001 0 0 1-1-1V2a1.001 1.001 0 0 1 1-1h12a1.001 1.001 0 0 1 1 1zm-.999 2H14V2H2v2h12.001z</Geometry>
+    <Geometry x:Key="UNTraceIconDanger">M16.5 24.5a1 1 0 1 1 1-1 1.002 1.002 0 0 1-1 1zM16 20h1V9h-1zm13.8-3.5A13.3 13.3 0 1 1 16.5 3.2a13.3 13.3 0 0 1 13.3 13.3zm-1 0a12.3 12.3 0 1 0-12.3 12.3 12.314 12.314 0 0 0 12.3-12.3z</Geometry>
+    <Geometry x:Key="UNTraceIconWarning">M16.5 29.8A13.3 13.3 0 1 0 3.2 16.5a13.3 13.3 0 0 0 13.3 13.3zM16 9h1v11h-1zm.5 13.5a1 1 0 1 1-1 1 1.002 1.002 0 0 1 1-1z</Geometry>
+    <Geometry x:Key="UNTraceIconAlertWarning">M3.929 29h25.148a1.897 1.897 0 0 0 1.67-2.797L18.217 2.951a1.897 1.897 0 0 0-3.337-.005L2.261 26.198A1.897 1.897 0 0 0 3.93 29zm-.788-2.324L15.759 3.423a.896.896 0 0 1 1.577.002l12.531 23.253a.898.898 0 0 1-.79 1.322H3.93a.897.897 0 0 1-.788-1.324zM15.5 24.5a1 1 0 1 1 1 1 1.002 1.002 0 0 1-1-1zM17 21h-1V10h1z</Geometry>
+    <Geometry x:Key="UNTraceIconAlertInfo">M16.5 9.5a1 1 0 1 1 1-1 1.002 1.002 0 0 1-1 1zM17 23V12h-2v1h1v10h-1v1h3v-1zm12.8-6.5A13.3 13.3 0 1 1 16.5 3.2a13.3 13.3 0 0 1 13.3 13.3zm-1 0a12.3 12.3 0 1 0-12.3 12.3 12.314 12.314 0 0 0 12.3-12.3z</Geometry>
+    <Geometry x:Key="UNTraceIconCheckmark16">M12.753 3l-7.319 7.497L3.252 8.31 2 9.373l3.434 3.434L14 4.24z</Geometry>
+    <Geometry x:Key="UNTraceIconCheckDash16">M4 7h8v2H4z</Geometry>
+    <Geometry x:Key="UNTraceIconEyeVisible">M10.8 7.5a2.3 2.3 0 1 1-2.3-2.3 2.302 2.302 0 0 1 2.3 2.3zm5.046.37c-.558.69-3.523 4.13-7.287 4.13-3.766 0-6.82-3.434-7.395-4.122a.581.581 0 0 1 .001-.758C1.738 6.434 4.793 3 8.56 3c3.764 0 6.73 3.44 7.286 4.13a.58.58 0 0 1 0 .74zm-.997-.37C14.07 6.61 11.532 4 8.559 4 5.58 4 2.969 6.605 2.16 7.5c.81.897 3.421 3.5 6.398 3.5 2.973 0 5.511-2.61 6.29-3.5z</Geometry>
+    <Geometry x:Key="UNTraceIconEyeIndeterminate">M8.559 12c-3.766 0-6.82-3.434-7.395-4.122a.581.581 0 0 1 .001-.758C1.738 6.434 4.793 3 8.56 3c3.764 0 6.73 3.44 7.286 4.13a.58.58 0 0 1 0 .74C15.289 8.56 12.324 12 8.56 12zM2.16 7.5c.81.897 3.421 3.5 6.398 3.5 2.973 0 5.511-2.61 6.29-3.5-.779-.89-3.317-3.5-6.29-3.5C5.58 4 2.969 6.605 2.16 7.5zm-.227.26l-.002.002zm13.13-.005zM1.93 7.235l.002.003zM8.5 5A2.5 2.5 0 1 0 11 7.5 2.503 2.503 0 0 0 8.5 5zm0 4A1.5 1.5 0 1 1 10 7.5 1.5 1.5 0 0 1 8.5 9z</Geometry>
+    <Geometry x:Key="UNTraceIconEyeHidden">M15.846 7.87c-.558.69-3.523 4.13-7.287 4.13a6.871 6.871 0 0 1-2.166-.37l.809-.809A5.594 5.594 0 0 0 8.559 11c2.973 0 5.511-2.61 6.29-3.5a13.195 13.195 0 0 0-2.276-2.05l.721-.721a13.92 13.92 0 0 1 2.55 2.4l.002.002a.58.58 0 0 1 0 .738zM5.535 10.176l-.742.742-.003-.002-2.27 2.27-.707-.707 2.107-2.107a14.436 14.436 0 0 1-2.756-2.495.581.581 0 0 1 .001-.758C1.738 6.434 4.793 3 8.56 3a6.83 6.83 0 0 1 2.308.426L13.48.813l.707.707-2.328 2.328.003.002-.753.753-.003-.002-1.14 1.14.002.003-3.224 3.224-.002-.003-1.21 1.21zm-.89-.528l1.622-1.623a2.28 2.28 0 0 1 2.76-2.76l1.046-1.046A5.587 5.587 0 0 0 8.559 4C5.58 4 2.969 6.605 2.16 7.5a13.663 13.663 0 0 0 2.483 2.149zM10.8 7.5a2.29 2.29 0 0 0-.06-.503L7.998 9.741A2.286 2.286 0 0 0 10.8 7.5z</Geometry>
+    <Geometry x:Key="UNTraceIconChevronUp">M8 6.207l-4 4V8.793l4-4 4 4v1.414z</Geometry>
+    <Geometry x:Key="UNTraceIconChevronDown">M8 11.207l-4-4V5.793l4 4 4-4v1.414z</Geometry>
+    <Geometry x:Key="UNTraceIconPlus">M16 17H8v-1h8V8h1v8h8v1h-8v8h-1z</Geometry>
+    <Geometry x:Key="UNTraceIconReset">M1 2v2.582A7.795 7.795 0 1 1 .272 9h1.01a6.802 6.802 0 1 0 .625-4H4v1H0V2z</Geometry>
+    <Geometry x:Key="UNTraceIconLeft">M5.325 6.415L3.74 8H14v1H3.705l1.62 1.62-.707.706-2.81-2.808 2.81-2.81z</Geometry>
+    <Geometry x:Key="UNTraceIconRight">M2 8h10.26l-1.585-1.585.707-.707 2.81 2.81-2.81 2.808-.707-.707L12.295 9H2z</Geometry>
+
+    <Duration x:Key="UNTraceAnimationDuration">0:0:0.1</Duration>
+
+    <Style x:Key="UNTraceFocusVisual" TargetType="Control">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle
+                        Margin="-4"
+                        SnapsToDevicePixels="true"
+                        Stroke="{StaticResource UNTraceTintNormal}"
+                        StrokeThickness="2" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceFocusVisualCompact" TargetType="Control">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle
+                        SnapsToDevicePixels="true"
+                        Stroke="{StaticResource UNTraceTintNormal}"
+                        StrokeThickness="2" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTracePathCommandIconStyle" TargetType="Path">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType=ButtonBase}, Path=Foreground}" />
+    </Style>
+
+    <Style x:Key="UNTraceGroupBox" TargetType="GroupBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Border
+                        Padding="8"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ContentPresenter
+                                ContentSource="Header"
+                                RecognizesAccessKey="True"
+                                TextElement.FontSize="14"
+                                TextElement.FontWeight="SemiBold" />
+                            <ContentPresenter Grid.Row="1" Margin="0,8,0,0" />
+                        </Grid>
+                    </Border>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{StaticResource UNTraceForeground0}" />
+    </Style>
+
+    <Style x:Key="UNTraceComboBoxItem" TargetType="ComboBoxItem">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisualCompact}" />
+        <Setter Property="BorderThickness" Value="1,0,1,1" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border
+                        Name="Border"
+                        Margin="0"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource UNTraceBackground2}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceComboBoxToggleButton" TargetType="ToggleButton">
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Padding" Value="7,7,7,6.5" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="OuterGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            Grid.ColumnSpan="2"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0" />
+                        <ContentPresenter
+                            Grid.Column="0"
+                            Margin="8,0,0,0"
+                            Content="{TemplateBinding Content}" />
+                        <Border
+                            Grid.Column="1"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="{TemplateBinding Padding}"
+                            CornerRadius="0">
+                            <Path
+                                Grid.Column="1"
+                                Width="12"
+                                Height="12"
+                                Margin="0,2,4,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Data="{StaticResource UNTraceIconCaretDown16}"
+                                Stretch="Uniform"
+                                Stroke="{StaticResource UNTraceForeground0}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="OuterGrid" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource UNTraceBackground2}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <ControlTemplate x:Key="UNTraceComboBoxTextBox" TargetType="TextBox">
+        <Border
+            Name="Border"
+            Padding="{TemplateBinding Padding}"
+            Background="{TemplateBinding Background}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    x:Name="PART_ContentHost"
+                    Grid.Column="1"
+                    Margin="0"
+                    Background="{TemplateBinding Background}" />
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    <Style x:Key="UNTraceComboBox" TargetType="{x:Type ComboBox}">
+        <Setter Property="Foreground" Value="{StaticResource UNTraceForeground0}" />
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Height" Value="28" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource UNTraceComboBoxItem}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton
+                            Name="ToggleButton"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            ClickMode="Press"
+                            Focusable="false"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                            Style="{StaticResource UNTraceComboBoxToggleButton}">
+                            <ContentPresenter
+                                Name="ContentSite"
+                                Margin="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding SelectionBoxItem}"
+                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                IsHitTestVisible="False" />
+                        </ToggleButton>
+                        <TextBox
+                            x:Name="PART_EditableTextBox"
+                            Margin="4,0,32,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Background="{TemplateBinding Background}"
+                            CaretBrush="{StaticResource UNTraceTintNormal}"
+                            Cursor="IBeam"
+                            Focusable="True"
+                            FontSize="12"
+                            Foreground="{StaticResource UNTraceForeground0}"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"
+                            Style="{x:Null}"
+                            Template="{StaticResource UNTraceComboBoxTextBox}"
+                            Visibility="Hidden" />
+                        <Popup
+                            Name="Popup"
+                            AllowsTransparency="True"
+                            Focusable="False"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            Placement="Bottom"
+                            PopupAnimation="Slide">
+                            <Grid
+                                Name="DropDown"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                SnapsToDevicePixels="True">
+                                <Border
+                                    x:Name="DropDownBorder"
+                                    Background="{StaticResource UNTraceBackground0}"
+                                    BorderBrush="{StaticResource UNTraceBorder1}"
+                                    BorderThickness="1" />
+                                <ScrollViewer SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                        </Trigger>
+                        <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                            <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0" />
+                            <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0" />
+                        </Trigger>
+                        <Trigger SourceName="PART_EditableTextBox" Property="IsFocused" Value="true">
+                            <Setter Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsDropDownOpen" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="true">
+                            <Setter Property="IsTabStop" Value="false" />
+                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
+        x:Key="UNTraceTaggedComboBox"
+        BasedOn="{StaticResource UNTraceComboBox}"
+        TargetType="{x:Type ComboBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton
+                            Name="ToggleButton"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            ClickMode="Press"
+                            Focusable="false"
+                            Foreground="{TemplateBinding Foreground}"
+                            IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                            Style="{StaticResource UNTraceComboBoxToggleButton}">
+                            <ContentPresenter
+                                Name="ContentSite"
+                                Margin="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Content="{TemplateBinding SelectionBoxItem}"
+                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                IsHitTestVisible="False" />
+                        </ToggleButton>
+                        <TextBox
+                            x:Name="PART_EditableTextBox"
+                            Margin="4,0,32,0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Background="{TemplateBinding Background}"
+                            CaretBrush="{StaticResource UNTraceTintNormal}"
+                            Cursor="IBeam"
+                            Focusable="True"
+                            FontSize="12"
+                            Foreground="{StaticResource UNTraceForeground0}"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"
+                            Style="{x:Null}"
+                            Template="{StaticResource UNTraceComboBoxTextBox}"
+                            Visibility="Hidden" />
+                        <Popup
+                            Name="Popup"
+                            AllowsTransparency="True"
+                            Focusable="False"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            Placement="Bottom"
+                            PopupAnimation="Slide">
+                            <Grid
+                                Name="DropDown"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                SnapsToDevicePixels="True">
+                                <Border
+                                    x:Name="DropDownBorder"
+                                    Background="{StaticResource UNTraceBackground0}"
+                                    BorderBrush="{StaticResource UNTraceBorder1}"
+                                    BorderThickness="1" />
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Margin="8"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Tag}"
+                                        TextAlignment="Center" />
+                                    <ScrollViewer Grid.Row="1" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                        </Trigger>
+                        <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                            <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0" />
+                            <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0" />
+                        </Trigger>
+                        <Trigger SourceName="PART_EditableTextBox" Property="IsFocused" Value="true">
+                            <Setter Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsDropDownOpen" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="true">
+                            <Setter Property="IsTabStop" Value="false" />
+                            <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <ControlTemplate x:Key="UNTraceExpanderToggleButtonTemplate" TargetType="ToggleButton">
+        <Border
+            x:Name="Border"
+            Padding="{TemplateBinding Padding}"
+            Background="{TemplateBinding Background}"
+            Cursor="Hand">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="4" />
+                </Grid.ColumnDefinitions>
+
+                <ContentPresenter TextElement.FontWeight="SemiBold" />
+                <Path
+                    x:Name="CollapsedArrow"
+                    Grid.Column="1"
+                    Width="8"
+                    Height="5.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="{StaticResource UNTraceIconChevronDown}"
+                    Fill="{StaticResource UNTraceForeground0}"
+                    Stretch="UniformToFill" />
+                <Path
+                    x:Name="ExpandededArrow"
+                    Grid.Column="1"
+                    Width="8"
+                    Height="5.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="{StaticResource UNTraceIconChevronUp}"
+                    Fill="{StaticResource UNTraceForeground0}"
+                    Stretch="UniformToFill"
+                    Visibility="Collapsed" />
+            </Grid>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CheckStates">
+                    <VisualState x:Name="Checked">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="CollapsedArrow" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Hidden}" />
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ExpandededArrow" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Unchecked" />
+                    <VisualState x:Name="Indeterminate" />
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="UNTraceExpander" TargetType="{x:Type Expander}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource UNTraceForeground0}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Expander}">
+                    <Grid x:Name="InnerGrid" Background="{TemplateBinding Background}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition x:Name="ContentRow" Height="0" />
+                        </Grid.RowDefinitions>
+                        <Border
+                            x:Name="Border"
+                            Padding="0"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ToggleButton
+                                Grid.Column="0"
+                                MinHeight="0"
+                                Margin="8,0,8,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Background="Transparent"
+                                Content="{TemplateBinding Header}"
+                                FocusVisualStyle="{StaticResource UNTraceFocusVisual}"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                OverridesDefaultStyle="True"
+                                Template="{StaticResource UNTraceExpanderToggleButtonTemplate}" />
+                        </Border>
+                        <Border
+                            x:Name="Content"
+                            Grid.Row="1"
+                            Margin="0,0,0,0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter Margin="{TemplateBinding Padding}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ContentRow" Property="Height" Value="{Binding Height, ElementName=Content}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceTabItem" TargetType="{x:Type TabItem}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisualCompact}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid x:Name="Root">
+                        <Border
+                            x:Name="Border"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="0,0,0,2"
+                            Cursor="Hand">
+                            <ContentPresenter
+                                x:Name="ContentSite"
+                                Margin="8"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                ContentSource="Header"
+                                RecognizesAccessKey="True"
+                                TextElement.Foreground="{StaticResource UNTraceForeground3}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Panel.ZIndex" Value="100" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ContentSite" Property="TextElement.Foreground" Value="{StaticResource UNTraceForeground0}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="ContentSite" Property="TextElement.Foreground" Value="{StaticResource UNTraceForeground0}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTracePrimaryButton" TargetType="ButtonBase">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Border
+                        x:Name="bg"
+                        Padding="1"
+                        Background="{StaticResource UNTraceTintNormal}"
+                        BorderBrush="{StaticResource UNTraceTintNormal}"
+                        BorderThickness="1"
+                        Cursor="Hand">
+                        <Grid>
+                            <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter
+                                    x:Name="content"
+                                    Grid.Column="1"
+                                    Content="{TemplateBinding Content}"
+                                    TextBlock.Foreground="{TemplateBinding Foreground}" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource ForegroundAlwaysLight}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bg" Property="BorderBrush" Value="{StaticResource UNTraceTintHover}" />
+                            <Setter TargetName="bg" Property="Background" Value="{StaticResource UNTraceTintHover}" />
+                            <Setter Property="Foreground" Value="{StaticResource ForegroundAlwaysLight}" />
+                            <Setter TargetName="bg" Property="BorderThickness" Value="2" />
+                            <Setter TargetName="bg" Property="Padding" Value="0" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bg" Property="BorderBrush" Value="{StaticResource UNTraceTintPress}" />
+                            <Setter TargetName="bg" Property="Background" Value="{StaticResource UNTraceTintPress}" />
+                            <Setter Property="Foreground" Value="{StaticResource ForegroundAlwaysLight}" />
+                            <Setter TargetName="bg" Property="BorderThickness" Value="2" />
+                            <Setter TargetName="bg" Property="Padding" Value="0" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bg" Property="Opacity" Value="0.8" />
+                            <Setter Property="Cursor" Value="None" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="bg" Property="Opacity" Value="1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceIconButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="bg"
+                        Margin="0"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand">
+                        <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <ContentPresenter
+                                x:Name="content"
+                                Grid.Column="1"
+                                Content="{TemplateBinding Content}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintHover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintPress}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceForeground3}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="bg" Property="Opacity" Value="1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
+        x:Key="UNTraceSecondaryButton"
+        BasedOn="{StaticResource UNTracePrimaryButton}"
+        TargetType="ButtonBase">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Border
+                        x:Name="bg"
+                        Padding="1"
+                        Background="{StaticResource UNTraceBackground0}"
+                        BorderBrush="{StaticResource UNTraceTintNormal}"
+                        BorderThickness="1"
+                        Cursor="Hand">
+                        <Grid>
+                            <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter
+                                    x:Name="content"
+                                    Grid.Column="1"
+                                    Content="{TemplateBinding Content}"
+                                    TextBlock.Foreground="{TemplateBinding Foreground}" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="bg" Property="BorderBrush" Value="{StaticResource UNTraceTintHover}" />
+                            <Setter TargetName="bg" Property="Background" Value="{StaticResource UNTraceBackground0}" />
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintHover}" />
+                            <Setter TargetName="bg" Property="BorderThickness" Value="2" />
+                            <Setter TargetName="bg" Property="Padding" Value="0" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="bg" Property="BorderBrush" Value="{StaticResource UNTraceTintPress}" />
+                            <Setter TargetName="bg" Property="Background" Value="{StaticResource UNTraceBackground0}" />
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintPress}" />
+                            <Setter TargetName="bg" Property="BorderThickness" Value="2" />
+                            <Setter TargetName="bg" Property="Padding" Value="0" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="bg" Property="Opacity" Value="0.8" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="bg" Property="Opacity" Value="1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceTabControl" TargetType="{x:Type TabControl}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource UNTraceTabItem}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <ScrollViewer
+                            x:Name="HeaderPanel"
+                            Panel.ZIndex="1"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Auto">
+                            <TabPanel
+                                Background="Transparent"
+                                IsItemsHost="True"
+                                KeyboardNavigation.TabIndex="1" />
+
+                        </ScrollViewer>
+                        <Border
+                            x:Name="Border"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Background="Transparent"
+                            BorderBrush="{StaticResource UNTraceBorder1}"
+                            CornerRadius="0"
+                            KeyboardNavigation.DirectionalNavigation="Contained"
+                            KeyboardNavigation.TabIndex="2"
+                            KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter
+                                x:Name="PART_SelectedContentHost"
+                                Margin="0"
+                                ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Top">
+                            <Setter TargetName="Border" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="Border" Property="Grid.ColumnSpan" Value="2" />
+                            <Setter TargetName="Border" Property="Grid.Row" Value="1" />
+                            <Setter TargetName="Border" Property="Grid.RowSpan" Value="1" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0,1,0,0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.ColumnSpan" Value="2" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.RowSpan" Value="1" />
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Left">
+                            <Setter TargetName="Border" Property="Grid.Column" Value="1" />
+                            <Setter TargetName="Border" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="Border" Property="Grid.RowSpan" Value="2" />
+                            <Setter TargetName="Border" Property="Grid.ColumnSpan" Value="1" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,0,0,0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.ColumnSpan" Value="1" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0" />
+                            <Setter TargetName="HeaderPanel" Property="Grid.RowSpan" Value="2" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTraceTextBox" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="MinWidth" Value="64" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="AcceptsReturn" Value="True" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="CaretBrush" Value="{StaticResource UNTraceTintNormal}" />
+        <Setter Property="SelectionBrush" Value="{StaticResource UNTraceTintNormal}" />
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+        <Setter Property="Foreground" Value="{StaticResource UNTraceForeground0}" />
+        <Setter Property="SelectionBrush" Value="{StaticResource UNTraceTintNormal}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBoxBase}">
+                    <Grid>
+                        <Border
+                            Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ScrollViewer
+                                    x:Name="PART_ContentHost"
+                                    Grid.Column="1"
+                                    Margin="0"
+                                    Padding="0" />
+                            </Grid>
+                        </Border>
+                        <Border
+                            x:Name="PART_Scrim"
+                            Background="{TemplateBinding Background}"
+                            Opacity="0.5"
+                            Visibility="Collapsed" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PART_Scrim" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsFocused" Value="True" />
+                    <Condition Property="IsReadOnly" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+            <Trigger Property="IsReadOnly" Value="True">
+                <Setter Property="Background" Value="{StaticResource UNTraceBackground2}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style
+        x:Key="UNTraceTextBoxCompact"
+        BasedOn="{StaticResource UNTraceTextBox}"
+        TargetType="TextBox">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="MaxLines" Value="1" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="MinWidth" Value="0" />
+    </Style>
+
+    <Style x:Key="UNTraceLabelingGroupBox" TargetType="GroupBox">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Border
+                            x:Name="bd_header"
+                            Grid.Row="0"
+                            Margin="0,0,0,4"
+                            Background="Transparent"
+                            BorderThickness="0">
+                            <ContentPresenter
+                                ContentSource="Header"
+                                TextBlock.TextAlignment="Left"
+                                TextElement.FontSize="12"
+                                TextElement.FontWeight="SemiBold"
+                                TextElement.Foreground="{StaticResource UNTraceForeground0}" />
+                        </Border>
+                        <Border x:Name="bd_body" Grid.Row="1">
+                            <ContentPresenter
+                                TextBlock.TextAlignment="Center"
+                                TextElement.FontSize="12"
+                                TextElement.Foreground="{StaticResource UNTraceForeground0}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTraceListViewItem" TargetType="ListViewItem">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="Foreground" Value="{StaticResource UNTraceForeground0}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border
+                        x:Name="Bd"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="ContentPart"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{StaticResource UNTraceBackground2}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="TextElement.Foreground" Value="{StaticResource UNTraceForeground3}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceListView" TargetType="{x:Type ListView}">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Background" Value="{StaticResource UNTraceBackground0}" />
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource UNTraceListViewItem}" />
+    </Style>
+
+    <Style x:Key="UNTraceCheckBox" TargetType="{x:Type CheckBox}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <BulletDecorator Background="Transparent" UseLayoutRounding="True">
+                        <BulletDecorator.Bullet>
+                            <Border
+                                x:Name="Border"
+                                Width="16"
+                                Height="16"
+                                Background="Transparent"
+                                BorderBrush="{StaticResource UNTraceBorder0}"
+                                BorderThickness="1"
+                                SnapsToDevicePixels="True">
+                                <Grid>
+                                    <Path
+                                        x:Name="CheckMark"
+                                        Width="12"
+                                        Height="9.81"
+                                        Data="{StaticResource UNTraceIconCheckmark16}"
+                                        SnapsToDevicePixels="True"
+                                        Stretch="Uniform"
+                                        Visibility="Collapsed" />
+                                    <Path
+                                        x:Name="InderminateMark"
+                                        Width="8"
+                                        Height="2"
+                                        Data="{StaticResource UNTraceIconCheckDash16}"
+                                        SnapsToDevicePixels="True"
+                                        Stretch="Uniform"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </Border>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter
+                            x:Name="ContentPresenterPart"
+                            Margin="6,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            RecognizesAccessKey="True" />
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0" />
+                            <Setter TargetName="CheckMark" Property="Fill" Value="{StaticResource ForegroundAlwaysLight}" />
+                            <Setter TargetName="InderminateMark" Property="Fill" Value="{StaticResource ForegroundAlwaysLight}" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource UNTraceTintNormal}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="InderminateMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0" />
+                            <Setter TargetName="CheckMark" Property="Fill" Value="{StaticResource ForegroundAlwaysLight}" />
+                            <Setter TargetName="InderminateMark" Property="Fill" Value="{StaticResource ForegroundAlwaysLight}" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource UNTraceTintNormal}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="False" />
+                                <Condition Property="IsChecked" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="Transparent" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource UNTraceBorderInput}" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="2" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource UNTraceTintHover}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource UNTraceTintHover}" />
+                                <Setter TargetName="Border" Property="BorderThickness" Value="0" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="{x:Null}" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource UNTraceTintHover}" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                        <!--  Disabled  -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTraceCheckBoxEye" TargetType="{x:Type CheckBox}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <BulletDecorator Background="Transparent" UseLayoutRounding="True">
+                        <BulletDecorator.Bullet>
+                            <Border
+                                x:Name="Border"
+                                Width="16"
+                                Height="16"
+                                Background="Transparent"
+                                SnapsToDevicePixels="True">
+                                <Grid>
+                                    <Grid.Resources>
+                                        <Style TargetType="Path">
+                                            <Setter Property="Width" Value="16" />
+                                            <Setter Property="Height" Value="16" />
+                                            <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Foreground}" />
+                                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                                            <Setter Property="Stretch" Value="Uniform" />
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </Style>
+                                    </Grid.Resources>
+                                    <Path x:Name="CheckMark" Data="{StaticResource UNTraceIconEyeVisible}" />
+                                    <Path x:Name="IndeterminateMark" Data="{StaticResource UNTraceIconEyeIndeterminate}" />
+                                    <Path x:Name="UncheckMark" Data="{StaticResource UNTraceIconEyeHidden}" />
+                                </Grid>
+                            </Border>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter
+                            x:Name="ContentPresenterPart"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            RecognizesAccessKey="True" />
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="UncheckMark" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="UncheckMark" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="IndeterminateMark" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="UncheckMark" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintHover}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource UNTraceTintNormal}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTraceProgressBar" TargetType="ProgressBar">
+        <Setter Property="Height" Value="2" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="IsIndeterminate" Value="True" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="0,8,0,8" />
+        <Setter Property="Foreground" Value="{StaticResource UNTraceTintNormal}" />
+        <Setter Property="Background" Value="{StaticResource UNTraceBorder1}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ProgressBar}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <Border
+                            x:Name="PART_Track"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" />
+                        <Border
+                            x:Name="PART_Indicator"
+                            HorizontalAlignment="Left"
+                            BorderThickness="0">
+                            <Grid x:Name="Animation" ClipToBounds="True">
+                                <Border
+                                    x:Name="ProgressFill"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="{TemplateBinding Foreground}" />
+                                <Rectangle
+                                    x:Name="PART_GlowRect"
+                                    Width="100"
+                                    Margin="-100,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    Fill="{TemplateBinding Foreground}"
+                                    Stroke="{TemplateBinding Foreground}" />
+                            </Grid>
+                        </Border>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Determinate" />
+                                <VisualState x:Name="Indeterminate">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ProgressFill"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="00:00:00" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="UNTraceSliderButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="Transparent" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTraceSlider" TargetType="{x:Type Slider}">
+        <Setter Property="LargeChange" Value="0.1" />
+        <Setter Property="Maximum" Value="1.0" />
+        <Setter Property="Minimum" Value="0.0" />
+        <Setter Property="SmallChange" Value="0.05" />
+        <Setter Property="TickFrequency" Value="0.1" />
+        <Setter Property="TickPlacement" Value="BottomRight" />
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource UNTraceFocusVisual}" />
+        <Setter Property="Foreground" Value="{StaticResource UNTraceTintNormal}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Slider}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Border
+                            x:Name="TrackBackground"
+                            Grid.Row="1"
+                            Height="2"
+                            Margin="0"
+                            Background="{StaticResource UNTraceBorder1}"
+                            BorderThickness="0" />
+                        <ProgressBar
+                            x:Name="InnerProgress"
+                            Grid.Row="1"
+                            Height="2"
+                            Margin="0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="{TemplateBinding Foreground}"
+                            Maximum="{TemplateBinding Maximum}"
+                            Minimum="{TemplateBinding Minimum}"
+                            Value="{TemplateBinding Value}" />
+                        <TickBar
+                            x:Name="TopTick"
+                            Grid.Row="1"
+                            Height="4"
+                            VerticalAlignment="Center"
+                            Fill="{StaticResource UNTraceForeground3}"
+                            Placement="Top"
+                            SnapsToDevicePixels="True"
+                            Visibility="Collapsed" />
+                        <Track x:Name="PART_Track" Grid.Row="1">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource UNTraceSliderButtonStyle}" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb FocusVisualStyle="{StaticResource UNTraceFocusVisual}" SnapsToDevicePixels="True">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Ellipse
+                                                x:Name="Ellipse"
+                                                Width="10"
+                                                Height="10"
+                                                Fill="{StaticResource UNTraceBackground0}"
+                                                Stroke="{StaticResource UNTraceForeground3}"
+                                                StrokeThickness="2" />
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsDragging" Value="True">
+                                                    <Setter TargetName="Ellipse" Property="Stroke" Value="{StaticResource UNTraceTintNormal}" />
+                                                    <Setter TargetName="Ellipse" Property="Fill" Value="{StaticResource UNTraceTintNormal}" />
+                                                </Trigger>
+                                                <!--  Hover light  -->
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsMouseOver" Value="True" />
+                                                        <Condition Property="IsDragging" Value="False" />
+                                                    </MultiTrigger.Conditions>
+                                                    <MultiTrigger.Setters>
+                                                        <Setter TargetName="Ellipse" Property="Stroke" Value="{StaticResource UNTraceTintNormal}" />
+                                                    </MultiTrigger.Setters>
+                                                    <MultiTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation
+                                                                    Storyboard.TargetName="Ellipse"
+                                                                    Storyboard.TargetProperty="StrokeThickness"
+                                                                    To="3"
+                                                                    Duration="{StaticResource UNTraceAnimationDuration}" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </MultiTrigger.EnterActions>
+                                                    <MultiTrigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation
+                                                                    Storyboard.TargetName="Ellipse"
+                                                                    Storyboard.TargetProperty="StrokeThickness"
+                                                                    To="2"
+                                                                    Duration="{StaticResource UNTraceAnimationDuration}" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </MultiTrigger.ExitActions>
+                                                </MultiTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource UNTraceSliderButtonStyle}" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                        <TickBar
+                            x:Name="BottomTick"
+                            Grid.Row="2"
+                            Height="4"
+                            Fill="{StaticResource UNTraceForeground3}"
+                            Placement="Bottom"
+                            SnapsToDevicePixels="True"
+                            Visibility="Collapsed" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TickPlacement" Value="TopLeft">
+                            <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="TickPlacement" Value="BottomRight">
+                            <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="TickPlacement" Value="Both">
+                            <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UNTraceHighCapacityTabControl" TargetType="{x:Type TabControl}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource UNTraceTabItem}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                            </Grid.ColumnDefinitions>
+                            <ScrollViewer
+                                x:Name="HeaderPanel"
+                                Grid.Column="0"
+                                Panel.ZIndex="0"
+                                HorizontalScrollBarVisibility="Auto"
+                                VerticalScrollBarVisibility="Disabled">
+                                <TabPanel
+                                    x:Name="TabsPanel"
+                                    Background="Transparent"
+                                    IsItemsHost="True"
+                                    KeyboardNavigation.TabIndex="1" />
+                            </ScrollViewer>
+                            <ToggleButton
+                                x:Name="MenuToggle"
+                                Grid.Column="1"
+                                Width="32"
+                                MinHeight="32"
+                                VerticalAlignment="Stretch"
+                                BorderBrush="Transparent"
+                                Style="{StaticResource UNTraceSecondaryButton}"
+                                Visibility="{Binding ElementName=HeaderPanel, Path=ComputedHorizontalScrollBarVisibility, Mode=OneWay}">
+                                <Path
+                                    Width="16"
+                                    Height="16"
+                                    Data="{StaticResource UNTraceIconFormDropdown}"
+                                    Fill="{StaticResource UNTraceTintNormal}"
+                                    Style="{StaticResource UNTracePathCommandIconStyle}" />
+                            </ToggleButton>
+                            <Popup
+                                Width="240"
+                                Height="240"
+                                IsOpen="{Binding ElementName=MenuToggle, Path=IsChecked, Mode=TwoWay}"
+                                Placement="Right"
+                                PlacementTarget="{Binding ElementName=MenuToggle}"
+                                StaysOpen="False">
+                                <ListView
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    ItemContainerStyle="{StaticResource UNTraceListViewItem}"
+                                    ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ItemsSource}"
+                                    SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=TabControl}, Path=SelectedItem, Mode=TwoWay}"
+                                    Style="{StaticResource UNTraceListView}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    MaxWidth="136"
+                                                    Margin="0,0,8,0"
+                                                    VerticalAlignment="Center"
+                                                    Text="{Binding Name}"
+                                                    TextWrapping="Wrap" />
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Margin="0,0,8,0"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=toolkit:UtilityNetworkTraceTool}, Path=ZoomToResultCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource UNTraceIconButton}">
+                                                    <Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                                                </Button>
+                                                <CheckBox
+                                                    Grid.Column="2"
+                                                    Margin="0,0,8,0"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center"
+                                                    IsChecked="{Binding VisualizationState, Mode=TwoWay}"
+                                                    Style="{StaticResource UNTraceCheckBoxEye}" />
+                                                <Button
+                                                    Grid.Column="3"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=toolkit:UtilityNetworkTraceTool}, Path=DeleteResultCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Style="{StaticResource UNTraceIconButton}">
+                                                    <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTracePathCommandIconStyle}" />
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Popup>
+                        </Grid>
+                        <Border
+                            x:Name="Border"
+                            Grid.Row="1"
+                            Background="Transparent"
+                            BorderBrush="{StaticResource UNTraceBorder1}"
+                            CornerRadius="0"
+                            KeyboardNavigation.DirectionalNavigation="Contained"
+                            KeyboardNavigation.TabIndex="2"
+                            KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter
+                                x:Name="PART_SelectedContentHost"
+                                Margin="0"
+                                ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

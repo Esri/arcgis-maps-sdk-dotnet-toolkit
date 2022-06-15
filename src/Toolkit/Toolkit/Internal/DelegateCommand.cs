@@ -24,12 +24,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     internal class DelegateCommand : ICommand
     {
-        private readonly Action _action;
+        private bool _canExecute = true;
+        private readonly Action? _action;
+        private readonly Action<object?>? _onExecute;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
         /// </summary>
         public DelegateCommand(Action inputAction) => _action = inputAction;
+
+        internal DelegateCommand(Action<object?> onExecute)
+        {
+            _onExecute = onExecute ?? throw new ArgumentNullException(nameof(onExecute));
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
 
 #pragma warning disable CS0067 // event is required by interface, so this warning shouldn't happen
         /// <inheritdoc/>
@@ -45,7 +53,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <inheritdoc/>
         public void Execute(object? parameter)
         {
-            _action.Invoke();
+            _action?.Invoke();
+            _onExecute?.Invoke(parameter);
+        }
+
+        internal void NotifyCanExecuteChanged(bool newValue)
+        {
+            if (newValue != _canExecute)
+            {
+                _canExecute = newValue;
+                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }

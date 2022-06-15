@@ -12,6 +12,9 @@
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SearchView/SearchView.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
         <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />

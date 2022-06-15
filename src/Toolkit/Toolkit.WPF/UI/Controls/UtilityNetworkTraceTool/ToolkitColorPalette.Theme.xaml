@@ -1,0 +1,122 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="./UNVisualResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <internal:ColorToColorConverter x:Key="ColorToColorConverter" />
+    <ControlTemplate x:Key="ToolkitPaletteTemplate" TargetType="internal:ToolkitColorPalette">
+        <ListView
+            x:Name="PART_InnerListView"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            ItemsSource="{TemplateBinding AvailableColors}"
+            SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedColor, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Width="16"
+                        Height="16"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        ClipToBounds="True">
+                        <Border.Background>
+                            <SolidColorBrush Color="{Binding Converter={StaticResource ColorToColorConverter}}" />
+                        </Border.Background>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid
+                        HorizontalAlignment="Left"
+                        IsItemsHost="True"
+                        Rows="1" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ControlTemplate.Resources>
+                                    <EllipseGeometry
+                                        x:Key="SelectionClip"
+                                        Center="8,8"
+                                        RadiusX="8"
+                                        RadiusY="8" />
+                                </ControlTemplate.Resources>
+                                <Border
+                                    x:Name="PART_Container"
+                                    Margin="8,4,8,4"
+                                    BorderBrush="{TemplateBinding Background}"
+                                    Cursor="Hand">
+                                    <ContentPresenter x:Name="PART_presenter" ClipToBounds="True" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="PART_presenter" Property="Clip" Value="{StaticResource SelectionClip}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="FocusVisualStyle">
+                        <Setter.Value>
+                            <Style>
+                                <Setter Property="Control.Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Rectangle
+                                                SnapsToDevicePixels="true"
+                                                Stroke="{StaticResource UNTraceTintNormal}"
+                                                StrokeThickness="2" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.FocusVisualStyle>
+                <Style>
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Rectangle
+                                    SnapsToDevicePixels="true"
+                                    Stroke="{StaticResource UNTraceTintNormal}"
+                                    StrokeThickness="1" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.FocusVisualStyle>
+            <ListView.Template>
+                <ControlTemplate>
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <ItemsPresenter />
+                    </Border>
+                </ControlTemplate>
+            </ListView.Template>
+        </ListView>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter TargetName="PART_InnerListView" Property="BorderBrush" Value="{StaticResource UNTraceTintNormal}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <Style x:Key="{x:Type internal:ToolkitColorPalette}" TargetType="internal:ToolkitColorPalette">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template" Value="{StaticResource ToolkitPaletteTemplate}" />
+        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+    </Style>
+</ResourceDictionary>
