@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if !__IOS__ && !__ANDROID__
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 #if NETFX_CORE
@@ -65,7 +66,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// Identifies the <see cref="SelectedColor"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty SelectedColorProperty =
-            DependencyProperty.Register(nameof(SelectedColor), typeof(System.Drawing.Color), typeof(ToolkitColorPalette), new PropertyMetadata(System.Drawing.Color.Black));
+            DependencyProperty.Register(nameof(SelectedColor), typeof(System.Drawing.Color), typeof(ToolkitColorPalette), new PropertyMetadata(System.Drawing.Color.Black, OnSelectionChanged));
+
+
+        private static void OnSelectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as ToolkitColorPalette)?.SelectionChanged?.Invoke(sender, EventArgs.Empty);
+        }
 
         /// <summary>
         /// Gets or sets the list of available colors.
@@ -81,6 +88,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public static readonly DependencyProperty AvailableColorsProperty =
             DependencyProperty.Register(nameof(AvailableColors), typeof(IList<System.Drawing.Color>), typeof(ToolkitColorPalette), null);
+
+        public event EventHandler SelectionChanged;
     }
 }
 #endif

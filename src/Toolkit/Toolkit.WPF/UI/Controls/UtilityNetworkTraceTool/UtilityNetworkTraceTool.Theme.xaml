@@ -172,7 +172,7 @@
                                 Rows="1">
                                 <Button
                                     Margin="4,0,0,0"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ZoomToResultCommand}"
+                                    Command="{Binding ZoomToCommand}"
                                     CommandParameter="{Binding}"
                                     Style="{StaticResource UNTraceSecondaryButton}"
                                     Visibility="{Binding HasAnyResults, Converter={StaticResource VisibilityConverter}}">
@@ -181,17 +181,17 @@
                                         <TextBlock
                                             VerticalAlignment="Center"
                                             Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                            Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ZoomToLabel, Mode=OneTime}" />
+                                            Text="Zoom to" />
                                     </StackPanel>
                                 </Button>
                                 <Button
                                     Margin="4,0,4,0"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=DeleteResultCommand}"
+                                    Command="{Binding DeleteCommand}"
                                     CommandParameter="{Binding}"
                                     Style="{StaticResource UNTraceSecondaryButton}">
                                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
                                         <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=DiscardResultLabel, Mode=OneTime}" />
+                                        <TextBlock VerticalAlignment="Center" Text="Discard" />
                                     </StackPanel>
                                 </Button>
                             </UniformGrid>
@@ -207,13 +207,13 @@
                                 <TextBlock
                                     Margin="4"
                                     HorizontalAlignment="Center"
-                                    Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=NoResultsFoundLabel, Mode=OneTime}"
+                                    Text="No results found."
                                     TextAlignment="Center"
                                     TextWrapping="Wrap" />
                             </StackPanel>
 
                             <Expander
-                                Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=FunctionResultsSectionHeaderLabel, Mode=OneTime}"
+                                Header="Function results"
                                 IsExpanded="True"
                                 Visibility="{Binding FunctionResults, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
                                 <ListView
@@ -263,13 +263,13 @@
                             </Expander>
 
                             <Expander
-                                Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=FeatureResultsSectionHeaderLabel, Mode=OneTime}"
+                                Header="Feature results"
                                 IsExpanded="True"
                                 Visibility="{Binding ElementResultsGrouped.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any', FallbackValue=Collapsed}">
                                 <StackPanel>
                                     <CheckBox
                                         Margin="8"
-                                        Content="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultsSelectFeaturesCheckboxLabel, Mode=OneTime}"
+                                        Content="Select features on map"
                                         IsChecked="{Binding AreFeaturesSelected, Mode=TwoWay}" />
                                     <ListView
                                         Margin="8,0,8,8"
@@ -296,13 +296,13 @@
                                 </StackPanel>
                             </Expander>
                             <Expander
-                                Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=VisualizationOptionsSectionHeaderLabel, Mode=OneTime}"
+                                Header="Visualization options"
                                 IsExpanded="False"
                                 Visibility="{Binding Graphics, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
                                 <StackPanel Margin="8,0,8,0">
                                     <CheckBox
                                         Margin="0,8,0,0"
-                                        Content="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultsShowGraphicsCheckboxLabel, Mode=OneTime}"
+                                        Content="Show graphics on map"
                                         IsChecked="{Binding AreGraphicsShown, Mode=TwoWay}" />
                                     <internal:ToolkitColorPalette Margin="0,8,0,0" SelectedColor="{Binding GraphicVisualizationColor, Mode=TwoWay}" />
                                     <Grid Margin="8">
@@ -313,7 +313,7 @@
                                         <TextBlock
                                             HorizontalAlignment="Right"
                                             FontWeight="SemiBold"
-                                            Text="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=PreviewLabel, Mode=OneTime}" />
+                                            Text="Preview:" />
                                         <ListView
                                             Grid.Column="1"
                                             Focusable="False"
@@ -340,21 +340,21 @@
                                     </Grid>
                                 </StackPanel>
                             </Expander>
-                            <Expander Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=TraceConfigurationDetailsSectionHeaderLabel, Mode=OneTime}">
+                            <Expander Header="Trace configuration details">
                                 <StackPanel Margin="8">
-                                    <GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionDescriptionLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                    <GroupBox Header="Description" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <TextBlock
                                             Margin="8,0,8,0"
                                             Text="{Binding Configuration.Description}"
                                             TextWrapping="Wrap" />
                                     </GroupBox>
-                                    <GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionCreatorLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                    <GroupBox Header="Creator" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <TextBlock
                                             Margin="8,0,8,0"
                                             Text="{Binding Configuration.Creator}"
                                             TextWrapping="Wrap" />
                                     </GroupBox>
-                                    <GroupBox Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultDetailsSectionTagsLabel, Mode=OneTime}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                    <GroupBox Header="Tags" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <ListView
                                             Margin="8,0,8,0"
                                             ItemsSource="{Binding Configuration.Tags}"
@@ -364,7 +364,7 @@
                             </Expander>
                             <Expander
                                 Foreground="{StaticResource UNTraceWarningNormal}"
-                                Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=ResultsWarningsSectionHeaderLabel, Mode=OneTime}"
+                                Header="Warnings"
                                 IsExpanded="True"
                                 Visibility="{Binding Warnings.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
                                 <ListView
@@ -446,7 +446,7 @@
                             KeyboardNavigation.TabIndex="8"
                             SelectedItem="{Binding StartingPoint.Terminal, Mode=TwoWay}"
                             Style="{StaticResource UNTraceTaggedComboBox}"
-                            Tag="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=TerminalPickerLabel, Mode=OneTime}"
+                            Tag="Terminal"
                             Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -534,7 +534,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <TabControl x:Name="PART_TabsControl" Style="{StaticResource UNTraceTabControl}">
-                                <TabItem Header="{TemplateBinding NewTraceLabel}">
+                                <TabItem Header="New trace">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
@@ -543,39 +543,26 @@
                                         </Grid.RowDefinitions>
                                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                                             <StackPanel Background="{StaticResource UNTraceBackground0}">
-                                                <GroupBox
-                                                    Header="{TemplateBinding UtilityNetworksSectionHeaderLabel}"
-                                                    Style="{StaticResource UNTraceGroupBox}"
-                                                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=UtilityNetworks.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='multiple'}">
-                                                    <ComboBox
-                                                        ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
+                                                <GroupBox x:Name="PART_UtilityNetworkSelectorContainer"
+                                                    Header="Utility networks"
+                                                    Style="{StaticResource UNTraceGroupBox}">
+                                                    <ComboBox x:Name="PART_UtilityNetworkSelector"
                                                         ItemTemplate="{TemplateBinding UtilityNetworkItemTemplate}"
-                                                        ItemsSource="{TemplateBinding UtilityNetworks}"
-                                                        SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedUtilityNetwork, Mode=TwoWay}"
                                                         Style="{StaticResource UNTraceComboBox}" />
                                                 </GroupBox>
-                                                <GroupBox
-                                                    Header="{TemplateBinding TraceConfigurationSectionHeaderLabel}"
-                                                    Style="{StaticResource UNTraceGroupBox}"
-                                                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=NamedTraceConfigurations.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
-                                                    <ComboBox
-                                                        ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
+                                                <GroupBox x:Name="PART_TraceConfigurationsContainer"
+                                                    Header="Trace configurations"
+                                                    Style="{StaticResource UNTraceGroupBox}">
+                                                    <ComboBox x:Name="PART_TraceConfigurationsSelector"
                                                         ItemTemplate="{TemplateBinding TraceTypeItemTemplate}"
-                                                        ItemsSource="{TemplateBinding NamedTraceConfigurations}"
-                                                        SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedTraceConfiguration, Mode=TwoWay}"
                                                         Style="{StaticResource UNTraceComboBox}" />
                                                 </GroupBox>
-                                                <GroupBox
-                                                    Header="{TemplateBinding StartingPointSectionHeaderLabel}"
-                                                    Style="{StaticResource UNTraceGroupBox}"
-                                                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedTraceConfiguration, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter='notnull'}">
+                                                <GroupBox x:Name="PART_StartingPointsSectionContainer"
+                                                    Header="Starting points"
+                                                    Style="{StaticResource UNTraceGroupBox}">
                                                     <StackPanel Orientation="Vertical">
-                                                        <internal:StartingPointListView
-                                                            ItemTemplate="{TemplateBinding StartingPointItemTemplate}"
-                                                            ItemsSource="{TemplateBinding StartingPoints}"
-                                                            SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedStartingPoint, Mode=TwoWay}"
-                                                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=StartingPoints.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}"
-                                                            ZoomToCommand="{TemplateBinding ZoomToCommand}">
+                                                        <internal:StartingPointListView x:Name="PART_StartingPointsList"
+                                                            ItemTemplate="{TemplateBinding StartingPointItemTemplate}">
                                                             <internal:StartingPointListView.InspectorViewTemplate>
                                                                 <DataTemplate>
                                                                     <Border Background="Transparent">
@@ -615,7 +602,7 @@
                                                                             <GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
-                                                                                Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=TerminalPickerLabel, Mode=OneTime}"
+                                                                                Header="Terminal"
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
                                                                                 <ComboBox
@@ -627,7 +614,7 @@
                                                                             <GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
-                                                                                Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=InspectorFractionAlongLabel, Mode=OneTime}"
+                                                                                Header="Position along line"
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}">
                                                                                 <Slider Style="{StaticResource UNTraceSlider}" Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
@@ -635,7 +622,7 @@
                                                                             <GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
-                                                                                Header="{Binding RelativeSource={RelativeSource AncestorType=controls:UtilityNetworkTraceTool}, Path=InspectorPopupLabel, Mode=OneTime}"
+                                                                                Header="Asset details"
                                                                                 Style="{StaticResource UNTraceGroupBox}">
                                                                                 <controls:PopupViewer PopupManager="{Binding PopupManager}">
                                                                                     <controls:PopupViewer.Template>
@@ -705,63 +692,54 @@
                                                                 </DataTemplate>
                                                             </internal:StartingPointListView.InspectorViewTemplate>
                                                         </internal:StartingPointListView>
-                                                        <TextBlock
+                                                        <TextBlock x:Name="PART_IsAddingStartingPointsIndicator"
                                                             Margin="2"
                                                             FontWeight="SemiBold"
-                                                            Text="{TemplateBinding AddStartingPointHelpTextLabel}"
-                                                            TextAlignment="Center"
-                                                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsAddingStartingPoints, Converter={StaticResource VisibilityConverter}}" />
-                                                        <UniformGrid
+                                                            Text="Click on the map to identify starting points."
+                                                            TextAlignment="Center" />
+                                                        <UniformGrid x:Name="PART_AddRemoveStartingPointButtonsContainer"
                                                             Margin="0,4,0,0"
-                                                            Rows="1"
-                                                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsAddingStartingPoints, Converter={StaticResource VisibilityConverter}, ConverterParameter='Reverse'}">
-                                                            <Button
+                                                            Rows="1">
+                                                            <Button x:Name="PART_ResetStartingPointsButton"
                                                                 Margin="0,0,4,0"
-                                                                Command="{TemplateBinding ResetStartingPointsCommand}"
-                                                                Style="{StaticResource UNTraceSecondaryButton}"
-                                                                Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=StartingPoints.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
+                                                                Style="{StaticResource UNTraceSecondaryButton}">
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <Path Data="{StaticResource UNTraceIconReset}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-                                                                    <TextBlock Margin="0,0,4,0" Text="{TemplateBinding RemoveAllStartingPointsButtonLabel}" />
+                                                                    <TextBlock Margin="0,0,4,0" Text="Remove all" />
                                                                 </StackPanel>
                                                             </Button>
-                                                            <Button
+                                                            <Button x:Name="PART_AddStartingPointsButton"
                                                                 Grid.Column="1"
                                                                 Margin="0"
-                                                                Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SetIsAddingStartingPointsCommand}"
-                                                                CommandParameter="True"
                                                                 Style="{StaticResource UNTracePrimaryButton}">
                                                                 <StackPanel Orientation="Horizontal">
                                                                     <Path Data="{StaticResource UNTraceIconPlus}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-                                                                    <TextBlock Text="{TemplateBinding AddStartingPointButtonLabel}" />
+                                                                    <TextBlock Text="Add starting point" />
                                                                 </StackPanel>
                                                             </Button>
                                                         </UniformGrid>
 
-                                                        <Button
+                                                        <Button x:Name="PART_CancelAddStartingPointsButton"
                                                             Margin="4"
-                                                            Command="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SetIsAddingStartingPointsCommand}"
-                                                            CommandParameter="False"
-                                                            Content="{TemplateBinding CancelButtonLabel}"
-                                                            Style="{StaticResource UNTracePrimaryButton}"
-                                                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsAddingStartingPoints, Converter={StaticResource VisibilityConverter}}" />
+                                                            Content="Cancel"
+                                                            Style="{StaticResource UNTracePrimaryButton}" />
                                                     </StackPanel>
                                                 </GroupBox>
-                                                <Expander Header="{TemplateBinding AdvancedOptionsSectionHeaderLabel}" Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedTraceConfiguration, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter='notnull'}">
+                                                <Expander x:Name="PART_AdvancedOptionsContainer" Header="Advanced options">
                                                     <StackPanel Margin="8">
                                                         <CheckBox
                                                             Margin="0,0,0,8"
-                                                            Content="{TemplateBinding ZoomToResultSettingLabel}"
+                                                            Content="Zoom to result"
                                                             IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AutoZoomToTraceResults, Mode=TwoWay}" />
-                                                        <GroupBox Header="{TemplateBinding ResultNameLabel}" Style="{StaticResource UNTraceLabelingGroupBox}">
-                                                            <TextBox Style="{StaticResource UNTraceTextBox}" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TraceInProgressName, Mode=TwoWay}" />
+                                                        <GroupBox Header="Result name (optional)" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                                            <TextBox x:Name="PART_ResultNameTextBox" Style="{StaticResource UNTraceTextBox}" />
                                                         </GroupBox>
                                                         <GroupBox
                                                             Margin="0,8,0,0"
-                                                            Header="{TemplateBinding ResultVisualizationColorLabel}"
+                                                            Header="Result visualization color"
                                                             Style="{StaticResource UNTraceLabelingGroupBox}">
                                                             <StackPanel>
-                                                                <internal:ToolkitColorPalette SelectedColor="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultVisualizationColor, Mode=TwoWay}" />
+                                                                <internal:ToolkitColorPalette x:Name="PART_ResultColorPalette" />
                                                                 <Grid Margin="0,8,0,0">
                                                                     <Grid.ColumnDefinitions>
                                                                         <ColumnDefinition Width="*" />
@@ -770,7 +748,7 @@
                                                                     <TextBlock
                                                                         HorizontalAlignment="Right"
                                                                         FontWeight="SemiBold"
-                                                                        Text="{TemplateBinding PreviewLabel}" />
+                                                                        Text="Preview:" />
                                                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                                                         <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultPointSymbol}" />
                                                                         <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultLineSymbol}" />
@@ -781,76 +759,69 @@
                                                         </GroupBox>
                                                     </StackPanel>
                                                 </Expander>
-                                                <StackPanel
+                                                <StackPanel x:Name="PART_NoNamedTraceConfigurationsWarningContainer"
                                                     MaxWidth="240"
                                                     Margin="8"
                                                     VerticalAlignment="Center"
-                                                    Orientation="Vertical"
-                                                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=NamedTraceConfigurations.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='none'}">
+                                                    Orientation="Vertical">
                                                     <Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
                                                     <TextBlock
                                                         Margin="0,4,0,0"
                                                         HorizontalAlignment="Center"
                                                         FontWeight="SemiBold"
-                                                        Text="{TemplateBinding NoTraceConfigurationsFoundLabel}"
+                                                        Text="No named trace configurations found for the selected utility network."
                                                         TextAlignment="Center"
                                                         TextWrapping="Wrap" />
                                                 </StackPanel>
                                             </StackPanel>
-                                        </ScrollViewer>
+                                        </ScrollViewer> 
                                         <Grid Grid.Row="1" Background="{StaticResource UNTraceBackground0}">
-                                            <Border
+                                            <Border x:Name="PART_NeedMoreStartingPointsWarningContainer"
                                                 Grid.Row="1"
-                                                Style="{StaticResource UNTraceFloatingWarningBorderStyle}"
-                                                Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=HasInsufficientStartingPointsWarning, Converter={StaticResource VisibilityConverter}}">
+                                                Style="{StaticResource UNTraceFloatingWarningBorderStyle}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="40" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <Path Style="{StaticResource UNTraceIcon32Warning}" />
-                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding InsufficientStartingPointsWarningLabel}" />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="The selected trace configuration requires additional starting points." />
                                                 </Grid>
                                             </Border>
-                                            <Border
+                                            <Border x:Name="PART_DuplicateTraceWarningContainer"
                                                 Grid.Row="1"
-                                                Style="{StaticResource UNTraceFloatingWarningBorderStyle}"
-                                                Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ConfigurationDuplicatesExistingResultWarning, Converter={StaticResource VisibilityConverter}}">
+                                                Style="{StaticResource UNTraceFloatingWarningBorderStyle}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="40" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <Path Style="{StaticResource UNTraceIcon32Warning}" />
-                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding DuplicateTraceWarningLabel}" />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="The selected trace configuration has already been run with the selected starting points." />
                                                 </Grid>
                                             </Border>
-                                            <Border
+                                            <Border x:Name="PART_ExtraStartingPointsWarningContainer"
                                                 Grid.Row="1"
                                                 BorderBrush="{StaticResource UNTraceTintNormal}"
-                                                Style="{StaticResource UNTraceFloatingWarningBorderStyle}"
-                                                Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=HasUnnecessaryStartingPointsWarning, Converter={StaticResource VisibilityConverter}}">
+                                                Style="{StaticResource UNTraceFloatingWarningBorderStyle}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="40" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <Path Data="{StaticResource UNTraceIconAlertInfo}" Style="{StaticResource UNTraceIcon32Info}" />
-                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{TemplateBinding ExcessStartingPointsWarningLabel}" />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="There are more starting points than required for the selected trace configuration." />
                                                 </Grid>
                                             </Border>
                                         </Grid>
-                                        <Button
+                                        <Button x:Name="PART_RunTraceButton"
                                             Grid.Row="2"
                                             Margin="4"
-                                            Command="{TemplateBinding RunTraceCommand}"
                                             Content="Run trace"
-                                            IsEnabled="{TemplateBinding IsReadyToTrace}"
                                             Style="{StaticResource UNTracePrimaryButton}" />
-                                        <Grid
+                                        <Grid x:Name="PART_TraceInProgressIndicator"
                                             Grid.RowSpan="3"
-                                            Background="{StaticResource UNTraceBackground0}"
-                                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsTraceInProgress, Converter={StaticResource VisibilityConverter}}">
+                                            Background="{StaticResource UNTraceBackground0}">
                                             <StackPanel
                                                 MaxWidth="120"
                                                 VerticalAlignment="Center"
@@ -860,16 +831,14 @@
                                                     Text="Running trace..."
                                                     TextAlignment="Center" />
                                                 <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
-                                                <Button
-                                                    Command="{TemplateBinding CancelOperationCommand}"
+                                                <Button x:Name="PART_CancelTraceButton"
                                                     Content="Cancel"
                                                     Style="{StaticResource UNTracePrimaryButton}" />
                                             </StackPanel>
                                         </Grid>
-                                        <Grid
+                                        <Grid x:Name="PART_IdentifyInProgressIndicator"
                                             Grid.RowSpan="3"
-                                            Background="{StaticResource UNTraceBackground0}"
-                                            Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsIdentifyingStartingPoints, Converter={StaticResource VisibilityConverter}}">
+                                            Background="{StaticResource UNTraceBackground0}">
                                             <StackPanel
                                                 MaxWidth="120"
                                                 VerticalAlignment="Center"
@@ -880,15 +849,14 @@
                                                     TextAlignment="Center"
                                                     TextWrapping="Wrap" />
                                                 <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
-                                                <Button
-                                                    Command="{TemplateBinding CancelOperationCommand}"
+                                                <Button x:Name="PART_CancelIdentifyButton"
                                                     Content="Cancel"
                                                     Style="{StaticResource UNTracePrimaryButton}" />
                                             </StackPanel>
                                         </Grid>
                                     </Grid>
                                 </TabItem>
-                                <TabItem Header="{TemplateBinding ResultsTabLabel}" Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=OneWay, Path=TraceResults.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
+                                <TabItem x:Name="PART_ResultsTabItem" Header="Results">
                                     <Grid Background="{StaticResource UNTraceBackground0}">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
@@ -897,19 +865,16 @@
                                         </Grid.RowDefinitions>
 
                                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                            <TabControl
+                                            <TabControl x:Name="PART_ResultsItemControl"
                                                 ContentTemplate="{TemplateBinding ResultItemTemplate}"
                                                 DisplayMemberPath="Name"
-                                                ItemsSource="{TemplateBinding TraceResults}"
-                                                SelectedItem="{TemplateBinding SelectedResult}"
                                                 Style="{StaticResource UNTraceHighCapacityTabControl}" />
                                         </ScrollViewer>
 
-                                        <Button
+                                        <Button x:Name="PART_DeleteAllResultsButton"
                                             Grid.Row="2"
                                             Margin="4"
-                                            Command="{TemplateBinding DeleteResultCommand}"
-                                            Content="{TemplateBinding ClearAllLabel}"
+                                            Content="Clear results"
                                             Style="{StaticResource UNTracePrimaryButton}" />
                                     </Grid>
                                 </TabItem>
@@ -924,7 +889,7 @@
                                         Margin="4"
                                         HorizontalAlignment="Center"
                                         FontWeight="SemiBold"
-                                        Text="{TemplateBinding NoNetworksFoundLabel}"
+                                        Text="No utility networks found."
                                         TextAlignment="Center"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
@@ -936,7 +901,7 @@
                                     Orientation="Vertical">
                                     <TextBlock
                                         HorizontalAlignment="Center"
-                                        Text="{TemplateBinding LoadingLabel}"
+                                        Text="Loading..."
                                         TextAlignment="Center" />
                                     <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
                                 </StackPanel>
@@ -947,42 +912,5 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Focusable" Value="False" />
-        <Setter Property="AddStartingPointHelpTextLabel" Value="Click on the map to identify starting points." />
-        <Setter Property="LoadingLabel" Value="Loading..." />
-        <Setter Property="NoNetworksFoundLabel" Value="No utility networks found." />
-        <Setter Property="ClearAllLabel" Value="Clear results" />
-        <Setter Property="ResultsTabLabel" Value="Results" />
-        <Setter Property="ExcessStartingPointsWarningLabel" Value="There are more starting points than required for the selected trace configuration." />
-        <Setter Property="DuplicateTraceWarningLabel" Value="The selected trace configuration has already been run with the selected starting points." />
-        <Setter Property="InsufficientStartingPointsWarningLabel" Value="The selected trace configuration requires additional starting points." />
-        <Setter Property="NoTraceConfigurationsFoundLabel" Value="No named trace configurations found for the selected utility network." />
-        <Setter Property="AdvancedOptionsSectionHeaderLabel" Value="Advanced options" />
-        <Setter Property="PreviewLabel" Value="Preview:" />
-        <Setter Property="ZoomToResultSettingLabel" Value="Zoom to result" />
-        <Setter Property="ResultVisualizationColorLabel" Value="Result visualization color" />
-        <Setter Property="ResultNameLabel" Value="Result name (optional)" />
-        <Setter Property="CancelButtonLabel" Value="Cancel" />
-        <Setter Property="AddStartingPointButtonLabel" Value="Add starting point" />
-        <Setter Property="RemoveAllStartingPointsButtonLabel" Value="Remove all" />
-        <Setter Property="StartingPointSectionHeaderLabel" Value="Starting points" />
-        <Setter Property="TraceConfigurationSectionHeaderLabel" Value="Trace configurations" />
-        <Setter Property="UtilityNetworksSectionHeaderLabel" Value="Utility networks" />
-        <Setter Property="NewTraceLabel" Value="New trace" />
-        <Setter Property="ZoomToLabel" Value="Zoom to" />
-        <Setter Property="DiscardResultLabel" Value="Discard" />
-        <Setter Property="VisualizationOptionsSectionHeaderLabel" Value="Visualization options" />
-        <Setter Property="ResultsWarningsSectionHeaderLabel" Value="Warnings" />
-        <Setter Property="TraceConfigurationDetailsSectionHeaderLabel" Value="Trace configuration details" />
-        <Setter Property="ResultsShowGraphicsCheckboxLabel" Value="Show graphics on map" />
-        <Setter Property="ResultDetailsSectionDescriptionLabel" Value="Description" />
-        <Setter Property="ResultDetailsSectionCreatorLabel" Value="Creator" />
-        <Setter Property="ResultDetailsSectionTagsLabel" Value="Tags" />
-        <Setter Property="FeatureResultsSectionHeaderLabel" Value="Feature results" />
-        <Setter Property="ResultsSelectFeaturesCheckboxLabel" Value="Select features on map" />
-        <Setter Property="FunctionResultsSectionHeaderLabel" Value="Function results" />
-        <Setter Property="NoResultsFoundLabel" Value="No results found." />
-        <Setter Property="TerminalPickerLabel" Value="Terminal" />
-        <Setter Property="InspectorFractionAlongLabel" Value="Position along line" />
-        <Setter Property="InspectorPopupLabel" Value="Asset details" />
     </Style>
 </ResourceDictionary>

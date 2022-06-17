@@ -30,8 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Models a starting point used for a utility network trace.
     /// </summary>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public class StartingPointModel : IEquatable<StartingPointModel>
+    internal class StartingPointModel : IEquatable<StartingPointModel>
     {
         internal StartingPointModel(UtilityElement element, Graphic selectionGraphic, Feature feature, Envelope? zoomToExtent)
         {

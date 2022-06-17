@@ -20,9 +20,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Esri.ArcGISRuntime.Data;
+using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
@@ -31,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Encapsulates a utility network trace operation, with all parameters and results, packaged for convenient use in a UI.
     /// </summary>
-    public class UtilityTraceOperationResult : INotifyPropertyChanged
+    internal class UtilityTraceOperationResult : INotifyPropertyChanged
     {
         private bool _areFeaturesSelected = true;
         private bool _areGraphicsShown;
@@ -105,15 +108,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public Exception? Error { get; set; }
 
+        internal UtilityNetworkTraceToolController _controller;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UtilityTraceOperationResult"/> class.
         /// </summary>
-        public UtilityTraceOperationResult(UtilityNamedTraceConfiguration configuration, UtilityTraceParameters parameters, IList<StartingPointModel> startingPoints)
+        internal UtilityTraceOperationResult(UtilityNetworkTraceToolController controller, UtilityNamedTraceConfiguration configuration, UtilityTraceParameters parameters, IList<StartingPointModel> startingPoints)
         {
+            _controller = controller;
             Configuration = configuration;
             Parameters = parameters;
             StartingPoints = startingPoints;
             AreGraphicsShown = true;
+            ZoomToCommand = new DelegateCommand(HandleZoomToResultCommand);
+            DeleteCommand = new DelegateCommand(HandleDeleteCommand);
         }
 
         /// <summary>
@@ -239,6 +247,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     AreFeaturesSelected = AreGraphicsShown = value.Value;
                     OnPropertyChanged();
+                }
+            }
+        }
+
+        public ICommand ZoomToCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
+        private void HandleDeleteCommand(object? parameter)
+        {
+            _controller.Results.Remove(this);
+        }
+
+        private void HandleZoomToResultCommand(object? parameter)
+        {
+            if (parameter is UtilityTraceOperationResult targetResult)
+            {
+                var graphicsExtent = targetResult.ResultOverlay.Extent;
+                var featureExtent = (targetResult.Features?.Any() ?? false) ? GeometryEngine.CombineExtents(targetResult.Features.Select(m => m.Geometry).OfType<Geometry.Geometry>()) : null;
+                if (targetResult.ResultOverlay.Graphics.Any() && featureExtent != null && graphicsExtent != null && !graphicsExtent.IsEmpty)
+                {
+                    _controller.RequestedViewpoint = new Viewpoint(GeometryEngine.CombineExtents(graphicsExtent, featureExtent));
+                }
+                else if (featureExtent != null)
+                {
+                    _controller.RequestedViewpoint = new Viewpoint(featureExtent);
+                }
+                else if (targetResult.ResultOverlay.Graphics.Any() && graphicsExtent != null && !graphicsExtent.IsEmpty)
+                {
+                    _controller.RequestedViewpoint = new Viewpoint(graphicsExtent);
                 }
             }
         }

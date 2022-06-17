@@ -574,7 +574,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             var traceParameters = new UtilityTraceParameters(SelectedTraceType, StartingPoints.Select(sp => sp.StartingPoint));
 
-            UtilityTraceOperationResult resultInProgress = new UtilityTraceOperationResult(SelectedTraceType, traceParameters, StartingPoints.ToList()) { GraphicVisualizationColor = ResultColor };
+            UtilityTraceOperationResult resultInProgress = new UtilityTraceOperationResult(this, SelectedTraceType, traceParameters, StartingPoints.ToList()) { GraphicVisualizationColor = ResultColor };
 
             try
             {
