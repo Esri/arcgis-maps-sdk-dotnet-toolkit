@@ -71,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets the graphics overlay for visualizing graphics results. This will be populated with the graphics in <see cref="Graphics"/> by default.
         /// </summary>
-        public GraphicsOverlay ResultOverlay { get; } = new GraphicsOverlay();
+        public GraphicsOverlay ResultOverlay { get; } = new GraphicsOverlay() { Opacity = 0.5 };
 
         /// <summary>
         /// Gets the utility element results, if any, grouped by asset group.
