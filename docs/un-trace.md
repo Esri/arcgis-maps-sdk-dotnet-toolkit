@@ -8,7 +8,6 @@ Use named trace configurations defined in a web map to perform connected trace o
 
 - Load networks and named trace configurations from a web map
 - Support for templating
-- Support for localizing all strings in the default template
 - Identify starting point candidates, then use the inspection view to narrow the selection:
 
     <img width="400" src="https://user-images.githubusercontent.com/29742178/173909691-57d8310d-264f-41dc-9cdd-6bd6f0495fd2.png">
