@@ -22,15 +22,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Symbology;
-using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-using Esri.ArcGISRuntime.UtilityNetworks;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -39,8 +35,8 @@ using Windows.UI.Xaml.Controls;
 using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
 #else
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -90,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Adds a starting point, which will be transformed into a <see cref="StartingPointModel"/> and added to <see cref="StartingPoints"/>.
+        /// Adds a starting point.
         /// </summary>
         /// <param name="feature">The feature to use as the basis for the starting point.</param>
         /// <param name="location">Optional location to use, which will be used to specify the location along the line for line features.</param>
@@ -568,6 +564,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         #endregion Convenience Properties
 
         #region Dependency Properties
+
         /// <summary>
         /// Identifies the <see cref="GeoView"/> dependency property.
         /// </summary>

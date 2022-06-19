@@ -16,7 +16,6 @@
 
 #if !__IOS__ && !__ANDROID__
 using System;
-using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;

@@ -108,7 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         public Exception? Error { get; set; }
 
-        internal UtilityNetworkTraceToolController _controller;
+        private UtilityNetworkTraceToolController _controller;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UtilityTraceOperationResult"/> class.
@@ -252,7 +252,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
 
         public ICommand ZoomToCommand { get; set; }
+
         public ICommand DeleteCommand { get; set; }
+
         private void HandleDeleteCommand(object? parameter)
         {
             _controller.Results.Remove(this);

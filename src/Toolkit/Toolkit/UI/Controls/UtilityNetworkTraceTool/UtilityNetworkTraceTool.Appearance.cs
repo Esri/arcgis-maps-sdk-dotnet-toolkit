@@ -15,12 +15,10 @@
 //  ******************************************************************************/
 
 #if !__IOS__ && !__ANDROID__
-using System.Collections.Generic;
-using System.Linq;
-using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.UtilityNetworks;
-using Esri.ArcGISRuntime.Toolkit.Internal;
 using System;
+using System.Linq;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.UtilityNetworks;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,7 +28,6 @@ using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using ToggleButton = System.Windows.Controls.Primitives.ToggleButton;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

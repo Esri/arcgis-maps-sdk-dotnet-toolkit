@@ -68,7 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static readonly DependencyProperty SelectedColorProperty =
             DependencyProperty.Register(nameof(SelectedColor), typeof(System.Drawing.Color), typeof(ToolkitColorPalette), new PropertyMetadata(System.Drawing.Color.Black, OnSelectionChanged));
 
-
         private static void OnSelectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             (sender as ToolkitColorPalette)?.SelectionChanged?.Invoke(sender, EventArgs.Empty);
