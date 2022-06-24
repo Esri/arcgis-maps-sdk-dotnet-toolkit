@@ -217,7 +217,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _part_startingPointsList?.SetValue(ListView.SelectedItemProperty, _controller.SelectedStartingPoint);
                     break;
                 case nameof(_controller.TraceName):
-                    _part_resultNamedTextBox?.SetValue(TextBox.TextProperty, _controller.TraceName);
+                    _part_resultNamedTextBox?.SetValue(TextBox.TextProperty, _controller.TraceName ?? "");
                     break;
                 case nameof(_controller.IsRunningTrace):
                     _part_traceInProgressIndicator?.SetValue(VisibilityProperty, _controller.IsRunningTrace ? Visibility.Visible : Visibility.Collapsed);

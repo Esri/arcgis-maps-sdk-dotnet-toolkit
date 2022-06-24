@@ -13,13 +13,18 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-#if WINDOWS && !WINDOWS_UWP
+#if WINDOWS
 using System.Collections;
 using System.Collections.Specialized;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#if WINDOWS_UWP
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
+#else
+using System.Windows.Controls;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -51,7 +56,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             SelectPreviousItemCommand = new DelegateCommand(obj => SelectPreviousItem());
             DeleteSelectedCommand = new DelegateCommand(obj => DeleteSelected(obj));
             UpdateState();
+            #if WINDOWS_UWP
+            SelectionChanged += StartingPointListView_SelectionChanged;
+            #endif
         }
+
+        #if WINDOWS_UWP
+        private void StartingPointListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            HandleExternalSelectionChange(e);
+        }
+        #endif
 
 #if WINDOWS_UWP
         protected override void OnApplyTemplate()
@@ -68,12 +83,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
+        #if !WINDOWS_UWP
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnItemsChanged(e);
 
             UpdateState();
         }
+        #endif
 
         private void InnerListView_HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -103,10 +120,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
+        #if !WINDOWS_UWP
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
+            HandleExternalSelectionChange(e);
+        }
+        #endif
 
+        private void HandleExternalSelectionChange(SelectionChangedEventArgs e)
+        {
             // Keep internal list view selection in sync with selection.
             if (_innerListView?.SelectedItems is IList selectedItems)
             {

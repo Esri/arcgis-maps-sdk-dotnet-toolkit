@@ -14,37 +14,51 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WINDOWS && !WINDOWS_UWP
+#if WINDOWS
+
 using System;
+using System.Collections;
+using System.Globalization;
+#if NETFX_CORE
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+using MediaColor = Windows.UI.Color;
+#else
+using MediaColor = System.Windows.Media.Color;
 using System.Windows;
 using System.Windows.Data;
-using Culture = System.Globalization.CultureInfo;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     internal class ColorToColorConverter : IValueConverter
     {
-        public object? Convert(object value, Type targetType, object parameter, Culture culture)
-        {
-            if (value is System.Windows.Media.Color mediaColor)
+        object IValueConverter.Convert(object? value, Type targetType, object? parameter,
+#if NETFX_CORE
+            string language)
+#else
+            CultureInfo culture)
+#endif
+    {
+            if (value is MediaColor mediaColor)
             {
                 return System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
             }
             else if (value is System.Drawing.Color drawingColor)
             {
-                return System.Windows.Media.Color.FromArgb(drawingColor.A, drawingColor.R, drawingColor.G, drawingColor.B);
+                return MediaColor.FromArgb(drawingColor.A, drawingColor.R, drawingColor.G, drawingColor.B);
             }
             return null;
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, Culture culture)
+        /// <inheritdoc />
+        object IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
+#if NETFX_CORE
+            string language)
+#else
+            CultureInfo culture)
+#endif
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

@@ -195,7 +195,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_ResultNameTextBox") is TextBox resultNameTextBox)
             {
                 _part_resultNamedTextBox = resultNameTextBox;
-                _part_resultNamedTextBox.Text = _controller.TraceName;
+                _part_resultNamedTextBox.Text = _controller.TraceName ?? "";
                 _part_resultNamedTextBox.TextChanged += Part_resultNamedTextBox_TextChanged;
             }
 
