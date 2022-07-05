@@ -39,8 +39,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public ToolkitColorPalette()
         {
-            DefaultStyleKey = typeof(ToolkitColorPalette);
+        #if WINDOWS_UWP
             SelectedColor = System.Drawing.Color.Black;
+        #endif
             AvailableColors = new ObservableCollection<System.Drawing.Color>(new[]
             {
                 System.Drawing.Color.Red,
@@ -52,6 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 System.Drawing.Color.HotPink,
                 System.Drawing.Color.Black,
             });
+            DefaultStyleKey = typeof(ToolkitColorPalette);
         }
 
         /// <summary>
