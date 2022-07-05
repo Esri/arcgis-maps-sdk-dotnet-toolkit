@@ -40,6 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public ToolkitColorPalette()
         {
             DefaultStyleKey = typeof(ToolkitColorPalette);
+            SelectedColor = System.Drawing.Color.Black;
             AvailableColors = new ObservableCollection<System.Drawing.Color>(new[]
             {
                 System.Drawing.Color.Red,
@@ -56,11 +57,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <summary>
         /// Gets or sets the selected color.
         /// </summary>
+        #if WINDOWS_UWP
+        public System.Drawing.Color SelectedColor
+        {
+            get
+            {
+                var value = GetValue(SelectedColorProperty);
+                if (value == null)
+                {
+                    return System.Drawing.Color.Black;
+                }
+                else
+                {
+                    return (System.Drawing.Color)value;
+                }
+            }
+            set => SetValue(SelectedColorProperty, value);
+        }
+        #else
         public System.Drawing.Color SelectedColor
         {
             get => (System.Drawing.Color)GetValue(SelectedColorProperty);
             set => SetValue(SelectedColorProperty, value);
         }
+        #endif
 
         /// <summary>
         /// Identifies the <see cref="SelectedColor"/> dependency property.

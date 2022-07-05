@@ -126,9 +126,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 _resultOverlays = new List<GraphicsOverlay>();
-                #if !WINDOWS_UWP
+#if !WINDOWS_UWP
                 _tabControl?.SetValue(TabControl.SelectedIndexProperty, 0);
-                #endif
+#else
+                _pivotControl?.SetValue(Pivot.SelectedIndexProperty, 0);
+#endif
 
                 if (e.OldItems != null)
                 {
@@ -171,9 +173,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             _part_resultsTabItem?.SetValue(VisibilityProperty, _controller.Results.Any() ? Visibility.Visible : Visibility.Collapsed);
-            #if !WINDOWS_UWP
+#if !WINDOWS_UWP
             _tabControl?.SetValue(TabControl.SelectedIndexProperty, _controller.Results.Any() ? 1 : 0);
-            #endif
+#else
+            _pivotControl?.SetValue(Pivot.SelectedIndexProperty, _controller.Results.Any() ? 1 : 0);
+#endif
 
             if (e.NewItems != null && e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count == 1 && _part_resultsItemControl is Selector resultSelectionControl)
             {

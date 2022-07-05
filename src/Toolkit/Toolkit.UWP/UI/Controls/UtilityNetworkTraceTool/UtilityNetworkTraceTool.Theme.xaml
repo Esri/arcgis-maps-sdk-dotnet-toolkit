@@ -5,7 +5,8 @@
     xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:localPrimitives="using:Esri.ArcGISRuntime.Toolkit.Primitives">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="./UNVisualResources.xaml" />
+        <ResourceDictionary Source="UNVisualResources.xaml" />
+        <!--<ResourceDictionary Source="StartingPointListView.Theme.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 
     <internal:VisibilityConverter x:Key="VisibilityConverter" />
@@ -64,6 +65,7 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ListViewItem">
+                    <Setter Property="MinWidth" Value="0" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListViewItem">
@@ -72,7 +74,6 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-
             </Setter.Value>
         </Setter>
     </Style>
@@ -82,17 +83,16 @@
         TargetType="ListView">
         <Setter Property="ItemTemplate">
             <Setter.Value>
-
                 <DataTemplate>
                     <Border
-                        Margin="0,0,8,0"
-                        Padding="8,4,8,4"
+                        Margin="0,8,8,0"
+                        Padding="4,0,4,0"
                         HorizontalAlignment="Left"
                         Background="{StaticResource UNTraceBackground3}"
                         CornerRadius="12">
                         <TextBlock
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource UNTraceForeground0}"
+                            Style="{StaticResource UNTraceBasicText}"
                             Text="{Binding}" />
                     </Border>
                 </DataTemplate>
@@ -101,7 +101,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
+                    <ItemsWrapGrid />
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
@@ -109,7 +109,7 @@
     <Style x:Key="UNTraceFloatingWarningBorderStyle" TargetType="Border">
         <Setter Property="Margin" Value="4" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
+        <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource UNTraceWarningNormal}" />
         <Setter Property="BorderThickness" Value="0,2,0,0" />
         <Setter Property="CornerRadius" Value="4" />
@@ -126,14 +126,17 @@
         <Setter Property="UtilityNetworkItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" />
+                    <TextBlock
+                        Style="{StaticResource UNTraceBasicText}"
+                        Text="{Binding Name}"
+                        TextWrapping="NoWrap" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="TraceTypeItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                    <TextBlock Style="{StaticResource UNTraceBasicText}" Text="{Binding Name}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -148,40 +151,30 @@
                         </Grid.RowDefinitions>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <CheckBox
                                 Margin="8,0,0,0"
-                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 IsChecked="{Binding VisualizationState, Mode=TwoWay}"
-                                Style="{StaticResource UNTraceCheckBoxEye}" />
-							<Grid
+                                Style="{StaticResource UNTraceCheckBox}" />
+                            <Button
                                 Grid.Column="1"
-                                Margin="4,8,4,8">
-								<Button
-                                    Margin="4,0,0,0"
-                                    Command="{Binding ZoomToCommand}"
-                                    CommandParameter="{Binding}"
-                                    Style="{StaticResource UNTraceSecondaryButton}"
-                                    Visibility="{Binding HasAnyResults, Converter={StaticResource VisibilityConverter}}">
-									<StackPanel Orientation="Horizontal">
-										<Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-										<TextBlock VerticalAlignment="Center" Text="Zoom to" />
-									</StackPanel>
-								</Button>
-								<Button
-                                    Margin="4,0,4,0"
-                                    Command="{Binding DeleteCommand}"
-                                    CommandParameter="{Binding}"
-                                    Style="{StaticResource UNTraceSecondaryButton}">
-									<StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-										<Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-										<TextBlock VerticalAlignment="Center" Text="Discard" />
-									</StackPanel>
-								</Button>
-							</Grid>
+                                Margin="4,0,0,0"
+                                Command="{Binding ZoomToCommand}"
+                                CommandParameter="{Binding}"
+                                Content="Zoom to"
+                                Style="{StaticResource UNTraceSecondaryButton}"
+                                Visibility="{Binding HasAnyResults, Converter={StaticResource VisibilityConverter}}" />
+                            <Button
+                                Grid.Column="2"
+                                Margin="4,0,4,0"
+                                Command="{Binding DeleteCommand}"
+                                CommandParameter="{Binding}"
+                                Content="Discard"
+                                Style="{StaticResource UNTraceSecondaryButton}" />
                         </Grid>
                         <StackPanel Grid.Row="1" Orientation="Vertical">
                             <StackPanel
@@ -194,9 +187,9 @@
                                 <TextBlock
                                     Margin="4"
                                     HorizontalAlignment="Center"
+                                    Style="{StaticResource UNTraceBasicText}"
                                     Text="No results found."
-                                    TextAlignment="Center"
-                                    TextWrapping="Wrap" />
+                                    TextAlignment="Center" />
                             </StackPanel>
 
                             <internal:Expander
@@ -227,20 +220,19 @@
                                                         Grid.Row="1"
                                                         Grid.Column="0"
                                                         Margin="2"
-                                                        Text="{Binding Function.FunctionType, Mode=OneTime}"
-                                                        TextWrapping="Wrap" />
+                                                        Style="{StaticResource UNTraceBasicText}"
+                                                        Text="{Binding Function.FunctionType, Mode=OneTime}" />
                                                     <TextBlock
                                                         Margin="2"
-                                                        FontWeight="Bold"
-                                                        Text="{Binding Function.NetworkAttribute.Name}"
-                                                        TextWrapping="Wrap" />
+                                                        Style="{StaticResource UNTraceBoldText}"
+                                                        Text="{Binding Function.NetworkAttribute.Name}" />
                                                     <TextBlock
                                                         Grid.RowSpan="2"
                                                         Grid.Column="1"
                                                         Margin="2"
                                                         VerticalAlignment="Center"
-                                                        Text="{Binding Result}"
-                                                        TextWrapping="Wrap" />
+                                                        Style="{StaticResource UNTraceBasicText}"
+                                                        Text="{Binding Result}" />
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
@@ -256,7 +248,8 @@
                                     <CheckBox
                                         Margin="8"
                                         Content="Select features on map"
-                                        IsChecked="{Binding AreFeaturesSelected, Mode=TwoWay}" />
+                                        IsChecked="{Binding AreFeaturesSelected, Mode=TwoWay}"
+                                        Style="{StaticResource UNTraceCheckBox}" />
                                     <ListView
                                         Margin="8,0,8,8"
                                         BorderBrush="{StaticResource UNTraceBorder1}"
@@ -266,13 +259,16 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Border BorderBrush="{StaticResource UNTraceBorder1}" BorderThickness="0,0,0,1">
-                                                    <Grid Margin="4">
+                                                    <Grid Margin="8,0,0,0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*" />
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Key.Name, Mode=OneWay}" />
-                                                        <TextBlock Grid.Column="1" Text="{Binding Count, Mode=OneWay}" />
+                                                        <TextBlock Style="{StaticResource UNTraceBoldText}" Text="{Binding Key.Name, Mode=OneWay}" />
+                                                        <TextBlock
+                                                            Grid.Column="1"
+                                                            Style="{StaticResource UNTraceBasicText}"
+                                                            Text="{Binding Count, Mode=OneWay}" />
                                                     </Grid>
                                                 </Border>
                                             </DataTemplate>
@@ -288,7 +284,8 @@
                                     <CheckBox
                                         Margin="0,8,0,0"
                                         Content="Show graphics on map"
-                                        IsChecked="{Binding AreGraphicsShown, Mode=TwoWay}" />
+                                        IsChecked="{Binding AreGraphicsShown, Mode=TwoWay}"
+                                        Style="{StaticResource UNTraceCheckBox}" />
                                     <internal:ToolkitColorPalette Margin="0,8,0,0" SelectedColor="{Binding GraphicVisualizationColor, Mode=TwoWay}" />
                                     <Grid Margin="8">
                                         <Grid.ColumnDefinitions>
@@ -297,24 +294,31 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock
                                             HorizontalAlignment="Right"
-                                            FontWeight="SemiBold"
+                                            Style="{StaticResource UNTraceBoldText}"
                                             Text="Preview:" />
                                         <ListView
                                             Grid.Column="1"
                                             ItemsSource="{Binding Graphics}"
+                                            SelectionMode="None"
                                             Style="{StaticResource UNTraceUnstyledListView}">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="40" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <controls:SymbolDisplay Symbol="{Binding Symbol}" />
-                                                    </Grid>
+                                                    <controls:SymbolDisplay
+                                                        MaxWidth="40"
+                                                        Margin="0"
+                                                        Symbol="{Binding Symbol}" />
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="MinWidth" Value="0" />
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ListView.ItemsPanel>
                                         </ListView>
                                     </Grid>
                                 </StackPanel>
@@ -324,14 +328,14 @@
                                     <internal:GroupBox Header="Description" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <TextBlock
                                             Margin="8,0,8,0"
-                                            Text="{Binding Configuration.Description}"
-                                            TextWrapping="Wrap" />
+                                            Style="{StaticResource UNTraceBasicText}"
+                                            Text="{Binding Configuration.Description}" />
                                     </internal:GroupBox>
                                     <internal:GroupBox Header="Creator" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <TextBlock
                                             Margin="8,0,8,0"
-                                            Text="{Binding Configuration.Creator}"
-                                            TextWrapping="Wrap" />
+                                            Style="{StaticResource UNTraceBasicText}"
+                                            Text="{Binding Configuration.Creator}" />
                                     </internal:GroupBox>
                                     <internal:GroupBox Header="Tags" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <ListView
@@ -381,7 +385,7 @@
         <Setter Property="StartingPointItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Margin="0,4,0,4">
                         <Grid.Resources />
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -406,29 +410,26 @@
                         <TextBlock
                             Grid.Column="1"
                             Margin="2"
-                            Text="{Binding StartingPoint.NetworkSource.Name}"
-                            TextWrapping="Wrap" />
+                            Text="{Binding StartingPoint.NetworkSource.Name}" />
                         <TextBlock
                             Grid.Row="1"
                             Grid.Column="1"
                             Margin="2"
                             FontWeight="SemiBold"
-                            Foreground="Black"
-                            Text="{Binding StartingPoint.AssetGroup.Name}"
-                            TextWrapping="Wrap" />
+                            Text="{Binding StartingPoint.AssetGroup.Name}" />
                         <ComboBox
                             Grid.Row="2"
                             Grid.Column="0"
                             Grid.ColumnSpan="5"
+                            HorizontalAlignment="Stretch"
                             ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
                             ItemsSource="{Binding StartingPoint.AssetType.TerminalConfiguration.Terminals}"
                             SelectedItem="{Binding StartingPoint.Terminal, Mode=TwoWay}"
-                            Style="{StaticResource UNTraceTaggedComboBox}"
-                            Tag="Terminal"
+                            Style="{StaticResource UNTraceComboBox}"
                             Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                                    <TextBlock Style="{StaticResource UNTraceBasicText}" Text="{Binding Name}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -439,6 +440,9 @@
                             Grid.ColumnSpan="3"
                             Margin="2"
                             VerticalAlignment="Center"
+                            Maximum="1"
+                            Minimum="0"
+                            StepFrequency="0.05"
                             Style="{StaticResource UNTraceSlider}"
                             Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}"
                             Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
@@ -446,40 +450,12 @@
                             Grid.Row="2"
                             Grid.Column="3"
                             Grid.ColumnSpan="2"
-                            Foreground="Black"
-                            Margin="4,0,0,0"
-                            Style="{StaticResource UNTraceTextBoxCompact}"
+                            MinHeight="0"
+                            Padding="4"
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
                             Text="{Binding ElementName=FractionAlongSlider, Path=Value, Mode=TwoWay}"
                             Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}" />
-                        <Button
-                            Grid.RowSpan="2"
-                            Grid.Column="2"
-                            Margin="8,4,0,4"
-                            VerticalAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            CommandParameter="{Binding}"
-                            Style="{StaticResource UNTraceIconButton}">
-                            <Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTracePathCommandIconStyle}" />
-                        </Button>
-                        <Button
-                            Grid.RowSpan="2"
-                            Grid.Column="3"
-                            Margin="8,4,0,4"
-                            VerticalAlignment="Center"
-                            CommandParameter="{Binding}"
-                            Style="{StaticResource UNTraceIconButton}">
-                            <Path Data="{StaticResource UNTraceIconInspect}" Style="{StaticResource UNTracePathCommandIconStyle}" />
-                        </Button>
-                        <Button
-                            Grid.RowSpan="2"
-                            Grid.Column="4"
-                            Margin="8,4,0,4"
-                            VerticalAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            CommandParameter="{Binding}"
-                            Style="{StaticResource UNTraceIconButton}">
-                            <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTracePathCommandIconStyle}" />
-                        </Button>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -496,14 +472,26 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}">
-						<Border.Resources>
-                        <Style BasedOn="{StaticResource UNTraceExpander}" TargetType="internal:Expander" />
-                        <Style BasedOn="{StaticResource UNTraceCheckBox}" TargetType="CheckBox" />
-							
-						</Border.Resources>
+                        <Border.Resources>
+                            <Style BasedOn="{StaticResource UNTraceExpander}" TargetType="internal:Expander" />
+                        </Border.Resources>
                         <Grid>
-                            <Pivot x:Name="PART_TabsControl" >
-                                <PivotItem Header="New trace">
+                            <Pivot
+                                x:Name="PART_TabsControl"
+                                Padding="0"
+                                Background="{StaticResource UNTraceBackground1}">
+                                <Pivot.HeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            FontWeight="SemiBold"
+                                            Style="{StaticResource UNTraceBasicText}"
+                                            Text="{Binding}" />
+                                    </DataTemplate>
+                                </Pivot.HeaderTemplate>
+                                <PivotItem
+                                    Margin="0"
+                                    Background="{StaticResource UNTraceBackground0}"
+                                    Header="New trace">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
@@ -511,32 +499,65 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                                            <StackPanel Background="{StaticResource UNTraceBackground0}">
+                                            <StackPanel>
                                                 <internal:GroupBox
                                                     x:Name="PART_UtilityNetworkSelectorContainer"
                                                     Header="Utility networks"
                                                     Style="{StaticResource UNTraceGroupBox}">
-													<ComboBox
-                                                        x:Name="PART_UtilityNetworkSelector" />
+                                                    <ComboBox x:Name="PART_UtilityNetworkSelector" Style="{StaticResource UNTraceComboBox}" />
                                                 </internal:GroupBox>
                                                 <internal:GroupBox
                                                     x:Name="PART_TraceConfigurationsContainer"
                                                     Header="Trace configurations"
                                                     Style="{StaticResource UNTraceGroupBox}">
-													<ComboBox
+                                                    <ComboBox
                                                         x:Name="PART_TraceConfigurationsSelector"
-                                                        ItemTemplate="{TemplateBinding TraceTypeItemTemplate}" />
+                                                        HorizontalAlignment="Stretch"
+                                                        ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
+                                                        ItemTemplate="{TemplateBinding TraceTypeItemTemplate}"
+                                                        Style="{StaticResource UNTraceComboBox}" />
                                                 </internal:GroupBox>
                                                 <internal:GroupBox
                                                     x:Name="PART_StartingPointsSectionContainer"
+                                                    HorizontalAlignment="Stretch"
                                                     Header="Starting points"
                                                     Style="{StaticResource UNTraceGroupBox}">
                                                     <StackPanel Orientation="Vertical">
+                                                        <Grid
+                                                            Margin="0,0,0,8"
+                                                            ColumnSpacing="8"
+                                                            Visibility="{Binding ElementName=PART_StartingPointsList, Path=SelectedItem, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter='notnull'}">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Button
+                                                                HorizontalAlignment="Stretch"
+                                                                Command="{Binding ElementName=PART_StartingPointsList, Path=ZoomToCommand, Mode=OneWay}"
+                                                                CommandParameter="{Binding ElementName=PART_StartingPointsList, Path=SelectedItem, Mode=OneWay}"
+                                                                Content="Zoom"
+                                                                Style="{StaticResource UNTraceSecondaryButton}" />
+                                                            <Button
+                                                                Grid.Column="1"
+                                                                HorizontalAlignment="Stretch"
+                                                                Command="{Binding ElementName=PART_StartingPointsList, Path=OpenInspectorCommand, Mode=OneWay}"
+                                                                CommandParameter="{Binding ElementName=PART_StartingPointsList, Path=SelectedItem, Mode=OneWay}"
+                                                                Content="Inspect"
+                                                                Style="{StaticResource UNTraceSecondaryButton}" />
+                                                            <Button
+                                                                Grid.Column="2"
+                                                                HorizontalAlignment="Stretch"
+                                                                Command="{Binding ElementName=PART_StartingPointsList, Path=DeleteSelectedCommand, Mode=OneWay}"
+                                                                CommandParameter="{Binding ElementName=PART_StartingPointsList, Path=SelectedItem, Mode=OneWay}"
+                                                                Content="Delete"
+                                                                Style="{StaticResource UNTraceSecondaryButton}" />
+                                                        </Grid>
                                                         <internal:StartingPointListView x:Name="PART_StartingPointsList" ItemTemplate="{TemplateBinding StartingPointItemTemplate}">
                                                             <internal:StartingPointListView.InspectorViewTemplate>
                                                                 <DataTemplate>
-                                                                    <Border Background="Transparent">
-                                                                        <StackPanel>
+                                                                    <Border HorizontalAlignment="Stretch" Background="Transparent">
+                                                                        <StackPanel HorizontalAlignment="Stretch">
                                                                             <Grid>
                                                                                 <Grid.ColumnDefinitions>
                                                                                     <ColumnDefinition Width="*" />
@@ -551,13 +572,13 @@
                                                                                     Grid.Column="0"
                                                                                     Margin="4"
                                                                                     FontSize="14"
-                                                                                    FontWeight="SemiBold"
+                                                                                    Style="{StaticResource UNTraceBoldText}"
                                                                                     Text="{Binding StartingPoint.NetworkSource.Name}" />
                                                                                 <TextBlock
                                                                                     Grid.Row="1"
                                                                                     Grid.Column="0"
                                                                                     Margin="4"
-                                                                                    FontWeight="SemiBold"
+                                                                                    Style="{StaticResource UNTraceBoldText}"
                                                                                     Text="{Binding StartingPoint.AssetGroup.Name}" />
                                                                                 <controls:SymbolDisplay
                                                                                     Grid.RowSpan="2"
@@ -617,14 +638,13 @@
                                                                                                         <ItemsControl ItemsSource="{Binding DisplayedFields}" Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}, ConverterParameter=Reverse}">
                                                                                                             <ItemsControl.ItemTemplate>
                                                                                                                 <DataTemplate>
-                                                                                                                    <Grid>
+                                                                                                                    <Grid Margin="0,0,0,2">
                                                                                                                         <Grid.ColumnDefinitions>
                                                                                                                             <ColumnDefinition Width="*" />
                                                                                                                             <ColumnDefinition Width="*" />
                                                                                                                         </Grid.ColumnDefinitions>
                                                                                                                         <TextBlock
                                                                                                                             FontWeight="SemiBold"
-                                                                                                                            Foreground="Black"
                                                                                                                             Text="{Binding Field.Label}"
                                                                                                                             TextWrapping="Wrap" />
                                                                                                                         <TextBox
@@ -659,37 +679,31 @@
                                                                 </DataTemplate>
                                                             </internal:StartingPointListView.InspectorViewTemplate>
                                                         </internal:StartingPointListView>
+
                                                         <TextBlock
                                                             x:Name="PART_IsAddingStartingPointsIndicator"
                                                             Margin="2"
-                                                            FontWeight="SemiBold"
+                                                            Style="{StaticResource UNTraceBoldText}"
                                                             Text="Click on the map to identify starting points."
                                                             TextAlignment="Center" />
-                                                        <Grid x:Name="PART_AddRemoveStartingPointButtonsContainer" Margin="0,4,0,0">
+                                                        <StackPanel
+                                                            x:Name="PART_AddRemoveStartingPointButtonsContainer"
+                                                            Margin="0,4,0,0"
+                                                            Spacing="4">
                                                             <Button
                                                                 x:Name="PART_ResetStartingPointsButton"
-                                                                Margin="0,0,4,0"
-                                                                Style="{StaticResource UNTraceSecondaryButton}">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Path Data="{StaticResource UNTraceIconReset}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-                                                                    <TextBlock Margin="0,0,4,0" Text="Remove all" />
-                                                                </StackPanel>
-                                                            </Button>
+                                                                Content="Remove all"
+                                                                Style="{StaticResource UNTraceSecondaryButton}" />
                                                             <Button
                                                                 x:Name="PART_AddStartingPointsButton"
-                                                                Grid.Column="1"
-                                                                Margin="0"
-                                                                Style="{StaticResource UNTracePrimaryButton}">
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Path Data="{StaticResource UNTraceIconPlus}" Style="{StaticResource UNTraceButtonEmbeddedIcon}" />
-                                                                    <TextBlock Text="Add starting point" />
-                                                                </StackPanel>
-                                                            </Button>
-                                                        </Grid>
+                                                                Content="Add starting point"
+                                                                Style="{StaticResource UNTracePrimaryButton}" />
+                                                        </StackPanel>
 
                                                         <Button
                                                             x:Name="PART_CancelAddStartingPointsButton"
                                                             Margin="4"
+                                                            HorizontalAlignment="Stretch"
                                                             Content="Cancel"
                                                             Style="{StaticResource UNTracePrimaryButton}" />
                                                     </StackPanel>
@@ -699,9 +713,10 @@
                                                         <CheckBox
                                                             Margin="0,0,0,8"
                                                             Content="Zoom to result"
-                                                            IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AutoZoomToTraceResults, Mode=TwoWay}" />
+                                                            IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AutoZoomToTraceResults, Mode=TwoWay}"
+                                                            Style="{StaticResource UNTraceCheckBox}" />
                                                         <internal:GroupBox Header="Result name (optional)" Style="{StaticResource UNTraceLabelingGroupBox}">
-                                                            <TextBox x:Name="PART_ResultNameTextBox" Style="{StaticResource UNTraceTextBox}" />
+                                                            <TextBox x:Name="PART_ResultNameTextBox" Style="{StaticResource UNTraceTextBoxStyle}" />
                                                         </internal:GroupBox>
                                                         <internal:GroupBox
                                                             Margin="0,8,0,0"
@@ -716,7 +731,7 @@
                                                                     </Grid.ColumnDefinitions>
                                                                     <TextBlock
                                                                         HorizontalAlignment="Right"
-                                                                        FontWeight="SemiBold"
+                                                                        Style="{StaticResource UNTraceBoldText}"
                                                                         Text="Preview:" />
                                                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                                                         <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultPointSymbol}" />
@@ -738,17 +753,17 @@
                                                     <TextBlock
                                                         Margin="0,4,0,0"
                                                         HorizontalAlignment="Center"
-                                                        FontWeight="SemiBold"
+                                                        Style="{StaticResource UNTraceBoldText}"
                                                         Text="No named trace configurations found for the selected utility network."
-                                                        TextAlignment="Center"
-                                                        TextWrapping="Wrap" />
+                                                        TextAlignment="Center" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </ScrollViewer>
-                                        <Grid Grid.Row="1" Background="{StaticResource UNTraceBackground0}">
+                                        <Grid Grid.Row="1" Background="{StaticResource UNTraceBackground1}">
                                             <Border
                                                 x:Name="PART_NeedMoreStartingPointsWarningContainer"
                                                 Grid.Row="1"
+                                                BorderThickness="1,3,1,1"
                                                 Style="{StaticResource UNTraceFloatingWarningBorderStyle}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -762,6 +777,7 @@
                                             <Border
                                                 x:Name="PART_DuplicateTraceWarningContainer"
                                                 Grid.Row="1"
+                                                BorderThickness="1,3,1,1"
                                                 Style="{StaticResource UNTraceFloatingWarningBorderStyle}">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
@@ -776,36 +792,31 @@
                                                 x:Name="PART_ExtraStartingPointsWarningContainer"
                                                 Grid.Row="1"
                                                 BorderBrush="{StaticResource UNTraceTintNormal}"
+                                                BorderThickness="1,3,1,1"
                                                 Style="{StaticResource UNTraceFloatingWarningBorderStyle}">
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="40" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Path Data="{StaticResource UNTraceIconAlertInfo}" Style="{StaticResource UNTraceIcon32Info}" />
-                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="There are more starting points than required for the selected trace configuration." />
-                                                </Grid>
+                                                <TextBlock Style="{StaticResource UNTraceAlertText}" Text="There are more starting points than required for the selected trace configuration." />
                                             </Border>
                                         </Grid>
                                         <Button
                                             x:Name="PART_RunTraceButton"
                                             Grid.Row="2"
-                                            Margin="4"
                                             Content="Run trace"
                                             Style="{StaticResource UNTracePrimaryButton}" />
                                         <Grid
                                             x:Name="PART_TraceInProgressIndicator"
                                             Grid.RowSpan="3"
-                                            Background="{StaticResource UNTraceBackground0}">
+                                            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                             <StackPanel
                                                 MaxWidth="120"
                                                 VerticalAlignment="Center"
-                                                Orientation="Vertical">
+                                                Orientation="Vertical"
+                                                Spacing="4">
                                                 <TextBlock
                                                     HorizontalAlignment="Center"
+                                                    Style="{StaticResource UNTraceBasicText}"
                                                     Text="Running trace..."
                                                     TextAlignment="Center" />
-                                                <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
+                                                <ProgressBar IsIndeterminate="True" />
                                                 <Button
                                                     x:Name="PART_CancelTraceButton"
                                                     Content="Cancel"
@@ -815,17 +826,18 @@
                                         <Grid
                                             x:Name="PART_IdentifyInProgressIndicator"
                                             Grid.RowSpan="3"
-                                            Background="{StaticResource UNTraceBackground0}">
+                                            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                                             <StackPanel
                                                 MaxWidth="120"
                                                 VerticalAlignment="Center"
-                                                Orientation="Vertical">
+                                                Orientation="Vertical"
+                                                Spacing="4">
                                                 <TextBlock
                                                     HorizontalAlignment="Center"
+                                                    Style="{StaticResource UNTraceBasicText}"
                                                     Text="Identifying starting points..."
-                                                    TextAlignment="Center"
-                                                    TextWrapping="Wrap" />
-                                                <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
+                                                    TextAlignment="Center" />
+                                                <ProgressBar IsIndeterminate="True" />
                                                 <Button
                                                     x:Name="PART_CancelIdentifyButton"
                                                     Content="Cancel"
@@ -834,8 +846,12 @@
                                         </Grid>
                                     </Grid>
                                 </PivotItem>
-                                <PivotItem x:Name="PART_ResultsTabItem" Header="Results">
-                                    <Grid Background="{StaticResource UNTraceBackground0}">
+                                <PivotItem
+                                    x:Name="PART_ResultsTabItem"
+                                    Margin="0"
+                                    Background="{StaticResource UNTraceBackground0}"
+                                    Header="Results">
+                                    <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
                                             <RowDefinition Height="Auto" />
@@ -843,15 +859,25 @@
                                         </Grid.RowDefinitions>
 
                                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-											<Pivot
-                                                x:Name="PART_ResultsItemControl"
-                                                ItemTemplate="{TemplateBinding ResultItemTemplate}" />
+                                            <Pivot x:Name="PART_ResultsItemControl" ItemTemplate="{TemplateBinding ResultItemTemplate}">
+                                                <Pivot.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Style="{StaticResource UNTraceBasicText}" Text="{Binding Name}" />
+                                                    </DataTemplate>
+                                                </Pivot.HeaderTemplate>
+                                                <Pivot.Resources>
+                                                    <Style TargetType="PivotItem">
+                                                        <Setter Property="Margin" Value="0" />
+                                                    </Style>
+                                                </Pivot.Resources>
+                                            </Pivot>
                                         </ScrollViewer>
 
                                         <Button
                                             x:Name="PART_DeleteAllResultsButton"
                                             Grid.Row="2"
                                             Margin="4"
+                                            HorizontalAlignment="Stretch"
                                             Content="Clear results"
                                             Style="{StaticResource UNTracePrimaryButton}" />
                                     </Grid>
@@ -861,27 +887,29 @@
                                 <StackPanel
                                     MaxWidth="120"
                                     VerticalAlignment="Center"
-                                    Orientation="Vertical">
+                                    Orientation="Vertical"
+                                    Spacing="4">
                                     <Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
                                     <TextBlock
                                         Margin="4"
                                         HorizontalAlignment="Center"
-                                        FontWeight="SemiBold"
+                                        Style="{StaticResource UNTraceBoldText}"
                                         Text="No utility networks found."
-                                        TextAlignment="Center"
-                                        TextWrapping="Wrap" />
+                                        TextAlignment="Center" />
                                 </StackPanel>
                             </Grid>
                             <Grid x:Name="PART_LoadingScrim" Background="{StaticResource UNTraceBackground0}">
                                 <StackPanel
                                     MaxWidth="120"
                                     VerticalAlignment="Center"
-                                    Orientation="Vertical">
+                                    Orientation="Vertical"
+                                    Spacing="4">
                                     <TextBlock
                                         HorizontalAlignment="Center"
+                                        Style="{StaticResource UNTraceBasicText}"
                                         Text="Loading..."
                                         TextAlignment="Center" />
-                                    <ProgressBar Style="{StaticResource UNTraceProgressBar}" />
+                                    <ProgressBar IsIndeterminate="True" />
                                 </StackPanel>
                             </Grid>
                         </Grid>

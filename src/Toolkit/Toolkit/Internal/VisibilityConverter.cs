@@ -65,6 +65,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
+            if (value is Visibility visibility)
+            {
+                if (visibility == Visibility.Visible)
+                {
+                    return true;
+                }
+                else if (visibility == Visibility.Collapsed)
+                {
+                    return false;
+                }
+            }
             throw new NotSupportedException();
         }
     }

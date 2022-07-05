@@ -4,63 +4,45 @@
     xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:local="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:localPrimitives="using:Esri.ArcGISRuntime.Toolkit.Primitives">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="./UNVisualResources.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-    <internal:ColorToColorConverter x:Key="ColorToColorConverter" />
-    <ControlTemplate x:Key="ToolkitPaletteTemplate" TargetType="internal:ToolkitColorPalette">
-        <ListView
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="UNVisualResources.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+	<internal:ColorToColorConverter x:Key="ColorToColorConverter" />
+	<ControlTemplate x:Key="ToolkitPaletteTemplate" TargetType="internal:ToolkitColorPalette">
+		<ListView
             x:Name="PART_InnerListView"
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
             ItemsSource="{TemplateBinding AvailableColors}"
             SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedColor, Mode=TwoWay}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border
-                        Width="16"
-                        Height="16"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch">
-                        <Border.Background>
-                            <SolidColorBrush Color="{Binding Converter={StaticResource ColorToColorConverter}}" />
-                        </Border.Background>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <Border
-                                    x:Name="PART_Container"
-                                    Margin="8,4,8,4"
-                                    BorderBrush="{TemplateBinding Background}">
-                                    <ContentPresenter x:Name="PART_presenter" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.Template>
-                <ControlTemplate>
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <ItemsPresenter />
-                    </Border>
-                </ControlTemplate>
-            </ListView.Template>
-        </ListView>
-    </ControlTemplate>
-    <Style x:Key="internal:ToolkitColorPalette" TargetType="internal:ToolkitColorPalette">
-        <Setter Property="Template" Value="{StaticResource ToolkitPaletteTemplate}" />
-        <Setter Property="Background" Value="{StaticResource UNTraceBackground1}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
-    </Style>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Border Margin="8"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Width="18.5"
+                        Height="18.5">
+						<Border.Background>
+							<SolidColorBrush Color="{Binding Converter={StaticResource ColorToColorConverter}}" />
+						</Border.Background>
+					</Border>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+			<ListView.ItemContainerStyle>
+				<Style TargetType="ListViewItem" BasedOn="{StaticResource UNTraceColorPickerContainerStyle}">
+
+				</Style>
+			</ListView.ItemContainerStyle>
+			<ListView.ItemsPanel>
+				<ItemsPanelTemplate>
+					<ItemsStackPanel Orientation="Horizontal" MaxWidth="300" />
+				</ItemsPanelTemplate>
+			</ListView.ItemsPanel>
+		</ListView>
+	</ControlTemplate>
+	<Style TargetType="internal:ToolkitColorPalette">
+		<Setter Property="Template" Value="{StaticResource ToolkitPaletteTemplate}" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="BorderBrush" Value="{StaticResource UNTraceBorder1}" />
+	</Style>
 </ResourceDictionary>

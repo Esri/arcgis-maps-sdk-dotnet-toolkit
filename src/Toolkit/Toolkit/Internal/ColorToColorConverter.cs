@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 #else
             CultureInfo culture)
 #endif
-    {
+        {
             if (value is MediaColor mediaColor)
             {
                 return System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);

@@ -62,6 +62,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_DeleteAllResultsButton", Type = typeof(Button))]
 #if !WINDOWS_UWP
     [TemplatePart(Name = "PART_TabsControl", Type = typeof(TabControl))]
+#else
+    [TemplatePart(Name = "PART_TabsControl", Type = typeof(Pivot))]
 #endif
     public partial class UtilityNetworkTraceTool
     {
@@ -95,6 +97,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Button? _part_deleteAllResultsButton;
 #if !WINDOWS_UWP
         private TabControl? _tabControl;
+#else
+        private Pivot? _pivotControl;
 #endif
 
         /// <inheritdoc />
@@ -146,12 +150,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _part_startingPointsList.SelectedItem = _controller.SelectedStartingPoint;
                 _part_startingPointsList.Visibility = _controller.IsAddingStartingPoints ? Visibility.Collapsed : Visibility.Visible;
                 _part_startingPointsList.SelectionChanged += Part_startingPointsList_SelectionChanged;
-                #if !WINDOWS_UWP
                 if (_part_startingPointsList is StartingPointListView specialized)
                 {
                     specialized.ZoomToCommand = new DelegateCommand((parameter) => HandleZoomToStartingPointCommand(parameter));
                 }
-                #endif
             }
 
             if (GetTemplateChild("PART_IsAddingStartingPointsIndicator") is UIElement addingStartingPointsIndicator)
@@ -283,6 +285,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 _tabControl = tabcontrol;
             }
+#else
+            if (GetTemplateChild("PART_TabsControl") is Pivot tabcontrol)
+            {
+                _pivotControl = tabcontrol;
+            }
 #endif
 
             if (GetTemplateChild("PART_IneligibleScrim") is UIElement ineligibleScrim)
@@ -341,9 +348,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             try
             {
                 await _controller.TraceAsync();
-                #if !WINDOWS_UWP
+#if !WINDOWS_UWP
                 _tabControl?.SetValue(TabControl.SelectedIndexProperty, 1);
-                #endif
+#else
+                _pivotControl?.SetValue(Pivot.SelectedIndexProperty, 1);
+#endif
             }
             catch (Exception)
             {
