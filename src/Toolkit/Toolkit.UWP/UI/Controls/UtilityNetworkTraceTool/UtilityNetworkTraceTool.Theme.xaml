@@ -13,23 +13,17 @@
     <internal:ListSizeVisibilityConverter x:Key="ListSizeVisibilityConverter" />
     <internal:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
-    <Style x:Key="UNTraceIcon32Danger" TargetType="Path">
+    <Style x:Key="UNTraceIcon32Info" TargetType="Path">
+        <Setter Property="Fill" Value="{StaticResource UNTraceTintNormal}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Width" Value="32" />
         <Setter Property="Height" Value="32" />
-        <Setter Property="Fill" Value="{StaticResource UNTraceDangerNormal}" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
-    <Style
-        x:Key="UNTraceIcon32Info"
-        BasedOn="{StaticResource UNTraceIcon32Danger}"
-        TargetType="Path">
-        <Setter Property="Fill" Value="{StaticResource UNTraceTintNormal}" />
-    </Style>
-    <Style
-        x:Key="UNTraceIcon32Warning"
-        BasedOn="{StaticResource UNTraceIcon32Danger}"
-        TargetType="Path">
+    <Style x:Key="UNTraceIcon32Warning" TargetType="Path">
         <Setter Property="Fill" Value="{StaticResource UNTraceWarningNormal}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
         <Setter Property="Data" Value="{StaticResource UNTraceIconAlertWarning}" />
     </Style>
     <Style x:Key="UNTraceAlertText" TargetType="TextBlock">
@@ -374,7 +368,10 @@
                                     <ColumnDefinition Width="40" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Path Data="{StaticResource UNTraceIconWarning}" Style="{StaticResource UNTraceIcon32Danger}" />
+                                <FontIcon
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Foreground="{StaticResource UNTraceDangerNormal}"
+                                    Glyph="&#xE783;" />
                                 <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{Binding Error.Message}" />
                             </Grid>
                         </Border>
@@ -749,7 +746,10 @@
                                                     Margin="8"
                                                     VerticalAlignment="Center"
                                                     Orientation="Vertical">
-                                                    <Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
+                                                    <FontIcon
+                                                        FontFamily="Segoe MDL2 Assets"
+                                                        Foreground="{StaticResource UNTraceDangerNormal}"
+                                                        Glyph="&#xE783;" />
                                                     <TextBlock
                                                         Margin="0,4,0,0"
                                                         HorizontalAlignment="Center"
@@ -889,7 +889,10 @@
                                     VerticalAlignment="Center"
                                     Orientation="Vertical"
                                     Spacing="4">
-                                    <Path Data="{StaticResource UNTraceIconDanger}" Style="{StaticResource UNTraceIcon32Danger}" />
+                                    <FontIcon
+                                        FontFamily="Segoe MDL2 Assets"
+                                        Foreground="{StaticResource UNTraceDangerNormal}"
+                                        Glyph="&#xE783;" />
                                     <TextBlock
                                         Margin="4"
                                         HorizontalAlignment="Center"
