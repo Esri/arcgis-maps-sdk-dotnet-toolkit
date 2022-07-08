@@ -1446,7 +1446,7 @@
                                                     Margin="0,0,8,0"
                                                     HorizontalAlignment="Right"
                                                     VerticalAlignment="Center"
-                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=toolkit:UtilityNetworkTraceTool}, Path=ZoomToResultCommand}"
+                                                    Command="{Binding ZoomToCommand}"
                                                     CommandParameter="{Binding}"
                                                     Style="{StaticResource UNTraceIconButton}">
                                                     <Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTracePathCommandIconStyle}" />
@@ -1463,7 +1463,7 @@
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Right"
                                                     VerticalAlignment="Center"
-                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=toolkit:UtilityNetworkTraceTool}, Path=DeleteResultCommand}"
+                                                    Command="{Binding DeleteCommand}"
                                                     CommandParameter="{Binding}"
                                                     Style="{StaticResource UNTraceIconButton}">
                                                     <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTracePathCommandIconStyle}" />
