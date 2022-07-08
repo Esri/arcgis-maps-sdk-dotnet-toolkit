@@ -56,17 +56,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             SelectPreviousItemCommand = new DelegateCommand(obj => SelectPreviousItem());
             DeleteSelectedCommand = new DelegateCommand(obj => DeleteSelected(obj));
             UpdateState();
-            #if WINDOWS_UWP
+#if WINDOWS_UWP
             SelectionChanged += StartingPointListView_SelectionChanged;
-            #endif
+#endif
         }
 
-        #if WINDOWS_UWP
+#if WINDOWS_UWP
         private void StartingPointListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             HandleExternalSelectionChange(e);
         }
-        #endif
+#endif
 
 #if WINDOWS_UWP
         protected override void OnApplyTemplate()
@@ -83,14 +83,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        #if !WINDOWS_UWP
+#if !WINDOWS_UWP
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnItemsChanged(e);
 
             UpdateState();
         }
-        #endif
+#endif
 
         private void InnerListView_HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -107,7 +107,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 if (SelectedItems.Contains(item))
                 {
+                    #if WINDOWS_UWP
+                    Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,() => SelectedItems.Remove(item));
+                    #else
                     SelectedItems.Remove(item);
+                    #endif
                 }
             }
         }
@@ -120,13 +124,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             }
         }
 
-        #if !WINDOWS_UWP
+#if !WINDOWS_UWP
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
             HandleExternalSelectionChange(e);
         }
-        #endif
+#endif
 
         private void HandleExternalSelectionChange(SelectionChangedEventArgs e)
         {

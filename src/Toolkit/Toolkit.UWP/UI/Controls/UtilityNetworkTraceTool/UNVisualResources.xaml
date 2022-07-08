@@ -15,7 +15,6 @@
             <SolidColorBrush x:Key="UNTraceForeground3" Color="#6A6A6A" />
             <SolidColorBrush x:Key="UNTraceBorder1" Color="#DFDFDF" />
             <SolidColorBrush x:Key="UNTraceBorderInput" Color="#949494" />
-            <SolidColorBrush x:Key="ForegroundAlwaysLight" Color="#FFF" />
             <SolidColorBrush x:Key="UNTraceTintNormal" Color="#007AC2" />
             <SolidColorBrush x:Key="UNTraceTintHover" Color="#00619B" />
             <SolidColorBrush x:Key="UNTraceTintPress" Color="#004874" />
@@ -24,27 +23,25 @@
             <Color x:Key="SystemAccentColor">#007AC2</Color>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="UNTraceBackground0" Color="#F8F8F8" />
-            <SolidColorBrush x:Key="UNTraceForeground0" Color="#151515" />
-            <SolidColorBrush x:Key="UNTraceBackground1" Color="#FFF" />
-            <SolidColorBrush x:Key="UNTraceBorder0" Color="#CACACA" />
-            <SolidColorBrush x:Key="UNTraceBackground2" Color="#F3F3F3" />
-            <SolidColorBrush x:Key="UNTraceBackground3" Color="#EAEAEA" />
-            <SolidColorBrush x:Key="UNTraceForeground3" Color="#6A6A6A" />
-            <SolidColorBrush x:Key="UNTraceBorder1" Color="#DFDFDF" />
-            <SolidColorBrush x:Key="UNTraceBorderInput" Color="#949494" />
-            <SolidColorBrush x:Key="ForegroundAlwaysLight" Color="#FFF" />
-            <SolidColorBrush x:Key="UNTraceTintNormal" Color="#007AC2" />
-            <SolidColorBrush x:Key="UNTraceTintHover" Color="#00619B" />
-            <SolidColorBrush x:Key="UNTraceTintPress" Color="#004874" />
-            <SolidColorBrush x:Key="UNTraceWarningNormal" Color="#EDD317" />
-            <SolidColorBrush x:Key="UNTraceDangerNormal" Color="#D83020" />
-            <Color x:Key="SystemAccentColor">#007AC2</Color>
+            <SolidColorBrush x:Key="UNTraceBackground0" Color="#353535" />
+            <SolidColorBrush x:Key="UNTraceForeground0" Color="#ffffff" />
+            <SolidColorBrush x:Key="UNTraceBackground1" Color="#2B2B2B" />
+            <SolidColorBrush x:Key="UNTraceBorder0" Color="#555555" />
+            <SolidColorBrush x:Key="UNTraceBackground2" Color="#202020" />
+            <SolidColorBrush x:Key="UNTraceBackground3" Color="#151515" />
+            <SolidColorBrush x:Key="UNTraceForeground3" Color="#9F9F9F" />
+            <SolidColorBrush x:Key="UNTraceBorder1" Color="#555555" />
+            <SolidColorBrush x:Key="UNTraceBorderInput" Color="#757575" />
+            <SolidColorBrush x:Key="UNTraceTintNormal" Color="#009AF2" />
+            <SolidColorBrush x:Key="UNTraceTintHover" Color="#007AC2" />
+            <SolidColorBrush x:Key="UNTraceTintPress" Color="#00619B" />
+            <SolidColorBrush x:Key="UNTraceWarningNormal" Color="#FFC900" />
+            <SolidColorBrush x:Key="UNTraceDangerNormal" Color="#FE583E" />
+            <Color x:Key="SystemAccentColor">#009AF2</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
     <internal:VisibilityConverter x:Key="VisibilityConveter" />
     <SolidColorBrush x:Key="UNTraceAlwaysLight" Color="#fff" />
-    <Color x:Key="SystemAccentColor">#007AC2</Color>
 
     <x:String x:Key="UNTraceIconCaretDown16">M 13.1,6 8,11.1 2.9,6 Z</x:String>
     <x:String x:Key="UNTraceIconInspect">M8.5 6.5a1 1 0 1 1 1-1 1.002 1.002 0 0 1-1 1zM8 13h1V8H8zm2-1H7v1h3zm5.8-3.5a7.3 7.3 0 1 1-7.3-7.3 7.3 7.3 0 0 1 7.3 7.3zm-1 0a6.3 6.3 0 1 0-6.3 6.3 6.307 6.307 0 0 0 6.3-6.3z</x:String>
@@ -765,7 +762,7 @@
                                     x:Name="CheckMark"
                                     FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                     FontSize="18"
-                                    Foreground="{StaticResource ForegroundAlwaysLight}"
+                                    Foreground="{StaticResource UNTraceAlwaysLight}"
                                     Glyph="&#xE001;"
                                     Opacity="0" />
 
@@ -773,7 +770,7 @@
                                     x:Name="IndeterminateMark"
                                     FontFamily="{ThemeResource SymbolThemeFontFamily}"
                                     FontSize="20"
-                                    Foreground="{ThemeResource ForegroundAlwaysLight}"
+                                    Foreground="{ThemeResource UNTraceAlwaysLight}"
                                     Glyph="&#xE73C;"
                                     Opacity="0" />
                             </Grid>
@@ -1175,7 +1172,7 @@
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource UNTraceTintHover}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ForegroundAlwaysLight}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource UNTraceAlwaysLight}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
 
@@ -1186,7 +1183,7 @@
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource UNTraceTintPress}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ForegroundAlwaysLight}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource UNTraceAlwaysLight}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -1515,6 +1512,9 @@
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
         <Setter Property="ManipulationMode" Value="None" />
+        <Setter Property="Maximum" Value="1" />
+        <Setter Property="Minimum" Value="0" />
+        <Setter Property="StepFrequency" Value="0.05" />
         <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
         <Setter Property="FocusVisualMargin" Value="-7,0,-7,0" />
         <Setter Property="IsFocusEngagementEnabled" Value="True" />
