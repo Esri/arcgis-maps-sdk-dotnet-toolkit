@@ -40,7 +40,7 @@ The ArcGIS Runtime SDK for .NET Toolkit contains controls and components to acce
 |[SearchView](https://esri.github.io/arcgis-toolkit-dotnet/search-view.html) | <img title="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" /> | Search using one or more locators, with support for suggestions, automatic zooming, and custom search sources. | Xamarin.Forms, UWP, WPF |
 |SymbolDisplay   | ![SymbolDisplay](https://user-images.githubusercontent.com/1378165/73390051-31676080-428a-11ea-9feb-afb5d2aa6385.png) | Render a symbol in a control. | Android, iOS, Xamarin.Forms, UWP, WPF |
 |[TimeSlider](https://esri.github.io/arcgis-toolkit-dotnet/time-slider.html) | ![TimeSlider on UWP](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png) | Interactively manipulate or animate the time extent for a map or scene. | Android, iOS, Xamarin.Forms, UWP, WPF|
-|[UtilityNetworkTraceTool](https://esri.github.io/arcgis-toolkit-dotnet/un-trace.html) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF |
+|[UtilityNetworkTraceTool](https://esri.github.io/arcgis-toolkit-dotnet/un-trace.html) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF, UWP |
 
 ## Get started
 

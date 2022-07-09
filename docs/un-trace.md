@@ -38,11 +38,10 @@ The following properties enable customizing symbology:
 - `ResultFillSymbol`
 - `ResultLineSymbol`
 - `ResultPointSymbol`
-- `ResultVisualizationColor` - set once to update the color of the default result symbols
 
 ## Usage
 
-WPF:
+WPF, UWP:
 
 ```xml
 <Grid>
