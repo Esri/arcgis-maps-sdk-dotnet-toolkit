@@ -1008,10 +1008,15 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Top"
                             Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <ContentControl
                                 x:Name="ContentPresenter"
+                                Margin="0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                HorizontalContentAlignment="Stretch"
                                 Content="{TemplateBinding Content}"
                                 ContentTemplate="{TemplateBinding ContentTemplate}" />
                         </Grid>

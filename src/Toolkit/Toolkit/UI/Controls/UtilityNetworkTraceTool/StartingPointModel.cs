@@ -16,11 +16,13 @@
 
 #if !__IOS__ && !__ANDROID__
 using System;
+using System.Windows.Input;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
@@ -31,11 +33,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     internal class StartingPointModel : IEquatable<StartingPointModel>
     {
-        internal StartingPointModel(UtilityElement element, Graphic selectionGraphic, Feature feature, Envelope? zoomToExtent)
+        private UtilityNetworkTraceToolController _controller;
+
+        internal StartingPointModel(UtilityNetworkTraceToolController controller, UtilityElement element, Graphic selectionGraphic, Feature feature, Envelope? zoomToExtent)
         {
+            _controller = controller;
             StartingPoint = element;
             SelectionGraphic = selectionGraphic;
             ZoomToExtent = zoomToExtent;
+            DeleteCommand = new DelegateCommand(() =>
+            {
+                _controller.StartingPoints.Remove(this);
+                _controller = null;
+            });
 
             // Create popup if possible.
             if (feature is ArcGISFeature arcFeature && arcFeature.FeatureTable?.PopupDefinition is PopupDefinition featurePopupDef)
@@ -49,6 +59,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 Symbol = symbol;
             }
         }
+
+        public ICommand DeleteCommand { get; set; }
 
         /// <summary>
         /// Gets the graphic representing the starting point, which may have different geometry from the <see cref="UtilityElement"/>.

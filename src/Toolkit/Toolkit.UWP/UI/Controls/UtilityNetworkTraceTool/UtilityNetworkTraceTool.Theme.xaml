@@ -382,7 +382,7 @@
         <Setter Property="StartingPointItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid Margin="0,4,0,4">
+                    <Grid Margin="0,4,0,4" HorizontalAlignment="Stretch">
                         <Grid.Resources />
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -392,8 +392,6 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <controls:SymbolDisplay
@@ -417,7 +415,7 @@
                         <ComboBox
                             Grid.Row="2"
                             Grid.Column="0"
-                            Grid.ColumnSpan="5"
+                            Grid.ColumnSpan="3"
                             HorizontalAlignment="Stretch"
                             ItemContainerStyle="{StaticResource UNTraceComboBoxItem}"
                             ItemsSource="{Binding StartingPoint.AssetType.TerminalConfiguration.Terminals}"
@@ -434,7 +432,7 @@
                             x:Name="FractionAlongSlider"
                             Grid.Row="2"
                             Grid.Column="0"
-                            Grid.ColumnSpan="3"
+                            Grid.ColumnSpan="2"
                             Margin="2"
                             VerticalAlignment="Center"
                             Maximum="1"
@@ -445,14 +443,16 @@
                             Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
                         <TextBox
                             Grid.Row="2"
-                            Grid.Column="3"
-                            Grid.ColumnSpan="2"
+                            Grid.Column="2"
                             MinHeight="0"
                             Padding="4"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
                             Text="{Binding ElementName=FractionAlongSlider, Path=Value, Mode=TwoWay}"
                             Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}" />
+                        <Button Command="{Binding DeleteCommand}" Margin="0,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2" Style="{StaticResource UNTraceIconButton}">
+							<FontIcon Glyph="&#xE74D;" FontFamily="Segoe MDL2 Assets" Foreground="{ThemeResource UNTraceTintNormal}" />
+						</Button>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

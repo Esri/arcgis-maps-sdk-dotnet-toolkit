@@ -75,7 +75,7 @@
                     SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedItem, Mode=TwoWay}">
 					<ListView.Template>
 						<ControlTemplate>
-							<ItemsPresenter />
+							<ItemsPresenter HorizontalAlignment="Stretch" />
 						</ControlTemplate>
 					</ListView.Template>
 				</ListView>

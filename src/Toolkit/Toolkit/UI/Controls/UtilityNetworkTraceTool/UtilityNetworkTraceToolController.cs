@@ -496,7 +496,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             graphic.Attributes["AssetType"] = element.AssetType?.Name;
             graphic.Attributes["Geometry"] = geometry?.ToJson();
 
-            StartingPoints.Add(new StartingPointModel(element, graphic, feature, geometry?.Extent));
+            StartingPoints.Add(new StartingPointModel(this, element, graphic, feature, geometry?.Extent));
         }
 
         /// <summary>
