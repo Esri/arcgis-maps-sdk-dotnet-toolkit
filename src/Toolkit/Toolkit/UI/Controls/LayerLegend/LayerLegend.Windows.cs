@@ -24,6 +24,9 @@ using Esri.ArcGISRuntime.Mapping;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -36,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize() => DefaultStyleKey = typeof(LayerLegend);
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -109,7 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Layer_Loaded(object? sender, EventArgs e)
         {
             ((ILoadable)sender!).Loaded -= Layer_Loaded;
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
             var ignore_ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, Refresh);
 #else
             var ignore = Dispatcher.InvokeAsync(Refresh);

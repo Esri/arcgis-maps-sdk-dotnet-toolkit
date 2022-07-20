@@ -20,6 +20,8 @@ using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Shapes;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml.Controls;
 #elif __IOS__
 using Control = UIKit.UIView;
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;

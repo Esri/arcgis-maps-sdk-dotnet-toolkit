@@ -37,6 +37,11 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Key = Windows.System.VirtualKey;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Windows.Foundation;
 #elif __IOS__
 using System.Drawing;
 using Brush = UIKit.UIColor;
@@ -303,7 +308,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
         private Size CalculateTextSize(TextBlock textBlock, string? text = null)
         {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
             // Create a dummy TextBlock to calculate the size of the text.  Note that only a limited number of properties
             // are copied here.  This may yield an incorrect size if additional properties are specified in the slider's
             // style that affect the text size,

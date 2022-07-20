@@ -27,6 +27,8 @@ using Control = UIKit.UIViewController;
 using Android.App;
 using Android.Views;
 using Control = Android.Widget.FrameLayout;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml.Controls;
 #else
 using System.Windows.Controls;
 #endif

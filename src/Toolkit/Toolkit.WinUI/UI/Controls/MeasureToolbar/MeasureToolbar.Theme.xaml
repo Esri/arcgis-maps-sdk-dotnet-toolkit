@@ -1,0 +1,188 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <BitmapImage x:Key="MeasureLengthImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureLength.png" />
+            <BitmapImage x:Key="MeasureAreaImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureArea.png" />
+            <BitmapImage x:Key="MeasureFeatureImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeature.png" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <BitmapImage x:Key="MeasureLengthImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureLength.png" />
+            <BitmapImage x:Key="MeasureAreaImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureArea.png" />
+            <BitmapImage x:Key="MeasureFeatureImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeature.png" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <BitmapImage x:Key="MeasureLengthImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureLengthDark.png" />
+            <BitmapImage x:Key="MeasureAreaImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureAreaDark.png" />
+            <BitmapImage x:Key="MeasureFeatureImage"
+                         UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeatureDark.png" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+    <Style TargetType="controls:MeasureToolbar">
+        <Setter Property="Background"
+                Value="{ThemeResource ComboBoxBackground}" />
+        <Setter Property="Foreground"
+                Value="{ThemeResource ComboBoxForeground}" />
+        <Setter Property="BorderBrush"
+                Value="{ThemeResource ComboBoxBorderBrush}" />
+        <Setter Property="BorderThickness"
+                Value="{ThemeResource ComboBoxBorderThemeThickness}" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:MeasureToolbar">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            Margin="{TemplateBinding Margin}"
+                            MinWidth="{TemplateBinding MinWidth}"
+                            MaxWidth="{TemplateBinding MaxWidth}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ToggleButton x:Name="MeasureLength"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          ToolTipService.ToolTip="Length">
+                                <ToggleButton.Content>
+                                    <Image Source="{ThemeResource MeasureLengthImage}"
+                                           Height="20"
+                                           Width="20"
+                                           Stretch="UniformToFill" />
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                            <ToggleButton x:Name="MeasureArea"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          ToolTipService.ToolTip="Area"
+                                          Grid.Column="1">
+                                <ToggleButton.Content>
+                                    <Image Source="{ThemeResource MeasureAreaImage}"
+                                           Height="20"
+                                           Width="20"
+                                           Stretch="UniformToFill" />
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                            <ToggleButton x:Name="MeasureFeature"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          ToolTipService.ToolTip="Feature"
+                                          Grid.Column="2">
+                                <ToggleButton.Content>
+                                    <Image Source="{ThemeResource MeasureFeatureImage}"
+                                           Height="20"
+                                           Width="20"
+                                           Stretch="UniformToFill" />
+                                </ToggleButton.Content>
+                            </ToggleButton>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Padding="8,4,8,4"
+                                    Grid.Column="3">
+                                <TextBlock x:Name="MeasureResult"
+                                           TextTrimming="CharacterEllipsis"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <ComboBox x:Name="AreaUnitsSelector"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Center"
+                                      VerticalAlignment="Stretch"
+                                      ToolTipService.ToolTip="Units"
+                                      Visibility="Collapsed"
+                                      Grid.Column="4"
+                                      SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedAreaUnit, Mode=TwoWay}"
+                                      ItemsSource="{TemplateBinding AreaUnits}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PluralDisplayName}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <ComboBox x:Name="LinearUnitsSelector"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Center"
+                                      VerticalAlignment="Stretch"
+                                      ToolTipService.ToolTip="Units"
+                                      Visibility="Visible"
+                                      Grid.Column="4"
+                                      SelectedItem="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=SelectedLinearUnit, Mode=TwoWay}"
+                                      ItemsSource="{TemplateBinding LinearUnits}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PluralDisplayName}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button x:Name="Undo"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    ToolTipService.ToolTip="Undo"
+                                    Grid.Column="5"
+                                    DataContext="{TemplateBinding MapView}"
+                                    Command="{Binding Path=SketchEditor.UndoCommand}"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Content="&#xE7A7;" />
+                            <Button x:Name="Redo"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    ToolTipService.ToolTip="Redo"
+                                    Grid.Column="6"
+                                    DataContext="{TemplateBinding MapView}"
+                                    Command="{Binding Path=SketchEditor.RedoCommand}"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Content="&#xE7A6;" />
+                            <Button x:Name="Clear"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    ToolTipService.ToolTip="Clear"
+                                    Grid.Column="7"
+                                    FontFamily="Segoe MDL2 Assets"
+                                    Content="&#xE74D;" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

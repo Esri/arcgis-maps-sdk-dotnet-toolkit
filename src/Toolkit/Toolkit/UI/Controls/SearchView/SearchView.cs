@@ -26,7 +26,11 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-#if !NETFX_CORE
+#if WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Windows.Foundation;
+#elif !NETFX_CORE
 using System.Windows;
 using System.Windows.Controls;
 #else
@@ -158,7 +162,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #region Binding support
+#region Binding support
 
         /// <summary>
         /// Gets or sets the selected suggestion, triggering a search.
@@ -258,9 +262,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #endregion binding support
+#endregion binding support
 
-        #region events
+#region events
 
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -507,9 +511,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             NotifyPropertyChange(nameof(ResultViewVisibility));
         }
 
-        #endregion events
+#endregion events
 
-        #region commands
+#region commands
 
         /// <summary>
         /// Gets a command that clears the current search.
@@ -541,9 +545,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             SearchViewModel?.RepeatSearchHere();
         }
-        #endregion commands
+#endregion commands
 
-        #region properties
+#region properties
 
         /// <summary>
         /// Gets or sets the GeoView associated with this view.
@@ -669,9 +673,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => SetValue(RepeatSearchButtonTextProperty, value);
         }
 
-        #endregion properties
+#endregion properties
 
-        #region dependency properties
+#region dependency properties
 
         /// <summary>
         /// Identifies the <see cref="NoResultMessage"/> dependency property.
@@ -744,7 +748,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public static readonly DependencyProperty RepeatSearchButtonTextProperty =
             DependencyProperty.Register(nameof(RepeatSearchButtonText), typeof(string), typeof(SearchView), null);
-        #endregion dependency properties
+#endregion dependency properties
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -755,9 +759,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             NotifyPropertyChange(nameof(ResultViewVisibility));
             NotifyPropertyChange(nameof(ResultMessageVisibility));
-            #if NETFX_CORE
+#if NETFX_CORE
             UpdateGroupingForUWP();
-            #endif
+#endif
         }
 
 #if NETFX_CORE

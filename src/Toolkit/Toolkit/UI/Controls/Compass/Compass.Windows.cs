@@ -24,6 +24,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 #else
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -40,7 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize() => DefaultStyleKey = typeof(Compass);
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -51,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateCompassRotation(false);
         }
 
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
         /// <inheritdoc />
         protected override void OnTapped(TappedRoutedEventArgs e)
         {

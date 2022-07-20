@@ -25,6 +25,10 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -54,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -559,7 +563,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 return null;
             }
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
             CultureInfo cinfo = new CultureInfo(Language);
 #else
             CultureInfo cinfo = Language.GetEquivalentCulture();

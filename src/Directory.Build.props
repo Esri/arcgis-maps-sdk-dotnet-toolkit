@@ -35,13 +35,20 @@
     <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">18362</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <UWPTargetPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformMinVersion>
-    <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
+    <NetAndroidPlatformMinVersion>31.0</NetAndroidPlatformMinVersion>
+    <NetiOSPlatformMinVersion>13.6</NetiOSPlatformMinVersion>
+    <NetWindowsPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</NetWindowsPlatformMinVersion>
+	
+	<!--Framework monikers-->
+	<AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)</UWPTargetFramework>
-    <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
-    <NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
-    <NetiOSTargetFramework>net6.0-ios13.6</NetiOSTargetFramework>
+    <NetWindowsTargetFramework>net6.0-windows10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)</NetWindowsTargetFramework>
+    <NetAndroidTargetFramework>net6.0-android$(NetAndroidPlatformMinVersion)</NetAndroidTargetFramework>
+    <NetiOSTargetFramework>net6.0-ios$(NetiOSPlatformMinVersion)</NetiOSTargetFramework>
+	
+	
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE
+#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE && !WINDOWS_WINUI
 
 using System;
 using System.Collections;
@@ -28,10 +28,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI;
+using Esri.ArcGISRuntime.UI.Controls;
 #if XAMARIN_FORMS
 using Esri.ArcGISRuntime.Xamarin.Forms;
-#else
-using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -40,7 +39,7 @@ using Windows.UI.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
     [Windows.UI.Xaml.Data.Bindable]
 #endif
     internal class TocDataSource : LayerContentDataSource<TocItem>

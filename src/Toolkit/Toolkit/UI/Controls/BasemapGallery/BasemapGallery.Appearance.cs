@@ -20,6 +20,10 @@ using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Markup;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -47,6 +51,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         /// <inheritdoc />
 #if NETFX_CORE
+        protected override void OnApplyTemplate()
+#elif WINDOWS_WINUI
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -198,7 +204,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _currentlyAppliedStyle = style;
         }
 
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
         // Shim makes cross-platform code easier
         private class WrapPanel
         {
@@ -207,7 +213,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static ItemsPanelTemplate? GetItemsPanelTemplate(Type panelType)
         {
-#if !NETFX_CORE
+#if !NETFX_CORE &&  !WINDOWS_WINUI
             return new ItemsPanelTemplate(new FrameworkElementFactory(panelType));
 #else
             if (panelType == typeof(StackPanel))

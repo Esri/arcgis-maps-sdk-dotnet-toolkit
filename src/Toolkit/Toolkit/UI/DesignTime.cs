@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (!_isInDesignMode.HasValue)
                 {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
                     _isInDesignMode = Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #elif !XAMARIN
                     var prop = DesignerProperties.IsInDesignModeProperty;

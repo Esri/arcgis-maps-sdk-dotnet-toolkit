@@ -31,6 +31,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -134,7 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()

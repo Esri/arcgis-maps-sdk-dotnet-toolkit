@@ -20,6 +20,8 @@ using Esri.ArcGISRuntime.UI.Controls;
 
 #if NETFX_CORE
 using Windows.UI.Xaml;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
 #else
 using System.Windows;
 #endif
@@ -31,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize() => DefaultStyleKey = GetType();
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()

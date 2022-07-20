@@ -20,6 +20,9 @@ using System.Globalization;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Data;
 #else
 using System.Windows;
 using System.Windows.Data;
@@ -35,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         /// <inheritdoc />
         object IValueConverter.Convert(object? value, Type targetType, object? parameter,
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
             string language)
 #else
             CultureInfo culture)
@@ -59,7 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         /// <inheritdoc />
         object IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
             string language)
 #else
             CultureInfo culture)

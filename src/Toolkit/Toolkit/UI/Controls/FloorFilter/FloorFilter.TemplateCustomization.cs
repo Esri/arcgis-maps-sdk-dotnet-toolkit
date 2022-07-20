@@ -20,6 +20,8 @@
 using System.Windows;
 #elif WINDOWS_UWP
 using Windows.UI.Xaml;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
 #endif
 using Esri.ArcGISRuntime.Mapping.Floor;
 

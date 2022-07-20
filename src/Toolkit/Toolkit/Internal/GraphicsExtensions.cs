@@ -18,6 +18,8 @@
 
 #if NETFX_CORE
 using Windows.Foundation;
+#elif WINDOWS_WINUI
+using Windows.Foundation;
 #else
 using System.Windows;
 #endif

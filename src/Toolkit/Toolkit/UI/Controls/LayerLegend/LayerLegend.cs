@@ -16,9 +16,10 @@
 
 using System.Collections.Generic;
 using Esri.ArcGISRuntime.Mapping;
-
 #if NETFX_CORE
 using Windows.UI.Xaml.Controls;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml.Controls;
 #elif __IOS__
 using Control = UIKit.UIView;
 #elif __ANDROID__

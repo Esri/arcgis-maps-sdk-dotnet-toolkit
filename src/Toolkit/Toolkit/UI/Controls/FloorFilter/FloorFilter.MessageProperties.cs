@@ -18,6 +18,8 @@
 
 #if WPF
 using System.Windows;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
 #else
 using Windows.UI.Xaml;
 #endif

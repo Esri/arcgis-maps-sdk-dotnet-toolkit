@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
+                    xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+                    xmlns:contract7Present="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract,7)"
+                    >
+  
+ 
+  
+    <Style TargetType="controls:Legend">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderBrush" Value="{ThemeResource ComboBoxBorderBrush}" />
+        <Setter Property="Background" Value="{ThemeResource ComboBoxBackground}" />
+        <Setter Property="Foreground" Value="{ThemeResource ComboBoxForeground}" />
+             <Setter Property="LayerItemTemplate">
+            <Setter.Value>
+              <DataTemplate>
+                <TextBlock Text="{Binding Content.Name}" FontSize="14" TextWrapping="Wrap" FontWeight="Semibold" />
+              </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="SublayerItemTemplate">
+          <Setter.Value>
+            <DataTemplate>
+              <TextBlock Text="{Binding Content.Name}" FontSize="14" TextWrapping="Wrap" />
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+        <Setter Property="LegendInfoItemTemplate">
+          <Setter.Value>
+            <DataTemplate>
+              <StackPanel Orientation="Horizontal">
+                <controls:SymbolDisplay Symbol="{Binding Content.Symbol}" MaxHeight="40" Width="40" Margin="0,0,5,0" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Content.Name}" FontSize="12" VerticalAlignment="Center" TextWrapping="Wrap" />
+              </StackPanel>
+            </DataTemplate>
+          </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:Legend">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            contract7Present:CornerRadius="{TemplateBinding CornerRadius}">
+                      <ListView x:Name="List"
+                                          Foreground="{TemplateBinding Foreground}"
+                                          ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          Margin="{TemplateBinding Padding}"
+                                          BorderThickness="0"
+                                          Padding="0" SelectionMode="None" 
+                                          IsItemClickEnabled="False" >
+                        <ListView.Resources>
+                          <SolidColorBrush x:Key="SystemControlTransparentRevealBackgroundBrush" Color="Transparent" />
+                          <SolidColorBrush x:Key="SystemControlTransparentRevealBorderBrush" Color="Transparent" />
+                          <Thickness x:Key="ListViewItemRevealBorderThemeThickness">0</Thickness>
+                          <SolidColorBrush x:Key="ListViewItemRevealPlaceholderBackground" Color="Transparent" />
+                        </ListView.Resources>
+                      </ListView>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

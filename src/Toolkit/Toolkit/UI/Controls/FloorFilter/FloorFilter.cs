@@ -22,7 +22,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
+
 #if WPF
 using System.Windows;
 using System.Windows.Controls;
@@ -31,6 +33,9 @@ using PropertyMetadata = System.Windows.FrameworkPropertyMetadata;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -83,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
 #if WPF
         public override void OnApplyTemplate()
-#elif WINDOWS_UWP
+#elif WINDOWS_UWP || WINDOWS_WINUI
         protected override void OnApplyTemplate()
 #endif
         {
@@ -242,7 +247,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _facilitiesNoSitesListView = facilitiesNoSitesListView;
 #if WPF
                 _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_UWP || WINDOWS_WINUI
                 if (_facilitiesNoSitesListView is FilteringListView nfnslv)
                 {
                     nfnslv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
@@ -397,7 +402,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((FloorFilter)d).SetGeoView(e.OldValue as GeoView, e.NewValue as GeoView);
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
         private long _propertyChangedCallbackToken = 0;
 #endif
 
@@ -412,7 +417,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (oldView is MapView mapview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
                     mapview.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(mapview, HandleGeoModelChanged);
@@ -420,7 +425,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (oldView is SceneView sceneview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
                     sceneview.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, HandleGeoModelChanged);
@@ -435,7 +440,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (newView is MapView mapview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
                     _propertyChangedCallbackToken = mapview.RegisterPropertyChangedCallback(MapView.MapProperty, HandleGeoModelChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(mapview, HandleGeoModelChanged);
@@ -443,7 +448,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (newView is SceneView sceneview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
                     _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, HandleGeoModelChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, HandleGeoModelChanged);
@@ -514,7 +519,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleGeoModelLoaded()
         {
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
             _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
 #else
             Dispatcher.Invoke(() =>
@@ -664,7 +669,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         #region Read-only list properties
 
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
 
         /// <summary>
         /// Gets the list of available sites.
@@ -789,7 +794,7 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
         /// Identifies the "IsExpanded" attached property.
         /// </summary>
         public static readonly DependencyProperty IsExpandedProperty =
-#if WINDOWS_UWP
+#if WINDOWS_UWP || WINDOWS_WINUI
             DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new PropertyMetadata(false));
 #else
             DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new PropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));

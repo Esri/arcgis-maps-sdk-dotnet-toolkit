@@ -33,6 +33,8 @@ using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
 using Windows.UI.Core;
 using View = Windows.UI.Xaml.DependencyObject;
+#elif WINDOWS_WINUI
+using View = Microsoft.UI.Xaml.DependencyObject;
 #elif __IOS__
 using View = UIKit.UIView;
 #elif __ANDROID__
@@ -84,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             _owner.InvokeOnMainThread(action);
 #elif __ANDROID__
             _owner.PostDelayed(action, 50);
-#elif NETFX_CORE
+#elif NETFX_CORE || WINDOWS_WINUI
             _ = _owner.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #else
             _owner.Dispatcher.Invoke(action);
@@ -92,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #endif
         }
 
-#if NETFX_CORE && !XAMARIN_FORMS
+#if (NETFX_CORE || WINDOWS_WINUI) && !XAMARIN_FORMS
         private long _propertyChangedCallbackToken = 0;
 #endif
 
@@ -112,7 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #else
                 if (_geoview is MapView mapview)
                 {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
                     mapview.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(mapview, GeoViewDocumentChanged);
@@ -120,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
                 else if (_geoview is SceneView sceneview)
                 {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
                     sceneview.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, GeoViewDocumentChanged);
@@ -139,7 +141,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 #else
                 if (_geoview is MapView mapview)
                 {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
                     _propertyChangedCallbackToken = mapview.RegisterPropertyChangedCallback(MapView.MapProperty, GeoViewDocumentChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(mapview, GeoViewDocumentChanged);
@@ -147,7 +149,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 }
                 else if (_geoview is SceneView sceneview)
                 {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
                     _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, GeoViewDocumentChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, GeoViewDocumentChanged);

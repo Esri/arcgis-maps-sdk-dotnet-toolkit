@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE
+#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE && !WINDOWS_WINUI
 using Esri.ArcGISRuntime.Mapping;
 #if NETFX_CORE
 using Windows.UI.Xaml;

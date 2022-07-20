@@ -20,6 +20,10 @@
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsWinUI)' == 'true'">
+	  <DefineConstants>$(DefineConstants);WINDOWS_WINUI</DefineConstants>
+  </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)' OR '$(TargetFramework)' == '$(DotNetTargetFramework)'">
     <UseWpf>true</UseWpf>

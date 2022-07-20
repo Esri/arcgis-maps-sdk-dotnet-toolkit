@@ -26,6 +26,13 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Markup;
+using Microsoft.UI.Xaml.Media;
+using Windows.Foundation;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -54,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         static Tickbar()
         {
-#if NETFX_CORE
+#if NETFX_CORE || WINDOWS_WINUI
             _defaultTickmarkTemplate = XamlReader.Load(_template) as DataTemplate;
 #else
             System.IO.MemoryStream stream = new System.IO.MemoryStream(UTF8Encoding.Default.GetBytes(_template));

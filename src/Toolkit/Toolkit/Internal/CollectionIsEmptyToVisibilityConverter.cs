@@ -20,6 +20,9 @@ using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Culture = System.String;
+#elif WINDOWS_WINUI
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Data;
 #else
 using System.Windows;
 using System.Windows.Data;
@@ -32,13 +35,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// Takes a collection size and returns Visibile if size is not 0, Collapsed otherwise. Specify "Empty" as parameter to invert.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    #if NETFX_CORE
+#if NETFX_CORE
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
-    #endif
+#endif
     public class CollectionIsEmptyToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc />
-        public object Convert(object value, Type targetType, object parameter, Culture culture)
+        public object Convert(object value, Type targetType, object parameter,
+#if WINDOWS_WINUI
+            string language)
+#else
+            Culture culture)
+#endif
         {
             if (value is int collectionSize)
             {
@@ -63,7 +71,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
         /// <inheritdoc />
-        public object ConvertBack(object value, Type targetType, object parameter, Culture culture)
+        public object ConvertBack(object value, Type targetType, object parameter,
+#if WINDOWS_WINUI
+            string language)
+#else
+            Culture culture)
+#endif
         {
             throw new NotImplementedException();
         }
