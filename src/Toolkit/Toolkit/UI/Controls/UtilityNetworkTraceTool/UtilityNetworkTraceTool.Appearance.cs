@@ -42,9 +42,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_StartingPointsList", Type = typeof(ListView))]
     [TemplatePart(Name = "PART_IsAddingStartingPointsIndicator", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_AddRemoveStartingPointButtonsContainer", Type = typeof(UIElement))]
-    [TemplatePart(Name = "PART_ResetStartingPointsButton", Type = typeof(Button))]
-    [TemplatePart(Name = "PART_AddStartingPointsButton", Type = typeof(Button))]
-    [TemplatePart(Name = "PART_CancelAddStartingPointsButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_ResetStartingPointsButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "PART_AddStartingPointsButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "PART_CancelAddStartingPointsButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_AdvancedOptionsSectionContainer", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ResultNameTextBox", Type = typeof(TextBox))]
     [TemplatePart(Name = "PART_ResultColorPalette", Type = typeof(UIElement))]
@@ -53,13 +53,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_DuplicateTraceWarningContainer", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ExtraStartingPointsWarningContainer", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_TraceInProgressIndicator", Type = typeof(UIElement))]
-    [TemplatePart(Name = "PART_RunTraceButton", Type = typeof(Button))]
-    [TemplatePart(Name = "PART_CancelTraceButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_RunTraceButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "PART_CancelTraceButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_IdentifyInProgressIndicator", Type = typeof(UIElement))]
-    [TemplatePart(Name = "PART_CancelIdentifyButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_CancelIdentifyButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_ResultsTabItem", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ResultsItemControl", Type = typeof(ItemsControl))]
-    [TemplatePart(Name = "PART_DeleteAllResultsButton", Type = typeof(Button))]
+    [TemplatePart(Name = "PART_DeleteAllResultsButton", Type = typeof(ButtonBase))]
 #if !WINDOWS_UWP
     [TemplatePart(Name = "PART_TabsControl", Type = typeof(TabControl))]
 #else
@@ -77,9 +77,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ListView? _part_startingPointsList;
         private UIElement? _part_isAddingStartingPointsIndicator;
         private UIElement? _part_addRemoveStartingPointsButtonContainer;
-        private Button? _part_resetStartingPointsButton;
-        private Button? _part_addStartingPointsButton;
-        private Button? _part_cancelAddStartingPointsButton;
+        private ButtonBase? _part_resetStartingPointsButton;
+        private ButtonBase? _part_addStartingPointsButton;
+        private ButtonBase? _part_cancelAddStartingPointsButton;
         private UIElement? _part_advancedOptionsSectionContainer;
         private TextBox? _part_resultNamedTextBox;
         private ToolkitColorPalette? _part_resultColorPalette;
@@ -88,13 +88,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private UIElement? _part_duplicateTraceWarningContainer;
         private UIElement? _part_extraStartingPointsWarningContainer;
         private UIElement? _part_traceInProgressIndicator;
-        private Button? _part_runTraceButton;
-        private Button? _part_cancelTraceButton;
+        private ButtonBase? _part_runTraceButton;
+        private ButtonBase? _part_cancelTraceButton;
         private UIElement? _part_identifyInProgressIndicator;
-        private Button? _part_cancelIdentifyButton;
+        private ButtonBase? _part_cancelIdentifyButton;
         private UIElement? _part_resultsTabItem;
         private ItemsControl? _part_resultsItemControl;
-        private Button? _part_deleteAllResultsButton;
+        private ButtonBase? _part_deleteAllResultsButton;
 #if !WINDOWS_UWP
         private TabControl? _tabControl;
 #else
@@ -168,20 +168,20 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _part_addRemoveStartingPointsButtonContainer.Visibility = _controller.IsAddingStartingPoints ? Visibility.Collapsed : Visibility.Visible;
             }
 
-            if (GetTemplateChild("PART_ResetStartingPointsButton") is Button resetStartingPointsButton)
+            if (GetTemplateChild("PART_ResetStartingPointsButton") is ButtonBase resetStartingPointsButton)
             {
                 _part_resetStartingPointsButton = resetStartingPointsButton;
                 _part_resetStartingPointsButton.Visibility = _controller.StartingPoints.Any() ? Visibility.Visible : Visibility.Collapsed;
                 _part_resetStartingPointsButton.Click += Part_resetStartingPointsButton_Click;
             }
 
-            if (GetTemplateChild("PART_AddStartingPointsButton") is Button addStartingPointsButton)
+            if (GetTemplateChild("PART_AddStartingPointsButton") is ButtonBase addStartingPointsButton)
             {
                 _part_addStartingPointsButton = addStartingPointsButton;
                 _part_addStartingPointsButton.Click += Part_addStartingPointsButton_Click;
             }
 
-            if (GetTemplateChild("PART_CancelAddStartingPointsButton") is Button cancelAddStartingPointsButton)
+            if (GetTemplateChild("PART_CancelAddStartingPointsButton") is ButtonBase cancelAddStartingPointsButton)
             {
                 _part_cancelAddStartingPointsButton = cancelAddStartingPointsButton;
                 _part_cancelAddStartingPointsButton.Visibility = _controller.IsAddingStartingPoints ? Visibility.Visible : Visibility.Collapsed;
@@ -238,14 +238,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _part_traceInProgressIndicator.Visibility = _controller.IsRunningTrace ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            if (GetTemplateChild("PART_RunTraceButton") is Button runTraceButton)
+            if (GetTemplateChild("PART_RunTraceButton") is ButtonBase runTraceButton)
             {
                 _part_runTraceButton = runTraceButton;
                 _part_runTraceButton.IsEnabled = _controller.EnableTrace;
                 _part_runTraceButton.Click += Part_runTraceButton_Click;
             }
 
-            if (GetTemplateChild("PART_CancelTraceButton") is Button cancelTraceButton)
+            if (GetTemplateChild("PART_CancelTraceButton") is ButtonBase cancelTraceButton)
             {
                 _part_cancelTraceButton = cancelTraceButton;
                 _part_cancelTraceButton.Click += Part_cancelTraceButton_Click;
@@ -257,7 +257,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _part_identifyInProgressIndicator.Visibility = Visibility.Collapsed;
             }
 
-            if (GetTemplateChild("PART_CancelIdentifyButton") is Button cancelIdentifyButton)
+            if (GetTemplateChild("PART_CancelIdentifyButton") is ButtonBase cancelIdentifyButton)
             {
                 _part_cancelIdentifyButton = cancelIdentifyButton;
             }
@@ -274,7 +274,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _part_resultsItemControl.ItemsSource = _controller.Results;
             }
 
-            if (GetTemplateChild("PART_DeleteAllResultsButton") is Button deleteAllResultsButton)
+            if (GetTemplateChild("PART_DeleteAllResultsButton") is ButtonBase deleteAllResultsButton)
             {
                 _part_deleteAllResultsButton = deleteAllResultsButton;
                 _part_deleteAllResultsButton.Click += Part_deleteAllResultsButton_Click;

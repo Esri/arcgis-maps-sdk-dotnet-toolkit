@@ -44,12 +44,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         {
             if (parameter is string preference)
             {
-                var trimmedPreference = preference.Trim().ToLower();
-                if (trimmedPreference == "null" && value == null)
+                if (preference.Equals("null", StringComparison.OrdinalIgnoreCase) && value == null)
                 {
                     return Visibility.Visible;
                 }
-                else if (trimmedPreference == "notnull" && value != null)
+                else if (preference.Equals("notnull", StringComparison.OrdinalIgnoreCase) && value != null)
                 {
                     return Visibility.Visible;
                 }

@@ -25,13 +25,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     internal class DelegateCommand : ICommand
     {
         private bool _canExecute = true;
-        private readonly Action? _action;
         private readonly Action<object?>? _onExecute;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegateCommand"/> class.
         /// </summary>
-        public DelegateCommand(Action inputAction) => _action = inputAction;
+        public DelegateCommand(Action inputAction) => _onExecute = (o) => inputAction();
 
         internal DelegateCommand(Action<object?> onExecute)
         {
@@ -53,7 +52,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <inheritdoc/>
         public void Execute(object? parameter)
         {
-            _action?.Invoke();
             _onExecute?.Invoke(parameter);
         }
 
