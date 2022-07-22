@@ -178,6 +178,9 @@
     <Compile Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml.cs">
       <DependentUpon>SymbolDisplaySample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\UtilityNetworkTraceTool\UtilityNetworkTraceToolSample.xaml.cs">
+      <DependentUpon>UtilityNetworkTraceToolSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
@@ -286,6 +289,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Samples\SymbolDisplay\SymbolDisplaySample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Samples\UtilityNetworkTraceTool\UtilityNetworkTraceToolSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

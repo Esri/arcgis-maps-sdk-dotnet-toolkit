@@ -14,6 +14,9 @@
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
         <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
