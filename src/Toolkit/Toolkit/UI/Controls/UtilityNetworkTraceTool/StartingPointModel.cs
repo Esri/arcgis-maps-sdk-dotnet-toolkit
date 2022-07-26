@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
 using System;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Data;
@@ -160,4 +159,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
     }
 }
-#endif

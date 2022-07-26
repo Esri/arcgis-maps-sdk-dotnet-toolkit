@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -84,6 +83,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         // Interaction
         private Viewpoint? _viewpoint;
         private Tuple<CalloutDefinition, MapPoint>? _requestedCallout;
+
+        private INotifyCollectionChanged? _lastObservedNetworkCollection;
 
         #region Observable collections
 
@@ -280,6 +281,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 if (value != _map)
                 {
+                    if (_map != null)
+                    {
+                        _map.Loaded -= OnGeoModelLoaded;
+                    }
+
                     _map = value;
                     OnPropertyChanged();
                     Reset(true);
@@ -293,12 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         }
                         else
                         {
-                            var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(_map)
-                            {
-                                OnEventAction = (instance, source, eventArgs) => OnGeoModelLoaded(source, eventArgs),
-                                OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent,
-                            };
-                            _map.Loaded += listener.OnEvent;
+                            _map.Loaded += OnGeoModelLoaded;
                         }
                     }
                 }
@@ -313,7 +314,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     if (Map != null)
                     {
-                        Map.LoadStatusChanged -= OnGeoModelLoaded;
+                        Map.Loaded -= OnGeoModelLoaded;
                     }
 
                     IsRunningTrace = false;
@@ -322,14 +323,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                     var utilityNetworks = (sender is Map map ? map.UtilityNetworks : null) ?? throw new ArgumentException("No UtilityNetworks found.");
 
+                    if (_lastObservedNetworkCollection != null)
+                    {
+                        _lastObservedNetworkCollection.CollectionChanged -= GeoModelUtilityNetworks_CollectionChanged;
+                        _lastObservedNetworkCollection = null;
+                    }
+
                     if (utilityNetworks is INotifyCollectionChanged incc)
                     {
-                        var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc)
-                        {
-                            OnEventAction = (instance, source, eventArgs) => GeoModelUtilityNetworks_CollectionChanged(sender, eventArgs),
-                            OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
-                        };
-                        incc.CollectionChanged += listener.OnEvent;
+                        incc.CollectionChanged += GeoModelUtilityNetworks_CollectionChanged;
+                        _lastObservedNetworkCollection = incc;
                     }
 
                     foreach (var utilityNetwork in utilityNetworks)
@@ -340,12 +343,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         }
                         else
                         {
-                            var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(utilityNetwork)
-                            {
-                                OnEventAction = (instance, source, eventArgs) => OnUtilityNetworkLoaded(source, eventArgs),
-                                OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent,
-                            };
-                            utilityNetwork.Loaded += listener.OnEvent;
+                            utilityNetwork.Loaded += OnUtilityNetworkLoaded;
                             await utilityNetwork.LoadAsync();
                         }
                     }
@@ -404,12 +402,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         }
                         else
                         {
-                            var listener = new Internal.WeakEventListener<ILoadable, object, EventArgs>(utilityNetwork)
-                            {
-                                OnEventAction = (instance, source, eventArgs) => OnUtilityNetworkLoaded(source, eventArgs),
-                                OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent,
-                            };
-                            utilityNetwork.Loaded += listener.OnEvent;
+                            utilityNetwork.Loaded += OnUtilityNetworkLoaded;
                             _ = utilityNetwork.LoadAsync();
                         }
                     }
@@ -423,6 +416,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 if (sender is UtilityNetwork utilityNetwork && utilityNetwork.LoadStatus == LoadStatus.Loaded)
                 {
+                    utilityNetwork.Loaded -= OnUtilityNetworkLoaded;
                     UtilityNetworks.Add(utilityNetwork);
                     IsReadyToConfigure = true;
                 }
@@ -1113,4 +1107,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
     }
 }
-#endif

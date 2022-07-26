@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -298,4 +297,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
     }
 }
-#endif

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Toolkit.Samples.Forms.Samples.UtilityNetworkTraceToolSample"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+    xmlns:esriTKConverter="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Converters;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+    xmlns:esriTKPrim="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+    xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+    Title="UtilityNetworkTraceTool">
+    <ContentPage.Resources>
+        <esriTKConverter:InverseConverter x:Key="InverseConverter" />
+    </ContentPage.Resources>
+
+    <esriTKPrim:BottomSheetLayout x:Name="ParentLayout">
+        <esriUI:MapView x:Name="MyMapView" />
+
+        <Grid Background="#dfdfdf" esriTKPrim:BottomSheetLayout.IsBottomSheet="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <Grid Margin="0,0,0,0" Background="#dfdfdf" Grid.Row="1" IsClippedToBounds="True">
+                <esriTK:UtilityNetworkTraceTool GeoView="{Binding Source={x:Reference MyMapView}}" />
+            </Grid>
+            <Grid Grid.Row="0" Background="#dfdfdf" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal, Converter={StaticResource Key=InverseConverter}}" HeightRequest="16">
+                <Frame Background="#dfdfdf" CornerRadius="8" HasShadow="False" />
+                <Frame HorizontalOptions="Center" Background="White" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
+            </Grid>
+            <Grid Grid.Row="2" Background="#dfdfdf" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal}" HeightRequest="16">
+                <Frame Background="#dfdfdf" CornerRadius="8" HasShadow="False" />
+                <Frame HorizontalOptions="Center" Background="White" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
+            </Grid>
+            
+        </Grid>
+    </esriTKPrim:BottomSheetLayout>
+
+</ContentPage>
