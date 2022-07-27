@@ -310,13 +310,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         {
             if (_controller.EnableTrace)
             {
-                if (Device.RuntimePlatform == Device.UWP)
+                var list = _controller.Results.ToList();
+                foreach (var item in list)
                 {
-                    var list = _controller.Results.ToList();
-                    foreach (var item in list)
-                    {
-                        _controller.Results.Remove(item);
-                    }
+                    _controller.Results.Remove(item);
                 }
 
                 _ = _controller.TraceAsync();
@@ -667,7 +664,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         }
 
         /// <summary>
-        /// Gets or sets the layout size that would be appropriate for the current UI state.
+        /// Gets the layout size that would be appropriate for the current UI state.
         /// </summary>
         /// <remarks>
         /// On mobile devices, it is often appropriate to minimize the control to show more of the map while adding starting points.
