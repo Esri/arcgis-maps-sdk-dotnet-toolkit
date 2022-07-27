@@ -201,7 +201,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Border BorderBrush="{StaticResource UNTraceBorder1}" BorderThickness="0,0,0,1">
-                                                <Grid Margin="2">
+                                                <Grid Margin="8,4,8,4">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="Auto" />
@@ -253,16 +253,16 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Border BorderBrush="{StaticResource UNTraceBorder1}" BorderThickness="0,0,0,1">
-                                                    <Grid Margin="8,0,0,0">
+                                                    <Grid Margin="8,0,8,0">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*" />
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBlock Style="{StaticResource UNTraceBoldText}" Text="{Binding Key.Name, Mode=OneWay}" />
+                                                        <TextBlock Style="{StaticResource UNTraceBoldText}" Text="{Binding Item1.Name, Mode=OneWay}" />
                                                         <TextBlock
                                                             Grid.Column="1"
                                                             Style="{StaticResource UNTraceBasicText}"
-                                                            Text="{Binding Count, Mode=OneWay}" />
+                                                            Text="{Binding Item2, Mode=OneWay}" />
                                                     </Grid>
                                                 </Border>
                                             </DataTemplate>

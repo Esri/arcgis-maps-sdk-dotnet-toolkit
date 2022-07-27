@@ -671,7 +671,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     RequestedViewpoint = new Viewpoint(bufferedGeometry);
                 }
 
-                resultInProgress.ElementResultsGrouped.AddRange(resultInProgress.ElementResults.GroupBy(m => m.AssetGroup).OrderByDescending(group => group.Count()));
+                resultInProgress.ElementResultsGrouped.AddRange(resultInProgress.ElementResults.GroupBy(m => m.AssetGroup).OrderByDescending(group => group.Count()).Select(grp => new Tuple<UtilityAssetGroup, int>(grp.Key, grp.Count())));
                 resultInProgress.Name = TraceName?.ToString() ?? GetDefaultTraceName();
                 Results.Add(resultInProgress);
             }

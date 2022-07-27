@@ -182,8 +182,8 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=E
                                             <ColumnDefinition Width=""*"" />
                                             <ColumnDefinition Width=""Auto"" />
                                         </Grid.ColumnDefinitions>
-                                        <Label Text=""{{Binding Key.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
-                                        <Label Text=""{{Binding Count}}"" Grid.Column=""1"" TextColor=""{foregroundColor}""  />
+                                        <Label Text=""{{Binding Item1.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
+                                        <Label Text=""{{Binding Item2}}"" Grid.Column=""1"" TextColor=""{foregroundColor}""  />
                                     </Grid>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
