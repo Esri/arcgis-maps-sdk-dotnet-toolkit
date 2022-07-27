@@ -15,11 +15,11 @@
 //  ******************************************************************************/
 using System;
 using Esri.ArcGISRuntime.Xamarin.Forms;
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives;
 using Xamarin.Forms;
 
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
+namespace Toolkit.Samples.Forms.Samples.Helpers
 {
-
     /// <summary>
     /// Layout used to acheive dynamic resize behavior.
     /// </summary>
@@ -80,7 +80,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
             _availableSwipeDistance = _fullHeight - _minimumSheetHeight;
             double bottomSheetHeight = 0;
             double bottomSheetWidth = 0;
-            MapView? savedMapView = null;
+            MapView savedMapView = null;
             foreach (var child in Children)
             {
                 if (child is MapView mapview)
@@ -182,34 +182,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
             private set => SetValue(IsHorizontalPropertyKey, value);
         }
 
-
-        private static void HandleDeferenceChange(BindableObject sender, object oldValue, object newValue)
+        /// <summary>
+        /// Gets or sets the requested size/pose for the bottom sheet.
+        /// </summary>
+        public ElementLayoutSizePreference RequestedSheetSize
         {
-            if (sender is Element sendingView)
-            {
-                while (sendingView.Parent != null)
-                {
-                    if (sendingView.Parent is BottomSheetLayout bottomSheetParent)
-                    {
-                        var prefString = newValue?.ToString();
-                        if (prefString == "collapsed")
-                        {
-                            bottomSheetParent._currentSwipeOffset = bottomSheetParent.IsHorizontal ? bottomSheetParent._availableSwipeDistance : 0;
-                        }
-                        else if (prefString == "5050")
-                        {
-                            bottomSheetParent._currentSwipeOffset = bottomSheetParent.IsHorizontal ? 0 : bottomSheetParent._availableSwipeDistance / 2;
-                        }
-                        else if (prefString == "maximized")
-                        {
-                            bottomSheetParent._currentSwipeOffset = bottomSheetParent.IsHorizontal ? 0 : bottomSheetParent._availableSwipeDistance;
-                        }
-                        
-                        bottomSheetParent.InvalidateLayout();
-                    }
+            get => (ElementLayoutSizePreference)GetValue(RequestedSheetSizeProperty);
+            set => SetValue(RequestedSheetSizeProperty, value);
+        }
 
-                    sendingView = sendingView.Parent;
+        /// <summary>
+        /// Identifies the <see cref="RequestedSheetSize"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty RequestedSheetSizeProperty =
+            BindableProperty.Create(nameof(RequestedSheetSize), typeof(ElementLayoutSizePreference), typeof(BottomSheetLayout), ElementLayoutSizePreference.NotSet, propertyChanged: HandleRequestedSizeChanged);
+
+        private static void HandleRequestedSizeChanged(BindableObject sender, object oldValue, object newValue)
+        {
+            if (sender is BottomSheetLayout bottomSheetParent && newValue is ElementLayoutSizePreference preference)
+            {
+                switch (preference)
+                {
+                    case ElementLayoutSizePreference.Collapsed:
+                        bottomSheetParent._currentSwipeOffset = bottomSheetParent.IsHorizontal ? bottomSheetParent._availableSwipeDistance : 0;
+                        break;
+                    case ElementLayoutSizePreference.Half:
+                        bottomSheetParent._currentSwipeOffset = bottomSheetParent.IsHorizontal ? 0 : bottomSheetParent._availableSwipeDistance / 2;
+                        break;
+                    case ElementLayoutSizePreference.Maximized:
+                        bottomSheetParent._currentSwipeOffset = bottomSheetParent.IsHorizontal ? 0 : bottomSheetParent._availableSwipeDistance;
+                        break;
                 }
+
+                bottomSheetParent.InvalidateLayout();
             }
         }
     }
