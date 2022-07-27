@@ -1,4 +1,19 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -18,12 +33,18 @@ using Grid = Xamarin.Forms.Grid;
 
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
+    /// <summary>
+    /// Represents a control that enables user to perform trace analysis with pre-configured trace types.
+    /// </summary>
     public partial class UtilityNetworkTraceTool : TemplatedView
     {
         private CancellationTokenSource? _identifyLayersCts;
         private readonly UtilityNetworkTraceToolController _controller;
         private List<GraphicsOverlay> _resultOverlays = new List<GraphicsOverlay>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UtilityNetworkTraceTool"/> class.
+        /// </summary>
         public UtilityNetworkTraceTool()
         {
             _controller = new UtilityNetworkTraceToolController();
@@ -35,137 +56,155 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             _controller.AutoZoomToTraceResults = AutoZoomToTraceResults;
             _controller.PropertyChanged += Controller_PropertyChanged;
             _controller.Results.CollectionChanged += Results_CollectionChanged;
-            _controller.TraceTypes.CollectionChanged += TraceTypes_CollectionChanged;
             _controller.StartingPoints.CollectionChanged += StartingPoints_CollectionChanged;
             _controller.UtilityNetworks.CollectionChanged += UtilityNetworks_CollectionChanged;
         }
 
+        /// <inheritdoc/>
         protected override void OnApplyTemplate()
         {
-            if (PART_NetworksCollectionView != null)
+            if (PART_ListViewNetworks != null)
             {
-                PART_NetworksCollectionView.ItemSelected -= PART_NetworksCollectionView_SelectionChanged;
-                PART_NetworksCollectionView.ItemsSource = null;
-            }
-            if (PART_TraceTypesListView != null)
-            {
-                PART_TraceTypesListView.ItemSelected -= PART_TraceTypesListView_ItemSelected;
-                PART_TraceTypesListView.ItemsSource = null;
+                PART_ListViewNetworks.ItemSelected -= PART_NetworksCollectionView_SelectionChanged;
+                PART_ListViewNetworks.ItemsSource = null;
             }
 
-            if (PART_AddStartingPointButton != null)
+            if (PART_ListViewTraceTypes != null)
             {
-                PART_AddStartingPointButton.Clicked -= PART_AddStartingPointButton_Clicked;
+                PART_ListViewTraceTypes.ItemSelected -= OnTraceTypeSelected;
+                PART_ListViewTraceTypes.ItemsSource = null;
             }
-            if (PART_StartingPointListViewUWP != null)
+
+            if (PART_ButtonAddStartingPoint != null)
             {
-                PART_StartingPointListViewUWP.ItemSelected -= PART_StartingPointListViewUWP_ItemSelected;
-                PART_StartingPointListViewUWP.ItemsSource = null;
+                PART_ButtonAddStartingPoint.Clicked -= OnAddStartingPointClicked;
             }
-            if (PART_RunTraceButton != null)
+
+            if (PART_ListViewStartingPoints != null)
             {
-                PART_RunTraceButton.Clicked -= PART_RunTraceButton_Clicked;
+                PART_ListViewStartingPoints.ItemSelected -= OnStartingPointSelected;
+                PART_ListViewStartingPoints.ItemsSource = null;
             }
+
+            if (PART_ButtonRunTrace != null)
+            {
+                PART_ButtonRunTrace.Clicked -= PART_RunTraceButton_Clicked;
+            }
+
             if (PART_NavigationSegment != null)
             {
-                PART_NavigationSegment.PropertyChanged -= PART_NavigationSegment_PropertyChanged;
+                PART_NavigationSegment.PropertyChanged -= OnSectionNavigated;
             }
-            if (PART_CancelAddStartingPointButton != null)
+
+            if (PART_ButtonCancelAddStartingPoint != null)
             {
-                PART_CancelAddStartingPointButton.Clicked -= PART_CancelAddStartingPointButton_Clicked;
+                PART_ButtonCancelAddStartingPoint.Clicked -= OnAddStartingPointCancelClicked;
             }
-            if(PART_CancelWaitButton != null)
+
+            if (PART_ButtonCancelActivity != null)
             {
-                PART_CancelWaitButton.Clicked -= PART_CancelWaitButton_Clicked;
+                PART_ButtonCancelActivity.Clicked -= PART_CancelWaitButton_Clicked;
             }
 
             base.OnApplyTemplate();
 
-            if (GetTemplateChild(nameof(PART_NetworksListLabel)) is Label _networkListLabel)
+            if (GetTemplateChild(nameof(PART_LabelNetworks)) is Label networkListLabel)
             {
-                PART_NetworksListLabel = _networkListLabel;
+                PART_LabelNetworks = networkListLabel;
             }
 
-            if (GetTemplateChild(nameof(PART_NetworksCollectionView)) is ListView _networksCollectionView)
+            if (GetTemplateChild(nameof(PART_ListViewNetworks)) is ListView networksCollectionView)
             {
-                PART_NetworksCollectionView = _networksCollectionView;
+                PART_ListViewNetworks = networksCollectionView;
 
-                PART_NetworksCollectionView.ItemsSource = _controller.UtilityNetworks;
-                PART_NetworksCollectionView.SelectedItem = _controller.SelectedUtilityNetwork;
-                PART_NetworksCollectionView.ItemSelected += PART_NetworksCollectionView_SelectionChanged;
-            }
-
-            if (GetTemplateChild(nameof(PART_TraceTypesLabel)) is Label traceTypesLabel)
-            {
-                PART_TraceTypesLabel = traceTypesLabel;
+                PART_ListViewNetworks.ItemsSource = _controller.UtilityNetworks;
+                PART_ListViewNetworks.SelectedItem = _controller.SelectedUtilityNetwork;
+                PART_ListViewNetworks.ItemSelected += PART_NetworksCollectionView_SelectionChanged;
             }
 
-            if (GetTemplateChild(nameof(PART_AddStartingPointButton)) is Button startingPointButton)
+            if (GetTemplateChild(nameof(PART_LabelTraceTypes)) is Label traceTypesLabel)
             {
-                PART_AddStartingPointButton = startingPointButton;
-                PART_AddStartingPointButton.Clicked += PART_AddStartingPointButton_Clicked;
+                PART_LabelTraceTypes = traceTypesLabel;
             }
-            if (GetTemplateChild(nameof(PART_StartingPointListViewUWP)) is ListView startingPointListView)
+
+            if (GetTemplateChild(nameof(PART_ButtonAddStartingPoint)) is Button startingPointButton)
             {
-                PART_StartingPointListViewUWP = startingPointListView;
-                PART_StartingPointListViewUWP.ItemsSource = _controller.StartingPoints;
-                PART_StartingPointListViewUWP.ItemSelected += PART_StartingPointListViewUWP_ItemSelected;
+                PART_ButtonAddStartingPoint = startingPointButton;
+                PART_ButtonAddStartingPoint.Clicked += OnAddStartingPointClicked;
             }
-            if (GetTemplateChild(nameof(PART_RunTraceButton)) is Button runTraceButton)
+
+            if (GetTemplateChild(nameof(PART_ListViewStartingPoints)) is ListView startingPointListView)
             {
-                PART_RunTraceButton = runTraceButton;
-                PART_RunTraceButton.Clicked += PART_RunTraceButton_Clicked;
+                PART_ListViewStartingPoints = startingPointListView;
+                PART_ListViewStartingPoints.ItemsSource = _controller.StartingPoints;
+                PART_ListViewStartingPoints.ItemSelected += OnStartingPointSelected;
             }
+
+            if (GetTemplateChild(nameof(PART_ButtonRunTrace)) is Button runTraceButton)
+            {
+                PART_ButtonRunTrace = runTraceButton;
+                PART_ButtonRunTrace.Clicked += PART_RunTraceButton_Clicked;
+            }
+
             if (GetTemplateChild(nameof(PART_NavigationSegment)) is SegmentedControl navSegment)
             {
                 PART_NavigationSegment = navSegment;
-                PART_NavigationSegment.PropertyChanged += PART_NavigationSegment_PropertyChanged;
+                PART_NavigationSegment.PropertyChanged += OnSectionNavigated;
             }
-            if (GetTemplateChild(nameof(PART_CancelAddStartingPointButton)) is Button cancelAdd)
+
+            if (GetTemplateChild(nameof(PART_ButtonCancelAddStartingPoint)) is Button cancelAdd)
             {
-                PART_CancelAddStartingPointButton = cancelAdd;
-                PART_CancelAddStartingPointButton.Clicked += PART_CancelAddStartingPointButton_Clicked;
+                PART_ButtonCancelAddStartingPoint = cancelAdd;
+                PART_ButtonCancelAddStartingPoint.Clicked += OnAddStartingPointCancelClicked;
             }
-            if (GetTemplateChild(nameof(PART_DuplicateTraceWarningContainer)) is View duplicateWarning)
+
+            if (GetTemplateChild(nameof(PART_DuplicateTraceWarning)) is View duplicateWarning)
             {
-                PART_DuplicateTraceWarningContainer = duplicateWarning;
+                PART_DuplicateTraceWarning = duplicateWarning;
             }
-            if (GetTemplateChild(nameof(PART_ExtraStartingPointsWarningContainer)) is View extraPointsWarning)
+
+            if (GetTemplateChild(nameof(PART_ExtraStartingPointsWarning)) is View extraPointsWarning)
             {
-                PART_ExtraStartingPointsWarningContainer = extraPointsWarning;
+                PART_ExtraStartingPointsWarning = extraPointsWarning;
             }
-            if (GetTemplateChild(nameof(PART_NeedMoreStartingPointsWarningContainer)) is View needMorePointsWarning)
+
+            if (GetTemplateChild(nameof(PART_NeedMoreStartingPointsWarning)) is View needMorePointsWarning)
             {
-                PART_NeedMoreStartingPointsWarningContainer = needMorePointsWarning;
+                PART_NeedMoreStartingPointsWarning = needMorePointsWarning;
             }
 
             if (GetTemplateChild(nameof(PART_NoNetworksWarning)) is View noNetworksWarning)
             {
                 PART_NoNetworksWarning = noNetworksWarning;
             }
+
             if (GetTemplateChild(nameof(PART_NoResultsWarning)) is View noResultsWarning)
             {
                 PART_NoResultsWarning = noResultsWarning;
             }
-            if (GetTemplateChild(nameof(PART_ResultDisplayUWP)) is Grid uwpResultGrid)
+
+            if (GetTemplateChild(nameof(PART_GridResultsDisplay)) is Grid uwpResultGrid)
             {
-                PART_ResultDisplayUWP = uwpResultGrid;
-                BindableLayout.SetItemsSource(PART_ResultDisplayUWP, _controller.Results);
+                PART_GridResultsDisplay = uwpResultGrid;
+                BindableLayout.SetItemsSource(PART_GridResultsDisplay, _controller.Results);
             }
-            if (GetTemplateChild(nameof(PART_TraceTypesListView)) is ListView listView)
+
+            if (GetTemplateChild(nameof(PART_ListViewTraceTypes)) is ListView listView)
             {
-                PART_TraceTypesListView = listView;
-                PART_TraceTypesListView.ItemsSource = _controller.TraceTypes;
-                PART_TraceTypesListView.ItemSelected += PART_TraceTypesListView_ItemSelected;
+                PART_ListViewTraceTypes = listView;
+                PART_ListViewTraceTypes.ItemsSource = _controller.TraceTypes;
+                PART_ListViewTraceTypes.ItemSelected += OnTraceTypeSelected;
             }
-            if(GetTemplateChild(nameof(PART_ActivityIndicator)) is Frame activityIndicator)
+
+            if (GetTemplateChild(nameof(PART_ActivityIndicator)) is Frame activityIndicator)
             {
                 PART_ActivityIndicator = activityIndicator;
             }
-            if(GetTemplateChild(nameof(PART_CancelWaitButton)) is Button cancelButton)
+
+            if (GetTemplateChild(nameof(PART_ButtonCancelActivity)) is Button cancelButton)
             {
-                PART_CancelWaitButton = cancelButton;
-                PART_CancelWaitButton.Clicked += PART_CancelWaitButton_Clicked;
+                PART_ButtonCancelActivity = cancelButton;
+                PART_ButtonCancelActivity.Clicked += PART_CancelWaitButton_Clicked;
             }
 
             ApplySegmentLayout();
@@ -173,26 +212,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
         private void PART_CancelWaitButton_Clicked(object sender, EventArgs e)
         {
-            _controller._traceCts.Cancel();
-            _controller._getFeaturesForElementsCts.Cancel();
+            _controller?._traceCts?.Cancel();
+            _controller?._getFeaturesForElementsCts?.Cancel();
+            _identifyLayersCts?.Cancel();
         }
 
-        private void PART_StartingPointListViewUWP_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            _controller.SelectedStartingPoint = e.SelectedItem as StartingPointModel;
-        }
+        private void OnStartingPointSelected(object sender, SelectedItemChangedEventArgs e) => _controller.SelectedStartingPoint = e.SelectedItem as StartingPointModel;
 
-        private void PART_TraceTypesListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            _controller.SelectedTraceType = e.SelectedItem as UtilityNamedTraceConfiguration;
-        }
+        private void OnTraceTypeSelected(object sender, SelectedItemChangedEventArgs e) => _controller.SelectedTraceType = e.SelectedItem as UtilityNamedTraceConfiguration;
 
-        private void PART_CancelAddStartingPointButton_Clicked(object sender, EventArgs e)
-        {
-            _controller.IsAddingStartingPoints = false;
-        }
+        private void OnAddStartingPointCancelClicked(object sender, EventArgs e) => _controller.IsAddingStartingPoints = false;
 
-        private void PART_NavigationSegment_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnSectionNavigated(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SegmentedControl.SelectedSegmentIndex))
             {
@@ -205,67 +236,72 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (!_controller.UtilityNetworks.Any())
             {
                 PART_NoNetworksWarning?.SetValue(IsVisibleProperty, true);
-                PART_NetworksCollectionView?.SetValue(IsVisibleProperty, false);
-                PART_NetworksListLabel?.SetValue(IsVisibleProperty, false);
-                PART_TraceTypesListView?.SetValue(IsVisibleProperty, false);
-                PART_TraceTypesLabel?.SetValue(IsVisibleProperty, false);
-                PART_AddStartingPointButton?.SetValue(IsVisibleProperty, false);
-                PART_StartingPointListViewUWP?.SetValue(IsVisibleProperty, false);
-                PART_RunTraceButton?.SetValue(IsVisibleProperty, false);
-                PART_ResultDisplayUWP?.SetValue(View.IsVisibleProperty, false);
-                PART_CancelAddStartingPointButton?.SetValue(IsVisibleProperty, false);
-                PART_ExtraStartingPointsWarningContainer?.SetValue(IsVisibleProperty, false);
-                PART_NeedMoreStartingPointsWarningContainer?.SetValue(IsVisibleProperty, false);
-                PART_DuplicateTraceWarningContainer?.SetValue(IsVisibleProperty, false);
+                PART_ListViewNetworks?.SetValue(IsVisibleProperty, false);
+                PART_LabelNetworks?.SetValue(IsVisibleProperty, false);
+                PART_ListViewTraceTypes?.SetValue(IsVisibleProperty, false);
+                PART_LabelTraceTypes?.SetValue(IsVisibleProperty, false);
+                PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
+                PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
+                PART_ButtonRunTrace?.SetValue(IsVisibleProperty, false);
+                PART_GridResultsDisplay?.SetValue(View.IsVisibleProperty, false);
+                PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
+                PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, false);
+                PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, false);
+                PART_DuplicateTraceWarning?.SetValue(IsVisibleProperty, false);
                 return;
             }
+
             PART_NoNetworksWarning?.SetValue(IsVisibleProperty, false);
-            PART_NetworksCollectionView?.SetValue(IsVisibleProperty, false);
+            PART_ListViewNetworks?.SetValue(IsVisibleProperty, false);
             PART_NoResultsWarning?.SetValue(IsVisibleProperty, false);
-            PART_NetworksListLabel?.SetValue(IsVisibleProperty, false);
-            PART_DuplicateTraceWarningContainer?.SetValue(IsVisibleProperty, false);
-            PART_RunTraceButton?.SetValue(IsVisibleProperty, false);
-            PART_ResultDisplayUWP?.SetValue(View.IsVisibleProperty, false);
-            PART_CancelAddStartingPointButton?.SetValue(IsVisibleProperty, false);
-            PART_TraceTypesLabel?.SetValue(IsVisibleProperty, false);
-            PART_TraceTypesListView?.SetValue(IsVisibleProperty, false);
-            PART_AddStartingPointButton?.SetValue(IsVisibleProperty, false);
-            PART_StartingPointListViewUWP?.SetValue(IsVisibleProperty, false);
-            PART_ExtraStartingPointsWarningContainer?.SetValue(IsVisibleProperty, false);
-            PART_NeedMoreStartingPointsWarningContainer?.SetValue(IsVisibleProperty, false);
+            PART_LabelNetworks?.SetValue(IsVisibleProperty, false);
+            PART_DuplicateTraceWarning?.SetValue(IsVisibleProperty, false);
+            PART_ButtonRunTrace?.SetValue(IsVisibleProperty, false);
+            PART_GridResultsDisplay?.SetValue(View.IsVisibleProperty, false);
+            PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
+            PART_LabelTraceTypes?.SetValue(IsVisibleProperty, false);
+            PART_ListViewTraceTypes?.SetValue(IsVisibleProperty, false);
+            PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
+            PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
+            PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, false);
+            PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, false);
+            if (PART_NavigationSegment == null)
+            {
+                return;
+            }
+
             switch (PART_NavigationSegment.SelectedSegmentIndex)
             {
                 // Select
                 case 0:
-                    PART_NetworksCollectionView?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
-                    PART_NetworksListLabel?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
-                    PART_TraceTypesListView?.SetValue(IsVisibleProperty, true);
-                    PART_TraceTypesLabel?.SetValue(IsVisibleProperty, true);
+                    PART_ListViewNetworks?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
+                    PART_LabelNetworks?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
+                    PART_ListViewTraceTypes?.SetValue(IsVisibleProperty, true);
+                    PART_LabelTraceTypes?.SetValue(IsVisibleProperty, true);
                     break;
+
                 // Configure
                 case 1:
-                    PART_StartingPointListViewUWP?.SetValue(IsVisibleProperty, true);
-                    PART_CancelAddStartingPointButton?.SetValue(IsVisibleProperty, _controller.IsAddingStartingPoints);
-                    PART_AddStartingPointButton?.SetValue(IsVisibleProperty, !_controller.IsAddingStartingPoints);
-                    PART_ExtraStartingPointsWarningContainer?.SetValue(IsVisibleProperty, _controller.TooManyStartingPointsWarning);
-                    PART_NeedMoreStartingPointsWarningContainer?.SetValue(IsVisibleProperty, _controller.InsufficientStartingPointsWarning);
+                    PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, true);
+                    PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, _controller.IsAddingStartingPoints);
+                    PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, !_controller.IsAddingStartingPoints);
+                    PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.TooManyStartingPointsWarning);
+                    PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.InsufficientStartingPointsWarning);
                     break;
+
                 // Run
                 case 2:
-                    PART_RunTraceButton?.SetValue(IsVisibleProperty, true);
-                    PART_DuplicateTraceWarningContainer?.SetValue(IsVisibleProperty, _controller.DuplicatedTraceWarning);
-                    PART_ExtraStartingPointsWarningContainer?.SetValue(IsVisibleProperty, _controller.TooManyStartingPointsWarning);
-                    PART_NeedMoreStartingPointsWarningContainer?.SetValue(IsVisibleProperty, _controller.InsufficientStartingPointsWarning);
+                    PART_ButtonRunTrace?.SetValue(IsVisibleProperty, true);
+                    PART_DuplicateTraceWarning?.SetValue(IsVisibleProperty, _controller.DuplicatedTraceWarning);
+                    PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.TooManyStartingPointsWarning);
+                    PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.InsufficientStartingPointsWarning);
                     break;
+
                 // Results
                 case 3:
-                    PART_ResultDisplayUWP?.SetValue(View.IsVisibleProperty, _controller.Results.Any());
+                    PART_GridResultsDisplay?.SetValue(View.IsVisibleProperty, _controller.Results.Any());
                     PART_NoResultsWarning?.SetValue(IsVisibleProperty, !_controller.Results.Any());
-
-                    if (GeoView != null)
-                    {
-                        GeoView.DismissCallout();
-                    }
+                    GeoView?.DismissCallout();
                     break;
             }
         }
@@ -281,52 +317,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     {
                         _controller.Results.Remove(item);
                     }
-                    //_controller.Results.Clear();
                 }
+
                 _ = _controller.TraceAsync();
             }
         }
 
-        private void PART_AddStartingPointButton_Clicked(object sender, EventArgs e)
-        {
-            _controller.IsAddingStartingPoints = !_controller.IsAddingStartingPoints;
-        }
-
-        private void PART_TraceTypesCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _controller.SelectedTraceType = e.CurrentSelection.FirstOrDefault() as UtilityNamedTraceConfiguration;
-        }
+        private void OnAddStartingPointClicked(object sender, EventArgs e) => _controller.IsAddingStartingPoints = !_controller.IsAddingStartingPoints;
 
         private void PART_NetworksCollectionView_SelectionChanged(object sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem is UtilityNetwork newSelection)
             {
-                //_controller.SelectedUtilityNetwork = newSelection;
+                _controller.SelectedUtilityNetwork = newSelection;
             }
         }
 
         private void UtilityNetworks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_controller.UtilityNetworks.Count > 1)
-            {
-                PART_NetworksListLabel?.SetValue(IsVisibleProperty, true);
-            }
-            //throw new NotImplementedException();
+            PART_LabelNetworks?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
         }
 
-        private void StartingPoints_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (GeoView != null)
-            {
-                GeoView.DismissCallout();
-            }
-            //throw new NotImplementedException();
-        }
-
-        private void TraceTypes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
+        private void StartingPoints_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => GeoView?.DismissCallout();
 
         private void Results_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -384,8 +396,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             if (_controller.Results.Any())
             {
-                PART_NavigationSegment.SelectedSegmentIndex = 3;
                 SetValue(BottomSheetLayout.LayoutPreferenceProperty, "5050");
+                PART_NavigationSegment?.SetValue(SegmentedControl.SelectedSegmentIndexProperty, 3);
             }
         }
 
@@ -396,28 +408,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 case nameof(_controller.IsAddingStartingPoints):
                     if (_controller.IsAddingStartingPoints)
                     {
-                        PART_NavigationSegment.SelectedSegmentIndex = 1;
-                        PART_AddStartingPointButton?.SetValue(IsVisibleProperty, false);
-                        PART_StartingPointListViewUWP?.SetValue(IsVisibleProperty, false);
-                        PART_CancelAddStartingPointButton?.SetValue(IsVisibleProperty, true);
                         SetValue(BottomSheetLayout.LayoutPreferenceProperty, "collapsed");
+                        PART_NavigationSegment?.SetValue(SegmentedControl.SelectedSegmentIndexProperty, 1);
+                        PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
+                        PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
+                        PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, true);
                     }
                     else
                     {
-                        PART_AddStartingPointButton?.SetValue(IsVisibleProperty, true);
-                        PART_StartingPointListViewUWP?.SetValue(IsVisibleProperty, true);
-                        PART_CancelAddStartingPointButton?.SetValue(IsVisibleProperty, false);
                         SetValue(BottomSheetLayout.LayoutPreferenceProperty, "5050");
+                        PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, true);
+                        PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, true);
+                        PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
                     }
+
                     break;
                 case nameof(_controller.EnableTrace):
-                    PART_RunTraceButton?.SetValue(IsEnabledProperty, _controller.EnableTrace);
+                    PART_ButtonRunTrace?.SetValue(IsEnabledProperty, _controller.EnableTrace);
                     break;
                 case nameof(_controller.RequestedViewpoint):
                     if (GeoView != null && _controller.RequestedViewpoint != null)
                     {
                         GeoView.SetViewpoint(_controller.RequestedViewpoint);
                     }
+
                     break;
                 case nameof(_controller.RequestedCallout):
                     if (GeoView != null)
@@ -431,6 +445,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                             GeoView.ShowCalloutAt(_controller.RequestedCallout.Item2, _controller.RequestedCallout.Item1);
                         }
                     }
+
                     break;
                 case nameof(_controller.DuplicatedTraceWarning):
                 case nameof(_controller.InsufficientStartingPointsWarning):
@@ -439,8 +454,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                     break;
                 case nameof(_controller.IsLoadingNetwork):
                 case nameof(_controller.IsRunningTrace):
-                    PART_ActivityIndicator?.SetValue(IsVisibleProperty, _controller.IsRunningTrace || _controller.IsLoadingNetwork);
-                    PART_CancelWaitButton?.SetValue(IsVisibleProperty, _controller.IsRunningTrace);
+                    PART_ActivityIndicator?.SetValue(IsVisibleProperty, _controller.IsRunningTrace || _controller.IsLoadingNetwork || _identifyLayersCts != null);
+                    PART_ButtonCancelActivity?.SetValue(IsVisibleProperty, _controller.IsRunningTrace || _identifyLayersCts != null);
                     break;
             }
         }
@@ -487,6 +502,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                             }
                         }
                     }
+
                     if (newGeoView is MapView mv && mv.Map != null)
                     {
                         sendingView._controller.Map = mv.Map;
@@ -494,9 +510,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 }
             }
         }
+
         private void OnGeoModelPropertyChanged(object? sender, PropertyChangedEventArgs? e)
         {
-            if (e.PropertyName == nameof(MapView.Map) && GeoView is MapView mv)
+            if (e?.PropertyName == nameof(MapView.Map) && GeoView is MapView mv)
             {
                 _controller.Map = mv.Map;
             }
@@ -511,14 +528,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 
             try
             {
-                //_part_identifyInProgressIndicator?.SetValue(VisibilityProperty, Visibility.Visible);
-
                 if (sender is GeoView geoView)
                 {
                     if (_identifyLayersCts != null)
                     {
                         _identifyLayersCts.Cancel();
                     }
+
+                    PART_ActivityIndicator?.SetValue(IsVisibleProperty, _controller.IsRunningTrace || _controller.IsLoadingNetwork || _identifyLayersCts != null);
+                    PART_ButtonCancelActivity?.SetValue(IsVisibleProperty, _controller.IsRunningTrace || _identifyLayersCts != null);
 
                     _identifyLayersCts = new CancellationTokenSource();
                     var identifyResults = await geoView.IdentifyLayersAsync(e.Position, 10d, false, _identifyLayersCts.Token);
@@ -541,7 +559,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             }
             finally
             {
-                //_part_identifyInProgressIndicator?.SetValue(VisibilityProperty, Visibility.Collapsed);
+                _identifyLayersCts = null;
+                PART_ActivityIndicator?.SetValue(IsVisibleProperty, _controller.IsRunningTrace || _controller.IsLoadingNetwork || _identifyLayersCts != null);
+                PART_ButtonCancelActivity?.SetValue(IsVisibleProperty, _controller.IsRunningTrace || _identifyLayersCts != null);
             }
         }
 
@@ -589,49 +609,101 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         public static readonly BindableProperty GeoViewProperty =
             BindableProperty.Create(nameof(GeoView), typeof(GeoView), typeof(UtilityNetworkTraceTool), null, propertyChanged: OnGeoViewPropertyChanged);
 
+        /// <summary>
+        /// Gets or sets a <see cref="Symbol"/> that represents a starting point.
+        /// </summary>
+        /// <value>
+        /// A <see cref="Symbol"/> that represents a starting point.
+        /// </value>
         public Symbol? StartingPointSymbol
         {
             get => GetValue(StartingPointSymbolProperty) as Symbol;
             set => SetValue(StartingPointSymbolProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets a <see cref="Symbol"/> that represents an aggregated multipoint trace result.
+        /// </summary>
+        /// <value>
+        /// A <see cref="Symbol"/> that represents an aggregated multipoint trace result.
+        /// </value>
         public Symbol? ResultPointSymbol
         {
             get => GetValue(ResultPointSymbolProperty) as Symbol;
             set => SetValue(ResultPointSymbolProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets a <see cref="Symbol"/> that represents an aggregated polyline trace result.
+        /// </summary>
+        /// <value>
+        /// A <see cref="Symbol"/> that represents an aggregated polyline trace result.
+        /// </value>
         public Symbol? ResultLineSymbol
         {
             get => GetValue(ResultLineSymbolProperty) as Symbol;
             set => SetValue(ResultLineSymbolProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets a <see cref="Symbol"/> that represents an aggregated polygon trace result.
+        /// </summary>
+        /// <value>
+        /// A <see cref="Symbol"/> that represents an aggregated polygon trace result.
+        /// </value>
         public Symbol? ResultFillSymbol
         {
             get => GetValue(ResultFillSymbolProperty) as Symbol;
             set => SetValue(ResultFillSymbolProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the GeoView should automatically zoom to show trace results.
+        /// </summary>
         public bool AutoZoomToTraceResults
         {
             get => (bool)GetValue(AutoZoomToTraceResultsProperty);
             set => SetValue(AutoZoomToTraceResultsProperty, value);
         }
+
+        /// <summary>
+        /// Identifies the <see cref="AutoZoomToTraceResults"/> bindable property.
+        /// </summary>
         public static readonly BindableProperty AutoZoomToTraceResultsProperty =
             BindableProperty.Create(nameof(AutoZoomToTraceResults), typeof(bool), typeof(UtilityNetworkTraceTool), true, propertyChanged: OnAutoZoomPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="ResultLineSymbol"/> bindable property.
+        /// </summary>
         public static readonly BindableProperty ResultLineSymbolProperty =
             BindableProperty.Create(nameof(ResultLineSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), propertyChanged: OnResultLineSymbolPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="ResultPointSymbol"/> bindable property.
+        /// </summary>
         public static readonly BindableProperty ResultPointSymbolProperty =
             BindableProperty.Create(nameof(ResultPointSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), propertyChanged: OnResultPointSymbolPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="StartingPointSymbol"/> bindable property.
+        /// </summary>
         public static readonly BindableProperty StartingPointSymbolProperty =
             BindableProperty.Create(nameof(StartingPointSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), propertyChanged: OnStartingPointSymbolPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="ResultFillSymbol"/> bindable property.
+        /// </summary>
         public static readonly BindableProperty ResultFillSymbolProperty =
             BindableProperty.Create(nameof(ResultFillSymbol), typeof(Symbol), typeof(UtilityNetworkTraceTool), propertyChanged: OnResultFillSymbolPropertyChanged);
 
         private static void OnAutoZoomPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
         {
-            if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller)
+            if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller && newValue != null)
             {
                 controller.AutoZoomToTraceResults = (bool)newValue;
             }
         }
+
         private static void OnStartingPointSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller)
@@ -639,6 +711,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 controller.StartingPointSymbol = newValue as Symbol;
             }
         }
+
         private static void OnResultPointSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller)
@@ -646,6 +719,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 controller.ResultPointSymbol = newValue as Symbol;
             }
         }
+
         private static void OnResultLineSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller)
@@ -653,6 +727,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 controller.ResultLineSymbol = newValue as Symbol;
             }
         }
+
         private static void OnResultFillSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
         {
             if (sender is UtilityNetworkTraceTool untt && untt._controller is UtilityNetworkTraceToolController controller)
@@ -660,6 +735,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 controller.ResultFillSymbol = newValue as Symbol;
             }
         }
+
         /// <summary>
         /// Event raised when a new utility network is selected.
         /// </summary>
@@ -669,7 +745,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
         /// Event raised when a utility network trace is completed.
         /// </summary>
         public event EventHandler<UtilityNetworkTraceCompletedEventArgs>? UtilityNetworkTraceCompleted;
-
     }
 }
-

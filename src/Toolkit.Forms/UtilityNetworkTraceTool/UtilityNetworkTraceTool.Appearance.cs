@@ -1,5 +1,19 @@
-﻿using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives;
-using System;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives;
 using Xamarin.Forms;
 using XForms = Xamarin.Forms.Xaml;
 
@@ -7,24 +21,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     public partial class UtilityNetworkTraceTool
     {
-        private Label? PART_NetworksListLabel;
-        private ListView? PART_NetworksCollectionView;
-        private Label? PART_TraceTypesLabel;
-        private ListView? PART_TraceTypesListView;
-        private Frame? PART_ActivityIndicator;
-        private Button? PART_AddStartingPointButton;
-        private ListView? PART_StartingPointListViewUWP;
-        private Button? PART_RunTraceButton;
-        private Button? PART_CancelAddStartingPointButton;
-        private Button? PART_CancelWaitButton;
+#pragma warning disable SA1310, SX1309, SA1306
+        // Navigation
         private SegmentedControl? PART_NavigationSegment;
-        private View? PART_DuplicateTraceWarningContainer;
-        private View? PART_ExtraStartingPointsWarningContainer;
-        private View? PART_NeedMoreStartingPointsWarningContainer;
+
+        // Select section
+        private Label? PART_LabelNetworks;
+        private ListView? PART_ListViewNetworks;
+        private Label? PART_LabelTraceTypes;
+        private ListView? PART_ListViewTraceTypes;
+
+        // Configure section
+        private Button? PART_ButtonAddStartingPoint;
+        private Button? PART_ButtonCancelAddStartingPoint;
+        private ListView? PART_ListViewStartingPoints;
+
+        // Run section
+        private Button? PART_ButtonRunTrace;
+
+        // View section
+        private Grid? PART_GridResultsDisplay;
+
+        // Warnings (multiple sections)
+        private View? PART_DuplicateTraceWarning;
+        private View? PART_ExtraStartingPointsWarning;
+        private View? PART_NeedMoreStartingPointsWarning;
         private View? PART_NoResultsWarning;
         private View? PART_NoNetworksWarning;
-        // UWP helper
-        private Grid? PART_ResultDisplayUWP;
+
+        // Loading indicators and cancel
+        private Frame? PART_ActivityIndicator;
+        private Button? PART_ButtonCancelActivity;
+#pragma warning restore SA1310, SX1309, SA1306
 
         private static readonly ControlTemplate DefaultControlTemplate;
 
@@ -46,8 +74,8 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=E
     </Frame>
     <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" Padding=""0"" />
     <StackLayout Spacing=""8"" Grid.Row=""2"">
-        <Label x:Name=""{nameof(PART_NetworksListLabel)}"" Text=""Networks"" FontAttributes=""Bold"" />
-        <ListView x:Name=""{nameof(PART_NetworksCollectionView)}"" ios:ListView.SeparatorStyle=""FullWidth"" Background=""#dfdfdf"">
+        <Label x:Name=""{nameof(PART_LabelNetworks)}"" Text=""Networks"" FontAttributes=""Bold"" />
+        <ListView x:Name=""{nameof(PART_ListViewNetworks)}"" ios:ListView.SeparatorStyle=""FullWidth"" Background=""#dfdfdf"">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -56,8 +84,8 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=E
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Label x:Name=""{nameof(PART_TraceTypesLabel)}"" Text=""Named trace configurations"" FontAttributes=""Bold"" />
-        <ListView x:Name=""{nameof(PART_TraceTypesListView)}"" ios:ListView.SeparatorStyle=""FullWidth"" Background=""#dfdfdf""> 
+        <Label x:Name=""{nameof(PART_LabelTraceTypes)}"" Text=""Named trace configurations"" FontAttributes=""Bold"" />
+        <ListView x:Name=""{nameof(PART_ListViewTraceTypes)}"" ios:ListView.SeparatorStyle=""FullWidth"" Background=""#dfdfdf""> 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -66,9 +94,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=E
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button x:Name=""{nameof(PART_AddStartingPointButton)}"" Text=""Add starting point"" />
-        <Button x:Name=""{nameof(PART_CancelAddStartingPointButton)}"" Text=""Cancel"" />
-        <ListView x:Name=""{nameof(PART_StartingPointListViewUWP)}"" ios:ListView.SeparatorStyle=""FullWidth"" RowHeight=""64"" HasUnevenRows=""True"" Background=""#dfdfdf"">
+        <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""Add starting point"" />
+        <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""Cancel"" />
+        <ListView x:Name=""{nameof(PART_ListViewStartingPoints)}"" ios:ListView.SeparatorStyle=""FullWidth"" RowHeight=""64"" HasUnevenRows=""True"" Background=""#dfdfdf"">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -92,20 +120,20 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=E
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Frame x:Name=""{nameof(PART_NeedMoreStartingPointsWarningContainer)}"" BorderColor=""#EDD317"" CornerRadius=""4"" Margin=""4"">
+        <Frame x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" BorderColor=""#EDD317"" CornerRadius=""4"" Margin=""4"">
             <Label Text=""Not enough starting points. Use the 'Configure' section to add starting points."" />
         </Frame>
-        <Frame x:Name=""{nameof(PART_ExtraStartingPointsWarningContainer)}"" BorderColor=""#007AC2"" CornerRadius=""4"" Margin=""4"">
+        <Frame x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" BorderColor=""#007AC2"" CornerRadius=""4"" Margin=""4"">
             <Label Text=""There are more starting points than required for the selected trace configuration."" />
         </Frame>
-        <Frame x:Name=""{nameof(PART_DuplicateTraceWarningContainer)}"" BorderColor=""#EDD317"" CornerRadius=""4"" Margin=""4"">
+        <Frame x:Name=""{nameof(PART_DuplicateTraceWarning)}"" BorderColor=""#EDD317"" CornerRadius=""4"" Margin=""4"">
             <Label Text=""The selected trace configuration has already been run with the selected starting points."" />
         </Frame>
-        <Button x:Name=""{nameof(PART_RunTraceButton)}"" Text=""Run Trace"" />
+        <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""Run Trace"" />
         <Frame x:Name=""{nameof(PART_NoResultsWarning)}"" BorderColor=""#D83020"" CornerRadius=""4"" Margin=""4"">
             <Label Text=""No results."" />
         </Frame>
-        <Grid x:Name=""{nameof(PART_ResultDisplayUWP)}"" IsVisible=""false"">
+        <Grid x:Name=""{nameof(PART_GridResultsDisplay)}"" IsVisible=""false"">
                         <BindableLayout.ItemTemplate>
                 <DataTemplate>
                     <ScrollView>
@@ -177,7 +205,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=E
     <Frame x:Name=""{nameof(PART_ActivityIndicator)}"" IsVisible=""false"" Grid.RowSpan=""3"" VerticalOptions=""FillAndExpand"" HorizontalOptions=""FillAndExpand"" Background=""#eaeaea"" HasShadow=""False"" CornerRadius=""0"" BorderColor=""#eaeaea"">
         <StackLayout Spacing=""8"" VerticalOptions=""Center"" HorizontalOptions=""CenterAndExpand"">
             <ActivityIndicator IsRunning=""True"" />
-            <Button x:Name=""{nameof(PART_CancelWaitButton)}"" Text=""Cancel"" />
+            <Button x:Name=""{nameof(PART_ButtonCancelActivity)}"" Text=""Cancel"" />
         </StackLayout>
     </Frame>
 </Grid>
@@ -186,4 +214,3 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=E
         }
     }
 }
-
