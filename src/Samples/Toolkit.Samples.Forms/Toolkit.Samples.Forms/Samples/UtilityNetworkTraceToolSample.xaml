@@ -11,27 +11,30 @@
     Title="UtilityNetworkTraceTool">
     <ContentPage.Resources>
         <esriTKConverter:InverseConverter x:Key="InverseConverter" />
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="{AppThemeBinding Dark=#353535, Light=#F8F8F8}" />
+        </Style>
     </ContentPage.Resources>
     <helpers:BottomSheetLayout x:Name="ParentLayout" Grid.Row="1" RequestedSheetSize="{Binding Source={x:Reference UnTraceTool}, Path=RequestedLayoutSize}">
         <esriUI:MapView x:Name="MyMapView" />
 
-        <Grid Background="#dfdfdf" helpers:BottomSheetLayout.IsBottomSheet="True">
+        <Grid Background="{AppThemeBinding Dark=#353535, Light=#F8F8F8}"  helpers:BottomSheetLayout.IsBottomSheet="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Grid Margin="0,0,0,0" Background="#dfdfdf" Grid.Row="1" IsClippedToBounds="True">
+            <Grid Margin="0,0,0,0" Grid.Row="1" IsClippedToBounds="True">
                 <esriTK:UtilityNetworkTraceTool x:Name="UnTraceTool" GeoView="{Binding Source={x:Reference MyMapView}}" />
             </Grid>
-            <Grid Grid.Row="0" Background="#dfdfdf" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal, Converter={StaticResource Key=InverseConverter}}" HeightRequest="16">
-                <Frame Background="#dfdfdf" CornerRadius="8" HasShadow="False" />
-                <Frame HorizontalOptions="Center" Background="White" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
+            <Grid Grid.Row="0" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal, Converter={StaticResource Key=InverseConverter}}" HeightRequest="16">
+                <Frame Background="{AppThemeBinding Dark=#353535, Light=#F8F8F8}" CornerRadius="8" HasShadow="False" />
+                <Frame HorizontalOptions="Center" Background="{AppThemeBinding Dark=#ffffff, Light=#151515}" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
             </Grid>
-            <Grid Grid.Row="2" Background="#dfdfdf" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal}" HeightRequest="16">
-                <Frame Background="#dfdfdf" CornerRadius="8" HasShadow="False" />
-                <Frame HorizontalOptions="Center" Background="White" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
+            <Grid Grid.Row="2" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal}" HeightRequest="16">
+                <Frame Background="{AppThemeBinding Dark=#353535, Light=#F8F8F8}" CornerRadius="8" HasShadow="False" />
+                <Frame HorizontalOptions="Center" Background="{AppThemeBinding Dark=#ffffff, Light=#151515}" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
             </Grid>
             
         </Grid>

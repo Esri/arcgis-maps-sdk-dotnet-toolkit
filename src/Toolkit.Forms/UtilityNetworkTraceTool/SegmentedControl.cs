@@ -42,17 +42,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
         {
             _selectionFill = new Rectangle
             {
-                Fill = new SolidColorBrush(System.Drawing.Color.FromArgb(243, 243, 243)),
                 RadiusX = 6.0,
                 RadiusY = 6.0,
             };
 
             _backgroundFill = new Rectangle
             {
-                Fill = new SolidColorBrush(System.Drawing.Color.FromArgb(168, 168, 168)),
                 RadiusX = 6.0,
                 RadiusY = 6.0,
             };
+            _backgroundFill.SetOnAppTheme<Brush>(Rectangle.FillProperty, new SolidColorBrush(System.Drawing.Color.FromArgb(234, 234, 234)), new SolidColorBrush(System.Drawing.Color.FromArgb(21, 21, 21)));
+            _selectionFill.SetOnAppTheme<Brush>(Rectangle.FillProperty, new SolidColorBrush(System.Drawing.Color.FromArgb(0, 122, 194)), new SolidColorBrush(System.Drawing.Color.FromArgb(0, 154, 242)));
+
             Children.Add(_backgroundFill);
             Children.Add(_selectionFill);
 
@@ -166,11 +167,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
                     label.Layout(new Rectangle2(lastXPosition, 0, widthForSelectedSegment, availableHeight));
                     animationXStart = lastXPosition;
                     lastXPosition += widthForSelectedSegment;
+                    label.TextColor = Color.White;
                 }
                 else
                 {
                     label.Layout(new Rectangle2(lastXPosition, 0, widthPerUnselectedSegment, availableHeight));
                     lastXPosition += widthPerUnselectedSegment;
+                    label.SetAppThemeColor(Label.TextColorProperty, Color.FromRgb(21, 21, 21), Color.White);
                 }
 
                 labelIndex++;
