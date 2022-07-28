@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
         /// <summary>
         /// Identifies the <see cref="SelectedSegmentIndex"/> bindable property.
         /// </summary>
-        public static readonly BindableProperty SelectedSegmentIndexProperty = BindableProperty.Create(nameof(SelectedSegmentIndex), typeof(int), typeof(SegmentedControl), propertyChanged: OnSelectionChanged);
+        public static readonly BindableProperty SelectedSegmentIndexProperty = BindableProperty.Create(nameof(SelectedSegmentIndex), typeof(int), typeof(SegmentedControl), defaultValue: 0, propertyChanged: OnSelectionChanged);
 
         private void HandleLabelTap(object sender, EventArgs e)
         {
