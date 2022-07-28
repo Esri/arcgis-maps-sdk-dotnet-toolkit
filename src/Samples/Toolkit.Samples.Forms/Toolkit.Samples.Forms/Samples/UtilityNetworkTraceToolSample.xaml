@@ -6,8 +6,8 @@
     xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
     xmlns:esriTKConverter="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Converters;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
     xmlns:esriTKPrim="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-    xmlns:helpers="clr-namespace:Toolkit.Samples.Forms.Samples.Helpers;assembly=Toolkit.Samples.Forms"
     xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+    xmlns:helpers="clr-namespace:Toolkit.Samples.Forms.Samples.Helpers;assembly=Toolkit.Samples.Forms"
     Title="UtilityNetworkTraceTool">
     <ContentPage.Resources>
         <esriTKConverter:InverseConverter x:Key="InverseConverter" />
@@ -15,28 +15,12 @@
             <Setter Property="Background" Value="{AppThemeBinding Dark=#353535, Light=#F8F8F8}" />
         </Style>
     </ContentPage.Resources>
-    <helpers:BottomSheetLayout x:Name="ParentLayout" Grid.Row="1" RequestedSheetSize="{Binding Source={x:Reference UnTraceTool}, Path=RequestedLayoutSize}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <esriUI:MapView x:Name="MyMapView" />
-
-        <Grid Background="{AppThemeBinding Dark=#353535, Light=#F8F8F8}"  helpers:BottomSheetLayout.IsBottomSheet="True">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid Margin="0,0,0,0" Grid.Row="1" IsClippedToBounds="True">
-                <esriTK:UtilityNetworkTraceTool x:Name="UnTraceTool" GeoView="{Binding Source={x:Reference MyMapView}}" />
-            </Grid>
-            <Grid Grid.Row="0" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal, Converter={StaticResource Key=InverseConverter}}" HeightRequest="16">
-                <Frame Background="{AppThemeBinding Dark=#353535, Light=#F8F8F8}" CornerRadius="8" HasShadow="False" />
-                <Frame HorizontalOptions="Center" Background="{AppThemeBinding Dark=#ffffff, Light=#151515}" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
-            </Grid>
-            <Grid Grid.Row="2" IsVisible="{Binding Source={x:Reference ParentLayout}, Path=IsHorizontal}" HeightRequest="16">
-                <Frame Background="{AppThemeBinding Dark=#353535, Light=#F8F8F8}" CornerRadius="8" HasShadow="False" />
-                <Frame HorizontalOptions="Center" Background="{AppThemeBinding Dark=#ffffff, Light=#151515}" VerticalOptions="Center" HeightRequest="1" WidthRequest="250" Margin="6" CornerRadius="8" HasShadow="False" />
-            </Grid>
-            
-        </Grid>
-    </helpers:BottomSheetLayout>
+        <esriTK:UtilityNetworkTraceTool Grid.Row="1" GeoView="{Binding Source={x:Reference MyMapView}}" />
+    </Grid>
 </ContentPage>

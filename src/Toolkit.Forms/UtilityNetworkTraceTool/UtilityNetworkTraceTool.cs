@@ -394,7 +394,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             if (_controller.Results.Any())
             {
                 PART_NavigationSegment?.SetValue(SegmentedControl.SelectedSegmentIndexProperty, 3);
-                RequestedLayoutSize = ElementLayoutSizePreference.Half;
             }
         }
 
@@ -409,14 +408,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                         PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
                         PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
                         PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, true);
-                        RequestedLayoutSize = ElementLayoutSizePreference.Collapsed;
                     }
                     else
                     {
                         PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, true);
                         PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, true);
                         PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
-                        RequestedLayoutSize = ElementLayoutSizePreference.Half;
                     }
 
                     break;
@@ -662,26 +659,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
             get => (bool)GetValue(AutoZoomToTraceResultsProperty);
             set => SetValue(AutoZoomToTraceResultsProperty, value);
         }
-
-        /// <summary>
-        /// Gets the layout size that would be appropriate for the current UI state.
-        /// </summary>
-        /// <remarks>
-        /// On mobile devices, it is often appropriate to minimize the control to show more of the map while adding starting points.
-        /// </remarks>
-        public ElementLayoutSizePreference RequestedLayoutSize
-        {
-            get => (ElementLayoutSizePreference)GetValue(RequestedLayoutSizeProperty);
-            private set => SetValue(RequestedLayoutSizePropertyKey, value);
-        }
-
-        internal static readonly BindablePropertyKey RequestedLayoutSizePropertyKey =
-            BindableProperty.CreateReadOnly(nameof(RequestedLayoutSize), typeof(ElementLayoutSizePreference), typeof(UtilityNetwork), ElementLayoutSizePreference.NotSet);
-
-        /// <summary>
-        /// Identifies the <see cref="RequestedLayoutSize"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty RequestedLayoutSizeProperty = RequestedLayoutSizePropertyKey.BindableProperty;
 
         /// <summary>
         /// Identifies the <see cref="AutoZoomToTraceResults"/> bindable property.

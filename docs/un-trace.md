@@ -44,7 +44,7 @@ The following properties enable customizing symbology:
 
 ## Usage
 
-WPF, UWP:
+WPF, UWP, Xamarin.Forms:
 
 ```xml
 <Grid>
@@ -58,16 +58,3 @@ WPF, UWP:
 ```
 
 The default template for this control is optimized for a panel or side-by-side presentation with a width of around 300 dip.
-
-Xamarin.Forms:
-
-On Xamarin.Forms, the trace tool has a bindable `RequestedLayoutSize` property, which indicates the desired layout size.
-This can be used with certain layouts to automatically minimize and maximize the control to facilitate map interaction.
-
-Example, where `RequestedSheetSize` is defined on the parent layout:
-
-```xml
-`RequestedSheetSize="{Binding Source={x:Reference UnTraceTool}, Path=RequestedLayoutSize}"`
-```
-
-See the sample for a full example including a responsive layout page that simulates a bottom sheet.
