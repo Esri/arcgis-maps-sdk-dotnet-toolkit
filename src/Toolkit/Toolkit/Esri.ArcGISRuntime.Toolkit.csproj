@@ -79,7 +79,7 @@
     <Compile Include="UI\Controls\FloorFilter\FloorFilterController.cs" />
     <Compile Include="UI\Controls\FloorFilter\AutomaticSelectionMode.cs" />
     <Compile Include="UI\Controls\UtilityNetworkTraceTool\UtilityNetworkTraceToolController.cs" />
-	<Compile Include="UI\Controls\UtilityNetworkTraceTool\UtilityTraceOperationResult.cs" />
+    <Compile Include="UI\Controls\UtilityNetworkTraceTool\UtilityTraceOperationResult.cs" />
     <Compile Include="UI\Controls\UtilityNetworkTraceTool\UtilityNetworkTraceCompletedEventArgs.cs" />
     <Compile Include="UI\Controls\UtilityNetworkTraceTool\UtilityNetworkChangedEventArgs.cs" />
     <Compile Include="UI\Controls\UtilityNetworkTraceTool\StartingPointModel.cs" />

@@ -150,7 +150,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
             }
 
             double availableHeight = Height;
-            double availableWidth = Width;
             double widthPerUnselectedSegment;
             double widthForSelectedSegment = widthPerUnselectedSegment = Width / _segmentLabels.Count();
 

@@ -13,7 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Primitives
+namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
 {
     /// <summary>
     /// Enumeration of size preferences for a UI element. Used by <see cref="UtilityNetworkTraceTool"/> to indicate when it should be shown in a collapsed or expanded state.
