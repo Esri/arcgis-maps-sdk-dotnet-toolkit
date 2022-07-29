@@ -117,5 +117,5 @@ Use named trace configurations defined in a web map to perform connected trace o
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |TableOfContents   | N/A | Preview | N/A  | N/A | N/A |
 |[TimeSlider](time-slider.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|[UtilityNetworkTraceTool](un-trace.md) | ❌ | ✔ | ❌ | ❌ | ❌ |
+|[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
 

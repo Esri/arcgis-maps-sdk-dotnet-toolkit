@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -76,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Gets the utility element results, if any, grouped by asset group.
         /// </summary>
-        public List<IGrouping<UtilityAssetGroup, UtilityElement>> ElementResultsGrouped { get; } = new List<IGrouping<UtilityAssetGroup, UtilityElement>>();
+        public List<Tuple<UtilityAssetGroup, int>> ElementResultsGrouped { get; } = new List<Tuple<UtilityAssetGroup, int>>();
 
         /// <summary>
         /// Gets or sets the name for this trace operation. This is use configurable to facilitate differentiation of trace operations.
@@ -298,4 +297,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
     }
 }
-#endif

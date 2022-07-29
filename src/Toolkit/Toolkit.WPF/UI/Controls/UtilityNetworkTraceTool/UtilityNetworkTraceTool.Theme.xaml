@@ -286,8 +286,8 @@
                                                             <ColumnDefinition Width="*" />
                                                             <ColumnDefinition Width="Auto" />
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Key.Name, Mode=OneWay}" />
-                                                        <TextBlock Grid.Column="1" Text="{Binding Count, Mode=OneWay}" />
+                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Item1.Name, Mode=OneWay}" />
+                                                        <TextBlock Grid.Column="1" Text="{Binding Item2, Mode=OneWay}" />
                                                     </Grid>
                                                 </Border>
                                             </DataTemplate>
