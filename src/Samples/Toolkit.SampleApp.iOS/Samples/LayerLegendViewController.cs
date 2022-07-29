@@ -36,9 +36,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             };
             mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector())
             {
-                InitialViewpoint = new Viewpoint(new Envelope(-1.98402303E7, 2144435, -7452840, 1.15368106626E7, SpatialReferences.WebMercator))
+                InitialViewpoint = new Viewpoint(new Envelope(569614.225, 6847121.683, 570198.333, 6846604.317, SpatialReferences.WebMercator))
             };
-            mapView.Map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Wildfire/MapServer")));
+            mapView.Map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://basisregistraties.arcgisonline.nl/arcgis/rest/services/DKK/DKKv4/MapServer")));
             this.View.AddSubview(mapView);
 
 #pragma warning disable CS0618 // Type or member is obsolete

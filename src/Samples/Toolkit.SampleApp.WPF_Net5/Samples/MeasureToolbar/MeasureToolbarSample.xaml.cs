@@ -20,10 +20,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.MeasureToolbar
 
             var map = new Map(Basemap.CreateLightGrayCanvasVector());
 
-            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer")));
-
-            map.OperationalLayers.Add(new FeatureLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/Wildfire/FeatureServer/2")));
-            map.OperationalLayers.Add(new FeatureLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/Wildfire/FeatureServer/1")));
+            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://services2.arcgis.com/ZQgQTuoyBrtmoGdP/ArcGIS/rest/services/Mobile_Data_Collection_WFL1/FeatureServer/1")));
+            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://services2.arcgis.com/ZQgQTuoyBrtmoGdP/ArcGIS/rest/services/Mobile_Data_Collection_WFL1/FeatureServer/0")));
 
             mapView.Map = map;
             AddRandomGraphics();

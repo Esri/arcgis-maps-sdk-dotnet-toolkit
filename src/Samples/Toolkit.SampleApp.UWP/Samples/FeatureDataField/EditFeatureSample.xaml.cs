@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
             this.InitializeComponent();
             overlay.Visibility = Visibility.Collapsed;
             Map map = new Map(Basemap.CreateLightGrayCanvasVector());
-            map.OperationalLayers.Add(new FeatureLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0")));
+            map.OperationalLayers.Add(new FeatureLayer(new Uri("https://services2.arcgis.com/ZQgQTuoyBrtmoGdP/arcgis/rest/services/Mobile_Data_Collection_WFL1/FeatureServer/0")));
             mapView.Map = map;
         }
 
