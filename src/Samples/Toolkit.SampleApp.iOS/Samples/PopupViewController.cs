@@ -21,16 +21,9 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
         {
         }
 
-        private RuntimeImage InfoIcon;
         public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
-            // Used to demonstrate display of EditSummary in PopupViewer
-            // Provides credentials to token-secured layer that has editor-tracking enabled
-            AuthenticationManager.Current.ChallengeHandler = new ChallengeHandler(async (info) =>
-            {
-                return await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, "user1", "user1");
-            });
 
             mapView = new MapView()
             {
@@ -45,11 +38,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             mapView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
             
             // Used in Callout to see feature details in PopupViewer
-            InfoIcon = await UIImage.FromBundle("info.png")?.ToRuntimeImageAsync();
             mapView.GeoViewTapped += mapView_GeoViewTapped;
 
             // Webmap configured with Popup
-            mapView.Map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
+            mapView.Map = new Map(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=064f2e898b094a17b84e4a4cd5e5f549"));
 
         }
         public override void ViewDidDisappear(bool animated)
@@ -70,15 +62,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 // Displays callout and on (i) button click shows PopupViewer in it's own view controller
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = new Action<object>((s) =>
-                    {
-                        var pvc = new PopupInfoViewController(popup);
-                        this.PresentModalViewController(pvc, true);
-                    });
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
+                    var pvc = new PopupInfoViewController(popup);
+                    this.PresentModalViewController(pvc, true);
                 }
             }
             catch (Exception ex)
@@ -185,7 +170,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 };
                 if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
                 {
-                    popupViewer.BackgroundColor = UIColor.SystemBackgroundColor;
+                    popupViewer.BackgroundColor = UIColor.SystemBackground;
                 }
                 else
                 {

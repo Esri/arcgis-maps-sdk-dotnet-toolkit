@@ -21,18 +21,9 @@ namespace Toolkit.Samples.Forms.Samples
 		public PopupViewerSample()
 		{
 			InitializeComponent();
-            mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
-
-            // Used to demonstrate display of EditSummary in PopupViewer
-            // Provides credentials to token-secured layer that has editor-tracking enabled
-            AuthenticationManager.Current.ChallengeHandler = new ChallengeHandler(async (info) =>
-            {
-                return await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, "user1", "user1");
-            });
-
+            mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=064f2e898b094a17b84e4a4cd5e5f549"));
             mapView.GeoViewTapped += mapView_GeoViewTapped;
-        }  // Used in Callout to see feature details in PopupViewer
-        private RuntimeImage InfoIcon => new RuntimeImage(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png"));
+        }
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
@@ -47,15 +38,8 @@ namespace Toolkit.Samples.Forms.Samples
                 // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = new Action<object>((s) =>
-                    {
-                        popupViewer.IsVisible = true;
-                        popupViewer.PopupManager = new PopupManager(s as Popup);
-                    });
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
+                    popupViewer.IsVisible = true;
+                    popupViewer.PopupManager = new PopupManager(popup);
                 }
                 else
                 {

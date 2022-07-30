@@ -26,23 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
         }
 
         // Webmap configured with Popup
-        public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
-
-        private RuntimeImage _infoIcon = null;
-        // Used in Callout to see feature details in PopupViewer
-        private RuntimeImage InfoIcon
-        {
-            get
-            {
-                if (_infoIcon == null)
-                {
-                    var fileName = RequestedTheme == Windows.UI.Xaml.ElementTheme.Dark ? "info_light.png" : "info_dark.png";
-                    _infoIcon = new RuntimeImage(new Uri($"ms-appx:///Samples/PopupViewer/{fileName}"));
-                }
-                return _infoIcon;
-            }
-        }
-
+        public Map Map { get; } = new Map(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=064f2e898b094a17b84e4a4cd5e5f549"));
 
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
@@ -57,15 +41,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                 // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = new Action<object>((s) =>
-                    {
-                        popupViewer.Visibility = Visibility.Visible;
-                        popupViewer.PopupManager = new PopupManager(s as Popup);
-                    });
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
+                    popupViewer.Visibility = Visibility.Visible;
+                    popupViewer.PopupManager = new PopupManager(popup);
                 }
                 else
                 {

@@ -8,10 +8,6 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Collections.Generic;
 using Esri.ArcGISRuntime.Data;
 using System.Linq;
-using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.Security;
-using System.IO;
-
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 {
@@ -19,9 +15,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
     [SampleInfoAttribute(Category = "Popup", Description = "Use PopupViewer to display detailed feature information")]
     public class PopupSampleActivity : Activity
     {
-        private RuntimeImage _infoIcon = null;
-        private RuntimeImage InfoIcon => _infoIcon;
-
         UI.Controls.PopupViewer popupViewer;
         MapView mapView;
 
@@ -29,24 +22,12 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.PopupViewerSample);
-
-
-            // Used in Callout to see feature details in PopupViewer
-            _infoIcon = await RuntimeImage.FromStreamAsync(Assets.Open("info.png"));
-
-            // Used to demonstrate display of EditSummary in PopupViewer
-            // Provides credentials to token-secured layer that has editor-tracking enabled
-            AuthenticationManager.Current.ChallengeHandler = new ChallengeHandler(async (info) =>
-            {
-                return await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, "user1", "user1");
-            });
-
             mapView = FindViewById<MapView>(Resource.Id.mapView);
             mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
             mapView.GeoViewTapped += mapView_GeoViewTapped;
 
             // Webmap configured with Popup
-            mapView.Map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
+            mapView.Map = new Map(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=064f2e898b094a17b84e4a4cd5e5f549"));
 
             popupViewer = FindViewById<UI.Controls.PopupViewer>(Resource.Id.popupViewer);
         }
@@ -64,11 +45,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = OnPopupInfoButtonClicked;                   
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
+                    ShowPopup(popup);
                 }
                 else
                 {
@@ -90,9 +67,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             }
         }
 
-        private void OnPopupInfoButtonClicked(object tag)
+        private void ShowPopup(Popup popup)
         {
-            Popup popup = (Popup)tag;
             // Create a popupviewer and show it in a PopupWindow
             var popupViewer = new UI.Controls.PopupViewer(ApplicationContext);
             PopupWindow window = new PopupWindow(ApplicationContext)

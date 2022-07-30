@@ -21,9 +21,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 
         }
 
-        // Used in Callout to see feature details in PopupViewer
-        private RuntimeImage InfoIcon { get; } = new RuntimeImage(new Uri("Samples/PopupViewer/info.png", UriKind.Relative));
-
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             try
@@ -36,15 +33,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
                 // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = new Action<object>((s) =>
-                        {
-                            popupViewer.Visibility = Visibility.Visible;
-                            popupViewer.PopupManager = new PopupManager(s as Popup);
-                        });
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
+                    popupViewer.Visibility = Visibility.Visible;
+                    popupViewer.PopupManager = new PopupManager(popup);
                 }
                 else
                 {
