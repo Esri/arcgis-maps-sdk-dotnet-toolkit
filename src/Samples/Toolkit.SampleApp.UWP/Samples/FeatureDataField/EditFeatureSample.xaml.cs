@@ -1,6 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
-using Microsoft.Toolkit.Uwp.UI.Animations;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,23 +63,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
         {
             overlay.DataContext = feature;
             overlay.Visibility = Visibility.Visible;
-
-            if (AnimationExtensions.IsBlurSupported)
-            {
-                AnimationExtensions.Blur(mapView, 10).Start();
-            }
-            else
-            {
-                overlay.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 255, 255, 255));
-            }
+            overlay.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 255, 255, 255));
         }
 
         private void CloseEditPanel()
         {
             overlay.DataContext = null;
             overlay.Visibility = Visibility.Collapsed;
-            if (AnimationExtensions.IsBlurSupported)
-                AnimationExtensions.Blur(mapView, 0).Start();
         }
 
         private async void ApplyButton_Click(object sender, RoutedEventArgs e)

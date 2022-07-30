@@ -8,20 +8,11 @@
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
-    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
     RequestedTheme="Light"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <esri:MapView x:Name="mapView" GeoViewTapped="mapView_GeoViewTapped" >
-            <interactivity:Interaction.Behaviors>
-                <behaviors:Blur x:Name="BlurMapBehavior"
-                                AutomaticallyStart="False"
-                                Delay="0"
-                                Value="10"
-                                Duration="1" />
-            </interactivity:Interaction.Behaviors>
-        </esri:MapView>
+        <esri:MapView x:Name="mapView" GeoViewTapped="mapView_GeoViewTapped"  />
 
         <Grid Background="#01FFFFFF" x:Name="overlay" PointerPressed="overlay_PointerDown">
             <Grid VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="400" MinHeight="200" Margin="20" Background="White">
