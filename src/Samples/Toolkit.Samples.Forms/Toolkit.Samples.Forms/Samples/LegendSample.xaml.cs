@@ -28,7 +28,7 @@ namespace Toolkit.Samples.Forms.Samples
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
             };
-            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://server6.tplgis.org/arcgis6/rest/services/National_UHI_2020/MapServer")));
+            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer")));
             map.OperationalLayers.Add(new FeatureLayer(new Uri("https://services2.arcgis.com/ZQgQTuoyBrtmoGdP/arcgis/rest/services/SF_311_Incidents/FeatureServer/0")));
             return map;
         }
