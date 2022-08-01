@@ -244,7 +244,7 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-		<Setter Property="Focusable" Value="False" />
+        <Setter Property="Focusable" Value="False" />
     </Style>
     
 </ResourceDictionary>
