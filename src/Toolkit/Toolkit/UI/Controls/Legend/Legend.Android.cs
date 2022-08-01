@@ -27,10 +27,6 @@ using Esri.ArcGISRuntime.Mapping;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
-    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
-    /// </summary>
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend")]
     public partial class Legend : Android.Widget.ListView
     {
