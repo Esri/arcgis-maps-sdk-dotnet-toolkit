@@ -14,26 +14,24 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WINDOWS
+
 using System;
+using System.Collections;
 using System.Globalization;
 #if NETFX_CORE
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
+using MediaColor = Windows.UI.Color;
 #else
-using System.Windows;
 using System.Windows.Data;
+using MediaColor = System.Windows.Media.Color;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
-    /// <summary>
-    /// *FOR INTERNAL USE* Returns visible status for positive boolean, non-null text and opposite state for visibility value.
-    /// </summary>
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public sealed class VisibilityConverter : IValueConverter
+    internal class ColorToColorConverter : IValueConverter
     {
-        /// <inheritdoc />
         object IValueConverter.Convert(object? value, Type targetType, object? parameter,
 #if NETFX_CORE
             string language)
@@ -41,20 +39,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
-            bool isVisible = value != null;
-
-            if (value is bool)
+            if (value is MediaColor mediaColor && targetType == typeof(System.Drawing.Color))
             {
-                isVisible = (bool)value;
+                return System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
             }
-            else if (value is string)
+            else if (value is System.Drawing.Color drawingColor && targetType == typeof(MediaColor))
             {
-                isVisible = !string.IsNullOrWhiteSpace((string)value);
+                return MediaColor.FromArgb(drawingColor.A, drawingColor.R, drawingColor.G, drawingColor.B);
             }
 
-            isVisible = parameter?.ToString() == "Reverse" ? !isVisible : isVisible;
-
-            return isVisible ? Visibility.Visible : Visibility.Collapsed;
+            return value;
         }
 
         /// <inheritdoc />
@@ -65,17 +59,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
-            if (value is Visibility visibility)
-            {
-                if (visibility == Visibility.Visible)
-                {
-                    return true;
-                }
-                else if (visibility == Visibility.Collapsed)
-                {
-                    return false;
-                }
-            }
             throw new NotSupportedException();
         }
     }

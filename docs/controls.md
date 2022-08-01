@@ -90,6 +90,11 @@ Allows interactively defining a temporal range (i.e. time extent) and animating 
 
 ![TimeSlider on UWP](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png)
 
+### UtilityNetworkTraceTool
+
+Use named trace configurations defined in a web map to perform connected trace operations and compare results.
+
+![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) 
 
 ## Feature availability by platform/API
 
@@ -112,4 +117,5 @@ Allows interactively defining a temporal range (i.e. time extent) and animating 
 |SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
 |TableOfContents   | N/A | Preview | N/A  | N/A | N/A |
 |[TimeSlider](time-slider.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
+|[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
 

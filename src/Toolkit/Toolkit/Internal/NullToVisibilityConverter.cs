@@ -16,6 +16,7 @@
 
 #if !XAMARIN
 using System;
+using System.Collections;
 using System.Globalization;
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -31,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Returns visible status for positive boolean, non-null text and opposite state for visibility value.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public sealed class VisibilityConverter : IValueConverter
+    internal sealed class NullToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc />
         object IValueConverter.Convert(object? value, Type targetType, object? parameter,
@@ -41,20 +42,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
-            bool isVisible = value != null;
-
-            if (value is bool)
+            if (parameter is string preference)
             {
-                isVisible = (bool)value;
-            }
-            else if (value is string)
-            {
-                isVisible = !string.IsNullOrWhiteSpace((string)value);
+                if (preference.Equals("null", StringComparison.OrdinalIgnoreCase) && value == null)
+                {
+                    return Visibility.Visible;
+                }
+                else if (preference.Equals("notnull", StringComparison.OrdinalIgnoreCase) && value != null)
+                {
+                    return Visibility.Visible;
+                }
             }
 
-            isVisible = parameter?.ToString() == "Reverse" ? !isVisible : isVisible;
-
-            return isVisible ? Visibility.Visible : Visibility.Collapsed;
+            return Visibility.Collapsed;
         }
 
         /// <inheritdoc />
@@ -65,17 +65,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
-            if (value is Visibility visibility)
-            {
-                if (visibility == Visibility.Visible)
-                {
-                    return true;
-                }
-                else if (visibility == Visibility.Collapsed)
-                {
-                    return false;
-                }
-            }
             throw new NotSupportedException();
         }
     }

@@ -21,5 +21,7 @@
     href: ../search-view.md
   - name: Time Slider
     href: ../time-slider.md
+  - name: Utility Network Trace Tool 
+    href: ../un-trace.md
 - name: API Reference
   href: ../api/index.md

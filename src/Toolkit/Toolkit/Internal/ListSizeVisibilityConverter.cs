@@ -16,6 +16,7 @@
 
 #if !XAMARIN
 using System;
+using System.Collections;
 using System.Globalization;
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -31,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// *FOR INTERNAL USE* Returns visible status for positive boolean, non-null text and opposite state for visibility value.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    public sealed class VisibilityConverter : IValueConverter
+    internal sealed class ListSizeVisibilityConverter : IValueConverter
     {
         /// <inheritdoc />
         object IValueConverter.Convert(object? value, Type targetType, object? parameter,
@@ -41,20 +42,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
-            bool isVisible = value != null;
-
-            if (value is bool)
+            if (parameter is string count)
             {
-                isVisible = (bool)value;
-            }
-            else if (value is string)
-            {
-                isVisible = !string.IsNullOrWhiteSpace((string)value);
+                int comparisonValue;
+                if (value is int rawInt)
+                {
+                    comparisonValue = rawInt;
+                }
+                else if (value is IList list && list.Count is int countInt)
+                {
+                    comparisonValue = countInt;
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
+
+                if (int.TryParse(count, out var result) && comparisonValue == result)
+                {
+                    return Visibility.Visible;
+                }
+                else if (parameter?.ToString() == "any" && comparisonValue > 0)
+                {
+                    return Visibility.Visible;
+                }
+                else if (parameter?.ToString() == "multiple" && comparisonValue > 1)
+                {
+                    return Visibility.Visible;
+                }
+                else if (parameter?.ToString() == "none" && comparisonValue == 0)
+                {
+                    return Visibility.Visible;
+                }
             }
 
-            isVisible = parameter?.ToString() == "Reverse" ? !isVisible : isVisible;
-
-            return isVisible ? Visibility.Visible : Visibility.Collapsed;
+            return Visibility.Collapsed;
         }
 
         /// <inheritdoc />
@@ -65,17 +87,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             CultureInfo culture)
 #endif
         {
-            if (value is Visibility visibility)
-            {
-                if (visibility == Visibility.Visible)
-                {
-                    return true;
-                }
-                else if (visibility == Visibility.Collapsed)
-                {
-                    return false;
-                }
-            }
             throw new NotSupportedException();
         }
     }
