@@ -17,7 +17,7 @@ namespace Toolkit.Samples.Forms.Samples
 		public ScaleLineSample ()
 		{
 			InitializeComponent ();
-            mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
+            mapView.Map = new Map(BasemapStyle.ArcGISLightGray);
         }
 	}
 }

@@ -17,7 +17,7 @@ namespace Toolkit.Samples.Forms.Samples
         public CompassSceneViewSample()
         {
             InitializeComponent();
-            sceneView.Scene = new Scene(Basemap.CreateImagery());
+            sceneView.Scene = new Scene(BasemapStyle.ArcGISImagery);
         }
     }
 }

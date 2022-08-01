@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 
             mapView = new MapView()
             {
-                Map = new Map(Basemap.CreateLightGrayCanvasVector()),
+                Map = new Map(BasemapStyle.ArcGISLightGray),
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
             this.View.AddSubview(mapView);

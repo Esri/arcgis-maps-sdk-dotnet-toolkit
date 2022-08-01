@@ -13,7 +13,7 @@ namespace Toolkit.Samples.Forms.Samples
     [SampleInfoAttribute(Category = "TimeSlider", Description = "TimeSlider")]
     public partial class TimeSliderSample : ContentPage
     {
-        public Map Map { get; } = new Map(Basemap.CreateLightGrayCanvas());
+        public Map Map { get; } = new Map(BasemapStyle.ArcGISLightGray);
 
         private Dictionary<string, Uri> _namedLayers = new Dictionary<string, Uri>
         {

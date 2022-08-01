@@ -26,7 +26,7 @@ namespace Toolkit.Samples.Forms.Samples
 
         private Map CreateMap()
         {
-            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            Map map = new Map(BasemapStyle.ArcGISLightGray)
             {
                 InitialViewpoint = new Viewpoint(new Envelope(569614.225, 6847121.683, 570198.333, 6846604.317, SpatialReferences.WebMercator))
             };

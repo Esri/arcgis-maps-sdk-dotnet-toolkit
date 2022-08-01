@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.ScaleLineSample);
             mapView = FindViewById<MapView>(Resource.Id.mapView);
-            mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
+            mapView.Map = new Map(BasemapStyle.ArcGISLightGray);
 
             var scaleLine = FindViewById<UI.Controls.ScaleLine>(Resource.Id.scaleLine);
             scaleLine.MapView = mapView;

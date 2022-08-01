@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 
             var sceneView = new SceneView()
             {
-                Scene = new Scene(Basemap.CreateImagery()),
+                Scene = new Scene(BasemapStyle.ArcGISImagery),
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
             this.View.AddSubview(sceneView);

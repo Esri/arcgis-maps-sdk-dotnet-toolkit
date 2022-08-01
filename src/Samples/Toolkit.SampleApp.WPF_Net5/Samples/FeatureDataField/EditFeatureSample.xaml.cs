@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
         {
             InitializeComponent();
             overlay.Visibility = Visibility.Collapsed;
-            Map map = new Map(Basemap.CreateLightGrayCanvasVector());
+            Map map = new Map(BasemapStyle.ArcGISLightGray);
             map.OperationalLayers.Add(new FeatureLayer(new Uri("https://services2.arcgis.com/ZQgQTuoyBrtmoGdP/arcgis/rest/services/Mobile_Data_Collection_WFL1/FeatureServer/0")));
             mapView.Map = map;
         }

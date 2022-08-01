@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
 
         private Map CreateMap()
         {
-            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            Map map = new Map(BasemapStyle.ArcGISLightGray)
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
             };

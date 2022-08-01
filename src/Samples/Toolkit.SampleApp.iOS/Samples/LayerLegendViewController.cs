@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
                 Map = new Map(new Uri("https://www.arcgis.com/home/webmap/viewer.html?webmap=f1ed0d220d6447a586203675ed5ac213")),
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
-            mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector())
+            mapView.Map = new Map(BasemapStyle.ArcGISLightGray)
             {
                 InitialViewpoint = new Viewpoint(new Envelope(569614.225, 6847121.683, 570198.333, 6846604.317, SpatialReferences.WebMercator))
             };

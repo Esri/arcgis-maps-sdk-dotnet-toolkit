@@ -16,7 +16,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
     [SampleInfoAttribute(Category = "TimeSlider", Description = "TimeSlider used with a MapView")]
     public class TimeSliderSample : Activity
     {
-        private Map _map { get; } = new Map(Basemap.CreateLightGrayCanvas());
+        private Map _map { get; } = new Map(BasemapStyle.ArcGISLightGray);
 
         private Dictionary<string, Uri> _namedLayers = new Dictionary<string, Uri>
         {

@@ -15,7 +15,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
         MapView _mapView;
         TimeSlider _timeSlider;
         UISegmentedControl _layerSegment;
-        Map _map = new Map(Basemap.CreateLightGrayCanvas());
+        Map _map = new Map(BasemapStyle.ArcGISLightGray);
         UIBarButtonItem _stepForwardButton;
         UIBarButtonItem _stepBackButton;
         UIBarButtonItem _stepCountButton;

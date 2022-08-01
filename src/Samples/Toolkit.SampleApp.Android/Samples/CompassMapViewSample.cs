@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.CompassMapViewSample);
             mapView = FindViewById<MapView>(Resource.Id.mapView);
-            mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
+            mapView.Map = new Map(BasemapStyle.ArcGISLightGray);
             compass = FindViewById<UI.Controls.Compass>(Resource.Id.compass);
             compass.GeoView = mapView;
             compass.AutoHide = false;

@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.CompassSceneViewSample);
             sceneView = FindViewById<SceneView>(Resource.Id.sceneView);
-            sceneView.Scene = new Scene(Basemap.CreateImagery());
+            sceneView.Scene = new Scene(BasemapStyle.ArcGISImagery);
             var compass = FindViewById<UI.Controls.Compass>(Resource.Id.compass);
             compass.GeoView = sceneView;
             compass.AutoHide = false;

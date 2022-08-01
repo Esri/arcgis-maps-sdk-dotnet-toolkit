@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
         public TableOfContentsSample()
         {
             InitializeComponent();
-            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            Map map = new Map(BasemapStyle.ArcGISLightGray)
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
             };
@@ -39,15 +39,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
             if (tocItem.Content is Mapping.Basemap)
             {
                 var item = new MenuItem() { Header = "Imagery" };
-                item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateImagery();
+                item.Click += (s, e) => mapView.Map.Basemap = new Basemap(BasemapStyle.ArcGISImagery);
                 args.MenuItems.Add(item);
 
                 item = new MenuItem() { Header = "Streets" };
-                item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateStreetsVector();
+                item.Click += (s, e) => mapView.Map.Basemap = new Basemap(BasemapStyle.ArcGISStreets);
                 args.MenuItems.Add(item);
 
                 item = new MenuItem() { Header = "OpenStreetMap" };
-                item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateOpenStreetMap();
+                item.Click += (s, e) => mapView.Map.Basemap = new Basemap(BasemapStyle.OSMStandard);
                 args.MenuItems.Add(item);
 
             }

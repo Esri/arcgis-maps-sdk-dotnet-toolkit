@@ -17,7 +17,7 @@ namespace Toolkit.Samples.Forms.Samples
 		public CompassMapViewSample ()
 		{
 			InitializeComponent();
-            mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
+            mapView.Map = new Map(BasemapStyle.ArcGISLightGray);
 		}
 
         private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)

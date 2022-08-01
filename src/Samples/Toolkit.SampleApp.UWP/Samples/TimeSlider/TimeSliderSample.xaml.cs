@@ -10,7 +10,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.TimeSlider
 {
     public sealed partial class TimeSliderSample : Page
     {
-        public Map Map { get; } = new Map(Basemap.CreateLightGrayCanvas());
+        public Map Map { get; } = new Map(BasemapStyle.ArcGISLightGray);
 
         private Dictionary<string, Uri> _namedLayers = new Dictionary<string, Uri>
         {
