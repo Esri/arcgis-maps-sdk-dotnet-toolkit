@@ -25,7 +25,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 using Point = Android.Graphics.PointF;
 #elif __IOS__
 using Point = CoreGraphics.CGPoint;
-#elif NETFX_CORE
+#elif NETFX_CORE || WINUI
 using Point = Windows.Foundation.Point;
 #endif
 #endif
@@ -224,7 +224,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 {
                     SpaceEffect = UI.SpaceEffect.None;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
-#if NETFX_CORE
+#if NETFX_CORE|| WINUI
                     if (_cameraView != null)
                     {
                         _cameraView.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -236,7 +236,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 {
                     SpaceEffect = UI.SpaceEffect.Stars;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.HorizonOnly;
-#if NETFX_CORE
+#if NETFX_CORE|| WINUI
                     if(_cameraView != null)
                     {
                         _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;

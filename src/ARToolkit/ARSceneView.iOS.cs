@@ -454,7 +454,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                 public Plane(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
+#if NETCOREAPP
+                    var planeGeometry = ARSCNPlaneGeometry.Create(renderer.Device);
+#else
                     var planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
+#endif
                     if (planeGeometry != null)
                     {
                         planeGeometry.Update(anchor.Geometry);
@@ -477,7 +481,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 public void Update(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
                     ARPlaneGeometry geometry = anchor.Geometry;
+#if NETCOREAPP
+                    ARSCNPlaneGeometry? planeGeometry = ARSCNPlaneGeometry.Create(renderer.Device);
+#else
                     ARSCNPlaneGeometry? planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
+#endif
                     if (planeGeometry != null && material != null && node != null)
                     {
                         planeGeometry.Update(geometry);

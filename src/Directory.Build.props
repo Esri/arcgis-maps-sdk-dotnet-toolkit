@@ -40,8 +40,8 @@
     <DotNetTargetFramework>net461</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)</UWPTargetFramework>
     <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
-    <!--<NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
-    <NetiOSTargetFramework>net6.0-ios13.0</NetiOSTargetFramework>-->
+    <NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
+    <NetiOSTargetFramework>net6.0-ios14.0</NetiOSTargetFramework>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->
