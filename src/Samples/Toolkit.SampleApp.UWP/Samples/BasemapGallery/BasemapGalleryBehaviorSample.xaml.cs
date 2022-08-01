@@ -76,14 +76,14 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
 
         private async void Button_Add_Last(object sender, RoutedEventArgs e)
         {
-            BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
-            item.Name = "With Thumbnail";
+            BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")));
+            item.Name = "With Thumbnail Override";
             item.Tooltip = Guid.NewGuid().ToString();
-            item.Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
+            item.Thumbnail = new Esri.ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
             Gallery.AvailableBasemaps.Add(item);
 
-            BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
-            item2.Name = "Without Thumbnail";
+            BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap(new Uri("https://arcgisruntime.maps.arcgis.com/home/item.html?id=4f2e99ba65e34bb8af49733d9778fb8e")));
+            item2.Name = "Human Geography Dark";
             Gallery.AvailableBasemaps.Add(item2);
         }
 
