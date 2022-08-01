@@ -25,7 +25,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Compass
     {
         public SceneViewCompassSample()
         {
-            Scene = new Scene(BasemapType.Imagery);
+            Scene = new Scene(BasemapStyle.ArcGISImageryStandard);
             Scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             this.InitializeComponent();
         }

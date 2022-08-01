@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Compass
         public SceneViewCompassSample()
         {
             InitializeComponent();
-            sceneView.Scene = new Scene(BasemapType.Imagery);
+            sceneView.Scene = new Scene(BasemapStyle.ArcGISImageryStandard);
         }
         
         private void RotateLeft_Click(object sender, RoutedEventArgs e)
