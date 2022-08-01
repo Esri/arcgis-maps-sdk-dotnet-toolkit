@@ -1,21 +1,33 @@
-﻿using Esri.ArcGISRuntime.Maui;
-using Esri.ArcGISRuntime.Maui.Handlers;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
 using Microsoft.Maui.Handlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
 {
-    public class ARSceneViewHandler //: Esri.ArcGISRuntime.Maui.Handlers.SceneViewHandler
+    public class ARSceneViewHandler
  #if WINDOWS || __IOS__ || __ANDROID__
          : ViewHandler<IARSceneView, Esri.ArcGISRuntime.ARToolkit.ARSceneView>
  #else
          : ViewHandler<IARSceneView, object>
  #endif
     {
+        /// <summary>
+        /// Property mapper for the <see cref="ARSceneView"/> control.
+        /// </summary>
         public static PropertyMapper<IARSceneView, ARSceneViewHandler> ARSceneViewMapper = new PropertyMapper<IARSceneView, ARSceneViewHandler>(ArcGISRuntime.Maui.Handlers.SceneViewHandler.ViewMapper)
         {
             [nameof(IARSceneView.ClippingDistance)] = MapClippingDistance,
@@ -27,15 +39,23 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
             [nameof(IARSceneView.TranslationFactor)] = MapTranslationFactor,
         };
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ARSceneViewHandler"/> class.
+        /// </summary>
         public ARSceneViewHandler() : this(ARSceneViewMapper)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ARSceneViewHandler"/> class.
+        /// </summary>
+        /// <param name="mapper">The property view mapper.</param>
         public ARSceneViewHandler(PropertyMapper mapper) : base(mapper ?? ARSceneViewMapper)
         {
         }
 
 #if !NETSTANDARD
+        /// <inheritdoc />
         protected override void ConnectHandler(ARToolkit.ARSceneView platformView)
         {
             base.ConnectHandler(platformView);
@@ -43,6 +63,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
             platformView.PlanesDetectedChanged += PlatformView_PlanesDetectedChanged;
         }
 
+        /// <inheritdoc />
         protected override void DisconnectHandler(ARToolkit.ARSceneView platformView)
         {
             platformView.OriginCameraChanged -= OriginCameraChanged;
@@ -53,67 +74,102 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         private void PlatformView_PlanesDetectedChanged(object? sender, bool planesDetected) => VirtualView.OnPlanesDetectedChanged(planesDetected);
 
         private void OriginCameraChanged(object? sender, EventArgs e) => VirtualView.OnOriginCameraChanged();
-        
+
 #endif
 
-        public static void MapClippingDistance(ARSceneViewHandler handler, IARSceneView mapView)
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.ClippingDistance"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapClippingDistance(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
             if (handler.PlatformView != null)
-                handler.PlatformView.ClippingDistance = mapView.ClippingDistance;
+                handler.PlatformView.ClippingDistance = arSceneView.ClippingDistance;
 #endif
         }
 
-        public static void MapLocationDataSource(ARSceneViewHandler handler, IARSceneView mapView)
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.LocationDataSource"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapLocationDataSource(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
             if (handler.PlatformView != null)
-                handler.PlatformView.LocationDataSource = mapView.LocationDataSource;
+                handler.PlatformView.LocationDataSource = arSceneView.LocationDataSource;
 #endif
         }
 
-        public static void MapNorthAlign(ARSceneViewHandler handler, IARSceneView mapView)
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.NorthAlign"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapNorthAlign(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
             if (handler.PlatformView != null)
-                handler.PlatformView.NorthAlign = mapView.NorthAlign;
+                handler.PlatformView.NorthAlign = arSceneView.NorthAlign;
 #endif
         }
 
-        public static void MapOriginCamera(ARSceneViewHandler handler, IARSceneView mapView)
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.OriginCamera"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapOriginCamera(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
             if (handler.PlatformView != null)
-                handler.PlatformView.OriginCamera = mapView.OriginCamera;
+                handler.PlatformView.OriginCamera = arSceneView.OriginCamera;
 #endif
         }
 
-        public static void MapRenderPlanes(ARSceneViewHandler handler, IARSceneView mapView)
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.RenderPlanes"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapRenderPlanes(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if __ANDROID__
             if (handler.PlatformView.ArSceneView != null)
             {
-                handler.PlatformView.ArSceneView.PlaneRenderer.Enabled = mapView.RenderPlanes;
-                handler.PlatformView.ArSceneView.PlaneRenderer.Visible = mapView.RenderPlanes;
+                handler.PlatformView.ArSceneView.PlaneRenderer.Enabled = arSceneView.RenderPlanes;
+                handler.PlatformView.ArSceneView.PlaneRenderer.Visible = arSceneView.RenderPlanes;
             }
 #elif __IOS__
-            handler.PlatformView.RenderPlanes = mapView.RenderPlanes;
+            handler.PlatformView.RenderPlanes = arSceneView.RenderPlanes;
 #endif
         }
 
-        public static void MapRenderVideoFeed(ARSceneViewHandler handler, IARSceneView mapView)
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.RenderVideoFeed"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapRenderVideoFeed(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
             if (handler.PlatformView != null)
-                handler.PlatformView.RenderVideoFeed = mapView.RenderVideoFeed;
+                handler.PlatformView.RenderVideoFeed = arSceneView.RenderVideoFeed;
 #endif
         }
 
-        public static void MapTranslationFactor(ARSceneViewHandler handler, IARSceneView mapView)
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.TranslationFactor"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapTranslationFactor(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
             if (handler.PlatformView != null)
-                handler.PlatformView.TranslationFactor = mapView.TranslationFactor;
+                handler.PlatformView.TranslationFactor = arSceneView.TranslationFactor;
 #endif
         }
 
@@ -129,7 +185,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         }
 #else
         /// <inheritdoc/>
-        protected override object CreatePlatformView() => throw new System.NotImplementedException();
+        protected override object CreatePlatformView() => throw new System.PlatformNotSupportedException();
 #endif
     }
 }

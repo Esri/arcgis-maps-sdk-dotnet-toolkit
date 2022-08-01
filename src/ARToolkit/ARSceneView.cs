@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
-        private void Controller_OriginCameraChanged(object sender, EventArgs e) => OriginCameraChanged?.Invoke(this, e);
+        private void Controller_OriginCameraChanged(object? sender, EventArgs e) => OriginCameraChanged?.Invoke(this, e);
         
         /// <summary>
         /// Starts device tracking.
@@ -141,7 +141,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         }
 
         private object locationLock = new object();
-        private void LocationDataSource_LocationChanged(object sender, Location.Location e)
+        private void LocationDataSource_LocationChanged(object? sender, Location.Location e)
         {
             if (_locationTrackingMode == ARLocationTrackingMode.Ignore)
                 return;

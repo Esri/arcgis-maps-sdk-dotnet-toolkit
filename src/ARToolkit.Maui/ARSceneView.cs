@@ -164,7 +164,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
         public System.Threading.Tasks.Task StartTrackingAsync(ARLocationTrackingMode locationTrackingMode = ARLocationTrackingMode.Ignore)
         {
 #if !NETSTANDARD2_0
-            var nativeView = NativeARSceneView();
+            var nativeView = NativeARSceneView;
             if (nativeView == null)
                 throw new InvalidOperationException("Cannot start tracking before the view has appeared");
             return nativeView.StartTrackingAsync(locationTrackingMode);
@@ -179,9 +179,9 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
         public System.Threading.Tasks.Task StopTrackingAsync()
         {
 #if !NETSTANDARD2_0
-            var nativeView = NativeARSceneView();
-            if (nativeView == null)
-                throw new InvalidOperationException("Cannot stop tracking before the view has appeared");
+            var nativeView = NativeARSceneView;
+            if (nativeView is null)
+                throw new InvalidOperationException("Cannot stop tracking before the view has a handler attached");
             return nativeView.StopTrackingAsync();
 #else
             throw new PlatformNotSupportedException();
@@ -206,7 +206,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
 #if NETSTANDARD2_0
             throw new PlatformNotSupportedException();
 #else
-            return NativeARSceneView()?.ARScreenToLocation(ToNativePoint(screenPoint));
+            return NativeARSceneView?.ARScreenToLocation(ToNativePoint(screenPoint));
 #endif
         }
 
@@ -218,8 +218,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
         public void SetInitialTransformation(Mapping.TransformationMatrix transformationMatrix)
         {
 #if !NETSTANDARD2_0
-            if (NativeARSceneView() == null)
-                throw new InvalidOperationException("Cannot set initial transformation before the view has appeared");
+            if (NativeARSceneView is null)
+                throw new InvalidOperationException("Cannot set initial transformation before the view has a handler attached");
 #endif
             MessagingCenter.Send(this, "SetInitialTransformation", transformationMatrix);
         }
@@ -236,7 +236,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
 #if NETSTANDARD2_0
             return false;
 #else
-            return NativeARSceneView()?.SetInitialTransformation(ToNativePoint(screenLocation)) ?? false;
+            return NativeARSceneView?.SetInitialTransformation(ToNativePoint(screenLocation)) ?? false;
 #endif
         }
 
@@ -252,7 +252,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
 #if NETSTANDARD2_0
                 return Mapping.TransformationMatrix.Identity;
 #else
-                return NativeARSceneView()?.InitialTransformation ?? Mapping.TransformationMatrix.Identity;
+                return NativeARSceneView?.InitialTransformation ?? Mapping.TransformationMatrix.Identity;
 #endif
             }
         }
@@ -265,7 +265,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
         void IARSceneView.OnPlanesDetectedChanged(bool planesDetected) => PlanesDetectedChanged?.Invoke(this, planesDetected);
 
 #if !NETSTANDARD
-        private Esri.ArcGISRuntime.ARToolkit.ARSceneView? NativeARSceneView() => Handler?.PlatformView as ARToolkit.ARSceneView;
+        private Esri.ArcGISRuntime.ARToolkit.ARSceneView? NativeARSceneView => Handler?.PlatformView as ARToolkit.ARSceneView;
 #endif
 
 #if WINDOWS

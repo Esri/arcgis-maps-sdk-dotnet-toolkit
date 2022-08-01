@@ -9,11 +9,13 @@
     <LangVersion>10</LangVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
-   </PropertyGroup>
+    <NoWarn>$(NoWarn);ESRI8000</NoWarn>
+    <AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />
     <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)-*" />

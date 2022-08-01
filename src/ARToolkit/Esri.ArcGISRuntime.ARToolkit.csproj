@@ -16,10 +16,11 @@
     <Nullable>enable</Nullable>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">14.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == '$(NetAndroidTargetFramework)'">26.0</SupportedOSPlatformVersion>
+    <NoWarn>$(NoWarn);ESRI8000</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <DefineConstants>$(DefineConstants);NETSTANDARD2_0</DefineConstants>
+    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
