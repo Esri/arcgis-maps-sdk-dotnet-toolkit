@@ -29,6 +29,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 #if !NETFX_CORE
 using System.Windows;
 using System.Windows.Controls;
+using System.Reflection;
 #else
 using System.Collections;
 using System.Collections.Generic;
@@ -78,6 +79,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SearchCommand = new DelegateCommand(HandleSearchCommand);
             RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
         }
+
+        // Ensure popup appears in correct location on touch-enabled PCs configured for left-handed use.
+#if !NETFX_CORE
+        private static readonly FieldInfo _popupAlignmentField;
+
+        static SearchView()
+        {
+            _popupAlignmentField = typeof(SystemParameters).GetField("_menuDropAlignment", BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (_popupAlignmentField != null)
+            {
+                ResetPopupAlignment();
+                SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
+            }
+        }
+
+        private static void SystemParameters_StaticPropertyChanged(object sender, PropertyChangedEventArgs e) => ResetPopupAlignment();
+
+        private static void ResetPopupAlignment()
+        {
+            if (SystemParameters.MenuDropAlignment && _popupAlignmentField != null)
+            {
+                _popupAlignmentField.SetValue(null, false);
+            }
+        }
+#endif
 
 #if NETFX_CORE
         private ListView _suggestionList;
