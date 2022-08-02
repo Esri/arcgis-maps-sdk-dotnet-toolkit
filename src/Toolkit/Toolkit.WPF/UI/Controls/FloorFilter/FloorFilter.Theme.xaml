@@ -244,6 +244,7 @@
     <Style x:Key="FloorFilterListStyle" TargetType="ListView">
         <Setter Property="Padding" Value="0" />
         <Setter Property="Margin" Value="0" />
+        <Setter Property="SelectionMode" Value="Single" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="Foreground" Value="{StaticResource FloorFilterDefaultForegroundBrush}" />
