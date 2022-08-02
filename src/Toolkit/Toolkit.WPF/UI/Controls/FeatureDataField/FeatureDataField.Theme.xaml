@@ -29,6 +29,7 @@
                                 <SolidColorBrush x:Name="ErrorBrush" Color="Transparent" />
                             </Border.BorderBrush>
                             <ContentControl x:Name="FeatureDataField_ContentControl"
+                                            Focusable="False"
                                             MinWidth="{TemplateBinding MinWidth}"
                                             Width="{TemplateBinding Width}"
                                             MaxWidth="{TemplateBinding MaxWidth}" />
@@ -243,6 +244,7 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Focusable" Value="False" />
     </Style>
     
 </ResourceDictionary>
