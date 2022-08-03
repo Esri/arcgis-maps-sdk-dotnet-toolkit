@@ -11,7 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" />
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)**\*.rd.xml" />
-    <Page Include="$(MSBuildThisFileDirectory)**\*.xaml" Exclude="$(MSBuildThisFileDirectory)**\bin\**\*.xaml;$(MSBuildThisFileDirectory)**\obj\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Page Include="..\Toolkit.WinUI\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)**\bin\**\*.xaml;$(MSBuildThisFileDirectory)**\obj\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="$(MSBuildThisFileDirectory)**\*.xaml.cs" DependentUpon="%(Filename).xaml" />
     <Content Include="$(MSBuildThisFileDirectory)**\*.png" Exclude="$(MSBuildThisFileDirectory)**\bin\**\*.png;$(MSBuildThisFileDirectory)**\obj\**\*.png" />
     <Content Include="$(MSBuildThisFileDirectory)..\..\Toolkit.Forms\Assets\calcite-ui-icons-24.ttf" Link="Assets\calcite-ui-icons-24.ttf" CopyToOutputDirectory="PreserveNewest" />

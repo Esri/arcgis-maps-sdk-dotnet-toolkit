@@ -68,7 +68,6 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <OutputPath>$(MSBuildThisFileDirectory)..\Output\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
       </PropertyGroup>
       
       <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)../.git') AND '$(OS)' == 'Windows_NT'">
