@@ -158,7 +158,7 @@
     "template": [
       "default", "template-override"
     ],
-    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ],
+    "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}", "https://developers.arcgis.com/net/api-reference/netstandard.xrefmap.yml" ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
