@@ -35,7 +35,7 @@ using Esri.ArcGISRuntime.Data;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// The FeatureDataField control is used to display or edit a single field attribute of a feature.
+    /// The FeatureDataField control is used to display or edit a single field attribute of an <see cref="Feature"/>.
     /// </summary>
     public class FeatureDataField : Control
     {

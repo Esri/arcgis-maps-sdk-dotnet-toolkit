@@ -37,8 +37,8 @@ using System.Windows.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// The Legend control is used to display symbology and description for a set of layers
-    /// in a Map or Scene contained in a <see cref="GeoView"/>.
+    /// The Legend control is used to display symbology and description for a set of <see cref="Layer"/>s
+    /// in a <see cref="Map"/> or <see cref="Scene"/> contained in a <see cref="GeoView"/>.
     /// </summary>
     public partial class Legend
     {

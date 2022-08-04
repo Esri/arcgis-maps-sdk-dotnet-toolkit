@@ -31,7 +31,7 @@ using System.Windows.Controls;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
-    /// A control that renders a Symbol.
+    /// A control that renders a <see cref="Symbology.Symbol"/>.
     /// </summary>
     public partial class SymbolDisplay
     {
