@@ -237,20 +237,15 @@
                                             </VisualState>
                                             <VisualState x:Name="InvalidFocusedState">
                                                 <Storyboard>
-                                                    <ColorAnimation Duration="0"
-                                                                    To="Red"
-                                                                    Storyboard.TargetName="ErrorBrush"
-                                                                    Storyboard.TargetProperty="Color" />
-                                                    <DoubleAnimation Storyboard.TargetName="ValidationFlyout"
-                                                                     Storyboard.TargetProperty="Opacity"
-                                                                     From="0.0"
-                                                                     To="1.0"
-                                                                     Duration="0:0:1" />
-                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ValidationFlyout"
-                                                                                   Storyboard.TargetProperty="Visibility">
+                                                    <ColorAnimation
+                                                        Storyboard.TargetName="ErrorBrush"
+                                                        Storyboard.TargetProperty="Color"
+                                                        To="Red"
+                                                        Duration="0" />
+                                                   <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ValidationPopup" Storyboard.TargetProperty="IsOpen">
                                                         <DiscreteObjectKeyFrame KeyTime="0">
                                                             <DiscreteObjectKeyFrame.Value>
-                                                                <Visibility>Visible</Visibility>
+                                                            True
                                                             </DiscreteObjectKeyFrame.Value>
                                                         </DiscreteObjectKeyFrame>
                                                     </ObjectAnimationUsingKeyFrames>
@@ -293,34 +288,40 @@
                                             Style="{StaticResource DeleteButtonStyle}"
                                             Visibility="Collapsed"
                                             VerticalAlignment="Stretch" />
-                                    <Grid x:Name="ValidationFlyout"
-                                          Visibility="Collapsed"
-                                          Grid.Row="1"
-                                          Margin="0,2,0,5">
-                                        <Border Margin="4,4,-4,-4"
+                                    <Popup x:Name="ValidationPopup" VerticalOffset="30" HorizontalOffset="2">
+                                        <Grid
+                                            x:Name="ValidationFlyout"
+                                            Grid.Row="1"
+                                            Margin="0,2,0,5">
+                                            <Border
+                                                Margin="4,4,-4,-4"
                                                 Background="#052A2E31"
                                                 CornerRadius="5" />
-                                        <Border Margin="3,3,-3,-3"
+                                            <Border
+                                                Margin="3,3,-3,-3"
                                                 Background="#152A2E31"
                                                 CornerRadius="4" />
-                                        <Border Margin="2,2,-2,-2"
+                                            <Border
+                                                Margin="2,2,-2,-2"
                                                 Background="#252A2E31"
                                                 CornerRadius="3" />
-                                        <Border Margin="1,1,-1,-1"
+                                            <Border
+                                                Margin="1,1,-1,-1"
                                                 Background="#352A2E31"
                                                 CornerRadius="2" />
-                                        <Border Background="#FFDC000C"
-                                                CornerRadius="2" />
-                                        <Border CornerRadius="10">
-                                            <TextBlock x:Name="ErrorTextBlock"
-                                                       HorizontalAlignment="Left"
-                                                       UseLayoutRounding="false"
-                                                       Foreground="White"
-                                                       Margin="8,4,8,4"
-                                                       TextWrapping="Wrap"
-                                                       Text="{Binding ErrorMessage}" />
-                                        </Border>
-                                    </Grid>
+                                            <Border Background="#FFDC000C" CornerRadius="2" />
+                                            <Border CornerRadius="10">
+                                                <TextBlock
+                                                    x:Name="ErrorTextBlock"
+                                                    Margin="8,4,8,4"
+                                                    HorizontalAlignment="Left"
+                                                    Foreground="White"
+                                                    Text="{Binding ErrorMessage}"
+                                                    TextWrapping="Wrap"
+                                                    UseLayoutRounding="false" />
+                                            </Border>
+                                        </Grid>
+                                    </Popup>
                                 </Grid>
                             </ControlTemplate>
                         </TextBox.Template>
