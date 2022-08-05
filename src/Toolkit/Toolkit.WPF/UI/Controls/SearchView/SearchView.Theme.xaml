@@ -337,8 +337,8 @@
                         Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
                         HorizontalOffset="-1"
                         IsOpen="{Binding IsSourceSelectOpen, Mode=TwoWay}"
-                        Placement="Bottom"
-                        PlacementTarget="{Binding ElementName=SourceSelectToggle}"
+                        Placement="Left"
+                        PlacementTarget="{Binding ElementName=PopupTarget}"
                         StaysOpen="False">
                         <Border Style="{StaticResource ResultAreaBorderStyle}">
                             <StackPanel>
@@ -391,7 +391,7 @@
                         Width="{Binding ElementName=Self, Path=ActualWidth, Mode=OneWay}"
                         HorizontalOffset="-1"
                         IsOpen="{Binding SearchViewModel.Suggestions.Count, Mode=OneWay, Converter={StaticResource CollectionIsEmptyToBoolConverter}, ConverterParameter='NotEmpty'}"
-                        Placement="Bottom"
+                        Placement="Left"
                         PlacementTarget="{Binding ElementName=PopupTarget}">
                         <Popup.Resources>
                             <CollectionViewSource x:Key="GroupedSuggestions" Source="{Binding SearchViewModel.Suggestions}">
