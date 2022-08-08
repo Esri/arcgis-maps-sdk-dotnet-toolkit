@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-#if FORMS
+#if MAUI
+using Esri.ArcGISRuntime.ARToolkit.Maui;
+#elif FORMS
 using Esri.ArcGISRuntime.ARToolkit.Forms;
 #else
 using Esri.ArcGISRuntime.ARToolkit;

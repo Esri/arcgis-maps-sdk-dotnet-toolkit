@@ -11,7 +11,9 @@ namespace ARToolkit.SampleApp
     {
         private static Type GetDefaultSampleType()
         {
-#if FORMS
+#if MAUI
+            return typeof(Page);
+#elif FORMS
             return typeof(Xamarin.Forms.Page);
 #else
 #if NETFX_CORE
