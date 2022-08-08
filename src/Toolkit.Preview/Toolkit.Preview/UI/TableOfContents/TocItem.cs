@@ -59,6 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                 if (content is ILoadable loadable && loadable.LoadStatus != LoadStatus.Loaded)
                 {
                     loadable.Loaded += (s, e) => SetChildren();
+                    _ = loadable.LoadAsync();
                 }
                 else
                 {
