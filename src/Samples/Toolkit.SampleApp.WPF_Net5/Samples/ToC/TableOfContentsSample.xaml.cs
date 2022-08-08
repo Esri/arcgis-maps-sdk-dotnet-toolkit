@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
                 InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
             };
 
-            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer")));
+            map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_HydroFlowMetricsAbsChange2040_01/MapServer")));
             map.OperationalLayers.Add(new FeatureLayer(new Uri("https://sampleserver6.arcgisonline.com/arcgis/rest/services/SF311/FeatureServer/0")));
 
             mapView.Map = map;
