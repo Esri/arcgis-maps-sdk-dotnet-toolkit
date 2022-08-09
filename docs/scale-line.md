@@ -6,7 +6,7 @@ Display the current scale reference for a map.
 
 ## Features
 
-- Supports binding to a MapView.
+- Supports binding to a `MapView`.
 - Supports display an arbitrary scale via the `MapScale` property.
 - Displays both metric and imperial units.
 
