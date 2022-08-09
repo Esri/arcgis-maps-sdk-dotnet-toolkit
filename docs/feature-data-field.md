@@ -1,6 +1,6 @@
 # FeatureDataField
 
-Display and optionally allow editing of a single field attribute of a feature.
+Display and optionally allow editing of a single attribute of a feature.
 
 ![FeatureDataField](https://user-images.githubusercontent.com/1378165/73389879-ebaa9800-4289-11ea-8e4e-de153a6a371a.png)
 
