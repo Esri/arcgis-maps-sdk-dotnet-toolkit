@@ -91,9 +91,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Subscribe to events if applicable
             if (bookmarks is INotifyCollectionChanged iCollectionChanged)
             {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(iCollectionChanged);
-                listener.OnEventAction = (instance, source, eventArgs) => HandleOverrideListCollectionChanged(source, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
+                var listener = new Internal.WeakEventListener<BookmarksViewDataSource, object?, NotifyCollectionChangedEventArgs>(this);
+                listener.OnEventAction = static (instance, source, eventArgs) => instance?.HandleOverrideListCollectionChanged(source, eventArgs);
+                listener.OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent;
                 iCollectionChanged.CollectionChanged += listener.OnEvent;
             }
         }
@@ -189,9 +189,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_geoView is MapView mv && mv.Map is ILoadable mapLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(mapLoadable);
-                listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
+                var listener = new Internal.WeakEventListener<BookmarksViewDataSource, object?, EventArgs>(this);
+                listener.OnEventAction = static (instance, source, eventArgs) => instance?.Doc_Loaded(source, eventArgs);
+                listener.OnDetachAction = static (instance, source, weakEventListener) => (source as ILoadable).Loaded -= weakEventListener.OnEvent;
                 mapLoadable.Loaded += listener.OnEvent;
 
                 // Ensure event is raised even if already loaded
@@ -200,9 +200,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             else if (_geoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(sceneLoadable);
-                listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
+                var listener = new Internal.WeakEventListener<BookmarksViewDataSource, object?, EventArgs>(this);
+                listener.OnEventAction = static (instance, source, eventArgs) => instance?.Doc_Loaded(source, eventArgs);
+                listener.OnDetachAction = static (instance, source, weakEventListener) => (source as ILoadable).Loaded -= weakEventListener.OnEvent;
                 sceneLoadable.Loaded += listener.OnEvent;
 
                 // Ensure event is raised even if already loaded
@@ -238,9 +238,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
 
-            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(bmCollection);
-            listener.OnEventAction = (instance, source, eventArgs) => HandleGeoViewBookmarksCollectionChanged(source, eventArgs);
-            listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
+            var listener = new Internal.WeakEventListener<BookmarksViewDataSource, object?, NotifyCollectionChangedEventArgs>(this);
+            listener.OnEventAction = static (instance, source, eventArgs) => instance?.HandleGeoViewBookmarksCollectionChanged(source, eventArgs);
+            listener.OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent;
             bmCollection.CollectionChanged += listener.OnEvent;
         }
 

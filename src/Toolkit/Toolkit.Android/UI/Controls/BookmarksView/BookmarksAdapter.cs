@@ -44,35 +44,40 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _dataSource = dataSource;
             _shadowList = dataSource.ToList();
 
-            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(dataSource)
+            var listener = new Internal.WeakEventListener<BookmarksAdapter, object, NotifyCollectionChangedEventArgs>(this)
             {
-                OnEventAction = (instance, source, eventArgs) =>
+                OnEventAction = static (instance, source, eventArgs) =>
                 {
+                    if (instance == null)
+                    {
+                        return;
+                    }
+
                     switch (eventArgs.Action)
                     {
                         case NotifyCollectionChangedAction.Add:
-                            _shadowList.InsertRange(eventArgs.NewStartingIndex, eventArgs.NewItems.OfType<Bookmark>());
-                            NotifyItemInserted(eventArgs.NewStartingIndex);
+                            instance._shadowList.InsertRange(eventArgs.NewStartingIndex, eventArgs.NewItems.OfType<Bookmark>());
+                            instance.NotifyItemInserted(eventArgs.NewStartingIndex);
                             break;
                         case NotifyCollectionChangedAction.Remove:
-                            _shadowList.RemoveRange(eventArgs.OldStartingIndex, eventArgs.OldItems.Count);
-                            NotifyItemRemoved(eventArgs.OldStartingIndex);
+                            instance._shadowList.RemoveRange(eventArgs.OldStartingIndex, eventArgs.OldItems.Count);
+                            instance.NotifyItemRemoved(eventArgs.OldStartingIndex);
                             break;
                         case NotifyCollectionChangedAction.Reset:
-                            _shadowList = _dataSource.ToList();
-                            NotifyDataSetChanged();
+                            instance._shadowList = instance._dataSource.ToList();
+                            instance.NotifyDataSetChanged();
                             break;
                         case NotifyCollectionChangedAction.Move:
-                            _shadowList = _dataSource.ToList();
-                            NotifyDataSetChanged();
+                            instance._shadowList = instance._dataSource.ToList();
+                            instance.NotifyDataSetChanged();
                             break;
                         case NotifyCollectionChangedAction.Replace:
-                            _shadowList[eventArgs.OldStartingIndex] = (Bookmark)eventArgs.NewItems[0];
-                            NotifyItemChanged(eventArgs.OldStartingIndex);
+                            instance._shadowList[eventArgs.OldStartingIndex] = (Bookmark)eventArgs.NewItems[0];
+                            instance.NotifyItemChanged(eventArgs.OldStartingIndex);
                             break;
                     }
                 },
-                OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent,
             };
 
             dataSource.CollectionChanged += listener.OnEvent;

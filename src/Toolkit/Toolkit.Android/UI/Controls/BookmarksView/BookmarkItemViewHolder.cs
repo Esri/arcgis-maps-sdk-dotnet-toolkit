@@ -32,15 +32,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     {
         public TextView BookmarkLabel { get; }
 
+        private Action<int> _listener;
+
         public BookmarkItemViewHolder(BookmarkItemView bmView, Action<int> listener)
             : base(bmView)
         {
             BookmarkLabel = bmView.BookmarkLabel;
+            _listener = listener;
 
-            var weakEventHandler = new Internal.WeakEventListener<View, object, EventArgs>(bmView)
+            var weakEventHandler = new Internal.WeakEventListener<BookmarkItemViewHolder, object, EventArgs>(this)
             {
-                OnEventAction = (instance, source, eventArgs) => listener(LayoutPosition),
-                OnDetachAction = (instance, weakEventListener) => instance.Click -= weakEventListener.OnEvent,
+                OnEventAction = static (instance, source, eventArgs) =>
+                {
+                    if (source is BookmarkItemViewHolder bmivh)
+                    {
+                        bmivh._listener(bmivh.LayoutPosition);
+                    }
+                },
+                OnDetachAction = static (instance, source, weakEventListener) => (source as BookmarkItemView).Click -= weakEventListener.OnEvent,
             };
 
             bmView.Click += weakEventHandler.OnEvent;

@@ -74,13 +74,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _layers = layers;
                 if (_layers is INotifyCollectionChanged incc)
                 {
-                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
+                    var listener = new Internal.WeakEventListener<LegendAdapter, object?, NotifyCollectionChangedEventArgs>(this)
                     {
-                        OnEventAction = (instance, source, eventArgs) =>
+                        OnEventAction = static (instance, source, eventArgs) =>
                         {
-                            NotifyDataSetChanged();
+                            instance?.NotifyDataSetChanged();
                         },
-                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
+                        OnDetachAction = (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent,
                     };
                     incc.CollectionChanged += listener.OnEvent;
                 }

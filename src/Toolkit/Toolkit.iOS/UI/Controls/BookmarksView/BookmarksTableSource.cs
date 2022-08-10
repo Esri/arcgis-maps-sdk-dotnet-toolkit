@@ -40,9 +40,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _bookmarks = dataSource;
             if (_bookmarks is INotifyCollectionChanged incc)
             {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object, NotifyCollectionChangedEventArgs>(incc);
-                listener.OnEventAction = (instance, source, eventArgs) => CollectionChanged?.Invoke(this, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
+                var listener = new Internal.WeakEventListener<BookmarksTableSource, object, NotifyCollectionChangedEventArgs>(this);
+                listener.OnEventAction = static (instance, source, eventArgs) => instance?.CollectionChanged?.Invoke(source, eventArgs);
+                listener.OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent;
                 incc.CollectionChanged += listener.OnEvent;
             }
         }

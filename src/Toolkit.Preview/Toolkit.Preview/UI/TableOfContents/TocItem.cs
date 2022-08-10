@@ -68,10 +68,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
 
             if (content is INotifyPropertyChanged inpc)
             {
-                var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(inpc)
+                var listener = new Internal.WeakEventListener<TocItem, object?, PropertyChangedEventArgs>(this)
                 {
-                    OnEventAction = (instance, source, eventArgs) => ContentPropertyChanged(eventArgs.PropertyName),
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
+                    OnEventAction = static (instance, source, eventArgs) => instance?.ContentPropertyChanged(eventArgs.PropertyName),
+                    OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyPropertyChanged).PropertyChanged -= weakEventListener.OnEvent,
                 };
                 inpc.PropertyChanged += listener.OnEvent;
             }
@@ -166,10 +166,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     RefreshChildren();
                     if (ilc.SublayerContents is INotifyCollectionChanged incc)
                     {
-                        var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
+                        var listener = new Internal.WeakEventListener<TocItem, object?, NotifyCollectionChangedEventArgs>(this)
                         {
-                            OnEventAction = (instance, source, eventArgs) => RefreshChildren(),
-                            OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
+                            OnEventAction = static (instance, source, eventArgs) => instance?.RefreshChildren(),
+                            OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent,
                         };
                         incc.CollectionChanged += listener.OnEvent;
                     }
