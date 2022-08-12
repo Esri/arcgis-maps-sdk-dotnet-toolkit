@@ -188,25 +188,39 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (_geoView is MapView mv && mv.Map is ILoadable mapLoadable)
             {
-                // Listen for load completion
-                var listener = new Internal.WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>(this, mapLoadable);
-                listener.OnEventAction = static (instance, source, eventArgs) => instance?.Doc_Loaded(source, eventArgs);
-                listener.OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent;
-                mapLoadable.Loaded += listener.OnEvent;
+                if (mapLoadable.LoadStatus != LoadStatus.Loaded)
+                {
+                    // Listen for load completion
+                    var listener = new Internal.WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>(this, mapLoadable);
+                    listener.OnEventAction = static (instance, source, eventArgs) => instance?.Doc_Loaded(source, eventArgs);
+                    listener.OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent;
+                    mapLoadable.Loaded += listener.OnEvent;
 
-                // Ensure event is raised even if already loaded
-                _ = mv.Map.RetryLoadAsync();
+                    // Ensure event is raised even if already loaded
+                    _ = mv.Map.LoadAsync();
+                }
+                else
+                {
+                    Doc_Loaded(mapLoadable, EventArgs.Empty);
+                }
             }
             else if (_geoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
             {
-                // Listen for load completion
-                var listener = new Internal.WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>(this, sceneLoadable);
-                listener.OnEventAction = static (instance, source, eventArgs) => instance?.Doc_Loaded(source, eventArgs);
-                listener.OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent;
-                sceneLoadable.Loaded += listener.OnEvent;
+                if (sceneLoadable.LoadStatus != LoadStatus.Loaded)
+                {
+                    // Listen for load completion
+                    var listener = new Internal.WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>(this, sceneLoadable);
+                    listener.OnEventAction = static (instance, source, eventArgs) => instance?.Doc_Loaded(source, eventArgs);
+                    listener.OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent;
+                    sceneLoadable.Loaded += listener.OnEvent;
 
-                // Ensure event is raised even if already loaded
-                _ = sv.Scene.RetryLoadAsync();
+                    // Ensure event is raised even if already loaded
+                    _ = sv.Scene.LoadAsync();
+                }
+                else
+                {
+                    Doc_Loaded(sceneLoadable, EventArgs.Empty);
+                }
             }
 
             if (_overrideList == null)
