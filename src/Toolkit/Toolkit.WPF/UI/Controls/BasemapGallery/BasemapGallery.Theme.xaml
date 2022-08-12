@@ -225,6 +225,7 @@
                                 VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                 HorizontalContentAlignment="Stretch"
                                 Background="{TemplateBinding Background}"
+                                SelectionMode="Single"
                                 BorderThickness="0"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ListView.Resources>

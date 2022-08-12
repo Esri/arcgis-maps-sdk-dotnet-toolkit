@@ -336,5 +336,6 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-    </Style>    
+        <Setter Property="IsTabStop" Value="False" />
+    </Style>
 </ResourceDictionary>

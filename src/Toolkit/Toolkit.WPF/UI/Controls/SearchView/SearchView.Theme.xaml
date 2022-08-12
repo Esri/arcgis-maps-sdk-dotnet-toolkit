@@ -356,6 +356,7 @@
                                     ItemTemplate="{StaticResource SourceTemplate}"
                                     ItemsSource="{Binding SearchViewModel.Sources, Mode=OneWay}"
                                     SelectedItem="{Binding SearchViewModel.ActiveSource, Mode=TwoWay}"
+                                    SelectionMode="Single"
                                     Style="{StaticResource ListStyle}" />
                             </StackPanel>
                         </Border>
@@ -493,6 +494,7 @@
                                 ItemContainerStyle="{StaticResource ListContainerStyle}"
                                 ItemsSource="{Binding SearchViewModel.Results, Mode=OneWay}"
                                 SelectedItem="{Binding SearchViewModel.SelectedResult, Mode=OneWayToSource}"
+                                SelectionMode="Single"
                                 Style="{StaticResource ListStyle}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="{x:Type controls:SearchResult}">
