@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             BookmarkLabel = bmView.BookmarkLabel;
             _listener = listener;
 
-            var weakEventHandler = new Internal.WeakEventListener<BookmarkItemViewHolder, object, EventArgs>(this)
+            var weakEventHandler = new Internal.WeakEventListener<BookmarkItemViewHolder, BookmarkItemView, object?, EventArgs>(this, bmView)
             {
                 OnEventAction = static (instance, source, eventArgs) =>
                 {
@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         bmivh._listener(bmivh.LayoutPosition);
                     }
                 },
-                OnDetachAction = static (instance, source, weakEventListener) => (source as BookmarkItemView).Click -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => source.Click -= weakEventListener.OnEvent,
             };
 
             bmView.Click += weakEventHandler.OnEvent;

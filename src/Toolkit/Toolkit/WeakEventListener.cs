@@ -29,10 +29,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </summary>
     /// <typeparam name="TListeningInstance">Type of instance listening for the event.</typeparam>
     /// <typeparam name="TEventRaisingSource">Type of source for the event.</typeparam>
+    /// <typeparam name="TEventSender">Type of sender for the event handler.</typeparam>
     /// <typeparam name="TEventArgs">Type of event arguments for the event.</typeparam>
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Used as link target in several projects.")]
 #pragma warning disable SA1402 // File may only contain a single class
-    internal class WeakEventListener<TListeningInstance, TEventRaisingSource, TEventArgs>
+    internal class WeakEventListener<TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs>
 #pragma warning restore SA1402 // File may only contain a single class
         where TListeningInstance : class
     {
@@ -40,59 +41,67 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// WeakReference to the instance listening for the event.
         /// </summary>
         private WeakReference _listeningInstance;
+        private TEventRaisingSource _eventSource;
 
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        public Action<TListeningInstance, TEventRaisingSource?, TEventArgs>? OnEventAction { get; set; }
+        public Action<TListeningInstance, TEventSender?, TEventArgs>? OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when detaching from the event.
         /// </summary>
-        public Action<TListeningInstance, TEventRaisingSource, WeakEventListener<TListeningInstance, TEventRaisingSource, TEventArgs>>? OnDetachAction { get; set; }
+        public Action<TListeningInstance, TEventRaisingSource, WeakEventListener<TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs>>? OnDetachAction { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WeakEventListener{TInstance, TSource, TEventArgs}"/> class.
+        /// Initializes a new instance of the <see cref="WeakEventListener{TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs}"/> class.
         /// </summary>
         /// <param name="instance">Instance subscribing to the event.</param>
-        public WeakEventListener(TListeningInstance instance)
+        /// <param name="source">Source of the event.</param>
+        public WeakEventListener(TListeningInstance instance, TEventRaisingSource source)
         {
             if (instance == null)
             {
-                throw new ArgumentNullException("instance");
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
             }
 
             _listeningInstance = new WeakReference(instance);
+            _eventSource = source;
         }
 
         /// <summary>
         /// Handler for the subscribed event calls OnEventAction to handle it.
         /// </summary>
-        /// <param name="source">Event source.</param>
+        /// <param name="sender">Event source.</param>
         /// <param name="eventArgs">Event arguments.</param>
-        public void OnEvent(object source, TEventArgs eventArgs)
+        public void OnEvent(TEventSender sender, TEventArgs eventArgs)
         {
             TListeningInstance? target = (TListeningInstance?)_listeningInstance.Target;
             if (target != null)
             {
                 // Call registered action
-                OnEventAction?.Invoke(target, (TEventRaisingSource)source, eventArgs);
+                OnEventAction?.Invoke(target, sender, eventArgs);
             }
             else
             {
                 // Detach from event
-                Detach(source);
+                Detach();
             }
         }
 
         /// <summary>
         /// Detaches from the subscribed event.
         /// </summary>
-        public void Detach(object source)
+        public void Detach()
         {
-            if (_listeningInstance?.Target is TListeningInstance target)
+            if (_listeningInstance.Target is TListeningInstance target)
             {
-                OnDetachAction?.Invoke(target, (TEventRaisingSource)source, this);
+                OnDetachAction?.Invoke(target, _eventSource, this);
             }
 
             OnDetachAction = null;

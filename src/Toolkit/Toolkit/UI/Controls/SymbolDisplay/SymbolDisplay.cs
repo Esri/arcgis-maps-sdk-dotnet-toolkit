@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class SymbolDisplay : Control
     {
-        private Internal.WeakEventListener<SymbolDisplay, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
+        private Internal.WeakEventListener<SymbolDisplay, System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
         private Task? _currentUpdateTask;
         private bool _isRefreshRequired;
 
@@ -58,19 +58,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (oldValue != null)
             {
-                _inpcListener?.Detach(oldValue);
+                _inpcListener?.Detach();
                 _inpcListener = null;
             }
 
             if (newValue != null)
             {
-                _inpcListener = new Internal.WeakEventListener<SymbolDisplay, object?, System.ComponentModel.PropertyChangedEventArgs>(this)
+                _inpcListener = new Internal.WeakEventListener<SymbolDisplay, System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>(this, newValue)
                 {
                     OnEventAction = static (instance, source, eventArgs) =>
                     {
                         instance?.Refresh();
                     },
-                    OnDetachAction = (instance, source, weakEventListener) => (source as System.ComponentModel.INotifyPropertyChanged).PropertyChanged -= weakEventListener.OnEvent,
+                    OnDetachAction = (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 newValue.PropertyChanged += _inpcListener.OnEvent;
             }

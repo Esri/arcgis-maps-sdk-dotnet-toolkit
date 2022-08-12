@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _dataSource = dataSource;
             _shadowList = dataSource.ToList();
 
-            var listener = new Internal.WeakEventListener<BookmarksAdapter, object, NotifyCollectionChangedEventArgs>(this)
+            var listener = new Internal.WeakEventListener<BookmarksAdapter, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, dataSource)
             {
                 OnEventAction = static (instance, source, eventArgs) =>
                 {
@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                             break;
                     }
                 },
-                OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
             };
 
             dataSource.CollectionChanged += listener.OnEvent;

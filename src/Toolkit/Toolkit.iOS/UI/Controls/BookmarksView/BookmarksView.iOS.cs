@@ -51,13 +51,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             tableSource.BookmarkSelected += HandleBookmarkSelected;
             _listView.Source = tableSource;
 
-            var listener = new Internal.WeakEventListener<BookmarksView, object, NotifyCollectionChangedEventArgs>(this)
+            var listener = new Internal.WeakEventListener<BookmarksView, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, tableSource)
             {
                 OnEventAction = static (instance, source, eventArgs) =>
                 {
                     instance?._listView?.ReloadData();
                 },
-                OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
             };
             tableSource.CollectionChanged += listener.OnEvent;
 

@@ -36,13 +36,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _layerLegends = layerLegends;
             if (_layerLegends is INotifyCollectionChanged incc)
             {
-                var listener = new Internal.WeakEventListener<LayerLegendTableSource, object?, NotifyCollectionChangedEventArgs>(this)
+                var listener = new Internal.WeakEventListener<LayerLegendTableSource, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
                 {
                     OnEventAction = static (instance, source, eventArgs) =>
                      {
                          instance.CollectionChanged?.Invoke(source, eventArgs);
                      },
-                    OnDetachAction = static (instance, source, weakEventListener) => (source as INotifyCollectionChanged).CollectionChanged -= weakEventListener.OnEvent,
+                    OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
                 };
                 incc.CollectionChanged += listener.OnEvent;
             }

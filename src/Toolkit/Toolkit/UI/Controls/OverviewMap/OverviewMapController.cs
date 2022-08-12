@@ -40,8 +40,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Symbol? _areaSymbol;
         private Symbol? _pointSymbol;
         private GeoView? _connectedView;
-        private readonly WeakEventListener<OverviewMapController, object?, EventArgs>? _viewpointListener;
-        private readonly WeakEventListener<OverviewMapController, object?, EventArgs>? _navigationListener;
+        private readonly WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>? _viewpointListener;
+        private readonly WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>? _navigationListener;
         private readonly GraphicsOverlay _extentOverlay;
         private readonly Graphic _extentGraphic;
         private readonly MapView _insetView;
@@ -66,18 +66,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _extentOverlay.Graphics.Add(_extentGraphic);
 
             // _overview.ViewpointChanged += OnViewpointChanged
-            _viewpointListener = new WeakEventListener<OverviewMapController, object?, EventArgs>(this)
+            _viewpointListener = new WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>(this, _insetView)
             {
                 OnEventAction = static (instance, source, eventArgs) => instance?.OnInsetViewpointChanged(source, eventArgs),
-                OnDetachAction = static (instance, source, weakEventListener) => (source as GeoView).ViewpointChanged -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => source.ViewpointChanged -= weakEventListener.OnEvent,
             };
             _insetView.ViewpointChanged += _viewpointListener.OnEvent;
 
             // _overview.NavigationCompleted += OnNavigationCompleted;
-            _navigationListener = new WeakEventListener<OverviewMapController, object?, EventArgs>(this)
+            _navigationListener = new WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>(this, _insetView)
             {
                 OnEventAction = static (instance, source, eventArgs) => instance?.OnInsetNavigationCompleted(source, eventArgs),
-                OnDetachAction = static (instance, source, weakEventListener) => (source as GeoView).NavigationCompleted -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => source.NavigationCompleted -= weakEventListener.OnEvent,
             };
             _insetView.NavigationCompleted += _navigationListener.OnEvent;
         }
@@ -244,8 +244,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public void Dispose()
         {
             AttachedView = null;
-            _navigationListener?.Detach(_insetView);
-            _viewpointListener?.Detach(_insetView);
+            _navigationListener?.Detach();
+            _viewpointListener?.Detach();
         }
     }
 }
