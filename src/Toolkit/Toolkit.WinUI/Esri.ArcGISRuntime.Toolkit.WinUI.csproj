@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetWindowsTargetFramework)</TargetFramework>
+    <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+    <DefineConstants>$(DefineConstants);WINDOWS_XAML;WINUI</DefineConstants>
+  </PropertyGroup>
+  <Import Project="..\..\CommonProperties.targets" />
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\Toolkit.UWP\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.UWP\obj\**\*.*" Link="%(RecursiveDir)%(Filename)%(Extension)" />
+    <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.UWP\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.UWP\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.UWP\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Esri.ArcGISRuntime.UI.Controls" />
+    <Using Include="Microsoft.UI.Xaml" />
+    <Using Include="Microsoft.UI.Xaml.Controls" />
+    <Using Include="Microsoft.UI.Xaml.Data" />
+    <Using Include="Microsoft.UI.Xaml.Controls.Primitives" />
+    <Using Include="Microsoft.UI.Xaml.Input" />
+    <Using Include="Microsoft.UI.Xaml.Media" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+</Project>

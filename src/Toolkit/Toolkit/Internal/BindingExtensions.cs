@@ -16,10 +16,7 @@
 
 #if !__IOS__ && !__ANDROID__
 
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
-#else
+#if WPF
 using System.Windows;
 using System.Windows.Data;
 #endif
@@ -50,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 Path = source.Path,
                 TargetNullValue = source.TargetNullValue,
                 UpdateSourceTrigger = source.UpdateSourceTrigger,
-#if NETFX_CORE
+#if WINDOWS_XAML
                 ConverterLanguage = source.ConverterLanguage,
 #else
                 AsyncState = source.AsyncState,
@@ -109,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // If the fallback hasn't been populated already, store the current string format as specified by the binding
             if (fallbackFormat == null)
             {
-#if NETFX_CORE
+#if WINDOWS_XAML
                 fallbackFormat = binding.Converter is StringFormatConverter ? binding.ConverterParameter as string : null;
 #else
                 fallbackFormat = binding.StringFormat;
@@ -119,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // Create a new binding to apply the format string.  Necessary because bindings that are already in use cannot be updated,
             // but we want to preserve how users may have setup the binding otherwise
             var newStringFormat = !string.IsNullOrEmpty(stringFormat) ? stringFormat : fallbackFormat;
-#if NETFX_CORE
+#if WINDOWS_XAML
             var newBinding = binding.Clone(newStringFormat);
 #else
             var newBinding = binding.Clone();
@@ -137,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <param name="property">The property to update.</param>
         public static void RefreshBinding(this FrameworkElement element, DependencyProperty property)
         {
-#if NETFX_CORE
+#if WINDOWS_XAML
             // Get the property binding
             var binding = element?.GetBindingExpression(property)?.ParentBinding;
             if (binding != null)

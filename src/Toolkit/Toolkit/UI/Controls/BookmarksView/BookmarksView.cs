@@ -19,16 +19,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
+#if __IOS__
 using Control = UIKit.UIViewController;
 #elif __ANDROID__
 using Android.App;
 using Android.Views;
 using Control = Android.Widget.FrameLayout;
-#else
-using System.Windows.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

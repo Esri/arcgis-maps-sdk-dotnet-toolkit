@@ -19,12 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+#if WINDOWS_XAML
 using Key = Windows.System.VirtualKey;
 #else
 using System.ComponentModel;
@@ -94,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// code or internal processes (such as a rebuilding layout pass) call
         /// <see cref="M:System.Windows.Controls.Control.ApplyTemplate"/>.
         /// </summary>
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -124,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (MinimumThumb != null)
             {
-#if NETFX_CORE
+#if WINDOWS_XAML
                 MinimumThumb.ManipulationMode = ManipulationModes.TranslateX;
                 MinimumThumb.ManipulationDelta += (s, e) =>
                 {
@@ -141,7 +136,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (MaximumThumb != null)
             {
-#if NETFX_CORE
+#if WINDOWS_XAML
                 MaximumThumb.ManipulationMode = ManipulationModes.TranslateX;
                 MaximumThumb.ManipulationDelta += (s, e) =>
                 {
@@ -158,7 +153,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (HorizontalTrackThumb != null)
             {
-#if NETFX_CORE
+#if WINDOWS_XAML
                 HorizontalTrackThumb.ManipulationMode = ManipulationModes.TranslateX;
                 HorizontalTrackThumb.ManipulationDelta += (s, e) =>
                 {
@@ -217,7 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void SetFocus()
         {
-#if NETFX_CORE
+#if WINDOWS_XAML
             Focus(FocusState.Pointer);
 #else
             Focus();
@@ -247,7 +242,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnPointerEntered(PointerRoutedEventArgs e)
         {
             base.OnPointerEntered(e);
@@ -266,7 +261,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnPointerExited(PointerRoutedEventArgs e)
         {
             base.OnPointerExited(e);
@@ -285,7 +280,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc />
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -304,7 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Called before the <see cref="E:System.Windows.UIElement.KeyDown"/> event occurs.
         /// </summary>
         /// <param name="e">The data for the event.</param>
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnKeyDown(KeyRoutedEventArgs e)
 #else
         protected override void OnKeyDown(KeyEventArgs e)
@@ -358,7 +353,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
-#if !NETFX_CORE
+#if !WINDOWS_XAML
         [TypeConverter(typeof(TimeExtentConverter))]
 #endif
         private TimeExtent? CurrentExtentImpl
@@ -380,7 +375,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance.
         /// </summary>
-#if !NETFX_CORE
+#if !WINDOWS_XAML
         [TypeConverter(typeof(TimeExtentConverter))]
 #endif
         private TimeExtent? FullExtentImpl

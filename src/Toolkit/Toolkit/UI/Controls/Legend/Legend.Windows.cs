@@ -14,17 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI.Controls;
-
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-#else
-using System.Windows;
-using System.Windows.Controls;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -36,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ItemTemplateSelector = new LegendItemTemplateSelector(this);
         }
 
-#if NETFX_CORE
+#if WINDOWS_XAML
         /// <inheritdoc />
         protected override void OnApplyTemplate()
 #else

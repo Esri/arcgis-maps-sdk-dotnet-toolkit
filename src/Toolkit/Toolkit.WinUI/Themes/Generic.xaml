@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/BasemapGallery/BasemapGallery.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/BookmarksView/BookmarksView.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/Legend/Legend.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/SearchView/SearchView.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/Compass/Compass.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
+        <ResourceDictionary Source="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

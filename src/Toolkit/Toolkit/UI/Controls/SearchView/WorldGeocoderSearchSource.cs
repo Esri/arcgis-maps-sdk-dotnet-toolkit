@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.UI;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {

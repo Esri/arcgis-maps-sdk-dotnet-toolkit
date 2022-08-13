@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE
+#if WPF
 
 using System.Windows;
 #if NETFX_CORE

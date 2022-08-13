@@ -14,15 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Shapes;
+#elif WINUI
+using Microsoft.UI.Xaml.Shapes;
 #else
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Shapes;
 #endif
 
@@ -40,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize() => DefaultStyleKey = typeof(ScaleLine);
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()

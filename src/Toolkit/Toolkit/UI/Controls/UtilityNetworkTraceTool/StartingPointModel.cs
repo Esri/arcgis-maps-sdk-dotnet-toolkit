@@ -20,10 +20,11 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
+using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {

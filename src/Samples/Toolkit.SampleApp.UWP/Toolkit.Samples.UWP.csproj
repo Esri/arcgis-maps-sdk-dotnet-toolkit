@@ -11,8 +11,8 @@
     <AssemblyName>Esri.ArcGISRuntime.Toolkit.SampleApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>15</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -304,15 +304,15 @@
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
-        <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        <ProjectReference Include="..\..\Toolkit\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj">
+          <Project>{a6431f30-a608-4c78-80be-548c322cbe75}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit.UWP</Name>
         </ProjectReference>
       </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.UWP">
           <Version>$(UseNugetPackage)</Version>
         </PackageReference>
       </ItemGroup>

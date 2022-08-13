@@ -14,24 +14,18 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 
-using System.Collections.Generic;
 using System.Text;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if NETFX_CORE
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
+using Size = Windows.Foundation.Size;
 using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
-#else
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
+#elif WINUI
+using Size = Windows.Foundation.Size;
+using Microsoft.UI.Xaml.Markup;
+#elif WPF
 using System.Windows.Markup;
-using System.Windows.Media;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -54,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         static Tickbar()
         {
-#if NETFX_CORE
+#if WINDOWS_XAML
             _defaultTickmarkTemplate = XamlReader.Load(_template) as DataTemplate;
 #else
             System.IO.MemoryStream stream = new System.IO.MemoryStream(UTF8Encoding.Default.GetBytes(_template));

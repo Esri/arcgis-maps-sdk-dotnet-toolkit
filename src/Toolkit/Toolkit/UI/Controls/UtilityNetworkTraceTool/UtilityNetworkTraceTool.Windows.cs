@@ -14,28 +14,19 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
-using System;
-using System.Collections.Generic;
+#if WPF || WINDOWS_XAML
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UI.Controls;
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 #if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Controls;
 using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
-#else
-using System.Windows;
-using System.Windows.Controls;
+#elif WINUI
+using ToggleButton = Microsoft.UI.Xaml.Controls.ToggleSwitch;
+#elif WPF
 using System.Windows.Controls.Primitives;
 #endif
 
@@ -126,7 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
 
                 _resultOverlays = new List<GraphicsOverlay>();
-#if !WINDOWS_UWP
+#if !WINDOWS_XAML
                 _tabControl?.SetValue(TabControl.SelectedIndexProperty, 0);
 #else
                 _pivotControl?.SetValue(Pivot.SelectedIndexProperty, 0);
@@ -173,7 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             _part_resultsTabItem?.SetValue(VisibilityProperty, _controller.Results.Any() ? Visibility.Visible : Visibility.Collapsed);
-#if !WINDOWS_UWP
+#if !WINDOWS_XAML
             _tabControl?.SetValue(TabControl.SelectedIndexProperty, _controller.Results.Any() ? 1 : 0);
 #else
             _pivotControl?.SetValue(Pivot.SelectedIndexProperty, _controller.Results.Any() ? 1 : 0);
@@ -408,7 +399,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#if NETFX_CORE && !XAMARIN_FORMS
+#if WINDOWS_XAML
         private long _propertyChangedCallbackToken = 0;
 
 #endif
@@ -423,7 +414,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (oldGeoView != null)
             {
                 oldGeoView.GeoViewTapped -= OnGeoViewTapped;
-#if NETFX_CORE
+#if WINDOWS_XAML
                 if (oldGeoView is MapView)
                 {
                     oldGeoView.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
@@ -458,7 +449,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 newGeoView.GeoViewTapped += OnGeoViewTapped;
 
-#if NETFX_CORE
+#if WINDOWS_XAML
                 if (newGeoView is MapView)
                 {
                     _propertyChangedCallbackToken = newGeoView.RegisterPropertyChangedCallback(MapView.MapProperty, OnGeoModelPropertyChanged);

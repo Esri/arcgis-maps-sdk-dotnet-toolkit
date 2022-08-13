@@ -14,23 +14,16 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WINDOWS
+#if WPF || WINDOWS_XAML
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
-using Esri.ArcGISRuntime.UI.Controls;
 #if WPF
-using System.Windows;
-using System.Windows.Controls;
 using PropertyMetadata = System.Windows.FrameworkPropertyMetadata;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -83,7 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
 #if WPF
         public override void OnApplyTemplate()
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
         protected override void OnApplyTemplate()
 #endif
         {
@@ -94,7 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
 #if WPF
                 _allFacilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_allFacilitiesListView is FilteringListView faflv)
                 {
                     faflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
@@ -111,7 +104,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
 #if WPF
                 _facilitiesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_facilitiesListView is FilteringListView fflv)
                 {
                     fflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
@@ -128,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
 #if WPF
                 _facilitiesNoSitesListView.SelectionChanged -= HandleControlDrivenFacilitySelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_facilitiesListView is FilteringListView fnsflv)
                 {
                     fnsflv.SelectionChanged2 -= HandleControlDrivenFacilitySelection;
@@ -145,7 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
 #if WPF
                 _siteListView.SelectionChanged -= HandleControlDrivenSiteSelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_siteListView is FilteringListView fslv)
                 {
                     fslv.SelectionChanged2 -= HandleControlDrivenSiteSelection;
@@ -190,7 +183,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _siteListView = siteListView;
 #if WPF
                 _siteListView.SelectionChanged += HandleControlDrivenSiteSelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_siteListView is FilteringListView nfslv)
                 {
                     nfslv.SelectionChanged2 += HandleControlDrivenSiteSelection;
@@ -207,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _facilitiesListView = facilitiesListView;
 #if WPF
                 _facilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_facilitiesListView is FilteringListView nfflv)
                 {
                     nfflv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
@@ -224,7 +217,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _allFacilitiesListView = allFacilitiesListView;
 #if WPF
                 _allFacilitiesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_allFacilitiesListView is FilteringListView nfaflv)
                 {
                     nfaflv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
@@ -242,7 +235,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _facilitiesNoSitesListView = facilitiesNoSitesListView;
 #if WPF
                 _facilitiesNoSitesListView.SelectionChanged += HandleControlDrivenFacilitySelection;
-#elif WINDOWS_UWP
+#elif WINDOWS_XAML
                 if (_facilitiesNoSitesListView is FilteringListView nfnslv)
                 {
                     nfnslv.SelectionChanged2 += HandleControlDrivenFacilitySelection;
@@ -377,7 +370,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        #region GeoView, GeoModel, Viewpoint management
+#region GeoView, GeoModel, Viewpoint management
 
         /// <summary>
         /// Gets or sets the GeoView associated with this view.
@@ -397,7 +390,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnGeoViewPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((FloorFilter)d).SetGeoView(e.OldValue as GeoView, e.NewValue as GeoView);
 
-#if WINDOWS_UWP
+#if WINDOWS_XAML
         private long _propertyChangedCallbackToken = 0;
 #endif
 
@@ -412,7 +405,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (oldView is MapView mapview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_XAML
                     mapview.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(mapview, HandleGeoModelChanged);
@@ -420,7 +413,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (oldView is SceneView sceneview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_XAML
                     sceneview.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, HandleGeoModelChanged);
@@ -435,7 +428,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (newView is MapView mapview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_XAML
                     _propertyChangedCallbackToken = mapview.RegisterPropertyChangedCallback(MapView.MapProperty, HandleGeoModelChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(mapview, HandleGeoModelChanged);
@@ -443,7 +436,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (newView is SceneView sceneview)
                 {
-#if WINDOWS_UWP
+#if WINDOWS_XAML
                     _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, HandleGeoModelChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, HandleGeoModelChanged);
@@ -514,8 +507,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleGeoModelLoaded()
         {
-#if WINDOWS_UWP
+#if NETFX_CORE
             _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+#elif WINUI
+            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
 #else
             Dispatcher.Invoke(() =>
 #endif
@@ -530,9 +525,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             });
         }
-        #endregion GeoView, GeoModel, Viewpoint management
+#endregion GeoView, GeoModel, Viewpoint management
 
-        #region Selection
+#region Selection
 
         /// <summary>
         /// Gets or sets the currently selected site.
@@ -660,11 +655,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-        #endregion Selection
+#endregion Selection
 
-        #region Read-only list properties
+#region Read-only list properties
 
-#if WINDOWS_UWP
+#if WINDOWS_XAML
 
         /// <summary>
         /// Gets the list of available sites.
@@ -750,9 +745,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static readonly DependencyPropertyKey DisplayLevelsPropertyKey =
 DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLevel>), typeof(FloorFilter), null);
 #endif
-        #endregion Read-only list properties
+#endregion Read-only list properties
 
-        #region Configuration
+#region Configuration
 
         /// <summary>
         /// Gets or sets the value that defines how the <see cref="SelectedFacility"/> is updated as the <see cref="GeoView"/>'s viewpoint changes.
@@ -771,9 +766,9 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
 
         private static void OnAutomaticSelectionModePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) =>
             ((FloorFilter)d)._controller.AutomaticSelectionMode = (AutomaticSelectionMode)e.NewValue;
-        #endregion Configuration
+#endregion Configuration
 
-        #region Attached Properties
+#region Attached Properties
 
         /// <summary>
         /// Gets a value indicating whether the given dependency object is in an expanded state.
@@ -789,14 +784,14 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
         /// Identifies the "IsExpanded" attached property.
         /// </summary>
         public static readonly DependencyProperty IsExpandedProperty =
-#if WINDOWS_UWP
+#if WINDOWS_XAML
             DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new PropertyMetadata(false));
 #else
             DependencyProperty.RegisterAttached("IsExpanded", typeof(bool), typeof(FloorFilter), new PropertyMetadata(false, FrameworkPropertyMetadataOptions.Inherits));
 #endif
-        #endregion Attached Properties
+#endregion Attached Properties
 
-        #region INPC
+#region INPC
 
         /// <inheritdoc />
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -805,9 +800,9 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
+#endregion
 
-        #region UI State Management
+#region UI State Management
 
         /// <summary>
         /// Gets a value indicating whether the floor filter should display an 'All Floors' button.
@@ -857,7 +852,7 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
                 {
                     _selectedTab = value;
                     OnPropertyChanged();
-#if WINDOWS_UWP
+#if WINDOWS_XAML
                     switch (_selectedTab)
                     {
                         case 0:
@@ -953,7 +948,7 @@ DependencyProperty.RegisterReadOnly(nameof(DisplayLevels), typeof(IList<FloorLev
             }
         }
 
-        #endregion UI State Management
+#endregion UI State Management
     }
 }
 #endif

@@ -14,17 +14,14 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
+#if WPF || WINDOWS_XAML
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 #if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
-#else
-using System.Windows;
-using System.Windows.Controls;
+#elif WINUI
+using ToggleButton = Microsoft.UI.Xaml.Controls.ToggleSwitch;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
@@ -39,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public ToolkitColorPalette()
         {
-        #if WINDOWS_UWP
+        #if WINDOWS_XAML
             SelectedColor = System.Drawing.Color.Black;
         #endif
             AvailableColors = new ObservableCollection<System.Drawing.Color>(new[]
@@ -59,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <summary>
         /// Gets or sets the selected color.
         /// </summary>
-        #if WINDOWS_UWP
+        #if WINDOWS_XAML
         public System.Drawing.Color SelectedColor
         {
             get

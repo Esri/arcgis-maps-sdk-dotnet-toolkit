@@ -14,15 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-#else
-using System.Windows;
-using System.Windows.Controls;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -38,7 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _owner = owner;
         }
 
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override DataTemplate SelectTemplateCore(object item)
 #else
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -62,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
 
-#if NETFX_CORE
+#if WINDOWS_XAML
             return base.SelectTemplateCore(item);
 #else
             return base.SelectTemplate(item, container);

@@ -14,15 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
-using System;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+#if WPF || WINDOWS_XAML
+
+#if WINUI
+using Microsoft.UI.Xaml.Markup;
+#elif NETFX_CORE
 using Windows.UI.Xaml.Markup;
-#else
-using System.Windows;
-using System.Windows.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -31,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_LoadingScrim", Type = typeof(UIElement))]
     public partial class BasemapGallery
     {
-        #if WINDOWS_UWP
+        #if WINDOWS_XAML
         private const double ViewStyleWidthThreshold = 398.0;
         #else
         private const double ViewStyleWidthThreshold = 440.0;
@@ -46,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private BasemapGalleryViewStyle _currentlyAppliedStyle = BasemapGalleryViewStyle.Automatic;
 
         /// <inheritdoc />
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -198,7 +195,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _currentlyAppliedStyle = style;
         }
 
-#if NETFX_CORE
+#if WINDOWS_XAML
         // Shim makes cross-platform code easier
         private class WrapPanel
         {
@@ -207,7 +204,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static ItemsPanelTemplate? GetItemsPanelTemplate(Type panelType)
         {
-#if !NETFX_CORE
+#if !WINDOWS_XAML
             return new ItemsPanelTemplate(new FrameworkElementFactory(panelType));
 #else
             if (panelType == typeof(StackPanel))

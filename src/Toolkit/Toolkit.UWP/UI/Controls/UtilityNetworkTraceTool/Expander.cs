@@ -14,13 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
-
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     /// <summary>

@@ -14,21 +14,14 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-#if NETFX_CORE
-using Windows.UI.Xaml.Data;
-#endif
+#if WPF || WINDOWS_XAML
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
     /// SelectorDataItem is a bindable object for <see cref="FeatureDataField.SelectorTemplate"/>.
     /// </summary>
-#if NETFX_CORE
+#if WINDOWS_XAML
     [Bindable]
 #endif
     internal sealed class SelectorDataItem : DataItem

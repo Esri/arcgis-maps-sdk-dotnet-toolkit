@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,17 +25,8 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-#else
-using System.Windows;
-using System.Windows.Controls;
+#if WPF
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -134,7 +125,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()

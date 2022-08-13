@@ -17,14 +17,10 @@
 using System.ComponentModel;
 using Esri.ArcGISRuntime.UI.Controls;
 
-#if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
+#if __IOS__
 using Control = UIKit.UIView;
 #elif __ANDROID__
 using Control = Android.Views.ViewGroup;
-#else
-using System.Windows.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

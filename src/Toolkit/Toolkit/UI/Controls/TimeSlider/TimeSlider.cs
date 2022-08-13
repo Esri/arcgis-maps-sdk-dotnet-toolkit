@@ -29,13 +29,9 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+#if WINDOWS_XAML
+using Size = Windows.Foundation.Size;
+using Rect = Windows.Foundation.Rect;
 using Key = Windows.System.VirtualKey;
 #elif __IOS__
 using System.Drawing;
@@ -184,7 +180,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 // There are two thumbs, so position minimum (max is used in both the one and two thumb case)
                 left = Math.Max(0, (start - minimum) * rate);
                 right = Math.Min(sliderWidth, (maximum - start) * rate);
-#if NETFX_CORE
+#if WINDOWS_XAML
                 // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
                 left -= 0.5;
                 right -= 0.5;
@@ -240,7 +236,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Position maximum thumb
             left = Math.Min(sliderWidth, (end - minimum) * rate);
             right = Math.Min(sliderWidth, (maximum - end) * rate);
-#if NETFX_CORE
+#if WINDOWS_XAML
             // Accommodate issue on UWP where element sometimes actually renders with a width of one pixel less than margin values dictate
             left -= 0.5;
             right -= 0.5;
@@ -303,7 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// the ActualWidth and ActualHeight properties are not representative of the new text.</remarks>
         private Size CalculateTextSize(TextBlock textBlock, string? text = null)
         {
-#if NETFX_CORE
+#if WINDOWS_XAML
             // Create a dummy TextBlock to calculate the size of the text.  Note that only a limited number of properties
             // are copied here.  This may yield an incorrect size if additional properties are specified in the slider's
             // style that affect the text size,
@@ -343,7 +339,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return size;
 #else
             var typeface = new Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch);
-#if NETCOREAPP
+#if WINDOWS_XAML
             var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
                 textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display, 1);
 #else
@@ -778,7 +774,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> associated with the visual thumbs(s) displayed on the TimeSlider.
         /// </summary>
-#if !NETFX_CORE && !XAMARIN
+#if WPF
         [TypeConverter(typeof(TimeExtentConverter))]
 #endif
         public TimeExtent? CurrentExtent
@@ -812,7 +808,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the <see cref="TimeExtent" /> that specifies the overall start and end time of the time slider instance.
         /// </summary>
-#if !NETFX_CORE && !XAMARIN
+#if WPF
         [TypeConverter(typeof(TimeExtentConverter))]
 #endif
         public TimeExtent? FullExtent

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(DotNetTargetFramework);$(NetWindowsTargetFramework)</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>10</LangVersion>
+    <DefineConstants>$(DefineConstants);WPF</DefineConstants>
+    <UseWpf>true</UseWpf>
+  </PropertyGroup>
+  <Import Project="..\..\CommonProperties.targets" />
+
+  <ItemGroup>
+    <Using Include="Esri.ArcGISRuntime.UI.Controls" />
+    <Using Include="System.Windows" />
+    <Using Include="System.Windows.Controls" />
+    <Using Include="System.Windows.Data" />
+    <Using Include="System.Windows.Media" />
+  </ItemGroup>
+
+  <ItemGroup>
+     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+</Project>

@@ -14,15 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.UI.Controls;
-
-#if NETFX_CORE
-using Windows.UI.Xaml;
-#else
-using System.Windows;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -31,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize() => DefaultStyleKey = GetType();
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()

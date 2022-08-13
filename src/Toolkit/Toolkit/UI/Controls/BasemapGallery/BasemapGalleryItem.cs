@@ -21,9 +21,6 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
-#if WINDOWS_UWP
-using Windows.UI.Xaml.Media;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
@@ -109,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     var buffer = new byte[stream.Length];
                     await stream.ReadAsync(buffer, 0, (int)stream.Length);
                     ThumbnailData = buffer;
-#if WINDOWS_UWP
+#if WINDOWS_XAML
                     ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();
 #endif
                 }
@@ -203,7 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-#if WINDOWS_UWP
+#if WINDOWS_XAML
         private ImageSource? _thumbnailBitmap;
 
         /// <summary>

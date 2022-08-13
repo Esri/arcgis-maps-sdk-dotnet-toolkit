@@ -20,10 +20,9 @@ using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UtilityNetworks;
 #if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Controls;
 using ToggleButton = Windows.UI.Xaml.Controls.ToggleSwitch;
+#elif WINUI
+using ToggleButton = Microsoft.UI.Xaml.Controls.ToggleSwitch;
 #else
 using System.Windows;
 using System.Windows.Controls;
@@ -60,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "PART_ResultsTabItem", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ResultsItemControl", Type = typeof(ItemsControl))]
     [TemplatePart(Name = "PART_DeleteAllResultsButton", Type = typeof(ButtonBase))]
-#if !WINDOWS_UWP
+#if !WINDOWS_XAML
     [TemplatePart(Name = "PART_TabsControl", Type = typeof(TabControl))]
 #else
     [TemplatePart(Name = "PART_TabsControl", Type = typeof(Pivot))]
@@ -95,14 +94,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private UIElement? _part_resultsTabItem;
         private ItemsControl? _part_resultsItemControl;
         private ButtonBase? _part_deleteAllResultsButton;
-#if !WINDOWS_UWP
+#if !WINDOWS_XAML
         private TabControl? _tabControl;
 #else
         private Pivot? _pivotControl;
 #endif
 
         /// <inheritdoc />
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -280,7 +279,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _part_deleteAllResultsButton.Click += Part_deleteAllResultsButton_Click;
             }
 
-#if !WINDOWS_UWP
+#if !WINDOWS_XAML
             if (GetTemplateChild("PART_TabsControl") is TabControl tabcontrol)
             {
                 _tabControl = tabcontrol;
@@ -348,7 +347,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             try
             {
                 await _controller.TraceAsync();
-#if !WINDOWS_UWP
+#if !WINDOWS_XAML
                 _tabControl?.SetValue(TabControl.SelectedIndexProperty, 1);
 #else
                 _pivotControl?.SetValue(Pivot.SelectedIndexProperty, 1);

@@ -16,11 +16,7 @@
 
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Geometry;
-using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Shapes;
-#elif __IOS__
+#if __IOS__
 using Control = UIKit.UIView;
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
 using TextBlock = UIKit.UILabel;
@@ -28,10 +24,6 @@ using TextBlock = UIKit.UILabel;
 using Control = Android.Views.ViewGroup;
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;
 using TextBlock = Android.Widget.TextView;
-#else
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Shapes;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

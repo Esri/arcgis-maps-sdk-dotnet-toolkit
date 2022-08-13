@@ -32,14 +32,14 @@
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true'">true</IsToolkitLibrary>
 
     <!--Framework versions-->
-    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">18362</ArcGISRuntime_MinimumSupportedWindowsBuild>
+    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">19041</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <UWPTargetPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformMinVersion>
     <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
     <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-    <DotNetTargetFramework>net461</DotNetTargetFramework>
+    <DotNetTargetFramework>net472</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)</UWPTargetFramework>
-    <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
+    <NetWindowsTargetFramework>net6.0-windows10.0.19041.0</NetWindowsTargetFramework>
     <NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
     <NetiOSTargetFramework>net6.0-ios14.0</NetiOSTargetFramework>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>

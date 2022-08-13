@@ -30,6 +30,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
@@ -54,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private bool _enableTrace;
 
         // Symbology
-        private Color _resultColor = Color.Blue;
+        private System.Drawing.Color _resultColor = System.Drawing.Color.Blue;
         private Symbol? _startingPointSymbol;
         private Symbol? _resultPointSymbol;
         private Symbol? _resultLineSymbol;
@@ -803,11 +804,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         #region Symbology
 
         // Fallback symbols
-        private readonly Symbol _defaultStartingLocationSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.LimeGreen, 20d);
-        private readonly Symbol _defaultResultPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.Blue, 20d);
-        private readonly Symbol _defaultResultLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Dot, Color.Blue, 5d);
-        private readonly Symbol _defaultResultFillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.ForwardDiagonal, Color.Blue,
-                new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Blue, 2d));
+        private readonly Symbol _defaultStartingLocationSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, System.Drawing.Color.LimeGreen, 20d);
+        private readonly Symbol _defaultResultPointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Blue, 20d);
+        private readonly Symbol _defaultResultLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Dot, System.Drawing.Color.Blue, 5d);
+        private readonly Symbol _defaultResultFillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.ForwardDiagonal, System.Drawing.Color.Blue,
+                new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, System.Drawing.Color.Blue, 2d));
 
         /// <summary>
         /// Gets or sets the starting point symbol.
@@ -877,7 +878,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// Gets or sets the result color. Setting this value will update <see cref="ResultFillSymbol"/>, <see cref="ResultLineSymbol"/>, and <see cref="ResultPointSymbol"/>
         /// if they are of type <see cref="SimpleFillSymbol"/>, <see cref="SimpleLineSymbol"/>, and <see cref="SimpleMarkerSymbol"/> respectively.
         /// </summary>
-        public Color ResultColor
+        public System.Drawing.Color ResultColor
         {
             get => _resultColor;
             set

@@ -14,24 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.UI.Controls;
 
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-#elif __IOS__
+#if __IOS__
 using Control = UIKit.UIView;
 #elif __ANDROID__
 using Control = Android.Views.ViewGroup;
-#else
-using System.Windows;
-using System.Windows.Controls;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls

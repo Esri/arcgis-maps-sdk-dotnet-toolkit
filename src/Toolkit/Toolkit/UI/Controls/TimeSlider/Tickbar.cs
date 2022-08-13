@@ -19,13 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-#if NETFX_CORE
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
-using Windows.UI.Xaml.Media;
+#if WINDOWS_XAML
+using Size = Windows.Foundation.Size;
+using Rect = Windows.Foundation.Rect;
 #elif __IOS__
 using System.Drawing;
 using Brush = UIKit.UIColor;
@@ -43,13 +39,6 @@ using FrameworkElement = Android.Views.View;
 using Rect = Android.Graphics.RectF;
 using Size = Android.Util.SizeF;
 using UIElement = Android.Views.View;
-#else
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Markup;
-using System.Windows.Media;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives

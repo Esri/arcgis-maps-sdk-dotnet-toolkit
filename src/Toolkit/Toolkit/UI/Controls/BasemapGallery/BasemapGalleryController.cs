@@ -316,7 +316,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 listOfBasemaps.Add(new BasemapGalleryItem(basemap));
             }
 
-#if !WINDOWS_UWP && !NETCOREAPP
+#if !WINDOWS_XAML && !NETCOREAPP
             await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
 #else
             foreach (var item in listOfBasemaps)

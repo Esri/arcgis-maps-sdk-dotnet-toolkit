@@ -14,21 +14,10 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-using System;
-using System.ComponentModel;
-using System.Windows;
-using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-#else
-using System.Windows.Controls;
+#if WPF || WINDOWS_XAML
+
+#if WPF
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Shapes;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -40,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize() => DefaultStyleKey = typeof(Compass);
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -51,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             UpdateCompassRotation(false);
         }
 
-#if NETFX_CORE
+#if WINDOWS_XAML
         /// <inheritdoc />
         protected override void OnTapped(TappedRoutedEventArgs e)
         {

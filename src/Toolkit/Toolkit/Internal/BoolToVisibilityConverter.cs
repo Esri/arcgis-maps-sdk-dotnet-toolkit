@@ -16,9 +16,7 @@
 
 #if !XAMARIN
 using System;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
+#if WINDOWS_XAML
 using Culture = System.String;
 #else
 using System.Windows;
@@ -32,9 +30,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// Converts a boolean value to a visibility. Specify 'Inverse' as parameter to invert result.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    #if NETFX_CORE
+#if WINDOWS_XAML
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
-    #endif
+#endif
     public class BoolToVisibilityConverter : IValueConverter
     {
         /// <inheritdoc/>

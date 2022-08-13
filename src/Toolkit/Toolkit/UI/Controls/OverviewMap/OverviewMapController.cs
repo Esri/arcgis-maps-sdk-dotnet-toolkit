@@ -27,6 +27,7 @@ using Esri.ArcGISRuntime.Xamarin.Forms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
 #if XAMARIN_FORMS
 namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms

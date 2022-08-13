@@ -14,22 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
+#if WPF || WINDOWS_XAML
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
-#else
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {

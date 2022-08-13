@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !NETFX_CORE && !__IOS__ && !__ANDROID__
+#if WPF
 
 using System;
 using System.ComponentModel;

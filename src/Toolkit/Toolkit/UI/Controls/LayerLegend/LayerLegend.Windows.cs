@@ -14,20 +14,10 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Esri.ArcGISRuntime.Mapping;
-
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-#else
-using System.Windows;
-using System.Windows.Controls;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -36,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void Initialize() => DefaultStyleKey = typeof(LayerLegend);
 
         /// <inheritdoc/>
-#if NETFX_CORE
+#if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -111,6 +101,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ((ILoadable)sender!).Loaded -= Layer_Loaded;
 #if NETFX_CORE
             var ignore_ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, Refresh);
+#elif WINUI
+            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, Refresh);
 #else
             var ignore = Dispatcher.InvokeAsync(Refresh);
 #endif

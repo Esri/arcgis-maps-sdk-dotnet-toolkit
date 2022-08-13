@@ -13,29 +13,16 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-#if !XAMARIN
-using System;
+#if WPF || WINDOWS_XAML
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UI.Controls;
-#if !NETFX_CORE
-using System.Windows;
-using System.Windows.Controls;
-#else
-using System.Collections;
-using System.Collections.Generic;
+#if WINDOWS_XAML
 using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -43,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// View for searching with locators or custom search sources.
     /// </summary>
-#if NETFX_CORE
+#if WINDOWS_XAML
     [TemplatePart(Name = "PART_SuggestionList", Type = typeof(ListView))]
 #endif
 #pragma warning disable IDE0079
@@ -79,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
         }
 
-#if NETFX_CORE
+#if WINDOWS_XAML
         private ListView _suggestionList;
 
         // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
@@ -755,12 +742,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             NotifyPropertyChange(nameof(ResultViewVisibility));
             NotifyPropertyChange(nameof(ResultMessageVisibility));
-            #if NETFX_CORE
+            #if WINDOWS_XAML
             UpdateGroupingForUWP();
             #endif
         }
 
-#if NETFX_CORE
+#if WINDOWS_XAML
         private void UpdateGroupingForUWP()
         {
             _groupListSelectionFlag = true;
@@ -817,7 +804,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             public IEnumerator<SearchSuggestion> GetEnumerator() => _suggestions.GetEnumerator();
 
             /// <inheritdoc />
-            IEnumerator IEnumerable.GetEnumerator() => _suggestions.GetEnumerator();
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _suggestions.GetEnumerator();
         }
 #endif
     }

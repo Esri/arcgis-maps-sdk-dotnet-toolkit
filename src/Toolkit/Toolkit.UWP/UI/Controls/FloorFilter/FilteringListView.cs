@@ -14,14 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping.Floor;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -64,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // Only update the unfiltered list when the ItemsSource changes
             if (ItemsSource != _lastSetItemsSource)
             {
-                if (ItemsSource is IEnumerable enumerable)
+                if (ItemsSource is System.Collections.IEnumerable enumerable)
                 {
                     _unfilteredList = enumerable.OfType<object>().ToList();
                 }

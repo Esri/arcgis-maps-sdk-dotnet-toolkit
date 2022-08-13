@@ -30,9 +30,6 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Xamarin.Forms;
 #else
 using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.UI.Core;
-#endif
 #endif
 
 #if XAMARIN_FORMS
