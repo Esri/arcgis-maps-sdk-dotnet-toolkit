@@ -24,7 +24,10 @@ jobs:
     
     - name: Setup Visual Studio Command Prompt
       uses: microsoft/setup-msbuild@v1.0.2
-    - pwsh: |
+
+    - name: "Install Xamarin Components"
+      shell: pwsh
+      run: |
         Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
         $InstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
         $componentsToAdd = @(
@@ -42,7 +45,7 @@ jobs:
             Write-Host "components were not installed"
             exit 1
         }
-      displayName: "Install Xamarin Components"
+      
     - name: Build
       run: |
         msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
