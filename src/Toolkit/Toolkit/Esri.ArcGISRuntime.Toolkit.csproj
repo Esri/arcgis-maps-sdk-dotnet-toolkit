@@ -26,6 +26,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsWinUI)' == 'true'">
+	  <UseWinUI>true</UseWinUI>
 	  <TargetPlatformVersion>$(NetWindowsPlatformMinVersion)</TargetPlatformVersion>
 	  <TargetPlatformMinVersion>$(NetWindowsPlatformMinVersion)</TargetPlatformMinVersion>
 	  <SupportedOSPlatformVersion>$(NetWindowsPlatformMinVersion)</SupportedOSPlatformVersion>
@@ -56,7 +57,7 @@
   
   <ItemGroup Condition="'$(IsWinUI)' == 'true'">
     <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.3" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.4" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
