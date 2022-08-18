@@ -19,6 +19,8 @@
     href: ../compass.md
   - name: FeatureDataField
     href: ../feature-data-field.md
+  - name: FloorFilter
+    href: ../floor-filter.md
   - name: Legend
     href: ../legend.md
   - name: Measure Toolbar
