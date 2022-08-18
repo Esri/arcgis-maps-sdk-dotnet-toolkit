@@ -68,7 +68,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     OnEventAction = static (instance, source, eventArgs) =>
                     {
-                        instance?.Refresh();
+                        instance.Refresh();
                     },
                     OnDetachAction = (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                 };

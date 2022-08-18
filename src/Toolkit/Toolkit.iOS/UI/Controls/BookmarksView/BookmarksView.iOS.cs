@@ -53,10 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             var listener = new Internal.WeakEventListener<BookmarksView, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, tableSource)
             {
-                OnEventAction = static (instance, source, eventArgs) =>
-                {
-                    instance?._listView?.ReloadData();
-                },
+                OnEventAction = static (instance, source, eventArgs) => instance._listView?.ReloadData(),
                 OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
             };
             tableSource.CollectionChanged += listener.OnEvent;

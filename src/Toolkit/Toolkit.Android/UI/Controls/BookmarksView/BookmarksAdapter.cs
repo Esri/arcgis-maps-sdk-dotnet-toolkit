@@ -48,11 +48,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 OnEventAction = static (instance, source, eventArgs) =>
                 {
-                    if (instance == null)
-                    {
-                        return;
-                    }
-
                     switch (eventArgs.Action)
                     {
                         case NotifyCollectionChangedAction.Add:

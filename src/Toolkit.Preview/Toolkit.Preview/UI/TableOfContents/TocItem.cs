@@ -70,7 +70,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
             {
                 var listener = new Internal.WeakEventListener<TocItem, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpc)
                 {
-                    OnEventAction = static (instance, source, eventArgs) => instance?.ContentPropertyChanged(eventArgs.PropertyName),
+                    OnEventAction = static (instance, source, eventArgs) => instance.ContentPropertyChanged(eventArgs.PropertyName),
                     OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 inpc.PropertyChanged += listener.OnEvent;
@@ -168,7 +168,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
                     {
                         var listener = new Internal.WeakEventListener<TocItem, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
                         {
-                            OnEventAction = static (instance, source, eventArgs) => instance?.RefreshChildren(),
+                            OnEventAction = static (instance, source, eventArgs) => instance.RefreshChildren(),
                             OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
                         };
                         incc.CollectionChanged += listener.OnEvent;

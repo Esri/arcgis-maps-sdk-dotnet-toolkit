@@ -76,10 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     var listener = new Internal.WeakEventListener<LegendAdapter, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
                     {
-                        OnEventAction = static (instance, source, eventArgs) =>
-                        {
-                            instance?.NotifyDataSetChanged();
-                        },
+                        OnEventAction = static (instance, source, eventArgs) => instance.NotifyDataSetChanged(),
                         OnDetachAction = (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
                     };
                     incc.CollectionChanged += listener.OnEvent;
