@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.14.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.14.0</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.15.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.15.0</ArcGISRuntimePackageVersion>
     <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.2244</XamarinFormsPackageVersion>
 
     <!--Common package properties-->
