@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// <summary>
         /// Gets or sets the method to call when detaching from the event.
         /// </summary>
-        public Action<TListeningInstance, TEventRaisingSource, WeakEventListener<TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs>>? OnDetachAction { get; set; }
+        public Action<TListeningInstance?, TEventRaisingSource, WeakEventListener<TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs>>? OnDetachAction { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WeakEventListener{TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs}"/> class.
@@ -99,11 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public void Detach()
         {
-            if (_listeningInstance.Target is TListeningInstance target)
-            {
-                OnDetachAction?.Invoke(target, _eventSource, this);
-            }
-
+            OnDetachAction?.Invoke(_listeningInstance.Target as TListeningInstance, _eventSource, this);
             OnDetachAction = null;
         }
     }
