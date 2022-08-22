@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(NetWindowsTargetFramework)</TargetFramework>
+    <!--<TargetFramework>net472</TargetFramework>-->
     <UseWPF>true</UseWPF>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
     <NoWarn>$(NoWarn);NU5105;MC3074;MSB4181;MC1000;MC3066</NoWarn>
@@ -22,10 +23,6 @@
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
-        <ProjectReference Include="..\..\Toolkit.Preview\Toolkit.Preview\Esri.ArcGISRuntime.Toolkit.Preview.csproj">
-          <Project>{c0f42fba-15f8-4d1e-b60f-06bb32ca19da}</Project>
-          <Name>Esri.ArcGISRuntime.Toolkit.Preview</Name>
-        </ProjectReference>
         <ProjectReference Include="..\..\Toolkit.WPF\Toolkit\Esri.ArcGISRuntime.Toolkit.WPF.csproj">
           <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
           <Name>Esri.ArcGISRuntime.Toolkit.WPF</Name>
