@@ -2,8 +2,6 @@
 using Esri.ArcGISRuntime.Toolkit.UI;
 using System;
 using System.Linq;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
 {

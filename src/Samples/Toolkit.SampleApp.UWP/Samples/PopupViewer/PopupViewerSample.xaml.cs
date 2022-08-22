@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                     callout.OnButtonClick = new Action<object>((s) =>
                     {
                         popupViewer.Visibility = Visibility.Visible;
-                        popupViewer.PopupManager = new PopupManager(s as Popup);
+                        popupViewer.PopupManager = new PopupManager(s as Mapping.Popups.Popup);
                     });
                     mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
                 }
@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                 await new MessageDialog(error.Message, error.GetType().Name).ShowAsync();
         }
 
-        private Popup GetPopup(IdentifyLayerResult result)
+        private Mapping.Popups.Popup GetPopup(IdentifyLayerResult result)
         {
             if (result == null)
             {
@@ -102,17 +102,17 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                     var popupDefinition = ((IPopupSource)result.LayerContent).PopupDefinition;
                     if (popupDefinition != null)
                     {
-                        return new Popup(geoElement, popupDefinition);
+                        return new Mapping.Popups.Popup(geoElement, popupDefinition);
                     }
                 }
 
-                return Popup.FromGeoElement(geoElement);
+                return Mapping.Popups.Popup.FromGeoElement(geoElement);
             }
 
             return null;
         }
 
-        private Popup GetPopup(IEnumerable<IdentifyLayerResult> results)
+        private Mapping.Popups.Popup GetPopup(IEnumerable<IdentifyLayerResult> results)
         {
             if (results == null)
             {

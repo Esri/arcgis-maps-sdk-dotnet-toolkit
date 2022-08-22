@@ -26,17 +26,21 @@
     <Page Include="**\*.xaml" Exclude="obj\**\*.*">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*" Link="%(RecursiveDir)%(Filename)%(Extension)" />
     <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+        <Generator>MSBuild:Compile</Generator>
+        <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Page>
-  </ItemGroup>  
+    <PRIResource Include="**\*.resw" />
+  </ItemGroup>
+    
   <ItemGroup>
      <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
-  <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+  <Target Name="CopyResources" BeforeTargets="Build;Rebuild">
+      <Copy SourceFiles="$(MSBuildThisFileDirectory)..\Toolkit\LocalizedStrings\Resources.resx" DestinationFiles="$(MSBuildThisFileDirectory)LocalizedStrings\en-US\Resources.resw" SkipUnchangedFiles="True" />
+  </Target>
+
+   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
 </Project>
