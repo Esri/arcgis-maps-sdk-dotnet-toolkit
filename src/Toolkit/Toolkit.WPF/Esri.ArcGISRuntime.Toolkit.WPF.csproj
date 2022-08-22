@@ -4,7 +4,6 @@
     <TargetFrameworks>$(DotNetTargetFramework);$(NetWindowsTargetFramework)</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <LangVersion>10</LangVersion>
     <DefineConstants>$(DefineConstants);WPF</DefineConstants>
     <UseWpf>true</UseWpf>
   </PropertyGroup>
