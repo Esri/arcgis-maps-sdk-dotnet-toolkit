@@ -3,23 +3,24 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/BasemapGallery/BasemapGallery.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/BookmarksView/BookmarksView.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Compass/Compass.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/Legend/Legend.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SearchView/SearchView.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
-        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit;component/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/BasemapGallery/BasemapGallery.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/BookmarksView/BookmarksView.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/Compass/Compass.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/FloorFilter/FloorFilter.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/LayerLegend/LayerLegend.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/Legend/Legend.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/ScaleLine/ScaleLine.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/SearchView/SearchView.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/SymbolDisplay/SymbolDisplay.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/UtilityNetworkTraceTool/UtilityNetworkTraceTool.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/UtilityNetworkTraceTool/ToolkitColorPalette.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/UtilityNetworkTraceTool/StartingPointListView.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/FeatureDataField/FeatureDataField.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/MeasureToolbar/MeasureToolbar.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/OverviewMap/OverviewMap.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/TableOfContents/TableOfContents.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/TimeSlider/TimeSlider.Theme.xaml" />
+        <ResourceDictionary Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/UI/Controls/PopupViewer/PopupViewer.Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
    

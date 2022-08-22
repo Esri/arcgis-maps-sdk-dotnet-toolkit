@@ -606,6 +606,7 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
+		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{5f3cad93-6062-450a-8771-7b4645caf598}*SharedItemsImports = 13
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{a6431f30-a608-4c78-80be-548c322cbe75}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{bdb163a7-b221-4e9f-a960-92a849ba3f3f}*SharedItemsImports = 5
 	EndGlobalSection

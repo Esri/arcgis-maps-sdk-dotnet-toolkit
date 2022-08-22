@@ -14,12 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using Esri.ArcGISRuntime.Mapping;
 
-namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
     /// Event argument fired by the <see cref="TableOfContents"/> when right-clicking an item.

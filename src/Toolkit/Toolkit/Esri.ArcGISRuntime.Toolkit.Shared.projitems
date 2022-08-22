@@ -9,7 +9,8 @@
     <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" Exclude="$(MSBuildThisFileDirectory)\obj\**\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)**\*.cs" Exclude="LocalizedStrings\*.*" />
     <EmbeddedResource Include="EmbeddedResources\**\*.*" />
+    <!-- <EmbeddedResource Include="LocalizedStrings\Resources.resx" /> -->
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DefineConstants>$(DefineConstants);WINDOWS_XAML;WINUI</DefineConstants>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
 

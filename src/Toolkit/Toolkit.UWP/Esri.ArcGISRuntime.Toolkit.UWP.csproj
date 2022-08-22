@@ -8,6 +8,7 @@
     <TargetPlatformVersion>$(UWPTargetPlatformVersion)</TargetPlatformVersion>
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
 

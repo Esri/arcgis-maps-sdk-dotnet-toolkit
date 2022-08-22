@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <DefineConstants>$(DefineConstants);WPF</DefineConstants>
     <UseWpf>true</UseWpf>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
 
@@ -21,5 +22,11 @@
      <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
+    <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx"  Link="LocalizedStrings\Resources.resx" />
+  </ItemGroup>
+
   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+
 </Project>

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE
+#if WPF
 using Esri.ArcGISRuntime.Mapping;
 #if NETFX_CORE
 using Windows.UI.Xaml;
@@ -24,7 +24,7 @@ using System.Windows;
 using System.Windows.Controls;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
     /// Determines which DataTemplate to use for a given layer content item in a <see cref="TableOfContents"/> control.

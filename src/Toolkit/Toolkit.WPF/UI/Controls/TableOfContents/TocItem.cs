@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__ && !NETSTANDARD2_0 && !NETFX_CORE
+#if WPF
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +24,7 @@ using System.Linq;
 using Esri.ArcGISRuntime;
 using Esri.ArcGISRuntime.Mapping;
 
-namespace Esri.ArcGISRuntime.Toolkit.Preview.UI
+namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     /// <summary>
     /// Class used to represent an entry in the Legend control.

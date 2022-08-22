@@ -26,7 +26,7 @@ using System.Windows.Controls;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.Preview.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
     /// A control that creates a table of content tree view from a <see cref="GeoView"/>.
