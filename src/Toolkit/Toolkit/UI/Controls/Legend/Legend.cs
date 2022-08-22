@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #endif
 
-#if XAMARIN
+#if __IOS__ || __ANDROID__
         private GeoView? _geoView;
 #endif
 
@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <seealso cref="SceneView"/>
         public GeoView? GeoView
         {
-#if XAMARIN
+#if MAUI
             get => _geoView;
             set
             {
@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </value>
         public bool FilterByVisibleScaleRange
         {
-#if XAMARIN
+#if MAUI
             get => _datasource.FilterByVisibleScaleRange;
             set => _datasource.FilterByVisibleScaleRange = value;
 #else

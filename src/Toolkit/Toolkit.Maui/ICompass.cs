@@ -14,25 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
-#else
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
-#endif
 {
-    /// <summary>
-    /// Used for generating symbols during design time.
-    /// </summary>
-    internal class DesignLegendInfo
+    public interface ICompass : IView
     {
-        public DesignLegendInfo(string name, Symbology.Symbol symbol)
-        {
-            Name = name;
-            Symbol = symbol;
-        }
-
-        public Symbology.Symbol Symbol { get; set; }
-
-        public string Name { get; set; }
+        bool AutoHide { get; set; }
+        GeoView? GeoView { get; set; }
+        double Heading { get; set; }
     }
 }

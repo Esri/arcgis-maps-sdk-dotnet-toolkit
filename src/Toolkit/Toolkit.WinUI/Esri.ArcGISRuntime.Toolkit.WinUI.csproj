@@ -10,14 +10,6 @@
   <Import Project="..\..\CommonProperties.targets" />
 
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)..\Toolkit.UWP\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.UWP\obj\**\*.*" Link="%(RecursiveDir)%(Filename)%(Extension)" />
-    <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.UWP\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.UWP\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.UWP\Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="Esri.ArcGISRuntime.UI.Controls" />
     <Using Include="Microsoft.UI.Xaml" />
     <Using Include="Microsoft.UI.Xaml.Controls" />

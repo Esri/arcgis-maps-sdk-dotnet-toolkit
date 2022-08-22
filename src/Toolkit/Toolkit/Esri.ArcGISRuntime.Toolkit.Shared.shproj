@@ -45,11 +45,9 @@
     <Compile Include="UI\Controls\BasemapGallery\BasemapGalleryViewStyle.cs" />
     <Compile Include="UI\Controls\BookmarksView\BookmarksView.cs" />
     <Compile Include="UI\Controls\BookmarksView\BookmarksView.Windows.cs" />
-    <Compile Include="UI\Controls\BookmarksView\BookmarksView.Xamarin.cs" />
     <Compile Include="UI\Controls\BookmarksView\BookmarksViewDataSource.cs" />
     <Compile Include="UI\Controls\Compass\Compass.cs" />
     <Compile Include="UI\Controls\Compass\Compass.Windows.cs" />
-    <Compile Include="UI\Controls\Compass\Compass.Xamarin.cs" />
     <Compile Include="UI\Controls\FeatureDataField\DataItem.cs" />
     <Compile Include="UI\Controls\FeatureDataField\FeatureDataField.cs" />
     <Compile Include="UI\Controls\FeatureDataField\FeatureHelper.cs" />
@@ -63,7 +61,6 @@
     <Compile Include="UI\Controls\FloorFilter\FloorFilterController.cs" />
     <Compile Include="UI\Controls\LayerLegend\LayerLegend.cs" />
     <Compile Include="UI\Controls\LayerLegend\LayerLegend.Windows.cs" />
-    <Compile Include="UI\Controls\LayerLegend\LayerLegend.Xamarin.cs" />
     <Compile Include="UI\Controls\Legend\DesignLegendInfo.cs" />
     <Compile Include="UI\Controls\Legend\Legend.Android.cs" />
     <Compile Include="UI\Controls\Legend\Legend.cs" />

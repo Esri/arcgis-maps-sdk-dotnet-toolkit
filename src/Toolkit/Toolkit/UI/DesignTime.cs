@@ -31,15 +31,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
 #if WINDOWS_XAML
                     _isInDesignMode = Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#elif !XAMARIN
+#elif __ANDROID__
+                    // Assume we're in design-time if there is no application context
+                    _isInDesignMode = Android.App.Application.Context == null;
+#elif WPF
                     var prop = DesignerProperties.IsInDesignModeProperty;
                     _isInDesignMode
                         = (bool)DependencyPropertyDescriptor
                         .FromProperty(prop, typeof(FrameworkElement))
                         .Metadata.DefaultValue;
-#elif __ANDROID__
-                    // Assume we're in design-time if there is no application context
-                    _isInDesignMode = Android.App.Application.Context == null;
 #else
                     _isInDesignMode = false;
 #endif

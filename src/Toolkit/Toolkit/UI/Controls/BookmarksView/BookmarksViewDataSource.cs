@@ -21,14 +21,14 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
-#if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Xamarin.Forms;
+#if MAUI
+using Esri.ArcGISRuntime.Maui;
 #else
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
 
 #if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
@@ -115,7 +115,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_geoView != null)
             {
-#if !XAMARIN && !XAMARIN_FORMS
+#if !MAUI
                 if (_geoView is MapView mapview)
                 {
 #if WINDOWS_XAML
@@ -146,7 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_geoView != null)
             {
-#if !XAMARIN && !XAMARIN_FORMS
+#if !MAUI
                 if (_geoView is MapView mapview)
                 {
 #if WINDOWS_XAML
@@ -173,7 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#if XAMARIN || XAMARIN_FORMS
+#if MAUI
         private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
@@ -265,12 +265,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void RunOnUIThread(Action action)
         {
-#if XAMARIN_FORMS
+#if MAUI
             global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
-#elif __IOS__
-            _geoView?.InvokeOnMainThread(action);
-#elif __ANDROID__
-            _geoView?.PostDelayed(action, 500);
 #elif NETFX_CORE
             _ = _geoView?.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #elif WINUI

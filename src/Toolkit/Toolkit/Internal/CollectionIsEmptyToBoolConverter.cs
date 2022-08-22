@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if !MAUI
 using System;
 #if WINDOWS_XAML
 using Culture = System.String;

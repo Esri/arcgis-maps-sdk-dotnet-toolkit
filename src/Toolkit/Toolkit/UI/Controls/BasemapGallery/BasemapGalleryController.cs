@@ -23,8 +23,6 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms")]
-
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
     internal class BasemapGalleryController : INotifyPropertyChanged

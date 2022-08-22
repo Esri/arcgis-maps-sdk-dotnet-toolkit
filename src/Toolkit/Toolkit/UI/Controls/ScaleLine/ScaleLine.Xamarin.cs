@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if XAMARIN
+#if MAUI
 using Esri.ArcGISRuntime.UI.Controls;
 #if __IOS__
 using Rectangle = Esri.ArcGISRuntime.Toolkit.UI.RectangleView;

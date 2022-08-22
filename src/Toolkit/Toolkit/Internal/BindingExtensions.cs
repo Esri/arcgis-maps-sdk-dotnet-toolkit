@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !__IOS__ && !__ANDROID__
+#if !__IOS__ && !__ANDROID__ && !MAUI
 
 #if WPF
 using System.Windows;

@@ -14,14 +14,10 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !MAUI
+
 using System.ComponentModel;
 using Esri.ArcGISRuntime.UI.Controls;
-
-#if __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -33,7 +29,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const double DefaultSize = 30;
         private bool _headingSetByGeoView;
 
-#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="Compass"/> class.
         /// </summary>
@@ -42,7 +37,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             Initialize();
         }
-#endif
 
         /// <summary>
         /// Gets or sets the Heading for the compass.
@@ -115,3 +109,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#endif

@@ -11,21 +11,26 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
-        <!--<DefineConstants>$(DefineConstants);MAUI</DefineConstants>
-        <DefineConstants Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">$(DefineConstants);XAMARIN</DefineConstants>
-        <DefineConstants Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">$(DefineConstants);XAMARIN</DefineConstants>-->
+        <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
         <LangVersion>10</LangVersion>
     </PropertyGroup>
     <Import Project="..\..\CommonProperties.targets" />
+    <ItemGroup>
+      <Compile Include="..\Toolkit\UI\DesignTime.cs" Link="DesignTime.cs" />
+    </ItemGroup>
     
     <ItemGroup>
        <Using Include="Esri.ArcGISRuntime.Maui" />
     </ItemGroup>
 
     <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)-preview4" />
+       <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)-preview4" />
     </ItemGroup>
 
-    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+    <ItemGroup>
+      <ProjectReference Include="..\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"/>
+    </ItemGroup>
+
+    <!--<Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />-->
 
 </Project>

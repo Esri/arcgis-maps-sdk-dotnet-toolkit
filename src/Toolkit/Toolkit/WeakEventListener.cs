@@ -17,8 +17,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
 #else
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 #endif

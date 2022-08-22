@@ -1,9 +1,4 @@
-﻿using Esri.ArcGISRuntime.Maui.Handlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Esri.ArcGISRuntime.Toolkit.Maui.Handlers;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -16,10 +11,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// <returns>The host builder</returns>
         public static MauiAppBuilder UseArcGISToolkit(this MauiAppBuilder builder)
         {
-            //builder.ConfigureMauiHandlers(delegate (IMauiHandlersCollection a)
-            //{
-            //    a.AddHandler(typeof(Compass), typeof(CompassHandler));
-            //});
+            builder.ConfigureMauiHandlers(delegate (IMauiHandlersCollection a)
+            {
+                a.AddHandler(typeof(Compass), typeof(CompassHandler));
+            });
 
             return builder; 
         }

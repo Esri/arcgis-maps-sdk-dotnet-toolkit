@@ -23,7 +23,7 @@
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
-        <ProjectReference Include="..\..\Toolkit.WPF\Toolkit\Esri.ArcGISRuntime.Toolkit.WPF.csproj">
+        <ProjectReference Include="..\..\Toolkit\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj">
           <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
           <Name>Esri.ArcGISRuntime.Toolkit.WPF</Name>
         </ProjectReference>

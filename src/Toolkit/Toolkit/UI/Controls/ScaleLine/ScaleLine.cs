@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !MAUI
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Geometry;
 #if __IOS__
@@ -268,3 +269,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#endif

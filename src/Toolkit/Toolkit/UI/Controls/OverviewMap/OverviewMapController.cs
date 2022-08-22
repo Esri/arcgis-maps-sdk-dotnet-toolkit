@@ -19,18 +19,18 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
-#if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
-using Esri.ArcGISRuntime.Xamarin.Forms;
+#if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+using Esri.ArcGISRuntime.Maui;
 #endif
-#if !XAMARIN_FORMS
+#if !MAUI
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
 using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif

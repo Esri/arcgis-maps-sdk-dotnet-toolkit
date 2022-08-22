@@ -25,9 +25,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI;
-#if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Xamarin.Forms;
-using View = Xamarin.Forms.View;
+#if MAUI
+using Esri.ArcGISRuntime.Maui;
+using View = Microsoft.Maui.Controls.View;
 #else
 using Esri.ArcGISRuntime.UI.Controls;
 #if NETFX_CORE
@@ -44,8 +44,8 @@ using View = System.Windows.DependencyObject;
 #endif
 #endif
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI
 #endif
@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private protected void RunOnUIThread(Action action)
         {
-#if XAMARIN_FORMS
+#if MAUI
             global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
 #else
             if (_owner == null)
@@ -111,7 +111,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 _geoview.LayerViewStateChanged -= GeoView_LayerViewStateChanged;
                 (_geoview as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
-#if XAMARIN || XAMARIN_FORMS
+#if MAUI
                 (_geoview as INotifyPropertyChanged).PropertyChanged -= GeoView_PropertyChanged;
 #else
                 if (_geoview is MapView mapview)
@@ -139,7 +139,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 _geoview.LayerViewStateChanged += GeoView_LayerViewStateChanged;
                 (_geoview as INotifyPropertyChanged).PropertyChanged += GeoView_PropertyChanged;
-#if XAMARIN || XAMARIN_FORMS
+#if MAUI
 #else
                 if (_geoview is MapView mapview)
                 {
@@ -196,7 +196,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             if (sender is GeoView geoview)
             {
-#if __IOS__ || __ANDROID__ || XAMARIN_FORMS
+#if MAUI
                 if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
                     (sender is SceneView && e.PropertyName == nameof(SceneView.Scene)))
                 {

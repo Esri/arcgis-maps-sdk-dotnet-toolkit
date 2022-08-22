@@ -26,7 +26,13 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*" Link="%(RecursiveDir)%(Filename)%(Extension)" />
+    <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Page>
+  </ItemGroup>  
   <ItemGroup>
      <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
