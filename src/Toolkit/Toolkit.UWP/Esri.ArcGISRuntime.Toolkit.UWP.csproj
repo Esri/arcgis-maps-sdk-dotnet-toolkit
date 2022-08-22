@@ -43,4 +43,6 @@
   </Target>
 
    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+
+   <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
 </Project>

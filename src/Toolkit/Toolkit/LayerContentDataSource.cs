@@ -25,6 +25,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
 using Esri.ArcGISRuntime.Maui;
 using View = Microsoft.Maui.Controls.View;
@@ -44,11 +45,7 @@ using View = System.Windows.DependencyObject;
 #endif
 #endif
 
-#if MAUI
-namespace Esri.ArcGISRuntime.Toolkit.Maui
-#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
-#endif
 {
     /// <summary>
     /// A generic helper class for tracking changes to the layers in a MapView or SceneView and generate a bindable list of information about the map,
@@ -75,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private protected void RunOnUIThread(Action action)
         {
 #if MAUI
-            global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
+            _owner.Dispatcher.Dispatch(action);
 #else
             if (_owner == null)
             {
@@ -234,14 +231,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
         private void DocumentPropertyChanged(object sender, string? propertyName)
         {
-            if (propertyName == nameof(Map.OperationalLayers))
+            if (propertyName == nameof(Mapping.Map.OperationalLayers))
             {
                 TrackOperationalLayers();
                 MarkCollectionDirty(false);
             }
-            else if (propertyName == nameof(Map.Basemap))
+            else if (propertyName == nameof(Mapping.Map.Basemap))
             {
-                SubscribeToBasemap((sender as Map)?.Basemap ?? (sender as Scene)?.Basemap);
+                SubscribeToBasemap((sender as Mapping.Map)?.Basemap ?? (sender as Scene)?.Basemap);
             }
 
             OnDocumentPropertyChanged(sender, propertyName);

@@ -14,14 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 
-#if MAUI
-namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
-#else
 namespace Esri.ArcGISRuntime.Toolkit.Internal
-#endif
 {
     /// <summary>
     /// Implements a weak event listener that allows the owner to be garbage

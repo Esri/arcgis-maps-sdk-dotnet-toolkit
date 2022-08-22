@@ -14,26 +14,23 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
 using System.Globalization;
-using Xamarin.Forms;
 
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
-    /// <summary>
-    /// Converts boolean value to opacity, used to show a scrim to cover invalid selections in a list.
-    /// </summary>
-    internal class BoolToOpacityConverter : IValueConverter
+    internal class ByteArrayToImageSourceConverter : IValueConverter
     {
-        /// <inheritdoc/>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        /// <summary>
+        /// Converts a byte array to an image source for display in Xamarin.Forms.
+        /// </summary>
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool boolValue)
+            if (value is byte[] rawBuffer)
             {
-                return boolValue ? 0f : 0.7f;
+                return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
             }
 
-            return 1.0f;
+            return null;
         }
 
         /// <inheritdoc/>

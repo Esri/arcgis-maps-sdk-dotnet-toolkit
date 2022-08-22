@@ -23,7 +23,11 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     internal class BasemapGalleryController : INotifyPropertyChanged
     {

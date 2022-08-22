@@ -14,11 +14,7 @@
         <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
         <LangVersion>10</LangVersion>
     </PropertyGroup>
-    <Import Project="..\..\CommonProperties.targets" />
-    <ItemGroup>
-      <Compile Include="..\Toolkit\UI\DesignTime.cs" Link="DesignTime.cs" />
-    </ItemGroup>
-    
+
     <ItemGroup>
        <Using Include="Esri.ArcGISRuntime.Maui" />
     </ItemGroup>
@@ -28,9 +24,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"/>
+      <ProjectReference Include="..\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
     </ItemGroup>
 
-    <!--<Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />-->
+    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+    <Import Project="..\..\CommonProperties.targets" />
 
 </Project>

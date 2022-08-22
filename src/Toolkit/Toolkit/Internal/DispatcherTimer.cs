@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if XAMARIN
+#if MAUI
 
 using System;
 using System.Timers;
@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// </remarks>
     internal class DispatcherTimer : IDisposable
     {
-        private readonly Timer _timer;
+        private readonly System.Timers.Timer _timer;
         private bool _isInitialized;
         private bool _isDisposed;
 
@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         public DispatcherTimer()
         {
-            _timer = new Timer();
+            _timer = new System.Timers.Timer();
             _timer.AutoReset = true;
             _isInitialized = false;
             _isDisposed = false;

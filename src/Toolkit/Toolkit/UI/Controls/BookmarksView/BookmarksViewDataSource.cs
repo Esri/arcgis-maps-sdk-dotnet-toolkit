@@ -23,11 +23,12 @@ using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 #if MAUI
 using Esri.ArcGISRuntime.Maui;
+using Map = Esri.ArcGISRuntime.Mapping.Map;
 #else
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
 
-#if XAMARIN_FORMS
+#if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -266,7 +267,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void RunOnUIThread(Action action)
         {
 #if MAUI
-            global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
+            _geoView?.Dispatcher.Dispatch(action);
 #elif NETFX_CORE
             _ = _geoView?.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
 #elif WINUI

@@ -24,9 +24,10 @@
 
   <ItemGroup>
     <None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
-    <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx"  Link="LocalizedStrings\Resources.resx" />
+    <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
   </ItemGroup>
 
   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+  <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
 
 </Project>

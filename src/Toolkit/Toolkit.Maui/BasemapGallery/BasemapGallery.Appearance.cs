@@ -13,11 +13,8 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-using Esri.ArcGISRuntime.Toolkit.UI;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
     public partial class BasemapGallery : TemplatedView
     {
@@ -57,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 parentLayout.Children.Add(imageContainer);
                 parentLayout.Children.Add(nameLabel);
 
-                Grid scrimGrid = new Grid { BackgroundColor = Color.White };
+                Grid scrimGrid = new Grid { BackgroundColor = Colors.White };
                 scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
                 parentLayout.Children.Add(scrimGrid);
 
@@ -89,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
                 parentLayout.Children.Add(imageContainer);
                 parentLayout.Children.Add(nameLabel);
 
-                Grid scrimGrid = new Grid { BackgroundColor = Color.White };
+                Grid scrimGrid = new Grid { BackgroundColor = Colors.White };
                 scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
                 parentLayout.Children.Add(scrimGrid);
 

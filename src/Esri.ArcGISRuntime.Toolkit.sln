@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.SampleApp.WPF", "Sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.SampleApp.WinUI", "Samples\Toolkit.SampleApp.WinUI\Toolkit.SampleApp.WinUI.csproj", "{A2625DFB-69E8-4880-98CB-E2BF5FEA6B58}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Esri.ArcGISRuntime.Toolkit.UI.Controls", "Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.shproj", "{D9B86D10-7483-47EE-994E-9764FDB07B20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -600,14 +602,20 @@ Global
 		{F4031695-3A25-4E37-B456-AA084994D245} = {94D7A0A9-8C78-4E5E-9EAB-6C5D1CF0E8A0}
 		{FE10E0C1-FFF3-4767-BD4A-D5C61B17C2C4} = {94D7A0A9-8C78-4E5E-9EAB-6C5D1CF0E8A0}
 		{A2625DFB-69E8-4880-98CB-E2BF5FEA6B58} = {94D7A0A9-8C78-4E5E-9EAB-6C5D1CF0E8A0}
+		{D9B86D10-7483-47EE-994E-9764FDB07B20} = {BD5B4F64-D32F-4DF3-B34D-070B7D526579}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD437263-1C96-46A9-A641-C312BF7DAF99}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{531b2297-2343-4692-8d66-878b0ad158cd}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{5f3cad93-6062-450a-8771-7b4645caf598}*SharedItemsImports = 13
+		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{a6431f30-a608-4c78-80be-548c322cbe75}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{a6431f30-a608-4c78-80be-548c322cbe75}*SharedItemsImports = 5
+		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{bdb163a7-b221-4e9f-a960-92a849ba3f3f}*SharedItemsImports = 5
 		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{bdb163a7-b221-4e9f-a960-92a849ba3f3f}*SharedItemsImports = 5
+		Toolkit\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems*{d9b86d10-7483-47ee-994e-9764fdb07b20}*SharedItemsImports = 13
+		Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems*{f7f98ce8-5304-460d-83a2-f4f7fe50b370}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

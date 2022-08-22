@@ -13,16 +13,11 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
-using Esri.ArcGISRuntime.Toolkit.UI;
-using Xamarin.Forms;
 
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
     /// <summary>
     /// Displays a collection of images representing basemaps from ArcGIS Online, a user-defined Portal, or a user-defined collection.

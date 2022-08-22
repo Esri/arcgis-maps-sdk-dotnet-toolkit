@@ -19,10 +19,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     /// <summary>
     /// Encompasses an element in a basemap gallery.
@@ -134,7 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 if (Basemap is Basemap inputBasemap && SpatialReference == null)
                 {
                     var clone = inputBasemap.Clone();
-                    var map = new Map(clone);
+                    var map = new Mapping.Map(clone);
                     await map.LoadAsync();
                     if (map.LoadStatus == LoadStatus.Loaded)
                     {

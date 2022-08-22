@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WINDOWS
+#if WINDOWS && !MAUI
 
 using System;
 using System.Collections;
