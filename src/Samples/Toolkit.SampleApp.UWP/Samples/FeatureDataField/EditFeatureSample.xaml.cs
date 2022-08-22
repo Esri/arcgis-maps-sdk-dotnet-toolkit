@@ -1,22 +1,12 @@
 ﻿using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
+#if WINUI
+using CommunityToolkit.WinUI.UI.Animations;
+#elif NETCX_CORE
 using Microsoft.Toolkit.Uwp.UI.Animations;
+#endif
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
 {
@@ -65,11 +55,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
             overlay.DataContext = feature;
             overlay.Visibility = Visibility.Visible;
 
-            if (AnimationExtensions.IsBlurSupported)
+#if !WINUI
+            if (Microsoft.Toolkit.Uwp.UI.Animations.AnimationExtensions.IsBlurSupported)
             {
-                AnimationExtensions.Blur(mapView, 10).Start();
+                Microsoft.Toolkit.Uwp.UI.Animations.AnimationExtensions.Blur(mapView, 10).Start();
             }
             else
+#endif
             {
                 overlay.Background = new SolidColorBrush(Windows.UI.Color.FromArgb(192, 255, 255, 255));
             }
@@ -79,8 +71,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
         {
             overlay.DataContext = null;
             overlay.Visibility = Visibility.Collapsed;
-            if (AnimationExtensions.IsBlurSupported)
-                AnimationExtensions.Blur(mapView, 0).Start();
+#if !WINUI
+            if (Microsoft.Toolkit.Uwp.UI.Animations.AnimationExtensions.IsBlurSupported)
+                Microsoft.Toolkit.Uwp.UI.Animations.AnimationExtensions.Blur(mapView, 0).Start();
+#endif
         }
 
         private async void ApplyButton_Click(object sender, RoutedEventArgs e)

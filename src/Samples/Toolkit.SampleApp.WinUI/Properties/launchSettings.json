@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Esri.ArcGISRuntime.Toolkit.SampleApp (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Esri.ArcGISRuntime.Toolkit.SampleApp (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

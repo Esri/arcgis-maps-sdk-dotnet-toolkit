@@ -1,0 +1,47 @@
+﻿<Window
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.Resources>
+            <local:SamplesVM x:Key="vm" />
+        </Grid.Resources>
+
+        <NavigationView Grid.Row="1" x:Name="splitView" IsPaneOpen="True" VerticalContentAlignment="Stretch" IsPaneToggleButtonVisible="False" IsBackEnabled="{x:Bind rootFrame.CanGoBack, Mode=OneWay}" PaneDisplayMode="Left">
+            <NavigationView.PaneCustomContent>
+                <ListView x:Name="sampleView" SelectionMode="None" VerticalAlignment="Stretch"
+                         IsRightTapEnabled="False"
+                         IsItemClickEnabled="True"
+                         IsHoldingEnabled="False"
+                         IsDoubleTapEnabled="False"
+                         ItemClick="sampleView_ItemClick"
+                         ItemsSource="{Binding Samples, Source={StaticResource vm}}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ToolTipService.ToolTip="{Binding Description}">
+                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Left" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True">
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Key}" FontSize="18" FontWeight="Bold"/>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </NavigationView.PaneCustomContent>
+            <Grid>
+                <Frame x:Name="rootFrame" Background="{ThemeResource ApplicationForegroundThemeBrush}" />
+            </Grid>
+        </NavigationView>
+    </Grid>
+</Window>

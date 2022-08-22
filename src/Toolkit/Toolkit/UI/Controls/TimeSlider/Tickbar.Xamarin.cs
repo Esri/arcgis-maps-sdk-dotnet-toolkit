@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if XAMARIN
+#if MAUI
 
 using System.Collections.Generic;
 using System.Linq;

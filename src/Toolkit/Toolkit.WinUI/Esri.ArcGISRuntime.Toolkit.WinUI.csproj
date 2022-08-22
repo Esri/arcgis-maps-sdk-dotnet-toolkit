@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+      <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx"  Link="LocalizedStrings\Resources.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
   </ItemGroup>

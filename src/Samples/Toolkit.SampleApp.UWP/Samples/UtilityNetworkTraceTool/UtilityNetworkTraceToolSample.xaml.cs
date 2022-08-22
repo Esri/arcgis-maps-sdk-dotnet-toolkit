@@ -2,7 +2,6 @@
 using Esri.ArcGISRuntime.Security;
 using System;
 using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.UtilityNetworkTraceTool
 {

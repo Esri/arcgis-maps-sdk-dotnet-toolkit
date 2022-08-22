@@ -1,6 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using System;
-using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FloorFilter
 {

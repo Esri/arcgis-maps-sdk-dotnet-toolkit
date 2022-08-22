@@ -3,8 +3,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
 {

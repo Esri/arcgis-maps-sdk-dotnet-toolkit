@@ -14,7 +14,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.FeatureDataField
     public partial class DataGridSample : UserControl
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="FeatureDataFieldSample"/> class.
+        /// Initializes a new instance of <see cref="DataGridSample"/> class.
         /// </summary>
         public DataGridSample()
         {

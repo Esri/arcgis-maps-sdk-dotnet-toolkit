@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
-using Visibility = Windows.UI.Xaml.Visibility;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -36,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
             {
                 if (_infoIcon == null)
                 {
-                    var fileName = RequestedTheme == Windows.UI.Xaml.ElementTheme.Dark ? "info_light.png" : "info_dark.png";
+                    var fileName = RequestedTheme == ElementTheme.Dark ? "info_light.png" : "info_dark.png";
                     _infoIcon = new RuntimeImage(new Uri($"ms-appx:///Samples/PopupViewer/{fileName}"));
                 }
                 return _infoIcon;
