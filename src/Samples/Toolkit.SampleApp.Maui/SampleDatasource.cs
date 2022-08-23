@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using Xamarin.Forms;
+﻿using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Toolkit.Samples.Forms
+namespace Toolkit.SampleApp.Maui
 {
     public class SampleDatasource
     {
-        private SampleDatasource() 
+        private SampleDatasource()
         {
             var pages = from t in this.GetType().GetTypeInfo().Assembly.ExportedTypes
-                where t.GetTypeInfo().IsSubclassOf(typeof(ContentPage)) && t.FullName.Contains(".Forms.Samples.")
-                select t;
+                        where t.GetTypeInfo().IsSubclassOf(typeof(ContentPage)) && t.FullName.Contains(".Maui.Samples.")
+                        select t;
 
             Samples = (from p in pages select new Sample(p)).ToArray();
         }
@@ -72,11 +66,11 @@ namespace Toolkit.Samples.Forms
         }
 
         public Type Page { get; set; }
-        
+
         public string Name { get; set; }
 
         public string Description { get; set; }
 
-		public string Category { get; set; }
+        public string Category { get; set; }
     }
 }

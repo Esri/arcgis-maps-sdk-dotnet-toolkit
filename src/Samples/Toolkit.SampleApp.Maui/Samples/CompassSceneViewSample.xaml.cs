@@ -1,14 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
-namespace Toolkit.Samples.Forms.Samples
+namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfoAttribute(Category = "Compass", Description = "Compass with SceneView sample")]

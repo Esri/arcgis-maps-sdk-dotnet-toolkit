@@ -2,23 +2,27 @@
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
+    public MainPage()
+    {
+        InitializeComponent();
+        SamplesList.ItemsSource = SampleDatasource.Current.Samples;
+    }
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    private async void SamplesList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    {
+        var sample = e.SelectedItem as Sample;
+        if (sample != null)
+        {
+            SamplesList.SelectedItem = null;
+            try
+            {
+                await Navigation.PushAsync(Activator.CreateInstance(sample.Page) as Page);
+            }
+            catch(System.Exception ex)
+            {
 
-	private void OnCounterClicked(object sender, EventArgs e)
-	{
-		count++;
-
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
-
-		SemanticScreenReader.Announce(CounterBtn.Text);
-	}
+            }
+        }
+    }
 }
 
