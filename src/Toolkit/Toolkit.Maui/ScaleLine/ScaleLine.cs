@@ -48,22 +48,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     <RowDefinition Height=""Auto"" />
                 </Grid.RowDefinitions>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""0"">
-                    <Border WidthRequest=""{Binding Width, Source={ x:Reference MetricScaleLine}}"" StrokeThickness=""0""/>
+                    <Border Background=""Transparent"" WidthRequest=""{Binding Width, Source={ x:Reference MetricScaleLine}}"" StrokeThickness=""0""/>
                     <Label x:Name=""MetricValue"" Text=""100"" TextColor=""{TemplateBinding Color}""/>
                     <Label x:Name=""MetricUnit"" Text=""m"" TextColor=""{TemplateBinding Color}""/>
                 </StackLayout>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""1"">
                     <Rectangle WidthRequest=""2"" BackgroundColor=""{TemplateBinding Color}"" HeightRequest=""5"" StrokeThickness=""0""/>
-                    <Border WidthRequest=""{Binding Width, Source={ x:Reference MetricScaleLine}}"" StrokeThickness=""0""/>
+                    <Border Background=""Transparent"" WidthRequest=""{Binding Width, Source={ x:Reference MetricScaleLine}}"" StrokeThickness=""0""/>
                     <Rectangle WidthRequest=""2"" BackgroundColor=""{TemplateBinding Color}"" HeightRequest=""5"" StrokeThickness=""0""/>
                 </StackLayout>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""3"">
                     <Rectangle WidthRequest=""2"" BackgroundColor=""{TemplateBinding Color}"" HeightRequest=""5"" StrokeThickness=""0""/>
-                    <Border WidthRequest=""{Binding Width, Source={ x:Reference UsScaleLine}}"" StrokeThickness=""0""/>
+                    <Border Background=""Transparent"" WidthRequest=""{Binding Width, Source={ x:Reference UsScaleLine}}"" StrokeThickness=""0""/>
                     <Rectangle WidthRequest=""2"" BackgroundColor=""{TemplateBinding Color}"" HeightRequest=""5"" StrokeThickness=""0""/>
                 </StackLayout>
                 <StackLayout Orientation=""Horizontal"" Grid.Row=""4"">
-                    <Border WidthRequest=""{Binding Width, Source={ x:Reference UsScaleLine}}"" StrokeThickness=""0""/>
+                    <Border Background=""Transparent"" WidthRequest=""{Binding Width, Source={ x:Reference UsScaleLine}}"" StrokeThickness=""0""/>
                     <Label x:Name=""UsValue"" Text=""USValue"" TextColor=""{TemplateBinding Color}""/>
                     <Label x:Name=""UsUnit"" Text=""UsUnit"" TextColor=""{TemplateBinding Color}""/>
                 </StackLayout>
