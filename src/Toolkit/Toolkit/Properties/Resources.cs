@@ -28,7 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties
             return _resource.GetString(name);
         }
 #else
+#if MAUI
+        private static ResourceManager _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.Maui.LocalizedStrings.Resources", typeof(Resources).Assembly);
+#else
         private static ResourceManager _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.LocalizedStrings.Resources", typeof(Resources).Assembly);
+#endif
 
         public static string? GetString(string name)
         {

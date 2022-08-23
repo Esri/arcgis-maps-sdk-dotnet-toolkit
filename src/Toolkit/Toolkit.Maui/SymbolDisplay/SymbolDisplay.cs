@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         static SymbolDisplay()
         {
-            string template = @"<Image xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" x:Name=""image"" Stretch=""Uniform"" Margin=""{TemplateBinding Padding}""/>";
+            string template = @"<Image xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" x:Name=""image"" Stretch=""Uniform"" Margin=""{TemplateBinding Padding}""/>";
             DefaultControlTemplate = new ControlTemplate()
             {
                 LoadTemplate = () =>

@@ -36,7 +36,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)PopupViewer\PopupViewer.Xamarin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.Xamarin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchView\SearchView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.Windows.cs" />
