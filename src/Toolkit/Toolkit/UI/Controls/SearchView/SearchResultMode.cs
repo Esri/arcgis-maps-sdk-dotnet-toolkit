@@ -1,4 +1,4 @@
-﻿// /*******************************************************************************
+// /*******************************************************************************
 //  * Copyright 2012-2018 Esri
 //  *
 //  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,29 +14,30 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System.Globalization;
-
+#if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
-    internal class ByteArrayToImageSourceConverter : IValueConverter
+    /// <summary>
+    /// Defines how many results should be returned by a search.
+    /// </summary>
+    public enum SearchResultMode
     {
         /// <summary>
-        /// Converts a byte array to an image source for display in Microsoft .NET MAUI.
+        /// Always try to return a single result.
         /// </summary>
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is byte[] rawBuffer)
-            {
-                return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
-            }
+        Single,
 
-            return null;
-        }
+        /// <summary>
+        /// Always try to return multiple results.
+        /// </summary>
+        Multiple,
 
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Try to make the right choice of single or multiple results based on context.
+        /// </summary>
+        Automatic,
     }
 }

@@ -45,11 +45,13 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.4" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
 	</ItemGroup>
 
     <Choose>
         <When Condition="'$(UseNugetPackage)'==''">
             <ItemGroup>
+                <ProjectReference Include="..\..\Toolkit\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
                 <ProjectReference Include="..\..\Toolkit\Toolkit.Maui\Esri.ArcGISRuntime.Toolkit.Maui.csproj" />
             </ItemGroup>
         </When>

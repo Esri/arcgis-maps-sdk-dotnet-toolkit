@@ -18,19 +18,19 @@ using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
-    internal class ByteArrayToImageSourceConverter : IValueConverter
+    internal class EmptyStringToBoolConverter : IValueConverter
     {
         /// <summary>
-        /// Converts a byte array to an image source for display in Microsoft .NET MAUI.
+        /// Converts a string to a bool, true if not empty, false otherwise.
         /// </summary>
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is byte[] rawBuffer)
+            if (value is string stringvalue && !string.IsNullOrEmpty(stringvalue))
             {
-                return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
+                return true;
             }
 
-            return null;
+            return false;
         }
 
         /// <inheritdoc/>

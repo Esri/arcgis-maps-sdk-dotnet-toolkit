@@ -21,6 +21,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
 using Esri.ArcGISRuntime.Maui;
 using Map = Esri.ArcGISRuntime.Mapping.Map;
@@ -92,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Subscribe to events if applicable
             if (bookmarks is INotifyCollectionChanged iCollectionChanged)
             {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(iCollectionChanged);
+                var listener = new WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(iCollectionChanged);
                 listener.OnEventAction = (instance, source, eventArgs) => HandleOverrideListCollectionChanged(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
                 iCollectionChanged.CollectionChanged += listener.OnEvent;
@@ -190,7 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_geoView is MapView mv && mv.Map is ILoadable mapLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(mapLoadable);
+                var listener = new WeakEventListener<ILoadable, object?, EventArgs>(mapLoadable);
                 listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
                 mapLoadable.Loaded += listener.OnEvent;
@@ -201,7 +202,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             else if (_geoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(sceneLoadable);
+                var listener = new WeakEventListener<ILoadable, object?, EventArgs>(sceneLoadable);
                 listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
                 listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
                 sceneLoadable.Loaded += listener.OnEvent;
@@ -239,7 +240,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
 
-            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(bmCollection);
+            var listener = new WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(bmCollection);
             listener.OnEventAction = (instance, source, eventArgs) => HandleGeoViewBookmarksCollectionChanged(source, eventArgs);
             listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
             bmCollection.CollectionChanged += listener.OnEvent;

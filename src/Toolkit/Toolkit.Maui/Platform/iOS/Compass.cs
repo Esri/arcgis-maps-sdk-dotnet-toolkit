@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using CoreGraphics;
 using UIKit;
+using Esri.ArcGISRuntime.Toolkit.UI;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
@@ -50,7 +51,7 @@ internal partial class Compass : IComponent
     public override void AwakeFromNib()
     {
         var component = (IComponent)this;
-        DesignTime.IsDesignMode = component.Site != null && component.Site.DesignMode;
+        Esri.ArcGISRuntime.Toolkit.Maui.DesignTime.IsDesignMode = component.Site != null && component.Site.DesignMode;
 
         Initialize();
 
@@ -61,7 +62,7 @@ internal partial class Compass : IComponent
     {
         BackgroundColor = UIColor.Clear;
 
-        if (Heading == 0 && AutoHide && !DesignTime.IsDesignMode)
+        if (Heading == 0 && AutoHide && !Esri.ArcGISRuntime.Toolkit.Maui.DesignTime.IsDesignMode)
         {
             Alpha = 0;
         }
@@ -148,7 +149,7 @@ internal partial class Compass : IComponent
 
     private void SetVisibility(bool isVisible)
     {
-        NFloat alpha = new NFloat(isVisible || DesignTime.IsDesignMode ? 1.0 : 0.0);
+        NFloat alpha = new NFloat(isVisible || Esri.ArcGISRuntime.Toolkit.Maui.DesignTime.IsDesignMode ? 1.0 : 0.0);
         if (alpha != Alpha)
         {
             UIView.Animate(0.25, () => Alpha = alpha);

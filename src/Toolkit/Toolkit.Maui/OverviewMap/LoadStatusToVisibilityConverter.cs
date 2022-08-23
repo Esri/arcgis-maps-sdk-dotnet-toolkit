@@ -14,42 +14,36 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || WINDOWS_XAML
+using System;
 using System.Globalization;
-using Esri.ArcGISRuntime.Toolkit.UI;
 
-namespace Esri.ArcGISRuntime.Toolkit.Internal
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
 {
     /// <summary>
-    /// *FOR INTERNAL USE* Returns visibility for the given load status.
+    /// *FOR INTERNAL USE* Returns a boolean representing visibility for a given load status.
     /// </summary>
-    internal sealed class LoadStatusToVisibilityConverter : IValueConverter
+    internal class LoadStatusToVisibilityConverter : IValueConverter
     {
-        /// <inheritdoc />
-        object IValueConverter.Convert(object? value, Type targetType, object? parameter,
-#if WINDOWS_XAML
-            string language)
-#else
-            CultureInfo culture)
-#endif
+        /// <inheritdoc/>
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (DesignTime.IsDesignMode)
+            if (DesignMode.IsDesignModeEnabled)
             {
                 if (parameter is string statusParameter)
                 {
                     switch (statusParameter)
                     {
                         case "Loaded":
-                            return Visibility.Visible;
+                            return true;
                         case "NotLoaded":
-                            return Visibility.Collapsed;
+                            return false;
                         case "Loading":
-                            return Visibility.Collapsed;
+                            return false;
                         case "FailedToLoad":
-                            return Visibility.Collapsed;
+                            return false;
+                        default:
+                            return true;
                     }
-
-                    return true;
                 }
             }
 
@@ -57,31 +51,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 if (parameterString == "Loaded" && status == LoadStatus.Loaded)
                 {
-                    return Visibility.Visible;
+                    return true;
                 }
                 else if (parameterString == "Loading" && status == LoadStatus.Loading)
                 {
-                    return Visibility.Visible;
+                    return true;
                 }
                 else if (parameterString == "FailedToLoad" && status == LoadStatus.FailedToLoad)
                 {
-                    return Visibility.Visible;
+                    return true;
                 }
             }
 
-            return Visibility.Collapsed;
+            return false;
         }
 
-        /// <inheritdoc />
-        object IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
-#if WINDOWS_XAML
-            string language)
-#else
-            CultureInfo culture)
-#endif
+        /// <inheritdoc/>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            throw new NotImplementedException();
         }
     }
 }
-#endif

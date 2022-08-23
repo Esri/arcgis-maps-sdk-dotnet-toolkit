@@ -17,9 +17,13 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
+namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
-    internal static partial class DesignTime
+    internal static class DesignTime
     {
         private static bool? _isInDesignMode;
 

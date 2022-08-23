@@ -46,7 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 parentLayout.Padding = new Thickness(8);
                 Grid imageContainer = new Grid { Margin = new Thickness(0, 0, 0, 8) };
                 Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
+                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
                 Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
                 Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), HorizontalTextAlignment = TextAlignment.Center };
                 imageContainer.Children.Add(fallback);
@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
                 Grid imageContainer = new Grid();
                 Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
+                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
                 Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
                 Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center };
                 imageContainer.Children.Add(fallback);
@@ -100,7 +100,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 return parentLayout;
             });
 
-            string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
+            string template = @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
                                     <Grid>
                                         <CollectionView x:Name=""PART_InnerListView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" SelectionMode=""Single"" />
                                         <Grid x:Name=""PART_LoadingScrim"">

@@ -38,7 +38,7 @@ public class BookmarksView : TemplatedView
             return defaultCell;
         });
 
-        string template = @"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"">
+        string template = @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
                                     <ListView x:Name=""PresentingView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"">
                                         <x:Arguments>
                                             <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>

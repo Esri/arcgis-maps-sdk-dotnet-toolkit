@@ -16,7 +16,34 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <!-- TODO -->
+      <Compile Remove="FloorFilter\**" />
+      <Compile Remove="UtilityNetworkTraceTool\**" />
+      <EmbeddedResource Remove="FloorFilter\**" />
+      <EmbeddedResource Remove="UtilityNetworkTraceTool\**" />
+      <MauiCss Remove="FloorFilter\**" />
+      <MauiCss Remove="UtilityNetworkTraceTool\**" />
+      <MauiXaml Remove="FloorFilter\**" />
+      <MauiXaml Remove="UtilityNetworkTraceTool\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Assets\BasemapDark.png" />
+      <EmbeddedResource Include="Assets\BasemapLight.png" />
+      <EmbeddedResource Include="Assets\calcite-ui-icons-24.ttf" />
+      <EmbeddedResource Include="Assets\caret-down-small.png" />
+      <EmbeddedResource Include="Assets\caret-down.png" />
+      <EmbeddedResource Include="Assets\pin-tear-small.png" />
+      <EmbeddedResource Include="Assets\pin-tear.png" />
+      <EmbeddedResource Include="Assets\search-small.png" />
+      <EmbeddedResource Include="Assets\search.png" />
+      <EmbeddedResource Include="Assets\x-small.png" />
+      <EmbeddedResource Include="Assets\x.png" />
+    </ItemGroup>
+
+    <ItemGroup>
        <Using Include="Esri.ArcGISRuntime.Maui" />
+       <Using Remove="Microsoft.Maui.ApplicationModel" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,7 +54,7 @@
       <ProjectReference Include="..\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
     </ItemGroup>
 
-    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
     <Import Project="..\..\CommonProperties.targets" />
+    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
 
 </Project>

@@ -16,7 +16,11 @@
 
 using System.ComponentModel;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     /// <summary>
     /// Internal use only.

@@ -40,8 +40,8 @@ using Windows.UI.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI
 {
-#if NETFX_CORE
-    [Windows.UI.Xaml.Data.Bindable]
+#if WINDOWS_XAML
+    [Bindable]
 #endif
     internal class TocDataSource : LayerContentDataSource<TocItem>
     {

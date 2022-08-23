@@ -147,7 +147,7 @@ internal partial class Compass
     // Calculates a screen dimension given a specified dimension in raw pixels
     internal static float CalculateScreenDimension(float pixels, ComplexUnitType screenUnitType = ComplexUnitType.Dip, Context? context = null)
     {
-        return !DesignTime.IsDesignMode ?
+        return !Esri.ArcGISRuntime.Toolkit.Maui.DesignTime.IsDesignMode ?
             TypedValue.ApplyDimension(screenUnitType, pixels, Internal.ViewExtensions.GetDisplayMetrics(context)) : pixels;
     }
 

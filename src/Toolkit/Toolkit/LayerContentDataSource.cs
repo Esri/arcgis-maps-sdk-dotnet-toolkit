@@ -45,7 +45,11 @@ using View = System.Windows.DependencyObject;
 #endif
 #endif
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     /// <summary>
     /// A generic helper class for tracking changes to the layers in a MapView or SceneView and generate a bindable list of information about the map,
@@ -208,7 +212,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
         }
 
-        private Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _documentListener;
+        private WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _documentListener;
 
         private void SubscribeToDocument(INotifyPropertyChanged? document)
         {
@@ -220,7 +224,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (document != null)
             {
-                _documentListener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(document)
+                _documentListener = new WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(document)
                 {
                     OnEventAction = (instance, source, eventArgs) => DocumentPropertyChanged(instance, eventArgs.PropertyName),
                     OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
@@ -248,7 +252,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
         }
 
-        private Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _basemapListener;
+        private WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _basemapListener;
 
         private void SubscribeToBasemap(Basemap? basemap)
         {
@@ -260,7 +264,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (basemap != null)
             {
-                _basemapListener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(basemap)
+                _basemapListener = new WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(basemap)
                 {
                     OnEventAction = (instance, source, eventArgs) => BasemapPropertyChanged(instance, eventArgs.PropertyName),
                     OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
@@ -363,7 +367,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     if (layer is INotifyPropertyChanged inpc)
                     {
-                        var listener = new Internal.WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(inpc)
+                        var listener = new WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(inpc)
                         {
                             OnEventAction = (instance, source, eventArgs) => Layer_PropertyChanged((ILayerContent)instance, eventArgs.PropertyName),
                             OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
@@ -380,7 +384,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 if (layers is INotifyCollectionChanged incc)
                 {
-                    var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
+                    var listener = new WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
                     {
                         OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
                         OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,

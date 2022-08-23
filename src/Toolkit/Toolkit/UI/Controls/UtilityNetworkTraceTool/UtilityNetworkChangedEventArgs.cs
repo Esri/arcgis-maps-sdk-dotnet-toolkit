@@ -14,29 +14,29 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System.Globalization;
+using System;
+using Esri.ArcGISRuntime.UtilityNetworks;
 
+#if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
-    internal class ByteArrayToImageSourceConverter : IValueConverter
+    /// <summary>
+    /// Event argument used by <see cref="UtilityNetworkTraceTool.UtilityNetworkChanged"/> event.
+    /// </summary>
+    public sealed class UtilityNetworkChangedEventArgs : EventArgs
     {
+        internal UtilityNetworkChangedEventArgs(UtilityNetwork? utilityNetwork)
+        {
+            UtilityNetwork = utilityNetwork;
+        }
+
         /// <summary>
-        /// Converts a byte array to an image source for display in Microsoft .NET MAUI.
+        /// Gets the new value for <see cref="UtilityNetwork"/>.
         /// </summary>
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is byte[] rawBuffer)
-            {
-                return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
-            }
-
-            return null;
-        }
-
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        /// <value>The new value for <see cref="UtilityNetwork"/>.</value>
+        public UtilityNetwork? UtilityNetwork { get; }
     }
 }
