@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             x:Class="Toolkit.SampleApp.Maui.Samples.LayerLegendSample" 
+             Title="LayerLegend (Obsolete - use Legend instead)">
+    <ContentPage.Content>
+        <Grid SizeChanged="Grid_SizeChanged">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <esriUI:MapView x:Name="mapView" Grid.ColumnSpan="2" />
+            
+            <esriTK:LayerLegend x:Name="layerLegend" Grid.Row="1" Grid.ColumnSpan="2" />
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

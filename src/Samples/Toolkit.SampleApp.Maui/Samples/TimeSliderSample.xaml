@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Toolkit.SampleApp.Maui.Samples.TimeSliderSample"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+    xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+    Title="TimeSlider">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <esriUI:MapView
+                x:Name="mapView"
+                Grid.Row="0"
+                Grid.Column="1" />
+            <esriTK:TimeSlider
+                x:Name="slider"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2" />
+
+            <StackLayout Grid.Row="0" Grid.Column="0">
+                <Label Text="Choose Layer" />
+                <Picker x:Name="LayerSelectionBox" HorizontalOptions="FillAndExpand" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.ColumnSpan="2" Text="Step forward and back" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Text="Intervals to step:" />
+                    <Entry
+                        x:Name="StepCountBox"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2"
+                        Text="1" />
+                    <Button
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Clicked="StepBack_Click"
+                        Text="Step Back" />
+                    <Button
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Clicked="StepForward_Click"
+                        Text="Step Forward" />
+                </Grid>
+                <Label Text="Choose Interval Count" />
+                <Entry x:Name="IntervalCountBox" Text="?" />
+                <Button Clicked="ConfigureIntervals_Click" Text="Configure Intervals" />
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Layer supports time filtering?  " />
+                    <Label x:Name="IsTimeAwareLabel" />
+                </StackLayout>
+                <Label Text="Notes" />
+                <Label Text="TimeSlider is transparent by default" />
+                <Label Text="TimeSlider needs additional configuration not in XAML. See code-behind for details." />
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

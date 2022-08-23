@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Toolkit.SampleApp.Maui.Samples.OverviewMapSample"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+    xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+    Title="OverviewMap - customization">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <esriUI:MapView x:Name="MyMapView" />
+                <esriUI:SceneView x:Name="MySceneView" IsVisible="False" />
+                <esriTK:OverviewMap
+                    Margin="4"
+                    x:Name="SampleOverview" />
+            </Grid>
+            <StackLayout
+                Grid.Row="1"
+                Padding="4"
+                BackgroundColor="#F2F2F2"
+                Spacing="2">
+                <Button Clicked="ToggleViewClick" Text="Toggle MapView/SceneView" />
+                <Button Clicked="ToggleModelClick" Text="Apply new Map/Scene" />
+                <Button Clicked="ToggleSymbolsClick" Text="Toggle symbols" />
+                <Label Text="Map rotation (map only):" />
+                <Slider Maximum="360" ValueChanged="Slider_ValueChanged" />
+                <Label Text="Scale factor:" />
+                <Slider Maximum="50" Minimum="10" Value="{Binding Source={x:Reference SampleOverview}, Path=ScaleFactor, Mode=TwoWay}" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

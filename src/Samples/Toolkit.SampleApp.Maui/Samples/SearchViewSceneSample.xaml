@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Toolkit.SampleApp.Maui.Samples.SearchViewSceneSample"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+    Title="SearchView - SceneView"
+    mc:Ignorable="d">
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <esri:SceneView
+                x:Name="MySceneView"
+                Grid.Row="1"
+                Grid.RowSpan="2" />
+            <toolkit:SearchView
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                GeoView="{Binding Source={Reference MySceneView}}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

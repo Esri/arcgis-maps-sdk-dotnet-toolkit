@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             x:Class="Toolkit.SampleApp.Maui.Samples.ScaleLineSample" Title="ScaleLine">
+    <ContentPage.Content>
+        <Grid>
+            <esriUI:MapView x:Name="mapView" />
+
+            <esriTK:ScaleLine HorizontalOptions="Start" VerticalOptions="End" Margin="20"
+                    MapView="{x:Reference mapView}"/>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Toolkit.SampleApp.Maui.Samples.UtilityNetworkTraceToolSample"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+    xmlns:esriTKConverter="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Converters;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
+    xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+    Title="UtilityNetworkTraceTool">
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="{AppThemeBinding Dark=#353535, Light=#F8F8F8}" />
+        </Style>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <esriUI:MapView x:Name="MyMapView" />
+        <esriTK:UtilityNetworkTraceTool Grid.Row="1" GeoView="{Binding Source={x:Reference MyMapView}}" />
+    </Grid>
+</ContentPage>

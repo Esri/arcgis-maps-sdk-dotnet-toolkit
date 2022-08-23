@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             x:Class="Toolkit.SampleApp.Maui.Samples.LegendSample" Title="Legend - MapView">
+    <ContentPage.Content>
+        <Grid SizeChanged="Grid_SizeChanged">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <esriUI:MapView x:Name="mapView" Grid.ColumnSpan="2" />
+            <esriTK:Legend x:Name="legend" 
+            IsVisible="True" GeoView="{x:Reference mapView}" Grid.Row="1" Grid.ColumnSpan="2" />
+            <StackLayout HorizontalOptions="End" VerticalOptions="Start"
+                         Grid.ColumnSpan="2" Margin="20" BackgroundColor="#55FFFFFF">
+                <Label Text="Filter by scale range" />
+                <Switch x:Name="filterByScaleRange" 
+                        IsToggled="{Binding FilterByVisibleScaleRange, Source={x:Reference legend}, Mode=TwoWay}" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

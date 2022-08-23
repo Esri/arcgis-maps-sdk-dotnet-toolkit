@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             mc:Ignorable="d"
+             Title="Bookmarks - templating"
+             x:Class="Toolkit.SampleApp.Maui.Samples.BookmarksViewTemplatedSample">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <esri:MapView x:Name="MyMapView" Grid.Row="0" Grid.Column="0" />
+            <toolkit:BookmarksView x:Name="MyBookmarks" Grid.Row="0" Grid.Column="1"
+                                   GeoView="{x:Reference MyMapView}">
+                <toolkit:BookmarksView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Name}" Detail="Custom bookmark template" />
+                    </DataTemplate>
+                </toolkit:BookmarksView.ItemTemplate>
+            </toolkit:BookmarksView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

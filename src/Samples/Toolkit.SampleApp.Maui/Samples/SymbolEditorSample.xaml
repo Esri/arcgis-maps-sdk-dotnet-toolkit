@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             x:Class="Toolkit.SampleApp.Maui.Samples.SymbolEditorSample"
+             Title="SymbolDisplay - dynamic">
+    <ContentPage.Content>
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackLayout Margin="20">
+
+                <Label Text="Size" />
+                <Slider Maximum="100" Minimum="5" Value="{Binding Symbol.Size, Source={x:Reference symbolDisplay}, Mode=TwoWay}" />
+                <Label Text="Style" />
+                <Picker ItemsSource="{Binding SimpleMarkerSymbolStyles}" SelectedItem="{Binding Symbol.Style, Source={x:Reference symbolDisplay}, Mode=TwoWay}"/>
+                <Label Text="Angle" />
+                <Slider Minimum="0" Maximum="360" Value="{Binding Symbol.Angle, Source={x:Reference symbolDisplay}, Mode=TwoWay}" />
+
+            </StackLayout>
+
+            <Frame BorderColor="LightGray" Grid.Row="1" Margin="20" HorizontalOptions="Center" VerticalOptions="Center" Padding="0" CornerRadius="0">
+                <esri:SymbolDisplay x:Name="symbolDisplay" Symbol="{Binding Symbol}" />
+            </Frame>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
