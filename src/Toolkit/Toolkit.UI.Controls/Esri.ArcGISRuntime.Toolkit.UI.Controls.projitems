@@ -14,7 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)BookmarksView\BookmarksView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BookmarksView\BookmarksView.Windows.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Compass\Compass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Compass\Compass.Windows.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\DataItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\FeatureDataField.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\FeatureHelper.cs" />

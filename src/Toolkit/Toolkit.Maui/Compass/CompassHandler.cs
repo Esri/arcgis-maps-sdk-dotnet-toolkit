@@ -99,16 +99,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Handlers
         public override void PlatformArrange(Rect rect)
         {
             base.PlatformArrange(rect);
-#if WINDOWS
-            PlatformView.Width = Math.Max(0, rect.Width - 1);
-            PlatformView.Height = rect.Height;
-#elif __ANDROID__
+#if  __ANDROID__
             var lp = PlatformView.LayoutParameters;
             if (lp != null && Context != null)
             {
                 var scale = (VirtualView as View)?.Window?.DisplayDensity ?? 1f;
                 lp.Width = (int)(rect.Width * scale);
-                lp.Height = (int)(rect.Height = scale);
+                lp.Height = (int)(rect.Height * scale);
             }
             PlatformView.LayoutParameters = lp;
 #endif

@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 #else
         /// <inheritdoc />
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        protected override void OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
             ResetRotation();
