@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Esri.ArcGISRuntime.Maui.Handlers;
+
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 /// <summary>
@@ -76,5 +78,19 @@ public class Compass : View, ICompass
     /// Identifies the <see cref="GeoView"/> Dependency Property.
     /// </summary>
     public static readonly BindableProperty GeoViewProperty =
-        BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, null);
+        BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, propertyChanged: OnGeoViewPropertyChanged);
+
+    private static void OnGeoViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+#if WINDOWS || __IOS__ || __ANDROID__
+        if(bindable is Compass c && c.PlatformGeoView != null)
+        {
+            c.PlatformGeoView.GeoView = (c.GeoView?.Handler as GeoViewHandler<Esri.ArcGISRuntime.Maui.IGeoView, Esri.ArcGISRuntime.UI.Controls.GeoView>)?.PlatformView;
+        }
+#endif
+    }
+
+#if WINDOWS || __IOS__ || __ANDROID__
+    private Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass? PlatformGeoView => Handler?.PlatformView as Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass;
+#endif
 }

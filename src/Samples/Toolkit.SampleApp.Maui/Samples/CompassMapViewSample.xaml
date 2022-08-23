@@ -4,21 +4,19 @@
              xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              x:Class="Toolkit.SampleApp.Maui.Samples.CompassMapViewSample" Title="Compass - MapView">
-    <ContentPage.Content>
-        <Grid>
-            <esriUI:MapView x:Name="mapView" />
+    <Grid>
+        <esriUI:MapView x:Name="mapView" />
 
-            <esriTK:Compass HorizontalOptions="End" VerticalOptions="Start" Margin="20"
-                    GeoView="{x:Reference mapView}" WidthRequest="30" HeightRequest="30"
-                    AutoHide="False" x:Name="compass" />
+        <esriTK:Compass HorizontalOptions="End" VerticalOptions="Start" Margin="20"
+                GeoView="{x:Reference mapView}" WidthRequest="30" HeightRequest="30"
+                AutoHide="False" x:Name="compass" />
 
-            <StackLayout HorizontalOptions="Start" VerticalOptions="Start" Margin="20" Padding="20" BackgroundColor="#F2F2F2">
-                <Label Text="AutoHide Compass" />
-                <Switch IsToggled="{Binding AutoHide, Source={x:Reference compass}}" />
-                <Label Text="Size" />
-                <Slider Maximum="100" Minimum="10" Value="30" ValueChanged="Slider_ValueChanged" MaximumTrackColor="Gray" />
-            </StackLayout>
+        <StackLayout HorizontalOptions="Start" VerticalOptions="End" Margin="20" Padding="20" BackgroundColor="#F2F2F2">
+            <Label Text="AutoHide Compass" />
+            <Switch IsToggled="{Binding AutoHide, Source={x:Reference compass}}" />
+            <Label Text="Size" />
+            <Slider Maximum="100" Minimum="10" Value="30" ValueChanged="Slider_ValueChanged" MaximumTrackColor="Gray" />
+        </StackLayout>
 
-        </Grid>
-    </ContentPage.Content>
+    </Grid>
 </ContentPage>

@@ -4,13 +4,11 @@
              xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              x:Class="Toolkit.SampleApp.Maui.Samples.CompassSceneViewSample" Title="Compass - SceneView">
-    <ContentPage.Content>
-        <Grid>
-            <esriUI:SceneView x:Name="sceneView" />
+    <Grid>
+        <esriUI:SceneView x:Name="sceneView" />
 
-            <esriTK:Compass HorizontalOptions="End" VerticalOptions="Start" Margin="20"
-                    GeoView="{x:Reference sceneView}" WidthRequest="30" HeightRequest="30"
-                    AutoHide="False" x:Name="compass" />
-        </Grid>
-    </ContentPage.Content>
+        <esriTK:Compass HorizontalOptions="End" VerticalOptions="Start" Margin="20"
+                GeoView="{x:Reference sceneView}" WidthRequest="30" HeightRequest="30"
+                AutoHide="False" x:Name="compass" />
+    </Grid>
 </ContentPage>
