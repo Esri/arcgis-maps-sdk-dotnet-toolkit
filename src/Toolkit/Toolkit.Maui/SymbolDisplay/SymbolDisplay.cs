@@ -28,18 +28,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private Task? _currentUpdateTask;
         private bool _isRefreshRequired;
         private static readonly ControlTemplate DefaultControlTemplate;
+        private Image? image;
+
         static SymbolDisplay()
         {
-            string template =
-$@"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
-xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
-            <Image x:Name=""image"" Stretch=""Uniform"" Margin=""{{TemplateBinding Padding}}""/>
-</ControlTemplate>";
-            DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
+            string template = @"<Image xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" x:Name=""image"" Stretch=""Uniform"" Margin=""{TemplateBinding Padding}""/>";
+            DefaultControlTemplate = new ControlTemplate()
+            {
+                LoadTemplate = () =>
+                {
+                    return Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new Image(), template);
+                }
+            };
         }
-            /// <summary>
-            /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
-            /// </summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+        /// </summary>
         public SymbolDisplay()
         {
             ControlTemplate = DefaultControlTemplate;
@@ -58,7 +62,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
         /// Identifies the <see cref="Symbol"/> bindable property.
         /// </summary>
         public static readonly BindableProperty SymbolProperty =
-            BindableProperty.Create(nameof(Symbol), typeof(bool), typeof(SearchView), false, propertyChanged: OnSymbolPropertyChanged);
+            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(SymbolDisplay), null, propertyChanged: OnSymbolPropertyChanged);
 
         private static void OnSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
         {
@@ -89,19 +93,27 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
             Refresh();
         }
 
+        /// <inheritdoc />
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            image = GetTemplateChild("image") as Image;
+            Refresh();
+        }
+
         private async Task UpdateSwatchAsync()
         {
-            var img = GetTemplateChild("image") as Image;
-            if (img == null)
+
+            if (image is null)
             {
                 return;
             }
 
             if (Symbol == null)
             {
-                img.Source = null;
-                img.MaximumWidthRequest = 0;
-                img.MaximumHeightRequest = 0;
+                image.Source = null;
+                image.MaximumWidthRequest = 0;
+                image.MaximumHeightRequest = 0;
             }
             else
             {
@@ -110,17 +122,17 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
                     var scale = GetScaleFactor();
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                     var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                    img.MaximumWidthRequest = imageData.Width / scale;
-                    img.MaximumHeightRequest = imageData.Height / scale;
-                    img.Source = await imageData.ToImageSourceAsync();
+                    image.MaximumWidthRequest = imageData.Width / scale;
+                    image.MaximumHeightRequest = imageData.Height / scale;
+                    image.Source = await imageData.ToImageSourceAsync();
                     SourceUpdated?.Invoke(this, EventArgs.Empty);
 #pragma warning restore ESRI1800
                 }
                 catch
                 {
-                    img.Source = null;
-                    img.MaximumWidthRequest = 0;
-                    img.MaximumHeightRequest = 0;
+                    image.Source = null;
+                    image.MaximumWidthRequest = 0;
+                    image.MaximumHeightRequest = 0;
                 }
             }
         }
