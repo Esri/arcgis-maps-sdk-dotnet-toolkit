@@ -31,9 +31,6 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Preview">
-          <Version>$(UseNugetPackage)</Version>
-        </PackageReference>
         <PackageReference Include="Esri.ArcGISRuntime.Toolkit.WPF">
           <Version>$(UseNugetPackage)</Version>
         </PackageReference>
