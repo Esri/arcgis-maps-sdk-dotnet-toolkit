@@ -99,8 +99,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (!DesignTime.IsDesignMode)
             {
-#if WINDOWS_XAML
+#if NETFX_CORE
                 return Windows.Graphics.Display.DisplayInformation.GetForCurrentView()?.RawPixelsPerViewPixel ?? 1;
+#elif WINUI
+                return XamlRoot?.RasterizationScale ?? 1;
 #else
                 var visual = PresentationSource.FromVisual(this);
                 if (visual != null)
