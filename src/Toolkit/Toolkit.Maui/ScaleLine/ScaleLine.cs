@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         static ScaleLine()
         {
-            string template = @"<Grid xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" x:Name=""LayoutRoot"" WidthRequest=""{TemplateBinding Width}"">
+            string template = @"<Grid xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" x:Name=""LayoutRoot"" VerticalOptions=""{TemplateBinding VerticalOptions}"" HorizontalOptions=""{TemplateBinding HorizontalOptions}"" >
             <Grid HorizontalOptions=""Fill"">
                 <Grid.RowDefinitions>
                     <RowDefinition Height=""Auto"" />
