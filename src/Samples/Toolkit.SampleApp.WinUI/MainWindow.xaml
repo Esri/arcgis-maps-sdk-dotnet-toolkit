@@ -8,9 +8,6 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.Resources>
-            <local:SamplesVM x:Key="vm" />
-        </Grid.Resources>
 
         <SplitView Grid.Row="1" x:Name="splitView" IsPaneOpen="True" VerticalContentAlignment="Stretch" DisplayMode="Inline" >
             <SplitView.Pane>
@@ -20,7 +17,7 @@
                          IsHoldingEnabled="False"
                          IsDoubleTapEnabled="False"
                          ItemClick="sampleView_ItemClick"
-                         ItemsSource="{Binding Samples, Source={StaticResource vm}}" >
+                         ItemsSource="{x:Bind Samples}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid ToolTipService.ToolTip="{Binding Description}">

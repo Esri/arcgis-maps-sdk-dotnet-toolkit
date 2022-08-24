@@ -24,17 +24,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public MainWindow()
         {
             this.InitializeComponent();
-            rootFrame.Loaded += RootFrame_Loaded;
             var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             Microsoft.UI.WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
             appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
             appWindow.Title = WindowTitle;
-        }
-
-        private void RootFrame_Loaded(object sender, RoutedEventArgs e)
-        {
-            var samples = SampleDatasource.Current.Samples;
-            rootFrame.Navigate(typeof(WelcomePage));
         }
 
         private void sampleView_ItemClick(object sender, ItemClickEventArgs e)
@@ -59,16 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         {
             get { return rootFrame; }
         }
-    }
 
-    public class SamplesVM
-    {
-        public ICollectionView Samples
-        {
-            get
-            {
-                return SampleDatasource.Current.CollectionViewSource.View;
-            }
-        }
+        public ICollectionView Samples => SampleDatasource.Current.CollectionViewSource.View;
     }
 }
