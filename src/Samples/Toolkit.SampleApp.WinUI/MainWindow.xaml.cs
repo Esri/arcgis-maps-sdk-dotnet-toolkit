@@ -14,53 +14,29 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainWindow : Window
     {
+        private const string WindowTitle = "ArcGIS Runtime Toolkit for WinUI - Functional Tests";
+        private readonly Microsoft.UI.Windowing.AppWindow appWindow;
+
         public MainWindow()
         {
             this.InitializeComponent();
             rootFrame.Loaded += RootFrame_Loaded;
-            rootFrame.Navigated += RootFrame_Navigated;
+            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+            Microsoft.UI.WindowId windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
+            appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+            appWindow.Title = WindowTitle;
         }
+
         private void RootFrame_Loaded(object sender, RoutedEventArgs e)
         {
-            splitView.BackRequested += (s, args) =>
-            {
-                if (rootFrame.CanGoBack)
-                {
-                    rootFrame.GoBack();
-                }
-            };
-
             var samples = SampleDatasource.Current.Samples;
-            Sample sample = null;
-            if (sample == null)
-            {
-                rootFrame.Navigate(typeof(WelcomePage));
-            }
-            else
-            {
-                if (!rootFrame.Navigate(sample.Page))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
+            rootFrame.Navigate(typeof(WelcomePage));
+        }
 
-                //Window.Current.SetTitleBar(new TextBlock() { Text = sample.Name });
-                //SampleTitle.Text = sample.Name;
-            }
-        }
-        private void RootFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            //splitView.IsBackEnabled = rootFrame.CanGoBack;
-        }
         private void sampleView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var sample = e.ClickedItem as Sample;
@@ -70,9 +46,13 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public void NavigateSample(Sample sample)
         {
             if (sample == null) return;
-            if (!rootFrame.Navigate(sample.Page, null))
+            if (!rootFrame.Navigate(sample.Page))
             {
                 throw new Exception("Failed to create initial page");
+            }
+            else
+            {
+                appWindow.Title = WindowTitle + " - " + sample.Name;
             }
         }
         public Frame SampleFrame

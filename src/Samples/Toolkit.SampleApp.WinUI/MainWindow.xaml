@@ -12,10 +12,10 @@
             <local:SamplesVM x:Key="vm" />
         </Grid.Resources>
 
-        <NavigationView Grid.Row="1" x:Name="splitView" IsPaneOpen="True" VerticalContentAlignment="Stretch" IsPaneToggleButtonVisible="False" IsBackEnabled="{x:Bind rootFrame.CanGoBack, Mode=OneWay}" PaneDisplayMode="Left">
-            <NavigationView.PaneCustomContent>
+        <SplitView Grid.Row="1" x:Name="splitView" IsPaneOpen="True" VerticalContentAlignment="Stretch" DisplayMode="Inline" >
+            <SplitView.Pane>
                 <ListView x:Name="sampleView" SelectionMode="None" VerticalAlignment="Stretch"
-                         IsRightTapEnabled="False"
+                         IsRightTapEnabled="False" Background="Transparent"
                          IsItemClickEnabled="True"
                          IsHoldingEnabled="False"
                          IsDoubleTapEnabled="False"
@@ -38,10 +38,12 @@
                         </GroupStyle>
                     </ListView.GroupStyle>
                 </ListView>
-            </NavigationView.PaneCustomContent>
+            </SplitView.Pane>
             <Grid>
-                <Frame x:Name="rootFrame" Background="{ThemeResource ApplicationForegroundThemeBrush}" />
+                <Frame x:Name="rootFrame" Background="{ThemeResource ApplicationForegroundThemeBrush}" >
+                    <local:WelcomePage />
+                </Frame>
             </Grid>
-        </NavigationView>
+        </SplitView>
     </Grid>
 </Window>
