@@ -100,7 +100,7 @@
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.LiveData" Version="2.2.0.3" />
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.1.0.5" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />
-    <PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
+    <PackageReference Include="Xamarin.Google.ARCore" Version="1.33.0" />
     <PackageReference Include="Esri.ArcGISRuntime.ARToolkit" Version="$(AGS_TOOLKIT_VERSION)" />
   </ItemGroup>
 

@@ -47,6 +47,18 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private bool IsDesignTime { get; } = false;
 #endif
 
+        public bool? SupportsVPS
+        {
+            get
+            {
+                #if __ANDROID__
+                return this.ArSceneView?.Session?.IsGeospatialModeSupported(Google.AR.Core.Config.GeospatialMode.Enabled);
+                #else
+                return false;
+                #endif
+            }
+        }
+
         private void InitializeCommon()
         {
             if (!IsDesignTime)
@@ -70,7 +82,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public async Task StartTrackingAsync(ARLocationTrackingMode locationTrackingMode = ARLocationTrackingMode.Ignore)
         {
             _locationTrackingMode = locationTrackingMode;
-            if (locationTrackingMode != ARLocationTrackingMode.Ignore)
+            if (locationTrackingMode != ARLocationTrackingMode.Ignore && locationTrackingMode != ARLocationTrackingMode.ContinuousWithVPS)
             {
                 if (LocationDataSource == null)
                     throw new InvalidOperationException("Cannot use location tracking without the LocationDataSource property being initialized");

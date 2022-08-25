@@ -34,6 +34,11 @@ namespace Esri.ArcGISRuntime.ARToolkit
         /// <summary>
         /// Use all locations from the location data source.
         /// </summary>
-        Continuous = 2
+        Continuous = 2,
+
+        /// <summary>
+        /// Enable Visual Positioning Systems with continuous location updates.
+        /// </summary>
+        ContinuousWithVPS = 3
     }
 }

@@ -76,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleScreenAdapter.cs" />
     <Compile Include="Samples\ARActivityBase.cs" />
+    <Compile Include="Samples\GeoSpatialSample.cs" />
     <Compile Include="Samples\LookAroundSample.cs" />
     <Compile Include="Samples\ManualCalibrationSample.cs" />
     <Compile Include="Samples\ContinuousGPSSample.cs" />
@@ -138,7 +139,7 @@
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.1.0.5-rc3" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
     <PackageReference Include="Xamarin.Google.ARCore">
-      <Version>1.29.0</Version>
+      <Version>1.33.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
