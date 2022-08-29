@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         public async Task StartTrackingAsync(ARLocationTrackingMode locationTrackingMode = ARLocationTrackingMode.Ignore)
         {
             _locationTrackingMode = locationTrackingMode;
-            if (locationTrackingMode != ARLocationTrackingMode.Ignore && locationTrackingMode != ARLocationTrackingMode.ContinuousWithVPS)
+            if (locationTrackingMode != ARLocationTrackingMode.Ignore)
             {
                 if (LocationDataSource == null)
                     throw new InvalidOperationException("Cannot use location tracking without the LocationDataSource property being initialized");
@@ -155,7 +155,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         private object locationLock = new object();
         private void LocationDataSource_LocationChanged(object sender, Location.Location e)
         {
-            if (_locationTrackingMode == ARLocationTrackingMode.Ignore)
+            if (_locationTrackingMode == ARLocationTrackingMode.Ignore || _locationTrackingMode == ARLocationTrackingMode.ContinuousWithVPS)
                 return;
             if (e.IsLastKnown)
                 return;
@@ -356,6 +356,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             _initialTransformation = Mapping.TransformationMatrix.Identity - origin;
             return true;
         }
+        public ARLocationTrackingMode TrackingMode => _locationTrackingMode;
 
         /// <summary>
         /// Raises an event indicating whether horizontal planes are currently detected or not

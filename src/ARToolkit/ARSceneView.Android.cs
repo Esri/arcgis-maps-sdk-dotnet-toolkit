@@ -329,41 +329,16 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 var rot = arCamera.DisplayOrientedPose.GetRotationQuaternion();
                 var tr = arCamera.DisplayOrientedPose.GetTranslation();
                 var arCoreTransMatrix = TransformationMatrix.Create(rot[0], rot[1], rot[2], rot[3], tr[0], tr[1], tr[2]);
+                if (_locationTrackingMode == ARLocationTrackingMode.ContinuousWithVPS)
+                {
+                    arCoreTransMatrix = TransformationMatrix.Create(rot[0], rot[1], rot[2], rot[3], 0, 0, 0);
+                }
                 // Apply transformation matrix from AR Core; includes startup position-relative heading rotation
                 _controller.TransformationMatrix = InitialTransformation + arCoreTransMatrix;
 
-                // Apply location from GeospatialAR if possible
-                if (_locationTrackingMode == ARLocationTrackingMode.ContinuousWithVPS && ArSceneView?.Session?.Earth?.TrackingState == TrackingState.Tracking)
-                {
-                    try
-                    {
-                        GeospatialPose earthRelativePose = ArSceneView.Session.Earth.CameraGeospatialPose;
+                // Used by VPS location data source to update position.
+                NotifyRenderFrame?.Invoke(this, EventArgs.Empty);
 
-                        // Set origin camera using Earth pose
-                        OriginCamera = new Mapping.Camera(earthRelativePose.Latitude, earthRelativePose.Longitude, earthRelativePose.Altitude, 0, 90, 0); 
-
-                        // Get the old origin camera.
-                        Mapping.Camera uncorrectedCamera = OriginCamera;
-
-                        // Get the actual camera after ARCore transformation
-                        Mapping.Camera actualCamera = Camera;
-
-                        // Calculate the new heading by applying the offset to the old camera's heading.
-                        double desiredheading = earthRelativePose.Heading;
-                        double actualHeading = actualCamera.Heading;
-                        var difference = desiredheading - actualHeading;
-
-                        // Create a new camera by rotating the old camera to the difference between the desired and actual heading.
-                        Mapping.Camera newCamera = uncorrectedCamera.RotateTo(difference, uncorrectedCamera.Pitch, uncorrectedCamera.Roll);
-
-                        // Use the new camera as the origin camera.
-                        OriginCamera = newCamera;
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"AR Toolkit: failed to apply position from ARCore Geospatial API - {ex}");
-                    }
-                }
                 var it = arCamera.ImageIntrinsics;
                 var fl = it.GetFocalLength();
                 var pp = it.GetPrincipalPoint();
@@ -382,6 +357,8 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 }
             }
         }
+
+        public event EventHandler NotifyRenderFrame;
 
         private TransformationMatrix? HitTest(Android.Graphics.PointF screenPoint)
         {
