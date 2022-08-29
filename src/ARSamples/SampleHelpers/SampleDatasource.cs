@@ -13,15 +13,13 @@ namespace ARToolkit.SampleApp
         {
 #if MAUI
             return typeof(Page);
-#elif FORMS
-            return typeof(Xamarin.Forms.Page);
 #else
 #if NETFX_CORE
             return typeof(Windows.UI.Xaml.Controls.Page);
 #elif __IOS__
             return typeof(UIKit.UIViewController);
 #elif __ANDROID__
-            return typeof(Android.App.Activity);
+            return typeof(global::Android.App.Activity);
 #endif
 #endif
         }
@@ -53,8 +51,8 @@ namespace ARToolkit.SampleApp
                 }
                 if (string.IsNullOrEmpty(sample?.Name))
                 {
-#if __ANDROID__
-                    var actAttr = sample.Type.GetTypeInfo().GetCustomAttribute(typeof(Android.App.ActivityAttribute)) as Android.App.ActivityAttribute;
+#if __ANDROID__ && !MAUI
+                    var actAttr = sample.Type.GetTypeInfo().GetCustomAttribute(typeof(global::Android.App.ActivityAttribute)) as global::Android.App.ActivityAttribute;
                     if (!string.IsNullOrEmpty(actAttr?.Label))
                         sample.Name = actAttr.Label;
                     else
@@ -62,7 +60,7 @@ namespace ARToolkit.SampleApp
                     {
                         //Deduce name from type name
                         sample.Name = Regex.Replace(sample.Type.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0");
-#if __ANDROID__
+#if __ANDROID__ && !MAUI
                         if (sample.Name.EndsWith("Activity"))
                             sample.Name = sample.Name.Substring(0, sample.Name.Length - 8);
 #endif

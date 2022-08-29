@@ -10,7 +10,7 @@ namespace ARToolkit.SampleApp.Samples
     [Activity(
         Label = "Tap To Place",
         Theme = "@style/Theme.AppCompat",
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = Android.Content.PM.ScreenOrientation.Locked)]
+        ConfigurationChanges = global::Android.Content.PM.ConfigChanges.Orientation | global::Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Locked)]
     [SampleData(ItemId = "7dd2f97bb007466ea939160d0de96a9d", Path = "philadelphia.mspk")]
     [SampleInfo(DisplayName = "Tap-to-place 3D Model", 
         Description = "This demonstrates the table-top experience, where you can double-tap a surface to place the scene on that surface")]

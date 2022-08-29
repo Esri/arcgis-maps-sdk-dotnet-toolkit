@@ -11,7 +11,7 @@ namespace ARToolkit.SampleApp.Samples
     [Activity(
         Label = "Look around mode",
         Theme = "@style/Theme.AppCompat",
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = Android.Content.PM.ScreenOrientation.Locked)]
+        ConfigurationChanges = global::Android.Content.PM.ConfigChanges.Orientation | global::Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Locked)]
     [SampleInfo(DisplayName = "ARCore Disabled", Description = "A sample that doesn't rely on ARCore but only features the ability to look around based on a motion sensor")]
     public class LookAroundSample : ARActivityBase
     {

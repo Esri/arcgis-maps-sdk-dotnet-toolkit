@@ -8,13 +8,14 @@ using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using System;
 using System.Threading.Tasks;
+using Resource = ARToolkit.SampleApp.Android.Resource;
 
 namespace ARToolkit.SampleApp.Samples
 {
     [Activity(
         Label = "GPS-assisted AR",
         Theme = "@style/Theme.AppCompat",
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = global::Android.Content.PM.ConfigChanges.Orientation | global::Android.Content.PM.ConfigChanges.ScreenSize)]
     [SampleInfo(DisplayName = "Continuous GPS Full-scale AR", Description = "Uses the device's GPS to continously snap the origin to your current location. Best results are achieved with a very high-accuracy GPS, and a good compass alignment.")]
     public class FullScaleARSample : ARActivityBase
     {
@@ -22,7 +23,7 @@ namespace ARToolkit.SampleApp.Samples
         private double defaultDeviceElevationAboveTerrain = 1.5;
         TextView headingReadout;
 
-        protected override ARSceneView SetContentView()
+        protected override ARSceneView? SetContentView()
         {
             SetContentView(Resource.Layout.fullscalear);            
             return FindViewById<ARSceneView>(Resource.Id.sceneView1);
@@ -116,7 +117,7 @@ namespace ARToolkit.SampleApp.Samples
                 {
                     double deviceElevationAboveTerrain = defaultDeviceElevationAboveTerrain;
                     // Perform hittest at center of screen against detected surfaces to estimate device elevation above terrain
-                    var mp = ARView.ARScreenToLocation(new Android.Graphics.PointF(ARView.Width * .5f, ARView.Height * .5f));
+                    var mp = ARView.ARScreenToLocation(new global::Android.Graphics.PointF(ARView.Width * .5f, ARView.Height * .5f));
                     if (mp != null)
                         deviceElevationAboveTerrain = ARView.Camera.Location.Z - mp.Z;
 

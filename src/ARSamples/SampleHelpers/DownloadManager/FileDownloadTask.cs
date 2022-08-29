@@ -34,9 +34,9 @@ namespace ARToolkit.SampleApp.DownloadManager
     [DataContract]
     public class FileDownloadTask
     {
-        private HttpResponseMessage content;
-        private HttpClient client;
-        private CancellationTokenSource cancellationSource;
+        private HttpResponseMessage? content;
+        private HttpClient? client;
+        private CancellationTokenSource? cancellationSource;
         private Task transferTask;
 
         private FileDownloadTask(string filename, Uri requestUri, HttpResponseMessage content, HttpClient client)
@@ -49,14 +49,14 @@ namespace ARToolkit.SampleApp.DownloadManager
 
         }
 
-        public Exception Exception { get; private set; }
+        public Exception? Exception { get; private set; }
         [DataMember]
         public DownloadStatus Status { get; internal set; }
         [DataMember]
         public int BufferSize { get; set; } = 65535;
 
         [DataMember]
-        internal string ETag { get; set; }
+        internal string? ETag { get; set; }
 
         [DataMember]
         internal DateTimeOffset? Date { get; set; }
@@ -74,11 +74,11 @@ namespace ARToolkit.SampleApp.DownloadManager
         [DataMember]
         public long? TotalLength { get; internal set; }
 
-        public event EventHandler Completed;
+        public event EventHandler? Completed;
 
-        public event EventHandler<ProgressInfo> Progress;
+        public event EventHandler<ProgressInfo>? Progress;
 
-        public event EventHandler<Exception> Error;
+        public event EventHandler<Exception>? Error;
 
         [OnDeserialized]
         internal void OnDeserialized(StreamingContext context)
@@ -94,12 +94,12 @@ namespace ARToolkit.SampleApp.DownloadManager
             }
         }
 
-        public static FileDownloadTask FromJson(string json, HttpMessageHandler handler = null)
+        public static FileDownloadTask FromJson(string json, HttpMessageHandler? handler = null)
         {
             DataContractJsonSerializer s = new DataContractJsonSerializer(typeof(FileDownloadTask));
             using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
             {
-                var fdt = s.ReadObject(ms) as FileDownloadTask;
+                var fdt = (FileDownloadTask)s.ReadObject(ms)!;
                 fdt.client = new HttpClient(handler ?? new HttpClientHandler());
                 return fdt;
             }
@@ -115,7 +115,7 @@ namespace ARToolkit.SampleApp.DownloadManager
             }
         }
 
-        public static Task<FileDownloadTask> StartDownload(string filename, Esri.ArcGISRuntime.Portal.PortalItem portalItem, HttpMessageHandler handler = null)
+        public static Task<FileDownloadTask> StartDownload(string filename, Esri.ArcGISRuntime.Portal.PortalItem portalItem, HttpMessageHandler? handler = null)
         {
             var uri1 = portalItem.Portal.Uri;
             string requestUri = $"http://www.arcgis.com/sharing/rest/content/items/{portalItem.ItemId}/data";
@@ -127,7 +127,7 @@ namespace ARToolkit.SampleApp.DownloadManager
             return StartDownload(new HttpRequestMessage(HttpMethod.Get, requestUri), filename, handler);
         }
 
-        private static async Task<FileDownloadTask> StartDownload(HttpRequestMessage request, string filename, HttpMessageHandler handler = null)
+        private static async Task<FileDownloadTask> StartDownload(HttpRequestMessage request, string filename, HttpMessageHandler? handler = null)
         {
             HttpClient client;
             if (handler == null)
@@ -136,7 +136,7 @@ namespace ARToolkit.SampleApp.DownloadManager
             var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             var content = response.EnsureSuccessStatusCode();
 
-            FileDownloadTask result = new FileDownloadTask(filename, request.RequestUri, content, client);
+            FileDownloadTask result = new FileDownloadTask(filename, request.RequestUri!, content, client);
             return result;
         }
 

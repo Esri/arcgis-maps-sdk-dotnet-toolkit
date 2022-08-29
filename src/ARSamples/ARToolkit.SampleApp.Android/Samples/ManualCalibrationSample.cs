@@ -9,13 +9,14 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using System;
 using System.Threading.Tasks;
+using Resource = ARToolkit.SampleApp.Android.Resource;
 
 namespace ARToolkit.SampleApp.Samples
 {
     [Activity(
         Label = "Manually calibrated AR",
         Theme = "@style/Theme.AppCompat",
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = global::Android.Content.PM.ConfigChanges.Orientation | global::Android.Content.PM.ConfigChanges.ScreenSize)]
     [SampleInfo(DisplayName = "Manually-calibrated Full-scale AR", Description = "Relies on manual alignment to the real world to get a fit. It's more tedious than doing it automatic, but much more accurate once calibrated.")]
     public class ManualCalibrationSample : ARActivityBase
     {
@@ -23,7 +24,7 @@ namespace ARToolkit.SampleApp.Samples
         private TextView statusText;
         private double defaultDeviceElevationAboveTerrain = 1.5;
 
-        protected override ARSceneView SetContentView()
+        protected override ARSceneView? SetContentView()
         {
             TrackingMode = ARLocationTrackingMode.Initial;
             SetContentView(Resource.Layout.manualcalibration);
@@ -126,7 +127,7 @@ namespace ARToolkit.SampleApp.Samples
                 {
                     double deviceElevationAboveTerrain = defaultDeviceElevationAboveTerrain;
                     // Perform hittest at center of screen against detected surfaces to estimate device elevation above terrain
-                    var mp = ARView.ARScreenToLocation(new Android.Graphics.PointF(ARView.Width * .5f, ARView.Height * .5f));
+                    var mp = ARView.ARScreenToLocation(new global::Android.Graphics.PointF(ARView.Width * .5f, ARView.Height * .5f));
                     if(mp != null)
                         deviceElevationAboveTerrain = ARView.Camera.Location.Z - mp.Z;
 
@@ -142,7 +143,7 @@ namespace ARToolkit.SampleApp.Samples
             }
         }
 
-        private void ARView_ViewpointChanged(object sender, EventArgs e)
+        private void ARView_ViewpointChanged(object? sender, EventArgs e)
         {
             statusText.Text = $"Heading: {ARView.Camera.Heading.ToString("0")}°";
         }
