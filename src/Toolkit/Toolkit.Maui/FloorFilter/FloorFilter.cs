@@ -376,7 +376,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private void HandleGeoModelLoaded()
         {
-            Dispatcher.BeginInvokeOnMainThread(() =>
+            Dispatcher.Dispatch(() =>
             {
                 if (GeoView is MapView mv && mv.Map is Map mapLoadable && mapLoadable.LoadStatus == LoadStatus.Loaded)
                 {

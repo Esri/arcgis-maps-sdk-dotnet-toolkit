@@ -17,8 +17,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
+using Grid = Microsoft.Maui.Controls.Grid;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -54,13 +56,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         {
             if (PART_ListViewNetworks != null)
             {
-                PART_ListViewNetworks.ItemSelected -= PART_NetworksCollectionView_SelectionChanged;
+                PART_ListViewNetworks.SelectedIndexChanged -= PART_NetworksCollectionView_SelectionChanged;
                 PART_ListViewNetworks.ItemsSource = null;
             }
 
             if (PART_ListViewTraceTypes != null)
             {
-                PART_ListViewTraceTypes.ItemSelected -= OnTraceTypeSelected;
+                PART_ListViewTraceTypes.SelectedIndexChanged -= OnTraceTypeSelected;
                 PART_ListViewTraceTypes.ItemsSource = null;
             }
 
@@ -102,13 +104,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 PART_LabelNetworks = networkListLabel;
             }
 
-            if (GetTemplateChild(nameof(PART_ListViewNetworks)) is ListView networksCollectionView)
+            if (GetTemplateChild(nameof(PART_ListViewNetworks)) is Picker networksCollectionView)
             {
                 PART_ListViewNetworks = networksCollectionView;
 
                 PART_ListViewNetworks.ItemsSource = _controller.UtilityNetworks;
                 PART_ListViewNetworks.SelectedItem = _controller.SelectedUtilityNetwork;
-                PART_ListViewNetworks.ItemSelected += PART_NetworksCollectionView_SelectionChanged;
+                PART_ListViewNetworks.SelectedIndexChanged += PART_NetworksCollectionView_SelectionChanged;
             }
 
             if (GetTemplateChild(nameof(PART_LabelTraceTypes)) is Label traceTypesLabel)
@@ -178,11 +180,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 BindableLayout.SetItemsSource(PART_GridResultsDisplay, _controller.Results);
             }
 
-            if (GetTemplateChild(nameof(PART_ListViewTraceTypes)) is ListView listView)
+            if (GetTemplateChild(nameof(PART_ListViewTraceTypes)) is Picker picker)
             {
-                PART_ListViewTraceTypes = listView;
+                PART_ListViewTraceTypes = picker;
                 PART_ListViewTraceTypes.ItemsSource = _controller.TraceTypes;
-                PART_ListViewTraceTypes.ItemSelected += OnTraceTypeSelected;
+                PART_ListViewTraceTypes.SelectedIndexChanged += OnTraceTypeSelected;
             }
 
             if (GetTemplateChild(nameof(PART_ActivityIndicator)) is Frame activityIndicator)
@@ -196,6 +198,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 PART_ButtonCancelActivity.Clicked += PART_CancelWaitButton_Clicked;
             }
 
+            if (GetTemplateChild(nameof(PART_SelectContainer)) is Layout selectContainer)
+            {
+                PART_SelectContainer = selectContainer;
+            }
+            if (GetTemplateChild(nameof(PART_ConfigureContainer)) is Layout configureContainer)
+            {
+                PART_ConfigureContainer = configureContainer;
+            }
+            if (GetTemplateChild(nameof(PART_RunContainer)) is Layout runContainer)
+            {
+                PART_RunContainer = runContainer;
+            }
+            if (GetTemplateChild(nameof(PART_ViewContainer)) is Layout viewContainer)
+            {
+                PART_ViewContainer = viewContainer;
+            }
+
+
+
             ApplySegmentLayout();
         }
 
@@ -208,7 +229,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private void OnStartingPointSelected(object sender, SelectedItemChangedEventArgs e) => _controller.SelectedStartingPoint = e.SelectedItem as StartingPointModel;
 
-        private void OnTraceTypeSelected(object sender, SelectedItemChangedEventArgs e) => _controller.SelectedTraceType = e.SelectedItem as UtilityNamedTraceConfiguration;
+        private void OnTraceTypeSelected(object sender, EventArgs e)
+        {
+            if (PART_ListViewTraceTypes?.SelectedItem is UtilityNamedTraceConfiguration config)
+            {
+                _controller.SelectedTraceType = config;
+            }
+        }
 
         private void OnAddStartingPointCancelClicked(object sender, EventArgs e) => _controller.IsAddingStartingPoints = false;
 
@@ -225,21 +252,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             if (!_controller.UtilityNetworks.Any())
             {
                 PART_NoNetworksWarning?.SetValue(IsVisibleProperty, true);
-                PART_ListViewNetworks?.SetValue(IsVisibleProperty, false);
-                PART_LabelNetworks?.SetValue(IsVisibleProperty, false);
-                PART_ListViewTraceTypes?.SetValue(IsVisibleProperty, false);
-                PART_LabelTraceTypes?.SetValue(IsVisibleProperty, false);
-                PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
-                PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
-                PART_ButtonRunTrace?.SetValue(IsVisibleProperty, false);
-                PART_GridResultsDisplay?.SetValue(View.IsVisibleProperty, false);
-                PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
-                PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, false);
-                PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, false);
-                PART_DuplicateTraceWarning?.SetValue(IsVisibleProperty, false);
+                PART_ConfigureContainer?.SetValue(IsVisibleProperty, false);
+                PART_RunContainer?.SetValue(IsVisibleProperty, false);
+                PART_SelectContainer?.SetValue(IsVisibleProperty, false);
+                PART_ViewContainer?.SetValue(IsVisibleProperty, false);
                 return;
             }
-
+            PART_ConfigureContainer?.SetValue(IsVisibleProperty, false);
+            PART_RunContainer?.SetValue(IsVisibleProperty, false);
+            PART_SelectContainer?.SetValue(IsVisibleProperty, false);
+            PART_ViewContainer?.SetValue(IsVisibleProperty, false);
             PART_NoNetworksWarning?.SetValue(IsVisibleProperty, false);
             PART_ListViewNetworks?.SetValue(IsVisibleProperty, false);
             PART_NoResultsWarning?.SetValue(IsVisibleProperty, false);
@@ -267,6 +289,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     PART_LabelNetworks?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
                     PART_ListViewTraceTypes?.SetValue(IsVisibleProperty, true);
                     PART_LabelTraceTypes?.SetValue(IsVisibleProperty, true);
+                    PART_SelectContainer?.SetValue(IsVisibleProperty, true);
                     break;
 
                 // Configure
@@ -276,6 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, !_controller.IsAddingStartingPoints);
                     PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.TooManyStartingPointsWarning);
                     PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.InsufficientStartingPointsWarning);
+                    PART_ConfigureContainer?.SetValue(IsVisibleProperty, true);
                     break;
 
                 // Run
@@ -284,12 +308,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     PART_DuplicateTraceWarning?.SetValue(IsVisibleProperty, _controller.DuplicatedTraceWarning);
                     PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.TooManyStartingPointsWarning);
                     PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, _controller.InsufficientStartingPointsWarning);
+                    PART_RunContainer?.SetValue(IsVisibleProperty, true);
                     break;
 
                 // Results
                 case 3:
                     PART_GridResultsDisplay?.SetValue(View.IsVisibleProperty, _controller.Results.Any());
                     PART_NoResultsWarning?.SetValue(IsVisibleProperty, !_controller.Results.Any());
+                    PART_ViewContainer?.SetValue(IsVisibleProperty, true);
                     GeoView?.DismissCallout();
                     break;
             }
@@ -311,9 +337,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private void OnAddStartingPointClicked(object sender, EventArgs e) => _controller.IsAddingStartingPoints = !_controller.IsAddingStartingPoints;
 
-        private void PART_NetworksCollectionView_SelectionChanged(object sender, SelectedItemChangedEventArgs e)
+        private void PART_NetworksCollectionView_SelectionChanged(object sender, EventArgs e)
         {
-            if (e.SelectedItem is UtilityNetwork newSelection)
+            if (PART_ListViewNetworks?.SelectedItem is UtilityNetwork newSelection)
             {
                 _controller.SelectedUtilityNetwork = newSelection;
             }

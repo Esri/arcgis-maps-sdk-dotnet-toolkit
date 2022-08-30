@@ -149,10 +149,10 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
 <Frame HasShadow=""False"" BackgroundColor=""White"" Grid.RowSpan=""5"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" />
         <Button x:Name=""{nameof(PART_BrowseButton)}"" Margin=""0"" WidthRequest=""48"" HeightRequest=""48""
            CornerRadius=""0"" BackgroundColor=""White"" Padding=""16"" FontFamily=""calcite-ui-icons-24""
-           BorderColor=""#aa6e6e6e"" BorderWidth=""1"" Text=""{IconFont.UrbanModel}"" TextColor=""Accent"" />
+           BorderColor=""#aa6e6e6e"" BorderWidth=""1"" Text=""{IconFont.UrbanModel}"" TextColor=""#007AC2"" />
         <Button x:Name=""{nameof(PART_AllButton)}"" Text=""{IconFont.Viewshed}"" Margin=""0,-1,0,0"" WidthRequest=""48"" HeightRequest=""48""
            BorderColor=""#aa6e6e6e"" BorderWidth=""1"" FontFamily=""calcite-ui-icons-24""
-           CornerRadius=""0"" Background=""White"" TextColor=""Accent""
+           CornerRadius=""0"" Background=""White"" TextColor=""#007AC2""
            Grid.Row=""1"" />
         <Frame x:Name=""{nameof(PART_LevelListContainer)}"" Grid.Row=""2"" BackgroundColor=""White"" BorderColor=""#aa6e6e6e""
            Padding=""1"" Margin=""0,-1,0,0"" IsClippedToBounds=""True""
@@ -168,12 +168,12 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
         </Frame>
         <Button x:Name=""{nameof(PART_ZoomButton)}"" Text=""{IconFont.ZoomToObject}"" Margin=""0,-1,0,0"" WidthRequest=""48"" HeightRequest=""48""
            BorderColor=""#aa6e6e6e"" BorderWidth=""1"" FontFamily=""calcite-ui-icons-24""
-           CornerRadius=""0"" Background=""White"" TextColor=""Accent""
+           CornerRadius=""0"" Background=""White"" TextColor=""#007AC2""
            Grid.Row=""3""
            IsVisible=""True"" />
    </Grid>
 </ControlTemplate >";
-            DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
+            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
         }
     }
 }

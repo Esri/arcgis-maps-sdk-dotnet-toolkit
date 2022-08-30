@@ -15,6 +15,10 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Floor;
+using Microsoft.Maui.Controls.PlatformConfiguration;
+using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
+using ListView = Microsoft.Maui.Controls.ListView;
+using SearchBar = Microsoft.Maui.Controls.SearchBar;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -67,7 +71,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 _backButton.BackgroundColor = Color.FromHex("#f3f3f3");
                 _backButton.Padding = new Thickness(0);
                 _backButton.Margin = new Thickness(8);
-                _backButton.TextColor = Color.Accent;
+                _backButton.SetAppThemeColor(Button.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
                 _backButton.Clicked += HandleBack_Clicked;
             }
 
@@ -79,16 +83,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             _closeButton.BackgroundColor = Color.FromHex("#f3f3f3");
             _closeButton.Padding = new Thickness(0);
             _closeButton.Margin = new Thickness(8);
-            _closeButton.TextColor = Color.Accent;
+            _closeButton.SetAppThemeColor(Button.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
 
             _noResultLabel = new Label
             {
                 Text = ff.NoResultsMessage,
-                TextColor = Color.Accent,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
                 Margin = new Thickness(16),
             };
+            _noResultLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
 
             Grid.SetRow(_noResultLabel, 2);
             Grid.SetColumnSpan(_noResultLabel, 3);
