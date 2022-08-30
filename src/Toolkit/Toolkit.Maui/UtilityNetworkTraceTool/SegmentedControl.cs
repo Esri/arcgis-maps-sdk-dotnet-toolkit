@@ -15,60 +15,118 @@
 //  ******************************************************************************/
 using System;
 using System.Linq;
+using Microsoft.Maui.Layouts;
 using Rectangle = Microsoft.Maui.Controls.Shapes.Rectangle;
-using Rectangle2 = Microsoft.Maui.Controls.Rectangle;
+using Rectangle2 = Microsoft.Maui.Graphics.Rect;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
     /// <summary>
     /// Internal control used by the <see cref="UtilityNetworkTraceTool"/>.
     /// </summary>
-    public class SegmentedControl : Layout<View>
+    public class SegmentedControl : GraphicsView
     {
-        private Rectangle _selectionFill;
-        private Rectangle _backgroundFill;
-        private Label[]? _segmentLabels;
+        private class SegmentDrawable : IDrawable
+        {
+            public bool IsHovered { get; set; }
+            public int SelectedIndex { get; set; }
+            public int CornerRadius { get; set; } = 8;
+            public void Draw(ICanvas canvas, RectF dirtyRect)
+            {
+                float segmentWidth = dirtyRect.Width / 4;
 
-        private double _lastHeight;
-        private double _lastWidth;
-        private int _lastSelection = -1;
-        private TapGestureRecognizer _tapGesture;
+                // Draw background
+                canvas.StrokeColor = Color.FromRgba(0, 0, 0, 0);
+                if (IsHovered)
+                {
+                    canvas.FillColor = Color.FromRgb(234, 234, 234);
+                }
+                else
+                {
+                    canvas.FillColor = Color.FromRgb(243, 243, 243);
+                }
+                canvas.FillRoundedRectangle(0, 0, dirtyRect.Width, dirtyRect.Height, CornerRadius);
+
+                // Draw selection background
+                if (IsHovered)
+                {
+                    canvas.FillColor = Color.FromRgb(0, 98, 155);
+                }
+                else
+                {
+                    canvas.FillColor = Color.FromRgb(0, 123, 194);
+                }
+                
+                canvas.FillRoundedRectangle(segmentWidth * SelectedIndex, 0, segmentWidth, 30, CornerRadius);
+
+                // Draw unselected labels
+                for(int x = 0; x < 5; x++)
+                {
+                    if (x == SelectedIndex)
+                    {
+                        canvas.FontColor = Color.FromRgb(255, 255, 255);
+                        
+                    }
+                    else
+                    {
+                        canvas.FontColor = Color.FromRgb(21, 21, 21);
+                    }
+
+                    switch (x)
+                    {
+                        case 0:
+                            canvas.DrawString("Select", new RectF(0, 0, segmentWidth, 30), HorizontalAlignment.Center, VerticalAlignment.Center);
+                            break;
+                        case 1:
+                            canvas.DrawString("Configure", new RectF(segmentWidth, 0, segmentWidth, 30), HorizontalAlignment.Center, VerticalAlignment.Center);
+                            break;
+                        case 2:
+                            canvas.DrawString("Run", new RectF(segmentWidth * 2, 0, segmentWidth, 30), HorizontalAlignment.Center, VerticalAlignment.Center);
+                            break;
+                        case 3:
+                            canvas.DrawString("View", new RectF(segmentWidth * 3, 0, segmentWidth, 30), HorizontalAlignment.Center, VerticalAlignment.Center);
+                            break;
+                    }
+                }
+            }
+        }
+
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SegmentedControl"/> class.
         /// </summary>
         public SegmentedControl()
         {
-            _selectionFill = new Rectangle
-            {
-                RadiusX = 6.0,
-                RadiusY = 6.0,
-            };
-
-            _backgroundFill = new Rectangle
-            {
-                RadiusX = 6.0,
-                RadiusY = 6.0,
-            };
-            _backgroundFill.SetOnAppTheme<Brush>(Rectangle.FillProperty, new SolidColorBrush(System.Drawing.Color.FromArgb(234, 234, 234)), new SolidColorBrush(System.Drawing.Color.FromArgb(21, 21, 21)));
-            _selectionFill.SetOnAppTheme<Brush>(Rectangle.FillProperty, new SolidColorBrush(System.Drawing.Color.FromArgb(0, 122, 194)), new SolidColorBrush(System.Drawing.Color.FromArgb(0, 154, 242)));
-
-            Children.Add(_backgroundFill);
-            Children.Add(_selectionFill);
-
-            SelectedSegmentIndex = 0;
-            _tapGesture = new TapGestureRecognizer();
-            _tapGesture.Tapped += HandleLabelTap;
-            Segments = new[] { "Select", "Configure", "Run", "View" };
+            this.Drawable = new SegmentDrawable();
+            this.MoveHoverInteraction += SegmentedControl_MoveHoverInteraction;
+            this.EndHoverInteraction += SegmentedControl_EndHoverInteraction;
+            this.StartInteraction += SegmentedControl_StartInteraction;
         }
 
-        /// <summary>
-        /// Gets or sets the segment titles.
-        /// </summary>
-        public string[] ? Segments
+        private void SegmentedControl_StartInteraction(object? sender, TouchEventArgs e)
         {
-            get => GetValue(SegmentsProperty) as string[];
-            set => SetValue(SegmentsProperty, value);
+            if (e.Touches.Any())
+            {
+                var xCoord = e.Touches[0].X;
+                var segmentWidth = Width / 4;
+                var segmentPosition = xCoord / segmentWidth;
+                SelectedSegmentIndex = (int)Math.Round(segmentPosition, 0, MidpointRounding.ToZero);
+                (Drawable as SegmentDrawable)!.SelectedIndex = SelectedSegmentIndex;
+                Invalidate();
+            }
+        }
+
+        private void SegmentedControl_EndHoverInteraction(object? sender, EventArgs e)
+        {
+            (this.Drawable as SegmentDrawable)!.IsHovered = false;
+            this.Invalidate();
+        }
+
+        private void SegmentedControl_MoveHoverInteraction(object? sender, TouchEventArgs e)
+        {
+            (this.Drawable as SegmentDrawable)!.IsHovered = true;
+            this.Invalidate();
         }
 
         /// <summary>
@@ -81,104 +139,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 
         /// <summary>
-        /// Identifies the <see cref="Segments"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty SegmentsProperty = BindableProperty.Create(nameof(Segments), typeof(string[]), typeof(SegmentedControl), propertyChanged: OnSegmentsChanged);
-
-        /// <summary>
         /// Identifies the <see cref="SelectedSegmentIndex"/> bindable property.
         /// </summary>
         public static readonly BindableProperty SelectedSegmentIndexProperty = BindableProperty.Create(nameof(SelectedSegmentIndex), typeof(int), typeof(SegmentedControl), defaultValue: 0, propertyChanged: OnSelectionChanged);
 
-        private void HandleLabelTap(object sender, EventArgs e)
-        {
-            if (sender is Label labelElement && _segmentLabels.Contains(labelElement))
-            {
-                int index = Array.IndexOf(_segmentLabels, labelElement);
-                SelectedSegmentIndex = index;
-            }
-        }
-
         private static void OnSelectionChanged(BindableObject sender, object oldValue, object newValue)
         {
-            (sender as SegmentedControl)?.InvalidateLayout();
-        }
-
-        private static void OnSegmentsChanged(BindableObject sender, object oldValue, object newValue)
-        {
-            if (sender is SegmentedControl sendingControl)
-            {
-                var oldChildren = sendingControl.Children.OfType<Label>().ToList();
-                foreach (var child in oldChildren)
-                {
-                    child.GestureRecognizers.Clear();
-                    sendingControl.Children.Remove(child);
-                }
-
-                sendingControl._segmentLabels = sendingControl.Segments.Select(segTitle => new Label() { Text = segTitle, VerticalTextAlignment = TextAlignment.Center, HorizontalTextAlignment = TextAlignment.Center }).ToArray();
-
-                foreach (var label in sendingControl._segmentLabels)
-                {
-                    label.GestureRecognizers.Add(sendingControl._tapGesture);
-                    sendingControl.Children.Add(label);
-                }
-
-                sendingControl.InvalidateLayout();
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc />
-        /// </summary>
-        protected override void LayoutChildren(double x, double y, double width, double height)
-        {
-            if (height < 0 || width < 0 || _segmentLabels == null)
-            {
-                return;
-            }
-
-            if (SelectedSegmentIndex == _lastSelection && Height == _lastHeight && Width == _lastWidth)
-            {
-                return;
-            }
-            else
-            {
-                _lastSelection = SelectedSegmentIndex;
-                _lastHeight = height;
-                _lastWidth = width;
-            }
-
-            double availableHeight = Height;
-            double widthPerUnselectedSegment;
-            double widthForSelectedSegment = widthPerUnselectedSegment = Width / _segmentLabels.Count();
-
-            // Divide segments
-            int labelIndex = 0;
-            double lastXPosition = 0;
-            double animationXStart = 0;
-
-            foreach (var label in _segmentLabels)
-            {
-                if (labelIndex == SelectedSegmentIndex)
-                {
-                    label.WidthRequest = widthForSelectedSegment;
-                    label.Layout(new Rectangle2(lastXPosition, 0, widthForSelectedSegment, availableHeight));
-                    animationXStart = lastXPosition;
-                    lastXPosition += widthForSelectedSegment;
-                    label.TextColor = Colors.White;
-                }
-                else
-                {
-                    label.Layout(new Rectangle2(lastXPosition, 0, widthPerUnselectedSegment, availableHeight));
-                    lastXPosition += widthPerUnselectedSegment;
-                    label.SetAppThemeColor(Label.TextColorProperty, Color.FromRgb(21, 21, 21), Colors.White);
-                }
-
-                labelIndex++;
-            }
-
-            _backgroundFill.Layout(new Rectangle2(x, y, width, height));
-            _selectionFill.LayoutTo(new Rectangle2(animationXStart, 0, widthForSelectedSegment, availableHeight), 150, Easing.CubicInOut);
+            ((sender as SegmentedControl)!.Drawable as SegmentDrawable)!.SelectedIndex = (int)newValue;
+            (sender as SegmentedControl)?.Invalidate();
         }
     }
 }

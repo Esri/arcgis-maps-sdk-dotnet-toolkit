@@ -16,18 +16,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <!-- TODO -->
-      <Compile Remove="FloorFilter\**" />
-      <Compile Remove="UtilityNetworkTraceTool\**" />
-      <EmbeddedResource Remove="FloorFilter\**" />
-      <EmbeddedResource Remove="UtilityNetworkTraceTool\**" />
-      <MauiCss Remove="FloorFilter\**" />
-      <MauiCss Remove="UtilityNetworkTraceTool\**" />
-      <MauiXaml Remove="FloorFilter\**" />
-      <MauiXaml Remove="UtilityNetworkTraceTool\**" />
-    </ItemGroup>
-
-    <ItemGroup>
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
       <EmbeddedResource Include="Assets\BasemapDark.png" />
       <EmbeddedResource Include="Assets\BasemapLight.png" />

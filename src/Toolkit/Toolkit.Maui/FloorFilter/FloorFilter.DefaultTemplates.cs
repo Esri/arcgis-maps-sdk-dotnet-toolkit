@@ -173,7 +173,7 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
            IsVisible=""True"" />
    </Grid>
 </ControlTemplate >";
-            DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
+            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
         }
     }
 }

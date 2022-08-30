@@ -15,6 +15,9 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Floor;
+using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
+using ListView = Microsoft.Maui.Controls.ListView;
+using SearchBar = Microsoft.Maui.Controls.SearchBar;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -33,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         public FloorFilterBrowseSitesPage(FloorFilter ff)
         {
-            On<iOS>().SetUseSafeArea(true);
+            On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUseSafeArea(true);
             _ff = ff;
 
             BackgroundColor = Colors.White;
@@ -68,17 +71,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 BackgroundColor = Color.FromHex("#f3f3f3"),
                 Padding = new Thickness(0),
                 Margin = new Thickness(8, 2),
-                TextColor = Color.Accent,
             };
+            _closeButton.SetAppThemeColor(Button.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
 
             _noResultLabel = new Label
             {
                 Text = ff.NoResultsMessage,
-                TextColor = Color.Accent,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
                 Margin = new Thickness(16),
             };
+
+            _noResultLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
 
             Grid.SetRow(_noResultLabel, 2);
             Grid.SetColumnSpan(_noResultLabel, 2);
@@ -111,11 +115,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 Text = ff.AllFacilitiesLabel,
                 IsVisible = (ff.AllSites?.Count() ?? 0) > 1,
-                TextColor = Color.White,
-                BackgroundColor = Color.Accent,
+                TextColor = Color.FromRgb(255, 255, 255),
                 CornerRadius = 4,
                 Margin = 8,
             };
+            _allSitesButton.SetAppThemeColor(Button.BackgroundColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
             Grid.SetRow(_allSitesButton, 3);
             Grid.SetColumnSpan(_allSitesButton, 2);
 

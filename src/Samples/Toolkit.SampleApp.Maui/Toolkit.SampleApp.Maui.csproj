@@ -48,16 +48,12 @@
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 
     <!-- TODO: -->
-    <Compile Remove="Samples\FloorFilterSample.xaml.cs" />
     <Compile Remove="Samples\LayerLegendSample.xaml.cs" />
     <Compile Remove="Samples\PopupViewerSample.xaml.cs" />
     <Compile Remove="Samples\TimeSliderSample.xaml.cs" />
-    <Compile Remove="Samples\UtilityNetworkTraceToolSample.xaml.cs" />
-    <MauiXaml Remove="Samples\FloorFilterSample.xaml" />
     <MauiXaml Remove="Samples\LayerLegendSample.xaml" />
     <MauiXaml Remove="Samples\PopupViewerSample.xaml" />
     <MauiXaml Remove="Samples\TimeSliderSample.xaml" />
-    <MauiXaml Remove="Samples\UtilityNetworkTraceToolSample.xaml" />
 
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.4" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
   </ItemGroup>

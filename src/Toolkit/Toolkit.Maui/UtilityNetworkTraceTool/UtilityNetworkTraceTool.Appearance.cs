@@ -25,20 +25,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private SegmentedControl? PART_NavigationSegment;
 
         // Select section
+        private Layout? PART_SelectContainer;
         private Label? PART_LabelNetworks;
-        private ListView? PART_ListViewNetworks;
+        private Picker? PART_ListViewNetworks;
         private Label? PART_LabelTraceTypes;
-        private ListView? PART_ListViewTraceTypes;
+        private Picker? PART_ListViewTraceTypes;
 
         // Configure section
+        private Layout? PART_ConfigureContainer;
         private Button? PART_ButtonAddStartingPoint;
         private Button? PART_ButtonCancelAddStartingPoint;
         private ListView? PART_ListViewStartingPoints;
 
         // Run section
+        private Layout? PART_RunContainer;
         private Button? PART_ButtonRunTrace;
 
         // View section
+        private Layout? PART_ViewContainer;
         private Grid? PART_GridResultsDisplay;
 
         // Warnings (multiple sections)
@@ -61,7 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             const string foregroundColor = "{AppThemeBinding Dark=#ffffff, Light=#151515}";
             string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
-xmlns:ios=""clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core""
+xmlns:ios=""clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls""
 xmlns:esriTKPrim=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Maui""
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"">
 <Grid RowSpacing=""8"" Padding=""8,0,8,0"">
@@ -79,30 +83,20 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
         <Label Text=""No utility networks found."" />
     </Frame>
     <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" Padding=""0"" />
-    <StackLayout Spacing=""8"" Grid.Row=""2"">
+    <VerticalStackLayout x:Name=""{nameof(PART_SelectContainer)}"" Grid.Row=""2"" Spacing=""8"">
         <Label x:Name=""{nameof(PART_LabelNetworks)}"" Text=""Networks"" FontAttributes=""Bold"" IsVisible=""false"" />
-        <ListView x:Name=""{nameof(PART_ListViewNetworks)}"" ios:ListView.SeparatorStyle=""FullWidth"" Background=""{backgroundColor}"" IsVisible=""false"">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Label Text=""{{Binding Name}}"" Padding=""8,4,8,4"" TextColor=""{foregroundColor}"" />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Picker x:Name=""{nameof(PART_ListViewNetworks)}"" ItemDisplayBinding=""{{Binding Name}}"" IsVisible=""false"" BackgroundColor=""{{AppThemeBinding Light=#eaeaea,Dark=#151515}}"" Title=""Select a Utility Network"" />
         <Label x:Name=""{nameof(PART_LabelTraceTypes)}"" Text=""Named trace configurations"" FontAttributes=""Bold"" IsVisible=""false"" />
-        <ListView x:Name=""{nameof(PART_ListViewTraceTypes)}"" ios:ListView.SeparatorStyle=""FullWidth"" Background=""{backgroundColor}"" IsVisible=""false""> 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Label Text=""{{Binding Name}}"" Padding=""8"" TextColor=""{foregroundColor}""  />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""Add starting point"" IsVisible=""false"" />
-        <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""Cancel"" IsVisible=""false""/>
-        <ListView x:Name=""{nameof(PART_ListViewStartingPoints)}"" ios:ListView.SeparatorStyle=""FullWidth"" RowHeight=""64"" HasUnevenRows=""True"" Background=""{backgroundColor}"" IsVisible=""false"">
+        <Picker x:Name=""{nameof(PART_ListViewTraceTypes)}"" IsVisible=""false"" ItemDisplayBinding=""{{Binding Name}}"" BackgroundColor=""{{AppThemeBinding Light=#eaeaea,Dark=#151515}}"" Title=""Select a trace configuration""  />
+    </VerticalStackLayout>
+    <Grid x:Name=""{nameof(PART_ConfigureContainer)}"" Grid.Row=""2"">
+        <Grid.RowDefinitions>
+            <RowDefinition Height=""Auto"" />
+            <RowDefinition Height=""*"" />
+        </Grid.RowDefinitions>
+        <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""Add starting point"" IsVisible=""false"" Grid.Row=""0"" />
+        <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""Cancel"" IsVisible=""false"" Grid.Row=""0""/>
+        <ListView x:Name=""{nameof(PART_ListViewStartingPoints)}"" ios:ListView.SeparatorStyle=""FullWidth"" RowHeight=""64"" Background=""{backgroundColor}"" IsVisible=""false"" Grid.Row=""1"">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -126,16 +120,26 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Frame x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"">
+
+    </Grid>
+    <Grid x:Name=""{nameof(PART_RunContainer)}"" Grid.Row=""2"">
+        <Grid.RowDefinitions>
+            <RowDefinition Height=""Auto"" />
+            <RowDefinition Height=""*"" />
+            <RowDefinition Height=""Auto"" />
+        </Grid.RowDefinitions>
+        <Frame x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""Not enough starting points. Use the 'Configure' section to add starting points."" TextColor=""{foregroundColor}""  />
         </Frame>
-        <Frame x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"">
+        <Frame x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""There are more starting points than required for the selected trace configuration."" TextColor=""{foregroundColor}""  />
         </Frame>
-        <Frame x:Name=""{nameof(PART_DuplicateTraceWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"">
+        <Frame x:Name=""{nameof(PART_DuplicateTraceWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
             <Label Text=""The selected trace configuration has already been run with the selected starting points."" TextColor=""{foregroundColor}""  />
         </Frame>
-        <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""Run Trace"" IsVisible=""false"" />
+        <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""Run Trace"" IsVisible=""false"" Grid.Row=""2"" />
+    </Grid>
+    <Grid x:Name=""{nameof(PART_ViewContainer)}"" Grid.Row=""2"">
         <Frame x:Name=""{nameof(PART_NoResultsWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"">
             <Label Text=""No results."" TextColor=""{foregroundColor}""  />
         </Frame>
@@ -207,7 +211,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
         </Grid>
-    </StackLayout>
+    </Grid>
     <Frame x:Name=""{nameof(PART_ActivityIndicator)}"" IsVisible=""false"" Grid.RowSpan=""3"" VerticalOptions=""FillAndExpand"" HorizontalOptions=""FillAndExpand"" Background=""{backgroundColor}"" HasShadow=""False"" CornerRadius=""0"" BorderColor=""{backgroundColor}"">
         <StackLayout Spacing=""8"" VerticalOptions=""Center"" HorizontalOptions=""CenterAndExpand"">
             <ActivityIndicator IsRunning=""True"" Color=""{{AppThemeBinding Light=#007AC2,Dark=#009AF2}}"" />
@@ -216,7 +220,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
     </Frame>
 </Grid>
 </ControlTemplate>";
-            DefaultControlTemplate = Extensions.LoadFromXaml(new ControlTemplate(), template);
+            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
         }
     }
 }
