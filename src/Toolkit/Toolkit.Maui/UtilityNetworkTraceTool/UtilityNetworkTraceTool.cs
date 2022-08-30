@@ -256,20 +256,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 PART_RunContainer?.SetValue(IsVisibleProperty, false);
                 PART_SelectContainer?.SetValue(IsVisibleProperty, false);
                 PART_ViewContainer?.SetValue(IsVisibleProperty, false);
-                /*
-                PART_ListViewNetworks?.SetValue(IsVisibleProperty, false);
-                PART_LabelNetworks?.SetValue(IsVisibleProperty, false);
-                PART_ListViewTraceTypes?.SetValue(IsVisibleProperty, false);
-                PART_LabelTraceTypes?.SetValue(IsVisibleProperty, false);
-                PART_ButtonAddStartingPoint?.SetValue(IsVisibleProperty, false);
-                PART_ListViewStartingPoints?.SetValue(IsVisibleProperty, false);
-                PART_ButtonRunTrace?.SetValue(IsVisibleProperty, false);
-                PART_GridResultsDisplay?.SetValue(View.IsVisibleProperty, false);
-                PART_ButtonCancelAddStartingPoint?.SetValue(IsVisibleProperty, false);
-                PART_ExtraStartingPointsWarning?.SetValue(IsVisibleProperty, false);
-                PART_NeedMoreStartingPointsWarning?.SetValue(IsVisibleProperty, false);
-                PART_DuplicateTraceWarning?.SetValue(IsVisibleProperty, false);
-                */
                 return;
             }
             PART_ConfigureContainer?.SetValue(IsVisibleProperty, false);
