@@ -19,7 +19,7 @@
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
       <EmbeddedResource Include="Assets\BasemapDark.png" />
       <EmbeddedResource Include="Assets\BasemapLight.png" />
-      <EmbeddedResource Include="Assets\calcite-ui-icons-24.ttf" />
+      <MauiFont Include="Resources\Fonts\calcite-ui-icons-24.ttf" />
       <EmbeddedResource Include="Assets\caret-down-small.png" />
       <EmbeddedResource Include="Assets\caret-down.png" />
       <EmbeddedResource Include="Assets\pin-tear-small.png" />
