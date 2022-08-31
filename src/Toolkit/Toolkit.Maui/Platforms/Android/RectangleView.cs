@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __ANDROID__
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -118,4 +117,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         }
     }
 }
-#endif

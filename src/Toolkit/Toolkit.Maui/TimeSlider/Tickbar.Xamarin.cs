@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if MAUI
+#if __IOS__ || __ANDROID__
 
 using System.Collections.Generic;
 using System.Linq;
@@ -87,7 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if __IOS__
                         var tick = tickContainer.Subviews.OfType<RectangleView>().FirstOrDefault();
 #elif __ANDROID__
-                        var tick = tickContainer is ViewGroup group ? group.GetChildren().OfType<View>().LastOrDefault() : tickContainer;
+                        var tick = tickContainer is ViewGroup group ? group.GetChildren().OfType<Android.Views.View>().LastOrDefault() : tickContainer;
 #endif
                         tick?.SetBackgroundFill(value);
                     }

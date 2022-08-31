@@ -13,7 +13,6 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Android.Content;
@@ -27,12 +26,17 @@ using Android.Support.Constraints;
 #endif
 using Android.Util;
 using Android.Views;
+using View = Android.Views.View;
+using Button = Android.Widget.Button;
 using Android.Widget;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.Primitives;
 using Esri.ArcGISRuntime.Toolkit.Maui;
-using Esri.ArcGISRuntime.Toolkit.Maui.Platform.Android;
-using Esri.ArcGISRuntime.Toolkit.Properties;
+//using Esri.ArcGISRuntime.Toolkit.Properties;
+using Color = Android.Graphics.Color;
+using RectF = Android.Graphics.RectF;
+using Size = Android.Util.Size;
+using ViewExtensions = Esri.ArcGISRuntime.Toolkit.Internal.ViewExtensions;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {

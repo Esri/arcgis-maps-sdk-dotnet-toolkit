@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if XAMARIN
+#if __IOS__ || __ANDROID__
 
 using System;
 using System.Collections.Generic;
@@ -24,6 +24,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 #if __IOS__
 using Color = UIKit.UIColor;
 #elif __ANDROID__
+using Color = Android.Graphics.Color;
 using Android.Graphics;
 #endif
 

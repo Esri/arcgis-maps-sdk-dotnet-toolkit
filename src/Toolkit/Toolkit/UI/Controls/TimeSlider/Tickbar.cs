@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if WPF || WINDOWS_XAML || __IOS__ || __ANDROID__
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ using FrameworkElement = UIKit.UIView;
 using Rect = CoreGraphics.CGRect;
 using Size = CoreGraphics.CGSize;
 using UIElement = UIKit.UIView;
+using nfloat = System.Runtime.InteropServices.NFloat;
+using ViewExtensions = Esri.ArcGISRuntime.Toolkit.Internal.ViewExtensions;
 #elif __ANDROID__
 using System.Drawing;
 using Android.Content;
@@ -39,6 +42,7 @@ using FrameworkElement = Android.Views.View;
 using Rect = Android.Graphics.RectF;
 using Size = Android.Util.SizeF;
 using UIElement = Android.Views.View;
+using ViewExtensions = Esri.ArcGISRuntime.Toolkit.Internal.ViewExtensions;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -444,3 +448,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
+#endif

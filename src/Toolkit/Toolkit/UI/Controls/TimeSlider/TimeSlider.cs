@@ -13,7 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-
+#if WPF || WINDOWS_XAML || __IOS__ || __ANDROID__
 // Implementation adapted and enhanced from https://github.com/Esri/arcgis-toolkit-sl-wpf
 using System;
 using System.Collections.Generic;
@@ -30,6 +30,9 @@ using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
 #if WINDOWS_XAML
+using GeoView = Esri.ArcGISRuntime.UI.Controls.GeoView;
+using MapView = Esri.ArcGISRuntime.UI.Controls.MapView;
+using SceneView = Esri.ArcGISRuntime.UI.Controls.SceneView;
 using Size = Windows.Foundation.Size;
 using Rect = Windows.Foundation.Rect;
 using Key = Windows.System.VirtualKey;
@@ -48,6 +51,12 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
+#endif
+#if MAUI
+using GeoView = Esri.ArcGISRuntime.Maui.GeoView;
+using MapView = Esri.ArcGISRuntime.Maui.MapView;
+using SceneView = Esri.ArcGISRuntime.Maui.SceneView;
+using Size = System.Drawing.Size;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -73,7 +82,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Primitives.Tickbar? Tickmarks;
 #pragma warning restore SX1309 // Field names must begin with underscore
 #pragma warning restore SA1306 // Field names must begin with lower-case letter
+        #if MAUI
+        private IDispatcherTimer _playTimer;
+        #else
         private DispatcherTimer _playTimer;
+        #endif
         private TimeExtent? _currentValue;
         private double _totalHorizontalChange;
         private TimeExtent? _horizontalChangeExtent;
@@ -120,7 +133,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         [MemberNotNull(nameof(_playTimer))]
         private void Initialize()
         {
+            #if MAUI
+            _playTimer = Microsoft.Maui.Dispatching.Dispatcher.GetForCurrentThread().CreateTimer();
+            _playTimer.Interval = PlaybackInterval;
+            #else
             _playTimer = new DispatcherTimer() { Interval = PlaybackInterval };
+            #endif
             _playTimer.Tick += PlayTimer_Tick;
         }
 
@@ -1780,3 +1798,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endregion
     }
 }
+#endif

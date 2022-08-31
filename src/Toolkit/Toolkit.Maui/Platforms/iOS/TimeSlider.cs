@@ -14,13 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __IOS__
 
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoreGraphics;
+using nfloat = System.Runtime.InteropServices.NFloat;
 using Foundation;
 using UIKit;
 
@@ -600,5 +600,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endregion
     }
 }
-
-#endif

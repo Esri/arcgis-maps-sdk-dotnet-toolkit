@@ -14,7 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __ANDROID__
 using System;
 using System.Collections.Generic;
 using Android.Content;
@@ -27,6 +26,9 @@ using Esri.ArcGISRuntime.Toolkit.UI;
 using Microsoft.Maui.ApplicationModel.Communication;
 using Size = Android.Util.Size;
 using View = Android.Views.View;
+using Color = Android.Graphics.Color;
+using SizeF = Android.Util.SizeF;
+using ViewExtensions = Esri.ArcGISRuntime.Toolkit.Internal.ViewExtensions;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -361,4 +363,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-#endif

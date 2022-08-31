@@ -39,17 +39,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)SearchView\SearchView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\LoopMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\PlaybackDirection.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\Tickbar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\Tickbar.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\Tickbar.Xamarin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeExtentChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeExtentConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSlider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSlider.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSlider.Xamarin.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSliderLabelMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\StartingPointListView.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\ToolkitColorPalette.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\UtilityNetworkTraceTool.Appearance.cs" />

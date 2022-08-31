@@ -14,8 +14,6 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if __IOS__
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +22,7 @@ using System.Text;
 using CoreGraphics;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.UI;
-using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
+using nfloat = System.Runtime.InteropServices.NFloat;
 using UIKit;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -272,5 +270,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-
-#endif
