@@ -40,6 +40,7 @@ using Key = Windows.System.VirtualKey;
 using System.Drawing;
 using Brush = UIKit.UIColor;
 using TextBlock = UIKit.UILabel;
+using Size = System.Drawing.Size;
 #elif __ANDROID__
 using System.Drawing;
 using Android.Content;
@@ -56,7 +57,6 @@ using System.Windows.Threading;
 using GeoView = Esri.ArcGISRuntime.Maui.GeoView;
 using MapView = Esri.ArcGISRuntime.Maui.MapView;
 using SceneView = Esri.ArcGISRuntime.Maui.SceneView;
-using Size = System.Drawing.Size;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
