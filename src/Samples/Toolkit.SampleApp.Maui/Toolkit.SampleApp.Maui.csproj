@@ -48,10 +48,8 @@
     <!-- TODO: -->
     <Compile Remove="Samples\LayerLegendSample.xaml.cs" />
     <Compile Remove="Samples\PopupViewerSample.xaml.cs" />
-    <Compile Remove="Samples\TimeSliderSample.xaml.cs" />
     <MauiXaml Remove="Samples\LayerLegendSample.xaml" />
     <MauiXaml Remove="Samples\PopupViewerSample.xaml" />
-    <MauiXaml Remove="Samples\TimeSliderSample.xaml" />
 
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.4" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
   </ItemGroup>

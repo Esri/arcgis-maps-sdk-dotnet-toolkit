@@ -19,7 +19,11 @@ using System;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.UI
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
+namespace Esri.ArcGISRuntime.Toolkit
+#endif
 {
 #if !NETSTANDARD2_0
     /// <summary>

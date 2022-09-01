@@ -29,10 +29,10 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI.Controls;
-#if WINDOWS_XAML
 using GeoView = Esri.ArcGISRuntime.UI.Controls.GeoView;
 using MapView = Esri.ArcGISRuntime.UI.Controls.MapView;
 using SceneView = Esri.ArcGISRuntime.UI.Controls.SceneView;
+#if WINDOWS_XAML
 using Size = Windows.Foundation.Size;
 using Rect = Windows.Foundation.Rect;
 using Key = Windows.System.VirtualKey;
@@ -54,9 +54,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 #endif
 #if MAUI
-using GeoView = Esri.ArcGISRuntime.Maui.GeoView;
-using MapView = Esri.ArcGISRuntime.Maui.MapView;
-using SceneView = Esri.ArcGISRuntime.Maui.SceneView;
+using Esri.ArcGISRuntime.Toolkit.Maui;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
@@ -899,7 +897,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public IReadOnlyList<DateTimeOffset>? TimeSteps
         {
             get => TimeStepsImpl;
-            private set => TimeStepsImpl = value;
+            internal set => TimeStepsImpl = value;
         }
 
         private async void OnTimeStepsPropertyChanged()

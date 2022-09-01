@@ -1,4 +1,11 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Toolkit.Maui;
+using Esri.ArcGISRuntime.Toolkit.UI;
+#if WINDOWS
+using TimeExtentChangedEventArg = Esri.ArcGISRuntime.Toolkit.TimeExtentChangedEventArgs;
+#else
+using TimeExtentChangedEventArg = Esri.ArcGISRuntime.Toolkit.Maui.TimeExtentChangedEventArgs;
+#endif
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
@@ -18,17 +25,21 @@ namespace Toolkit.SampleApp.Maui.Samples
         {
             InitializeComponent();
             mapView.Map = this.Map;
+            #if WINDOWS || __IOS__ || __ANDROID__
             slider.CurrentExtentChanged += Slider_CurrentExtentChanged;
+            #endif
             LayerSelectionBox.ItemsSource = _namedLayers.Keys.ToList();
             LayerSelectionBox.SelectedIndex = 0;
             _ = HandleSelectionChanged();
             LayerSelectionBox.SelectedIndexChanged += LayerSelectionBox_SelectedIndexChanged;
         }
 
-        private void Slider_CurrentExtentChanged(object sender, TimeExtentChangedEventArgs e)
+        #if WINDOWS || __IOS__ || __ANDROID__
+        private void Slider_CurrentExtentChanged(object sender, TimeExtentChangedEventArg e)
         {
             mapView.TimeExtent = e.NewExtent;
         }
+        #endif
 
         private void LayerSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
         {

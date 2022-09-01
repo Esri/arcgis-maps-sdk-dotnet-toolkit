@@ -23,6 +23,7 @@ using CoreGraphics;
 using nfloat = System.Runtime.InteropServices.NFloat;
 using Foundation;
 using UIKit;
+using Esri.ArcGISRuntime.Toolkit.Maui;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {

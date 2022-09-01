@@ -14,7 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.UI
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
+namespace Esri.ArcGISRuntime.Toolkit
+#endif
 {
     /// <summary>
     /// Represents the display mode for time slider labels.
