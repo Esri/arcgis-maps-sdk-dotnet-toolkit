@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net6.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
-    <Description>ArcGIS Runtime Augmented Reality controls and utilities for Xamarin.Android and Xamarin.iOS apps.</Description>
-    <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial Augmented Reality AR 3D Xamarin Android iOS toolkit</PackageTags>
+    <Description>ArcGIS Runtime Augmented Reality controls and utilities for .NET Android and .NET iOS apps.</Description>
+    <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial Augmented Reality AR 3D .NET Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.ARToolkit</RootNamespace>
     <AssemblyName>Esri.ArcGISRuntime.ARToolkit</AssemblyName>
     <Configurations>Debug;Release</Configurations>
