@@ -155,9 +155,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Content = parentGrid;
         }
 
-        private void HandleBack_Clicked(object sender, EventArgs e) => _ff?.GoBack();
+        private void HandleBack_Clicked(object? sender, EventArgs e) => _ff?.GoBack();
 
-        private void HandleItem_Tapped(object sender, ItemTappedEventArgs e)
+        private void HandleItem_Tapped(object? sender, ItemTappedEventArgs e)
         {
             if (e.Item is FloorFacility newFacility && _ff != null)
             {
@@ -172,9 +172,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             _ff?.CloseBrowsing();
         }
 
-        private void HandleClose_Clicked(object sender, EventArgs e) => _ff?.CloseBrowsing();
+        private void HandleClose_Clicked(object? sender, EventArgs e) => _ff?.CloseBrowsing();
 
-        private void HandleSearchText_Changed(object sender, TextChangedEventArgs e)
+        private void HandleSearchText_Changed(object? sender, TextChangedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(_searchBar.Text))
             {

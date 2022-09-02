@@ -67,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
 #if WINDOWS_XAML
-        private ListView _suggestionList;
+        private ListView? _suggestionList;
 
         // UWP listview automatically selects first item when doing grouping; using this flag to be able to ignore that first selection.
         private bool _groupListSelectionFlag;
@@ -93,11 +93,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void SuggestionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SuggestionList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             if (_groupListSelectionFlag)
             {
-                _suggestionList.SelectedIndex = -1;
+                if (_suggestionList != null)
+                {
+                    _suggestionList.SelectedIndex = -1;
+                }
                 return;
             }
 
@@ -763,7 +766,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _groupListSelectionFlag = false;
         }
 
-        private List<SuggestionsGrouped> _groupedSuggestions;
+        private List<SuggestionsGrouped>? _groupedSuggestions;
 
         /// <summary>
         /// Gets the grouped list of suggestions.

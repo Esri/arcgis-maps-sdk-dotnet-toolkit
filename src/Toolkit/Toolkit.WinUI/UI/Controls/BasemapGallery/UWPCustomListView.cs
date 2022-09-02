@@ -34,8 +34,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     Source = bmgi,
                 };
 
-                (element as ListViewItem).SetBinding(IsEnabledProperty, isenabledBinding);
-                (element as ListViewItem).SetBinding(IsHitTestVisibleProperty, isenabledBinding);
+                (element as ListViewItem)?.SetBinding(IsEnabledProperty, isenabledBinding);
+                (element as ListViewItem)?.SetBinding(IsHitTestVisibleProperty, isenabledBinding);
             }
         }
     }

@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         static Tickbar()
         {
 #if WINDOWS_XAML
-            _defaultTickmarkTemplate = XamlReader.Load(_template) as DataTemplate;
+            _defaultTickmarkTemplate = (DataTemplate)XamlReader.Load(_template);
 #else
             System.IO.MemoryStream stream = new System.IO.MemoryStream(UTF8Encoding.Default.GetBytes(_template));
             _defaultTickmarkTemplate = (DataTemplate)XamlReader.Load(stream);

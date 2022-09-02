@@ -304,7 +304,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void Part_resultNamedTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void Part_resultNamedTextBox_TextChanged(object? sender, TextChangedEventArgs e)
         {
             if (_part_resultNamedTextBox?.Text is string newName)
             {
@@ -320,12 +320,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void Part_resetStartingPointsButton_Click(object sender, RoutedEventArgs e)
+        private void Part_resetStartingPointsButton_Click(object? sender, RoutedEventArgs e)
         {
             _controller.StartingPoints.Clear();
         }
 
-        private void Part_deleteAllResultsButton_Click(object sender, RoutedEventArgs e)
+        private void Part_deleteAllResultsButton_Click(object? sender, RoutedEventArgs e)
         {
             foreach (var result in _controller.Results)
             {
@@ -335,14 +335,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller.Results.Clear();
         }
 
-        private void Part_cancelTraceButton_Click(object sender, RoutedEventArgs e)
+        private void Part_cancelTraceButton_Click(object? sender, RoutedEventArgs e)
         {
             _identifyLayersCts?.Cancel();
             _controller._getFeaturesForElementsCts?.Cancel();
             _controller._traceCts?.Cancel();
         }
 
-        private async void Part_runTraceButton_Click(object sender, RoutedEventArgs e)
+        private async void Part_runTraceButton_Click(object? sender, RoutedEventArgs e)
         {
             try
             {
@@ -359,27 +359,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void Part_cancelAddStartingPointsButton_Click(object sender, RoutedEventArgs e)
+        private void Part_cancelAddStartingPointsButton_Click(object? sender, RoutedEventArgs e)
         {
             _controller.IsAddingStartingPoints = false;
         }
 
-        private void Part_addStartingPointsButton_Click(object sender, RoutedEventArgs e)
+        private void Part_addStartingPointsButton_Click(object? sender, RoutedEventArgs e)
         {
             _controller.IsAddingStartingPoints = true;
         }
 
-        private void Part_startingPointsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Part_startingPointsList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             _controller.SelectedStartingPoint = (sender as Selector)?.SelectedItem as StartingPointModel;
         }
 
-        private void Part_traceConfigurationsSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Part_traceConfigurationsSelector_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             _controller.SelectedTraceType = (sender as Selector)?.SelectedItem as UtilityNamedTraceConfiguration;
         }
 
-        private void Part_utilityNetworkSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Part_utilityNetworkSelector_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             _controller.SelectedUtilityNetwork = (sender as Selector)?.SelectedItem as UtilityNetwork;
         }

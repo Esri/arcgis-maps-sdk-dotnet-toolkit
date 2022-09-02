@@ -18,12 +18,12 @@ namespace Toolkit.SampleApp.Maui.Samples
             SampleOverview.GeoView = MyMapView;
         }
 
-        private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        private void Slider_ValueChanged(object? sender, ValueChangedEventArgs e)
         {
             MyMapView.SetViewpointRotationAsync(e.NewValue);
         }
 
-        private void ToggleViewClick(object sender, EventArgs e)
+        private void ToggleViewClick(object? sender, EventArgs e)
         {
             if (MyMapView.IsVisible == true)
             {
@@ -39,7 +39,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void ToggleModelClick(object sender, EventArgs e)
+        private void ToggleModelClick(object? sender, EventArgs e)
         {
             _mapToggle = !_mapToggle;
 
@@ -53,7 +53,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void ToggleSymbolsClick(object sender, EventArgs e)
+        private void ToggleSymbolsClick(object? sender, EventArgs e)
         {
             _symbolToggle = !_symbolToggle;
             if (_symbolToggle)

@@ -17,7 +17,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             ViewStyleCombobox.SelectedIndex = 0;
         }
 
-        private void ViewStyleCombobox_SelectedIndexChanged(object sender, EventArgs e)
+        private void ViewStyleCombobox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             switch (ViewStyleCombobox.SelectedIndex)
             {
@@ -30,7 +30,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private async void Button_Load_Portal(object sender, EventArgs e)
+        private async void Button_Load_Portal(object? sender, EventArgs e)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private async void Button_Load_AGOL(object sender, EventArgs e)
+        private async void Button_Load_AGOL(object? sender, EventArgs e)
         {
             try
             {
@@ -51,28 +51,28 @@ namespace Toolkit.SampleApp.Maui.Samples
             catch (Exception) { }
         }
 
-        private void Button_Switch_To_Map(object sender, EventArgs e)
+        private void Button_Switch_To_Map(object? sender, EventArgs e)
         {
             MySceneView.IsVisible = false;
             MyMapView.IsVisible = true;
             Gallery.GeoModel = MyMapView.Map;
         }
 
-        private void Button_Switch_To_Scene(object sender, EventArgs e)
+        private void Button_Switch_To_Scene(object? sender, EventArgs e)
         {
             MyMapView.IsVisible = false;
             MySceneView.IsVisible = true;
             Gallery.GeoModel = MySceneView.Scene;
         }
 
-        private void Button_Disconect_View(object sender, EventArgs e)
+        private void Button_Disconect_View(object? sender, EventArgs e)
         {
             MySceneView.IsVisible = false;
             MyMapView.IsVisible = false;
             Gallery.GeoModel = null;
         }
 
-        private async void Button_Add_Last(object sender, EventArgs e)
+        private async void Button_Add_Last(object? sender, EventArgs e)
         {
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
             item.Name = "With Thumbnail";
@@ -85,13 +85,13 @@ namespace Toolkit.SampleApp.Maui.Samples
             Gallery.AvailableBasemaps.Add(item2);
         }
 
-        private async void Button_Add_WGS84(object sender, EventArgs e)
+        private async void Button_Add_WGS84(object? sender, EventArgs e)
         {
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=1396c369fa3b44a2a5437f18412f8032")));
             Gallery.AvailableBasemaps.Add(item);
         }
 
-        private void Button_Remove_Last(object sender, EventArgs e)
+        private void Button_Remove_Last(object? sender, EventArgs e)
         {
             if (Gallery.AvailableBasemaps.Any())
             {
@@ -99,7 +99,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void Gallery_BasemapSelected(object sender, BasemapGalleryItem e)
+        private void Gallery_BasemapSelected(object? sender, BasemapGalleryItem e)
         {
             LastSelectedDateLabel.Text = DateTime.Now.ToLongTimeString();
         }

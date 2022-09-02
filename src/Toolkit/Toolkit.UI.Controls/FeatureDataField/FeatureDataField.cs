@@ -63,13 +63,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Refresh();
         }
 
-        private void ContentControl_GotFocus(object sender, RoutedEventArgs e)
+        private void ContentControl_GotFocus(object? sender, RoutedEventArgs e)
         {
             _focused = true;
             UpdateValidationState();
         }
 
-        private void ContentControl_LostFocus(object sender, RoutedEventArgs e)
+        private void ContentControl_LostFocus(object? sender, RoutedEventArgs e)
         {
             _focused = false;
             UpdateValidationState();
@@ -374,14 +374,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private static void OnTextBoxChanged(object sender, TextChangedEventArgs e)
+        private static void OnTextBoxChanged(object? sender, TextChangedEventArgs e)
         {
-            var textBox = (TextBox)sender;
-            var bindingExpression = textBox.GetBindingExpression(TextBox.TextProperty);
-            if (bindingExpression != null)
-            {
-                bindingExpression.UpdateSource();
-            }
+            (sender as TextBox)?.GetBindingExpression(TextBox.TextProperty).UpdateSource();
         }
 
         /// <summary>

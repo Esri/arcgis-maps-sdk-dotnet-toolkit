@@ -13,6 +13,7 @@
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
         <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
         <LangVersion>10</LangVersion>
+        <Nullable>annotations</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

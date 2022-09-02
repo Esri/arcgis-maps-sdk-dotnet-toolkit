@@ -272,13 +272,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void HandleAllButtonClick(object sender, RoutedEventArgs e) => SetTabSelection(2);
+        private void HandleAllButtonClick(object? sender, RoutedEventArgs e) => SetTabSelection(2);
 
-        private void HandleBackClick(object sender, RoutedEventArgs e) => SetTabSelection(0);
+        private void HandleBackClick(object? sender, RoutedEventArgs e) => SetTabSelection(0);
 
-        private void HandleCloseBrowseClick(object sender, RoutedEventArgs e) => IsBrowseOpen = false;
+        private void HandleCloseBrowseClick(object? sender, RoutedEventArgs e) => IsBrowseOpen = false;
 
-        private void HandleZoomButtonClick(object sender, RoutedEventArgs e) => _controller?.ForceZoomToSelection();
+        private void HandleZoomButtonClick(object? sender, RoutedEventArgs e) => _controller?.ForceZoomToSelection();
 
         private void HandleControllerPropertyChanges(object? sender, PropertyChangedEventArgs e)
         {
@@ -352,7 +352,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void HandleControlDrivenSiteSelection(object sender, SelectionChangedEventArgs e)
+        private void HandleControlDrivenSiteSelection(object? sender, SelectionChangedEventArgs e)
         {
             // Note: custom listview has special behavior so that selection change events are raised when the existing item is selected.
             if (e.AddedItems.Count > 0 && SelectedBrowseTab == 0)
@@ -361,7 +361,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void HandleControlDrivenFacilitySelection(object sender, SelectionChangedEventArgs e)
+        private void HandleControlDrivenFacilitySelection(object? sender, SelectionChangedEventArgs e)
         {
             // Note: custom listview has special behavior so that selection change events are raised when the existing item is selected.
             if (e.AddedItems.Count > 0)

@@ -25,12 +25,12 @@ namespace Toolkit.SampleApp.Maui.Samples
             LayerSelectionBox.SelectedIndexChanged += LayerSelectionBox_SelectedIndexChanged;
         }
 
-        private void Slider_CurrentExtentChanged(object sender, TimeExtentChangedEventArgs e)
+        private void Slider_CurrentExtentChanged(object? sender, TimeExtentChangedEventArgs e)
         {
             mapView.TimeExtent = e.NewExtent;
         }
 
-        private void LayerSelectionBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void LayerSelectionBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             _ = HandleSelectionChanged();
         }
@@ -47,7 +47,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             IsTimeAwareLabel.Text = layer.SupportsTimeFiltering ? "Yes" : "No";
         }
 
-        private void StepForward_Click(object sender, EventArgs e)
+        private void StepForward_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void StepBack_Click(object sender, EventArgs e)
+        private void StepBack_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void ConfigureIntervals_Click(object sender, EventArgs e)
+        private void ConfigureIntervals_Click(object? sender, EventArgs e)
         {
             try
             {

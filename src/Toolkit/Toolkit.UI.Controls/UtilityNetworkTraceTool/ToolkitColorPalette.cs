@@ -107,7 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         public static readonly DependencyProperty AvailableColorsProperty =
             DependencyProperty.Register(nameof(AvailableColors), typeof(IList<System.Drawing.Color>), typeof(ToolkitColorPalette), null);
 
-        public event EventHandler SelectionChanged;
+        public event EventHandler? SelectionChanged;
     }
 }
 #endif

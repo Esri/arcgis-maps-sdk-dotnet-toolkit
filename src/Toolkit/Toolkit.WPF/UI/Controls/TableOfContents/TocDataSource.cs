@@ -72,7 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        protected override void OnDocumentPropertyChanged(object sender, string? propertyName)
+        protected override void OnDocumentPropertyChanged(object? sender, string? propertyName)
         {
             if (propertyName == nameof(Map.Basemap))
             {

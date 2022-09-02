@@ -25,11 +25,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     [TemplatePart(Name = "PART_UnfilteredListView", Type = typeof(ListView))]
     internal class FilteringListView : ListView
     {
-        private TextBlock _placeholder;
-        private TextBox _searchBox;
-        private TextBlock _noResultsLabel;
-        private ListView _filteredListView;
-        private ListView _unfilteredListView;
+        private TextBlock? _placeholder;
+        private TextBox? _searchBox;
+        private TextBlock? _noResultsLabel;
+        private ListView? _filteredListView;
+        private ListView? _unfilteredListView;
 
         private bool _waitFlag;
 
@@ -47,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         private void HandleDPChange(DependencyObject o, DependencyProperty dp) => (o as FilteringListView)?.UpdateForCurrentState();
 
-        private void FilteringListView_SelectionChanged(object sender, SelectionChangedEventArgs e) => UpdateForCurrentState();
+        private void FilteringListView_SelectionChanged(object? sender, SelectionChangedEventArgs e) => UpdateForCurrentState();
 
         private void UpdateForCurrentState()
         {
@@ -135,7 +135,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         private async void HandleTextChanged()
         {
-            if (string.IsNullOrWhiteSpace(_searchBox.Text))
+            if (string.IsNullOrWhiteSpace(_searchBox?.Text))
             {
                 _placeholder?.SetValue(VisibilityProperty, Visibility.Visible);
             }
@@ -207,9 +207,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             UpdateForCurrentState();
         }
 
-        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => HandleTextChanged();
+        private void SearchBox_TextChanged(object? sender, TextChangedEventArgs e) => HandleTextChanged();
 
-        private void InnerListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void InnerListView_ItemClick(object? sender, ItemClickEventArgs e)
         {
             if (e.ClickedItem is object newobject)
             {

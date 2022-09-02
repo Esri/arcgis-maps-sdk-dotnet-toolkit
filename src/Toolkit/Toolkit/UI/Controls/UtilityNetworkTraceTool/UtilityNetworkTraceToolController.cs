@@ -535,7 +535,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             var calloutDefinition = new CalloutDefinition(selectedStartingPoint.StartingPoint.NetworkSource.Name, selectedStartingPoint.StartingPoint.AssetGroup.Name);
             try
             {
-                calloutDefinition.Icon = await selectedStartingPoint.Symbol.CreateSwatchAsync();
+                calloutDefinition.Icon = selectedStartingPoint.Symbol is null ? null : await selectedStartingPoint.Symbol.CreateSwatchAsync();
             }
             catch (Exception)
             {

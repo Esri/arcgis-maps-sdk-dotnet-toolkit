@@ -13,7 +13,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
         }
 
-        private async void Button_Add_Item(object sender, EventArgs e)
+        private async void Button_Add_Item(object? sender, EventArgs e)
         {
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
             item.Name = "With Thumbnail";
@@ -26,7 +26,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             Gallery.AvailableBasemaps.Add(item2);
         }
 
-        private void Button_Remove_Item(object sender, EventArgs e)
+        private void Button_Remove_Item(object? sender, EventArgs e)
         {
             if (Gallery.AvailableBasemaps.Any())
             {
