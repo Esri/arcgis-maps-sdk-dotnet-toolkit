@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
         public TableOfContentsSample()
         {
             InitializeComponent();
-            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            Map map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"))
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
             };
@@ -39,15 +39,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.ToC
             if (tocItem.Content is Mapping.Basemap)
             {
                 var item = new MenuItem() { Header = "Imagery" };
-                item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateImagery();
+                item.Click += (s, e) => mapView.Map.Basemap = new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a"));
                 args.MenuItems.Add(item);
 
                 item = new MenuItem() { Header = "Streets" };
-                item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateStreetsVector();
+                item.Click += (s, e) => mapView.Map.Basemap = new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405"));
                 args.MenuItems.Add(item);
 
                 item = new MenuItem() { Header = "OpenStreetMap" };
-                item.Click += (s, e) => mapView.Map.Basemap = Basemap.CreateOpenStreetMap();
+                item.Click += (s, e) => mapView.Map.Basemap = new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=b834a68d7a484c5fb473d4ba90d35e71"));
                 args.MenuItems.Add(item);
 
             }

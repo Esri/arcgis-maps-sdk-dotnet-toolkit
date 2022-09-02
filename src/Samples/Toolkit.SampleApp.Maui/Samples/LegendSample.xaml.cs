@@ -15,7 +15,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private Map CreateMap()
         {
-            Map map = new Map(Basemap.CreateLightGrayCanvasVector())
+            Map map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"))
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-178, 17.8, -65, 71.4, SpatialReference.Create(4269)))
             };

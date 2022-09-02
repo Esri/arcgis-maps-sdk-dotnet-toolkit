@@ -19,7 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.FeatureDataField
         {
             this.InitializeComponent();
             overlay.Visibility = Visibility.Collapsed;
-            Map map = new Map(Basemap.CreateLightGrayCanvasVector());
+            Map map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
             map.OperationalLayers.Add(new FeatureLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0")));
             mapView.Map = map;
         }
