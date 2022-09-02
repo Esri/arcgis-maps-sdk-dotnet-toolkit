@@ -28,6 +28,13 @@
       <EmbeddedResource Include="Assets\search.png" />
       <EmbeddedResource Include="Assets\x-small.png" />
       <EmbeddedResource Include="Assets\x.png" />
+      <EmbeddedResource Include="Assets\NextPreviousFill.png" />
+      <EmbeddedResource Include="Assets\NextPreviousOutline.png" />
+      <EmbeddedResource Include="Assets\PauseFill.png" />
+      <EmbeddedResource Include="Assets\PauseOutline.png" />
+      <EmbeddedResource Include="Assets\TriangleOutline.png" />
+      <EmbeddedResource Include="Assets\TriangleFill.png" />
+      <EmbeddedResource Include="Assets\Thumb.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -44,6 +51,15 @@
       <ProjectReference Include="..\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Assets\NextPreviousFill.png" />
+      <None Remove="Assets\NextPreviousOutline.png" />
+      <None Remove="Assets\PauseFill.png" />
+      <None Remove="Assets\PauseOutline.png" />
+      <None Remove="Assets\TriangleOutline.png" />
+      <None Remove="Assets\TriangleFill.png" />
+      <None Remove="Assets\Thumb.png" />
+    </ItemGroup>
     <Import Project="..\..\CommonProperties.targets" />
     <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
 

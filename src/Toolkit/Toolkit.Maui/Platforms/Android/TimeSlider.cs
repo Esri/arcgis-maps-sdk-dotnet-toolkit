@@ -32,20 +32,22 @@ using Android.Widget;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.Primitives;
 using Esri.ArcGISRuntime.Toolkit.Maui;
-//using Esri.ArcGISRuntime.Toolkit.Properties;
 using Color = Android.Graphics.Color;
 using RectF = Android.Graphics.RectF;
 using Size = Android.Util.Size;
 using ViewExtensions = Esri.ArcGISRuntime.Toolkit.Internal.ViewExtensions;
 using Android.Content.Res;
 using Android.Graphics.Drawables;
+using System.Reflection;
+using ShapeDrawable = Android.Graphics.Drawables.ShapeDrawable;
+using AndroidX.CoordinatorLayout.Widget;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider")]
     [DisplayName("Time Slider")]
     [Category("ArcGIS Runtime Controls")]
-    public partial class TimeSlider : ConstraintLayout, View.IOnTouchListener
+    public partial class TimeSlider : CoordinatorLayout, View.IOnTouchListener
     {
         private Context _context;
 #pragma warning disable SX1309 // Names match elements in template
@@ -82,6 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public TimeSlider(Context? context)
             : base(context)
         {
+            _context = context;
             InitializeImpl();
             Initialize();        }
 
@@ -100,60 +103,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void InitializeImpl()
         {
-            if (DesignTime.IsDesignMode)
-            {
-                // Add placeholder text
-                SetBackgroundColor(Color.LightGray);
-                var designTimePlaceholderText = new TextView(Context)
-                {
-                    Text = "Time Slider",
-                    TextSize = 16,
-                    Id = 123456789,
-                };
-                designTimePlaceholderText.SetTextColor(Color.Black);
-                AddView(designTimePlaceholderText);
-
-                // Center text by constraining it to the edges of the parent view
-                var constraintSet = new ConstraintSet();
-                constraintSet.Clone(this);
-                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.Start, ConstraintSet.ParentId, ConstraintSet.Start);
-                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.End, ConstraintSet.ParentId, ConstraintSet.End);
-                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.Top, ConstraintSet.ParentId, ConstraintSet.Top, 15);
-                constraintSet.Connect(designTimePlaceholderText.Id, ConstraintSet.Bottom, ConstraintSet.ParentId, ConstraintSet.Bottom, 15);
-                constraintSet.ApplyTo(this);
-
-#pragma warning disable CS8774 // Member must have a non-null value when exiting.
-                return;
-#pragma warning restore CS8774 // Member must have a non-null value when exiting.
-            }
-
             //var inflater = LayoutInflater.FromContext(Context!);
             //inflater?.Inflate(Resource.Layout.TimeSlider, this, true);
             CreateUI();
-
-            /*
-            SliderTrack = FindViewById<View>(Resource.Id.SliderTrack);
-            SliderTrackOutline = FindViewById<View>(Resource.Id.SliderTrackOutline);
-            FullExtentStartTimeLabel = FindViewById<TextView>(Resource.Id.FullExtentStartTimeLabel);
-            FullExtentEndTimeLabel = FindViewById<TextView>(Resource.Id.FullExtentEndTimeLabel);
-            MinimumThumb = FindViewById<View>(Resource.Id.MinThumb);
-            MaximumThumb = FindViewById<View>(Resource.Id.MaxThumb);
-            MinimumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentStartTimeLabel);
-            MaximumThumbLabel = FindViewById<TextView>(Resource.Id.CurrentExtentEndTimeLabel);
-            PinnedMinimumThumb = FindViewById<View>(Resource.Id.PinnedMinThumb);
-            PinnedMaximumThumb = FindViewById<View>(Resource.Id.PinnedMaxThumb);
-            HorizontalTrackThumb = FindViewById<View>(Resource.Id.CurrentExtentFill);
-            Tickmarks = FindViewById<Tickbar>(Resource.Id.Tickmarks);
-            PlayPauseButton = FindViewById<ToggleButton>(Resource.Id.PlayPauseButton);
-            PlayButtonOutline = FindViewById<View>(Resource.Id.PlayButtonOutline);
-            PauseButtonOutline = FindViewById<View>(Resource.Id.PauseButtonOutline);
-            NextButton = FindViewById<Button>(Resource.Id.NextButton);
-            PreviousButton = FindViewById<Button>(Resource.Id.PreviousButton);
-            NextButtonOutline = FindViewById<View>(Resource.Id.NextButtonOutline);
-            PreviousButtonOutline = FindViewById<View>(Resource.Id.PreviousButtonOutline);
-            _startTimeTickmark = FindViewById<View>(Resource.Id.FullExtentStartTimeTickmark);
-            _endTimeTickmark = FindViewById<View>(Resource.Id.FullExtentEndTimeTickmark);
-            */
 
             PositionTickmarks();
             ApplyLabelMode(LabelMode);
@@ -191,133 +143,155 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void CreateUI()
         {
             this.Id = GenerateViewId();
+            var root = new ConstraintLayout(_context);
+            root.LayoutParameters = new ViewGroup.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
+            root.Id = GenerateViewId();
+            AddView(root);
+
+            var trianglefill = BitmapDrawable.CreateFromStream(Assembly.GetAssembly(typeof(TimeSlider)).GetManifestResourceStream("Esri.ArcGISRuntime.Toolkit.Maui.Assets.TriangleFill.png"), "TriangleFill.png");
+            var triangleOutline = BitmapDrawable.CreateFromStream(Assembly.GetAssembly(typeof(TimeSlider)).GetManifestResourceStream("Esri.ArcGISRuntime.Toolkit.Maui.Assets.TriangleOutline.png"), "TriangleOutline.png");
+            var pauseFill = BitmapDrawable.CreateFromStream(Assembly.GetAssembly(typeof(TimeSlider)).GetManifestResourceStream("Esri.ArcGISRuntime.Toolkit.Maui.Assets.PauseFill.png"), "PauseFill.png");
+            var pauseOutline = BitmapDrawable.CreateFromStream(Assembly.GetAssembly(typeof(TimeSlider)).GetManifestResourceStream("Esri.ArcGISRuntime.Toolkit.Maui.Assets.PauseOutline.png"), "PauseOutline.png");
+            var nextPreviousOutline = BitmapDrawable.CreateFromStream(Assembly.GetAssembly(typeof(TimeSlider)).GetManifestResourceStream("Esri.ArcGISRuntime.Toolkit.Maui.Assets.NextPreviousOutline.png"), "NextPreviousOutline.png");
+            var nextPreviousFill = BitmapDrawable.CreateFromStream(Assembly.GetAssembly(typeof(TimeSlider)).GetManifestResourceStream("Esri.ArcGISRuntime.Toolkit.Maui.Assets.NextPreviousFill.png"), "NextPreviousFill.png");
+            var thumb = BitmapDrawable.CreateFromStream(Assembly.GetAssembly(typeof(TimeSlider)).GetManifestResourceStream("Esri.ArcGISRuntime.Toolkit.Maui.Assets.Thumb.png"), "Thumb.png");
+
+            var nextpreviousbutton = new StateListDrawable();
+            nextpreviousbutton.AddState(new[] { Android.Resource.Attribute.StateSelected, Android.Resource.Attribute.StatePressed, }, nextPreviousFill);
+            nextpreviousbutton.AddState(new int[] {}, nextPreviousFill);
 
             // PlayPauseButton
             PlayPauseButton = new ToggleButton(_context) { Id = GenerateViewId(), TextOn = "", TextOff = "" };
+            var playPauseBackground = new StateListDrawable();
+            playPauseBackground.AddState(new[] { Android.Resource.Attribute.StateChecked }, pauseFill);
+            playPauseBackground.AddState(new[] { -Android.Resource.Attribute.StateChecked }, trianglefill);
+            PlayPauseButton.Background = playPauseBackground;
             PlayPauseButton.LayoutParameters = new ViewGroup.LayoutParams(38.ToDips(Resources), 44.ToDips(Resources));
-            AddView(PlayPauseButton);
+            root.AddView(PlayPauseButton);
 
             // PlayButtonOutline
-            PlayButtonOutline = new View(_context) { Id = GenerateViewId() };
+            PlayButtonOutline = new View(_context) { Id = GenerateViewId(), Background = triangleOutline };
             PlayButtonOutline.LayoutParameters = new ViewGroup.LayoutParams(0, 0);
-            AddView(PlayButtonOutline);
+            root.AddView(PlayButtonOutline);
 
             // PauseButtonOutline
-            PauseButtonOutline = new View (_context) { Id = GenerateViewId(), Visibility = ViewStates.Gone };
+            PauseButtonOutline = new View (_context) { Id = GenerateViewId(), Visibility = ViewStates.Gone, Background = pauseOutline };
             PauseButtonOutline.LayoutParameters = new ViewGroup.LayoutParams(0, 0);
-            AddView(PauseButtonOutline);
+            root.AddView(PauseButtonOutline);
 
             // NextButton
-            NextButton = new Button(_context) { Id = GenerateViewId() };
-            PlayPauseButton.LayoutParameters = new LayoutParams(22.ToDips(Resources), 24.ToDips(Resources)) { LeftMargin = 10.ToDips(Resources)};
-            AddView(NextButton);
+            NextButton = new Button(_context) { Id = GenerateViewId(), Background = nextpreviousbutton };
+            NextButton.LayoutParameters = new LayoutParams(22.ToDips(Resources), 24.ToDips(Resources)) { LeftMargin = 10.ToDips(Resources)};
+            root.AddView(NextButton);
 
             // NextButtonOutline
-            NextButtonOutline = new View(_context) { Id = GenerateViewId() };
+            NextButtonOutline = new View(_context) { Id = GenerateViewId(), Background = nextPreviousOutline };
             NextButtonOutline.LayoutParameters = new ViewGroup.LayoutParams(0, 0);
-            AddView(NextButtonOutline);
+            root.AddView(NextButtonOutline);
 
             // PreviousButton
-            PreviousButton = new Button(_context) { Id = GenerateViewId(), Rotation = 180 };
-            PlayPauseButton.LayoutParameters = new LayoutParams(22.ToDips(Resources), 24.ToDips(Resources)) { RightMargin = 13.ToDips(Resources)};
-            AddView(PreviousButton);
+            PreviousButton = new Button(_context) { Id = GenerateViewId(), Rotation = 180, Background = nextpreviousbutton };
+            PreviousButton.LayoutParameters = new LayoutParams(22.ToDips(Resources), 24.ToDips(Resources)) { RightMargin = 13.ToDips(Resources)};
+            root.AddView(PreviousButton);
 
             // PreviousButtonOutline
-            PreviousButtonOutline = new View(_context) { Id = GenerateViewId(), Rotation = 180 };
+            PreviousButtonOutline = new View(_context) { Id = GenerateViewId(), Rotation = 180, Background = nextPreviousOutline };
             PreviousButtonOutline.LayoutParameters = new ViewGroup.LayoutParams(0, 0);
-            AddView(PreviousButtonOutline);
+            root.AddView(PreviousButtonOutline);
 
             // FullExtentStartTimeLabel
             FullExtentStartTimeLabel = new TextView(_context) { Id = GenerateViewId(), Text = "7/1/2012", Clickable = false, Focusable = false};
-            FullExtentStartTimeLabel.LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
-            AddView(FullExtentStartTimeLabel);
+            FullExtentStartTimeLabel.LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent) { TopMargin = 10.ToDips(Resources)};
+            root.AddView(FullExtentStartTimeLabel);
 
             // FullExtentStartGuide
             var fullExtentStartGuide = new Space(_context) { Id = GenerateViewId() };
             fullExtentStartGuide.LayoutParameters = new LayoutParams(2.ToDips(Resources), 1.ToDips(Resources));
-            AddView(fullExtentStartGuide);
+            root.AddView(fullExtentStartGuide);
 
             // FullExtentEndTimeLabel
             FullExtentEndTimeLabel = new TextView(_context) { Id = GenerateViewId(), Text = "7/12/2012", Clickable = false, Focusable = false };
             FullExtentEndTimeLabel.LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
-            AddView(FullExtentEndTimeLabel);
+            root.AddView(FullExtentEndTimeLabel);
 
             // FullExtentEndGuide
             var fullExtendEndGuide = new Space(_context) { Id = GenerateViewId() };
             fullExtendEndGuide.LayoutParameters = new LayoutParams(2.ToDips(Resources), 1.ToDips(Resources));
-            AddView(fullExtendEndGuide);
+            root.AddView(fullExtendEndGuide);
 
             // SliderTrackOutline
-            SliderTrackOutline = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.ParseColor("#5c5c5c")) };
-            SliderTrackOutline.LayoutParameters = new LayoutParams(0, 6.ToDips(Resources))
+            SliderTrackOutline = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.Yellow) };
+            SliderTrackOutline.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, 6.ToDips(Resources))
             {
                 LeftMargin = 0,
                 RightMargin = 0,
                 BottomMargin = 10.ToDips(Resources)
             };
-            AddView(SliderTrackOutline);
+            root.AddView(SliderTrackOutline);
 
             // SliderTrack
-            SliderTrack = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.ParseColor("#5c5c5c"))};
+            SliderTrack = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.Pink)};
             var m1 = 1.ToDips(Resources);
             SliderTrack.LayoutParameters = new LayoutParams(0, 0) { LeftMargin = m1, RightMargin = m1, TopMargin = m1, BottomMargin = m1};
-            AddView(SliderTrack);
+            root.AddView(SliderTrack);
 
             // FullExtentStartTimeTickmark
-            var fullExtentStartTimeTickmark = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.ParseColor("#5c5c5c")) };
+            var fullExtentStartTimeTickmark = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.PowderBlue) };
             fullExtentStartTimeTickmark.SetForegroundGravity(GravityFlags.Center);
             fullExtentStartTimeTickmark.LayoutParameters = new LinearLayout.LayoutParams(m1, 0) { BottomMargin = m1, Gravity = GravityFlags.Center };
-            AddView(fullExtentStartTimeTickmark);
+            root.AddView(fullExtentStartTimeTickmark);
 
             // FullExtentEndTimeTickmark
-            var fullExtentEndTimeTickmark = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.ParseColor("#5c5c5c")) };
+            var fullExtentEndTimeTickmark = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.PeachPuff) };
             fullExtentEndTimeTickmark.LayoutParameters = new LayoutParams(m1, 0) { BottomMargin = m1 };
-            AddView(fullExtentEndTimeTickmark);
+            root.AddView(fullExtentEndTimeTickmark);
             
             // Tickmarks
             Tickmarks = new Tickbar(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false };
             Tickmarks.LayoutParameters = new LayoutParams(0, LayoutParams.WrapContent);
-            AddView(Tickmarks);
+            root.AddView(Tickmarks);
 
             // ThumbGuideStart
-            var thumbGuideStart = new Space(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false };
+            var thumbGuideStart = new Space(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.DarkOliveGreen) };
             thumbGuideStart.LayoutParameters = new LayoutParams(14.ToDips(Resources), 0);
-            AddView(thumbGuideStart);
+            root.AddView(thumbGuideStart);
 
             // CurrentExtentFill
-            HorizontalTrackThumb = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.ParseColor("#5E97F6")) };
+            HorizontalTrackThumb = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = new ColorDrawable(Color.Red) };
             HorizontalTrackThumb.LayoutParameters = new LayoutParams(0, 0);
-            AddView(HorizontalTrackThumb);
+            root.AddView(HorizontalTrackThumb);
+
+            
 
             // MinThumb
-            MinimumThumb = new View (_context) { Id = GenerateViewId(), Clickable = false, Focusable = false };
+            MinimumThumb = new View (_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = thumb };
             MinimumThumb.LayoutParameters = new LayoutParams(18.ToDips(Resources), 18.ToDips(Resources));
-            AddView(MinimumThumb);
+            root.AddView(MinimumThumb);
 
             // PinnedMinThumb
             PinnedMinimumThumb = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Visibility = ViewStates.Invisible, Background = new ColorDrawable(Color.ParseColor("#5e97f6"))};
             PinnedMinimumThumb.LayoutParameters = new LayoutParams(7.ToDips(Resources), 13.ToDips(Resources));
-            AddView(PinnedMinimumThumb);
+            root.AddView(PinnedMinimumThumb);
 
             // MinThumbCenter
             var minThumbCenter = new Space(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false };
             minThumbCenter.LayoutParameters = new LayoutParams(m1, m1);
-            AddView(minThumbCenter);
+            root.AddView(minThumbCenter);
             
             // MaxThumb
-            MaximumThumb = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false };
+            MaximumThumb = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Background = thumb };
             MaximumThumb.LayoutParameters = new LayoutParams(18.ToDips(Resources), 18.ToDips(Resources));
-            AddView(MaximumThumb);
+            root.AddView(MaximumThumb);
 
             // PinnedMaxThumb
             PinnedMaximumThumb = new View(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Visibility = ViewStates.Invisible, Background = new ColorDrawable(Color.ParseColor("#5e97f6"))};
             PinnedMaximumThumb.LayoutParameters = new LayoutParams(7.ToDips(Resources), 13.ToDips(Resources));
-            AddView(PinnedMaximumThumb);
+            root.AddView(PinnedMaximumThumb);
 
             // MaxThumbCenter
             var maxThumbCenter = new Space(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false };
             maxThumbCenter.LayoutParameters = new LayoutParams(m1, m1);
-            AddView(maxThumbCenter);
+            root.AddView(maxThumbCenter);
 
             // CurrentExtentStartTimeLabel
             MinimumThumbLabel = new TextView(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Text = "7/4/2012" };
@@ -325,7 +299,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 BottomMargin = 10.ToDips(Resources)
             };
-            AddView(MinimumThumbLabel);
+            root.AddView(MinimumThumbLabel);
 
             // CurrentExtentEndTimeLabel
             MaximumThumbLabel = new TextView(_context) { Id = GenerateViewId(), Clickable = false, Focusable = false, Text = "7/8/2012" };
@@ -333,13 +307,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 BottomMargin = 10.ToDips(Resources)
             };
-            AddView(MaximumThumbLabel);
+            root.AddView(MaximumThumbLabel);
 
             // PlayPauseButton constraints
             ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.Connect(PlayPauseButton.Id, ConstraintSet.Bottom, this.Id, ConstraintSet.Bottom);
-            constraintSet.Connect(PlayPauseButton.Id, ConstraintSet.Start, this.Id, ConstraintSet.Start);
-            constraintSet.Connect(PlayPauseButton.Id, ConstraintSet.End, this.Id, ConstraintSet.End);
+            constraintSet.Clone(root);
+            constraintSet.Connect(PlayPauseButton.Id, ConstraintSet.Bottom, root.Id, ConstraintSet.Bottom);
+            constraintSet.Connect(PlayPauseButton.Id, ConstraintSet.Start, root.Id, ConstraintSet.Start);
+            constraintSet.Connect(PlayPauseButton.Id, ConstraintSet.End, root.Id, ConstraintSet.End);
             // PlayButtonOutline
             constraintSet.Connect(PlayButtonOutline.Id, ConstraintSet.Top, PlayPauseButton.Id, ConstraintSet.Top);
             constraintSet.Connect(PlayButtonOutline.Id, ConstraintSet.Bottom, PlayPauseButton.Id, ConstraintSet.Bottom);
@@ -370,21 +345,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             constraintSet.Connect(PreviousButtonOutline.Id, ConstraintSet.End, PreviousButton.Id, ConstraintSet.End);
             // FullExtentStartTimeLabel
             constraintSet.Connect(FullExtentStartTimeLabel.Id, ConstraintSet.Top, PlayPauseButton.Id, ConstraintSet.Top);
-            constraintSet.Connect(FullExtentStartTimeLabel.Id, ConstraintSet.Start, this.Id, ConstraintSet.Start);
+            constraintSet.Connect(FullExtentStartTimeLabel.Id, ConstraintSet.Start, root.Id, ConstraintSet.Start);
             // FullExtentStartGuide
             constraintSet.Connect(fullExtentStartGuide.Id, ConstraintSet.Start, FullExtentStartTimeLabel.Id, ConstraintSet.Start);
             constraintSet.Connect(fullExtentStartGuide.Id, ConstraintSet.End, FullExtentStartTimeLabel.Id, ConstraintSet.End);
             constraintSet.Connect(fullExtentStartGuide.Id, ConstraintSet.Bottom, FullExtentStartTimeLabel.Id, ConstraintSet.Top);
             // FullExtentEndTimeLabel
             constraintSet.Connect(FullExtentEndTimeLabel.Id, ConstraintSet.Top, PlayPauseButton.Id, ConstraintSet.Top);
-            constraintSet.Connect(FullExtentEndTimeLabel.Id, ConstraintSet.End, this.Id, ConstraintSet.End);
+            constraintSet.Connect(FullExtentEndTimeLabel.Id, ConstraintSet.End, root.Id, ConstraintSet.End);
             // FullExtentEndGuide
             constraintSet.Connect(fullExtendEndGuide.Id, ConstraintSet.Start, FullExtentEndTimeLabel.Id, ConstraintSet.Start);
             constraintSet.Connect(fullExtendEndGuide.Id, ConstraintSet.End, FullExtentEndTimeLabel.Id, ConstraintSet.End);
             constraintSet.Connect(fullExtendEndGuide.Id, ConstraintSet.Bottom, FullExtentEndTimeLabel.Id, ConstraintSet.Top);
             // SliderTrackOutline
             constraintSet.Connect(SliderTrackOutline.Id, ConstraintSet.Start, fullExtentStartGuide.Id, ConstraintSet.Start);
-            constraintSet.Connect(SliderTrackOutline.Id, ConstraintSet.End, fullExtendEndGuide.Id, ConstraintSet.End);
+            constraintSet.Connect(SliderTrackOutline.Id, ConstraintSet.End, this.Id, ConstraintSet.End);
             constraintSet.Connect(SliderTrackOutline.Id, ConstraintSet.Bottom, PlayPauseButton.Id, ConstraintSet.Top);
             // SliderTrack
             constraintSet.Connect(SliderTrack.Id, ConstraintSet.Start, SliderTrackOutline.Id, ConstraintSet.Start);
@@ -400,8 +375,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             constraintSet.Connect(fullExtentEndTimeTickmark.Id, ConstraintSet.Top, SliderTrackOutline.Id, ConstraintSet.Bottom);
             constraintSet.Connect(fullExtentEndTimeTickmark.Id, ConstraintSet.End, SliderTrackOutline.Id, ConstraintSet.End);
             // Tickmarks
-            constraintSet.Connect(Tickmarks.Id, ConstraintSet.Start, this.Id, ConstraintSet.Start);
-            constraintSet.Connect(Tickmarks.Id, ConstraintSet.End, this.Id, ConstraintSet.End);
+            constraintSet.Connect(Tickmarks.Id, ConstraintSet.Start, root.Id, ConstraintSet.Start);
+            constraintSet.Connect(Tickmarks.Id, ConstraintSet.End, root.Id, ConstraintSet.End);
             constraintSet.Connect(Tickmarks.Id, ConstraintSet.Bottom, SliderTrackOutline.Id, ConstraintSet.Top);
             // ThumbGuideStart
             constraintSet.Connect(thumbGuideStart.Id, ConstraintSet.End, SliderTrack.Id, ConstraintSet.Start);
@@ -412,7 +387,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             constraintSet.Connect(HorizontalTrackThumb.Id, ConstraintSet.Top, SliderTrack.Id, ConstraintSet.Top);
             constraintSet.Connect(HorizontalTrackThumb.Id, ConstraintSet.Bottom, SliderTrack.Id, ConstraintSet.Bottom);
             // MinThumb
-            constraintSet.Connect(MinimumThumb.Id, ConstraintSet.Start, this.Id, ConstraintSet.Start);
+            constraintSet.Connect(MinimumThumb.Id, ConstraintSet.Start, root.Id, ConstraintSet.Start);
             constraintSet.Connect(MinimumThumb.Id, ConstraintSet.Top, SliderTrack.Id, ConstraintSet.Top);
             constraintSet.Connect(MinimumThumb.Id, ConstraintSet.Bottom, SliderTrack.Id, ConstraintSet.Bottom);
             // PinnedMinThumb
@@ -426,7 +401,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             constraintSet.Connect(minThumbCenter.Id, ConstraintSet.Top, SliderTrack.Id, ConstraintSet.Top);
             constraintSet.Connect(minThumbCenter.Id, ConstraintSet.Bottom, SliderTrack.Id, ConstraintSet.Bottom);
             // MaxThumb
-            constraintSet.Connect(MaximumThumb.Id, ConstraintSet.Start, this.Id, ConstraintSet.Start);
+            constraintSet.Connect(MaximumThumb.Id, ConstraintSet.Start, root.Id, ConstraintSet.Start);
             constraintSet.Connect(MaximumThumb.Id, ConstraintSet.Top, SliderTrack.Id, ConstraintSet.Top);
             constraintSet.Connect(MaximumThumb.Id, ConstraintSet.Bottom, SliderTrack.Id, ConstraintSet.Bottom);
             // PinnedMaxThumb
@@ -441,12 +416,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             constraintSet.Connect(maxThumbCenter.Id, ConstraintSet.Bottom, SliderTrack.Id, ConstraintSet.Bottom);
             // CurrentExtentStartTimeLabel
             constraintSet.Connect(MinimumThumbLabel.Id, ConstraintSet.Bottom, minThumbCenter.Id, ConstraintSet.Top);
-            constraintSet.Connect(MinimumThumbLabel.Id, ConstraintSet.Start, this.Id, ConstraintSet.Start);
+            constraintSet.Connect(MinimumThumbLabel.Id, ConstraintSet.Start, root.Id, ConstraintSet.Start);
             // CurrentExtentEndTimeLabel
             constraintSet.Connect(MaximumThumbLabel.Id, ConstraintSet.Bottom, maxThumbCenter.Id, ConstraintSet.Top);
-            constraintSet.Connect(MaximumThumbLabel.Id, ConstraintSet.Start, this.Id, ConstraintSet.Start);
+            constraintSet.Connect(MaximumThumbLabel.Id, ConstraintSet.Start, root.Id, ConstraintSet.Start);
             // Apply all constraints
-            constraintSet.ApplyTo(this);
+            constraintSet.ApplyTo(root);
+            RequestLayout();
         }
 
         private void InvalidateMeasureAndArrange()
@@ -455,6 +431,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 UpdateTrackLayout(CurrentValidExtent);
             }
+            RequestLayout();
         }
 
         private Size GetDesiredSize(View view)

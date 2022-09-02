@@ -13,20 +13,20 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <esriUI:MapView
                 x:Name="mapView"
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.Column="1" />
             <esriTK:TimeSlider
                 x:Name="slider"
-                Grid.Row="1"
+                Grid.Row="0"
                 Grid.Column="0"
                 Grid.ColumnSpan="2" />
 
-            <StackLayout Grid.Row="0" Grid.Column="0">
+            <StackLayout Grid.Row="1" Grid.Column="0">
                 <Label Text="Choose Layer" />
                 <Picker x:Name="LayerSelectionBox" HorizontalOptions="FillAndExpand" />
                 <Grid>

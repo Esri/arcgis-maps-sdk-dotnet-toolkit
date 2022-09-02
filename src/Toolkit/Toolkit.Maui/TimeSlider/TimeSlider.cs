@@ -108,7 +108,7 @@ public class TimeSlider : View, ITimeSlider
     /// Identifies the <see cref="PlaybackInterval"/> bindable property.
     /// </summary>
     public static readonly BindableProperty PlaybackIntervalProperty =
-        BindableProperty.Create(nameof(PlaybackInterval), typeof(TimeSpan), typeof(TimeSlider), null, BindingMode.OneWay, null);
+        BindableProperty.Create(nameof(PlaybackInterval), typeof(TimeSpan), typeof(TimeSlider), TimeSpan.FromSeconds(1), BindingMode.OneWay, null);
 
     /// <summary>
     /// Gets or sets the PlaybackInterval for the compass.
