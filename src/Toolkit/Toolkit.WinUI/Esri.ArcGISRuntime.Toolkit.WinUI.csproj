@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetWindowsTargetFramework)</TargetFramework>
+	<Description>ArcGIS Runtime controls and utilities for Windows UI 3 (WinUI 3) apps.</Description>
+    <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D WinUI toolkit</PackageTags>
     <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
