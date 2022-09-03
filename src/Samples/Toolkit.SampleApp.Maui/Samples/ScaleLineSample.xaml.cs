@@ -9,7 +9,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 		public ScaleLineSample ()
 		{
 			InitializeComponent ();
-            mapView.Map = new Map(Basemap.CreateLightGrayCanvasVector());
+            mapView.Map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
         }
 	}
 }

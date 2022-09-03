@@ -8,7 +8,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.TimeSlider
 {
     public sealed partial class TimeSliderSample : Page
     {
-        public Map Map { get; } = new Map(Basemap.CreateLightGrayCanvas());
+        public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
 
         private Dictionary<string, Uri> _namedLayers = new Dictionary<string, Uri>
         {

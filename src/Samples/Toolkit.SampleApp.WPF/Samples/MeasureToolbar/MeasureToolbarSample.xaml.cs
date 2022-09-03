@@ -18,7 +18,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.MeasureToolbar
 
             // Builds a map with different types of layer and graphic that can be identified for measure.
 
-            var map = new Map(Basemap.CreateLightGrayCanvasVector());
+            var map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
 
             map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer")));
 

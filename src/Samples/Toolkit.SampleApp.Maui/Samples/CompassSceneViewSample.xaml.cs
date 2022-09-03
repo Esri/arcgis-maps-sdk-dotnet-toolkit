@@ -9,7 +9,7 @@ namespace Toolkit.SampleApp.Maui.Samples
         public CompassSceneViewSample()
         {
             InitializeComponent();
-            sceneView.Scene = new Scene(Basemap.CreateImagery());
+            sceneView.Scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
         }
     }
 }
