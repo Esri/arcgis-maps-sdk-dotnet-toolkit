@@ -164,7 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             });
 
             string template =
-$@"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
+$@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
 <Grid RowSpacing=""0"" ColumnSpacing=""0"" >
     <Grid.ColumnDefinitions>
