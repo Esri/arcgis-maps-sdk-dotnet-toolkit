@@ -8,7 +8,7 @@
         <Grid>
             <esriUI:MapView x:Name="mapView" />
 
-            <esriTK:ScaleLine Margin="20" VerticalOptions="Center"
+            <esriTK:ScaleLine Margin="20" VerticalOptions="End"
                     MapView="{x:Reference mapView}"/>
 
         </Grid>
