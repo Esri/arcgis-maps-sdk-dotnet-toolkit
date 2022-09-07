@@ -20,9 +20,12 @@ using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
-using Esri.ArcGISRuntime.Toolkit.UI;
 
+#if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
+namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     /// <summary>
     /// FloorFilter provides a browsing experience for floor-aware maps and scenes, and allows you to filter the view to show a single floor/level.
@@ -117,7 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void PART_BrowseButton_Clicked(object sender, EventArgs e)
+        private void PART_BrowseButton_Clicked(object? sender, EventArgs e)
         {
             if (AllSites?.Count > 1)
             {
@@ -177,7 +180,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void HandleZoomButtonClick(object sender, EventArgs e) => _controller?.ForceZoomToSelection();
+        private void HandleZoomButtonClick(object? sender, EventArgs e) => _controller?.ForceZoomToSelection();
 
         private void HandleControllerPropertyChanges(object? sender, PropertyChangedEventArgs e)
         {
@@ -262,7 +265,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void HandleControlDrivenFacilitySelection(object sender, ItemTappedEventArgs e)
+        private void HandleControlDrivenFacilitySelection(object? sender, ItemTappedEventArgs e)
         {
             Navigation.PopModalAsync();
         }

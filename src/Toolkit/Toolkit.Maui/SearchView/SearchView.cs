@@ -237,7 +237,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             SearchViewModel?.RepeatSearchHere();
         }
 
-        private void PART_SourcesView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private void PART_SourcesView_ItemTapped(object? sender, ItemTappedEventArgs e)
         {
             if (SearchViewModel == null)
             {
@@ -257,9 +257,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             UpdateVisibility();
         }
 
-        private void PART_RepeatButton_Clicked(object sender, EventArgs e) => SearchViewModel?.RepeatSearchHere();
+        private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => SearchViewModel?.RepeatSearchHere();
 
-        private void PART_SuggestionsView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void PART_SuggestionsView_ItemSelected(object? sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem is SearchSuggestion suggestion)
             {
@@ -269,7 +269,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void PART_ResultView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void PART_ResultView_ItemSelected(object? sender, SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItemIndex != -1 && SearchViewModel is SearchViewModel vm)
             {
@@ -278,7 +278,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void PART_SourceSelectButton_Clicked(object sender, EventArgs e)
+        private void PART_SourceSelectButton_Clicked(object? sender, EventArgs e)
         {
             _sourceSelectToggled = !_sourceSelectToggled;
 
@@ -290,7 +290,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             UpdateVisibility();
         }
 
-        private void PART_Entry_TextChanged(object sender, TextChangedEventArgs e)
+        private void PART_Entry_TextChanged(object? sender, TextChangedEventArgs e)
         {
             if (SearchViewModel != null)
             {
@@ -298,13 +298,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void PART_CancelButton_Clicked(object sender, EventArgs e)
+        private void PART_CancelButton_Clicked(object? sender, EventArgs e)
         {
             SearchViewModel?.CancelSearch();
             SearchViewModel?.ClearSearch();
         }
 
-        private void PART_SearchButton_Clicked(object sender, EventArgs e) => SearchViewModel?.CommitSearch();
+        private void PART_SearchButton_Clicked(object? sender, EventArgs e) => SearchViewModel?.CommitSearch();
 
         private async Task ConfigureForCurrentConfiguration()
         {

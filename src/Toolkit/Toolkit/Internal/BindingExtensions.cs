@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             if (binding != null)
             {
                 // Re-apply the binding
-                element.SetBinding(property, binding.Clone());
+                element?.SetBinding(property, binding.Clone());
             }
 #else
             element?.GetBindingExpression(property)?.UpdateTarget();

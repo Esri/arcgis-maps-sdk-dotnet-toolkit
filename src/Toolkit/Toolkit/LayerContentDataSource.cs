@@ -24,7 +24,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Toolkit.UI;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
 using Esri.ArcGISRuntime.Maui;
@@ -233,7 +232,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private void DocumentPropertyChanged(object sender, string? propertyName)
+        private void DocumentPropertyChanged(object? sender, string? propertyName)
         {
             if (propertyName == nameof(Mapping.Map.OperationalLayers))
             {
@@ -248,7 +247,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             OnDocumentPropertyChanged(sender, propertyName);
         }
 
-        protected virtual void OnDocumentPropertyChanged(object sender, string? propertyName)
+        protected virtual void OnDocumentPropertyChanged(object? sender, string? propertyName)
         {
         }
 

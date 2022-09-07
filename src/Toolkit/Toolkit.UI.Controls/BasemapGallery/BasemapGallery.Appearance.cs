@@ -148,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty GalleryViewStyleProperty =
             DependencyProperty.Register(nameof(GalleryViewStyle), typeof(BasemapGalleryViewStyle), typeof(BasemapGallery), new PropertyMetadata(BasemapGalleryViewStyle.Automatic, OnViewLayoutPropertyChanged));
 
-        private void BasemapGallerySizeChanged(object sender, SizeChangedEventArgs e) => SetNewStyle(e.NewSize.Width);
+        private void BasemapGallerySizeChanged(object? sender, SizeChangedEventArgs e) => SetNewStyle(e.NewSize.Width);
 
         private void SetNewStyle(double currentSize)
         {

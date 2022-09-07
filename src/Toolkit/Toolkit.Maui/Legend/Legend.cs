@@ -15,7 +15,6 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Toolkit.UI;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {

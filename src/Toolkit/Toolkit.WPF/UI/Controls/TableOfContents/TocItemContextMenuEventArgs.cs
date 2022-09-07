@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <seealso cref="TableOfContents.TocItemContextMenuOpening"/>
     public class TocItemContextMenuEventArgs : RoutedEventArgs
     {
-        internal TocItemContextMenuEventArgs(object source, ContextMenuEventArgs args, TocItem item, ContextMenu menu, ItemCollection menuItems)
+        internal TocItemContextMenuEventArgs(object? source, ContextMenuEventArgs args, TocItem item, ContextMenu menu, ItemCollection menuItems)
             : base(args.RoutedEvent, source)
         {
             Item = item;

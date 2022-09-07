@@ -25,7 +25,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Toolkit.UI;
 #if MAUI
 using Esri.ArcGISRuntime.Maui;
 #else

@@ -16,7 +16,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             MySearchView.GeoView = MyMapView;
         }
 
-        private void GeoViewConnection_Checked(object sender, CheckedChangedEventArgs e)
+        private void GeoViewConnection_Checked(object? sender, CheckedChangedEventArgs e)
         {
             if (e.Value)
             {
@@ -28,7 +28,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private async void AddDefaultLocator_Click(object sender, EventArgs e)
+        private async void AddDefaultLocator_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void RemoveLocator_Click(object sender, EventArgs e)
+        private void RemoveLocator_Click(object? sender, EventArgs e)
         {
             if (MySearchView.SearchViewModel?.Sources?.Count > 0)
             {
@@ -50,7 +50,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void SearchModePicker_SelectedIndexChanged(object sender, EventArgs e)
+        private void SearchModePicker_SelectedIndexChanged(object? sender, EventArgs e)
         {
             switch (SearchModePicker.SelectedIndex)
             {
@@ -66,7 +66,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void AddTestLocator_Click(object sender, EventArgs e)
+        private void AddTestLocator_Click(object? sender, EventArgs e)
         {
             MySearchView.SearchViewModel.Sources.Add(new TestSearchSource());
         }
