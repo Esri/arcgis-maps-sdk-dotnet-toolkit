@@ -152,9 +152,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private async Task EnsureLoaded()
         {
             await Locator.LoadAsync();
-
+#if MAUI
+            Stream? resourceStream = Assembly.GetAssembly(typeof(LocatorSearchSource))?.GetManifestResourceStream(
+                "Esri.ArcGISRuntime.Toolkit.Maui.Assets.pin-red.png");
+#else
             Stream? resourceStream = Assembly.GetAssembly(typeof(LocatorSearchSource))?.GetManifestResourceStream(
                 "Esri.ArcGISRuntime.Toolkit.EmbeddedResources.pin_red.png");
+#endif
 
             if (resourceStream != null)
             {

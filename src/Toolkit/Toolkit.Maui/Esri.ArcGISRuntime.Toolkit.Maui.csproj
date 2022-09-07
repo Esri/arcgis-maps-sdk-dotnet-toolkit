@@ -30,6 +30,7 @@
       <EmbeddedResource Include="Assets\search.png" />
       <EmbeddedResource Include="Assets\x-small.png" />
       <EmbeddedResource Include="Assets\x.png" />
+      <EmbeddedResource Include="Assets\pin-red.png" />
     </ItemGroup>
 
     <ItemGroup>
