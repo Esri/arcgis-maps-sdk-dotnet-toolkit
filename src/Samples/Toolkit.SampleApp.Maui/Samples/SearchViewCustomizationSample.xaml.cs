@@ -11,13 +11,30 @@ namespace Toolkit.SampleApp.Maui.Samples
     {
         public SearchViewCustomizationSample()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
             MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
             MySearchView.GeoView = MyMapView;
+            SearchModePicker.Items.Add("Automatic");
+            SearchModePicker.Items.Add("Single");
+            SearchModePicker.Items.Add("Multiple");
+            SearchModePicker.SelectedIndex = 0;
         }
 
         private void GeoViewConnection_Checked(object sender, CheckedChangedEventArgs e)
         {
+            // Guard against exception on iOS device
+            if (MySearchView == null || MyMapView == null)
+            {
+                return;
+            }
+
             if (e.Value)
             {
                 MySearchView.GeoView = MyMapView;
@@ -52,6 +69,11 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private void SearchModePicker_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Guard against exception on iOS device
+            if (MySearchView == null || MyMapView == null || SearchModePicker == null)
+            {
+                return;
+            }
             switch (SearchModePicker.SelectedIndex)
             {
                 case 0:

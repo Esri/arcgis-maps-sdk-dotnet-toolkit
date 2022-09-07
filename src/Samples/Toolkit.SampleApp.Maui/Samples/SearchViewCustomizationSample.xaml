@@ -49,14 +49,7 @@
                     <Label Text="Search Result Mode:" />
                     <Picker
                         x:Name="SearchModePicker"
-                        SelectedIndex="0"
-                        SelectedIndexChanged="SearchModePicker_SelectedIndexChanged">
-                        <Picker.Items>
-                            <x:String>Automatic</x:String>
-                            <x:String>Single</x:String>
-                            <x:String>Multiple</x:String>
-                        </Picker.Items>
-                    </Picker>
+                        SelectedIndexChanged="SearchModePicker_SelectedIndexChanged" />
                     <Label Text="Default Placeholder:" />
                     <Entry Text="{Binding Source={Reference MySearchView}, Path=SearchViewModel.DefaultPlaceholder, Mode=TwoWay}" />
                     <Label Text="No result message:" />
