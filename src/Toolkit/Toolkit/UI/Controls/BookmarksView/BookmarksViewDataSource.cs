@@ -338,7 +338,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             RunOnUIThread(() =>
             {
+#if MAUI && __IOS__
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+#else
                 CollectionChanged?.Invoke(this, args);
+#endif
                 OnPropertyChanged("Item[]");
                 if (args.Action != NotifyCollectionChangedAction.Move)
                 {
