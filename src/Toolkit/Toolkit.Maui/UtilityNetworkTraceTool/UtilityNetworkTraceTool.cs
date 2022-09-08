@@ -73,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             if (PART_ListViewStartingPoints != null)
             {
-                PART_ListViewStartingPoints.ItemSelected -= OnStartingPointSelected;
+                PART_ListViewStartingPoints.SelectionChanged -= OnStartingPointSelected;
                 PART_ListViewStartingPoints.ItemsSource = null;
             }
 
@@ -124,11 +124,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 PART_ButtonAddStartingPoint.Clicked += OnAddStartingPointClicked;
             }
 
-            if (GetTemplateChild(nameof(PART_ListViewStartingPoints)) is ListView startingPointListView)
+            if (GetTemplateChild(nameof(PART_ListViewStartingPoints)) is CollectionView startingPointListView)
             {
                 PART_ListViewStartingPoints = startingPointListView;
                 PART_ListViewStartingPoints.ItemsSource = _controller.StartingPoints;
-                PART_ListViewStartingPoints.ItemSelected += OnStartingPointSelected;
+                PART_ListViewStartingPoints.SelectionChanged += OnStartingPointSelected;
             }
 
             if (GetTemplateChild(nameof(PART_ButtonRunTrace)) is Button runTraceButton)
@@ -227,7 +227,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             _identifyLayersCts?.Cancel();
         }
 
-        private void OnStartingPointSelected(object sender, SelectedItemChangedEventArgs e) => _controller.SelectedStartingPoint = e.SelectedItem as StartingPointModel;
+        private void OnStartingPointSelected(object sender, SelectionChangedEventArgs e) => _controller.SelectedStartingPoint = e.CurrentSelection.FirstOrDefault() as StartingPointModel;
 
         private void OnTraceTypeSelected(object sender, EventArgs e)
         {

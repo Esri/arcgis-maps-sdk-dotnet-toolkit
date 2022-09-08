@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private Layout? PART_ConfigureContainer;
         private Button? PART_ButtonAddStartingPoint;
         private Button? PART_ButtonCancelAddStartingPoint;
-        private ListView? PART_ListViewStartingPoints;
+        private CollectionView? PART_ListViewStartingPoints;
 
         // Run section
         private Layout? PART_RunContainer;
@@ -96,30 +96,28 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
         </Grid.RowDefinitions>
         <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""Add starting point"" IsVisible=""false"" Grid.Row=""0"" />
         <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""Cancel"" IsVisible=""false"" Grid.Row=""0""/>
-        <ListView x:Name=""{nameof(PART_ListViewStartingPoints)}"" ios:ListView.SeparatorStyle=""FullWidth"" RowHeight=""64"" Background=""{backgroundColor}"" IsVisible=""false"" Grid.Row=""1"">
-            <ListView.ItemTemplate>
+        <CollectionView x:Name=""{nameof(PART_ListViewStartingPoints)}"" Background=""{backgroundColor}"" SelectionMode=""Single"" IsVisible=""false"" Grid.Row=""1"">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <Grid Padding=""4"">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height=""Auto"" />
-                                <RowDefinition Height=""Auto"" />
-                                <RowDefinition Height=""Auto"" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width=""40"" />
-                                <ColumnDefinition Width=""*"" />
-                                <ColumnDefinition Width=""40"" />
-                            </Grid.ColumnDefinitions>
-                            <esriTK:SymbolDisplay Symbol=""{{Binding Symbol}}"" Grid.RowSpan=""2"" />
-                            <Label Grid.Column=""1"" Text=""{{Binding StartingPoint.NetworkSource.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
-                            <Label Grid.Column=""1"" Grid.Row=""1"" Text=""{{Binding StartingPoint.AssetGroup.Name}}"" TextColor=""{foregroundColor}""  />
-                            <Button Grid.Column=""2"" Grid.RowSpan=""2"" Text=""X"" Command=""{{Binding DeleteCommand}}"" Padding=""2"" />
-                        </Grid>
-                    </ViewCell>
+                    <Grid Padding=""4"">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height=""Auto"" />
+                            <RowDefinition Height=""Auto"" />
+                            <RowDefinition Height=""Auto"" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=""40"" />
+                            <ColumnDefinition Width=""*"" />
+                            <ColumnDefinition Width=""40"" />
+                        </Grid.ColumnDefinitions>
+                        <esriTK:SymbolDisplay Symbol=""{{Binding Symbol}}"" Grid.RowSpan=""2"" />
+                        <Label Grid.Column=""1"" Text=""{{Binding StartingPoint.NetworkSource.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
+                        <Label Grid.Column=""1"" Grid.Row=""1"" Text=""{{Binding StartingPoint.AssetGroup.Name}}"" TextColor=""{foregroundColor}""  />
+                        <Button Grid.Column=""2"" Grid.RowSpan=""2"" Text=""X"" Command=""{{Binding DeleteCommand}}"" Padding=""2"" />
+                    </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
     </Grid>
     <Grid x:Name=""{nameof(PART_RunContainer)}"" Grid.Row=""2"">
