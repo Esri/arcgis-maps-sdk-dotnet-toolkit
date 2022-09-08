@@ -101,6 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetColumn(_closeButton, 2);
 
             _searchBar = new SearchBar { Placeholder = ff.SearchPlaceholder };
+            _searchBar.SetAppThemeColor(SearchBar.BackgroundColorProperty, Color.FromArgb("#F8F8F8"), Color.FromArgb("#353535"));
             Grid.SetRow(_searchBar, 1);
             Grid.SetColumnSpan(_searchBar, 3);
 
