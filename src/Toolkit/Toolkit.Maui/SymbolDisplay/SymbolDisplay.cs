@@ -137,7 +137,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private double GetScaleFactor() => Window?.DisplayDensity ?? 1d;
+        private double GetScaleFactor() => DeviceDisplay.Current.MainDisplayInfo.Density;
 
         private async void Refresh()
         {
