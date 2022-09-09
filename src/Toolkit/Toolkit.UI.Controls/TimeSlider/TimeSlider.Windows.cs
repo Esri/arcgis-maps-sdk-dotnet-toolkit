@@ -77,7 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SizeChanged += TimeSlider_SizeChanged;
         }
 
-        private void TimeSlider_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void TimeSlider_SizeChanged(object? sender, SizeChangedEventArgs e)
         {
             UpdateTrackLayout(CurrentValidExtent);
         }

@@ -56,7 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 
 #if WINDOWS_XAML
-        private void StartingPointListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void StartingPointListView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             HandleExternalSelectionChange(e);
         }
@@ -86,7 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 #endif
 
-        private void InnerListView_HandleSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void InnerListView_HandleSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             // Keep selection in sync with internal list view.
             foreach (var item in e.AddedItems)

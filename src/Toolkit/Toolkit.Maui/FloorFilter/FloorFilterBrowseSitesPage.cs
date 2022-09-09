@@ -144,7 +144,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Content = parentGrid;
         }
 
-        private void HandleListItem_Tapped(object sender, SelectionChangedEventArgs e)
+        private void HandleListItem_Tapped(object? sender, SelectionChangedEventArgs e)
         {
             if (_ff == null || !e.CurrentSelection.Any())
             {
@@ -164,9 +164,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             _filteredListView.SelectedItem = null;
         }
 
-        private void HandleAllSites_Clicked(object sender, EventArgs e) => _ff?.NavigateForward(new FloorFilterBrowseFacilitiesPage(_ff, true, true));
+        private void HandleAllSites_Clicked(object? sender, EventArgs e) => _ff?.NavigateForward(new FloorFilterBrowseFacilitiesPage(_ff, true, true));
 
-        private void HandleSearchText_Changed(object sender, TextChangedEventArgs e)
+        private void HandleSearchText_Changed(object? sender, TextChangedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(_searchBar.Text))
             {
@@ -193,6 +193,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void HandleClose_Clicked(object sender, EventArgs e) => _ff?.CloseBrowsing();
+        private void HandleClose_Clicked(object? sender, EventArgs e) => _ff?.CloseBrowsing();
     }
 }

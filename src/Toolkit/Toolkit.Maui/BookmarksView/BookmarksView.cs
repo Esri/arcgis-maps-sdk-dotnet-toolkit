@@ -182,7 +182,7 @@ public class BookmarksView : TemplatedView
     /// <summary>
     /// Handles selection on the underlying list view.
     /// </summary>
-    private void Internal_bookmarkSelected(object sender, SelectedItemChangedEventArgs e)
+    private void Internal_bookmarkSelected(object? sender, SelectedItemChangedEventArgs e)
     {
         if (e.SelectedItem is Bookmark bm)
         {

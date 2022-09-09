@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     public class StringFormatConverter : IValueConverter
     {
         /// <inheritdoc />
-        object IValueConverter.Convert(object value, Type targetType, object parameter, string language)
+        object? IValueConverter.Convert(object? value, Type targetType, object? parameter, string language)
         {
             if (value != null && parameter is string formatString)
             {

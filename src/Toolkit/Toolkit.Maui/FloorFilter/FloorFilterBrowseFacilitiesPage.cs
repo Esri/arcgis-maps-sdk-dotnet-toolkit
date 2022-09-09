@@ -187,9 +187,9 @@ $@"<ResourceDictionary xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" x
             Content = parentGrid;
         }
 
-        private void HandleBack_Clicked(object sender, EventArgs e) => _ff?.GoBack();
+        private void HandleBack_Clicked(object? sender, EventArgs e) => _ff?.GoBack();
 
-        private void HandleItem_Tapped(object sender, SelectionChangedEventArgs e)
+        private void HandleItem_Tapped(object? sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is FloorFacility newFacility && _ff != null)
             {
@@ -204,9 +204,9 @@ $@"<ResourceDictionary xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" x
             _ff?.CloseBrowsing();
         }
 
-        private void HandleClose_Clicked(object sender, EventArgs e) => _ff?.CloseBrowsing();
+        private void HandleClose_Clicked(object? sender, EventArgs e) => _ff?.CloseBrowsing();
 
-        private void HandleSearchText_Changed(object sender, TextChangedEventArgs e)
+        private void HandleSearchText_Changed(object? sender, TextChangedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(_searchBar.Text))
             {

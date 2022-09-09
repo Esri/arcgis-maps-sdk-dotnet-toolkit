@@ -44,7 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             _ = _controller.LoadFromDefaultPortal();
         }
 
-        private void HandleControllerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void HandleControllerPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
@@ -108,7 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void ListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListViewSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             if (ListView == null)
             {

@@ -14,7 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     /// <summary>
     /// Defines the selection modes for the FloorFilter.

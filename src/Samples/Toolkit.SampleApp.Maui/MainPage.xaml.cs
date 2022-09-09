@@ -8,7 +8,7 @@ public partial class MainPage : ContentPage
         SamplesList.ItemsSource = SampleDatasource.Current.Samples;
     }
 
-    private async void SamplesList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private async void SamplesList_ItemSelected(object? sender, SelectedItemChangedEventArgs e)
     {
         var sample = e.SelectedItem as Sample;
         if (sample != null)

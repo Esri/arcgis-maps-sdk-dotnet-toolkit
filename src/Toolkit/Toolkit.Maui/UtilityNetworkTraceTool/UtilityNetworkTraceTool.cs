@@ -220,16 +220,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             ApplySegmentLayout();
         }
 
-        private void PART_CancelWaitButton_Clicked(object sender, EventArgs e)
+        private void PART_CancelWaitButton_Clicked(object? sender, EventArgs e)
         {
             _controller?._traceCts?.Cancel();
             _controller?._getFeaturesForElementsCts?.Cancel();
             _identifyLayersCts?.Cancel();
         }
 
-        private void OnStartingPointSelected(object sender, SelectionChangedEventArgs e) => _controller.SelectedStartingPoint = e.CurrentSelection.FirstOrDefault() as StartingPointModel;
+        private void OnStartingPointSelected(object? sender, SelectionChangedEventArgs e) => _controller.SelectedStartingPoint = e.CurrentSelection.FirstOrDefault() as StartingPointModel;
 
-        private void OnTraceTypeSelected(object sender, EventArgs e)
+        private void OnTraceTypeSelected(object? sender, EventArgs e)
         {
             if (PART_ListViewTraceTypes?.SelectedItem is UtilityNamedTraceConfiguration config)
             {
@@ -237,9 +237,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void OnAddStartingPointCancelClicked(object sender, EventArgs e) => _controller.IsAddingStartingPoints = false;
+        private void OnAddStartingPointCancelClicked(object? sender, EventArgs e) => _controller.IsAddingStartingPoints = false;
 
-        private void OnSectionNavigated(object sender, PropertyChangedEventArgs e)
+        private void OnSectionNavigated(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(SegmentedControl.SelectedSegmentIndex))
             {
@@ -321,7 +321,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void PART_RunTraceButton_Clicked(object sender, EventArgs e)
+        private void PART_RunTraceButton_Clicked(object? sender, EventArgs e)
         {
             if (_controller.EnableTrace)
             {
@@ -335,9 +335,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void OnAddStartingPointClicked(object sender, EventArgs e) => _controller.IsAddingStartingPoints = !_controller.IsAddingStartingPoints;
+        private void OnAddStartingPointClicked(object? sender, EventArgs e) => _controller.IsAddingStartingPoints = !_controller.IsAddingStartingPoints;
 
-        private void PART_NetworksCollectionView_SelectionChanged(object sender, EventArgs e)
+        private void PART_NetworksCollectionView_SelectionChanged(object? sender, EventArgs e)
         {
             if (PART_ListViewNetworks?.SelectedItem is UtilityNetwork newSelection)
             {
@@ -345,14 +345,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void UtilityNetworks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void UtilityNetworks_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             PART_LabelNetworks?.SetValue(IsVisibleProperty, _controller.UtilityNetworks.Count > 1);
         }
 
-        private void StartingPoints_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => GeoView?.DismissCallout();
+        private void StartingPoints_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => GeoView?.DismissCallout();
 
-        private void Results_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void Results_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Reset && GeoView?.GraphicsOverlays is GraphicsOverlayCollection visualizedOverlays)
             {
@@ -412,7 +412,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private void Controller_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Controller_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {

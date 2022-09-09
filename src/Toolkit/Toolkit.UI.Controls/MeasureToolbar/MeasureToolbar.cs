@@ -364,10 +364,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="sender">Toggle button that raised click event.</param>
         /// <param name="e">Contains information or event data associated with routed event.</param>
-        private async void OnToggleMeasureMode(object sender, RoutedEventArgs e)
+        private async void OnToggleMeasureMode(object? sender, RoutedEventArgs e)
         {
-            var toggleButton = (ToggleButton)sender;
-            Mode = toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
+            var toggleButton = sender as ToggleButton;
+            Mode = toggleButton != null && toggleButton.IsChecked.HasValue && toggleButton.IsChecked.Value ?
                (toggleButton == _measureLengthButton ? MeasureToolbarMode.Line :
                toggleButton == _measureAreaButton ? MeasureToolbarMode.Area :
                toggleButton == _measureFeatureButton ? MeasureToolbarMode.Feature : MeasureToolbarMode.None) :
@@ -533,7 +533,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <param name="sender">Button that raised clicked event.</param>
         /// <param name="e">Contains information or event data associated with routed event.</param>
-        private void OnClear(object sender, RoutedEventArgs e)
+        private void OnClear(object? sender, RoutedEventArgs e)
         {
             if (Mode == MeasureToolbarMode.Line || Mode == MeasureToolbarMode.Area)
             {

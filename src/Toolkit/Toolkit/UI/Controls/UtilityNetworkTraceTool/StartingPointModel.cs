@@ -37,7 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// </summary>
     internal class StartingPointModel : IEquatable<StartingPointModel>
     {
-        private UtilityNetworkTraceToolController _controller;
+        private UtilityNetworkTraceToolController? _controller;
 
         internal StartingPointModel(UtilityNetworkTraceToolController controller, UtilityElement element, Graphic selectionGraphic, Feature feature, Envelope? zoomToExtent)
         {

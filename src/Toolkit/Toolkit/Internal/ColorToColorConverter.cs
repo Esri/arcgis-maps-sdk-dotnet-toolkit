@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     internal class ColorToColorConverter : IValueConverter
     {
-        object IValueConverter.Convert(object? value, Type targetType, object? parameter,
+        object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
 #if WINDOWS_XAML
             string language)
 #else

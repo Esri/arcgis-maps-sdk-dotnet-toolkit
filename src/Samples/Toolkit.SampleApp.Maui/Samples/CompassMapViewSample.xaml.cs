@@ -17,7 +17,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
         }
 
-        private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        private void Slider_ValueChanged(object? sender, ValueChangedEventArgs e)
         {
             compass.WidthRequest = compass.HeightRequest = e.NewValue;
         }

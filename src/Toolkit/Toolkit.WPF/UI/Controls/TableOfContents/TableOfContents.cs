@@ -173,10 +173,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 DependencyProperty.Register(nameof(BasemapItemTemplate), typeof(DataTemplate), typeof(TableOfContents), new PropertyMetadata(null));
 
 #if !NETFX_CORE
-        private void ContextMenuEventHandler(object sender, ContextMenuEventArgs e)
+        private void ContextMenuEventHandler(object? sender, ContextMenuEventArgs e)
         {
             var s = new TreeView().ItemContainerStyle;
-            ((FrameworkElement)sender).ContextMenu = null;
+            if(sender is FrameworkElement elm)
+                elm.ContextMenu = null;
             var vm = (e.OriginalSource as FrameworkElement)?.DataContext;
             if (vm is TocItem item && TocItemContextMenuOpening != null)
             {
@@ -184,9 +185,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 var args = new TocItemContextMenuEventArgs(sender, e, item, ctm, ctm.Items);
                 TocItemContextMenuOpening?.Invoke(this, args);
                 e.Handled = args.Handled;
-                if (args.MenuItems.Count > 0)
+                if (args.MenuItems.Count > 0 && sender is FrameworkElement element)
                 {
-                    ((FrameworkElement)sender).ContextMenu = args.Menu;
+                    element.ContextMenu = args.Menu;
                 }
             }
         }

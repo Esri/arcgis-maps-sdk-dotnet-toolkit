@@ -37,7 +37,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             MySceneView.Scene = new Scene(new Uri(webSceneOne));
         }
 
-        private void SetMapViewBinding_Click(object sender, EventArgs e)
+        private void SetMapViewBinding_Click(object? sender, EventArgs e)
         {
             if (_viewContainer.Children.Contains(MyMapView) == false)
                 _viewContainer.Children.Add(MyMapView);
@@ -48,7 +48,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.GeoViewProperty, geoviewBinding);
         }
 
-        private void SetSceneViewBinding_Click(object sender, EventArgs e)
+        private void SetSceneViewBinding_Click(object? sender, EventArgs e)
         {
             if (_viewContainer.Children.Contains(MySceneView) == false)
                 _viewContainer.Children.Add(MySceneView);
@@ -59,7 +59,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.GeoViewProperty, geoviewBinding);
         }
 
-        private void SetDocumentOne_Click(object sender, EventArgs e)
+        private void SetDocumentOne_Click(object? sender, EventArgs e)
         {
             if (BookmarksView.GeoView is MapView mapView)
             {
@@ -71,7 +71,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void SetDocumentTwo_Click(object sender, EventArgs e)
+        private void SetDocumentTwo_Click(object? sender, EventArgs e)
         {
             if (BookmarksView.GeoView is MapView mapView)
             {
@@ -83,17 +83,17 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void SetOverrideList_Click(object sender, EventArgs e)
+        private void SetOverrideList_Click(object? sender, EventArgs e)
         {
             BookmarksView.BookmarksOverride = bookmarksOverride;
         }
 
-        private void ClearOverrideList_Click(object sender, EventArgs e)
+        private void ClearOverrideList_Click(object? sender, EventArgs e)
         {
             BookmarksView.BookmarksOverride = null;
         }
 
-        private void AddToOverrideList_Click(object sender, EventArgs e)
+        private void AddToOverrideList_Click(object? sender, EventArgs e)
         {
             double longitude = (_randomizer.NextDouble() * 360) - 180;
             double latitude = (_randomizer.NextDouble() * 180) - 90;
@@ -101,7 +101,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             bookmarksOverride.Add(new Bookmark($"BM {bookmarksOverride.Count}", new Viewpoint(latitude, longitude, 2375)));
         }
 
-        private void AddToMapScene_Click(object sender, EventArgs e)
+        private void AddToMapScene_Click(object? sender, EventArgs e)
         {
             double longitude = (_randomizer.NextDouble() * 360) - 180;
             double latitude = (_randomizer.NextDouble() * 180) - 90;
@@ -116,29 +116,29 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
         }
 
-        private void SetItemTemplateOne_Click(object sender, EventArgs e)
+        private void SetItemTemplateOne_Click(object? sender, EventArgs e)
         {
             DataTemplate template = Resources["ItemTemplateOne"] as DataTemplate;
             BookmarksView.ItemTemplate = template;
         }
 
-        private void SetItemTemplateTwo_Click(object sender, EventArgs e)
+        private void SetItemTemplateTwo_Click(object? sender, EventArgs e)
         {
             DataTemplate template = Resources["ItemTemplateTwo"] as DataTemplate;
             BookmarksView.ItemTemplate = template;
         }
 
-        private void AddSelectionListener_Click(object sender, EventArgs e)
+        private void AddSelectionListener_Click(object? sender, EventArgs e)
         {
             BookmarksView.BookmarkSelected += BookmarkSelected;
         }
 
-        private void RemoveSelectionListener_Click(object sender, EventArgs e)
+        private void RemoveSelectionListener_Click(object? sender, EventArgs e)
         {
             BookmarksView.BookmarkSelected -= BookmarkSelected;
         }
 
-        private void BookmarkSelected(object sender, Bookmark bookmark)
+        private void BookmarkSelected(object? sender, Bookmark bookmark)
         {
             DisplayAlert("Bookmark selected", $"Selected {bookmark.Name}", "Ok");
         }
