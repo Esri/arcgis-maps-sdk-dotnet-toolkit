@@ -102,6 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             this.MoveHoverInteraction += SegmentedControl_MoveHoverInteraction;
             this.EndHoverInteraction += SegmentedControl_EndHoverInteraction;
             this.StartInteraction += SegmentedControl_StartInteraction;
+            this.BackgroundColor = Colors.Transparent;
         }
 
         private void SegmentedControl_StartInteraction(object? sender, TouchEventArgs e)
