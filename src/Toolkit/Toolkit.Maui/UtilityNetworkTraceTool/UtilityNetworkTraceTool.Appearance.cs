@@ -82,7 +82,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
     <Frame x:Name=""{nameof(PART_NoNetworksWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" Grid.RowSpan=""3"" IsVisible=""false"">
         <Label Text=""No utility networks found."" />
     </Frame>
-    <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" Padding=""0"" />
+    <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" />
     <VerticalStackLayout x:Name=""{nameof(PART_SelectContainer)}"" Grid.Row=""2"" Spacing=""8"">
         <Label x:Name=""{nameof(PART_LabelNetworks)}"" Text=""Networks"" FontAttributes=""Bold"" IsVisible=""false"" />
         <Picker x:Name=""{nameof(PART_ListViewNetworks)}"" ItemDisplayBinding=""{{Binding Name}}"" IsVisible=""false"" BackgroundColor=""{{AppThemeBinding Light=#eaeaea,Dark=#151515}}"" Title=""Select a Utility Network"" />
