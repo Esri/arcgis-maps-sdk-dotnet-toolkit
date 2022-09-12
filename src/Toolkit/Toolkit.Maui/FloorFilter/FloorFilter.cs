@@ -593,7 +593,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 const int maxHeight = 320;
                 var desiredHeight = (_displayLevels?.Count ?? 0) * 48;
-                PART_LevelListContainer.MaximumHeightRequest = Math.Min(maxHeight, desiredHeight);
+                var limitedHeight = Math.Min(maxHeight, desiredHeight);
+                PART_LevelListView.HeightRequest = limitedHeight;
+                PART_LevelListContainer.MaximumHeightRequest = limitedHeight + 2;
 
                 if (desiredHeight > maxHeight)
                 {
