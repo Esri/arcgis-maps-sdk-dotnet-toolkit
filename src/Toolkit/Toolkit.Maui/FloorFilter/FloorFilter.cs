@@ -593,21 +593,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 const int maxHeight = 320;
                 var desiredHeight = (_displayLevels?.Count ?? 0) * 48;
-                PART_LevelListView.HeightRequest = Math.Min(maxHeight, desiredHeight);
+                PART_LevelListContainer.MaximumHeightRequest = Math.Min(maxHeight, desiredHeight);
 
                 if (desiredHeight > maxHeight)
                 {
                     PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Always;
 
+                    // ScrollTo causes fail fast excepion in kernelbase.dll
+                    #if !WINDOWS
                     if (SelectedLevel != null)
                     {
                         PART_LevelListView?.ScrollTo(DisplayLevels.IndexOf(SelectedLevel));
                     }
+                    #endif
                 }
                 else if (DisplayLevels?.Any() ?? false)
                 {
                     PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Never;
+                    #if !WINDOWS
                     PART_LevelListView?.ScrollTo(DisplayLevels.Count - 1);
+                    #endif
                 }
             }
         }

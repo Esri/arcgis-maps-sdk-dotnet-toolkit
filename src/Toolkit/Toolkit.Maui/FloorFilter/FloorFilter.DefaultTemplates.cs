@@ -145,7 +145,7 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
         <Grid.RowDefinitions>
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
-           <RowDefinition Height=""*"" />
+           <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
@@ -183,6 +183,7 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
               <CollectionView x:Name=""{nameof(PART_LevelListView)}""
                  Grid.Row=""2""
                  SelectionMode=""Single""
+                 VerticalOptions=""End""
                  WidthRequest=""46""
                  Margin=""0"" />
         </Border>
