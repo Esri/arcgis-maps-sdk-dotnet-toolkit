@@ -137,7 +137,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
         }
 
-        private double GetScaleFactor() => Window?.DisplayDensity ?? DeviceDisplay.Current.MainDisplayInfo.Density;
+        // Known issue - see toolkit issue #451
+        private double GetScaleFactor() => Window?.DisplayDensity ?? 1d;
 
         private async void Refresh()
         {
