@@ -30,6 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
             }
 
+            // Return the placeholder image directly rather than null to work around bugs/limitations in MAUI
             return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly); ;
         }
 
