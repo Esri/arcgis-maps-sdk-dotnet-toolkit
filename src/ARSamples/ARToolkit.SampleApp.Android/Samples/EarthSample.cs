@@ -20,7 +20,7 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             try
             {
-                var scene = new Scene(Basemap.CreateImagery());
+                var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
                 scene.BaseSurface = new Surface();
                 scene.BaseSurface.BackgroundGrid.IsVisible = false;
                 scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));

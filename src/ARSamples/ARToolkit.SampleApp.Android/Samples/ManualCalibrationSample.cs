@@ -44,7 +44,7 @@ namespace ARToolkit.SampleApp.Samples
             TrackingMode = ARLocationTrackingMode.Initial; // Get the GPS location once, and snap origin to there
 
             // Configure scene
-            Scene = new Scene(Basemap.CreateStreets());
+            Scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=55ebf90799fa4a3fa57562700a68c405")));
             Scene.Basemap.BaseLayers[0].Opacity = .75;
             Scene.BaseSurface = new Esri.ArcGISRuntime.Mapping.Surface();
             Scene.BaseSurface.BackgroundGrid.IsVisible = false;

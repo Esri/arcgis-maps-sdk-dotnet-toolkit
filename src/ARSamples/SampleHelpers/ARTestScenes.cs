@@ -22,7 +22,7 @@ namespace ARToolkit.SampleApp
             // URL for a scene service of buildings in Brest, France
             string brestFrance = @"https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0";
             string _elevationSourceUrl = @"https://scene.arcgis.com/arcgis/rest/services/BREST_DTM_1M/ImageServer";
-            var scene = new Scene(Basemap.CreateImagery());
+            var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
 
             var observerCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-4.49492, 48.3808, 48.2511, SpatialReferences.Wgs84), 344.488, 74.1212, 0.0);
             scene.InitialViewpoint = new Esri.ArcGISRuntime.Mapping.Viewpoint(observerCamera.Location, observerCamera);
@@ -49,7 +49,7 @@ namespace ARToolkit.SampleApp
             var observerCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-4.49492, 48.3808, 48.2511, SpatialReferences.Wgs84), 344.488, 74.1212, 0.0);
             MapPoint center = (MapPoint)GeometryEngine.Project(iml.FullExtent.GetCenter(), SpatialReferences.Wgs84);
             observerCamera = new Esri.ArcGISRuntime.Mapping.Camera(center.Y, center.X, 600, 120, 60, 0);
-            var scene = new Scene(Basemap.CreateImagery());
+            var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
             scene.InitialViewpoint = new Esri.ArcGISRuntime.Mapping.Viewpoint(observerCamera.Location, observerCamera);
             scene.OperationalLayers.Add(iml);
             scene.BaseSurface = new Surface();
@@ -69,7 +69,7 @@ namespace ARToolkit.SampleApp
             var observerCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-4.49492, 48.3808, 48.2511, SpatialReferences.Wgs84), 344.488, 74.1212, 0.0);
             MapPoint center = (MapPoint)GeometryEngine.Project(iml.FullExtent.GetCenter(), SpatialReferences.Wgs84);
             observerCamera = new Esri.ArcGISRuntime.Mapping.Camera(center.Y, center.X, 225, 220, 80, 0);
-            var scene = new Scene(Basemap.CreateImagery());
+            var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
             scene.InitialViewpoint = new Esri.ArcGISRuntime.Mapping.Viewpoint(observerCamera.Location, observerCamera);
             scene.OperationalLayers.Add(iml);
             scene.BaseSurface = new Surface();
@@ -89,7 +89,7 @@ namespace ARToolkit.SampleApp
             var observerCamera = new Esri.ArcGISRuntime.Mapping.Camera(new MapPoint(-4.49492, 48.3808, 48.2511, SpatialReferences.Wgs84), 344.488, 74.1212, 0.0);
             MapPoint center = (MapPoint)GeometryEngine.Project(iml.FullExtent.GetCenter(), SpatialReferences.Wgs84);
             observerCamera = new Esri.ArcGISRuntime.Mapping.Camera(center.Y, center.X, 225, 240, 80, 0);
-            var scene = new Scene(Basemap.CreateImagery());
+            var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
             scene.InitialViewpoint = new Esri.ArcGISRuntime.Mapping.Viewpoint(observerCamera.Location, observerCamera);
             scene.OperationalLayers.Add(iml);
             scene.BaseSurface = new Surface();

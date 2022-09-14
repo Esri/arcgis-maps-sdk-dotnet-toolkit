@@ -24,7 +24,7 @@ public partial class LookAroundSample : ContentPage
 
             Surface sceneSurface = new Surface();
             sceneSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
-            Scene scene = new Scene(Basemap.CreateImagery())
+            Scene scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")))
             {
                 BaseSurface = sceneSurface
             };
