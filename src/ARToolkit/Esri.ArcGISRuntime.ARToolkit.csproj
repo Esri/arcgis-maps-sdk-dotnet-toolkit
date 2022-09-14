@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(NetAndroidTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Android" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
+    <PackageReference Include="Esri.ArcGISRuntime.Android" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
     <PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
     <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
     <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.17.1" />
@@ -37,7 +38,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.iOS" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
+	<PackageReference Include="Esri.ArcGISRuntime.iOS" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
@@ -63,4 +65,5 @@
       <_FakeOutputPath Include="$(OutputPath)\$(AssemblyName).dll" />
     </ItemGroup>
   </Target>
+  <Import Project="..\CommonProperties.targets" />
 </Project>

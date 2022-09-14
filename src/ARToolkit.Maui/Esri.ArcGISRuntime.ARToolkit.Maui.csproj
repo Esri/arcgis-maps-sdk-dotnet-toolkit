@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
-	<Description>ArcGIS Runtime Augmented Reality controls and utilities for .NET MAUI apps including .NET for Android and .NET for iOS</Description>
+    <Description>ArcGIS Runtime Augmented Reality controls and utilities for .NET MAUI apps including .NET for Android and .NET for iOS</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial Augmented Reality AR 3D .NET MAUI Android iOS toolkit</PackageTags>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
@@ -19,21 +19,10 @@
     <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(UseNugetPackage)-preview4" Condition="'$(UseNugetPackage)'=='100.15.0'" />
-    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(UseNugetPackage)" Condition="'$(UseNugetPackage)'!='100.15.0'" />
+    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)-preview4" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
+    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
+    <ProjectReference Include="..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />
   </ItemGroup>
-  <Choose>
-    <When Condition="'$(UseNugetPackage)'==''">
-      <ItemGroup>
-        <ProjectReference Include="..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <PackageReference Include="Esri.ArcGISRuntime.ARToolkit">
-          <Version>$(UseNugetPackage)</Version>
-        </PackageReference>
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
+  <Import Project="..\CommonProperties.targets" />
+
 </Project>
