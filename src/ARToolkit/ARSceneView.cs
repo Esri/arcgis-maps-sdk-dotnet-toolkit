@@ -271,11 +271,24 @@ namespace Esri.ArcGISRuntime.ARToolkit
             get => _controller?.OriginCamera ?? throw new InvalidOperationException();  // Only null in design mode
             set
             {
-                if (_controller != null && value != OriginCamera && value?.IsEqual(OriginCamera) == false)
+                if (_controller != null && value != OriginCamera && !CameraEquals(value, OriginCamera))
                 {
                     _controller.OriginCamera = value;
                 } 
             }
+        }
+
+        private static bool CameraEquals(Mapping.Camera camera1, Mapping.Camera camera2)
+        {
+            if (camera1 is null && camera2 is null) return true;
+            if (camera1 is null && camera2 != null || camera1 != null && camera2 is null) return false;
+            if (ReferenceEquals(camera1, camera2)) return true;
+            return camera1!.Location.X == camera2!.Location.X &&
+                camera1.Location.Y == camera2.Location.Y &&
+                camera1.Location.Z == camera2.Location.Z &&
+                camera1.Heading == camera2.Heading &&
+                camera1.Pitch == camera2.Pitch &&
+                camera1.Roll == camera2.Roll;
         }
 
         /// <summary>
