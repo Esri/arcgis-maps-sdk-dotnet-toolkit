@@ -2,20 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Toolkit.SampleApp.Maui.MainPage">
-
-    <Grid>
-        <ListView x:Name="SamplesList" ItemSelected="SamplesList_ItemSelected" RowHeight="50">
+        <ListView x:Name="SamplesList" ItemSelected="SamplesList_ItemSelected">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Margin="20,5">
-                            <Label Text="{Binding Name}" FontSize="16" TextColor="Black" />
-                            <Label Text="{Binding Description}" FontSize="10" TextColor="Gray" />
-                        </StackLayout>
-                    </ViewCell>
+                    <TextCell Text="{Binding Name}" Detail="{Binding Description}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </Grid>
-
 </ContentPage>

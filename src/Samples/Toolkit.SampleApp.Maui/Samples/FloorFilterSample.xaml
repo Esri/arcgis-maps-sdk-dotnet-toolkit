@@ -11,24 +11,14 @@
     mc:Ignorable="d">
     <ContentPage.Content>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <esri:MapView
-                x:Name="MyMapView"
-                Grid.RowSpan="2"
-                Grid.ColumnSpan="2" />
+            <esri:MapView x:Name="MyMapView" />
             <toolkit:FloorFilter
                 x:Name="FF"
-                Grid.Row="1"
-                Grid.Column="0"
                 Margin="8,8,8,32"
-                GeoView="{x:Reference MyMapView}" />
+                GeoView="{x:Reference MyMapView}"
+                HorizontalOptions="Start"
+                MaximumHeightRequest="400"
+                VerticalOptions="End" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

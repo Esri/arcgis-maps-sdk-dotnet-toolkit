@@ -14,6 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
+
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
     public partial class BasemapGallery : TemplatedView
@@ -39,72 +42,139 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             DefaultGridDataTemplate = new DataTemplate(() =>
             {
+                Border border = new Border { Padding = 4, StrokeThickness = 1, StrokeShape = new Rectangle() };
                 Grid outerScrimContainer = new Grid();
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = 128 });
+                outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(86) });
+                outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40)});
+                outerScrimContainer.RowSpacing = 4;
 
-                StackLayout parentLayout = new StackLayout() { Orientation = StackOrientation.Vertical };
-                parentLayout.Padding = new Thickness(8);
-                Grid imageContainer = new Grid { Margin = new Thickness(0, 0, 0, 8) };
-                Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
-                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
-                Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), HorizontalTextAlignment = TextAlignment.Center };
-                imageContainer.Children.Add(fallback);
-                imageContainer.Children.Add(thumbnail);
-                parentLayout.Children.Add(imageContainer);
-                parentLayout.Children.Add(nameLabel);
+                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
+                Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Start };
 
-                Grid scrimGrid = new Grid { BackgroundColor = Colors.White };
-                scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
-                parentLayout.Children.Add(scrimGrid);
+                outerScrimContainer.Children.Add(thumbnail);
+                outerScrimContainer.Children.Add(nameLabel);
 
-                outerScrimContainer.Children.Add(parentLayout);
+                Grid.SetRow(thumbnail, 0);
+                Grid.SetRow(nameLabel, 1);
+
+
+                Grid scrimGrid = new Grid();
+                scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
                 outerScrimContainer.Children.Add(scrimGrid);
+                Grid.SetRowSpan(scrimGrid, 2);
+                
 
                 thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
 
-                return outerScrimContainer;
+                border.Content = outerScrimContainer;
+                return border;
             });
 
             DefaultListDataTemplate = new DataTemplate(() =>
             {
-                Grid parentLayout = new Grid() { };
-                parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
-                parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(72) });
-                parentLayout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                // Special template to take advantate of negative margin support on iOS, Mac
+#if __IOS__
+                Border border = new Border { Padding = new Thickness(0), StrokeThickness = 8, StrokeShape = new Rectangle() };
+                Grid outerScrimContainer = new Grid();
+                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
+                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                outerScrimContainer.ColumnSpacing = 0;
+                outerScrimContainer.Margin = new Thickness(-4, -8, -8, -8);
+                outerScrimContainer.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
 
-                Grid imageContainer = new Grid();
-                Image fallback = new Image { WidthRequest = 32, HeightRequest = 32, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-                fallback.Source = ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly);
-                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill };
-                Label nameLabel = new Label { FontSize = 11, TextColor = Color.FromHex("#6e6e6e"), VerticalOptions = LayoutOptions.Center, VerticalTextAlignment = TextAlignment.Center };
-                imageContainer.Children.Add(fallback);
-                imageContainer.Children.Add(thumbnail);
+                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
+                Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
+                thumbnail.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
 
-                parentLayout.Children.Add(imageContainer);
-                parentLayout.Children.Add(nameLabel);
+                outerScrimContainer.Children.Add(thumbnail);
+                outerScrimContainer.Children.Add(nameLabel);
 
-                Grid scrimGrid = new Grid { BackgroundColor = Colors.White };
-                scrimGrid.SetValue(Grid.ColumnSpanProperty, 3);
-                parentLayout.Children.Add(scrimGrid);
+                Grid.SetColumn(thumbnail, 0);
+                Grid.SetColumn(nameLabel, 2);
 
-                imageContainer.SetValue(Grid.ColumnProperty, 1);
-                nameLabel.SetValue(Grid.ColumnProperty, 2);
+
+                Grid scrimGrid = new Grid();
+                scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
+                outerScrimContainer.Children.Add(scrimGrid);
+                Grid.SetColumnSpan(scrimGrid, 3);
+
 
                 thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
                 nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
                 scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
 
-                return parentLayout;
+                border.Content = outerScrimContainer;
+                return border;
+#else
+                Border border = new Border { Padding = new Thickness(0), StrokeThickness = 1, StrokeShape = new Rectangle() };
+                Grid outerScrimContainer = new Grid();
+                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
+                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                outerScrimContainer.ColumnSpacing = 0;
+
+                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
+                Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
+
+                outerScrimContainer.Children.Add(thumbnail);
+                outerScrimContainer.Children.Add(nameLabel);
+
+                Grid.SetColumn(thumbnail, 0);
+                Grid.SetColumn(nameLabel, 2);
+
+
+                Grid scrimGrid = new Grid();
+                scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
+                outerScrimContainer.Children.Add(scrimGrid);
+                Grid.SetColumnSpan(scrimGrid, 3);
+
+
+                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
+                nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
+                scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
+
+                border.Content = outerScrimContainer;
+                return border;
+#endif
             });
 
-            string template = @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
+            string template = $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
                                     <Grid>
-                                        <CollectionView x:Name=""PART_InnerListView"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" SelectionMode=""Single"" />
+                                            <Grid.Resources>
+                                                 <Style TargetType=""Border"">
+                                                        <Setter Property=""VisualStateManager.VisualStateGroups"">
+                                                            <VisualStateGroupList>
+                                                                <VisualStateGroup x:Name=""CommonStates"">
+                                                                    <VisualState x:Name=""Normal"">
+                                                                        <VisualState.Setters>
+                                                                            <Setter Property=""BackgroundColor""
+                                                                                    Value=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
+                                                                            <Setter Property=""Stroke""
+                                                                                    Value=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
+                                                                        </VisualState.Setters>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name=""Selected"">
+                                                                        <VisualState.Setters>
+                                                                            <Setter Property=""BackgroundColor""
+                                                                                    Value=""{{AppThemeBinding Light=#e2f1fb,Dark=#202020}}"" />
+                                                                            <Setter Property=""Stroke""
+                                                                                    Value=""{{AppThemeBinding Light=#007ac2,Dark=#009af2}}"" />
+                                                                        </VisualState.Setters>
+                                                                    </VisualState>
+                                                                </VisualStateGroup>
+                                                            </VisualStateGroupList>
+                                                        </Setter>
+                                                    </Style>
+                                                    <Style TargetType=""Label"">
+                                                        <Setter Property=""TextColor"" Value=""{{AppThemeBinding Light=#6a6a6a,Dark=#fff}}"" />
+                                                    </Style>
+                                                </Grid.Resources>
+                                        <CollectionView x:Name=""PART_InnerListView"" HorizontalOptions=""Fill"" VerticalOptions=""Fill"" SelectionMode=""Single"" BackgroundColor=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
                                         <Grid x:Name=""PART_LoadingScrim"">
-                                            <Grid BackgroundColor=""{AppThemeBinding Light=White, Dark=Black}"" Opacity=""0.3"" />
+                                            <Grid BackgroundColor=""{{AppThemeBinding Light=White, Dark=Black}}"" Opacity=""0.3"" />
                                             <ActivityIndicator IsRunning=""True"" HorizontalOptions=""Center"" VerticalOptions=""Center"" />
                                         </Grid>
                                     </Grid>
@@ -228,12 +298,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 if (styleAfterUpdate == BasemapGalleryViewStyle.List)
                 {
                     ListView.ItemTemplate = ListItemTemplate;
-                    ListView.ItemsLayout = LinearItemsLayout.Vertical;
+                    ListView.ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical) { ItemSpacing = 0 };
+                    ListView.Margin = new Thickness(0);
                 }
                 else
                 {
                     ListView.ItemTemplate = GridItemTemplate;
-                    ListView.ItemsLayout = new GridItemsLayout(gridSpanAfterUpdate, ItemsLayoutOrientation.Vertical);
+                    ListView.ItemsLayout = new GridItemsLayout(gridSpanAfterUpdate, ItemsLayoutOrientation.Vertical) { HorizontalItemSpacing = 4, VerticalItemSpacing = 4 };
+                    ListView.Margin = new Thickness(4, 4, 0, 0);
                 }
 
                 _currentSelectedSpan = gridSpanAfterUpdate;

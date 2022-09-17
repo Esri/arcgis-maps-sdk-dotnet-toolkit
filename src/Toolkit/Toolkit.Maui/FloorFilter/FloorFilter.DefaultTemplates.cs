@@ -26,65 +26,58 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         static FloorFilter()
         {
-            var backgroundColor = Color.FromHex("#aaffffff");
-            var foregroundColor = Color.FromHex("#6e6e6e");
             DefaultLevelDataTemplate = new DataTemplate(() =>
             {
-                var viewcell = new ViewCell();
-
                 Grid containingGrid = new Grid
                 {
-                    BackgroundColor = backgroundColor,
                     WidthRequest = 48,
+                    HeightRequest = 48,
+                    InputTransparent = false,
+                    CascadeInputTransparent = false,
                 };
                 containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(48) });
-
                 Label textLabel = new Label
                 {
                     FontSize = 14,
                     VerticalTextAlignment = TextAlignment.Center,
                     HorizontalTextAlignment = TextAlignment.Center,
-                    TextColor = foregroundColor,
-                    HorizontalOptions = LayoutOptions.FillAndExpand,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    HorizontalOptions = LayoutOptions.Fill,
+                    VerticalOptions = LayoutOptions.Fill,
+                    InputTransparent = false,
                 };
                 textLabel.SetBinding(Label.TextProperty, "ShortName");
-
                 containingGrid.Children.Add(textLabel);
-                viewcell.View = containingGrid;
-                return viewcell;
+                return containingGrid;
             });
 
             DefaultFacilityDataTemplate = new DataTemplate(() =>
             {
-                var viewcell = new ViewCell();
-                Grid containingGrid = new Grid { BackgroundColor = backgroundColor };
+                Grid containingGrid = new Grid();
+                containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#FFF"), Color.FromArgb("#353535"));
 
                 Label textLabel = new Label
                 {
                     FontSize = 14,
                     VerticalTextAlignment = TextAlignment.Center,
-                    TextColor = foregroundColor,
-                    Margin = new Thickness(4),
+                    Margin = new Thickness(8),
+                    HorizontalOptions = LayoutOptions.Fill
                 };
                 textLabel.SetBinding(Label.TextProperty, "Name");
+                textLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
 
                 containingGrid.Children.Add(textLabel);
-                viewcell.View = containingGrid;
-                return viewcell;
+                return containingGrid;
             });
 
             DefaultSiteDataTemplate = DefaultFacilityDataTemplate;
 
             DefaultDifferentiatingFacilityDataTemplate = new DataTemplate(() =>
             {
-                var viewCell = new ViewCell();
-
                 Grid containingGrid = new Grid
                 {
-                    Padding = new Thickness(8, 4, 4, 4),
-                    BackgroundColor = backgroundColor,
+                    Padding = new Thickness(8),
                 };
+                containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#FFF"), Color.FromArgb("#353535"));
 
                 containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
                 containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
@@ -104,18 +97,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                     FontAttributes = FontAttributes.Bold,
                     VerticalOptions = LayoutOptions.End,
                     VerticalTextAlignment = TextAlignment.End,
-                    TextColor = foregroundColor,
                     FontSize = 14,
                 };
+                titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
                 titleLabel.SetBinding(Label.TextProperty, "Name");
 
                 Label subtitleLabel = new Label
                 {
-                    TextColor = Color.FromHex("#2e2e2e"),
                     FontSize = 11,
                     VerticalTextAlignment = TextAlignment.Start,
                     VerticalOptions = LayoutOptions.Start,
                 };
+                subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#2e2e2e"), Color.FromArgb("#aaa"));
                 subtitleLabel.SetBinding(Label.TextProperty, "Site.Name");
 
                 textStack.Children.Add(titleLabel);
@@ -126,53 +119,79 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 containingGrid.Children.Add(textStack);
 
                 Grid.SetColumn(textStack, 1);
-
-                viewCell.View = containingGrid;
-                return viewCell;
+                return containingGrid;
             });
 
             string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
     xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui""
     x:DataType=""controls:FloorFilter"" x:Name=""Self"">
-    <Grid RowSpacing=""0"" x:Name=""PART_VisibilityWrapper"" IsVisible=""True"" BackgroundColor=""White"">
+    <Grid RowSpacing=""0"" x:Name=""PART_VisibilityWrapper"" IsVisible=""True"">
+        <Grid.Resources>
+            <Style TargetType=""Button"">
+                <Setter Property=""Background"" Value=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
+                <Setter Property=""TextColor"" Value=""{{AppThemeBinding Light=#6e6e6e,Dark=#fff}}"" />
+                <Setter Property=""CornerRadius"" Value=""0"" />
+                <Setter Property=""BorderWidth"" Value=""1"" />
+                <Setter Property=""BorderColor"" Value=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" />
+                <Setter Property=""FontFamily"" Value=""calcite-ui-icons-24"" />
+                <Setter Property=""HeightRequest"" Value=""48"" />
+                <Setter Property=""WidthRequest"" Value=""48"" />
+            </Style>
+        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=""48"" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
-           <RowDefinition Height=""*"" />
+           <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
-<Frame HasShadow=""False"" BackgroundColor=""White"" Grid.RowSpan=""5"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" />
-        <Button x:Name=""{nameof(PART_BrowseButton)}"" Margin=""0"" WidthRequest=""48"" HeightRequest=""48""
-           CornerRadius=""0"" BackgroundColor=""White"" Padding=""16"" FontFamily=""calcite-ui-icons-24""
-           BorderColor=""#aa6e6e6e"" BorderWidth=""1"" Text=""{IconFont.UrbanModel}"" TextColor=""#007AC2"" />
-        <Button x:Name=""{nameof(PART_AllButton)}"" Text=""{IconFont.Viewshed}"" Margin=""0,-1,0,0"" WidthRequest=""48"" HeightRequest=""48""
-           BorderColor=""#aa6e6e6e"" BorderWidth=""1"" FontFamily=""calcite-ui-icons-24""
-           CornerRadius=""0"" Background=""White"" TextColor=""#007AC2""
+<Frame HasShadow=""False"" BackgroundColor=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" Grid.RowSpan=""5"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" />
+        <Button x:Name=""{nameof(PART_BrowseButton)}"" Margin=""0"" Padding=""16"" Text=""{IconFont.UrbanModel}"" />
+        <Button x:Name=""{nameof(PART_AllButton)}"" Text=""{IconFont.Viewshed}"" Margin=""0,-1,0,0""
            Grid.Row=""1"" />
-        <Frame x:Name=""{nameof(PART_LevelListContainer)}"" Grid.Row=""2"" BackgroundColor=""White"" BorderColor=""#aa6e6e6e""
-           Padding=""1"" Margin=""0,-1,0,0"" IsClippedToBounds=""True""
-           HasShadow=""False"" CornerRadius=""0"">
-              <ListView x:Name=""{nameof(PART_LevelListView)}""
+        <Border x:Name=""{nameof(PART_LevelListContainer)}"" Grid.Row=""2"" Stroke=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" StrokeThickness=""1"" StrokeShape=""Rectangle""
+           Padding=""-1,0,0,0"" Margin=""0,-1,0,0"">
+                <Border.Resources>
+                    <Style TargetType=""Grid"">
+                        <Setter Property=""VisualStateManager.VisualStateGroups"">
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name=""CommonStates"">
+                                    <VisualState x:Name=""Normal"">
+                                        <VisualState.Setters>
+                                            <Setter Property=""BackgroundColor""
+                                                    Value=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name=""Selected"">
+                                        <VisualState.Setters>
+                                            <Setter Property=""BackgroundColor""
+                                                    Value=""{{AppThemeBinding Light=#e2f1fb,Dark=#009af2}}"" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </Setter>
+                    </Style>
+                    <Style TargetType=""Label"">
+                        <Setter Property=""TextColor"" Value=""{{AppThemeBinding Light=#6e6e6e,Dark=#fff}}"" />
+                    </Style>
+                </Border.Resources>
+              <CollectionView x:Name=""{nameof(PART_LevelListView)}""
                  Grid.Row=""2""
-                 RowHeight=""48"" SeparatorColor=""#aa6e6e6e""
-                 SeparatorVisibility=""None""
-                 WidthRequest=""48""
-                 Background=""White""
-                 HeightRequest=""0""
+                 SelectionMode=""Single""
+                 VerticalOptions=""End""
+                 WidthRequest=""46""
                  Margin=""0"" />
-        </Frame>
-        <Button x:Name=""{nameof(PART_ZoomButton)}"" Text=""{IconFont.ZoomToObject}"" Margin=""0,-1,0,0"" WidthRequest=""48"" HeightRequest=""48""
-           BorderColor=""#aa6e6e6e"" BorderWidth=""1"" FontFamily=""calcite-ui-icons-24""
-           CornerRadius=""0"" Background=""White"" TextColor=""#007AC2""
+        </Border>
+        <Button x:Name=""{nameof(PART_ZoomButton)}"" Text=""{IconFont.ZoomToObject}"" Margin=""0,-1,0,0""
            Grid.Row=""3""
            IsVisible=""True"" />
    </Grid>
-</ControlTemplate >";
+</ControlTemplate>";
             DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
         }
     }

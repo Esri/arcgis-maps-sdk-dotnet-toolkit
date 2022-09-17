@@ -47,7 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private Button? PART_BrowseButton;
 
         // Most ListView selection properties are set in XAML, but special event behavior is needed for the browsing view navigation experience.
-        private ListView? PART_LevelListView;
+        private CollectionView? PART_LevelListView;
 #pragma warning restore SX1309 // Field names should begin with underscore
 #pragma warning restore SA1310 // Field names should not contain underscore
 #pragma warning restore SA1306 // Field names should begin with lower-case letter
@@ -101,7 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 PART_ZoomButton.Clicked += HandleZoomButtonClick;
             }
 
-            PART_LevelListView = GetTemplateChild(nameof(PART_LevelListView)) as ListView;
+            PART_LevelListView = GetTemplateChild(nameof(PART_LevelListView)) as CollectionView;
             PART_BrowseButton = GetTemplateChild(nameof(PART_BrowseButton)) as Button;
             PART_AllButton = GetTemplateChild(nameof(PART_AllButton)) as Button;
             PART_LevelListContainer = GetTemplateChild(nameof(PART_LevelListContainer)) as View;
@@ -115,8 +115,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 PART_LevelListView.ItemTemplate = LevelDataTemplate;
                 PART_LevelListView.BindingContext = this;
-                PART_LevelListView.SetBinding(ListView.ItemsSourceProperty, new Binding(nameof(DisplayLevels), BindingMode.OneWay));
-                PART_LevelListView.SetBinding(ListView.SelectedItemProperty, new Binding(nameof(SelectedLevel), BindingMode.TwoWay));
+                PART_LevelListView.SetBinding(CollectionView.ItemsSourceProperty, new Binding(nameof(DisplayLevels), BindingMode.OneWay));
+                PART_LevelListView.SetBinding(CollectionView.SelectedItemProperty, new Binding(nameof(SelectedLevel), BindingMode.TwoWay));
             }
         }
 
@@ -593,43 +593,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 const int maxHeight = 320;
                 var desiredHeight = (_displayLevels?.Count ?? 0) * 48;
-                PART_LevelListView.HeightRequest = Math.Min(maxHeight, desiredHeight);
+                var limitedHeight = Math.Min(maxHeight, desiredHeight);
+                PART_LevelListView.HeightRequest = limitedHeight;
+                PART_LevelListContainer.MaximumHeightRequest = limitedHeight + 2;
 
                 if (desiredHeight > maxHeight)
                 {
                     PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Always;
 
+                    // ScrollTo causes fail fast excepion in kernelbase.dll
+                    #if !WINDOWS
                     if (SelectedLevel != null)
                     {
-                        try
-                        {
-                            // There is a crash on iOS only
-                            if (Device.RuntimePlatform != Device.iOS)
-                            {
-                                PART_LevelListView.ScrollTo(SelectedLevel, ScrollToPosition.MakeVisible, false);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Esri Toolkit - FloorFilter - Exception scrolling list: {ex}");
-                        }
+                        PART_LevelListView?.ScrollTo(DisplayLevels.IndexOf(SelectedLevel));
                     }
+                    #endif
                 }
                 else if (DisplayLevels?.Any() ?? false)
                 {
                     PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Never;
-                    try
-                    {
-                        // There is a crash on iOS only
-                        if (Device.RuntimePlatform != Device.iOS)
-                        {
-                            PART_LevelListView.ScrollTo(DisplayLevels.Last(), ScrollToPosition.Start, false);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Esri Toolkit - FloorFilter - Exception scrolling list: {ex}");
-                    }
+                    #if !WINDOWS
+                    PART_LevelListView?.ScrollTo(DisplayLevels.Count - 1);
+                    #endif
                 }
             }
         }

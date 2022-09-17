@@ -27,8 +27,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private Label _noResultLabel;
         private Button _closeButton;
         private SearchBar _searchBar;
-        private ListView _unfilteredListView;
-        private ListView _filteredListView;
+        private CollectionView _unfilteredListView;
+        private CollectionView _filteredListView;
         private Button _allSitesButton;
         private IList<FloorSite>? _itemsSource;
 
@@ -39,9 +39,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUseSafeArea(true);
             _ff = ff;
 
-            BackgroundColor = Colors.White;
+            this.SetAppThemeColor(ContentPage.BackgroundColorProperty, Color.FromArgb("#fff"), Color.FromArgb("#353535"));
 
             Grid parentGrid = new Grid();
+            parentGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#fff"), Color.FromArgb("#353535"));
             parentGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Browse label, close button
             parentGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Search bar
             parentGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star }); // list views
@@ -58,6 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 FontSize = 16,
                 Margin = new Thickness(8, 2),
             };
+            _browseLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
 
             Grid.SetRow(_browseLabel, 0);
 
@@ -68,10 +70,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 WidthRequest = 32,
                 HeightRequest = 32,
                 CornerRadius = 16,
-                BackgroundColor = Color.FromHex("#f3f3f3"),
                 Padding = new Thickness(0),
-                Margin = new Thickness(8, 2),
+                Margin = new Thickness(8),
             };
+            _closeButton.SetAppThemeColor(Button.BackgroundColorProperty, Color.FromArgb("#f3f3f3"), Color.FromArgb("#2b2b2b"));
             _closeButton.SetAppThemeColor(Button.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
 
             _noResultLabel = new Label
@@ -91,23 +93,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetColumn(_closeButton, 1);
 
             _searchBar = new SearchBar { Placeholder = ff.SearchPlaceholder, Margin = new Thickness(0) };
+            _searchBar.SetAppThemeColor(SearchBar.BackgroundColorProperty, Color.FromArgb("#F8F8F8"), Color.FromArgb("#353535"));
             Grid.SetRow(_searchBar, 1);
             Grid.SetColumnSpan(_searchBar, 2);
 
             _itemsSource = ff.AllSites;
             _noResultLabel.IsVisible = !(_itemsSource?.Any() ?? false);
-            _unfilteredListView = new ListView
+            _unfilteredListView = new CollectionView
             {
                 ItemsSource = _itemsSource,
                 ItemTemplate = ff.SiteDataTemplate,
-                SelectedItem = _ff.SelectedSite,
+                //SelectedItem = _ff.SelectedSite, // Prevents navigation to that site
                 IsVisible = !_noResultLabel.IsVisible,
+                SelectionMode = SelectionMode.Single
             };
 
             Grid.SetRow(_unfilteredListView, 2);
             Grid.SetColumnSpan(_unfilteredListView, 2);
 
-            _filteredListView = new ListView { ItemTemplate = ff.SiteDataTemplate, IsVisible = false };
+            _filteredListView = new CollectionView { ItemTemplate = ff.SiteDataTemplate, IsVisible = false, SelectionMode = SelectionMode.Single };
             Grid.SetRow(_filteredListView, 2);
             Grid.SetColumnSpan(_filteredListView, 2);
 
@@ -134,20 +138,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             _closeButton.Clicked += HandleClose_Clicked;
             _searchBar.TextChanged += HandleSearchText_Changed;
             _allSitesButton.Clicked += HandleAllSites_Clicked;
-            _filteredListView.ItemTapped += HandleListItem_Tapped;
-            _unfilteredListView.ItemTapped += HandleListItem_Tapped;
+            _filteredListView.SelectionChanged += HandleListItem_Tapped;
+            _unfilteredListView.SelectionChanged += HandleListItem_Tapped;
 
             Content = parentGrid;
         }
 
-        private void HandleListItem_Tapped(object? sender, ItemTappedEventArgs e)
+        private void HandleListItem_Tapped(object? sender, SelectionChangedEventArgs e)
         {
-            if (_ff == null)
+            if (_ff == null || !e.CurrentSelection.Any())
             {
                 return;
             }
 
-            _ff.SelectedSite = e.Item as FloorSite;
+            _ff.SelectedSite = e.CurrentSelection.FirstOrDefault() as FloorSite;
             if ((_ff.SelectedSite?.Facilities?.Count() ?? 0) > 1)
             {
                 _ff.NavigateForward(new FloorFilterBrowseFacilitiesPage(_ff, false, true));
@@ -156,6 +160,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 _ff.CloseBrowsing();
             }
+            _unfilteredListView.SelectedItem = null;
+            _filteredListView.SelectedItem = null;
         }
 
         private void HandleAllSites_Clicked(object? sender, EventArgs e) => _ff?.NavigateForward(new FloorFilterBrowseFacilitiesPage(_ff, true, true));

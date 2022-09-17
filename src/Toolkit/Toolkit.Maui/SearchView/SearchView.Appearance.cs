@@ -25,9 +25,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private ImageButton? PART_SearchButton;
         private ImageButton? PART_SourceSelectButton;
         private Label? PART_ResultLabel;
-        private ListView? PART_SuggestionsView;
-        private ListView? PART_ResultView;
-        private ListView? PART_SourcesView;
+        private CollectionView? PART_SuggestionsView;
+        private CollectionView? PART_ResultView;
+        private CollectionView? PART_SourcesView;
         private Button? PART_RepeatButton;
         private Grid? PART_ResultContainer;
         private Grid? PART_RepeatButtonContainer;
@@ -48,7 +48,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             EmptyStringConverter = new EmptyStringToBoolConverter();
             DefaultSuggestionGroupHeaderTemplate = new DataTemplate(() =>
             {
-                var viewcell = new ViewCell();
                 Grid containingGrid = new Grid();
                 containingGrid.BackgroundColor = Color.FromHex("#4e4e4e");
 
@@ -59,13 +58,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 textLabel.FontSize = 14;
                 textLabel.VerticalTextAlignment = TextAlignment.Center;
                 containingGrid.Children.Add(textLabel);
-                viewcell.View = containingGrid;
-                return viewcell;
+                return containingGrid;
             });
             DefaultSuggestionTemplate = new DataTemplate(() =>
             {
-                var viewCell = new ViewCell();
-
                 Grid containingGrid = new Grid();
 
                 containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
@@ -108,13 +104,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Grid.SetColumn(textStack, 1);
                 Grid.SetColumn(imageView, 0);
 
-                viewCell.View = containingGrid;
-                return viewCell;
+                return containingGrid;
             });
             DefaultResultTemplate = new DataTemplate(() =>
             {
-                var viewCell = new ViewCell();
-
                 Grid containingGrid = new Grid();
                 containingGrid.Padding = new Thickness(2, 4, 2, 4);
 
@@ -159,12 +152,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 Grid.SetColumn(textStack, 1);
                 Grid.SetColumn(imageView, 0);
 
-                viewCell.View = containingGrid;
-                return viewCell;
+                return containingGrid;
             });
 
             string template =
-$@"<ControlTemplate xmlns=""http://xamarin.com/schemas/2014/forms"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
+$@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
 <Grid RowSpacing=""0"" ColumnSpacing=""0"" >
     <Grid.ColumnDefinitions>
@@ -182,9 +174,9 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" BackgroundColor=""White"" TextColor=""Black"" />
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
     <ImageButton x:Name=""{nameof(PART_SearchButton)}"" Grid.Column=""2"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
-    <ListView x:Name=""{nameof(PART_SuggestionsView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""175"" />
-    <ListView x:Name=""{nameof(PART_ResultView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" HasUnevenRows=""true"" BackgroundColor=""White"" HeightRequest=""200"" />
-    <ListView x:Name=""{nameof(PART_SourcesView)}"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" HeightRequest=""150"" />
+    <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2"" BackgroundColor=""White"" HeightRequest=""175"" />
+    <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" BackgroundColor=""White"" HeightRequest=""200"" />
+    <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" BackgroundColor=""White"" HeightRequest=""150"" />
     <Grid x:Name=""{nameof(PART_ResultContainer)}"" BackgroundColor=""White"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
     <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" BackgroundColor=""White"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2"">
         <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""#007AC2"" TextColor=""White"" CornerRadius=""0"" />

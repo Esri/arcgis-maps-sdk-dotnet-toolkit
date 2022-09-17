@@ -125,18 +125,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             if (PART_SourcesView != null)
             {
-                PART_SourcesView.ItemTapped -= PART_SourcesView_ItemTapped;
+                PART_SourcesView.SelectionChanged -= PART_SourcesView_SelectionChanged;
             }
 
             if (PART_SuggestionsView != null)
             {
-                PART_SuggestionsView.ItemSelected -= PART_SuggestionsView_ItemSelected;
+                PART_SuggestionsView.SelectionChanged -= PART_SuggestionsView_ItemSelected;
                 PART_SuggestionsView.ItemsSource = null;
             }
 
             if (PART_ResultView != null)
             {
-                PART_ResultView.ItemSelected -= PART_ResultView_ItemSelected;
+                PART_ResultView.SelectionChanged -= PART_ResultView_ItemSelected;
                 PART_ResultView.ItemsSource = null;
             }
 
@@ -185,25 +185,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 PART_ResultContainer = newResultContainer;
             }
 
-            if (GetTemplateChild(nameof(PART_SourcesView)) is ListView newSourceSelectView)
+            if (GetTemplateChild(nameof(PART_SourcesView)) is CollectionView newSourceSelectView)
             {
                 PART_SourcesView = newSourceSelectView;
-                PART_SourcesView.ItemTapped += PART_SourcesView_ItemTapped;
+                PART_SourcesView.SelectionChanged += PART_SourcesView_SelectionChanged;
             }
 
-            if (GetTemplateChild(nameof(PART_ResultView)) is ListView newResultList)
+            if (GetTemplateChild(nameof(PART_ResultView)) is CollectionView newResultList)
             {
                 PART_ResultView = newResultList;
                 PART_ResultView.ItemTemplate = ResultTemplate;
-                PART_ResultView.ItemSelected += PART_ResultView_ItemSelected;
+                PART_ResultView.SelectionChanged += PART_ResultView_ItemSelected;
             }
 
-            if (GetTemplateChild(nameof(PART_SuggestionsView)) is ListView newSuggestionList)
+            if (GetTemplateChild(nameof(PART_SuggestionsView)) is CollectionView newSuggestionList)
             {
                 PART_SuggestionsView = newSuggestionList;
                 PART_SuggestionsView.ItemTemplate = SuggestionTemplate;
-                PART_SuggestionsView.ItemSelected += PART_SuggestionsView_ItemSelected;
-                PART_SuggestionsView.IsGroupingEnabled = SearchViewModel?.Sources?.Count > 1 && SearchViewModel?.ActiveSource == null;
+                PART_SuggestionsView.SelectionChanged += PART_SuggestionsView_ItemSelected;
+                PART_SuggestionsView.IsGrouped = SearchViewModel?.Sources?.Count > 1 && SearchViewModel?.ActiveSource == null;
             }
 
             if (GetTemplateChild(nameof(PART_RepeatButton)) is Button newRepeatButton)
@@ -237,20 +237,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             SearchViewModel?.RepeatSearchHere();
         }
 
-        private void PART_SourcesView_ItemTapped(object? sender, ItemTappedEventArgs e)
+        private void PART_SourcesView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             if (SearchViewModel == null)
             {
                 return;
             }
 
-            if (e.ItemIndex == 0)
+            if (e.CurrentSelection.Count == 0)
             {
                 SearchViewModel.ActiveSource = null;
             }
             else
             {
-                SearchViewModel.ActiveSource = SearchViewModel.Sources[e.ItemIndex - 1];
+                SearchViewModel.ActiveSource = e.CurrentSelection.First() as ISearchSource;
             }
 
             _sourceSelectToggled = false;
@@ -259,22 +259,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         private void PART_RepeatButton_Clicked(object? sender, EventArgs e) => SearchViewModel?.RepeatSearchHere();
 
-        private void PART_SuggestionsView_ItemSelected(object? sender, SelectedItemChangedEventArgs e)
+        private void PART_SuggestionsView_ItemSelected(object? sender, SelectionChangedEventArgs e)
         {
-            if (e.SelectedItem is SearchSuggestion suggestion)
+            if (e.CurrentSelection.FirstOrDefault() is SearchSuggestion suggestion)
             {
-                PART_SuggestionsView?.SetValue(ListView.SelectedItemProperty, null);
+                PART_SuggestionsView?.SetValue(CollectionView.SelectedItemProperty, null);
 
                 _ = AcceptSuggestion(suggestion);
             }
         }
 
-        private void PART_ResultView_ItemSelected(object? sender, SelectedItemChangedEventArgs e)
+        private void PART_ResultView_ItemSelected(object? sender, SelectionChangedEventArgs e)
         {
-            if (e.SelectedItemIndex != -1 && SearchViewModel is SearchViewModel vm)
+            if (e.CurrentSelection.Count > 0 && SearchViewModel is SearchViewModel vm)
             {
-                vm.SelectedResult = vm.Results?.ElementAtOrDefault(e.SelectedItemIndex);
-                PART_ResultView?.SetValue(ListView.SelectedItemProperty, null);
+                vm.SelectedResult = e.CurrentSelection.First() as SearchResult;
+                PART_ResultView?.SetValue(CollectionView.SelectedItemProperty, null);
             }
         }
 
@@ -475,7 +475,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 {
                     sendingView.PART_Entry?.SetValue(Entry.TextProperty, newModel.CurrentQuery);
                     sendingView.PART_Entry?.SetValue(Entry.PlaceholderProperty, newModel.ActivePlaceholder);
-                    sendingView.PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, newModel.Sources?.Count > 1 && newModel.ActiveSource == null);
+                    sendingView.PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, newModel.Sources?.Count > 1 && newModel.ActiveSource == null);
                     newModel.PropertyChanged += sendingView.SearchViewModel_PropertyChanged;
                     if (newModel.Sources is INotifyCollectionChanged newSources)
                     {
@@ -559,7 +559,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 case nameof(SearchViewModel.Suggestions):
                     // Only group if there are multiple sources
                     bool groupingEnabled = SearchViewModel.Sources.Count > 1 && SearchViewModel.ActiveSource == null;
-                    PART_SuggestionsView?.SetValue(ListView.IsGroupingEnabledProperty, groupingEnabled);
+                    PART_SuggestionsView?.SetValue(CollectionView.IsGroupedProperty, groupingEnabled);
                     if (groupingEnabled)
                     {
                         var grouped = SearchViewModel.Suggestions?.GroupBy(item => item.OwningSource);
@@ -572,17 +572,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                             Console.WriteLine(grouped.First().Key);
                         }
 
-                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, grouped);
+                        PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, grouped ?? new IGrouping<ISearchSource, SearchSuggestion>[] {});
                     }
                     else
                     {
-                        PART_SuggestionsView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel.Suggestions);
+                        PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Suggestions ?? new List<SearchSuggestion>());
                     }
 
                     UpdateVisibility();
                     break;
                 case nameof(SearchViewModel.Results):
-                    PART_ResultView?.SetValue(ListView.ItemsSourceProperty, SearchViewModel.Results);
+                    PART_ResultView?.SetValue(CollectionView.ItemsSourceProperty, SearchViewModel.Results ?? new List<SearchResult>());
                     _ = HandleResultsCollectionChanged();
                     break;
                 case nameof(SearchViewModel.CurrentQuery):
@@ -655,7 +655,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             if (SearchViewModel?.SelectedResult is SearchResult selectedResult)
             {
-                PART_ResultView?.SetValue(ListView.SelectedItemProperty, selectedResult);
+                PART_ResultView?.SetValue(CollectionView.SelectedItemProperty, selectedResult);
                 _resultOverlay?.Graphics.Clear();
                 AddResultToGeoView(selectedResult);
 
@@ -675,7 +675,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             }
             else
             {
-                PART_ResultView?.SetValue(ListView.SelectedItemProperty, null);
+                PART_ResultView?.SetValue(CollectionView.SelectedItemProperty, null);
                 GeoView?.DismissCallout();
             }
         }

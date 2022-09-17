@@ -29,8 +29,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private Button _closeButton;
         private Button? _backButton;
         private SearchBar _searchBar;
-        private ListView _unfilteredListView;
-        private ListView _filteredListView;
+        private CollectionView _unfilteredListView;
+        private CollectionView _filteredListView;
         private bool _isAllSites;
         private IList<FloorFacility>? _itemsSource;
 
@@ -41,10 +41,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             On<iOS>().SetUseSafeArea(true);
 
             _ff = ff;
-            BackgroundColor = Colors.White;
+            this.SetAppThemeColor(ContentPage.BackgroundColorProperty, Color.FromArgb("#fff"), Color.FromArgb("#353535"));
             _isAllSites = isAllSites;
 
             Grid parentGrid = new Grid();
+            parentGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#fff"), Color.FromArgb("#353535"));
             parentGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Browse label, close button
             parentGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Search bar
             parentGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star }); // list views
@@ -52,12 +53,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             parentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Back button
             parentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); // Browse label
             parentGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Close button
+            const string vsmDictionaryString =
+$@"<ResourceDictionary xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"">
+<Style TargetType=""Grid"">
+                        <Setter Property=""VisualStateManager.VisualStateGroups"">
+                            <VisualStateGroupList>
+                                <VisualStateGroup x:Name=""CommonStates"">
+                                    <VisualState x:Name=""Normal"">
+                                        <VisualState.Setters>
+                                            <Setter Property=""BackgroundColor""
+                                                    Value=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState x:Name=""Selected"">
+                                        <VisualState.Setters>
+                                            <Setter Property=""BackgroundColor""
+                                                    Value=""{{AppThemeBinding Light=#e2f1fb,Dark=#009af2}}"" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateGroupList>
+                        </Setter>
+                    </Style>
+                    <Style TargetType=""Label"">
+                        <Setter Property=""TextColor"" Value=""{{AppThemeBinding Light=#6e6e6e,Dark=#fff}}"" />
+                    </Style>
+        </ResourceDictionary>";
+            var vsmDictionary = new ResourceDictionary().LoadFromXaml(vsmDictionaryString);
+            parentGrid.Resources.MergedDictionaries.Add(vsmDictionary);
 
             _browseLabel = new Label { Text = ff.BrowseFacilitiesLabel };
             _browseLabel.VerticalTextAlignment = TextAlignment.Center;
             _browseLabel.Margin = new Thickness(8, 2);
             _browseLabel.FontAttributes = FontAttributes.Bold;
             _browseLabel.FontSize = 16;
+            _browseLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
             Grid.SetRow(_browseLabel, 0);
             Grid.SetColumn(_browseLabel, 1);
 
@@ -68,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 _backButton.WidthRequest = 32;
                 _backButton.HeightRequest = 32;
                 _backButton.CornerRadius = 16;
-                _backButton.BackgroundColor = Color.FromHex("#f3f3f3");
+                _backButton.SetAppThemeColor(Button.BackgroundColorProperty, Color.FromArgb("#f3f3f3"), Color.FromArgb("#2b2b2b"));
                 _backButton.Padding = new Thickness(0);
                 _backButton.Margin = new Thickness(8);
                 _backButton.SetAppThemeColor(Button.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
@@ -80,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             _closeButton.WidthRequest = 32;
             _closeButton.HeightRequest = 32;
             _closeButton.CornerRadius = 16;
-            _closeButton.BackgroundColor = Color.FromHex("#f3f3f3");
+            _closeButton.SetAppThemeColor(Button.BackgroundColorProperty, Color.FromArgb("#f3f3f3"), Color.FromArgb("#2b2b2b"));
             _closeButton.Padding = new Thickness(0);
             _closeButton.Margin = new Thickness(8);
             _closeButton.SetAppThemeColor(Button.TextColorProperty, Color.FromRgb(0, 122, 194), Color.FromRgb(0, 154, 242));
@@ -101,14 +131,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             Grid.SetColumn(_closeButton, 2);
 
             _searchBar = new SearchBar { Placeholder = ff.SearchPlaceholder };
+            _searchBar.SetAppThemeColor(SearchBar.BackgroundColorProperty, Color.FromArgb("#F8F8F8"), Color.FromArgb("#353535"));
             Grid.SetRow(_searchBar, 1);
             Grid.SetColumnSpan(_searchBar, 3);
 
-            _unfilteredListView = new ListView();
+            _unfilteredListView = new CollectionView { SelectionMode = SelectionMode.Single };
             Grid.SetRow(_unfilteredListView, 2);
             Grid.SetColumnSpan(_unfilteredListView, 3);
 
-            _filteredListView = new ListView { IsVisible = false };
+            _filteredListView = new CollectionView { IsVisible = false, SelectionMode = SelectionMode.Single };
+
             Grid.SetRow(_filteredListView, 2);
             Grid.SetColumnSpan(_filteredListView, 3);
 
@@ -149,17 +181,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
             _closeButton.Clicked += HandleClose_Clicked;
             _searchBar.TextChanged += HandleSearchText_Changed;
-            _filteredListView.ItemTapped += HandleItem_Tapped;
-            _unfilteredListView.ItemTapped += HandleItem_Tapped;
+            _filteredListView.SelectionChanged += HandleItem_Tapped;
+            _unfilteredListView.SelectionChanged += HandleItem_Tapped;
 
             Content = parentGrid;
         }
 
         private void HandleBack_Clicked(object? sender, EventArgs e) => _ff?.GoBack();
 
-        private void HandleItem_Tapped(object? sender, ItemTappedEventArgs e)
+        private void HandleItem_Tapped(object? sender, SelectionChangedEventArgs e)
         {
-            if (e.Item is FloorFacility newFacility && _ff != null)
+            if (e.CurrentSelection.FirstOrDefault() is FloorFacility newFacility && _ff != null)
             {
                 if (newFacility.Site != null)
                 {
