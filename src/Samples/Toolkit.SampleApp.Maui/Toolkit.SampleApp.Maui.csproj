@@ -67,8 +67,8 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(UseNugetPackage)-preview4" Condition="'$(UseNugetPackage)'=='100.15.0'" />
-        <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(UseNugetPackage)" Condition="'$(UseNugetPackage)'!='100.15.0'" />
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Maui" Version="$(UseNugetPackage)-preview4" Condition="'$(UseNugetPackage)'=='100.15.0'" />
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.Maui" Version="$(UseNugetPackage)" Condition="'$(UseNugetPackage)'!='100.15.0'" />
       </ItemGroup>
     </Otherwise>
   </Choose>
