@@ -11,6 +11,9 @@
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
+  <ItemGroup>
+    <None Remove="EmbeddedResources\pin_red.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <Using Include="Esri.ArcGISRuntime.UI.Controls" />
