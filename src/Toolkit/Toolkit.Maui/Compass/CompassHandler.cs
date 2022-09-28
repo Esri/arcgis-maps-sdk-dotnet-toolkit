@@ -139,8 +139,9 @@ public class CompassHandler : ViewHandler<ICompass, NativeViewType>
             ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).Heading = compass.Heading;
 #endif
     }
-
+#pragma warning disable CS0169
     private bool _isUpdatingHeadingFromGeoView;
+#pragma warning restore CS0169
 
     /// <inheritdoc />
 #if WINDOWS || __IOS__
