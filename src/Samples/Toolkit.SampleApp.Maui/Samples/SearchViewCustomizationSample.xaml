@@ -66,7 +66,7 @@
                         <Label Text="{Binding Source={Reference MySearchView}, Path=SearchViewModel.SelectedResult.DisplayTitle, Mode=OneWay}" />
                     </StackLayout>
                     <Label Text="Results:" />
-                    <FlexLayout BindableLayout.ItemsSource="{Binding Source={Reference MySearchView}, Path=SearchViewModel.Results, Mode=OneWay}">
+                    <FlexLayout BindableLayout.ItemsSource="{Binding Source={Reference MySearchView}, Path=SearchViewModel.Results, Mode=OneWay}" MaximumHeightRequest="100">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Label Text="{Binding DisplayTitle}" />
@@ -74,7 +74,7 @@
                         </BindableLayout.ItemTemplate>
                     </FlexLayout>
                     <Label Text="Sources:" />
-                    <FlexLayout BindableLayout.ItemsSource="{Binding Source={Reference MySearchView}, Path=SearchViewModel.Sources, Mode=OneWay}" Direction="Row">
+                    <FlexLayout BindableLayout.ItemsSource="{Binding Source={Reference MySearchView}, Path=SearchViewModel.Sources, Mode=OneWay}" MaximumHeightRequest="100">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Label Text="{Binding DisplayName}" />
