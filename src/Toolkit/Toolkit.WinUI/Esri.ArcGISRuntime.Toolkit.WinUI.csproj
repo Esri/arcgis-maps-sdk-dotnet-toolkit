@@ -14,9 +14,6 @@
   <ItemGroup>
     <Content Remove="EmbeddedResources\pin_red.png" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="EmbeddedResources\pin_red.png" />
-  </ItemGroup>
 
   <ItemGroup>
     <Using Include="Esri.ArcGISRuntime.UI.Controls" />

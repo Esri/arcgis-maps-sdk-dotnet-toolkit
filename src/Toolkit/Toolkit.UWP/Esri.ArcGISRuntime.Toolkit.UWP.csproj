@@ -37,10 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="EmbeddedResources\pin_red.png" />
-  </ItemGroup>
-    
-  <ItemGroup>
      <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
