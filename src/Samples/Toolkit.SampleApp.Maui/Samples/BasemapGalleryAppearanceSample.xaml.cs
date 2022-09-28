@@ -19,16 +19,16 @@ namespace Toolkit.SampleApp.Maui.Samples
             item.Name = "With Thumbnail";
             item.Tooltip = Guid.NewGuid().ToString();
             item.Thumbnail = new Esri.ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
-            Gallery.AvailableBasemaps.Add(item);
+            Gallery.AvailableBasemaps?.Add(item);
 
             BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
             item2.Name = "Without Thumbnail";
-            Gallery.AvailableBasemaps.Add(item2);
+            Gallery.AvailableBasemaps?.Add(item2);
         }
 
         private void Button_Remove_Item(object? sender, EventArgs e)
         {
-            if (Gallery.AvailableBasemaps.Any())
+            if (Gallery.AvailableBasemaps?.Any() ?? false)
             {
                 Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
             }

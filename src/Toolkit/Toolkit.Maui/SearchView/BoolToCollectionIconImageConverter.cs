@@ -19,37 +19,36 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+internal class BoolToCollectionIconImageConverter : IValueConverter
 {
-    internal class BoolToCollectionIconImageConverter : IValueConverter
+    /// <summary>
+    /// Converts a bool to an icon representing either a search (true) or an individual result (false).
+    /// </summary>
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        /// <summary>
-        /// Converts a bool to an icon representing either a search (true) or an individual result (false).
-        /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (value is bool boolvalue && boolvalue)
         {
-            if (value is bool boolvalue && boolvalue)
-            {
-                if (DeviceInfo.Platform == DevicePlatform.WinUI)
-                {
-                    return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.WinUI.Assets.search-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
-                }
-
-                return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.search.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
-            }
-
             if (DeviceInfo.Platform == DevicePlatform.WinUI)
             {
-                return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.WinUI.Assets.pin-tear-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
+                return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.WinUI.Assets.search-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
             }
 
-            return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.pin-tear.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
+            return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.search.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
         }
 
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        if (DeviceInfo.Platform == DevicePlatform.WinUI)
         {
-            throw new NotImplementedException();
+            return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.WinUI.Assets.pin-tear-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
         }
+
+        return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.pin-tear.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
+    }
+
+    /// <inheritdoc/>
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

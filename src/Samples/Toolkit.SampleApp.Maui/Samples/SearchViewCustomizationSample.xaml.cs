@@ -51,7 +51,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             {
                 var source = await LocatorSearchSource.CreateDefaultSourceAsync();
                 source.DisplayName = GeocoderNameEntry.Text;
-                MySearchView.SearchViewModel.Sources.Add(source);
+                MySearchView.SearchViewModel?.Sources.Add(source);
             }
             catch (Exception ex)
             {
@@ -70,29 +70,27 @@ namespace Toolkit.SampleApp.Maui.Samples
         private void SearchModePicker_SelectedIndexChanged(object? sender, EventArgs e)
         {
             // Guard against exception on iOS device
-            if (MySearchView == null || MyMapView == null || SearchModePicker == null)
+            if (MySearchView?.SearchViewModel == null || MyMapView == null || SearchModePicker == null)
             {
                 return;
             }
-            switch (SearchModePicker.SelectedIndex)
+
+            MySearchView.SearchViewModel.SearchMode = SearchModePicker.SelectedIndex switch
             {
-                case 0:
-                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Automatic;
-                    break;
-                case 1:
-                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Single;
-                    break;
-                case 2:
-                    MySearchView.SearchViewModel.SearchMode = SearchResultMode.Multiple;
-                    break;
-            }
+                0 => SearchResultMode.Automatic,
+                1 => SearchResultMode.Single,
+                _ => SearchResultMode.Multiple
+            };
         }
 
         private void AddTestLocator_Click(object? sender, EventArgs e)
         {
-            MySearchView.SearchViewModel.Sources.Add(new TestSearchSource());
+            if (MySearchView?.SearchViewModel != null)
+            {
+                MySearchView.SearchViewModel.Sources.Add(new TestSearchSource());
+            }
         }
-
+#pragma warning disable CS8603, CS8602, CS8769, CS8767
         private class TestSearchSource : ISearchSource
         {
             public string DisplayName { get => "Event tester"; set => throw new NotImplementedException(); }
@@ -147,7 +145,8 @@ namespace Toolkit.SampleApp.Maui.Samples
                 var list = new[] { "one", "two", "three", "four" };
                 return list.Select(m => new SearchSuggestion($"suggestion {m}", this) { IsCollection = m.Contains("w") }).ToList();
             }
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+#pragma warning restore CS1998// Async method lacks 'await' operators and will run synchronously
         }
+#pragma warning restore CS8603, CS8602, CS8769, CS8767
     }
 }

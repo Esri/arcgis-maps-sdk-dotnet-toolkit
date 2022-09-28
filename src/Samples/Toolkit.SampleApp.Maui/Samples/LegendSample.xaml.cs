@@ -27,7 +27,7 @@ namespace Toolkit.SampleApp.Maui.Samples
         private void Grid_SizeChanged(object? sender, EventArgs e)
         {
             // Place legend on left size when view is wide, otherwise below mapview
-            if(((Grid)sender).Width > ((Grid)sender).Height)
+            if(sender is Grid sg && sg.Width > sg.Height)
             {
                 Grid.SetColumnSpan(mapView, 1);
                 Grid.SetColumnSpan(legend, 1);

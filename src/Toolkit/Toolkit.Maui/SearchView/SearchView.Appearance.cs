@@ -15,147 +15,147 @@
 //  ******************************************************************************/
 using System.ComponentModel;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+public partial class SearchView : TemplatedView, INotifyPropertyChanged
 {
-    public partial class SearchView : TemplatedView, INotifyPropertyChanged
-    {
 #pragma warning disable SA1306, SA1310, SX1309 // Field names should begin with lower-case letter
-        private Entry? PART_Entry;
-        private ImageButton? PART_CancelButton;
-        private ImageButton? PART_SearchButton;
-        private ImageButton? PART_SourceSelectButton;
-        private Label? PART_ResultLabel;
-        private CollectionView? PART_SuggestionsView;
-        private CollectionView? PART_ResultView;
-        private CollectionView? PART_SourcesView;
-        private Button? PART_RepeatButton;
-        private Grid? PART_ResultContainer;
-        private Grid? PART_RepeatButtonContainer;
+    private Entry? PART_Entry;
+    private ImageButton? PART_CancelButton;
+    private ImageButton? PART_SearchButton;
+    private ImageButton? PART_SourceSelectButton;
+    private Label? PART_ResultLabel;
+    private CollectionView? PART_SuggestionsView;
+    private CollectionView? PART_ResultView;
+    private CollectionView? PART_SourcesView;
+    private Button? PART_RepeatButton;
+    private Grid? PART_ResultContainer;
+    private Grid? PART_RepeatButtonContainer;
 #pragma warning restore SA1306, SA1310, SX1309 // Field names should begin with lower-case letter
 
-        private static readonly DataTemplate DefaultResultTemplate;
-        private static readonly DataTemplate DefaultSuggestionTemplate;
-        private static readonly DataTemplate DefaultSuggestionGroupHeaderTemplate;
-        private static readonly ControlTemplate DefaultControlTemplate;
-        private static readonly ByteArrayToImageSourceConverter ImageSourceConverter;
-        private static readonly BoolToCollectionIconImageConverter CollectionIconConverter;
-        private static readonly EmptyStringToBoolConverter EmptyStringConverter;
+    private static readonly DataTemplate DefaultResultTemplate;
+    private static readonly DataTemplate DefaultSuggestionTemplate;
+    private static readonly DataTemplate DefaultSuggestionGroupHeaderTemplate;
+    private static readonly ControlTemplate DefaultControlTemplate;
+    private static readonly ByteArrayToImageSourceConverter ImageSourceConverter;
+    private static readonly BoolToCollectionIconImageConverter CollectionIconConverter;
+    private static readonly EmptyStringToBoolConverter EmptyStringConverter;
 
-        static SearchView()
+    static SearchView()
+    {
+        ImageSourceConverter = new ByteArrayToImageSourceConverter();
+        CollectionIconConverter = new BoolToCollectionIconImageConverter();
+        EmptyStringConverter = new EmptyStringToBoolConverter();
+        DefaultSuggestionGroupHeaderTemplate = new DataTemplate(() =>
         {
-            ImageSourceConverter = new ByteArrayToImageSourceConverter();
-            CollectionIconConverter = new BoolToCollectionIconImageConverter();
-            EmptyStringConverter = new EmptyStringToBoolConverter();
-            DefaultSuggestionGroupHeaderTemplate = new DataTemplate(() =>
-            {
-                Grid containingGrid = new Grid();
-                containingGrid.BackgroundColor = Color.FromHex("#4e4e4e");
+            Grid containingGrid = new Grid();
+            containingGrid.BackgroundColor = Color.FromArgb("#4e4e4e");
 
-                Label textLabel = new Label();
-                textLabel.SetBinding(Label.TextProperty, "Key.DisplayName");
-                textLabel.Margin = new Thickness(4);
-                textLabel.TextColor = Colors.White;
-                textLabel.FontSize = 14;
-                textLabel.VerticalTextAlignment = TextAlignment.Center;
-                containingGrid.Children.Add(textLabel);
-                return containingGrid;
-            });
-            DefaultSuggestionTemplate = new DataTemplate(() =>
-            {
-                Grid containingGrid = new Grid();
+            Label textLabel = new Label();
+            textLabel.SetBinding(Label.TextProperty, "Key.DisplayName");
+            textLabel.Margin = new Thickness(4);
+            textLabel.TextColor = Colors.White;
+            textLabel.FontSize = 14;
+            textLabel.VerticalTextAlignment = TextAlignment.Center;
+            containingGrid.Children.Add(textLabel);
+            return containingGrid;
+        });
+        DefaultSuggestionTemplate = new DataTemplate(() =>
+        {
+            Grid containingGrid = new Grid();
 
-                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-                Grid textStack = new Grid();
-                textStack.VerticalOptions = LayoutOptions.Center;
-                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            Grid textStack = new Grid();
+            textStack.VerticalOptions = LayoutOptions.Center;
+            textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-                Image imageView = new Image();
-                imageView.SetBinding(Image.SourceProperty, nameof(SearchSuggestion.IsCollection), converter: CollectionIconConverter);
-                imageView.WidthRequest = 16;
-                imageView.HeightRequest = 16;
-                imageView.Margin = new Thickness(4);
-                imageView.VerticalOptions = LayoutOptions.Center;
+            Image imageView = new Image();
+            imageView.SetBinding(Image.SourceProperty, nameof(SearchSuggestion.IsCollection), converter: CollectionIconConverter);
+            imageView.WidthRequest = 16;
+            imageView.HeightRequest = 16;
+            imageView.Margin = new Thickness(4);
+            imageView.VerticalOptions = LayoutOptions.Center;
 
-                Label titleLabel = new Label();
-                titleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplayTitle));
-                titleLabel.VerticalOptions = LayoutOptions.End;
-                titleLabel.VerticalTextAlignment = TextAlignment.End;
-                titleLabel.TextColor = Colors.Black;
+            Label titleLabel = new Label();
+            titleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplayTitle));
+            titleLabel.VerticalOptions = LayoutOptions.End;
+            titleLabel.VerticalTextAlignment = TextAlignment.End;
+            titleLabel.TextColor = Colors.Black;
 
-                Label subtitleLabel = new Label();
-                subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplaySubtitle));
-                subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchSuggestion.DisplaySubtitle), converter: EmptyStringConverter);
-                subtitleLabel.VerticalOptions = LayoutOptions.Start;
-                subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
-                subtitleLabel.TextColor = Colors.Black;
+            Label subtitleLabel = new Label();
+            subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchSuggestion.DisplaySubtitle));
+            subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchSuggestion.DisplaySubtitle), converter: EmptyStringConverter);
+            subtitleLabel.VerticalOptions = LayoutOptions.Start;
+            subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
+            subtitleLabel.TextColor = Colors.Black;
 
-                textStack.Children.Add(titleLabel);
-                textStack.Children.Add(subtitleLabel);
-                Grid.SetRow(titleLabel, 0);
-                Grid.SetRow(subtitleLabel, 1);
+            textStack.Children.Add(titleLabel);
+            textStack.Children.Add(subtitleLabel);
+            Grid.SetRow(titleLabel, 0);
+            Grid.SetRow(subtitleLabel, 1);
 
-                containingGrid.Children.Add(imageView);
-                containingGrid.Children.Add(textStack);
+            containingGrid.Children.Add(imageView);
+            containingGrid.Children.Add(textStack);
 
-                Grid.SetColumn(textStack, 1);
-                Grid.SetColumn(imageView, 0);
+            Grid.SetColumn(textStack, 1);
+            Grid.SetColumn(imageView, 0);
 
-                return containingGrid;
-            });
-            DefaultResultTemplate = new DataTemplate(() =>
-            {
-                Grid containingGrid = new Grid();
-                containingGrid.Padding = new Thickness(2, 4, 2, 4);
+            return containingGrid;
+        });
+        DefaultResultTemplate = new DataTemplate(() =>
+        {
+            Grid containingGrid = new Grid();
+            containingGrid.Padding = new Thickness(2, 4, 2, 4);
 
-                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-                Grid textStack = new Grid();
-                textStack.VerticalOptions = LayoutOptions.Center;
-                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            Grid textStack = new Grid();
+            textStack.VerticalOptions = LayoutOptions.Center;
+            textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-                Image imageView = new Image();
-                imageView.SetBinding(Image.SourceProperty, nameof(SearchResult.MarkerImageData), converter: ImageSourceConverter);
-                imageView.WidthRequest = 24;
-                imageView.HeightRequest = 24;
-                imageView.Margin = new Thickness(4);
-                imageView.VerticalOptions = LayoutOptions.Center;
+            Image imageView = new Image();
+            imageView.SetBinding(Image.SourceProperty, nameof(SearchResult.MarkerImageData), converter: ImageSourceConverter);
+            imageView.WidthRequest = 24;
+            imageView.HeightRequest = 24;
+            imageView.Margin = new Thickness(4);
+            imageView.VerticalOptions = LayoutOptions.Center;
 
-                Label titleLabel = new Label();
-                titleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplayTitle));
-                titleLabel.FontAttributes = FontAttributes.Bold;
-                titleLabel.VerticalOptions = LayoutOptions.End;
-                titleLabel.VerticalTextAlignment = TextAlignment.End;
-                titleLabel.TextColor = Colors.Black;
+            Label titleLabel = new Label();
+            titleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplayTitle));
+            titleLabel.FontAttributes = FontAttributes.Bold;
+            titleLabel.VerticalOptions = LayoutOptions.End;
+            titleLabel.VerticalTextAlignment = TextAlignment.End;
+            titleLabel.TextColor = Colors.Black;
 
-                Label subtitleLabel = new Label();
-                subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplaySubtitle));
-                subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchResult.DisplaySubtitle), converter: EmptyStringConverter);
-                subtitleLabel.TextColor = Colors.Black;
-                subtitleLabel.VerticalOptions = LayoutOptions.Start;
-                subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
+            Label subtitleLabel = new Label();
+            subtitleLabel.SetBinding(Label.TextProperty, nameof(SearchResult.DisplaySubtitle));
+            subtitleLabel.SetBinding(Label.IsVisibleProperty, nameof(SearchResult.DisplaySubtitle), converter: EmptyStringConverter);
+            subtitleLabel.TextColor = Colors.Black;
+            subtitleLabel.VerticalOptions = LayoutOptions.Start;
+            subtitleLabel.VerticalTextAlignment = TextAlignment.Start;
 
-                textStack.Children.Add(titleLabel);
-                textStack.Children.Add(subtitleLabel);
-                Grid.SetRow(titleLabel, 0);
-                Grid.SetRow(subtitleLabel, 1);
+            textStack.Children.Add(titleLabel);
+            textStack.Children.Add(subtitleLabel);
+            Grid.SetRow(titleLabel, 0);
+            Grid.SetRow(subtitleLabel, 1);
 
-                containingGrid.Children.Add(imageView);
-                containingGrid.Children.Add(textStack);
+            containingGrid.Children.Add(imageView);
+            containingGrid.Children.Add(textStack);
 
-                Grid.SetColumn(textStack, 1);
-                Grid.SetColumn(imageView, 0);
+            Grid.SetColumn(textStack, 1);
+            Grid.SetColumn(imageView, 0);
 
-                return containingGrid;
-            });
+            return containingGrid;
+        });
 
-            string template =
+        string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
 <Grid RowSpacing=""0"" ColumnSpacing=""0"" >
@@ -183,7 +183,6 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     </Grid>
 </Grid>
 </ControlTemplate>";
-            DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
-        }
+        DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
     }
 }

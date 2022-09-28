@@ -17,131 +17,131 @@
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+public partial class BasemapGallery : TemplatedView
 {
-    public partial class BasemapGallery : TemplatedView
+    private const double ViewStyleWidthThreshold = 384.0;
+
+    // Tracks currently-applied layout to avoid unnecessary re-styling of the view
+    private int _currentSelectedSpan = 0;
+    private BasemapGalleryViewStyle _currentlyAppliedViewStyle = BasemapGalleryViewStyle.Automatic;
+
+    private View? _loadingScrim;
+
+    private static readonly DataTemplate DefaultListDataTemplate;
+    private static readonly DataTemplate DefaultGridDataTemplate;
+    private static readonly ControlTemplate DefaultControlTemplate;
+    private static readonly BoolToOpacityConverter OpacityConverter;
+    private static readonly ByteArrayToImageSourceConverter ImageSourceConverter;
+
+    static BasemapGallery()
     {
-        private const double ViewStyleWidthThreshold = 384.0;
+        OpacityConverter = new BoolToOpacityConverter();
+        ImageSourceConverter = new ByteArrayToImageSourceConverter();
 
-        // Tracks currently-applied layout to avoid unnecessary re-styling of the view
-        private int _currentSelectedSpan = 0;
-        private BasemapGalleryViewStyle _currentlyAppliedViewStyle = BasemapGalleryViewStyle.Automatic;
-
-        private View? _loadingScrim;
-
-        private static readonly DataTemplate DefaultListDataTemplate;
-        private static readonly DataTemplate DefaultGridDataTemplate;
-        private static readonly ControlTemplate DefaultControlTemplate;
-        private static readonly BoolToOpacityConverter OpacityConverter;
-        private static readonly ByteArrayToImageSourceConverter ImageSourceConverter;
-
-        static BasemapGallery()
+        DefaultGridDataTemplate = new DataTemplate(() =>
         {
-            OpacityConverter = new BoolToOpacityConverter();
-            ImageSourceConverter = new ByteArrayToImageSourceConverter();
+            Border border = new Border { Padding = 4, StrokeThickness = 1, StrokeShape = new Rectangle() };
+            Grid outerScrimContainer = new Grid();
+            outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(86) });
+            outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40)});
+            outerScrimContainer.RowSpacing = 4;
 
-            DefaultGridDataTemplate = new DataTemplate(() =>
-            {
-                Border border = new Border { Padding = 4, StrokeThickness = 1, StrokeShape = new Rectangle() };
-                Grid outerScrimContainer = new Grid();
-                outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(86) });
-                outerScrimContainer.RowDefinitions.Add(new RowDefinition { Height = new GridLength(40)});
-                outerScrimContainer.RowSpacing = 4;
+            Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
+            Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Start };
 
-                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, BackgroundColor = Colors.Transparent, HorizontalOptions = LayoutOptions.Center };
-                Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Start };
+            outerScrimContainer.Children.Add(thumbnail);
+            outerScrimContainer.Children.Add(nameLabel);
 
-                outerScrimContainer.Children.Add(thumbnail);
-                outerScrimContainer.Children.Add(nameLabel);
-
-                Grid.SetRow(thumbnail, 0);
-                Grid.SetRow(nameLabel, 1);
+            Grid.SetRow(thumbnail, 0);
+            Grid.SetRow(nameLabel, 1);
 
 
-                Grid scrimGrid = new Grid();
-                scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
-                outerScrimContainer.Children.Add(scrimGrid);
-                Grid.SetRowSpan(scrimGrid, 2);
-                
+            Grid scrimGrid = new Grid();
+            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
+            outerScrimContainer.Children.Add(scrimGrid);
+            Grid.SetRowSpan(scrimGrid, 2);
+            
 
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
-                nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
-                scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
+            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
+            nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
+            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
 
-                border.Content = outerScrimContainer;
-                return border;
-            });
+            border.Content = outerScrimContainer;
+            return border;
+        });
 
-            DefaultListDataTemplate = new DataTemplate(() =>
-            {
-                // Special template to take advantate of negative margin support on iOS, Mac
+        DefaultListDataTemplate = new DataTemplate(() =>
+        {
+            // Special template to take advantate of negative margin support on iOS, Mac
 #if __IOS__
-                Border border = new Border { Padding = new Thickness(0), StrokeThickness = 8, StrokeShape = new Rectangle() };
-                Grid outerScrimContainer = new Grid();
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                outerScrimContainer.ColumnSpacing = 0;
-                outerScrimContainer.Margin = new Thickness(-4, -8, -8, -8);
-                outerScrimContainer.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
+            Border border = new Border { Padding = new Thickness(0), StrokeThickness = 8, StrokeShape = new Rectangle() };
+            Grid outerScrimContainer = new Grid();
+            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
+            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            outerScrimContainer.ColumnSpacing = 0;
+            outerScrimContainer.Margin = new Thickness(-4, -8, -8, -8);
+            outerScrimContainer.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
 
-                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
-                Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
-                thumbnail.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
+            Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
+            Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
+            thumbnail.SetBinding(BackgroundColorProperty, new Binding { Source = border, Path = nameof(border.BackgroundColor) });
 
-                outerScrimContainer.Children.Add(thumbnail);
-                outerScrimContainer.Children.Add(nameLabel);
+            outerScrimContainer.Children.Add(thumbnail);
+            outerScrimContainer.Children.Add(nameLabel);
 
-                Grid.SetColumn(thumbnail, 0);
-                Grid.SetColumn(nameLabel, 2);
-
-
-                Grid scrimGrid = new Grid();
-                scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
-                outerScrimContainer.Children.Add(scrimGrid);
-                Grid.SetColumnSpan(scrimGrid, 3);
+            Grid.SetColumn(thumbnail, 0);
+            Grid.SetColumn(nameLabel, 2);
 
 
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
-                nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
-                scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
+            Grid scrimGrid = new Grid();
+            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
+            outerScrimContainer.Children.Add(scrimGrid);
+            Grid.SetColumnSpan(scrimGrid, 3);
 
-                border.Content = outerScrimContainer;
-                return border;
+
+            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
+            nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
+            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
+
+            border.Content = outerScrimContainer;
+            return border;
 #else
-                Border border = new Border { Padding = new Thickness(0), StrokeThickness = 1, StrokeShape = new Rectangle() };
-                Grid outerScrimContainer = new Grid();
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
-                outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                outerScrimContainer.ColumnSpacing = 0;
+            Border border = new Border { Padding = new Thickness(0), StrokeThickness = 1, StrokeShape = new Rectangle() };
+            Grid outerScrimContainer = new Grid();
+            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(64) });
+            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
+            outerScrimContainer.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            outerScrimContainer.ColumnSpacing = 0;
 
-                Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
-                Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
+            Image thumbnail = new Image { WidthRequest = 64, HeightRequest = 64, Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Start };
+            Label nameLabel = new Label { FontSize = 12, HorizontalTextAlignment = TextAlignment.Start, VerticalTextAlignment = TextAlignment.Center };
 
-                outerScrimContainer.Children.Add(thumbnail);
-                outerScrimContainer.Children.Add(nameLabel);
+            outerScrimContainer.Children.Add(thumbnail);
+            outerScrimContainer.Children.Add(nameLabel);
 
-                Grid.SetColumn(thumbnail, 0);
-                Grid.SetColumn(nameLabel, 2);
-
-
-                Grid scrimGrid = new Grid();
-                scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
-                outerScrimContainer.Children.Add(scrimGrid);
-                Grid.SetColumnSpan(scrimGrid, 3);
+            Grid.SetColumn(thumbnail, 0);
+            Grid.SetColumn(nameLabel, 2);
 
 
-                thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
-                nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
-                scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
+            Grid scrimGrid = new Grid();
+            scrimGrid.SetAppThemeColor(BackgroundColorProperty, Colors.White, Colors.Black);
+            outerScrimContainer.Children.Add(scrimGrid);
+            Grid.SetColumnSpan(scrimGrid, 3);
 
-                border.Content = outerScrimContainer;
-                return border;
+
+            thumbnail.SetBinding(Image.SourceProperty, nameof(BasemapGalleryItem.ThumbnailData), converter: ImageSourceConverter);
+            nameLabel.SetBinding(Label.TextProperty, nameof(BasemapGalleryItem.Name));
+            scrimGrid.SetBinding(OpacityProperty, nameof(BasemapGalleryItem.IsValid), mode: BindingMode.OneWay, converter: OpacityConverter);
+
+            border.Content = outerScrimContainer;
+            return border;
 #endif
-            });
+        });
 
-            string template = $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
+        string template = $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
                                     <Grid>
                                             <Grid.Resources>
                                                  <Style TargetType=""Border"">
@@ -179,147 +179,146 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                                         </Grid>
                                     </Grid>
                                 </ControlTemplate>";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
+        DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
+    }
+
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
+    protected override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+
+        ListView = GetTemplateChild("PART_InnerListView") as CollectionView;
+        VisualStateManager.SetVisualStateGroups(ListView, new VisualStateGroupList());
+        _loadingScrim = GetTemplateChild("PART_LoadingScrim") as View;
+        if (ListView != null)
+        {
+            ListView.BindingContext = _controller;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the data template used to show basemaps in a list.
+    /// </summary>
+    /// <seealso cref="GalleryViewStyle"/>
+    public DataTemplate? ListItemTemplate
+    {
+        get => GetValue(ListItemTemplateProperty) as DataTemplate;
+        set => SetValue(ListItemTemplateProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the template used to show basemaps in a grid.
+    /// </summary>
+    /// <seealso cref="GalleryViewStyle"/>
+    public DataTemplate? GridItemTemplate
+    {
+        get => GetValue(GridItemTemplateProperty) as DataTemplate;
+        set => SetValue(GridItemTemplateProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the view style for the gallery.
+    /// </summary>
+    public BasemapGalleryViewStyle GalleryViewStyle
+    {
+        get => (BasemapGalleryViewStyle)GetValue(GalleryViewStyleProperty);
+        set => SetValue(GalleryViewStyleProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="ListItemTemplate"/> bindable property.
+    /// </summary>
+    public static readonly BindableProperty ListItemTemplateProperty =
+        BindableProperty.Create(nameof(ListItemTemplate), typeof(DataTemplate), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+
+    /// <summary>
+    /// Identifies the <see cref="GridItemTemplate"/> bindable property.
+    /// </summary>
+    public static readonly BindableProperty GridItemTemplateProperty =
+        BindableProperty.Create(nameof(GridItemTemplate), typeof(DataTemplate), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
+
+    /// <summary>
+    /// Identifies the <see cref="GalleryViewStyle"/> bindable property.
+    /// </summary>
+    public static readonly BindableProperty GalleryViewStyleProperty =
+        BindableProperty.Create(nameof(GalleryViewStyle), typeof(BasemapGalleryViewStyle), typeof(BasemapGallery), BasemapGalleryViewStyle.Automatic, BindingMode.OneWay, propertyChanged: ItemTemplateChanged);
+
+    /// <summary>
+    /// Handles property changes for the bindable properties that can trigger a style or template change.
+    /// </summary>
+    private static void ItemTemplateChanged(BindableObject sender, object oldValue, object newValue)
+    {
+        BasemapGallery sendingView = (BasemapGallery)sender;
+        sendingView.HandleTemplateChange(sendingView.Width);
+    }
+
+    /// <summary>
+    /// Updates the view based on the current width, adjusting the collection view presentation style as configured.
+    /// </summary>
+    /// <seealso cref="GridItemTemplate"/>
+    /// <seealso cref="ListItemTemplate"/>
+    /// <seealso cref="GalleryViewStyle"/>
+    private void HandleTemplateChange(double currentWidth)
+    {
+        if (ListView == null)
+        {
+            return;
         }
 
-        /// <summary>
-        /// <inheritdoc />
-        /// </summary>
-        protected override void OnApplyTemplate()
+        BasemapGalleryViewStyle styleAfterUpdate = BasemapGalleryViewStyle.Automatic;
+        int gridSpanAfterUpdate = 0;
+        switch (GalleryViewStyle)
         {
-            base.OnApplyTemplate();
-
-            ListView = GetTemplateChild("PART_InnerListView") as CollectionView;
-            VisualStateManager.SetVisualStateGroups(ListView, new VisualStateGroupList());
-            _loadingScrim = GetTemplateChild("PART_LoadingScrim") as View;
-            if (ListView != null)
-            {
-                ListView.BindingContext = _controller;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the data template used to show basemaps in a list.
-        /// </summary>
-        /// <seealso cref="GalleryViewStyle"/>
-        public DataTemplate? ListItemTemplate
-        {
-            get => GetValue(ListItemTemplateProperty) as DataTemplate;
-            set => SetValue(ListItemTemplateProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the template used to show basemaps in a grid.
-        /// </summary>
-        /// <seealso cref="GalleryViewStyle"/>
-        public DataTemplate? GridItemTemplate
-        {
-            get => GetValue(GridItemTemplateProperty) as DataTemplate;
-            set => SetValue(GridItemTemplateProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the view style for the gallery.
-        /// </summary>
-        public BasemapGalleryViewStyle GalleryViewStyle
-        {
-            get => (BasemapGalleryViewStyle)GetValue(GalleryViewStyleProperty);
-            set => SetValue(GalleryViewStyleProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="ListItemTemplate"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty ListItemTemplateProperty =
-            BindableProperty.Create(nameof(ListItemTemplate), typeof(DataTemplate), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="GridItemTemplate"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty GridItemTemplateProperty =
-            BindableProperty.Create(nameof(GridItemTemplate), typeof(DataTemplate), typeof(BasemapGallery), null, BindingMode.OneWay, null, propertyChanged: ItemTemplateChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="GalleryViewStyle"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty GalleryViewStyleProperty =
-            BindableProperty.Create(nameof(GalleryViewStyle), typeof(BasemapGalleryViewStyle), typeof(BasemapGallery), BasemapGalleryViewStyle.Automatic, BindingMode.OneWay, propertyChanged: ItemTemplateChanged);
-
-        /// <summary>
-        /// Handles property changes for the bindable properties that can trigger a style or template change.
-        /// </summary>
-        private static void ItemTemplateChanged(BindableObject sender, object oldValue, object newValue)
-        {
-            BasemapGallery sendingView = (BasemapGallery)sender;
-            sendingView.HandleTemplateChange(sendingView.Width);
-        }
-
-        /// <summary>
-        /// Updates the view based on the current width, adjusting the collection view presentation style as configured.
-        /// </summary>
-        /// <seealso cref="GridItemTemplate"/>
-        /// <seealso cref="ListItemTemplate"/>
-        /// <seealso cref="GalleryViewStyle"/>
-        private void HandleTemplateChange(double currentWidth)
-        {
-            if (ListView == null)
-            {
-                return;
-            }
-
-            BasemapGalleryViewStyle styleAfterUpdate = BasemapGalleryViewStyle.Automatic;
-            int gridSpanAfterUpdate = 0;
-            switch (GalleryViewStyle)
-            {
-                case BasemapGalleryViewStyle.List:
-                    styleAfterUpdate = BasemapGalleryViewStyle.List;
-                    break;
-                case BasemapGalleryViewStyle.Grid:
-                    styleAfterUpdate = BasemapGalleryViewStyle.Grid;
-                    break;
-                case BasemapGalleryViewStyle.Automatic:
-                    styleAfterUpdate = currentWidth >= ViewStyleWidthThreshold ? BasemapGalleryViewStyle.Grid : BasemapGalleryViewStyle.List;
-                    break;
-            }
-
-            // This check may be removable once UWP collectionview supports dynamic item sizing: https://gist.github.com/hartez/7d0edd4182dbc7de65cebc6c67f72e14
-            if (Device.RuntimePlatform == Device.UWP)
-            {
+            case BasemapGalleryViewStyle.List:
                 styleAfterUpdate = BasemapGalleryViewStyle.List;
-            }
-
-            if (styleAfterUpdate == BasemapGalleryViewStyle.Grid)
-            {
-                gridSpanAfterUpdate = System.Math.Max((int)(currentWidth / 128), 1);
-            }
-
-            if (_currentSelectedSpan != gridSpanAfterUpdate || styleAfterUpdate != _currentlyAppliedViewStyle)
-            {
-                if (styleAfterUpdate == BasemapGalleryViewStyle.List)
-                {
-                    ListView.ItemTemplate = ListItemTemplate;
-                    ListView.ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical) { ItemSpacing = 0 };
-                    ListView.Margin = new Thickness(0);
-                }
-                else
-                {
-                    ListView.ItemTemplate = GridItemTemplate;
-                    ListView.ItemsLayout = new GridItemsLayout(gridSpanAfterUpdate, ItemsLayoutOrientation.Vertical) { HorizontalItemSpacing = 4, VerticalItemSpacing = 4 };
-                    ListView.Margin = new Thickness(4, 4, 0, 0);
-                }
-
-                _currentSelectedSpan = gridSpanAfterUpdate;
-                _currentlyAppliedViewStyle = styleAfterUpdate;
-            }
+                break;
+            case BasemapGalleryViewStyle.Grid:
+                styleAfterUpdate = BasemapGalleryViewStyle.Grid;
+                break;
+            case BasemapGalleryViewStyle.Automatic:
+                styleAfterUpdate = currentWidth >= ViewStyleWidthThreshold ? BasemapGalleryViewStyle.Grid : BasemapGalleryViewStyle.List;
+                break;
         }
 
-        /// <inheritdoc />
-        protected override void OnSizeAllocated(double width, double height)
+        // This check may be removable once UWP collectionview supports dynamic item sizing: https://gist.github.com/hartez/7d0edd4182dbc7de65cebc6c67f72e14
+        if (DeviceInfo.Platform == DevicePlatform.WinUI)
         {
-            base.OnSizeAllocated(width, height);
-
-            // Size change could necesitate a switch between list and grid presentations.
-            HandleTemplateChange(width);
+            styleAfterUpdate = BasemapGalleryViewStyle.List;
         }
+
+        if (styleAfterUpdate == BasemapGalleryViewStyle.Grid)
+        {
+            gridSpanAfterUpdate = System.Math.Max((int)(currentWidth / 128), 1);
+        }
+
+        if (_currentSelectedSpan != gridSpanAfterUpdate || styleAfterUpdate != _currentlyAppliedViewStyle)
+        {
+            if (styleAfterUpdate == BasemapGalleryViewStyle.List)
+            {
+                ListView.ItemTemplate = ListItemTemplate;
+                ListView.ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical) { ItemSpacing = 0 };
+                ListView.Margin = new Thickness(0);
+            }
+            else
+            {
+                ListView.ItemTemplate = GridItemTemplate;
+                ListView.ItemsLayout = new GridItemsLayout(gridSpanAfterUpdate, ItemsLayoutOrientation.Vertical) { HorizontalItemSpacing = 4, VerticalItemSpacing = 4 };
+                ListView.Margin = new Thickness(4, 4, 0, 0);
+            }
+
+            _currentSelectedSpan = gridSpanAfterUpdate;
+            _currentlyAppliedViewStyle = styleAfterUpdate;
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void OnSizeAllocated(double width, double height)
+    {
+        base.OnSizeAllocated(width, height);
+
+        // Size change could necesitate a switch between list and grid presentations.
+        HandleTemplateChange(width);
     }
 }

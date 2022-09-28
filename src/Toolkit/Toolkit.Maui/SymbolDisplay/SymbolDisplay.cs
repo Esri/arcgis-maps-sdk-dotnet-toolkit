@@ -17,164 +17,163 @@
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+/// <summary>
+/// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
+/// </summary>
+public partial class SymbolDisplay : TemplatedView
 {
-    /// <summary>
-    /// A control that renders a <see cref="Esri.ArcGISRuntime.Symbology.Symbol"/>.
-    /// </summary>
-    public partial class SymbolDisplay : TemplatedView
+    private WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
+    private Task? _currentUpdateTask;
+    private bool _isRefreshRequired;
+    private static readonly ControlTemplate DefaultControlTemplate;
+    private Image? image;
+
+    static SymbolDisplay()
     {
-        private WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
-        private Task? _currentUpdateTask;
-        private bool _isRefreshRequired;
-        private static readonly ControlTemplate DefaultControlTemplate;
-        private Image? image;
-
-        static SymbolDisplay()
+        string template = @"<Image xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" x:Name=""image"" Aspect=""AspectFit"" Margin=""{TemplateBinding Padding}""/>";
+        DefaultControlTemplate = new ControlTemplate()
         {
-            string template = @"<Image xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" x:Name=""image"" Aspect=""AspectFit"" Margin=""{TemplateBinding Padding}""/>";
-            DefaultControlTemplate = new ControlTemplate()
+            LoadTemplate = () =>
             {
-                LoadTemplate = () =>
+                return Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new Image(), template);
+            }
+        };
+    }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
+    /// </summary>
+    public SymbolDisplay()
+    {
+        ControlTemplate = DefaultControlTemplate;
+    }
+
+    /// <summary>
+    /// Gets or sets the symbol to render.
+    /// </summary>
+    public Symbology.Symbol? Symbol
+    {
+        get => (Symbol?)GetValue(SymbolProperty);
+        set => SetValue(SymbolProperty, value);
+    }
+
+    /// <summary>
+    /// Identifies the <see cref="Symbol"/> bindable property.
+    /// </summary>
+    public static readonly BindableProperty SymbolProperty =
+        BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(SymbolDisplay), null, propertyChanged: OnSymbolPropertyChanged);
+
+    private static void OnSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
+    {
+        ((SymbolDisplay)sender).OnSymbolChanged(oldValue as Symbol, newValue as Symbol);
+    }
+
+    private void OnSymbolChanged(Symbology.Symbol? oldValue, Symbology.Symbol? newValue)
+    {
+        if (oldValue != null)
+        {
+            _inpcListener?.Detach();
+            _inpcListener = null;
+        }
+
+        if (newValue != null)
+        {
+            _inpcListener = new WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>(newValue)
+            {
+                OnEventAction = (instance, source, eventArgs) =>
                 {
-                    return Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new Image(), template);
-                }
+                    Refresh();
+                },
+                OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
             };
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SymbolDisplay"/> class.
-        /// </summary>
-        public SymbolDisplay()
-        {
-            ControlTemplate = DefaultControlTemplate;
+            newValue.PropertyChanged += _inpcListener.OnEvent;
         }
 
-        /// <summary>
-        /// Gets or sets the symbol to render.
-        /// </summary>
-        public Symbology.Symbol? Symbol
+        Refresh();
+    }
+
+    /// <inheritdoc />
+    protected override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        image = GetTemplateChild("image") as Image;
+        Refresh();
+    }
+
+    private async Task UpdateSwatchAsync()
+    {
+
+        if (image is null)
         {
-            get => (Symbol?)GetValue(SymbolProperty);
-            set => SetValue(SymbolProperty, value);
+            return;
         }
 
-        /// <summary>
-        /// Identifies the <see cref="Symbol"/> bindable property.
-        /// </summary>
-        public static readonly BindableProperty SymbolProperty =
-            BindableProperty.Create(nameof(Symbol), typeof(Symbol), typeof(SymbolDisplay), null, propertyChanged: OnSymbolPropertyChanged);
-
-        private static void OnSymbolPropertyChanged(BindableObject sender, object? oldValue, object? newValue)
+        if (Symbol == null)
         {
-            ((SymbolDisplay)sender).OnSymbolChanged(oldValue as Symbol, newValue as Symbol);
+            image.Source = null;
+            image.MaximumWidthRequest = 0;
+            image.MaximumHeightRequest = 0;
         }
-
-        private void OnSymbolChanged(Symbology.Symbol? oldValue, Symbology.Symbol? newValue)
+        else
         {
-            if (oldValue != null)
+            try
             {
-                _inpcListener?.Detach();
-                _inpcListener = null;
+                var scale = GetScaleFactor();
+#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
+                var imageData = await Symbol.CreateSwatchAsync(scale * 96);
+                image.MaximumWidthRequest = imageData.Width / scale;
+                image.MaximumHeightRequest = imageData.Height / scale;
+                image.Source = await imageData.ToImageSourceAsync();
+                SourceUpdated?.Invoke(this, EventArgs.Empty);
+#pragma warning restore ESRI1800
             }
-
-            if (newValue != null)
-            {
-                _inpcListener = new WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>(newValue)
-                {
-                    OnEventAction = (instance, source, eventArgs) =>
-                    {
-                        Refresh();
-                    },
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
-                };
-                newValue.PropertyChanged += _inpcListener.OnEvent;
-            }
-
-            Refresh();
-        }
-
-        /// <inheritdoc />
-        protected override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            image = GetTemplateChild("image") as Image;
-            Refresh();
-        }
-
-        private async Task UpdateSwatchAsync()
-        {
-
-            if (image is null)
-            {
-                return;
-            }
-
-            if (Symbol == null)
+            catch
             {
                 image.Source = null;
                 image.MaximumWidthRequest = 0;
                 image.MaximumHeightRequest = 0;
             }
-            else
-            {
-                try
-                {
-                    var scale = GetScaleFactor();
-#pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
-                    var imageData = await Symbol.CreateSwatchAsync(scale * 96);
-                    image.MaximumWidthRequest = imageData.Width / scale;
-                    image.MaximumHeightRequest = imageData.Height / scale;
-                    image.Source = await imageData.ToImageSourceAsync();
-                    SourceUpdated?.Invoke(this, EventArgs.Empty);
-#pragma warning restore ESRI1800
-                }
-                catch
-                {
-                    image.Source = null;
-                    image.MaximumWidthRequest = 0;
-                    image.MaximumHeightRequest = 0;
-                }
-            }
         }
+    }
 
-        // Known issue - see toolkit issue #451
-        private double GetScaleFactor() => Window?.DisplayDensity ?? 1d;
+    // Known issue - see toolkit issue #451
+    private double GetScaleFactor() => Window?.DisplayDensity ?? 1d;
 
-        private async void Refresh()
+    private async void Refresh()
+    {
+        try
         {
-            try
+            if (_currentUpdateTask != null)
             {
-                if (_currentUpdateTask != null)
-                {
-                    // Instead of refreshing immediately when a refresh is already in progress, avoid updating too frequently, but just flag it dirty
-                    // This avoid multiple refreshes where properties change very frequently, but just the latest state gets refreshed.
-                    _isRefreshRequired = true;
-                    return;
-                }
+                // Instead of refreshing immediately when a refresh is already in progress, avoid updating too frequently, but just flag it dirty
+                // This avoid multiple refreshes where properties change very frequently, but just the latest state gets refreshed.
+                _isRefreshRequired = true;
+                return;
+            }
 
 #pragma warning disable SA1500 // Braces for multi-line statements should not share line
 
-                do
-                {
-                    _isRefreshRequired = false;
-                    var task = _currentUpdateTask = UpdateSwatchAsync();
-                    await task;
-                } while (_isRefreshRequired);
+            do
+            {
+                _isRefreshRequired = false;
+                var task = _currentUpdateTask = UpdateSwatchAsync();
+                await task;
+            } while (_isRefreshRequired);
 
 #pragma warning restore SA1500 // Braces for multi-line statements should not share line
 
-                _currentUpdateTask = null;
-            }
-            catch (Exception)
-            {
-                // Ignore
-            }
+            _currentUpdateTask = null;
         }
-        // Even though this code doesn't apply to .NET standard build, Visual Studio sill warns about it.
-        /// <summary>
-        /// Triggered when the image source has updated
-        /// </summary>
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-        public event System.EventHandler? SourceUpdated;
+        catch (Exception)
+        {
+            // Ignore
+        }
     }
+    // Even though this code doesn't apply to .NET standard build, Visual Studio sill warns about it.
+    /// <summary>
+    /// Triggered when the image source has updated
+    /// </summary>
+    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+    public event System.EventHandler? SourceUpdated;
 }

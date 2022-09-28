@@ -14,12 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+#pragma warning disable CS1591
+public interface ICompass : IView
 {
-    public interface ICompass : IView
-    {
-        bool AutoHide { get; set; }
-        GeoView? GeoView { get; set; }
-        double Heading { get; set; }
-    }
+    bool AutoHide { get; set; }
+    GeoView? GeoView { get; set; }
+    double Heading { get; set; }
 }
+#pragma warning restore CS1591

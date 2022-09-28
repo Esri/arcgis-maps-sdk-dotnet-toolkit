@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
-
+#pragma warning disable CS8602, CS8618
 namespace Toolkit.SampleApp.Maui
 {
     public class SampleDatasource
@@ -74,3 +74,4 @@ namespace Toolkit.SampleApp.Maui
         public string Category { get; set; }
     }
 }
+#pragma warning restore CS8602, CS8618

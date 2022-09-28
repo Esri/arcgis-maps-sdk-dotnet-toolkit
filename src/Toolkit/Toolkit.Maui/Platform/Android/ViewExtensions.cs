@@ -92,22 +92,6 @@ internal static class ViewExtensions
         }
     }
 
-    public static void SetBackgroundFill(this View view, Color color)
-    {
-        if (view.Background is GradientDrawable gradientDrawable)
-        {
-            gradientDrawable.SetColor(color.ToArgb());
-        }
-        else if (view.Background is Drawable drawable)
-        {
-            drawable.SetColorFilter(color, PorterDuff.Mode.SrcAtop!);
-        }
-        else
-        {
-            view.SetBackgroundColor(color);
-        }
-    }
-
     public static void SetBorderColor(this View view, Color color)
     {
         if (view.Background is GradientDrawable drawable)

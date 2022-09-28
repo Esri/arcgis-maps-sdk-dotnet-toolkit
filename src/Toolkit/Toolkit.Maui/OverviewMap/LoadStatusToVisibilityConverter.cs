@@ -14,62 +14,60 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System;
 using System.Globalization;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+
+/// <summary>
+/// *FOR INTERNAL USE* Returns a boolean representing visibility for a given load status.
+/// </summary>
+internal class LoadStatusToVisibilityConverter : IValueConverter
 {
-    /// <summary>
-    /// *FOR INTERNAL USE* Returns a boolean representing visibility for a given load status.
-    /// </summary>
-    internal class LoadStatusToVisibilityConverter : IValueConverter
+    /// <inheritdoc/>
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        /// <inheritdoc/>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (DesignMode.IsDesignModeEnabled)
         {
-            if (DesignMode.IsDesignModeEnabled)
+            if (parameter is string statusParameter)
             {
-                if (parameter is string statusParameter)
+                switch (statusParameter)
                 {
-                    switch (statusParameter)
-                    {
-                        case "Loaded":
-                            return true;
-                        case "NotLoaded":
-                            return false;
-                        case "Loading":
-                            return false;
-                        case "FailedToLoad":
-                            return false;
-                        default:
-                            return true;
-                    }
+                    case "Loaded":
+                        return true;
+                    case "NotLoaded":
+                        return false;
+                    case "Loading":
+                        return false;
+                    case "FailedToLoad":
+                        return false;
+                    default:
+                        return true;
                 }
             }
-
-            if (value is LoadStatus status && parameter is string parameterString)
-            {
-                if (parameterString == "Loaded" && status == LoadStatus.Loaded)
-                {
-                    return true;
-                }
-                else if (parameterString == "Loading" && status == LoadStatus.Loading)
-                {
-                    return true;
-                }
-                else if (parameterString == "FailedToLoad" && status == LoadStatus.FailedToLoad)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        if (value is LoadStatus status && parameter is string parameterString)
         {
-            throw new NotImplementedException();
+            if (parameterString == "Loaded" && status == LoadStatus.Loaded)
+            {
+                return true;
+            }
+            else if (parameterString == "Loading" && status == LoadStatus.Loading)
+            {
+                return true;
+            }
+            else if (parameterString == "FailedToLoad" && status == LoadStatus.FailedToLoad)
+            {
+                return true;
+            }
         }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

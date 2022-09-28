@@ -16,27 +16,26 @@
 
 using System.Globalization;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+internal class EmptyStringToBoolConverter : IValueConverter
 {
-    internal class EmptyStringToBoolConverter : IValueConverter
+    /// <summary>
+    /// Converts a string to a bool, true if not empty, false otherwise.
+    /// </summary>
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        /// <summary>
-        /// Converts a string to a bool, true if not empty, false otherwise.
-        /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (value is string stringvalue && !string.IsNullOrEmpty(stringvalue))
         {
-            if (value is string stringvalue && !string.IsNullOrEmpty(stringvalue))
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

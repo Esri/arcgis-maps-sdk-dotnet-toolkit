@@ -27,131 +27,131 @@ using NativeViewType = Android.Views.View;
 using NativeViewType = System.Object;
 #endif
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui.Handlers
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Handlers;
+#pragma warning disable CS1591
+public class CompassHandler : ViewHandler<ICompass, NativeViewType>
 {
-    public class CompassHandler : ViewHandler<ICompass, NativeViewType>
+    public static PropertyMapper<ICompass, CompassHandler> CompassMapper = new PropertyMapper<ICompass, CompassHandler>(ViewHandler.ViewMapper)
     {
-        public static PropertyMapper<ICompass, CompassHandler> CompassMapper = new PropertyMapper<ICompass, CompassHandler>(ViewHandler.ViewMapper)
-        {
-            [nameof(ICompass.AutoHide)] = MapAutoHide,
-            [nameof(ICompass.GeoView)] = MapGeoView,
-            [nameof(ICompass.Heading)] = MapHeading,
-        };
+        [nameof(ICompass.AutoHide)] = MapAutoHide,
+        [nameof(ICompass.GeoView)] = MapGeoView,
+        [nameof(ICompass.Heading)] = MapHeading,
+    };
 
-        /// <summary>
-        /// Instantiates a new instance of the <see cref="CompassHandler"/> class.
-        /// </summary>
-        public CompassHandler() : this(CompassMapper)
-        {
-        }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="CompassHandler"/> class.
+    /// </summary>
+    public CompassHandler() : this(CompassMapper)
+    {
+    }
 
 
-        /// <summary>
-        /// Instantiates a new instance of the <see cref="CompassHandler"/> class.
-        /// </summary>
-        /// <param name="mapper">property mapper</param>
-        /// <param name="commandMapper"></param>
-        public CompassHandler(IPropertyMapper mapper, CommandMapper? commandMapper = null) : base(mapper ?? CompassMapper, commandMapper )
-        {
-        }
+    /// <summary>
+    /// Instantiates a new instance of the <see cref="CompassHandler"/> class.
+    /// </summary>
+    /// <param name="mapper">property mapper</param>
+    /// <param name="commandMapper"></param>
+    public CompassHandler(IPropertyMapper mapper, CommandMapper? commandMapper = null) : base(mapper ?? CompassMapper, commandMapper )
+    {
+    }
 
 #if WINDOWS || __IOS__ || __ANDROID__
-        /// <inheritdoc />
-        protected override void ConnectHandler(NativeViewType platformView)
+    /// <inheritdoc />
+    protected override void ConnectHandler(NativeViewType platformView)
+    {
+        base.ConnectHandler(platformView);
+        if(platformView is INotifyPropertyChanged inpc)
         {
-            base.ConnectHandler(platformView);
-            if(platformView is INotifyPropertyChanged inpc)
-            {
-                inpc.PropertyChanged += PlatformView_PropertyChanged;
-            }
+            inpc.PropertyChanged += PlatformView_PropertyChanged;
+        }
+        UpdateHeadingFromNativeCompass(VirtualView);
+    }
+
+    private void PlatformView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if(e.PropertyName == nameof(Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.Heading))
+        {
             UpdateHeadingFromNativeCompass(VirtualView);
         }
+    }
 
-        private void PlatformView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void UpdateHeadingFromNativeCompass(ICompass? compass)
+    {
+        if (PlatformView is Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass view && compass is not null)
         {
-            if(e.PropertyName == nameof(Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.Heading))
-            {
-                UpdateHeadingFromNativeCompass(VirtualView);
-            }
+            _isUpdatingHeadingFromGeoView = true;
+            compass.Heading = view.Heading;
+            _isUpdatingHeadingFromGeoView = false;
         }
+    }
 
-        private void UpdateHeadingFromNativeCompass(ICompass? compass)
+    /// <inheritdoc />
+    protected override void DisconnectHandler(NativeViewType platformView)
+    {
+        if (platformView is INotifyPropertyChanged inpc)
         {
-            if (PlatformView is Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass view && compass is not null)
-            {
-                _isUpdatingHeadingFromGeoView = true;
-                compass.Heading = view.Heading;
-                _isUpdatingHeadingFromGeoView = false;
-            }
+            inpc.PropertyChanged -= PlatformView_PropertyChanged;
         }
+        base.DisconnectHandler(platformView);
+    }
 
-        /// <inheritdoc />
-        protected override void DisconnectHandler(NativeViewType platformView)
-        {
-            if (platformView is INotifyPropertyChanged inpc)
-            {
-                inpc.PropertyChanged -= PlatformView_PropertyChanged;
-            }
-            base.DisconnectHandler(platformView);
-        }
-
-        /// <inheritdoc />
-        public override void PlatformArrange(Rect rect)
-        {
-            base.PlatformArrange(rect);
+    /// <inheritdoc />
+    public override void PlatformArrange(Rect rect)
+    {
+        base.PlatformArrange(rect);
 #if  __ANDROID__
-            var lp = PlatformView.LayoutParameters;
-            if (lp != null && Context != null)
-            {
-                var scale = (VirtualView as View)?.Window?.DisplayDensity ?? 1f;
-                lp.Width = (int)(rect.Width * scale);
-                lp.Height = (int)(rect.Height * scale);
-            }
-            PlatformView.LayoutParameters = lp;
-#endif
-        }
-#endif
-
-        private static void MapAutoHide(CompassHandler handler, ICompass compass)
+        var lp = PlatformView.LayoutParameters;
+        if (lp != null && Context != null)
         {
-#if WINDOWS || __IOS__ || __ANDROID__
-            ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).AutoHide = compass.AutoHide;
-#endif
+            var scale = (VirtualView as View)?.Window?.DisplayDensity ?? 1f;
+            lp.Width = (int)(rect.Width * scale);
+            lp.Height = (int)(rect.Height * scale);
         }
-
-        private static void MapGeoView(CompassHandler handler, ICompass compass)
-        {
-#if WINDOWS || __IOS__ || __ANDROID__
-            if (compass.GeoView?.Handler is MapViewHandler mvh)
-                ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).GeoView = mvh.PlatformView;
-            else if (compass.GeoView?.Handler is SceneViewHandler svh)
-                ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).GeoView = svh.PlatformView;
-            else
-                ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).GeoView = null;
-#endif
-        }
-
-        private static void MapHeading(CompassHandler handler, ICompass compass)
-        {
-#if WINDOWS || __IOS__ || __ANDROID__
-            if (!handler._isUpdatingHeadingFromGeoView)
-
-                ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).Heading = compass.Heading;
-#endif
-        }
-
-        private bool _isUpdatingHeadingFromGeoView;
-
-        /// <inheritdoc />
-#if WINDOWS || __IOS__
-        protected override NativeViewType CreatePlatformView() => new Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass();
-#elif __ANDROID__
-        protected override NativeViewType CreatePlatformView() => new Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass(this.Context);
-#else
-        protected override object CreatePlatformView()
-        {
-            throw new NotImplementedException();
-        }
+        PlatformView.LayoutParameters = lp;
 #endif
     }
+#endif
+
+    private static void MapAutoHide(CompassHandler handler, ICompass compass)
+    {
+#if WINDOWS || __IOS__ || __ANDROID__
+        ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).AutoHide = compass.AutoHide;
+#endif
+    }
+
+    private static void MapGeoView(CompassHandler handler, ICompass compass)
+    {
+#if WINDOWS || __IOS__ || __ANDROID__
+        if (compass.GeoView?.Handler is MapViewHandler mvh)
+            ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).GeoView = mvh.PlatformView;
+        else if (compass.GeoView?.Handler is SceneViewHandler svh)
+            ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).GeoView = svh.PlatformView;
+        else
+            ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).GeoView = null;
+#endif
+    }
+
+    private static void MapHeading(CompassHandler handler, ICompass compass)
+    {
+#if WINDOWS || __IOS__ || __ANDROID__
+        if (!handler._isUpdatingHeadingFromGeoView)
+
+            ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).Heading = compass.Heading;
+#endif
+    }
+
+    private bool _isUpdatingHeadingFromGeoView;
+
+    /// <inheritdoc />
+#if WINDOWS || __IOS__
+    protected override NativeViewType CreatePlatformView() => new Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass();
+#elif __ANDROID__
+    protected override NativeViewType CreatePlatformView() => new Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass(this.Context);
+#else
+    protected override object CreatePlatformView()
+    {
+        throw new NotImplementedException();
+    }
+#endif
 }
+#pragma warning restore CS1591

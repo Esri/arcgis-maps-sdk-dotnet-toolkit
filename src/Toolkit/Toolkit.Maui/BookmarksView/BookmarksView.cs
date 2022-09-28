@@ -189,9 +189,9 @@ public class BookmarksView : TemplatedView
             SelectAndNavigateToBookmark(bm);
         }
 
-        if (e.SelectedItem != null)
+        if (e.SelectedItem != null && sender is ListView lv)
         {
-            ((ListView)sender).SelectedItem = null;
+            lv.SelectedItem = null;
         }
     }
 
