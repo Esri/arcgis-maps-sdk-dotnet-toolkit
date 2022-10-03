@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         private RuntimeImage? _markerImage;
         #if WINDOWS_XAML
-        private ImageSource _markerImageSource;
+        private ImageSource? _markerImageSource;
         #endif
         private bool _imageRequestFlag;
         private string _displayTitle;

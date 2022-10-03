@@ -78,12 +78,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // Update filtered list and both views' visibilities
             if (_searchBox?.Text?.ToLower() is string searchString && !string.IsNullOrWhiteSpace(searchString))
             {
-                _filteredList = _unfilteredList.Where(m => AsFilterString(m).Contains(searchString)).ToList();
+                _filteredList = _unfilteredList?.Where(m => AsFilterString(m).Contains(searchString)).ToList();
                 _filteredListView?.SetValue(ItemsSourceProperty, _filteredList);
                 _filteredListView?.SetValue(VisibilityProperty, Visibility.Visible);
                 _unfilteredListView?.SetValue(VisibilityProperty, Visibility.Collapsed);
 
-                if (!_filteredList.Any())
+                if (_filteredList != null && !_filteredList.Any())
                 {
                     _filteredListView?.SetValue(VisibilityProperty, Visibility.Collapsed);
                     _noResultsLabel?.SetValue(VisibilityProperty, Visibility.Visible);
@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 _unfilteredListView?.SetValue(VisibilityProperty, Visibility.Visible);
                 _filteredListView?.SetValue(VisibilityProperty, Visibility.Collapsed);
 
-                if (!_unfilteredList.Any())
+                if (_unfilteredList != null && !_unfilteredList.Any())
                 {
                     _unfilteredListView?.SetValue(VisibilityProperty, Visibility.Collapsed);
                     _noResultsLabel?.SetValue(VisibilityProperty, Visibility.Visible);
@@ -220,7 +220,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             UpdateForCurrentState();
         }
 
-        public event SelectionChangedEventHandler SelectionChanged2;
+        public event SelectionChangedEventHandler? SelectionChanged2;
 
         private static string AsFilterString(object input)
         {
