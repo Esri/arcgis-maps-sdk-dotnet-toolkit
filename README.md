@@ -3,13 +3,13 @@
 [![Link: Samples](https://img.shields.io/badge/Samples-633b9b?style=flat-square)](https://developers.arcgis.com/net/wpf/sample-code/)
 [![Link: Templates](https://img.shields.io/badge/Templates-633b9b?style=flat-square&logo=visualstudio&labelColor=gray)](https://www.nuget.org/packages?q=ArcGIS+Runtime+Templates)
 [![Link: NuGet](https://img.shields.io/badge/NuGet-633b9b?style=flat-square&logo=nuget&labelColor=gray)](https://www.nuget.org/profiles/Esri_Inc)
-[![Link: Esri Community](https://img.shields.io/badge/🙋-Get%20help%20in%20Early%20Adopter%20Community-633b9b?style=flat-square)](https://community.esri.com/t5/arcgis-runtime-sdk-for-net/bd-p/arcgis-runtime-sdk-dotnet-questions)
+[![Link: Early Adopter Community](https://img.shields.io/badge/🙋-Get%20help%20in%20Early%20Adopter%20Community-633b9b?style=flat-square)](https://esriurl.com/agsrt200beta)
 
 # ArcGIS Runtime SDK for .NET - Toolkit 200 beta
 
 The ArcGIS Runtime SDK for .NET Toolkit contains controls and components to accelerate your development with [ArcGIS Runtime SDK for .NET](https://developers.arcgis.com/net/).
 
-> **IMPORTANT** This is a beta branch. The 200.0.0-beta release of ArcGIS Runtime is beta software. If you would like to use this software, please join the [Esri Early Adopter community]().
+> **IMPORTANT** This is a beta branch. The 200.0.0-beta release of ArcGIS Runtime is beta software. If you would like to use this software, please join the [Esri Early Adopter community](https://esriurl.com/agsrt200beta).
 
 > **Note**: At version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
 
