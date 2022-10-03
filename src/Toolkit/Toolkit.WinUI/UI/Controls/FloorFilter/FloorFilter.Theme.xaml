@@ -4,6 +4,9 @@
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="FloorFilter.Includes.xaml" />
+    </ResourceDictionary.MergedDictionaries>
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
             <Color x:Key="FloorFilterDefaultBackgroundColor">White</Color>
@@ -28,7 +31,6 @@
 
 
     <x:Double x:Key="FloorFilterCollapsedWidth">48</x:Double>
-    <FontFamily x:Key="CalciteIconFont">ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/calcite-ui-icons-24.ttf#calcite-ui-icons-24</FontFamily>
     <internal:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
     <SolidColorBrush x:Key="FloorFilterDefaultBackgroundBrush" Color="{ThemeResource FloorFilterDefaultBackgroundColor}" />
