@@ -36,7 +36,7 @@ The following properties enable customization of the view:
 </Grid>
 ```
 
-## Usage - UWP
+## Usage - UWP and WinUI
 
 ```xaml
 <Grid>
@@ -45,7 +45,7 @@ The following properties enable customization of the view:
 </Grid>
 ```
 
-## Usage - Xamarin.Forms
+## Usage - MAUI
 
 SearchView shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the MapView or SceneView.
 

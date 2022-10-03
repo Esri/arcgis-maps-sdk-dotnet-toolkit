@@ -15,41 +15,32 @@ The ArcGIS Runtime SDK for .NET Toolkit contains controls and components to acce
 # Documentation
 
 [![Link: Toolkit Guide](https://img.shields.io/badge/%F0%9F%93%84-Toolkit%20Guide-633b9b?style=flat-square)](https://esri.github.io/arcgis-toolkit-dotnet/controls.html)
-[![Link: Toolkit API Reference (landing page)](https://img.shields.io/badge/Toolkit%20API%20Reference:-fff?style=flat-square)](https://esri.github.io/arcgis-toolkit-dotnet/api/index.html)
-[![Link: Toolkit API Reference - Android](https://img.shields.io/badge/Xamarin.Android-3ddc84?style=flat-square&labelColor=gray&logo=android)](https://esri.github.io/arcgis-toolkit-dotnet/api/android/index.html)
-[![Link: Toolkit API Reference - iOS](https://img.shields.io/badge/Xamarin.iOS-black?style=flat-square&labelColor=gray&logo=ios)](https://esri.github.io/arcgis-toolkit-dotnet/api/ios/index.html)
-[![Link: Toolkit API Reference - Forms](https://img.shields.io/badge/Xamarin.Forms-3498db?style=flat-square&labelColor=gray&logo=Xamarin)](https://esri.github.io/arcgis-toolkit-dotnet/api/netstd/index.html)
-[![Link: Toolkit API Reference - WPF](https://img.shields.io/badge/WPF-0078d6?style=flat-square&labelColor=gray&logo=windowsxp)](https://esri.github.io/arcgis-toolkit-dotnet/api/netfx/index.html)
-[![Link: Toolkit API Reference - UWP](https://img.shields.io/badge/UWP-0078d6?style=flat-square&labelColor=gray&logo=windows)](https://esri.github.io/arcgis-toolkit-dotnet/api/uwp/index.html)
+[![Link: API Reference (landing page)](https://img.shields.io/badge/API%20Reference-007ac2?style=flat-square)](https://esri.github.io/arcgis-toolkit-dotnet/api/index.html)
 
 ## Features
 
 | Component | Screenshot | Description | Availability |
 |-----------|------------|-------------|--------------|
-|[ARSceneView](https://esri.github.io/arcgis-toolkit-dotnet/ar.html) | ![image](https://user-images.githubusercontent.com/29742178/150397609-13618fcd-9cd4-462b-a8cd-4ed71981374f.png) | Display ArcGIS content in augmented reality using ARCore and ARKit | iOS, Android, Xamarin.Forms |
-|[BasemapGallery](https://esri.github.io/arcgis-toolkit-dotnet/basemap-gallery.html) | <img width="150" title="Basemap Gallery" src="https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png" />| Display a list or grid of Basemaps. | UWP, WPF, Xamarin.Forms |
-|[BookmarksView](https://esri.github.io/arcgis-toolkit-dotnet/bookmarks-view.html) | ![image](https://user-images.githubusercontent.com/29742178/150397137-28029b87-5384-41b1-aabf-98260885152d.png) | Show and navigate to bookmarks from a map or a custom list. | iOS, Android, Xamarin.Forms, UWP, WPF |
-| [Compass](https://esri.github.io/arcgis-toolkit-dotnet/compass.html) | ![compass](https://user-images.githubusercontent.com/1378165/73389839-d9c8f500-4289-11ea-923c-18232489b3e0.png) | Show a compass direction when the map or scene is rotated. | iOS, Android, Xamarin.Forms, UWP, WPF |
+|[BasemapGallery](https://esri.github.io/arcgis-toolkit-dotnet/basemap-gallery.html) | <img width="150" title="Basemap Gallery" src="https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png" />| Display a list or grid of Basemaps. | WinUI, MAUI, UWP, WPF |
+|[BookmarksView](https://esri.github.io/arcgis-toolkit-dotnet/bookmarks-view.html) | ![image](https://user-images.githubusercontent.com/29742178/150397137-28029b87-5384-41b1-aabf-98260885152d.png) | Show and navigate to bookmarks from a map or a custom list. | WinUI, MAUI, UWP, WPF |
+| [Compass](https://esri.github.io/arcgis-toolkit-dotnet/compass.html) | ![compass](https://user-images.githubusercontent.com/1378165/73389839-d9c8f500-4289-11ea-923c-18232489b3e0.png) | Show a compass direction when the map or scene is rotated. | WinUI, MAUI, UWP, WPF |
 | [FeatureDataField](https://esri.github.io/arcgis-toolkit-dotnet/feature-data-field.html)   | ![FeatureDataField](https://user-images.githubusercontent.com/1378165/73389879-ebaa9800-4289-11ea-8e4e-de153a6a371a.png) | Display and optionally allow editing of a single field attribute of a feature. | UWP, WPF |
-|[FloorFilter](https://esri.github.io/arcgis-toolkit-dotnet/floor-filter.html) | ![image](https://user-images.githubusercontent.com/29742178/158746908-71a39e28-596f-44b6-9230-e2a04bdaeb9e.png) | Browse floor-aware maps and scenes and filter the view to show levels in a facility. | WPF, Xamarin.Forms, UWP |
-| [Legend](https://esri.github.io/arcgis-toolkit-dotnet/legend.html)   | <img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" title="Legend" />| Display a legend for a single layer in a map, optionally including sublayers. | Android, iOS, Xamarin.Forms, WPF, UWP |
+|[FloorFilter](https://esri.github.io/arcgis-toolkit-dotnet/floor-filter.html) | ![image](https://user-images.githubusercontent.com/29742178/158746908-71a39e28-596f-44b6-9230-e2a04bdaeb9e.png) | Browse floor-aware maps and scenes and filter the view to show levels in a facility. | WinUI, MAUI, UWP, WPF |
+| [Legend](https://esri.github.io/arcgis-toolkit-dotnet/legend.html)   | <img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" title="Legend" />| Display a legend for a single layer in a map, optionally including sublayers. | WinUI, MAUI, UWP, WPF |
 | [MeasureToolbar](https://esri.github.io/arcgis-toolkit-dotnet/measure-toolbar.html)  | ![MeasureToolbar](https://user-images.githubusercontent.com/1378165/73389958-0f6dde00-428a-11ea-8c78-7192d49ea605.png) | Measure distances, areas, and features in a map view. | UWP, WPF |
-|[OverviewMap](https://esri.github.io/arcgis-toolkit-dotnet/overview-map.html) | <img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" width="150" title="Overview Map" /> | Display an interactive inset map for a map or scene. | Xamarin.Forms, UWP, WPF |
-| [PopupViewer](https://esri.github.io/arcgis-toolkit-dotnet/popup-viewer.html) | <img src="https://user-images.githubusercontent.com/1378165/73389991-1e549080-428a-11ea-81f3-b2f9c29f61ad.png" width="120" /> | Display and edit details of features and graphics with popups. | Android, iOS, Xamarin.Forms, UWP, WPF |
-| [ScaleLine](https://esri.github.io/arcgis-toolkit-dotnet/scale-line.html)   | ![ScaleLine](https://user-images.githubusercontent.com/1378165/73390077-3debb900-428a-11ea-8b2f-dfd4914a637e.png) | Display the current scale reference for a map. | Android, iOS, Xamarin.Forms, UWP, WPF |
-|[SearchView](https://esri.github.io/arcgis-toolkit-dotnet/search-view.html) | <img title="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" /> | Search using one or more locators, with support for suggestions, automatic zooming, and custom search sources. | Xamarin.Forms, UWP, WPF |
-| [SymbolDisplay](https://esri.github.io/arcgis-toolkit-dotnet/symbol-display.html)   | ![SymbolDisplay](https://user-images.githubusercontent.com/1378165/73390051-31676080-428a-11ea-9feb-afb5d2aa6385.png) | Render a symbol in a control. | Android, iOS, Xamarin.Forms, UWP, WPF |
-|[TimeSlider](https://esri.github.io/arcgis-toolkit-dotnet/time-slider.html) | ![TimeSlider on UWP](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png) | Interactively manipulate or animate the time extent for a map or scene. | Android, iOS, Xamarin.Forms, UWP, WPF|
-|[UtilityNetworkTraceTool](https://esri.github.io/arcgis-toolkit-dotnet/un-trace.html) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF, UWP, Xamarin.Forms |
+|[OverviewMap](https://esri.github.io/arcgis-toolkit-dotnet/overview-map.html) | <img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" width="150" title="Overview Map" /> | Display an interactive inset map for a map or scene. | WinUI, MAUI, UWP, WPF |
+| [ScaleLine](https://esri.github.io/arcgis-toolkit-dotnet/scale-line.html)   | ![ScaleLine](https://user-images.githubusercontent.com/1378165/73390077-3debb900-428a-11ea-8b2f-dfd4914a637e.png) | Display the current scale reference for a map. | WinUI, MAUI, UWP, WPF |
+|[SearchView](https://esri.github.io/arcgis-toolkit-dotnet/search-view.html) | <img title="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" /> | Search using one or more locators, with support for suggestions, automatic zooming, and custom search sources. | WinUI, MAUI, UWP, WPF |
+| [SymbolDisplay](https://esri.github.io/arcgis-toolkit-dotnet/symbol-display.html)   | ![SymbolDisplay](https://user-images.githubusercontent.com/1378165/73390051-31676080-428a-11ea-9feb-afb5d2aa6385.png) | Render a symbol in a control. | WinUI, MAUI, UWP, WPF |
+|[TimeSlider](https://esri.github.io/arcgis-toolkit-dotnet/time-slider.html) | ![TimeSlider on UWP](https://user-images.githubusercontent.com/29742178/147712751-6d6db182-3e72-4dfc-ba23-3fbe97b1f934.png) | Interactively manipulate or animate the time extent for a map or scene. | WinUI, UWP, WPF |
+|[UtilityNetworkTraceTool](https://esri.github.io/arcgis-toolkit-dotnet/un-trace.html) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF, UWP, WinUI, MAUI |
 
 ## Get started
 
 The simplest way to get started is to add the NuGet package(s) to your projects:
 
 [![Link: Toolkit NuGet - base package](https://img.shields.io/badge/Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit/)
-[![Link: Toolkit NuGet - Xamarin.Forms](https://img.shields.io/badge/Xamarin.Forms%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms/)
-[![Link: Toolkit NuGet - AR](https://img.shields.io/badge/Augmented%20Reality%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget)](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit/)
-[![Link: Toolkit NuGet - Forms AR](https://img.shields.io/badge/Xamarin.Forms%20Augmented%20Reality%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget)](https://www.nuget.org/packages/Esri.ArcGISRuntime.ARToolkit.Forms/)
+[![Link: Toolkit NuGet - MAUI](https://img.shields.io/badge/MAUI%20Toolkit-007ac2?style=flat-square&labelColor=gray&logo=nuget)](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit.Maui/)
 
 ## Customize
 

@@ -44,8 +44,6 @@ The following properties enable customizing symbology:
 
 ## Usage
 
-WPF, UWP, Xamarin.Forms:
-
 ```xml
 <Grid>
     <Grid.ColumnDefinitions>
