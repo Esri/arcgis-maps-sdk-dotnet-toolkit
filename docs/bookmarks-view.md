@@ -242,9 +242,9 @@ public class BookmarksSampleActivity : Activity
 }
 ```
 
-### Xamarin Forms
+### MAUI
 
-On Xamarin Forms, there are two ways to configure the `BookmarksView` control:
+On MAUI, there are two ways to configure the `BookmarksView` control:
 
 * Binding in XAML
 * Setting properties in code
@@ -257,12 +257,12 @@ The following properties support binding:
 Binding example:
 
 ```xml
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:d="http://schemas.microsoft.com/dotnet/2021/maui/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              x:Class="Toolkit.Samples.Forms.Samples.BookmarksSample">
     <ContentPage.Content>
         <Grid>

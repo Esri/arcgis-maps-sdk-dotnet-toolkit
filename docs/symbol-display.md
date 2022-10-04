@@ -11,20 +11,6 @@ Displays a symbol from ArcGIS Runtime outside of a `GeoView`.
 
 ## Usage
 
-WPF, UWP, Xamarin.Forms:
-
 ```xml
 <esri:SymbolDisplay Symbol="{Binding Symbol}" />
-```
-
-Android:
-
-```cs
-var sd = new SymbolDisplay(this) { Symbol = symbol };
-```
-
-iOS:
-
-```cs
-var sd = new SymbolDisplay { Symbol = symbol };
 ```
