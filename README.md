@@ -9,7 +9,8 @@
 
 The ArcGIS Runtime SDK for .NET Toolkit contains controls and components to accelerate your development with [ArcGIS Runtime SDK for .NET](https://developers.arcgis.com/net/).
 
-> **IMPORTANT** This branch is under the 200.0.0 program and showcases changes we will be releasing in our upcoming 200.0.0 release. Please join the [Esri Early Adopter community](https://esriurl.com/agsrt200beta) to provide feedback and report issues.
+> **IMPORTANT** This branch showcases changes we will be releasing in our upcoming 200.0 release. To report any toolkit related bug or question please create an issue in this repo. 
+For any other feedback please join the [Esri Early Adopter community](https://esriurl.com/agsrt200beta).
 
 > **Note**: At version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
 
