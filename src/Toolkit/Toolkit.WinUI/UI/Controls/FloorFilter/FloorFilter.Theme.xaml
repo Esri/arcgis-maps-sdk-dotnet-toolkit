@@ -5,7 +5,7 @@
     xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="FloorFilter.Includes.xaml" />
+        <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
@@ -27,8 +27,6 @@
             <Color x:Key="FloorFilterMutedBorderColor">#aa404040</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
-
-
 
     <x:Double x:Key="FloorFilterCollapsedWidth">48</x:Double>
     <internal:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
