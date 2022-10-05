@@ -40,8 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
-       <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)-preview4" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
-       <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
+       <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)" />
     </ItemGroup>
 
     <ItemGroup>
