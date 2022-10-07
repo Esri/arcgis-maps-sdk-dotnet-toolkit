@@ -19,8 +19,7 @@
     <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)-preview4" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
-    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
+    <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)" />
     <ProjectReference Include="..\ARToolkit\Esri.ArcGISRuntime.ARToolkit.csproj" />
   </ItemGroup>
   <Import Project="..\CommonProperties.targets" />

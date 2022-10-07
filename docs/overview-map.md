@@ -64,14 +64,14 @@ WPF:
 </UserControl>
 ```
 
-Xamarin.Forms:
+MAUI:
 
 ```xml
 <ContentPage x:Class="Toolkit.Samples.Forms.Samples.OverviewMapWithSceneSample"
-             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms">
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui">
     <ContentPage.Content>
         <Grid>
             <esriUI:SceneView x:Name="sceneView" />
