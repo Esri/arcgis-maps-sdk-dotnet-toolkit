@@ -98,7 +98,7 @@ internal class FloorFilterBrowseSitesPage : ContentPage
         Grid.SetColumnSpan(_searchBar, 2);
 
         _itemsSource = ff.AllSites;
-        _noResultLabel.IsVisible = !(_itemsSource?.Any() ?? false);
+        _noResultLabel.IsVisible = !(_itemsSource?.Any() == true);
         _unfilteredListView = new CollectionView
         {
             ItemsSource = _itemsSource,
@@ -185,14 +185,14 @@ internal class FloorFilterBrowseSitesPage : ContentPage
                 _unfilteredListView.IsVisible = false;
                 _filteredListView.IsVisible = results.Any();
             }
-            _noResultLabel.IsVisible = !(results?.Any() ?? false);
+            _noResultLabel.IsVisible = !(results?.Any() == true);
         }
         else
         {
             _filteredListView.ItemsSource = null;
             _filteredListView.IsVisible = false;
-            _unfilteredListView.IsVisible = _itemsSource?.Any() ?? false;
-            _noResultLabel.IsVisible = !(_itemsSource?.Any() ?? false);
+            _unfilteredListView.IsVisible = _itemsSource?.Any() == true;
+            _noResultLabel.IsVisible = !(_itemsSource?.Any() == true);
         }
     }
 

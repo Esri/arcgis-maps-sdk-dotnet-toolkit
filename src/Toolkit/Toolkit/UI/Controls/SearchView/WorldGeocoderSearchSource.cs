@@ -110,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Add attributes expected from the World Geocoder Service if present, otherwise default to all attributes.
             if (Locator.Uri?.ToString() == WorldGeocoderUriString &&
-                (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false))
+                (Locator.LocatorInfo?.ResultAttributes?.Any() == true))
             {
                 var desiredAttributes = new[] { AddressAttributeKey, LocatorIconAttributeKey };
                 foreach (var attr in desiredAttributes.OfType<string>())

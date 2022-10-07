@@ -144,6 +144,7 @@ namespace Toolkit.SampleApp.Maui.Samples
                 var list = new[] { "one", "two", "three", "four" };
                 return list.Select(m => new SearchSuggestion($"suggestion {m}", this) { IsCollection = m.Contains("w") }).ToList();
             }
+#pragma warning restore CS1998
         }
     }
 }

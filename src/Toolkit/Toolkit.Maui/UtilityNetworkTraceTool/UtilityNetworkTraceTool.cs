@@ -744,6 +744,7 @@ public partial class UtilityNetworkTraceTool : TemplatedView
             controller.ResultFillSymbol = newValue as Symbol;
         }
     }
+
     /// <summary>
     /// Event raised when a new utility network is selected.
     /// </summary>

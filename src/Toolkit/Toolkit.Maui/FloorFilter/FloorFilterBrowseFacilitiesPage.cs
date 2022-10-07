@@ -164,7 +164,7 @@ $@"<ResourceDictionary xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" x
             }
         }
 
-        _noResultLabel.IsVisible = !(_itemsSource?.Any() ?? false);
+        _noResultLabel.IsVisible = !(_itemsSource?.Any() == true);
         _unfilteredListView.IsVisible = !_noResultLabel.IsVisible;
 
         parentGrid.Children.Add(_browseLabel);
@@ -225,14 +225,14 @@ $@"<ResourceDictionary xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" x
                 _unfilteredListView.IsVisible = false;
                 _filteredListView.IsVisible = true;
             }
-            _noResultLabel.IsVisible = !(results?.Any() ?? false);
+            _noResultLabel.IsVisible = !(results?.Any() == true);
         }
         else
         {
             _filteredListView.ItemsSource = null;
             _filteredListView.IsVisible = false;
             _unfilteredListView.IsVisible = true;
-            _noResultLabel.IsVisible = !(_itemsSource?.Any() ?? false);
+            _noResultLabel.IsVisible = !(_itemsSource?.Any() == true);
         }
     }
 }

@@ -371,7 +371,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                 return false;
             }
 
-            if (SearchViewModel?.Results?.Any() ?? false)
+            if (SearchViewModel?.Results?.Any() == true)
             {
                 return true;
             }
@@ -380,7 +380,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         }
     }
 
-    private bool SuggestionsViewVisibility => (SearchViewModel?.Suggestions?.Any() ?? false) && SearchViewModel?.Results == null;
+    private bool SuggestionsViewVisibility => (SearchViewModel?.Suggestions?.Any() == true) && SearchViewModel?.Results == null;
 
     private bool SourceSelectVisibility => SearchViewModel?.Sources?.Count > 1;
 

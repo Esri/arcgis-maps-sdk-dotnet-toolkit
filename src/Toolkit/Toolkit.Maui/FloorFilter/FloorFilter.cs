@@ -609,7 +609,7 @@ public partial class FloorFilter : TemplatedView
                 }
                 #endif
             }
-            else if (DisplayLevels?.Any() ?? false)
+            else if (DisplayLevels?.Any() == true)
             {
                 PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Never;
                 #if !WINDOWS

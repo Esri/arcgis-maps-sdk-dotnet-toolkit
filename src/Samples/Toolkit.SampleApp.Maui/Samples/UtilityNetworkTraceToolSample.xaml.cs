@@ -39,9 +39,9 @@ namespace Toolkit.SampleApp.Maui.Samples
 
                 MyMapView.Map = new Map(new Uri(WebmapURL));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //MessageBox.Show($"Initializing sample failed: {ex.Message}", ex.GetType().Name);
+                System.Diagnostics.Debug.WriteLine(ex);
             }
         }
     }
