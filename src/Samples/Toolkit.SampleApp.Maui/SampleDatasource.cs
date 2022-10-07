@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
-#pragma warning disable CS8602, CS8618
 namespace Toolkit.SampleApp.Maui
 {
     public class SampleDatasource
@@ -8,7 +7,7 @@ namespace Toolkit.SampleApp.Maui
         private SampleDatasource()
         {
             var pages = from t in this.GetType().GetTypeInfo().Assembly.ExportedTypes
-                        where t.GetTypeInfo().IsSubclassOf(typeof(ContentPage)) && t.FullName.Contains(".Maui.Samples.")
+                        where t.GetTypeInfo().IsSubclassOf(typeof(ContentPage)) && (t.FullName?.Contains(".Maui.Samples.") ?? false)
                         select t;
 
             Samples = (from p in pages select new Sample(p)).ToArray();
@@ -16,7 +15,7 @@ namespace Toolkit.SampleApp.Maui
 
         public IEnumerable<Sample> Samples { get; private set; }
 
-        private static SampleDatasource m_Current;
+        private static SampleDatasource? m_Current;
 
         public static SampleDatasource Current
         {
@@ -33,9 +32,9 @@ namespace Toolkit.SampleApp.Maui
         public SampleInfoAttributeAttribute()
         {
         }
-        public string Category { get; set; }
-        public string Description { get; set; }
-        public string DisplayName { get; set; }
+        public string? Category { get; set; }
+        public string? Description { get; set; }
+        public string? DisplayName { get; set; }
     }
     public class Sample
     {
@@ -58,7 +57,7 @@ namespace Toolkit.SampleApp.Maui
             }
             if (string.IsNullOrEmpty(Category))
             {
-                if (!Page.Namespace.EndsWith(".Samples")) //use sub namespace instead
+                if (Page.Namespace != null && !Page.Namespace.EndsWith(".Samples")) //use sub namespace instead
                 {
                     Category = Page.Namespace.Substring(Page.Namespace.IndexOf(".Samples.") + 9);
                 }
@@ -67,11 +66,10 @@ namespace Toolkit.SampleApp.Maui
 
         public Type Page { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string Category { get; set; }
+        public string? Category { get; set; }
     }
 }
-#pragma warning restore CS8602, CS8618

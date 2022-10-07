@@ -17,6 +17,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <esriUI:MapView x:Name="MyMapView" />
-        <esriTK:UtilityNetworkTraceTool Grid.Row="1" GeoView="{Binding Source={x:Reference MyMapView}}" />
+        <esriTK:UtilityNetworkTraceTool x:Name="MyTraceTool" Grid.Row="1" GeoView="{Binding Source={x:Reference MyMapView}}" />
     </Grid>
 </ContentPage>

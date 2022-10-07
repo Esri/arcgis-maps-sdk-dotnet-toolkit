@@ -744,7 +744,6 @@ public partial class UtilityNetworkTraceTool : TemplatedView
             controller.ResultFillSymbol = newValue as Symbol;
         }
     }
-#pragma warning disable CS0067
     /// <summary>
     /// Event raised when a new utility network is selected.
     /// </summary>
@@ -754,5 +753,4 @@ public partial class UtilityNetworkTraceTool : TemplatedView
     /// Event raised when a utility network trace is completed.
     /// </summary>
     public event EventHandler<UtilityNetworkTraceCompletedEventArgs>? UtilityNetworkTraceCompleted;
-#pragma warning restore CS0067
 }

@@ -16,11 +16,23 @@
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
-#pragma warning disable CS1591
+/// <summary>
+/// Defines the public API for the MAUI compass control.
+/// </summary>
 public interface ICompass : IView
 {
+    /// <summary>
+    /// Gets or sets a value indicating whether the compass will hide itself when the map rotation is 0 degrees.
+    /// </summary>
     bool AutoHide { get; set; }
+
+    /// <summary>
+    /// Gets or sets the GeoView that the compass is connected to.
+    /// </summary>
     GeoView? GeoView { get; set; }
+
+    /// <summary>
+    /// Gets or sets the heading of the compass.
+    /// </summary>
     double Heading { get; set; }
 }
-#pragma warning restore CS1591

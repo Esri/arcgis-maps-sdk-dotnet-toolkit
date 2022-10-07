@@ -28,9 +28,15 @@ using NativeViewType = System.Object;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Handlers;
-#pragma warning disable CS1591
+
+/// <summary>
+/// Handler maps the MAUI compass control to underlying native implementation.
+/// </summary>
 public class CompassHandler : ViewHandler<ICompass, NativeViewType>
 {
+    /// <summary>
+    /// Maps properties from the Compass public API to handler implementation.
+    /// </summary>
     public static PropertyMapper<ICompass, CompassHandler> CompassMapper = new PropertyMapper<ICompass, CompassHandler>(ViewHandler.ViewMapper)
     {
         [nameof(ICompass.AutoHide)] = MapAutoHide,
@@ -139,9 +145,9 @@ public class CompassHandler : ViewHandler<ICompass, NativeViewType>
             ((Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass)handler.PlatformView).Heading = compass.Heading;
 #endif
     }
-#pragma warning disable CS0169
+#if WINDOWS || __IOS__ || __ANDROID__
     private bool _isUpdatingHeadingFromGeoView;
-#pragma warning restore CS0169
+#endif
 
     /// <inheritdoc />
 #if WINDOWS || __IOS__

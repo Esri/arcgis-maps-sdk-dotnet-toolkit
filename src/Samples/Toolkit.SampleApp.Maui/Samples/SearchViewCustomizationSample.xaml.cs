@@ -90,28 +90,27 @@ namespace Toolkit.SampleApp.Maui.Samples
                 MySearchView.SearchViewModel.Sources.Add(new TestSearchSource());
             }
         }
-#pragma warning disable CS8603, CS8602, CS8769, CS8767
         private class TestSearchSource : ISearchSource
         {
             public string DisplayName { get => "Event tester"; set => throw new NotImplementedException(); }
-            public string Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
-            public CalloutDefinition DefaultCalloutDefinition { get => null; set => throw new NotImplementedException(); }
+            public string? Placeholder { get => "Test placeholder"; set => throw new NotImplementedException(); }
+            public CalloutDefinition? DefaultCalloutDefinition { get => null; set => throw new NotImplementedException(); }
             public double DefaultZoomScale { get => 1000; set => throw new NotImplementedException(); }
             public int MaximumResults { get => 3; set => throw new NotImplementedException(); }
             public int MaximumSuggestions { get => 3; set => throw new NotImplementedException(); }
-            public Geometry SearchArea { get => null; set { } }
-            public MapPoint PreferredSearchLocation { get => null; set { } }
+            public Geometry? SearchArea { get => null; set { } }
+            public MapPoint? PreferredSearchLocation { get => null; set { } }
 
-            Esri.ArcGISRuntime.Symbology.Symbol ISearchSource.DefaultSymbol { get => null; set => throw new NotImplementedException(); }
+            Esri.ArcGISRuntime.Symbology.Symbol? ISearchSource.DefaultSymbol { get => null; set => throw new NotImplementedException(); }
 
-            public void NotifyDeselected(SearchResult result)
+            public void NotifyDeselected(SearchResult? result)
             {
-                App.Current.MainPage.DisplayAlert("Deselected", $"Deselected {result?.DisplayTitle ?? "all results"}", "Ok");
+                App.Current?.MainPage?.DisplayAlert("Deselected", $"Deselected {result?.DisplayTitle ?? "all results"}", "Ok");
             }
 
             public void NotifySelected(SearchResult result)
             {
-                App.Current.MainPage.DisplayAlert("Selected", $"Selected {result?.DisplayTitle}", "Ok");
+                App.Current?.MainPage?.DisplayAlert("Selected", $"Selected {result?.DisplayTitle}", "Ok");
             }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -145,8 +144,6 @@ namespace Toolkit.SampleApp.Maui.Samples
                 var list = new[] { "one", "two", "three", "four" };
                 return list.Select(m => new SearchSuggestion($"suggestion {m}", this) { IsCollection = m.Contains("w") }).ToList();
             }
-#pragma warning restore CS1998// Async method lacks 'await' operators and will run synchronously
         }
-#pragma warning restore CS8603, CS8602, CS8769, CS8767
     }
 }

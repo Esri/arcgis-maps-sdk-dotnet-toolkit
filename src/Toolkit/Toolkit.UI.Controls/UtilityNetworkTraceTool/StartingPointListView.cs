@@ -102,7 +102,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
                 if (SelectedItems.Contains(item))
                 {
                     #if WINDOWS_UWP
-                    Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,() => SelectedItems.Remove(item));
+                    _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,() => SelectedItems.Remove(item));
                     #elif WINUI
                     DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () => SelectedItems.Remove(item));
                     #else
