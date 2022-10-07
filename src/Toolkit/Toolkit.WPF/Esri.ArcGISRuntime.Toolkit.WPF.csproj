@@ -2,13 +2,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>$(DotNetTargetFramework);$(NetWindowsTargetFramework)</TargetFrameworks>
-	<Description>ArcGIS Runtime controls and utilities for WPF apps.</Description>
+    <Description>ArcGIS Runtime controls and utilities for WPF apps.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D  WPF toolkit</PackageTags>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DefineConstants>$(DefineConstants);WPF</DefineConstants>
     <UseWpf>true</UseWpf>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
+    <SupportedOSPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
 

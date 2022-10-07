@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>$(UWPTargetFramework)</TargetFramework>
-	<Description>ArcGIS Runtime controls and utilities for UWP apps.</Description>
+    <Description>ArcGIS Runtime controls and utilities for UWP apps.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D  UWP toolkit</PackageTags>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
