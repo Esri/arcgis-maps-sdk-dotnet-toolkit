@@ -43,6 +43,16 @@
   <Target Name="CopyResources" BeforeTargets="Build;Rebuild">
       <Copy SourceFiles="$(MSBuildThisFileDirectory)..\Toolkit\LocalizedStrings\Resources.resx" DestinationFiles="$(MSBuildThisFileDirectory)LocalizedStrings\en-US\Resources.resw" SkipUnchangedFiles="True" />
   </Target>
+  
+   <!-- Works around issue where some NuGet content is ending up in TFM folder \lib\uap10.0.[targetversion]\ instead of \lib\uap10.0.[minversion]
+       For UWP NuGet content should all be minversion TFM folder. -->
+  <Target Name="FixTFMPathsInPackage" AfterTargets="_SdkIncludeWindowsLibraryLayoutItems">
+    <ItemGroup>
+      <TfmSpecificPackageFile Update="**\*.*" >
+        <PackagePath>$([System.String]::Copy('%(PackagePath)').Replace('lib\uap10.0.$(WindowsSDKTargetBuild)','lib\uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)'))</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
 
    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
 
