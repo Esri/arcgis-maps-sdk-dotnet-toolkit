@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AR", "AR", "{59CBA572-E567-4272-80D0-2177A7449E43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGISRuntime.AR.Forms.App", "ArcGISRuntime.AR\Template.Forms\ArcGISRuntime.AR.Forms.App.csproj", "{33CE3B91-CECD-45BC-94E3-7E00660C5FD0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGISRuntime.AR.VsixInstaller", "ArcGISRuntime.AR\Installer\ArcGISRuntime.AR.VsixInstaller.csproj", "{DA30EA02-871C-44F9-897C-21FB3D8475DD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{33CE3B91-CECD-45BC-94E3-7E00660C5FD0} = {33CE3B91-CECD-45BC-94E3-7E00660C5FD0}
