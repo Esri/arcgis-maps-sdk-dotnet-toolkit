@@ -62,6 +62,8 @@ public partial class SymbolDisplay : TemplatedView
                 Refresh();
             }
 
+            _displayDensityChangedListener?.Detach();
+
             _displayDensityChangedListener = new WeakEventListener<Window, object, DisplayDensityChangedEventArgs>(Window)
             {
                 OnEventAction = (instance, source, eventArgs) =>
@@ -152,7 +154,7 @@ public partial class SymbolDisplay : TemplatedView
 
                 if (double.IsNaN(scale))
                 {
-                    throw new Exception();
+                    return;
                 }
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 var imageData = await Symbol.CreateSwatchAsync(scale * 96);
