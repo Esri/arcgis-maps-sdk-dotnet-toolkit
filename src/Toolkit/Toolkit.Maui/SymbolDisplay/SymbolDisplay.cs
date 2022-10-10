@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using System;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 
@@ -25,10 +26,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 public partial class SymbolDisplay : TemplatedView
 {
     private WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
+    private WeakEventListener<Window, object, DisplayDensityChangedEventArgs>? _displayDensityChangedListener;
     private Task? _currentUpdateTask;
     private bool _isRefreshRequired;
     private static readonly ControlTemplate DefaultControlTemplate;
     private Image? image;
+    private double _lastScaleFactor = double.NaN;
 
     static SymbolDisplay()
     {
@@ -47,6 +50,33 @@ public partial class SymbolDisplay : TemplatedView
     public SymbolDisplay()
     {
         ControlTemplate = DefaultControlTemplate;
+        this.PropertyChanged += SymbolDisplay_PropertyChanged;
+    }
+
+    private void SymbolDisplay_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Window) && Window != null)
+        {
+            if (_lastScaleFactor != GetScaleFactor())
+            {
+                Refresh();
+            }
+
+            _displayDensityChangedListener?.Detach();
+
+            _displayDensityChangedListener = new WeakEventListener<Window, object, DisplayDensityChangedEventArgs>(Window)
+            {
+                OnEventAction = (instance, source, eventArgs) =>
+                {
+                    if (_lastScaleFactor != GetScaleFactor())
+                    {
+                        Refresh();
+                    }
+                },
+                OnDetachAction = (instance, weakEventListener) => instance.DisplayDensityChanged -= weakEventListener.OnEvent,
+            };
+            Window.DisplayDensityChanged += _displayDensityChangedListener.OnEvent;
+        }
     }
 
     /// <summary>
@@ -120,6 +150,12 @@ public partial class SymbolDisplay : TemplatedView
             try
             {
                 var scale = GetScaleFactor();
+                _lastScaleFactor = scale;
+
+                if (double.IsNaN(scale))
+                {
+                    return;
+                }
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 var imageData = await Symbol.CreateSwatchAsync(scale * 96);
                 image.MaximumWidthRequest = imageData.Width / scale;
@@ -137,8 +173,7 @@ public partial class SymbolDisplay : TemplatedView
         }
     }
 
-    // Known issue - see toolkit issue #451
-    private double GetScaleFactor() => Window?.DisplayDensity ?? 1d;
+    private double GetScaleFactor() => Window?.DisplayDensity ?? double.NaN;
 
     private async void Refresh()
     {
