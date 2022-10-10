@@ -47,6 +47,8 @@ public partial class SymbolDisplay : TemplatedView
     public SymbolDisplay()
     {
         ControlTemplate = DefaultControlTemplate;
+        this.Unloaded += SymbolDisplay_Unloaded;
+        this.PropertyChanged += SymbolDisplay_PropertyChanged;
     }
 
     /// <summary>
@@ -176,4 +178,28 @@ public partial class SymbolDisplay : TemplatedView
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public event System.EventHandler? SourceUpdated;
+
+    private void SymbolDisplay_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Window) && Window != null)
+        {
+            Refresh();
+            Window.DisplayDensityChanged += Window_DisplayDensityChanged;
+        }
+    }
+
+    private void SymbolDisplay_Unloaded(object? sender, EventArgs e)
+    {
+        if (Window != null)
+        {
+            Window.DisplayDensityChanged -= Window_DisplayDensityChanged;
+        }
+        this.Unloaded -= SymbolDisplay_Unloaded;
+        this.PropertyChanged -= SymbolDisplay_PropertyChanged;
+    }
+
+    private void Window_DisplayDensityChanged(object? sender, DisplayDensityChangedEventArgs e)
+    {
+        Refresh();
+    }
 }
