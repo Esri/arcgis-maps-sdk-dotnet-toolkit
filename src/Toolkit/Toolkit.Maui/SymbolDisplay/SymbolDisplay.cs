@@ -25,10 +25,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 public partial class SymbolDisplay : TemplatedView
 {
     private WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
+    private WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _thisWindowInpcListener;
     private Task? _currentUpdateTask;
     private bool _isRefreshRequired;
     private static readonly ControlTemplate DefaultControlTemplate;
     private Image? image;
+    private double _lastScaleFactor = 1;
 
     static SymbolDisplay()
     {
@@ -47,8 +49,18 @@ public partial class SymbolDisplay : TemplatedView
     public SymbolDisplay()
     {
         ControlTemplate = DefaultControlTemplate;
-        this.Unloaded += SymbolDisplay_Unloaded;
-        this.PropertyChanged += SymbolDisplay_PropertyChanged;
+        _thisWindowInpcListener = new WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>(this)
+        {
+            OnEventAction = (instance, source, eventArgs) =>
+            {
+                if (eventArgs.PropertyName == nameof(Window) && Window != null && _lastScaleFactor != GetScaleFactor())
+                {
+                    Refresh();
+                }
+            },
+            OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
+        };
+        this.PropertyChanged += _thisWindowInpcListener.OnEvent;
     }
 
     /// <summary>
@@ -122,6 +134,7 @@ public partial class SymbolDisplay : TemplatedView
             try
             {
                 var scale = GetScaleFactor();
+                _lastScaleFactor = scale;
 #pragma warning disable ESRI1800 // Add ConfigureAwait(false) - This is UI Dependent code and must return to UI Thread
                 var imageData = await Symbol.CreateSwatchAsync(scale * 96);
                 image.MaximumWidthRequest = imageData.Width / scale;
@@ -139,7 +152,6 @@ public partial class SymbolDisplay : TemplatedView
         }
     }
 
-    // Known issue - see toolkit issue #451
     private double GetScaleFactor() => Window?.DisplayDensity ?? 1d;
 
     private async void Refresh()
@@ -178,28 +190,4 @@ public partial class SymbolDisplay : TemplatedView
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public event System.EventHandler? SourceUpdated;
-
-    private void SymbolDisplay_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(Window) && Window != null)
-        {
-            Refresh();
-            Window.DisplayDensityChanged += Window_DisplayDensityChanged;
-        }
-    }
-
-    private void SymbolDisplay_Unloaded(object? sender, EventArgs e)
-    {
-        if (Window != null)
-        {
-            Window.DisplayDensityChanged -= Window_DisplayDensityChanged;
-        }
-        this.Unloaded -= SymbolDisplay_Unloaded;
-        this.PropertyChanged -= SymbolDisplay_PropertyChanged;
-    }
-
-    private void Window_DisplayDensityChanged(object? sender, DisplayDensityChangedEventArgs e)
-    {
-        Refresh();
-    }
 }
