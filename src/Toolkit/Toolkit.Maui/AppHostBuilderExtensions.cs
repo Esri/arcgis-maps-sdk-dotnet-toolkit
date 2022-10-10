@@ -2,6 +2,9 @@
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
+    /// <summary>
+    /// Extensions used to configure ArcGIS Runtime Toolkit
+    /// </summary>
     public static class AppHostBuilderExtensions
     {
         /// <summary>

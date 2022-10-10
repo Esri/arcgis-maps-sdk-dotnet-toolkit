@@ -15,6 +15,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private async void Button_Add_Item(object? sender, EventArgs e)
         {
+            if (Gallery.AvailableBasemaps is null) return;
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
             item.Name = "With Thumbnail";
             item.Tooltip = Guid.NewGuid().ToString();
@@ -28,7 +29,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private void Button_Remove_Item(object? sender, EventArgs e)
         {
-            if (Gallery.AvailableBasemaps.Any())
+            if (Gallery.AvailableBasemaps?.Any() == true)
             {
                 Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
             }

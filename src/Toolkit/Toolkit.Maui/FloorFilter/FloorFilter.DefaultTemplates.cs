@@ -14,115 +14,115 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+public partial class FloorFilter
 {
-    public partial class FloorFilter
+    private static readonly DataTemplate DefaultLevelDataTemplate;
+    private static readonly DataTemplate DefaultFacilityDataTemplate;
+    private static readonly DataTemplate DefaultSiteDataTemplate;
+    private static readonly DataTemplate DefaultDifferentiatingFacilityDataTemplate;
+    private static readonly ControlTemplate DefaultControlTemplate;
+
+    static FloorFilter()
     {
-        private static readonly DataTemplate DefaultLevelDataTemplate;
-        private static readonly DataTemplate DefaultFacilityDataTemplate;
-        private static readonly DataTemplate DefaultSiteDataTemplate;
-        private static readonly DataTemplate DefaultDifferentiatingFacilityDataTemplate;
-        private static readonly ControlTemplate DefaultControlTemplate;
-
-        static FloorFilter()
+        DefaultLevelDataTemplate = new DataTemplate(() =>
         {
-            DefaultLevelDataTemplate = new DataTemplate(() =>
+            Grid containingGrid = new Grid
             {
-                Grid containingGrid = new Grid
-                {
-                    WidthRequest = 48,
-                    HeightRequest = 48,
-                    InputTransparent = false,
-                    CascadeInputTransparent = false,
-                };
-                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(48) });
-                Label textLabel = new Label
-                {
-                    FontSize = 14,
-                    VerticalTextAlignment = TextAlignment.Center,
-                    HorizontalTextAlignment = TextAlignment.Center,
-                    HorizontalOptions = LayoutOptions.Fill,
-                    VerticalOptions = LayoutOptions.Fill,
-                    InputTransparent = false,
-                };
-                textLabel.SetBinding(Label.TextProperty, "ShortName");
-                containingGrid.Children.Add(textLabel);
-                return containingGrid;
-            });
-
-            DefaultFacilityDataTemplate = new DataTemplate(() =>
+                WidthRequest = 48,
+                HeightRequest = 48,
+                InputTransparent = false,
+                CascadeInputTransparent = false,
+            };
+            containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(48) });
+            Label textLabel = new Label
             {
-                Grid containingGrid = new Grid();
-                containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#FFF"), Color.FromArgb("#353535"));
+                FontSize = 14,
+                VerticalTextAlignment = TextAlignment.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+                InputTransparent = false,
+            };
+            textLabel.SetBinding(Label.TextProperty, "ShortName");
+            containingGrid.Children.Add(textLabel);
+            return containingGrid;
+        });
 
-                Label textLabel = new Label
-                {
-                    FontSize = 14,
-                    VerticalTextAlignment = TextAlignment.Center,
-                    Margin = new Thickness(8),
-                    HorizontalOptions = LayoutOptions.Fill
-                };
-                textLabel.SetBinding(Label.TextProperty, "Name");
-                textLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
+        DefaultFacilityDataTemplate = new DataTemplate(() =>
+        {
+            Grid containingGrid = new Grid();
+            containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#FFF"), Color.FromArgb("#353535"));
 
-                containingGrid.Children.Add(textLabel);
-                return containingGrid;
-            });
-
-            DefaultSiteDataTemplate = DefaultFacilityDataTemplate;
-
-            DefaultDifferentiatingFacilityDataTemplate = new DataTemplate(() =>
+            Label textLabel = new Label
             {
-                Grid containingGrid = new Grid
-                {
-                    Padding = new Thickness(8),
-                };
-                containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#FFF"), Color.FromArgb("#353535"));
+                FontSize = 14,
+                VerticalTextAlignment = TextAlignment.Center,
+                Margin = new Thickness(8),
+                HorizontalOptions = LayoutOptions.Fill
+            };
+            textLabel.SetBinding(Label.TextProperty, "Name");
+            textLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
 
-                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-                containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            containingGrid.Children.Add(textLabel);
+            return containingGrid;
+        });
 
-                Grid textStack = new Grid
-                {
-                    VerticalOptions = LayoutOptions.Center,
-                    RowSpacing = 2,
-                };
+        DefaultSiteDataTemplate = DefaultFacilityDataTemplate;
 
-                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        DefaultDifferentiatingFacilityDataTemplate = new DataTemplate(() =>
+        {
+            Grid containingGrid = new Grid
+            {
+                Padding = new Thickness(8),
+            };
+            containingGrid.SetAppThemeColor(Grid.BackgroundColorProperty, Color.FromArgb("#FFF"), Color.FromArgb("#353535"));
 
-                Label titleLabel = new Label
-                {
-                    FontAttributes = FontAttributes.Bold,
-                    VerticalOptions = LayoutOptions.End,
-                    VerticalTextAlignment = TextAlignment.End,
-                    FontSize = 14,
-                };
-                titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
-                titleLabel.SetBinding(Label.TextProperty, "Name");
+            containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+            containingGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-                Label subtitleLabel = new Label
-                {
-                    FontSize = 11,
-                    VerticalTextAlignment = TextAlignment.Start,
-                    VerticalOptions = LayoutOptions.Start,
-                };
-                subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#2e2e2e"), Color.FromArgb("#aaa"));
-                subtitleLabel.SetBinding(Label.TextProperty, "Site.Name");
+            Grid textStack = new Grid
+            {
+                VerticalOptions = LayoutOptions.Center,
+                RowSpacing = 2,
+            };
 
-                textStack.Children.Add(titleLabel);
-                textStack.Children.Add(subtitleLabel);
-                Grid.SetRow(titleLabel, 0);
-                Grid.SetRow(subtitleLabel, 1);
+            textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            textStack.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-                containingGrid.Children.Add(textStack);
+            Label titleLabel = new Label
+            {
+                FontAttributes = FontAttributes.Bold,
+                VerticalOptions = LayoutOptions.End,
+                VerticalTextAlignment = TextAlignment.End,
+                FontSize = 14,
+            };
+            titleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#6e6e6e"), Color.FromArgb("#fff"));
+            titleLabel.SetBinding(Label.TextProperty, "Name");
 
-                Grid.SetColumn(textStack, 1);
-                return containingGrid;
-            });
+            Label subtitleLabel = new Label
+            {
+                FontSize = 11,
+                VerticalTextAlignment = TextAlignment.Start,
+                VerticalOptions = LayoutOptions.Start,
+            };
+            subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#2e2e2e"), Color.FromArgb("#aaa"));
+            subtitleLabel.SetBinding(Label.TextProperty, "Site.Name");
 
-            string template =
+            textStack.Children.Add(titleLabel);
+            textStack.Children.Add(subtitleLabel);
+            Grid.SetRow(titleLabel, 0);
+            Grid.SetRow(subtitleLabel, 1);
+
+            containingGrid.Children.Add(textStack);
+
+            Grid.SetColumn(textStack, 1);
+            return containingGrid;
+        });
+
+        string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
     xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui""
     x:DataType=""controls:FloorFilter"" x:Name=""Self"">
@@ -192,7 +192,6 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
            IsVisible=""True"" />
    </Grid>
 </ControlTemplate>";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
-        }
+        DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
     }
 }

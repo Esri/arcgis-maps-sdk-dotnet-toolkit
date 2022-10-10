@@ -114,6 +114,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     ThumbnailBitmap = await Thumbnail.ToImageSourceAsync();
 #endif
                 }
+                _hasLoaded = true;
             }
             catch (Exception)
             {

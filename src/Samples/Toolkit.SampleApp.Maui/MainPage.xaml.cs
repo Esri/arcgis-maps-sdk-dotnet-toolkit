@@ -18,9 +18,9 @@ public partial class MainPage : ContentPage
             {
                 await Navigation.PushAsync(Activator.CreateInstance(sample.Page) as Page);
             }
-            catch(System.Exception ex)
+            catch(Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(ex);
             }
         }
     }

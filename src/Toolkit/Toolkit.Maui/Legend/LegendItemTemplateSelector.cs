@@ -16,47 +16,46 @@
 
 using Esri.ArcGISRuntime.Mapping;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+/// <summary>
+/// Determines which DataTemplate to use for a given layer content item in a Legend control.
+/// </summary>
+internal class LegendItemTemplateSelector : DataTemplateSelector
 {
-    /// <summary>
-    /// Determines which DataTemplate to use for a given layer content item in a Legend control.
-    /// </summary>
-    internal class LegendItemTemplateSelector : DataTemplateSelector
+    private Legend _owner;
+
+    public LegendItemTemplateSelector(Legend owner)
     {
-        private Legend _owner;
+        _owner = owner;
+    }
 
-        public LegendItemTemplateSelector(Legend owner)
+    protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
+    {
+        if (item is LegendEntry entry)
         {
-            _owner = owner;
-        }
-
-        protected override DataTemplate? OnSelectTemplate(object item, BindableObject container)
-        {
-            if (item is LegendEntry entry)
+            if (entry.Content is Layer && LayerTemplate != null)
             {
-                if (entry.Content is Layer && LayerTemplate != null)
-                {
-                    return LayerTemplate;
-                }
-
-                if (entry.Content is ILayerContent)
-                {
-                    return SublayerTemplate;
-                }
-
-                if (entry.Content is LegendInfo)
-                {
-                    return LegendInfoTemplate;
-                }
+                return LayerTemplate;
             }
 
-            return null;
+            if (entry.Content is ILayerContent)
+            {
+                return SublayerTemplate;
+            }
+
+            if (entry.Content is LegendInfo)
+            {
+                return LegendInfoTemplate;
+            }
         }
 
-        public DataTemplate? LayerTemplate => _owner.LayerItemTemplate;
-
-        public DataTemplate? SublayerTemplate => _owner.SublayerItemTemplate;
-
-        public DataTemplate? LegendInfoTemplate => _owner.LegendInfoItemTemplate;
+        return null;
     }
+
+    public DataTemplate? LayerTemplate => _owner.LayerItemTemplate;
+
+    public DataTemplate? SublayerTemplate => _owner.SublayerItemTemplate;
+
+    public DataTemplate? LegendInfoTemplate => _owner.LegendInfoItemTemplate;
 }

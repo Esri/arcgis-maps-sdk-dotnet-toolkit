@@ -24,98 +24,97 @@ using Android.Views;
 using Color = Android.Graphics.Color;
 using View = Android.Views.View;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI
+namespace Esri.ArcGISRuntime.Toolkit.UI;
+
+/// <summary>
+/// Draws a rectangle on the screen.
+/// </summary>
+/// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size. The
+/// specified width and height will be applied to the width and height of the view's layout parameters.</remarks>
+internal class RectangleView : View, INotifyPropertyChanged
 {
-    /// <summary>
-    /// Draws a rectangle on the screen.
-    /// </summary>
-    /// <remarks>Provides a convenient mechanism for rendering rectangle elements of a certain size. The
-    /// specified width and height will be applied to the width and height of the view's layout parameters.</remarks>
-    internal class RectangleView : View, INotifyPropertyChanged
+    public RectangleView(Context? context)
+        : base(context)
     {
-        public RectangleView(Context? context)
-            : base(context)
+    }
+
+    public RectangleView(Context? context, double width, double height)
+        : this(context)
+    {
+        Width = width;
+        Height = height;
+    }
+
+    private double _width;
+
+    /// <summary>
+    /// Gets or sets the rectangle's width.
+    /// </summary>
+    public new double Width
+    {
+        get => _width;
+        set
         {
+            _width = value;
+            var layoutParams = GetLayoutParams();
+            layoutParams.Width = (int)Math.Round(value);
+            LayoutParameters = layoutParams;
+            OnPropertyChanged();
+        }
+    }
+
+    private ViewGroup.LayoutParams GetLayoutParams()
+    {
+        if (LayoutParameters == null)
+        {
+            LayoutParameters = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent);
         }
 
-        public RectangleView(Context? context, double width, double height)
-            : this(context)
+        return LayoutParameters;
+    }
+
+    private double _height;
+
+    /// <summary>
+    /// Gets or sets the rectangle's height.
+    /// </summary>
+    public new double Height
+    {
+        get => _height;
+        set
         {
-            Width = width;
-            Height = height;
+            _height = value;
+            var layoutParams = GetLayoutParams();
+            layoutParams.Height = (int)Math.Round(value);
+            LayoutParameters = layoutParams;
+            OnPropertyChanged();
         }
+    }
 
-        private double _width;
+    private Color _backgroundColor;
 
-        /// <summary>
-        /// Gets or sets the rectangle's width.
-        /// </summary>
-        public new double Width
+    /// <summary>
+    /// Gets or sets the rectangle's background color.
+    /// </summary>
+    public Color BackgroundColor
+    {
+        get => _backgroundColor;
+        set
         {
-            get => _width;
-            set
-            {
-                _width = value;
-                var layoutParams = GetLayoutParams();
-                layoutParams.Width = (int)Math.Round(value);
-                LayoutParameters = layoutParams;
-                OnPropertyChanged();
-            }
+            SetBackgroundColor(value);
+            _backgroundColor = value;
+            OnPropertyChanged();
         }
+    }
 
-        private ViewGroup.LayoutParams GetLayoutParams()
-        {
-            if (LayoutParameters == null)
-            {
-                LayoutParameters = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WrapContent,
-                    ViewGroup.LayoutParams.WrapContent);
-            }
+    /// <inheritdoc />
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-            return LayoutParameters;
-        }
-
-        private double _height;
-
-        /// <summary>
-        /// Gets or sets the rectangle's height.
-        /// </summary>
-        public new double Height
-        {
-            get => _height;
-            set
-            {
-                _height = value;
-                var layoutParams = GetLayoutParams();
-                layoutParams.Height = (int)Math.Round(value);
-                LayoutParameters = layoutParams;
-                OnPropertyChanged();
-            }
-        }
-
-        private Color _backgroundColor;
-
-        /// <summary>
-        /// Gets or sets the rectangle's background color.
-        /// </summary>
-        public Color BackgroundColor
-        {
-            get => _backgroundColor;
-            set
-            {
-                SetBackgroundColor(value);
-                _backgroundColor = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
 #endif

@@ -118,13 +118,13 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private void SetItemTemplateOne_Click(object? sender, EventArgs e)
         {
-            DataTemplate template = Resources["ItemTemplateOne"] as DataTemplate;
+            var template = Resources["ItemTemplateOne"] as DataTemplate;
             BookmarksView.ItemTemplate = template;
         }
 
         private void SetItemTemplateTwo_Click(object? sender, EventArgs e)
         {
-            DataTemplate template = Resources["ItemTemplateTwo"] as DataTemplate;
+            var template = Resources["ItemTemplateTwo"] as DataTemplate;
             BookmarksView.ItemTemplate = template;
         }
 

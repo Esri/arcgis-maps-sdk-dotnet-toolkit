@@ -12,8 +12,21 @@ namespace Toolkit.SampleApp.Maui.Samples
         public UtilityNetworkTraceToolSample()
         {
             InitializeComponent();
-            Initialize();
 
+            MyTraceTool.UtilityNetworkChanged += MyTraceTool_UtilityNetworkChanged;
+            MyTraceTool.UtilityNetworkTraceCompleted += MyTraceTool_UtilityNetworkTraceCompleted;
+
+            Initialize();
+        }
+
+        private void MyTraceTool_UtilityNetworkTraceCompleted(object? sender, Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Trace completed {e}");
+        }
+
+        private void MyTraceTool_UtilityNetworkChanged(object? sender, Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Network changed. New selection: {e.UtilityNetwork?.Name}");
         }
 
         private async void Initialize()
@@ -28,7 +41,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             catch (Exception ex)
             {
-                //MessageBox.Show($"Initializing sample failed: {ex.Message}", ex.GetType().Name);
+                System.Diagnostics.Debug.WriteLine(ex);
             }
         }
     }

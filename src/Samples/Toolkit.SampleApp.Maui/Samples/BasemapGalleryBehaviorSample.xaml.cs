@@ -74,6 +74,7 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private async void Button_Add_Last(object? sender, EventArgs e)
         {
+            if (Gallery.AvailableBasemaps is null) return;
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
             item.Name = "With Thumbnail";
             item.Tooltip = Guid.NewGuid().ToString();
@@ -88,12 +89,12 @@ namespace Toolkit.SampleApp.Maui.Samples
         private async void Button_Add_WGS84(object? sender, EventArgs e)
         {
             BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=1396c369fa3b44a2a5437f18412f8032")));
-            Gallery.AvailableBasemaps.Add(item);
+            Gallery.AvailableBasemaps?.Add(item);
         }
 
         private void Button_Remove_Last(object? sender, EventArgs e)
         {
-            if (Gallery.AvailableBasemaps.Any())
+            if (Gallery.AvailableBasemaps?.Any() == true)
             {
                 Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
             }

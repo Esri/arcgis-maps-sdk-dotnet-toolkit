@@ -16,28 +16,27 @@
 
 using System.Globalization;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+internal class ByteArrayToImageSourceConverter : IValueConverter
 {
-    internal class ByteArrayToImageSourceConverter : IValueConverter
+    /// <summary>
+    /// Converts a byte array to an image source for display in Microsoft .NET MAUI.
+    /// </summary>
+    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        /// <summary>
-        /// Converts a byte array to an image source for display in Microsoft .NET MAUI.
-        /// </summary>
-        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (value is byte[] rawBuffer)
         {
-            if (value is byte[] rawBuffer)
-            {
-                return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
-            }
-
-            // Return the placeholder image directly rather than null to work around bugs/limitations in MAUI
-            return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly); ;
+            return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
         }
 
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        // Return the placeholder image directly rather than null to work around bugs/limitations in MAUI
+        return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly); ;
+    }
+
+    /// <inheritdoc/>
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

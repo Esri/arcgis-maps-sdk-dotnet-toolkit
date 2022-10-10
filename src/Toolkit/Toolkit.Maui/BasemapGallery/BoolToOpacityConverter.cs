@@ -16,28 +16,27 @@
 
 using System.Globalization;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+/// <summary>
+/// Converts boolean value to opacity, used to show a scrim to cover invalid selections in a list.
+/// </summary>
+internal class BoolToOpacityConverter : IValueConverter
 {
-    /// <summary>
-    /// Converts boolean value to opacity, used to show a scrim to cover invalid selections in a list.
-    /// </summary>
-    internal class BoolToOpacityConverter : IValueConverter
+    /// <inheritdoc/>
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        /// <inheritdoc/>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        if (value is bool boolValue)
         {
-            if (value is bool boolValue)
-            {
-                return boolValue ? 0f : 0.7f;
-            }
-
-            return 1.0f;
+            return boolValue ? 0f : 0.7f;
         }
 
-        /// <inheritdoc/>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        return 1.0f;
+    }
+
+    /// <inheritdoc/>
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
     }
 }

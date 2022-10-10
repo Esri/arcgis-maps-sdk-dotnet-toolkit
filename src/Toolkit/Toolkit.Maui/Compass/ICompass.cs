@@ -14,12 +14,25 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+/// <summary>
+/// Defines the public API for the MAUI compass control.
+/// </summary>
+public interface ICompass : IView
 {
-    public interface ICompass : IView
-    {
-        bool AutoHide { get; set; }
-        GeoView? GeoView { get; set; }
-        double Heading { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets a value indicating whether the compass will hide itself when the map rotation is 0 degrees.
+    /// </summary>
+    bool AutoHide { get; set; }
+
+    /// <summary>
+    /// Gets or sets the GeoView that the compass is connected to.
+    /// </summary>
+    GeoView? GeoView { get; set; }
+
+    /// <summary>
+    /// Gets or sets the heading of the compass.
+    /// </summary>
+    double Heading { get; set; }
 }

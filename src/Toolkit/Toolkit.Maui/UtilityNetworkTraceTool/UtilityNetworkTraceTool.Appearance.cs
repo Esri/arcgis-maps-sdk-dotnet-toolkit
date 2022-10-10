@@ -16,54 +16,54 @@
 
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui
+namespace Esri.ArcGISRuntime.Toolkit.Maui;
+
+public partial class UtilityNetworkTraceTool
 {
-    public partial class UtilityNetworkTraceTool
-    {
 #pragma warning disable SA1310, SX1309, SA1306
-        // Navigation
-        private SegmentedControl? PART_NavigationSegment;
+    // Navigation
+    private SegmentedControl? PART_NavigationSegment;
 
-        // Select section
-        private Layout? PART_SelectContainer;
-        private Label? PART_LabelNetworks;
-        private Picker? PART_ListViewNetworks;
-        private Label? PART_LabelTraceTypes;
-        private Picker? PART_ListViewTraceTypes;
+    // Select section
+    private Layout? PART_SelectContainer;
+    private Label? PART_LabelNetworks;
+    private Picker? PART_ListViewNetworks;
+    private Label? PART_LabelTraceTypes;
+    private Picker? PART_ListViewTraceTypes;
 
-        // Configure section
-        private Layout? PART_ConfigureContainer;
-        private Button? PART_ButtonAddStartingPoint;
-        private Button? PART_ButtonCancelAddStartingPoint;
-        private CollectionView? PART_ListViewStartingPoints;
+    // Configure section
+    private Layout? PART_ConfigureContainer;
+    private Button? PART_ButtonAddStartingPoint;
+    private Button? PART_ButtonCancelAddStartingPoint;
+    private CollectionView? PART_ListViewStartingPoints;
 
-        // Run section
-        private Layout? PART_RunContainer;
-        private Button? PART_ButtonRunTrace;
+    // Run section
+    private Layout? PART_RunContainer;
+    private Button? PART_ButtonRunTrace;
 
-        // View section
-        private Layout? PART_ViewContainer;
-        private Grid? PART_GridResultsDisplay;
+    // View section
+    private Layout? PART_ViewContainer;
+    private Grid? PART_GridResultsDisplay;
 
-        // Warnings (multiple sections)
-        private View? PART_DuplicateTraceWarning;
-        private View? PART_ExtraStartingPointsWarning;
-        private View? PART_NeedMoreStartingPointsWarning;
-        private View? PART_NoResultsWarning;
-        private View? PART_NoNetworksWarning;
+    // Warnings (multiple sections)
+    private View? PART_DuplicateTraceWarning;
+    private View? PART_ExtraStartingPointsWarning;
+    private View? PART_NeedMoreStartingPointsWarning;
+    private View? PART_NoResultsWarning;
+    private View? PART_NoNetworksWarning;
 
-        // Loading indicators and cancel
-        private Frame? PART_ActivityIndicator;
-        private Button? PART_ButtonCancelActivity;
+    // Loading indicators and cancel
+    private Frame? PART_ActivityIndicator;
+    private Button? PART_ButtonCancelActivity;
 #pragma warning restore SA1310, SX1309, SA1306
 
-        private static readonly ControlTemplate DefaultControlTemplate;
+    private static readonly ControlTemplate DefaultControlTemplate;
 
-        static UtilityNetworkTraceTool()
-        {
-            const string backgroundColor = "{AppThemeBinding Dark=#353535, Light=#F8F8F8}";
-            const string foregroundColor = "{AppThemeBinding Dark=#ffffff, Light=#151515}";
-            string template =
+    static UtilityNetworkTraceTool()
+    {
+        const string backgroundColor = "{AppThemeBinding Dark=#353535, Light=#F8F8F8}";
+        const string foregroundColor = "{AppThemeBinding Dark=#ffffff, Light=#151515}";
+        string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
 xmlns:ios=""clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls""
 xmlns:esriTKPrim=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Maui""
@@ -218,7 +218,6 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
     </Frame>
 </Grid>
 </ControlTemplate>";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
-        }
+        DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
     }
 }

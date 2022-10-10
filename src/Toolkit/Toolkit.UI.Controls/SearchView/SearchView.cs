@@ -191,7 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     return Visibility.Collapsed;
                 }
 
-                if (SearchViewModel?.Results?.Any() ?? false)
+                if (SearchViewModel?.Results?.Any() == true)
                 {
                     return Visibility.Visible;
                 }
