@@ -25,8 +25,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// </summary>
 public partial class SymbolDisplay : TemplatedView
 {
-    private WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
-    private WeakEventListener<Window, object, DisplayDensityChangedEventArgs>? _displayDensityChangedListener;
+    private WeakEventListener<SymbolDisplay, System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>? _inpcListener;
+    private WeakEventListener<SymbolDisplay, Window, object, DisplayDensityChangedEventArgs>? _displayDensityChangedListener;
     private Task? _currentUpdateTask;
     private bool _isRefreshRequired;
     private static readonly ControlTemplate DefaultControlTemplate;
@@ -64,16 +64,16 @@ public partial class SymbolDisplay : TemplatedView
 
             _displayDensityChangedListener?.Detach();
 
-            _displayDensityChangedListener = new WeakEventListener<Window, object, DisplayDensityChangedEventArgs>(Window)
+            _displayDensityChangedListener = new WeakEventListener<SymbolDisplay, Window, object, DisplayDensityChangedEventArgs>(this, Window)
             {
-                OnEventAction = (instance, source, eventArgs) =>
+                OnEventAction = static (instance, source, eventArgs) =>
                 {
-                    if (_lastScaleFactor != GetScaleFactor())
+                    if (instance._lastScaleFactor != instance.GetScaleFactor())
                     {
-                        Refresh();
+                        instance.Refresh();
                     }
                 },
-                OnDetachAction = (instance, weakEventListener) => instance.DisplayDensityChanged -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => source.DisplayDensityChanged -= weakEventListener.OnEvent,
             };
             Window.DisplayDensityChanged += _displayDensityChangedListener.OnEvent;
         }
@@ -109,13 +109,13 @@ public partial class SymbolDisplay : TemplatedView
 
         if (newValue != null)
         {
-            _inpcListener = new WeakEventListener<System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>(newValue)
+            _inpcListener = new WeakEventListener<SymbolDisplay, System.ComponentModel.INotifyPropertyChanged, object?, System.ComponentModel.PropertyChangedEventArgs>(this, newValue)
             {
-                OnEventAction = (instance, source, eventArgs) =>
+                OnEventAction = static (instance, source, eventArgs) =>
                 {
-                    Refresh();
+                    instance.Refresh();
                 },
-                OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
+                OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
             };
             newValue.PropertyChanged += _inpcListener.OnEvent;
         }
