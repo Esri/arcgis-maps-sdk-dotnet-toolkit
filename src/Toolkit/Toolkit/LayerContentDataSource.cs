@@ -368,7 +368,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     {
                         var listener = new WeakEventListener<LayerContentDataSource<T>, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpc)
                         {
-                            OnEventAction = static (instance, source, eventArgs) => instance.Layer_PropertyChanged((ILayerContent)instance, eventArgs.PropertyName),
+                            OnEventAction = static (instance, source, eventArgs) => instance.Layer_PropertyChanged((ILayerContent)source, eventArgs.PropertyName),
                             OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                         };
                         inpc.PropertyChanged += listener.OnEvent;
