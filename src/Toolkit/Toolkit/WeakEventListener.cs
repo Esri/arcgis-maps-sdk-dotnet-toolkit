@@ -27,9 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// <typeparam name="TEventSender">Type of sender for the event handler.</typeparam>
     /// <typeparam name="TEventArgs">Type of event arguments for the event.</typeparam>
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Used as link target in several projects.")]
-#pragma warning disable SA1402 // File may only contain a single class
     internal class WeakEventListener<TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs>
-#pragma warning restore SA1402 // File may only contain a single class
         where TListeningInstance : class
     {
         /// <summary>
