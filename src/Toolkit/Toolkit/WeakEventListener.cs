@@ -22,56 +22,62 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// Implements a weak event listener that allows the owner to be garbage
     /// collected if its only remaining link is an event handler.
     /// </summary>
-    /// <typeparam name="TInstance">Type of instance listening for the event.</typeparam>
-    /// <typeparam name="TSource">Type of source for the event.</typeparam>
+    /// <typeparam name="TListeningInstance">Type of instance listening for the event.</typeparam>
+    /// <typeparam name="TEventRaisingSource">Type of source for the event.</typeparam>
+    /// <typeparam name="TEventSender">Type of sender for the event handler.</typeparam>
     /// <typeparam name="TEventArgs">Type of event arguments for the event.</typeparam>
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Used as link target in several projects.")]
-#pragma warning disable SA1402 // File may only contain a single class
-    internal class WeakEventListener<TInstance, TSource, TEventArgs>
-#pragma warning restore SA1402 // File may only contain a single class
-        where TInstance : class
+    internal class WeakEventListener<TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs>
+        where TListeningInstance : class
     {
         /// <summary>
         /// WeakReference to the instance listening for the event.
         /// </summary>
-        private WeakReference _weakInstance;
+        private WeakReference _listeningInstance;
+        private TEventRaisingSource _eventSource;
 
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        public Action<TInstance, TSource?, TEventArgs>? OnEventAction { get; set; }
+        public Action<TListeningInstance, TEventSender?, TEventArgs>? OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when detaching from the event.
         /// </summary>
-        public Action<TInstance, WeakEventListener<TInstance, TSource, TEventArgs>>? OnDetachAction { get; set; }
+        public Action<TListeningInstance?, TEventRaisingSource, WeakEventListener<TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs>>? OnDetachAction { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WeakEventListener{TInstance, TSource, TEventArgs}"/> class.
+        /// Initializes a new instance of the <see cref="WeakEventListener{TListeningInstance, TEventRaisingSource, TEventSender, TEventArgs}"/> class.
         /// </summary>
         /// <param name="instance">Instance subscribing to the event.</param>
-        public WeakEventListener(TInstance instance)
+        /// <param name="source">Source of the event.</param>
+        public WeakEventListener(TListeningInstance instance, TEventRaisingSource source)
         {
             if (instance == null)
             {
-                throw new ArgumentNullException("instance");
+                throw new ArgumentNullException(nameof(instance));
+            }
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
             }
 
-            _weakInstance = new WeakReference(instance);
+            _listeningInstance = new WeakReference(instance);
+            _eventSource = source;
         }
 
         /// <summary>
         /// Handler for the subscribed event calls OnEventAction to handle it.
         /// </summary>
-        /// <param name="source">Event source.</param>
+        /// <param name="sender">Event source.</param>
         /// <param name="eventArgs">Event arguments.</param>
-        public void OnEvent(TSource? source, TEventArgs eventArgs)
+        public void OnEvent(TEventSender? sender, TEventArgs eventArgs)
         {
-            TInstance? target = (TInstance?)_weakInstance.Target;
+            TListeningInstance? target = (TListeningInstance?)_listeningInstance.Target;
             if (target != null)
             {
                 // Call registered action
-                OnEventAction?.Invoke(target, source, eventArgs);
+                OnEventAction?.Invoke(target, sender, eventArgs);
             }
             else
             {
@@ -85,108 +91,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         /// </summary>
         public void Detach()
         {
-            if (_weakInstance?.Target is TInstance target)
-            {
-                OnDetachAction?.Invoke(target, this);
-            }
-
+            OnDetachAction?.Invoke(_listeningInstance.Target as TListeningInstance, _eventSource, this);
             OnDetachAction = null;
-        }
-    }
-
-    /// <summary>
-    /// Implements a weak event listener that allows the owner to be garbage
-    /// collected if its only remaining link is an event handler.
-    /// </summary>
-    /// <remarks>
-    /// USAGE:
-    ///
-    /// EventReceiver - the class that is listening for the event
-    /// eventSource - the object that is firing a 'Changed' event.
-    /// _eventListener - an instance of WeakEventListener.
-    ///
-    /// SUBSCRIBE TO EVENT:
-    ///
-    /// _eventListener = new WeakEventListener&lt;EventReceiver&gt;(this)
-    ///     {
-    ///         OnEventAction = l => /* do something to handle the event */,
-    ///         OnDetachAction = wel => newValue.Changed -= wel.OnEvent
-    ///     };
-    /// eventSource.Changed += _eventListener.OnEvent;
-    ///
-    /// UNSUBSCRIBE FROM EVENT:
-    /// <code>
-    /// _eventListener.Detach();
-    /// _eventListener = null;
-    /// </code>
-    /// </remarks>
-    /// <typeparam name="TInstance">Type of instance listening for the event.</typeparam>
-    [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Used as link target in several projects.")]
-#pragma warning disable SA1402
-    internal class WeakEventListener<TInstance>
-        where TInstance : class
-#pragma warning restore SA1402
-    {
-        /// <summary>
-        /// WeakReference to the instance listening for the event.
-        /// </summary>
-        private WeakReference<TInstance> _weakInstance;
-
-        /// <summary>
-        /// Gets or sets the method to call when the event fires.
-        /// </summary>
-        public Action<TInstance>? OnEventAction { get; set; }
-
-        /// <summary>
-        /// Gets or sets the method to call when detaching from the event.
-        /// </summary>
-        public Action<WeakEventListener<TInstance>>? OnDetachAction { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WeakEventListener{TInstance}"/> class.
-        /// </summary>
-        /// <param name="instance">Instance subscribing to the event.</param>
-        public WeakEventListener(TInstance instance)
-        {
-            if (instance == null)
-            {
-                throw new ArgumentNullException("instance");
-            }
-
-            _weakInstance = new WeakReference<TInstance>(instance);
-        }
-
-        /// <summary>
-        /// Handler for the subscribed event calls OnEventAction to handle it.
-        /// </summary>
-        public void OnEvent()
-        {
-            TInstance? target;
-            if (_weakInstance.TryGetTarget(out target))
-            {
-                // Call registered action
-                if (OnEventAction != null)
-                {
-                    OnEventAction(target);
-                }
-            }
-            else
-            {
-                // Detach from event
-                Detach();
-            }
-        }
-
-        /// <summary>
-        /// Detaches from the subscribed event.
-        /// </summary>
-        public void Detach()
-        {
-            if (OnDetachAction != null)
-            {
-                OnDetachAction(this);
-                OnDetachAction = null;
-            }
         }
     }
 }

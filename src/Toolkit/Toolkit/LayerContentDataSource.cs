@@ -211,9 +211,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
         }
 
-        private WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _documentListener;
+        private WeakEventListener<LayerContentDataSource<T>, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _documentListener;
 
-        private void SubscribeToDocument(INotifyPropertyChanged? document)
+        private void SubscribeToDocument(GeoModel? document)
         {
             if (_documentListener != null)
             {
@@ -223,10 +223,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (document != null)
             {
-                _documentListener = new WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(document)
+                _documentListener = new WeakEventListener<LayerContentDataSource<T>, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, document)
                 {
-                    OnEventAction = (instance, source, eventArgs) => DocumentPropertyChanged(instance, eventArgs.PropertyName),
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
+                    OnEventAction = static (instance, source, eventArgs) => instance.DocumentPropertyChanged(instance, eventArgs.PropertyName),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 document.PropertyChanged += _documentListener.OnEvent;
             }
@@ -251,7 +251,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
         }
 
-        private WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _basemapListener;
+        private WeakEventListener<LayerContentDataSource<T>, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _basemapListener;
 
         private void SubscribeToBasemap(Basemap? basemap)
         {
@@ -263,10 +263,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             if (basemap != null)
             {
-                _basemapListener = new WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(basemap)
+                _basemapListener = new WeakEventListener<LayerContentDataSource<T>, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, basemap)
                 {
-                    OnEventAction = (instance, source, eventArgs) => BasemapPropertyChanged(instance, eventArgs.PropertyName),
-                    OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
+                    OnEventAction = static (instance, source, eventArgs) => instance.BasemapPropertyChanged(instance, eventArgs.PropertyName),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 basemap.PropertyChanged += _basemapListener.OnEvent;
             }
@@ -338,7 +338,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 foreach (var action in _operationalLayerTrackingDetachActions)
                 {
-                    action();
+                    action.Invoke();
                 }
 
                 _operationalLayerTrackingDetachActions = null;
@@ -366,10 +366,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 {
                     if (layer is INotifyPropertyChanged inpc)
                     {
-                        var listener = new WeakEventListener<INotifyPropertyChanged, object?, PropertyChangedEventArgs>(inpc)
+                        var listener = new WeakEventListener<LayerContentDataSource<T>, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpc)
                         {
-                            OnEventAction = (instance, source, eventArgs) => Layer_PropertyChanged((ILayerContent)instance, eventArgs.PropertyName),
-                            OnDetachAction = (instance, weakEventListener) => instance.PropertyChanged -= weakEventListener.OnEvent,
+                            OnEventAction = static (instance, source, eventArgs) => instance.Layer_PropertyChanged((ILayerContent)source, eventArgs.PropertyName),
+                            OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                         };
                         inpc.PropertyChanged += listener.OnEvent;
                         yield return listener.Detach;
@@ -383,10 +383,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 if (layers is INotifyCollectionChanged incc)
                 {
-                    var listener = new WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(incc)
+                    var listener = new WeakEventListener<LayerContentDataSource<T>, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
                     {
-                        OnEventAction = (instance, source, eventArgs) => Layers_CollectionChanged(source, eventArgs),
-                        OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent,
+                        OnEventAction = static (instance, source, eventArgs) => instance.Layers_CollectionChanged(source, eventArgs),
+                        OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
                     };
                     incc.CollectionChanged += listener.OnEvent;
                     yield return listener.Detach;
