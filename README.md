@@ -51,6 +51,10 @@ The simplest way to get started is to add the platform-specific NuGet package(s)
 
 The ArcGIS Runtime SDK Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
+## Compatibility
+
+Nuget packages for Toolkit are tested and published in sync with the `Esri.ArcGISRuntime.*` packages. Toolkit is only supported when used with the matching Runtime API version.
+
 ## Contribute
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
