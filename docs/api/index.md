@@ -2,15 +2,8 @@
 
 **Select your platform:**
 
-- [.NET Standard API Reference](netstd/index.md)
-
-- [.NET Framework API Reference](netfx/index.md)
-
-- [.NET Core API Reference](netcore/index.md)
-
-- [UWP API Reference](uwp/index.md)
-
-- [Android API Reference](android/index.md)
-
-- [iOS API Reference](ios/index.md)
-
+- [.NET Framework (WPF)](netfx/index.md)
+- [.NET 6 (WPF, WinUI, MAUI WinUI)](net6/index.html)
+- [UWP](uwp/index.md)
+- [MAUI Android](android/index.md)
+- [MAUI iOS](ios/index.md)
