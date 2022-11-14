@@ -80,45 +80,10 @@ namespace ARToolkit.SampleApp.DownloadManager
 
         public event EventHandler<Exception>? Error;
 
-        [OnDeserialized]
-        internal void OnDeserialized(StreamingContext context)
-        {
-            if (Status == DownloadStatus.Downloading || Status == DownloadStatus.Resuming)
-                Status = DownloadStatus.Paused;
-            var fi = new FileInfo(Filename);
-
-            if (fi.Exists)
-            {
-                IsResumable = !string.IsNullOrEmpty(ETag) || Date.HasValue;
-                BytesDownloaded = fi.Length;
-            }
-        }
-
-        public static FileDownloadTask FromJson(string json, HttpMessageHandler? handler = null)
-        {
-            DataContractJsonSerializer s = new DataContractJsonSerializer(typeof(FileDownloadTask));
-            using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
-            {
-                var fdt = (FileDownloadTask)s.ReadObject(ms)!;
-                fdt.client = new HttpClient(handler ?? new HttpClientHandler());
-                return fdt;
-            }
-        }
-
-        public string ToJson()
-        {
-            DataContractJsonSerializer s = new DataContractJsonSerializer(typeof(FileDownloadTask));
-            using (var ms = new MemoryStream())
-            {
-                s.WriteObject(ms, this);
-                return Encoding.UTF8.GetString(ms.ToArray());
-            }
-        }
-
         public static Task<FileDownloadTask> StartDownload(string filename, Esri.ArcGISRuntime.Portal.PortalItem portalItem, HttpMessageHandler? handler = null)
         {
             var uri1 = portalItem.Portal.Uri;
-            string requestUri = $"http://www.arcgis.com/sharing/rest/content/items/{portalItem.ItemId}/data";
+            string requestUri = $"https://www.arcgis.com/sharing/rest/content/items/{portalItem.ItemId}/data";
             return StartDownload(new HttpRequestMessage(HttpMethod.Get, requestUri), filename, handler);
         }
 
