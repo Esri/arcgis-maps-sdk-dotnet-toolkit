@@ -13,13 +13,18 @@ namespace ARToolkit.SampleApp.Samples
     [SampleData(ItemId = "7dd2f97bb007466ea939160d0de96a9d", Path = "philadelphia.mspk")]
     public partial class TapToPlaceViewController : UIViewController
     {
-        ARSceneView ARView;
-        UILabel lbl;
-        UISwitch _planeSwitch;
+        ARSceneView? ARView;
+        UILabel? lbl;
+        UISwitch? _planeSwitch;
 
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            if (View == null)
+            {
+                throw new InvalidOperationException("View was unexpectedly null");
+            }
 
             ARView = new ARSceneView { TranslatesAutoresizingMaskIntoConstraints = false };
 
@@ -72,22 +77,30 @@ namespace ARToolkit.SampleApp.Samples
             }
         }
 
-        private void ARView_PlanesDetectedChanged(object sender, bool planesDetected)
+        private void ARView_PlanesDetectedChanged(object? sender, bool planesDetected)
         {
             CoreFoundation.DispatchQueue.MainQueue.DispatchSync(() =>
             {
-                lbl.Text = planesDetected ? "" : "Move the device in a circular motion to detect surfaces...";
+                if (lbl != null)
+                    lbl.Text = planesDetected ? "" : "Move the device in a circular motion to detect surfaces...";
             });
         }
 
-        private void Sw_ValueChanged(object sender, EventArgs e)
+        private void Sw_ValueChanged(object? sender, EventArgs e)
         {
-            var isOn = ((UISwitch)sender).On;
-            ARView.RenderPlanes = isOn;
+            if (sender is UISwitch sendingSwitch && ARView != null)
+            {
+                ARView.RenderPlanes = sendingSwitch.On;
+            }
         }
 
-        private void ArView_GeoViewDoubleTapped(object sender, GeoViewInputEventArgs e)
+        private void ArView_GeoViewDoubleTapped(object? sender, GeoViewInputEventArgs e)
         {
+            if (ARView == null || lbl == null)
+            {
+                return;
+            }
+
             if (ARView.SetInitialTransformation(e.Position))
             {
                 lbl.Text = $"Placed scene {ARView.InitialTransformation.TranslationX.ToString("0.000")},{ARView.InitialTransformation.TranslationY.ToString("0.000")},{ARView.InitialTransformation.TranslationZ.ToString("0.000")} ";
@@ -99,19 +112,29 @@ namespace ARToolkit.SampleApp.Samples
             }
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
+            if (_planeSwitch != null)
+            {
+                _planeSwitch.ValueChanged += Sw_ValueChanged;
+            }
             if (ARView != null)
             {
                 ARView.PlanesDetectedChanged += ARView_PlanesDetectedChanged;
                 ARView.GeoViewDoubleTapped += ArView_GeoViewDoubleTapped;
-                _planeSwitch.ValueChanged += Sw_ValueChanged;
-                ARView.StartTrackingAsync();
+                try
+                {
+                    await ARView.StartTrackingAsync();
+                }
+                catch(Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
             }
         }
 
-        public override void ViewDidDisappear(bool animated)
+        public override async void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);
 
@@ -119,8 +142,19 @@ namespace ARToolkit.SampleApp.Samples
             {
                 ARView.PlanesDetectedChanged -= ARView_PlanesDetectedChanged;
                 ARView.GeoViewDoubleTapped -= ArView_GeoViewDoubleTapped;
-                _planeSwitch.ValueChanged -= Sw_ValueChanged;
-                ARView.StopTrackingAsync();
+                if (_planeSwitch != null)
+                {
+                    _planeSwitch.ValueChanged -= Sw_ValueChanged;
+                }
+
+                try
+                {
+                    await ARView.StopTrackingAsync();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex);
+                }
             }
         }
     }
