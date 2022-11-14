@@ -47,6 +47,6 @@
 	<key>NSCameraUsageDescription</key>
 	<string>For Augmented Reality</string>
 	<key>MinimumOSVersion</key>
-	<string>13.0</string>
+	<string>14.0</string>
 </dict>
 </plist>
