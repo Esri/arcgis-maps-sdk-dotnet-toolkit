@@ -141,37 +141,41 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
         private void OnWillRenderScene(ISCNSceneRenderer renderer, SCNScene scene, double timeInSeconds)
         {
-            if (_tracking && ARSCNView != null)
+            CoreFoundation.DispatchQueue.MainQueue.DispatchAsync(() =>
             {
-                var pov = ARSCNView.PointOfView;
-                if (pov != null)
+                if (_tracking && ARSCNView != null)
                 {
-                    var c = Camera;
-                    if (c != null)
+                    var pov = ARSCNView.PointOfView;
+                    if (pov != null)
                     {
-                        var q = pov.WorldOrientation;
-                        var t = pov.Transform;
-                        if(_controller != null)
-                            _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
-                        using (var frame = ARSCNView.Session.CurrentFrame)
+                        var c = Camera;
+                        if (c != null)
                         {
-                            var camera = frame?.Camera;
-                            if (camera != null)
+                            var q = pov.WorldOrientation;
+                            var t = pov.Transform;
+                            if (_controller != null)
+                                _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
+                            using (var frame = ARSCNView.Session.CurrentFrame)
                             {
-                                var intrinsics = camera.Intrinsics;
-                                var imageResolution = camera.ImageResolution;
-                                SetFieldOfView(intrinsics.M11, intrinsics.M22, intrinsics.M13, intrinsics.M23, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
+                                var camera = frame?.Camera;
+                                if (camera != null)
+                                {
+                                    var intrinsics = camera.Intrinsics;
+                                    var imageResolution = camera.ImageResolution;
+                                    SetFieldOfView(intrinsics.M11, intrinsics.M22, intrinsics.M13, intrinsics.M23, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if (IsManualRendering)
-            {
-                RenderFrame();
-            }
-            ARSCNViewWillRenderScene?.Invoke(this, new ARSCNViewRenderSceneEventArgs(renderer, scene, timeInSeconds));
+                if (IsManualRendering)
+                {
+                    RenderFrame();
+                }
+                ARSCNViewWillRenderScene?.Invoke(this, new ARSCNViewRenderSceneEventArgs(renderer, scene, timeInSeconds));
+            });
+            
         }
 
         private DeviceOrientation GetDeviceOrientation()
