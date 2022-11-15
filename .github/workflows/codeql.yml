@@ -73,8 +73,9 @@ jobs:
        
     - name: Build
       run: |
-        msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Release
-        msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Release
+        msbuild /restore /t:Build src/Esri.ArcGISRuntime.Toolkit.sln /p:Configuration=Debug
+#        ARToolkit build disabled due to https://github.com/dotnet/maui/issues/10152
+#        msbuild /restore /t:Build src/Esri.ArcGISRuntime.ARToolkit.sln /p:Configuration=Debug
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
