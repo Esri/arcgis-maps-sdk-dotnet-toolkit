@@ -17,16 +17,18 @@ public partial class EarthSample : ContentPage
     {
         try
         {
-            var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
+            var basemap = new Basemap(new ArcGISTiledLayer(new Uri("https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9")));
+            await basemap.LoadAsync();
+            var scene = new Scene(basemap);
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;
             scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             scene.BaseSurface.ElevationExaggeration = 50;
             scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
-            ARView.TranslationFactor = 50000000;
+            ARView.TranslationFactor = 100000000;
             // Set pitch to 0 so looking forward looks "down" on earth from space
-            ARView.OriginCamera = new Camera(new MapPoint(0, 0, 10000000, SpatialReferences.Wgs84), 0, 0, 0);
-
+            ARView.OriginCamera = new Camera(new MapPoint(0, 0, 20000000, SpatialReferences.Wgs84), 0, 0, 0);
+            ARView.NorthAlign = false;
             await scene.LoadAsync();
             ARView.Scene = scene;
         }
@@ -37,10 +39,28 @@ public partial class EarthSample : ContentPage
         }
     }
 
+    private async Task LoadWhenReady()
+    {
+        bool hasLoaded = false;
+        do
+        {
+            try
+            {
+                await ARView.StartTrackingAsync();
+                hasLoaded = true;
+            }
+            catch (Exception)
+            {
+                await Task.Delay(300);
+            }
+        } while (!hasLoaded);
+        
+    }
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        ARView.StartTrackingAsync();
+        _ = LoadWhenReady();
     }
 
     protected override void OnDisappearing()

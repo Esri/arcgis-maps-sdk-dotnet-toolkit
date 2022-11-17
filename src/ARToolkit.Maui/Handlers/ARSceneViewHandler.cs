@@ -14,21 +14,24 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Esri.ArcGISRuntime.Maui;
+using Esri.ArcGISRuntime.Maui.Handlers;
+using Esri.ArcGISRuntime.UI;
 using Microsoft.Maui.Handlers;
 
 namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
 {
     public class ARSceneViewHandler
- #if WINDOWS || __IOS__ || __ANDROID__
-         : ViewHandler<IARSceneView, Esri.ArcGISRuntime.ARToolkit.ARSceneView>
- #else
+#if WINDOWS || __IOS__ || __ANDROID__
+         : ArcGISRuntime.Maui.Handlers.SceneViewHandler
+#else
          : ViewHandler<IARSceneView, object>
- #endif
+#endif
     {
         /// <summary>
         /// Property mapper for the <see cref="ARSceneView"/> control.
         /// </summary>
-        public static PropertyMapper<IARSceneView, ARSceneViewHandler> ARSceneViewMapper = new PropertyMapper<IARSceneView, ARSceneViewHandler>(ArcGISRuntime.Maui.Handlers.SceneViewHandler.ViewMapper)
+        public static PropertyMapper<IARSceneView, ARSceneViewHandler> ARSceneViewMapper = new PropertyMapper<IARSceneView, ARSceneViewHandler>(ArcGISRuntime.Maui.Handlers.SceneViewHandler.SceneViewMapper)
         {
             [nameof(IARSceneView.ClippingDistance)] = MapClippingDistance,
             [nameof(IARSceneView.LocationDataSource)] = MapLocationDataSource,
@@ -37,6 +40,7 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
             [nameof(IARSceneView.RenderPlanes)] = MapRenderPlanes,
             [nameof(IARSceneView.RenderVideoFeed)] = MapRenderVideoFeed,
             [nameof(IARSceneView.TranslationFactor)] = MapTranslationFactor,
+            [nameof(IARSceneView.CameraController)] = MapCameraController,
         };
 
         /// <summary>
@@ -56,24 +60,31 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
 
 #if !NETSTANDARD
         /// <inheritdoc />
-        protected override void ConnectHandler(ARToolkit.ARSceneView platformView)
+        protected override void ConnectHandler(Esri.ArcGISRuntime.UI.Controls.SceneView platformView)
         {
             base.ConnectHandler(platformView);
-            platformView.OriginCameraChanged += OriginCameraChanged;
-            platformView.PlanesDetectedChanged += PlatformView_PlanesDetectedChanged;
+            if (platformView is ARToolkit.ARSceneView _platformView)
+            {
+                _platformView.OriginCameraChanged += OriginCameraChanged;
+                _platformView.PlanesDetectedChanged += PlatformView_PlanesDetectedChanged;
+            }
         }
 
         /// <inheritdoc />
-        protected override void DisconnectHandler(ARToolkit.ARSceneView platformView)
+        protected override void DisconnectHandler(Esri.ArcGISRuntime.UI.Controls.SceneView platformView)
         {
-            platformView.OriginCameraChanged -= OriginCameraChanged;
-            platformView.PlanesDetectedChanged -= PlatformView_PlanesDetectedChanged;
+            if (platformView is ARToolkit.ARSceneView _platformView)
+            {
+                _platformView.OriginCameraChanged -= OriginCameraChanged;
+                _platformView.PlanesDetectedChanged -= PlatformView_PlanesDetectedChanged;
+            }
+            
             base.DisconnectHandler(platformView);
         }
 
-        private void PlatformView_PlanesDetectedChanged(object? sender, bool planesDetected) => VirtualView.OnPlanesDetectedChanged(planesDetected);
+        private void PlatformView_PlanesDetectedChanged(object? sender, bool planesDetected) => (VirtualView as IARSceneView)?.OnPlanesDetectedChanged(planesDetected);
 
-        private void OriginCameraChanged(object? sender, EventArgs e) => VirtualView.OnOriginCameraChanged();
+        private void OriginCameraChanged(object? sender, EventArgs e) => (VirtualView as IARSceneView)?.OnOriginCameraChanged();
 
 #endif
 
@@ -85,9 +96,19 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         public static void MapClippingDistance(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
-            if (handler.PlatformView != null)
-                handler.PlatformView.ClippingDistance = arSceneView.ClippingDistance;
+            if (handler.PlatformView is ARToolkit.ARSceneView arView)
+                arView.ClippingDistance = arSceneView.ClippingDistance;
 #endif
+        }
+
+        /// <summary>
+        /// Maps the <see cref="ARSceneView.CameraController"/> property to the native ARSceneView control.
+        /// </summary>
+        /// <param name="handler">View handler</param>
+        /// <param name="arSceneView">ARSceneView instance</param>
+        public static void MapCameraController(ARSceneViewHandler handler, IARSceneView arSceneView)
+        {
+            // override default behavior
         }
 
         /// <summary>
@@ -98,8 +119,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         public static void MapLocationDataSource(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
-            if (handler.PlatformView != null)
-                handler.PlatformView.LocationDataSource = arSceneView.LocationDataSource;
+            if (handler.PlatformView is ARToolkit.ARSceneView arView)
+                arView.LocationDataSource = arSceneView.LocationDataSource;
 #endif
         }
 
@@ -111,8 +132,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         public static void MapNorthAlign(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
-            if (handler.PlatformView != null)
-                handler.PlatformView.NorthAlign = arSceneView.NorthAlign;
+            if (handler.PlatformView is ARToolkit.ARSceneView arView)
+                arView.NorthAlign = arSceneView.NorthAlign;
 #endif
         }
 
@@ -124,8 +145,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         public static void MapOriginCamera(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
-            if (handler.PlatformView != null)
-                handler.PlatformView.OriginCamera = arSceneView.OriginCamera;
+            if (handler.PlatformView is ARToolkit.ARSceneView arView)
+                arView.OriginCamera = arSceneView.OriginCamera;
 #endif
         }
 
@@ -136,15 +157,21 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         /// <param name="arSceneView">ARSceneView instance</param>
         public static void MapRenderPlanes(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
-#if __ANDROID__
-            if (handler.PlatformView.ArSceneView != null)
+#if __IOS__ || __ANDROID__
+            if (handler.PlatformView is ARToolkit.ARSceneView arview)
             {
-                handler.PlatformView.ArSceneView.PlaneRenderer.Enabled = arSceneView.RenderPlanes;
-                handler.PlatformView.ArSceneView.PlaneRenderer.Visible = arSceneView.RenderPlanes;
+#if __ANDROID__
+            if (arview.ArSceneView != null)
+            {
+                arview.ArSceneView.PlaneRenderer.Enabled = arSceneView.RenderPlanes;
+                arview.ArSceneView.PlaneRenderer.Visible = arSceneView.RenderPlanes;
             }
 #elif __IOS__
-            handler.PlatformView.RenderPlanes = arSceneView.RenderPlanes;
+                arview.RenderPlanes = arSceneView.RenderPlanes;
 #endif
+            }
+#endif
+
         }
 
         /// <summary>
@@ -155,8 +182,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         public static void MapRenderVideoFeed(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
-            if (handler.PlatformView != null)
-                handler.PlatformView.RenderVideoFeed = arSceneView.RenderVideoFeed;
+            if (handler.PlatformView is ARToolkit.ARSceneView arview)
+                arview.RenderVideoFeed = arSceneView.RenderVideoFeed;
 #endif
         }
 
@@ -168,8 +195,8 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         public static void MapTranslationFactor(ARSceneViewHandler handler, IARSceneView arSceneView)
         {
 #if !NETSTANDARD
-            if (handler.PlatformView != null)
-                handler.PlatformView.TranslationFactor = arSceneView.TranslationFactor;
+            if (handler.PlatformView is ARToolkit.ARSceneView arview)
+                arview.TranslationFactor = arSceneView.TranslationFactor;
 #endif
         }
 

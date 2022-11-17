@@ -55,10 +55,28 @@ public partial class TapToPlaceSample : ContentPage
         }
     }
 
-    protected override void OnAppearing()
+    private async Task LoadWhenReady()
+    {
+        bool hasLoaded = false;
+        do
+        {
+            try
+            {
+                await ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+                hasLoaded = true;
+            }
+            catch (Exception)
+            {
+                await Task.Delay(300);
+            }
+        } while (!hasLoaded);
+
+    }
+
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        ARView.StartTrackingAsync(Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.Ignore);
+        await LoadWhenReady();
     }
 
     protected override void OnDisappearing()
