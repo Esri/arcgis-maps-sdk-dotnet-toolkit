@@ -1,12 +1,12 @@
-# ArcGIS Runtime Toolkit for .NET
+# ArcGIS Maps SDK for .NET Toolkit
 
-The ArcGIS Runtime SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Runtime SDK for .NET](http://links.esri.com/dotnetsdk).
+The ArcGIS Maps SDK for .NET Toolkit contains controls and utilities you can use with [ArcGIS Maps SDK for .NET](http://links.esri.com/dotnetsdk).
 
 You can use the Toolkit in your projects by:
 
 1. Building the source code available in GitHub ([see instructions here](buildingtoolkit.md))
 2. Installing the latest stable release or pre-release from NuGet:
-    - [Esri.ArcGISRuntime.Toolkit](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
+    - [Esri.ArcGISRuntime.Toolkit.<platform>](https://www.nuget.org/packages/Esri.ArcGISRuntime.Toolkit)
 
 ## Resources
  - [List of controls](controls.md)

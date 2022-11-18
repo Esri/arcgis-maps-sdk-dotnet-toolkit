@@ -25,7 +25,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [DisplayName("PopupViewer")]
-    [Category("ArcGIS Runtime Controls")]
+    [Category("ArcGIS Maps SDK for .NET Controls")]
     public partial class PopupViewer : IComponent
     {
         private UILabel _editSummary;

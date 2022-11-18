@@ -7,12 +7,12 @@
         - `Mobile development with .NET` (MAUI)
         - `.NET Core cross-platform development`
 
-2. Confirm your system meets the requirements for developing with ArcGIS Runtime SDK for .NET. [ArcGIS Runtime System Requirements](https://developers.arcgis.com/net/reference/system-requirements/)
+2. Confirm your system meets the requirements for developing with ArcGIS Maps SDK for .NET. [System Requirements](https://developers.arcgis.com/net/reference/system-requirements/)
 
 3. Fork and then clone the repo or download the .zip file.
 
 4. Include (i) or reference (ii) the Toolkit in your projects:
-    > Note the Toolkit references [ArcGIS Runtime SDK for .NET](http://esriurl.com/dotnetsdk) by Nuget package. The package is automatically downloaded when you build the solution for the first time.
+    > Note the Toolkit references [ArcGIS Maps SDK for .NET](http://esriurl.com/dotnetsdk) by Nuget package. The package is automatically downloaded when you build the solution for the first time.
     1. Include the appropriate platform Projects in your Solution.
         - WPF (src\Toolkit\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj)
         - UWP (\src\Toolkit\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj)

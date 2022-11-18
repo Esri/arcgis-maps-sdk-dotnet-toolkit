@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [Register("Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider")]
     [DisplayName("Time Slider")]
-    [Category("ArcGIS Runtime Controls")]
+    [Category("ArcGIS Maps SDK Controls")]
     public partial class TimeSlider : ConstraintLayout, View.IOnTouchListener
     {
 #pragma warning disable SX1309 // Names match elements in template

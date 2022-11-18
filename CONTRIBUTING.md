@@ -7,15 +7,15 @@ We do not currently accept new PRs for full features, for example a new Toolkit 
 * Bugs you find while using the Toolkit.
 * Requests for new Toolkit components or enhancements to existing Toolkit Components.
 
-## Contributing to the ArcGIS Runtime SDK for .NET Toolkit
+## Contributing to the ArcGIS Maps SDK for .NET Toolkit
 
-This guide describes how you can contribute improvements to the ArcGIS Runtime SDK for .NET Toolkit source code.
+This guide describes how you can contribute improvements to the ArcGIS Maps SDK for .NET Toolkit source code.
 
 1. Make sure you have a [GitHub account](https://github.com/signup/free).
 2. To add an enhancement or fix a problem, create an issue.
     * Be descriptive: Clearly describe the issue including steps to reproduce and, if possible, a sample.
     * If an enhancement, clearly describe the additional functionality and provide a good use case to support it.
-3. [Fork](https://help.github.com/articles/fork-a-repo) the [ArcGIS Runtime SDK for .NET Toolkit repo](https://github.com/Esri/arcgis-toolkit-dotnet/) on GitHub.
+3. [Fork](https://help.github.com/articles/fork-a-repo) the [ArcGIS Maps SDK for .NET Toolkit repo](https://github.com/Esri/arcgis-toolkit-dotnet/) on GitHub.
 4. Clone it to your local machine.
 5. Checkout the [main branch](https://github.com/Esri/arcgis-toolkit-dotnet/tree/main).
 6. Create a new feature branch on your local machine. The name of the branch is not important.

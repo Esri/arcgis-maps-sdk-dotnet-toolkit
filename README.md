@@ -5,9 +5,9 @@
 [![Link: NuGet](https://img.shields.io/badge/NuGet-633b9b?style=flat-square&logo=nuget&labelColor=gray)](https://www.nuget.org/profiles/Esri_Inc)
 [![Link: Early Adopter Community](https://img.shields.io/badge/🙋-Get%20help%20in%20Early%20Adopter%20Community-633b9b?style=flat-square)](https://esriurl.com/agsrt200beta)
 
-# ArcGIS Runtime SDK for .NET Toolkit
+# ArcGIS Maps SDK for .NET Toolkit
 
-The ArcGIS Runtime SDK for .NET Toolkit contains controls and components to accelerate your development with [ArcGIS Runtime SDK for .NET](https://developers.arcgis.com/net/).
+The ArcGIS Maps SDK for .NET Toolkit contains controls and components to accelerate your development with [ArcGIS Maps SDK for .NET](https://developers.arcgis.com/net/).
 
 > **IMPORTANT** This branch showcases changes we will be releasing in our upcoming 200.0 release. To report any toolkit related bug or question please create an issue in this repo. 
 For any other feedback please join the [Esri Early Adopter community](https://esriurl.com/agsrt200beta).
@@ -49,11 +49,11 @@ The simplest way to get started is to add the platform-specific NuGet package(s)
 
 ## Customize
 
-The ArcGIS Runtime SDK Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
+The ArcGIS Maps SDK for .NET Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
 ## Compatibility
 
-Nuget packages for Toolkit are tested and published in sync with the `Esri.ArcGISRuntime.*` packages. Toolkit is only supported when used with the matching Runtime API version.
+Nuget packages for Toolkit are tested and published in sync with the `Esri.ArcGISRuntime.*` packages. Toolkit is only supported when used with the matching ArcGIS Maps SDK for .NET API version.
 
 ## Contribute
 

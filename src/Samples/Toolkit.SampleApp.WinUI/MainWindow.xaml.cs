@@ -18,7 +18,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
     public sealed partial class MainWindow : Window
     {
-        private const string WindowTitle = "ArcGIS Runtime Toolkit for WinUI - Functional Tests";
+        private const string WindowTitle = "ArcGIS Maps SDK for .NET Toolkit (WinUI) - Functional Tests";
         private readonly Microsoft.UI.Windowing.AppWindow appWindow;
 
         public MainWindow()

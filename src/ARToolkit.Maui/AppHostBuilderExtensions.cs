@@ -21,12 +21,12 @@ using Microsoft.Maui.Hosting;
 namespace Esri.ArcGISRuntime.ARToolkit.Maui
 {
     /// <summary>
-    /// ArcGIS Runtime AppHost builder methods for registering the runtime with .NET MAUI.
+    /// ArcGIS Maps SDK for .NET AppHost builder methods for registering the SDK with .NET MAUI.
     /// </summary>
     public static class AppHostBuilderExtensions
     {
         /// <summary>
-        /// Initializes the ArcGIS Runtime AR Toolkit MAUI UI Controls.
+        /// Initializes the ArcGIS Maps SDK for .NET AR Toolkit MAUI UI Controls.
         /// </summary>
         /// <param name="builder">The Maui host builder.</param>
         /// <returns>The host builder</returns>

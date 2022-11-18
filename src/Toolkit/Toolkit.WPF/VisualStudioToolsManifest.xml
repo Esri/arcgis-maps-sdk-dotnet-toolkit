@@ -1,6 +1,6 @@
 <FileList>
   <File Reference="Esri.ArcGISRuntime.Toolkit/WPF.dll">
-    <ToolboxItems VSCategory="ArcGIS Runtime" BlendCategory="ArcGIS Runtime">
+    <ToolboxItems VSCategory="ArcGIS Maps SDK for .NET" BlendCategory="ArcGIS Maps SDK for .NET">
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView" />

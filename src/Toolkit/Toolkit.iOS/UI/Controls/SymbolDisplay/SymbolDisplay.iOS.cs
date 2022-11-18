@@ -25,7 +25,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [DisplayName("SymbolDisplay")]
-    [Category("ArcGIS Runtime Controls")]
+    [Category("ArcGIS Maps SDK for .NET Controls")]
     public partial class SymbolDisplay : IComponent
     {
         private UIStackView _rootStackView;
