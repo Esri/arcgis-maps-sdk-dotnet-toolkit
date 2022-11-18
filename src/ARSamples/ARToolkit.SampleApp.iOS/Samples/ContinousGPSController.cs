@@ -67,7 +67,7 @@ namespace ARToolkit.SampleApp.Samples
                 scene.Basemap = basemap;
 
                 scene.BaseSurface = new Surface();
-                scene.BaseSurface.BackgroundGrid.IsVisible = true;
+                scene.BaseSurface.BackgroundGrid.IsVisible = false;
                 scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
                 scene.BaseSurface.NavigationConstraint = NavigationConstraint.None;
 
