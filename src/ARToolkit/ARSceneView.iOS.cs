@@ -152,9 +152,9 @@ namespace Esri.ArcGISRuntime.ARToolkit
                         if (c != null)
                         {
                             var q = pov.WorldOrientation;
-                            var t = pov.Transform;
+                            var t = pov.WorldPosition;
                             if (_controller != null)
-                                _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.Row3.X, t.Row3.Y, t.Row3.Z);
+                                _controller.TransformationMatrix = InitialTransformation + TransformationMatrix.Create(q.X, q.Y, q.Z, q.W, t.X, t.Y, t.Z);
                             using (var frame = ARSCNView.Session.CurrentFrame)
                             {
                                 var camera = frame?.Camera;
