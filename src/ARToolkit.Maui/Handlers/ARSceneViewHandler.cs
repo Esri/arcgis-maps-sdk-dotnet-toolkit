@@ -183,7 +183,20 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui.Handlers
         {
 #if !NETSTANDARD
             if (handler.PlatformView is ARToolkit.ARSceneView arview)
+            {
                 arview.RenderVideoFeed = arSceneView.RenderVideoFeed;
+                if (arSceneView.RenderVideoFeed)
+                {
+                    arSceneView.SpaceEffect = arview.SpaceEffect = SpaceEffect.None;
+                    arSceneView.AtmosphereEffect = arview.AtmosphereEffect = AtmosphereEffect.None;
+                }
+                else
+                {
+                    arSceneView.SpaceEffect = arview.SpaceEffect = SpaceEffect.Stars;
+                    arSceneView.AtmosphereEffect = arview.AtmosphereEffect = AtmosphereEffect.HorizonOnly;
+                }
+            }
+                
 #endif
         }
 
