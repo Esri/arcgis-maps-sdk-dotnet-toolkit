@@ -513,7 +513,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                     // Scale the material to be 10x10cm
                     // Texture used is 1.732x taller than wide
                     if (material != null)
-                        material.Diffuse.ContentsTransform = SCNMatrix4.Scale(anchor.Extent.X / .1f, anchor.Extent.Z / .1f / 1.732f, 0);
+                        material.Diffuse.ContentsTransform = SCNMatrix4.Scale(anchor.PlaneExtent.Width/ .1f, anchor.PlaneExtent.Height / .1f / 1.732f, 0);
                 }
             }
         }
