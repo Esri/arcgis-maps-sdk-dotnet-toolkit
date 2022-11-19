@@ -2,7 +2,7 @@
 
 [![world-scale sample](https://img.shields.io/badge/World_Scale-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/) [![Tabletop sample](https://img.shields.io/badge/Tabletop-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/) [![Flyover sample](https://img.shields.io/badge/Flyover-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/)
 
-Augmented reality experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of the ArcGIS Maps SDK, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
+Augmented reality experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In this toolkit SDK, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
 
 ## AR patterns
 
