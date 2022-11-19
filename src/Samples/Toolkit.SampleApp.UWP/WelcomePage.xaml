@@ -11,7 +11,7 @@
     <Grid>
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="ArcGIS Runtime Toolkit for Universal apps (UWP)"
+            <TextBlock Text="ArcGIS Maps SDK for .NET Toolkit (UWP)"
                        Style="{ThemeResource SubheaderTextBlockStyle}" />
 
             <TextBlock Text="Please select a sample from the sample list"

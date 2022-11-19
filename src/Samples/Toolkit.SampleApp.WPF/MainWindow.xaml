@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples"
         xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
         mc:Ignorable="d" 
-        Title="Esri ArcGIS Runtime Toolkit - Functional Test App" Height="650" Width="925">
+        Title="ArcGIS Maps SDK for .NET Toolkit - Functional Test App" Height="650" Width="925">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -25,7 +25,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="ArcGIS Runtime Toolkit for WPF" FontFamily="Segoe UI Light"
+                    <TextBlock Text="ArcGIS Maps SDK for .NET Toolkit (WPF)" FontFamily="Segoe UI Light"
                       FontSize="48" />
 
                     <TextBlock Text="Please select a sample from the menu" FontSize="24" />

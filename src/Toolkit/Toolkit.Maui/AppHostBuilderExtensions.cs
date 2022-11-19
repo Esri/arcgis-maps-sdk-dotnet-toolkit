@@ -3,12 +3,12 @@
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
     /// <summary>
-    /// Extensions used to configure ArcGIS Runtime Toolkit
+    /// Extensions used to configure ArcGIS Maps SDK for .NET Toolkit
     /// </summary>
     public static class AppHostBuilderExtensions
     {
         /// <summary>
-        ///  Initializes the ArcGIS Runtime Toolkit Controls.
+        ///  Initializes the ArcGIS Maps SDK for .NET Toolkit Controls.
         /// </summary>
         /// <param name="builder">The Maui host builder.</param>
         /// <returns>The host builder</returns>

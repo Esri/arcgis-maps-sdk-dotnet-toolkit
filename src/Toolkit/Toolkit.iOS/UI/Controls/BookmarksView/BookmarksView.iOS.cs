@@ -22,7 +22,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [DisplayName("BookmarksView")]
-    [Category("ArcGIS Runtime Controls")]
+    [Category("ArcGIS Maps SDK for .NET Controls")]
     public partial class BookmarksView
     {
         private UITableView? _listView;

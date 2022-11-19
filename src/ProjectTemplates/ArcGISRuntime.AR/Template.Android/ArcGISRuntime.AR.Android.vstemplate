@@ -1,7 +1,7 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>ArcGIS Runtime Augmented Reality App (Xamarin.Android)</Name>
-    <Description>An ArcGIS Runtime SDK for .NET project for creating an Augmented Reality (AR) application based on Android ARCore with ArcGIS Runtime functionality.</Description>
+    <Name>ArcGIS Maps SDK for .NET Augmented Reality (AR) App (Xamarin.Android)</Name>
+    <Description>An ArcGIS Maps SDK for .NET project for creating an Augmented Reality (AR) application based on Android ARCore.</Description>
     <Icon>TemplateIcon.ico</Icon>
     <TemplateID>Esri.CS.AR.Android.ARApplication</TemplateID>
     <DefaultName>ArcGISARApp</DefaultName>

@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [Register("TimeSlider")]
     [DisplayName("Time Slider")]
-    [Category("ArcGIS Runtime Controls")]
+    [Category("ArcGIS Maps SDK for .NET Controls")]
     public partial class TimeSlider : UIView, IComponent
     {
 #pragma warning disable SX1309 // Names match elements in template

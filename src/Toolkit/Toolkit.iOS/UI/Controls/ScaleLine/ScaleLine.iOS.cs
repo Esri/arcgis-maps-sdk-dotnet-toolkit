@@ -23,7 +23,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [DisplayName("Scaleline")]
-    [Category("ArcGIS Runtime Controls")]
+    [Category("ArcGIS Maps SDK for .NET Controls")]
     public partial class ScaleLine : IComponent
     {
         private RectangleView _firstMetricTickLine;

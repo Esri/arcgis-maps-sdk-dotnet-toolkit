@@ -2,7 +2,7 @@
 
 [![world-scale sample](https://img.shields.io/badge/World_Scale-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/collect-data-in-ar/) [![Tabletop sample](https://img.shields.io/badge/Tabletop-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/) [![Flyover sample](https://img.shields.io/badge/Flyover-Sample-blue)](https://developers.arcgis.com/net/latest/ios/sample-code/explore-scenes-in-flyover-ar/)
 
-Augmented reality experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In the case of Runtime, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
+Augmented reality experiences are designed to "augment" the physical world with virtual content that respects real world scale, position, and orientation of a device. In this toolkit SDK, `ARSceneView` extends `SceneView` to display GIS data on top of a camera feed showing the physical world.
 
 ## AR patterns
 
@@ -12,7 +12,7 @@ The Augmented Reality (AR) toolkit component allows quick and easy integration o
 * **Tabletop**: Scene content is anchored to a physical surface, as if it were a 3D-printed model. You can see this demonstrated in the [Display scenes in tabletop AR](https://developers.arcgis.com/net/latest/ios/sample-code/display-scenes-in-tabletop-ar/) sample.
 * **World-scale**: Scene content is rendered exactly where it would be in the physical world. A camera feed is shown and GIS content is rendered on top of that feed. This is used in scenarios ranging from viewing hidden infrastructure to displaying waypoints for navigation. You can see this demonstrated in the [Navigate in AR](https://developers.arcgis.com/net/latest/ios/sample-code/navigate-in-ar/) sample.
 
-The AR toolkit component is comprised of one class: `ARSceneView`. This is a subclass of `SceneView` that contains the functionality needed to display an AR experience in your application. It uses the native platform's augmented reality framework to display the live camera feed and handle real world tracking and synchronization with the Runtime SDK's `SceneView`. `ARSceneView` is responsible for starting and managing an ARCore/ARKit session. `ARSceneView` uses a user-provided `LocationDataSource` for getting an initial GPS location and when continuous GPS tracking is required.
+The AR toolkit component is comprised of one class: `ARSceneView`. This is a subclass of `SceneView` that contains the functionality needed to display an AR experience in your application. It uses the native platform's augmented reality framework to display the live camera feed and handle real world tracking and synchronization with the ArcGIS Maps SDK for .NET's `SceneView`. `ARSceneView` is responsible for starting and managing an ARCore/ARKit session. `ARSceneView` uses a user-provided `LocationDataSource` for getting an initial GPS location and when continuous GPS tracking is required.
 
 ## Features of the AR component
 
@@ -26,7 +26,7 @@ The AR toolkit component is comprised of one class: `ARSceneView`. This is a sub
 
 There is a significant amount of configuration needed to get iOS and Android projects ready for AR. The full details are covered below.
 
-The ArcGIS Runtime templates for AR provide project templates that are usable out-of-the-box. You can download the templates from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Esri.EsriArcGISRuntimeARTemplates).
+The ArcGIS Maps SDK for .NET AR templates provide project templates that are usable out-of-the-box. You can download the templates from [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Esri.EsriArcGISRuntimeARTemplates).
 
 > **NOTE**: These templates are completely optional for using AR. See steps below if you're working with an existing project or prefer manual configuration.
 
