@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="33a2f6b0-320a-47b9-b8d4-88e9bf698dbd" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>ArcGIS Maps SDK for .NET Toolkit Sample App</DisplayName>
-    <PublisherDisplayName>ArcGIS Maps SDK Team</PublisherDisplayName>
+    <PublisherDisplayName>ArcGIS Maps SDK .NET Team</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
