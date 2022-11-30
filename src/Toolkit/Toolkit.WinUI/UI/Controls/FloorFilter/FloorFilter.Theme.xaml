@@ -5,7 +5,7 @@
     xmlns:internal="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="FloorFilter.Includes.xaml" />
+        <ResourceDictionary Source="FloorFilter.Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Light">
