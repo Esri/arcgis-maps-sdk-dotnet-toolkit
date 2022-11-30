@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="../../../Themes/SharedResources.xaml" />
+        <ResourceDictionary Source="MeasureToolbar.Includes.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="controls:MeasureToolbar">
         <Setter Property="Background"

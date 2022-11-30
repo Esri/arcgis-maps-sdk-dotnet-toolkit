@@ -28,9 +28,9 @@
     <Page Include="**\*.xaml" Exclude="obj\**\*.*">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-	<Content Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Assets\**\*.*" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
+	<Content Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Assets\**\*.*"  Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
     <Compile Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*" Link="%(RecursiveDir)%(Filename)%(Extension)" />
-    <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Themes\*.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Themes\Generic.xaml;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\UI\Controls\**\*.Includes.xaml">
         <Generator>MSBuild:Compile</Generator>
         <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Page>
