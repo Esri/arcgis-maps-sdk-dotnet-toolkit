@@ -270,7 +270,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (GetTemplateChild("PART_ResultsItemControl") is ItemsControl resultsViewer)
             {
                 _part_resultsItemControl = resultsViewer;
+                #if !WPF
                 _part_resultsItemControl.ItemsSource = _controller.Results;
+                #endif
             }
 
             if (GetTemplateChild("PART_DeleteAllResultsButton") is ButtonBase deleteAllResultsButton)
