@@ -187,6 +187,7 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             BorderThickness="0"
+                            CornerRadius="0"
                             HorizontalTextAlignment="Left" />
                         <TextBlock
                             x:Name="PART_Placeholder"
