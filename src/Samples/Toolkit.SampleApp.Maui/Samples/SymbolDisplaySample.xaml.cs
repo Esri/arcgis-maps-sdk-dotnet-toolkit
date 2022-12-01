@@ -1,6 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Maui;
-
+using Microsoft.Maui.Controls;
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
@@ -42,10 +42,10 @@ namespace Toolkit.SampleApp.Maui.Samples
             {
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
-                BorderColor = Colors.Black,
                 Padding = 0,
                 CornerRadius = 0
             };
+            f.SetAppThemeColor(Microsoft.Maui.Controls.Frame.BorderColorProperty, Colors.Black, Colors.White);
             f.Content = sd;
             int count = LayoutRoot.Children.Count;
             var row = count / columnCount;
