@@ -4,14 +4,28 @@
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="MeasureToolbar.Resources.xaml" />
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key="BarBackground"  Color="#eaeaeaea" />
+            <SolidColorBrush x:Key="BarBorder" Color="#DFDFDF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="BarBackground"  Color="#eaeaeaea" />
+            <SolidColorBrush x:Key="BarBorder" Color="#DFDFDF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="BarBackground" Color="#ea151515" />
+            <SolidColorBrush x:Key="BarBorder" Color="#404040" />
+        </ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
+    <SolidColorBrush x:Key="BarBackground"  Color="#eaeaeaea" />
+    <SolidColorBrush x:Key="BarBorder" Color="#DFDFDF" />
     <Style TargetType="controls:MeasureToolbar">
         <Setter Property="Background"
-                Value="{ThemeResource ComboBoxBackground}" />
+                Value="{ThemeResource BarBackground}" />
         <Setter Property="Foreground"
                 Value="{ThemeResource ComboBoxForeground}" />
         <Setter Property="BorderBrush"
-                Value="{ThemeResource ComboBoxBorderBrush}" />
+                Value="{ThemeResource BarBorder}" />
         <Setter Property="BorderThickness"
                 Value="{ThemeResource ComboBoxBorderThemeThickness}" />
         <Setter Property="HorizontalAlignment"
