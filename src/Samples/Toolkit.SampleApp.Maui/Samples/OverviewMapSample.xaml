@@ -22,7 +22,6 @@
             <StackLayout
                 Grid.Row="1"
                 Padding="4"
-                BackgroundColor="#F2F2F2"
                 Spacing="2">
                 <Button Clicked="ToggleViewClick" Text="Toggle MapView/SceneView" />
                 <Button Clicked="ToggleModelClick" Text="Apply new Map/Scene" />
