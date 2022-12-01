@@ -9,6 +9,8 @@
                          UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureArea.png" />
             <BitmapImage x:Key="MeasureFeatureImage"
                          UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeature.png" />
+            <SolidColorBrush x:Key="BarBackground"  Color="#eaeaeaea" />
+            <SolidColorBrush x:Key="BarBorder" Color="#DFDFDF" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <BitmapImage x:Key="MeasureLengthImage"
@@ -17,6 +19,8 @@
                          UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureArea.png" />
             <BitmapImage x:Key="MeasureFeatureImage"
                          UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeature.png" />
+            <SolidColorBrush x:Key="BarBackground"  Color="#eaeaeaea" />
+            <SolidColorBrush x:Key="BarBorder" Color="#DFDFDF" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="Dark">
             <BitmapImage x:Key="MeasureLengthImage"
@@ -25,15 +29,17 @@
                          UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureAreaDark.png" />
             <BitmapImage x:Key="MeasureFeatureImage"
                          UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit/Assets/MeasureFeatureDark.png" />
+            <SolidColorBrush x:Key="BarBackground" Color="#ea151515" />
+            <SolidColorBrush x:Key="BarBorder" Color="#404040" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
     <Style TargetType="controls:MeasureToolbar">
         <Setter Property="Background"
-                Value="{ThemeResource ComboBoxBackground}" />
+                Value="{ThemeResource BarBackground}" />
         <Setter Property="Foreground"
                 Value="{ThemeResource ComboBoxForeground}" />
         <Setter Property="BorderBrush"
-                Value="{ThemeResource ComboBoxBorderBrush}" />
+                Value="{ThemeResource BarBorder}" />
         <Setter Property="BorderThickness"
                 Value="{ThemeResource ComboBoxBorderThemeThickness}" />
         <Setter Property="HorizontalAlignment"
