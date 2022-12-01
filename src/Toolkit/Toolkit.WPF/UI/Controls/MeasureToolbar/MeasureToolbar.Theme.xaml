@@ -43,7 +43,7 @@
                                           Padding="8,4,8,4"
                                           ToolTip="Length">
                                 <ToggleButton.Content>
-                                    <Image Source="/Esri.ArcGISRuntime.Toolkit;component/Assets/MeasureLength.png"
+                                    <Image Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/MeasureLength.png"
                                            Height="20"
                                            Width="20"
                                            Stretch="UniformToFill" />
@@ -58,7 +58,7 @@
                                           ToolTip="Area"
                                           Grid.Column="1">
                                 <ToggleButton.Content>
-                                    <Image Source="/Esri.ArcGISRuntime.Toolkit;component/Assets/MeasureArea.png"
+                                    <Image Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/MeasureArea.png"
                                            Height="20"
                                            Width="20"
                                            Stretch="UniformToFill" />
@@ -73,7 +73,7 @@
                                           ToolTip="Feature"
                                           Grid.Column="2">
                                 <ToggleButton.Content>
-                                    <Image Source="/Esri.ArcGISRuntime.Toolkit;component/Assets/MeasureFeature.png"
+                                    <Image Source="/Esri.ArcGISRuntime.Toolkit.WPF;component/Assets/MeasureFeature.png"
                                            Height="20"
                                            Width="20"
                                            Stretch="UniformToFill" />

@@ -13,6 +13,12 @@
     <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
+  <ItemGroup>
+    <None Remove="Assets\*.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\*.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <Using Include="Esri.ArcGISRuntime.UI.Controls" />
