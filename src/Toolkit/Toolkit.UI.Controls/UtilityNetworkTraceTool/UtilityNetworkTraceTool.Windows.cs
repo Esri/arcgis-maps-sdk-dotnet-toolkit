@@ -169,6 +169,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
             _pivotControl?.SetValue(Pivot.SelectedIndexProperty, _controller.Results.Any() ? 1 : 0);
 #endif
+            #if WPF
+            // Fix an issue on WPF where the results tab control would show multiple tabs for the first item in the results when bound to observable collection.
+            if (_part_resultsItemControl != null)
+            {
+                _part_resultsItemControl.ItemsSource = _controller.Results.ToList();
+                if (_part_resultsItemControl is Selector resultSelector && !_controller.Results.Contains(resultSelector.SelectedItem))
+                {
+                    resultSelector.SelectedIndex = 0;
+                }
+            }
+            #endif
 
             if (e.NewItems != null && e.Action == NotifyCollectionChangedAction.Add && e.NewItems.Count == 1 && _part_resultsItemControl is Selector resultSelectionControl)
             {
