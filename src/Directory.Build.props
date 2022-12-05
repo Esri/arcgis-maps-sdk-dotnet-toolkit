@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.0.0-beta</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.0.0-beta</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.0.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.0.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -31,7 +31,7 @@
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true'">true</IsToolkitLibrary>
 
     <!--Framework versions-->
-    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">19041</ArcGISRuntime_MinimumSupportedWindowsBuild>
+    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">17763</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
     <UWPTargetPlatformVersion>10.0.$(WindowsSDKTargetBuild).0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformMinVersion>
