@@ -167,7 +167,7 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
 xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
 <Grid RowSpacing=""0"" ColumnSpacing=""0"">
 <Grid.Resources>
-        <Style TargetType=""Grid"">
+        <Style TargetType=""Grid"" x:Key=""SVDefaultGridStyle"">
             <Setter Property=""Background"" Value=""{{AppThemeBinding Dark={BACKGROUND_DARK},Light={BACKGROUND_LIGHT}}}"" />
         </Style>
         <Style TargetType=""CollectionView"">
@@ -188,7 +188,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <RowDefinition Height=""Auto"" />
     <RowDefinition Height=""Auto"" />
     </Grid.RowDefinitions>
-    <Grid Grid.Row=""0"" Grid.ColumnSpan=""3""/>
+    <Grid Grid.Row=""0"" Grid.ColumnSpan=""3"" Style=""{{StaticResource SVDefaultGridStyle}}""/>
     <ImageButton x:Name=""{nameof(PART_SourceSelectButton)}"" Grid.Column=""0"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" Margin=""0"" />
     <Entry x:Name=""{nameof(PART_Entry)}"" Grid.Column=""1"" Grid.Row=""0"" TextColor=""{{AppThemeBinding Light={FOREGROUND_LIGHT}, Dark={FOREGROUND_DARK}}}"" />
     <ImageButton x:Name=""{nameof(PART_CancelButton)}"" Grid.Column=""1"" HorizontalOptions=""End"" WidthRequest=""32"" HeightRequest=""32"" Padding=""4"" BackgroundColor=""Transparent"" />
@@ -196,8 +196,8 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"">
     <CollectionView x:Name=""{nameof(PART_SuggestionsView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""2""  HeightRequest=""175"" />
     <CollectionView x:Name=""{nameof(PART_ResultView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Grid.RowSpan=""1"" HeightRequest=""200"" />
     <CollectionView x:Name=""{nameof(PART_SourcesView)}"" SelectionMode=""Single"" Grid.Column=""0"" Grid.ColumnSpan=""3"" Grid.Row=""1"" HeightRequest=""150"" />
-    <Grid x:Name=""{nameof(PART_ResultContainer)}"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
-    <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2"">
+    <Grid x:Name=""{nameof(PART_ResultContainer)}"" Grid.ColumnSpan=""3"" Grid.Row=""1"" Padding=""8""  Style=""{{StaticResource SVDefaultGridStyle}}""><Label x:Name=""{nameof(PART_ResultLabel)}"" HorizontalOptions=""Center"" VerticalOptions=""Center"" FontAttributes=""Bold"" /></Grid>
+    <Grid x:Name=""{nameof(PART_RepeatButtonContainer)}"" Grid.Column=""0"" Grid.ColumnSpan=""3""  Grid.Row=""2""  Style=""{{StaticResource SVDefaultGridStyle}}"">
         <Button x:Name=""{nameof(PART_RepeatButton)}"" BackgroundColor=""{{AppThemeBinding Light=#007AC2, Dark=#00619B}}"" TextColor=""White"" CornerRadius=""0"" />
     </Grid>
 </Grid>
