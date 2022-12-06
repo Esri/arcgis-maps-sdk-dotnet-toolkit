@@ -104,16 +104,20 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                             <RowDefinition Height=""Auto"" />
                             <RowDefinition Height=""Auto"" />
                             <RowDefinition Height=""Auto"" />
+                            <RowDefinition Height=""Auto"" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width=""40"" />
                             <ColumnDefinition Width=""*"" />
                             <ColumnDefinition Width=""40"" />
+                            <ColumnDefinition Width=""40"" />
                         </Grid.ColumnDefinitions>
                         <esriTK:SymbolDisplay Symbol=""{{Binding Symbol}}"" Grid.RowSpan=""2"" />
                         <Label Grid.Column=""1"" Text=""{{Binding StartingPoint.NetworkSource.Name}}"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
                         <Label Grid.Column=""1"" Grid.Row=""1"" Text=""{{Binding StartingPoint.AssetGroup.Name}}"" TextColor=""{foregroundColor}""  />
-                        <Button Grid.Column=""2"" Grid.RowSpan=""2"" Text=""X"" Command=""{{Binding DeleteCommand}}"" Padding=""2"" />
+                        <Button Grid.Column=""3"" Grid.RowSpan=""2"" Text=""{IconFont.XCircle}"" FontFamily=""calcite-ui-icons-24"" Command=""{{Binding DeleteCommand}}"" Padding=""2"" />
+                        <Slider Grid.Row=""3"" Grid.ColumnSpan=""4"" Minimum=""0"" Maximum=""1.0"" Value=""{{Binding FractionAlongEdge, Mode=TwoWay}}"" IsVisible=""{{Binding FractionSliderVisible, Mode=OneWay}}"" Margin=""8"" />
+                        <Picker Grid.Row=""3"" Grid.ColumnSpan=""4"" ItemsSource=""{{Binding StartingPoint.AssetType.TerminalConfiguration.Terminals}}"" ItemDisplayBinding=""{{Binding Name}}"" SelectedItem=""{{Binding StartingPoint.Terminal, Mode=TwoWay}}"" IsVisible=""{{Binding TerminalPickerVisible, Mode=OneWay}}"" Margin=""8"" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
