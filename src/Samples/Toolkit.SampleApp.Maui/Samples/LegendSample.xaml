@@ -18,7 +18,9 @@
             <esriTK:Legend x:Name="legend" 
             IsVisible="True" GeoView="{x:Reference mapView}" Grid.Row="1" Grid.ColumnSpan="2" />
             <StackLayout HorizontalOptions="End" VerticalOptions="Start"
-                         Grid.ColumnSpan="2" Margin="20" BackgroundColor="#55FFFFFF">
+                         BackgroundColor="{AppThemeBinding Light=White, Dark=Black}"
+                         Padding="8"
+                         Grid.ColumnSpan="2" Margin="20">
                 <Label Text="Filter by scale range" />
                 <Switch x:Name="filterByScaleRange" 
                         IsToggled="{Binding FilterByVisibleScaleRange, Source={x:Reference legend}, Mode=TwoWay}" />
