@@ -32,7 +32,7 @@ internal class BoolToCollectionIconImageConverter : IValueConverter
         {
             if (DeviceInfo.Platform == DevicePlatform.WinUI)
             {
-                return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.WinUI.Assets.search-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
+                return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.search-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
             }
 
             return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.search.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
@@ -40,7 +40,7 @@ internal class BoolToCollectionIconImageConverter : IValueConverter
 
         if (DeviceInfo.Platform == DevicePlatform.WinUI)
         {
-            return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.WinUI.Assets.pin-tear-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
+            return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.pin-tear-small.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
         }
 
         return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.pin-tear.png", Assembly.GetAssembly(typeof(BoolToCollectionIconImageConverter)));
