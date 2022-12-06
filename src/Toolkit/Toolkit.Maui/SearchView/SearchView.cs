@@ -244,13 +244,15 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
             return;
         }
 
-        if (e.CurrentSelection.Count == 0)
+        var selectedSource = e.CurrentSelection.FirstOrDefault() as string;
+
+        if (selectedSource == null || selectedSource == AllSourcesSelectText || (AllSourcesSelectText == null && selectedSource == "All"))
         {
             SearchViewModel.ActiveSource = null;
         }
-        else
+        else 
         {
-            SearchViewModel.ActiveSource = e.CurrentSelection.First() as ISearchSource;
+            SearchViewModel.ActiveSource = SearchViewModel.Sources.First(source => source.DisplayName == selectedSource);
         }
 
         _sourceSelectToggled = false;
