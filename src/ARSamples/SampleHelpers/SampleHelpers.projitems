@@ -11,6 +11,9 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)ARTestScenes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DownloadManager\FileDownloadTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Preferences.android.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Preferences.ios.tvos.watchos.macos.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Preferences.shared.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SampleDataAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SampleDatasource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SampleInfoAttribute.cs" />

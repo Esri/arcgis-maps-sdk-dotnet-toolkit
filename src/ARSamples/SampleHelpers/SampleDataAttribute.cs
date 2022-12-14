@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Plugin.Settings;
+#if !MAUI
+using Xamarin.Essentials;
+#endif
 
 namespace ARToolkit.SampleApp
 {
@@ -20,10 +22,15 @@ namespace ARToolkit.SampleApp
                 return;
             DownloadManager.FileDownloadTask task = null;
             string tempFile = null;
-            
-            if (Plugin.Settings.CrossSettings.Current.Contains("DataDownloadTask"))
+#if !MAUI
+            if (Preferences.ContainsKey("DataDownloadTask"))
             {
-                var previousTask = DownloadManager.FileDownloadTask.FromJson(Plugin.Settings.CrossSettings.Current.GetValueOrDefault("DataDownloadTask", string.Empty));
+                var previousTask = DownloadManager.FileDownloadTask.FromJson(Preferences.Get("DataDownloadTask", string.Empty));
+#else
+            if (Preferences.Default.ContainsKey("DataDownloadTask"))
+            {
+                var previousTask = DownloadManager.FileDownloadTask.FromJson(Preferences.Default.Get("DataDownloadTask", string.Empty));
+#endif
                 if (previousTask.IsResumable)
                 {
                     task = previousTask;
@@ -40,7 +47,11 @@ namespace ARToolkit.SampleApp
                 tempFile = System.IO.Path.GetTempFileName();
                 task = await DownloadManager.FileDownloadTask.StartDownload(tempFile, item);
                 string downloadTask = task.ToJson();
-                Plugin.Settings.CrossSettings.Current.AddOrUpdateValue("DataDownloadTask", task.ToJson());
+#if !MAUI
+                Preferences.Set("DataDownloadTask", task.ToJson());
+#else
+                Preferences.Default.Set("DataDownloadTask", task.ToJson());
+#endif
             }
             progress?.Invoke("Downloading data...");
 

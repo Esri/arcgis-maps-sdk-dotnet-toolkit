@@ -19,17 +19,17 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
-#if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.Internal;
-using Esri.ArcGISRuntime.Xamarin.Forms;
-#endif
-#if !XAMARIN_FORMS
 using Esri.ArcGISRuntime.Toolkit.Internal;
+#if MAUI
+using Esri.ArcGISRuntime.Maui;
+#endif
+#if !MAUI
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
@@ -40,8 +40,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private Symbol? _areaSymbol;
         private Symbol? _pointSymbol;
         private GeoView? _connectedView;
-        private readonly WeakEventListener<GeoView, object?, EventArgs>? _viewpointListener;
-        private readonly WeakEventListener<GeoView, object?, EventArgs>? _navigationListener;
+        private readonly WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>? _viewpointListener;
+        private readonly WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>? _navigationListener;
         private readonly GraphicsOverlay _extentOverlay;
         private readonly Graphic _extentGraphic;
         private readonly MapView _insetView;
@@ -66,18 +66,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _extentOverlay.Graphics.Add(_extentGraphic);
 
             // _overview.ViewpointChanged += OnViewpointChanged
-            _viewpointListener = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
+            _viewpointListener = new WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>(this, _insetView)
             {
-                OnEventAction = (instance, source, eventArgs) => OnInsetViewpointChanged(source, eventArgs),
-                OnDetachAction = (instance, weakEventListener) => instance.ViewpointChanged -= weakEventListener.OnEvent,
+                OnEventAction = static (instance, source, eventArgs) => instance.OnInsetViewpointChanged(source, eventArgs),
+                OnDetachAction = static (instance, source, weakEventListener) => source.ViewpointChanged -= weakEventListener.OnEvent,
             };
             _insetView.ViewpointChanged += _viewpointListener.OnEvent;
 
             // _overview.NavigationCompleted += OnNavigationCompleted;
-            _navigationListener = new WeakEventListener<GeoView, object?, EventArgs>(_insetView)
+            _navigationListener = new WeakEventListener<OverviewMapController, GeoView, object?, EventArgs>(this, _insetView)
             {
-                OnEventAction = (instance, source, eventArgs) => OnInsetNavigationCompleted(source, eventArgs),
-                OnDetachAction = (instance, weakEventListener) => instance.NavigationCompleted -= weakEventListener.OnEvent,
+                OnEventAction = static (instance, source, eventArgs) => instance.OnInsetNavigationCompleted(source, eventArgs),
+                OnDetachAction = static (instance, source, weakEventListener) => source.NavigationCompleted -= weakEventListener.OnEvent,
             };
             _insetView.NavigationCompleted += _navigationListener.OnEvent;
         }

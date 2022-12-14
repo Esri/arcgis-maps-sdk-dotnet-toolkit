@@ -11,14 +11,14 @@
     <AssemblyName>Esri.ArcGISRuntime.Toolkit.SampleApp</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.18362.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>15</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <PackageCertificateKeyFile>Toolkit.Samples.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>EA6451EED9A5E048A1949FB52EFD7B4808C41EB3</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>B2DB53E5289B8F6A6F775C370DC8E0BF9BC39BA9</PackageCertificateThumbprint>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <SuppressXamlWarnings>1500</SuppressXamlWarnings>
     <NoWarn>$(NoWarn);2008;APPX4001</NoWarn>
@@ -114,6 +114,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GlobalUsings.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -200,8 +201,6 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    <Content Include="Samples\PopupViewer\info_dark.png" />
-    <Content Include="Samples\PopupViewer\info_light.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -304,15 +303,15 @@
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
-        <ProjectReference Include="..\..\Toolkit\Toolkit\Esri.ArcGISRuntime.Toolkit.csproj">
-          <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
-          <Name>Esri.ArcGISRuntime.Toolkit</Name>
+        <ProjectReference Include="..\..\Toolkit\Toolkit.UWP\Esri.ArcGISRuntime.Toolkit.UWP.csproj">
+          <Project>{a6431f30-a608-4c78-80be-548c322cbe75}</Project>
+          <Name>Esri.ArcGISRuntime.Toolkit.UWP</Name>
         </ProjectReference>
       </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="Esri.ArcGISRuntime.Toolkit">
+        <PackageReference Include="Esri.ArcGISRuntime.Toolkit.UWP">
           <Version>$(UseNugetPackage)</Version>
         </PackageReference>
       </ItemGroup>

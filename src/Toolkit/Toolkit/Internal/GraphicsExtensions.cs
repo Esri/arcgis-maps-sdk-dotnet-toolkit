@@ -14,9 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 
-#if NETFX_CORE
+#if WINDOWS_XAML
 using Windows.Foundation;
 #else
 using System.Windows;

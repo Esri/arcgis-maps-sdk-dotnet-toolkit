@@ -14,10 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if !MAUI
 using System;
-#if NETFX_CORE
-using Windows.UI.Xaml.Data;
+#if WINDOWS_XAML
 using Culture = System.String;
 #else
 using System.Windows;
@@ -31,9 +30,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// Takes a collection size and returns True if size is not 0, False otherwise. Specify "Empty" as parameter to invert.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    #if NETFX_CORE
+#if WINDOWS_XAML
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
-    #endif
+#endif
     public class CollectionIsEmptyToBoolConverter : IValueConverter
     {
         /// <inheritdoc/>

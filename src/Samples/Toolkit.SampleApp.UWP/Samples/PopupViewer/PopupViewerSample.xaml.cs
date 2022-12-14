@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
-using Visibility = Windows.UI.Xaml.Visibility;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,22 +26,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
         // Webmap configured with Popup
         public Map Map { get; } = new Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
 
-        private RuntimeImage _infoIcon = null;
-        // Used in Callout to see feature details in PopupViewer
-        private RuntimeImage InfoIcon
-        {
-            get
-            {
-                if (_infoIcon == null)
-                {
-                    var fileName = RequestedTheme == Windows.UI.Xaml.ElementTheme.Dark ? "info_light.png" : "info_dark.png";
-                    _infoIcon = new RuntimeImage(new Uri($"ms-appx:///Samples/PopupViewer/{fileName}"));
-                }
-                return _infoIcon;
-            }
-        }
-
-
         private async void mapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
         {
             Exception error = null;
@@ -57,15 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                 // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = new Action<object>((s) =>
-                    {
-                        popupViewer.Visibility = Visibility.Visible;
-                        popupViewer.PopupManager = new PopupManager(s as Popup);
-                    });
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
+                    popupViewer.Visibility = Visibility.Visible;
+                    popupViewer.PopupManager = new PopupManager(popup);
                 }
                 else
                 {
@@ -78,10 +53,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                 error = ex;
             }
             if (error != null)
-                await new MessageDialog(error.Message, error.GetType().Name).ShowAsync();
+                System.Diagnostics.Debug.WriteLine(error);
         }
 
-        private Popup GetPopup(IdentifyLayerResult result)
+        private Mapping.Popups.Popup GetPopup(IdentifyLayerResult result)
         {
             if (result == null)
             {
@@ -102,17 +77,17 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
                     var popupDefinition = ((IPopupSource)result.LayerContent).PopupDefinition;
                     if (popupDefinition != null)
                     {
-                        return new Popup(geoElement, popupDefinition);
+                        return new Mapping.Popups.Popup(geoElement, popupDefinition);
                     }
                 }
 
-                return Popup.FromGeoElement(geoElement);
+                return Mapping.Popups.Popup.FromGeoElement(geoElement);
             }
 
             return null;
         }
 
-        private Popup GetPopup(IEnumerable<IdentifyLayerResult> results)
+        private Mapping.Popups.Popup GetPopup(IEnumerable<IdentifyLayerResult> results)
         {
             if (results == null)
             {

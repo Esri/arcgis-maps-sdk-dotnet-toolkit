@@ -1,22 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Symbology;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SymbolDisplay
 {
@@ -57,9 +40,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SymbolDisplay
             var sd = new UI.Controls.SymbolDisplay() { Symbol = symbol };
             var f = new Border()
             {
+#if NETFX_CORE
                 HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Center,
                 VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center,
-                BorderBrush = new SolidColorBrush(Colors.Black),
+                BorderBrush = new SolidColorBrush(Windows.UI.Colors.Black),
+#else
+                HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center,
+                VerticalAlignment = Microsoft.UI.Xaml.VerticalAlignment.Center,
+                BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.Black),
+#endif
                 BorderThickness = new Thickness(1),
                 Padding = new Thickness(0)
             };

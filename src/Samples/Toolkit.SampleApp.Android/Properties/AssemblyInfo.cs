@@ -11,7 +11,7 @@ using Android.App;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Esri.ArcGISRuntime.Toolkit.SampleApp")]
-[assembly: AssemblyCopyright("Copyright © ArcGIS Runtime Team 2017")]
+[assembly: AssemblyCopyright("Copyright © Esri 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

@@ -16,7 +16,11 @@
 
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
     /// <summary>
     /// Wraps a search suggestion for display.

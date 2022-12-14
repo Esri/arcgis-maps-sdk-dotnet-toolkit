@@ -2,8 +2,8 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
         <Identity Id="Esri.ArcGISRuntime.ARTemplates" Version="0.1.2" Language="en-US" Publisher="Esri" />
-        <DisplayName>ArcGIS Runtime SDK for .NET AR Project Templates</DisplayName>
-        <Description xml:space="preserve">Project templates for building Augmented Reality apps for Android and iOS with Xamarin and ArcGIS Runtime SDK for .NET.</Description>
+        <DisplayName>ArcGIS Maps SDK for .NET AR Project Templates</DisplayName>
+        <Description xml:space="preserve">Project templates for building Augmented Reality apps for Android and iOS with Xamarin and ArcGIS Maps SDK for .NET.</Description>
         <MoreInfo>https://links.esri.com/runtime-dotnet-sdk</MoreInfo>
         <License>EULA.rtf</License>
         <Icon>ArcGIS_SDK_128.png</Icon>

@@ -17,7 +17,11 @@
 using System;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
     /// <summary>
     /// Event argument used by <see cref="UtilityNetworkTraceTool.UtilityNetworkChanged"/> event.

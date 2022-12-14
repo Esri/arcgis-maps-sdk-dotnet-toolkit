@@ -95,7 +95,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             if (e is null)
                 return;
             float[]? rotationMatrix = null;
-
+            if (e.Values is null) return;
             if (e.Sensor == _rotationSensor)
             {
                 var rotationVector = e.Values.ToArray();

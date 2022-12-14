@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(NetWindowsTargetFramework)</TargetFramework>
+    <Description>ArcGIS Maps SDK for .NET controls and utilities for Windows UI 3 (WinUI 3) apps.</Description>
+    <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D WinUI toolkit</PackageTags>
+    <SupportedOSPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DefineConstants>$(DefineConstants);WINDOWS_XAML;WINUI</DefineConstants>
+    <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
+  </PropertyGroup>
+  <Import Project="..\..\CommonProperties.targets" />
+  <ItemGroup>
+    <Content Remove="EmbeddedResources\pin_red.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Esri.ArcGISRuntime.UI.Controls" />
+    <Using Include="Microsoft.UI.Xaml" />
+    <Using Include="Microsoft.UI.Xaml.Controls" />
+    <Using Include="Microsoft.UI.Xaml.Data" />
+    <Using Include="Microsoft.UI.Xaml.Controls.Primitives" />
+    <Using Include="Microsoft.UI.Xaml.Input" />
+    <Using Include="Microsoft.UI.Xaml.Media" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
+  </ItemGroup>
+
+  <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+
+  <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
+</Project>

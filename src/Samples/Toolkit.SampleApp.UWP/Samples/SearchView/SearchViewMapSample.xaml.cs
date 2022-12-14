@@ -1,5 +1,4 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
-using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView
 {

@@ -25,8 +25,13 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.UI;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
     /// <summary>
     /// Basic search source implementation for generic locators.
@@ -147,9 +152,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private async Task EnsureLoaded()
         {
             await Locator.LoadAsync();
-
+#if MAUI
+            Stream? resourceStream = Assembly.GetAssembly(typeof(LocatorSearchSource))?.GetManifestResourceStream(
+                "Esri.ArcGISRuntime.Toolkit.Maui.Assets.pin-red.png");
+#else
             Stream? resourceStream = Assembly.GetAssembly(typeof(LocatorSearchSource))?.GetManifestResourceStream(
                 "Esri.ArcGISRuntime.Toolkit.EmbeddedResources.pin_red.png");
+#endif
 
             if (resourceStream != null)
             {

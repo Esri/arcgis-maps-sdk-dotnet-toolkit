@@ -160,7 +160,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                             {
                                 var intrinsics = camera.Intrinsics;
                                 var imageResolution = camera.ImageResolution;
-                                SetFieldOfView(intrinsics.R0C0, intrinsics.R1C1, intrinsics.R0C2, intrinsics.R1C2, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
+                                SetFieldOfView(intrinsics.M11, intrinsics.M22, intrinsics.M13, intrinsics.M23, (float)imageResolution.Width, (float)imageResolution.Height, GetDeviceOrientation());
                             }
                         }
                     }
@@ -417,7 +417,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             {
                 if (_sceneView.RenderPlanes && anchor is ARPlaneAnchor planeAnchor && _planes.ContainsKey(anchor.Identifier))
                 {
-                    _planes.Remove(anchor.Identifier, out Plane plane);
+                    _planes.Remove(anchor.Identifier, out Plane? plane);
                     if (_planes.Count == 0)
                         _sceneView?.RaisePlanesDetectedChanged(false);
                 }
@@ -454,36 +454,53 @@ namespace Esri.ArcGISRuntime.ARToolkit
 
                 public Plane(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
-                    var planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
-                    if (planeGeometry != null)
+#if NETCOREAPP
+                    var device = renderer.Device;
+#else
+                    var device = renderer.GetDevice();
+#endif
+                    if (device != null)
                     {
-                        planeGeometry.Update(anchor.Geometry);
-                        node = SCNNode.FromGeometry(planeGeometry);
-                        node.Geometry = planeGeometry;
-                        node.Opacity = 1f;
-                        material = new SCNMaterial()
+                        var planeGeometry = ARSCNPlaneGeometry.Create(device);
+                        if (planeGeometry != null)
                         {
-                            DoubleSided = false
-                        };
-                        material.Diffuse.Contents = img;
-                        material.Diffuse.WrapS = SCNWrapMode.Repeat;
-                        material.Diffuse.WrapT = SCNWrapMode.Repeat;
-                        planeGeometry.Materials = new[] { material };
-                        UpdateMaterial(anchor);
-                        AddChildNode(node);
+                            planeGeometry.Update(anchor.Geometry);
+                            node = SCNNode.FromGeometry(planeGeometry);
+                            node.Geometry = planeGeometry;
+                            node.Opacity = 1f;
+                            material = new SCNMaterial()
+                            {
+                                DoubleSided = false
+                            };
+                            material.Diffuse.Contents = img;
+                            material.Diffuse.WrapS = SCNWrapMode.Repeat;
+                            material.Diffuse.WrapT = SCNWrapMode.Repeat;
+                            planeGeometry.Materials = new[] { material };
+                            UpdateMaterial(anchor);
+                            AddChildNode(node);
+                        }
                     }
                 }
 
                 public void Update(ARPlaneAnchor anchor, ISCNSceneRenderer renderer)
                 {
                     ARPlaneGeometry geometry = anchor.Geometry;
-                    ARSCNPlaneGeometry? planeGeometry = ARSCNPlaneGeometry.Create(renderer.GetDevice());
-                    if (planeGeometry != null && material != null && node != null)
+#if NETCOREAPP
+                    var device = renderer.Device;
+#else
+                    var device = renderer.GetDevice();
+#endif
+                    if (device != null)
                     {
-                        planeGeometry.Update(geometry);
-                        planeGeometry.Materials = new[] { material };
-                        UpdateMaterial(anchor);
-                        node.Geometry = planeGeometry;
+
+                        ARSCNPlaneGeometry? planeGeometry = ARSCNPlaneGeometry.Create(device);
+                        if (planeGeometry != null && material != null && node != null)
+                        {
+                            planeGeometry.Update(geometry);
+                            planeGeometry.Materials = new[] { material };
+                            UpdateMaterial(anchor);
+                            node.Geometry = planeGeometry;
+                        }
                     }
                 }
 

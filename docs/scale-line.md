@@ -12,8 +12,6 @@ Display the current scale reference for a map.
 
 ## Usage
 
-WPF, UWP, Xamarin.Forms:
-
 ```xml
 <esri:ScaleLine MapView="{Binding ElementName=mapView}" />
 ```

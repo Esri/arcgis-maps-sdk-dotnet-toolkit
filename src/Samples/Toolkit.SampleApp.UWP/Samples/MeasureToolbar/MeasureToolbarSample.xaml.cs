@@ -3,15 +3,9 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using System;
 using System.Linq;
-using Windows.UI.Xaml.Controls;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.MeasureToolbar
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MeasureToolbarSample : Page
     {
         public MeasureToolbarSample()
@@ -20,7 +14,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.MeasureToolbar
 
             // Builds a map with different types of layer and graphic that can be identified for measure.
 
-            var map = new Map(Basemap.CreateLightGrayCanvasVector());
+            var map = new Map(new Uri("https://www.arcgis.com/home/item.html?id=979c6cc89af9449cbeb5342a439c6a76"));
 
             map.OperationalLayers.Add(new ArcGISMapImageLayer(new Uri("http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer")));
 

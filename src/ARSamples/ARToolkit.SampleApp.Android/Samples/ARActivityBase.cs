@@ -1,7 +1,8 @@
 ﻿using Android.OS;
-using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using AndroidX.AppCompat.App;
+using ARToolkit.SampleApp.Android;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
@@ -68,7 +69,7 @@ namespace ARToolkit.SampleApp.Samples
             }
         }
 
-        protected virtual Esri.ArcGISRuntime.ARToolkit.ARSceneView SetContentView()
+        protected virtual Esri.ArcGISRuntime.ARToolkit.ARSceneView? SetContentView()
         {
             SetContentView(Resource.Layout.simplearview);
             return FindViewById<Esri.ArcGISRuntime.ARToolkit.ARSceneView>(Resource.Id.sceneView1);

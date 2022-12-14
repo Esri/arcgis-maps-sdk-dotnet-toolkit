@@ -1,0 +1,21 @@
+<FileList>
+  <File Reference="Esri.ArcGISRuntime.Toolkit/WPF.dll">
+    <ToolboxItems VSCategory="ArcGIS Maps SDK for .NET" BlendCategory="ArcGIS Maps SDK for .NET">
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents" />
+    </ToolboxItems>
+  </File>
+</FileList>

@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             mc:Ignorable="d"
+             Title="Bookmarks - customization"
+             x:Class="Toolkit.SampleApp.Maui.Samples.BookmarksViewSample">
+    <ContentPage.Resources>
+        <DataTemplate x:Key="ItemTemplateOne">
+            <TextCell Text="{Binding Name}" TextColor="Red" />
+        </DataTemplate>
+        <DataTemplate x:Key="ItemTemplateTwo">
+            <ViewCell>
+                <Label BackgroundColor="Red" TextColor="White" Text="{Binding Name}" />
+            </ViewCell>
+        </DataTemplate>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="_viewContainer" Grid.Row="0"/>
+                <toolkit:BookmarksView x:Name="BookmarksView" Grid.Row="1"/>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Labels -->
+                        <ColumnDefinition Width="*" />
+                        <!-- First option -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Second option -->
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <!-- 0: switch between map and scene views -->
+                        <RowDefinition Height="Auto" />
+                        <!-- 1: switch map in geoview -->
+                        <RowDefinition Height="Auto" />
+                        <!-- 2: set/clear override list -->
+                        <RowDefinition Height="Auto" />
+                        <!-- 3: Add to override list or add to map/scene -->
+                        <RowDefinition Height="Auto" />
+                        <!-- 4: Switch Item template -->
+                        <RowDefinition Height="Auto" />
+                        <!-- 5: Set or clear selection listener -->
+                    </Grid.RowDefinitions>
+
+                    <Label Text="GeoView:" Grid.Row="0" Grid.Column="0" />
+                    <Label Text="Document:" Grid.Row="1" Grid.Column="0" />
+                    <Label Text="Override list:" Grid.Row="2" Grid.Column="0" />
+                    <Label Text="Add to:" Grid.Row="3" Grid.Column="0" />
+                    <Label Text="Set template:" Grid.Row="4" Grid.Column="0" />
+                    <Label Text="Selection listener:" Grid.Row="5" Grid.Column="0" />
+
+                    <Button Text="MapView" Grid.Row="0" Grid.Column="1" Clicked="SetMapViewBinding_Click" />
+                    <Button Text="SceneView" Grid.Row="0" Grid.Column="2" Clicked="SetSceneViewBinding_Click" />
+                    <Button Text="Doc 1" Grid.Row="1" Grid.Column="1" Clicked="SetDocumentOne_Click" />
+                    <Button Text="Doc 2" Grid.Row="1" Grid.Column="2" Clicked="SetDocumentTwo_Click" />
+                    <Button Text="Set list" Grid.Row="2" Grid.Column="1" Clicked="SetOverrideList_Click" />
+                    <Button Text="Clear list" Grid.Row="2" Grid.Column="2" Clicked="ClearOverrideList_Click" />
+                    <Button Text="Override list" Grid.Row="3" Grid.Column="1" Clicked="AddToOverrideList_Click" />
+                    <Button Text="Map/Scene" Grid.Row="3" Grid.Column="2" Clicked="AddToMapScene_Click" />
+                    <Button Text="Red fore" Grid.Row="4" Grid.Column="1" Clicked="SetItemTemplateOne_Click" />
+                    <Button Text="Red back" Grid.Row="4" Grid.Column="2" Clicked="SetItemTemplateTwo_Click" />
+                    <Button Text="Add" Grid.Row="5" Grid.Column="1" Clicked="AddSelectionListener_Click" />
+                    <Button Text="Remove" Grid.Row="5" Grid.Column="2" Clicked="RemoveSelectionListener_Click" />
+                </Grid>
+            </Grid>
+        </ScrollView>
+
+    </ContentPage.Content>
+</ContentPage>

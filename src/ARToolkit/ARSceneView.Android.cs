@@ -164,7 +164,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             IsManualRendering = IsUsingARCore;
         }
 
-        private void OrientationHelper_OrientationChanged(object sender, CompassOrientationEventArgs e)
+        private void OrientationHelper_OrientationChanged(object? sender, CompassOrientationEventArgs e)
         {
             if (e.Accuracy == Android.Hardware.SensorStatus.NoContact)
                 return;

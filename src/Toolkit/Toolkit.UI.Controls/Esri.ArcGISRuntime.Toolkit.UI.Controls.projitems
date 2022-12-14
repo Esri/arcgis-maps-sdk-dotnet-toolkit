@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d9b86d10-7483-47ee-994e-9764fdb07b20</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit.UI.Controls</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BasemapGallery\BasemapGallery.Appearance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BasemapGallery\BasemapGallery.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BookmarksView\BookmarksView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BookmarksView\BookmarksView.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Compass\Compass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\DataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\FeatureDataField.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\FeatureHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\InputDataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\ReadOnlyDataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureDataField\SelectorDataItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FloorFilter\FloorFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FloorFilter\FloorFilter.MessageProperties.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FloorFilter\FloorFilter.TemplateCustomization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LayerLegend\LayerLegend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LayerLegend\LayerLegend.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legend\DesignLegendInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legend\Legend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legend\Legend.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legend\LegendItemTemplateSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MeasureToolbar\MeasureToolbar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OverviewMap\OverviewMap.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PopupViewer\PopupViewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PopupViewer\PopupViewer.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PopupViewer\PopupViewer.Xamarin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SearchView\SearchView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SymbolDisplay\SymbolDisplay.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\LoopMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\PlaybackDirection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\Tickbar.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\Tickbar.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\Tickbar.Xamarin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeExtentChangedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeExtentConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSlider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSlider.Windows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSlider.Xamarin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimeSlider\TimeSliderLabelMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\StartingPointListView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\ToolkitColorPalette.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\UtilityNetworkTraceTool.Appearance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UtilityNetworkTraceTool\UtilityNetworkTraceTool.Windows.cs" />
+  </ItemGroup>
+</Project>

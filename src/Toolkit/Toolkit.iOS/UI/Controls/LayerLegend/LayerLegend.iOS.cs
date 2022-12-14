@@ -25,7 +25,7 @@ using UIKit;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     [DisplayName("LayerLegend")]
-    [Category("ArcGIS Runtime Controls")]
+    [Category("ArcGIS Maps SDK for .NET Controls")]
     public partial class LayerLegend : IComponent
     {
         private UITableView _listView;

@@ -1,7 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap
 {
@@ -17,7 +15,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap
             SampleOverview.GeoView = MyMapView;
         }
 
-        private void Slider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        private void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             _ = MyMapView.SetViewpointRotationAsync(e.NewValue);
         }

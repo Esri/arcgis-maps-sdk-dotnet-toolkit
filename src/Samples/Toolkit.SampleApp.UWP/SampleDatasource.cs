@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using System.Text.RegularExpressions;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp
@@ -21,7 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public string DisplayName { get; set; }
     }
 
-    [Windows.UI.Xaml.Data.Bindable]
+    [Bindable]
 	public class SampleDatasource
     {
         private SampleDatasource() 
@@ -91,14 +89,14 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 					{
 						IsSourceGrouped = true,
 						Source = SamplesByCategory,
-						ItemsPath = new Windows.UI.Xaml.PropertyPath("Items")
+						ItemsPath = new PropertyPath("Items")
 					};
 				}
 				return m_CollectionViewSource;
 			}
 		}
     }
-	[Windows.UI.Xaml.Data.Bindable]
+	[Bindable]
 	public class SampleGroup
 	{
 		public SampleGroup(IEnumerable<Sample> samples)
@@ -110,7 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 		public IEnumerable<Sample> Items { get; private set; }
 	}
 
-	[Windows.UI.Xaml.Data.Bindable]
+	[Bindable]
 	public class Sample
     {
         public Type Page { get; set; }

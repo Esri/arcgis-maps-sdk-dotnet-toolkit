@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if NETFX_CORE
+#if NETFX_CORE || WINUI
 using System;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;

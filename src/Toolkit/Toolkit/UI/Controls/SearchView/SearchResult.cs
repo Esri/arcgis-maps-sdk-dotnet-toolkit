@@ -22,11 +22,13 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
-#if WINDOWS_UWP
-using Windows.UI.Xaml.Media;
-#endif
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
     /// <summary>
     /// Wraps a search result for display.
@@ -37,8 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private byte[]? _markerData;
 #pragma warning restore SA1011 // Closing square brackets should be spaced correctly
         private RuntimeImage? _markerImage;
-        #if WINDOWS_UWP
-        private ImageSource _markerImageSource;
+        #if WINDOWS_XAML
+        private ImageSource? _markerImageSource;
         #endif
         private bool _imageRequestFlag;
         private string _displayTitle;
@@ -158,7 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             set => SetPropertyChanged(value, ref _markerData);
         }
 
-        #if WINDOWS_UWP
+#if WINDOWS_XAML
 
         /// <summary>
         /// Gets the image displayed for this result, in a format useful for UWP.
@@ -182,7 +184,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             try
             {
             MarkerImage = await symbol.CreateSwatchAsync();
-            #if WINDOWS_UWP
+            #if WINDOWS_XAML
             MarkerImageSource = await MarkerImage.ToImageSourceAsync();
             #endif
             var markerDataStream = await MarkerImage.GetEncodedBufferAsync();

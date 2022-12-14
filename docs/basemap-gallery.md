@@ -13,7 +13,7 @@ BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defi
 BasemapGallery:
 
 - Can be configured to use a list, grid, or automatic layout. When using an automatic layout, list or grid presentation is chosen based on a defined width threshold.
-    - Note: Grid layout is not supported on Xamarin.Forms UWP. Regardless of settings, the list layout will always be used.
+    - Note: Grid layout is not supported on MAUI WinUI. Regardless of settings, the list layout will always be used.
 - Shows basemaps from a portal, and allows manually adding and removing basemaps from the collection.
 - Shows a representation of the map or scene's current basemap if that basemap exists in the gallery.
 - Shows a name and thumbnail for each basemap.
@@ -33,8 +33,8 @@ The following properties enable customization of the gallery's appearance:
 - `GalleryViewStyle` - Controls whether the gallery is displayed as a list or a grid.
 - `GridItemTemplate` - Template used to display basemaps when using a grid presentation.
 - `ListItemTemplate` - Template used to display basemaps when using a list presentation.
-- `ListItemContainerStyle` - Container style used when displaying items as a list. Does not apply to Xamarin.Forms.
-- `GridItemContainerStyle` - Container style used when displaying items as a grid. Does not apply to Xamarin.Forms.
+- `ListItemContainerStyle` - Container style used when displaying items as a list. Does not apply to MAUI.
+- `GridItemContainerStyle` - Container style used when displaying items as a grid. Does not apply to MAUI.
 
 ## Usage
 
@@ -82,14 +82,14 @@ WPF:
 </UserControl>
 ```
 
-Xamarin.Forms:
+MAUI:
 
 ```xml
 <ContentPage x:Class="Toolkit.Samples.Forms.Samples.BasemapGalleryWithSceneSample"
-             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Toolkit.Xamarin.Forms"
-             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms">
+             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui">
     <ContentPage.Content>
         <Grid>
             <esriUI:SceneView x:Name="sceneView" />

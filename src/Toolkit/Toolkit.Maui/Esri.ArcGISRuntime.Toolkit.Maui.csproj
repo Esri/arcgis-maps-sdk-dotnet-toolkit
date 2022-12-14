@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework);$(NetCatalystTargetFramework)</TargetFrameworks>
+		    <Description>ArcGIS Maps SDK for .NET controls and utilities for .NET MAUI apps including .NET for Android, .NET for iOS, .NET for macOS, or Windows UI 3 (WinUI 3)</Description>
+		    <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial 3D WinUI Android iOS Mac Catalyst MacCatalyst Windows UI 3 toolkit</PackageTags>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);$(NetWindowsTargetFramework)</TargetFrameworks>
+        <UseMaui>true</UseMaui>
+        <SingleProject>true</SingleProject>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
+        <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
+        <LangVersion>10</LangVersion>
+        <Nullable>annotations</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
+      <EmbeddedResource Include="Assets\BasemapDark.png" />
+      <EmbeddedResource Include="Assets\BasemapLight.png" />
+      <MauiFont Include="Resources\Fonts\calcite-ui-icons-24.ttf" />
+      <EmbeddedResource Include="Assets\caret-down-small.png" />
+      <EmbeddedResource Include="Assets\caret-down.png" />
+      <EmbeddedResource Include="Assets\pin-tear-small.png" />
+      <EmbeddedResource Include="Assets\pin-tear.png" />
+      <EmbeddedResource Include="Assets\search-small.png" />
+      <EmbeddedResource Include="Assets\search.png" />
+      <EmbeddedResource Include="Assets\x-small.png" />
+      <EmbeddedResource Include="Assets\x.png" />
+      <EmbeddedResource Include="Assets\pin-red.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+       <Using Include="Esri.ArcGISRuntime.Maui" />
+       <Using Remove="Microsoft.Maui.ApplicationModel" />
+    </ItemGroup>
+
+    <ItemGroup>
+       <PackageReference Include="Esri.ArcGISRuntime.Maui" Version="$(ArcGISRuntimePackageVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
+    </ItemGroup>
+
+    <Import Project="..\..\CommonProperties.targets" />
+    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
+
+</Project>

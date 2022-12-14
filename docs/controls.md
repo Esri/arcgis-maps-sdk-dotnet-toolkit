@@ -1,10 +1,5 @@
 # List of controls
 
-### ARSceneView
-Part of the AR Toolkit, enables integration of GIS content and ARKit/ARCore.
-
-[Documentation](ar.md)
-
 ### BasemapGallery
 
 BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defined portal, or a custom collection. When a basemap is selected from the gallery, the basemap used in the connected GeoModel is replaced.
@@ -98,24 +93,21 @@ Use named trace configurations defined in a web map to perform connected trace o
 
 ## Feature availability by platform/API
 
-|Component |UWP  |WPF  |Xamarin.Android  |Xamarin.iOS  |Xamarin.Forms |
-|---|---|---|---|---|---|
-|[ARSceneView](ar.md)   | N/A | N/A | ✔ | ✔ | ✔ |
-|[BasemapGallery](basemap-gallery.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
-|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|Compass   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|FeatureDataField   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/198.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/198) |
-|[FloorFilter](floor-filter.md) | ✔  | ✔ | ❌ | ❌ | ✔ |
-|Legend   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|LayerLegend   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|MeasureToolbar   | ✔ | ✔ | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) | [![GitHub Issue State](https://img.shields.io/github/issues/detail/s/Esri/arcgis-toolkit-dotnet/199.svg)](https://github.com/Esri/arcgis-toolkit-dotnet/issues/199) |
-|[OverviewMap](overview-map.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
-|PopupViewer | ✔ | ✔ | ✔ | ✔ | ✔ |
-|ScaleLine   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|[SearchView](search-view.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
-|SignInForm   |   | Preview |   |   |   |
-|SymbolDisplay   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|TableOfContents   | N/A | Preview | N/A  | N/A | N/A |
-|[TimeSlider](time-slider.md)   | ✔ | ✔ | ✔ | ✔ | ✔ |
-|[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ❌ | ❌ | ✔ |
+|Component |UWP and WinUI |WPF  |MAUI |
+|---|---|---|---|
+|[BasemapGallery](basemap-gallery.md) | ✔ | ✔ |  ✔ |
+|[BookmarksView](bookmarks-view.md)   | ✔ | ✔ | ✔ |
+|[Compass](compass.md)   | ✔ | ✔ | ✔ |
+|[FeatureDataField](feature-data-field.md)   | ✔ | ✔ | ❌ |
+|[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ |
+|[Legend](legend.md)   | ✔ | ✔ | ✔ |
+|[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ |
+|[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ |
+|[PopupViewer](popup-viewer.md) | ✔ | ✔ | ❌ |
+|[ScaleLine](scale-line.md)   | ✔ | ✔ | ✔ |
+|[SearchView](search-view.md) | ✔ | ✔ | ✔ |
+|[SymbolDisplay](symbol-display.md)   | ✔ | ✔ | ✔ |
+|TableOfContents   | N/A | Preview | N/A  |
+|[TimeSlider](time-slider.md)   | ✔ | ✔ | ❌ |
+|[UtilityNetworkTraceTool](un-trace.md) | ✔ | ✔ | ✔ |
 

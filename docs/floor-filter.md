@@ -60,7 +60,7 @@ WPF:
 </Grid>
 ```
 
-Xamarin.Forms:
+MAUI:
 
 ```xml
 <Grid>

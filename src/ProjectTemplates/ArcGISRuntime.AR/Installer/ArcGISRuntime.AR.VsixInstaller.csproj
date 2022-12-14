@@ -52,11 +52,6 @@
     <Content Include="EULA.rtf">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="..\Template.Forms\bin\ProjectTemplates\CSharp\1033\ArcGISRuntime.AR.Forms.App.zip">
-      <Link>ProjectTemplates\CSharp\1033\ArcGISRuntime.AR.Forms.App.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <Content Include="..\Template.Android\bin\ProjectTemplates\CSharp\1033\ArcGISRuntime.AR.Android.zip">
       <Link>ProjectTemplates\CSharp\1033\ArcGISRuntime.AR.Android.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -81,7 +76,6 @@
     <TextReplaceTask Filename="$(IntermediateVsixManifest)" OldText="0.1.2" NewText="$(ArcGISRuntimeToolkitPackageVersion)" />
     <TextReplaceTask Filename="$(IntermediateOutputPath)\ProjectTemplates\**\*.csproj" OldText="%24(AGS_TOOLKIT_VERSION)" NewText="$(ArcGISRuntimeToolkitPackageVersion)" />
     <TextReplaceTask Filename="$(IntermediateOutputPath)\ProjectTemplates\**\*.vstemplate" OldText="%24(AGS_TOOLKIT_VERSION)" NewText="$(ArcGISRuntimeToolkitPackageVersion)" />
-    <TextReplaceTask Filename="$(IntermediateOutputPath)\ProjectTemplates\**\*.csproj" OldText="%24(XamarinFormsVersion)" NewText="$(XamarinFormsPackageVersion)" />
   </Target>
   <Target Name="SignVSIX" Condition="Exists($(PFXSignatureFile)) AND '$(DISABLE_SIGNING)'!='true'" BeforeTargets="PostBuildEvent">
     <PropertyGroup>

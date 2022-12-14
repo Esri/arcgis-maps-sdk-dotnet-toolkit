@@ -21,14 +21,16 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
-#if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Xamarin.Forms;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+#if MAUI
+using Esri.ArcGISRuntime.Maui;
+using Map = Esri.ArcGISRuntime.Mapping.Map;
 #else
 using Esri.ArcGISRuntime.UI.Controls;
 #endif
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
@@ -91,14 +93,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Subscribe to events if applicable
             if (bookmarks is INotifyCollectionChanged iCollectionChanged)
             {
-                var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(iCollectionChanged);
-                listener.OnEventAction = (instance, source, eventArgs) => HandleOverrideListCollectionChanged(source, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
+                var listener = new WeakEventListener<BookmarksViewDataSource, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, iCollectionChanged);
+                listener.OnEventAction = static (instance, source, eventArgs) => instance.HandleOverrideListCollectionChanged(source, eventArgs);
+                listener.OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent;
                 iCollectionChanged.CollectionChanged += listener.OnEvent;
             }
         }
 
-#if NETFX_CORE && !XAMARIN_FORMS
+#if WINDOWS_XAML
         private long _propertyChangedCallbackToken = 0;
 #endif
 
@@ -115,10 +117,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_geoView != null)
             {
-#if !XAMARIN && !XAMARIN_FORMS
+#if !MAUI
                 if (_geoView is MapView mapview)
                 {
-#if NETFX_CORE
+#if WINDOWS_XAML
                     mapview.UnregisterPropertyChangedCallback(MapView.MapProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).RemoveValueChanged(mapview, GeoViewDocumentChanged);
@@ -126,7 +128,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (_geoView is SceneView sceneview)
                 {
-#if NETFX_CORE
+#if WINDOWS_XAML
                     sceneview.UnregisterPropertyChangedCallback(SceneView.SceneProperty, _propertyChangedCallbackToken);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).RemoveValueChanged(sceneview, GeoViewDocumentChanged);
@@ -146,10 +148,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             if (_geoView != null)
             {
-#if !XAMARIN && !XAMARIN_FORMS
+#if !MAUI
                 if (_geoView is MapView mapview)
                 {
-#if NETFX_CORE
+#if WINDOWS_XAML
                     _propertyChangedCallbackToken = mapview.RegisterPropertyChangedCallback(MapView.MapProperty, GeoViewDocumentChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(MapView.MapProperty, typeof(MapView)).AddValueChanged(mapview, GeoViewDocumentChanged);
@@ -157,7 +159,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (_geoView is SceneView sceneview)
                 {
-#if NETFX_CORE
+#if WINDOWS_XAML
                     _propertyChangedCallbackToken = sceneview.RegisterPropertyChangedCallback(SceneView.SceneProperty, GeoViewDocumentChanged);
 #else
                     DependencyPropertyDescriptor.FromProperty(SceneView.SceneProperty, typeof(SceneView)).AddValueChanged(sceneview, GeoViewDocumentChanged);
@@ -173,7 +175,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-#if XAMARIN || XAMARIN_FORMS
+#if MAUI
         private void GeoView_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if ((sender is MapView && e.PropertyName == nameof(MapView.Map)) ||
@@ -189,9 +191,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_geoView is MapView mv && mv.Map is ILoadable mapLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(mapLoadable);
-                listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
+                var listener = new WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>(this, mapLoadable);
+                listener.OnEventAction = static (instance, source, eventArgs) => instance.Doc_Loaded(source, eventArgs);
+                listener.OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent;
                 mapLoadable.Loaded += listener.OnEvent;
 
                 // Ensure event is raised even if already loaded
@@ -200,9 +202,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             else if (_geoView is SceneView sv && sv.Scene is ILoadable sceneLoadable)
             {
                 // Listen for load completion
-                var listener = new Internal.WeakEventListener<ILoadable, object?, EventArgs>(sceneLoadable);
-                listener.OnEventAction = (instance, source, eventArgs) => Doc_Loaded(source, eventArgs);
-                listener.OnDetachAction = (instance, weakEventListener) => instance.Loaded -= weakEventListener.OnEvent;
+                var listener = new WeakEventListener<BookmarksViewDataSource, ILoadable, object?, EventArgs>(this, sceneLoadable);
+                listener.OnEventAction = static (instance, source, eventArgs) => instance.Doc_Loaded(source, eventArgs);
+                listener.OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent;
                 sceneLoadable.Loaded += listener.OnEvent;
 
                 // Ensure event is raised even if already loaded
@@ -238,9 +240,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
 
-            var listener = new Internal.WeakEventListener<INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(bmCollection);
-            listener.OnEventAction = (instance, source, eventArgs) => HandleGeoViewBookmarksCollectionChanged(source, eventArgs);
-            listener.OnDetachAction = (instance, weakEventListener) => instance.CollectionChanged -= weakEventListener.OnEvent;
+            var listener = new WeakEventListener<BookmarksViewDataSource, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, bmCollection);
+            listener.OnEventAction = static (instance, source, eventArgs) => instance.HandleGeoViewBookmarksCollectionChanged(source, eventArgs);
+            listener.OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent;
             bmCollection.CollectionChanged += listener.OnEvent;
         }
 
@@ -265,14 +267,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void RunOnUIThread(Action action)
         {
-#if XAMARIN_FORMS
-            global::Xamarin.Forms.Device.BeginInvokeOnMainThread(action);
-#elif __IOS__
-            _geoView?.InvokeOnMainThread(action);
-#elif __ANDROID__
-            _geoView?.PostDelayed(action, 500);
+#if MAUI
+            _geoView?.Dispatcher.Dispatch(action);
 #elif NETFX_CORE
             _ = _geoView?.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () => action());
+#elif WINUI
+            _ = _geoView?.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () => action());
 #else
             _geoView?.Dispatcher.Invoke(action);
 #endif
@@ -338,7 +338,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             RunOnUIThread(() =>
             {
+                // TODO: fix this properly
+#if MAUI && __IOS__
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+#else
                 CollectionChanged?.Invoke(this, args);
+#endif
                 OnPropertyChanged("Item[]");
                 if (args.Action != NotifyCollectionChangedAction.Move)
                 {

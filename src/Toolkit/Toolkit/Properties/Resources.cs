@@ -21,14 +21,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Properties
     internal static class Resources
     {
 #if NETFX_CORE
-        private static readonly Windows.ApplicationModel.Resources.ResourceLoader _resource = Windows.ApplicationModel.Resources.ResourceLoader.GetForViewIndependentUse("Esri.ArcGISRuntime.Toolkit/Resources");
+        private static readonly Windows.ApplicationModel.Resources.ResourceLoader _resource = Windows.ApplicationModel.Resources.ResourceLoader.GetForViewIndependentUse("Esri.ArcGISRuntime.Toolkit.UWP/Resources");
 
         public static string? GetString(string name)
         {
             return _resource.GetString(name);
         }
 #else
+#if MAUI
+        private static ResourceManager _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.Maui.LocalizedStrings.Resources", typeof(Resources).Assembly);
+#else
         private static ResourceManager _resourceManager = new ResourceManager("Esri.ArcGISRuntime.Toolkit.LocalizedStrings.Resources", typeof(Resources).Assembly);
+#endif
 
         public static string? GetString(string name)
         {

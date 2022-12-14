@@ -1,9 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">100.15.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">100.15.0</ArcGISRuntimePackageVersion>
-    <XamarinFormsPackageVersion Condition="'$(XamarinFormsPackageVersion)'==''">5.0.0.2244</XamarinFormsPackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.0.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.0.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -20,7 +19,7 @@
     <Copyright>Copyright © 2014-$([System.DateTime]::Now.ToString('yyyy')) Esri.</Copyright>
 
     <DefaultLanguage>en-US</DefaultLanguage>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>10</LangVersion>
 
     <!--Project type identifiers-->
     <IsSampleProject>$(MSBuildProjectName.Contains('.Samples.'))</IsSampleProject>
@@ -32,16 +31,16 @@
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true'">true</IsToolkitLibrary>
 
     <!--Framework versions-->
-    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">18362</ArcGISRuntime_MinimumSupportedWindowsBuild>
-    <UWPTargetPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformVersion>
+    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">17763</ArcGISRuntime_MinimumSupportedWindowsBuild>
+    <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
+    <UWPTargetPlatformVersion>10.0.$(WindowsSDKTargetBuild).0</UWPTargetPlatformVersion>
     <UWPTargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformMinVersion>
-    <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
-    <iOSTargetFramework>xamarinios10</iOSTargetFramework>
-    <DotNetTargetFramework>net461</DotNetTargetFramework>
-    <UWPTargetFramework>uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)</UWPTargetFramework>
-    <NetWindowsTargetFramework>net6.0-windows10.0.18362.0</NetWindowsTargetFramework>
-    <!--<NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
-    <NetiOSTargetFramework>net6.0-ios13.0</NetiOSTargetFramework>-->
+    <DotNetTargetFramework>net472</DotNetTargetFramework>
+    <UWPTargetFramework>uap10.0.$(WindowsSDKTargetBuild)</UWPTargetFramework>
+    <NetWindowsTargetFramework>net6.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
+    <NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
+    <NetCatalystTargetFramework Condition="$(ArcGISRuntimePackageVersion.StartsWith('200.'))">net6.0-maccatalyst14.2</NetCatalystTargetFramework>
+    <NetiOSTargetFramework>net6.0-ios14.0</NetiOSTargetFramework>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->

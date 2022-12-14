@@ -1,45 +1,45 @@
 <Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
-    <AndroidTargetFramework>monoandroid90</AndroidTargetFramework>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;$(iOSTargetFramework);$(AndroidTargetFramework)</TargetFrameworks>
-    <Description>ArcGIS Runtime Augmented Reality controls and utilities for Xamarin.Android and Xamarin.iOS apps.</Description>
-    <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial Augmented Reality AR 3D Xamarin Android iOS toolkit</PackageTags>
+    <TargetFrameworks>netstandard2.0;net6.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
+    <Description>ArcGIS Maps SDK for .NET Augmented Reality (AR) controls and utilities for .NET Android and .NET iOS apps.</Description>
+    <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial Augmented Reality AR 3D .NET Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.ARToolkit</RootNamespace>
     <AssemblyName>Esri.ArcGISRuntime.ARToolkit</AssemblyName>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">14.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == '$(NetAndroidTargetFramework)'">26.0</SupportedOSPlatformVersion>
+    <NoWarn>$(NoWarn);ESRI8000</NoWarn>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <DesignTimeBuild>false</DesignTimeBuild> <!-- workaround for MSBuildSdkExtras issue in VS16.2 -->
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == '$(UWPTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetWindowsTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\**\*.*" />
   </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == '$(AndroidTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetAndroidTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
+    <PackageReference Include="Esri.ArcGISRuntime.Android" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
     <PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
     <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
     <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.17.1" />
     <AndroidResource Include="Resources\**\*.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
-
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="$(ArcGISRuntimePackageVersion)" />
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">
+    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
+	<PackageReference Include="Esri.ArcGISRuntime.iOS" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
@@ -50,7 +50,7 @@
     <None Remove="GridDot.png" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(iOSTargetFramework)'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">
     <EmbeddedResource Include="GridDot.png" />
   </ItemGroup>
 
@@ -65,4 +65,5 @@
       <_FakeOutputPath Include="$(OutputPath)\$(AssemblyName).dll" />
     </ItemGroup>
   </Target>
+  <Import Project="..\CommonProperties.targets" />
 </Project>

@@ -16,7 +16,11 @@
 
 using Esri.ArcGISRuntime.Mapping;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     /// <summary>
     /// Class used to represent an entry in the Legend control.

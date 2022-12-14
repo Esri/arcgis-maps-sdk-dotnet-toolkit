@@ -25,7 +25,7 @@ using Esri.ArcGISRuntime.UI.Controls;
 using Point = Android.Graphics.PointF;
 #elif __IOS__
 using Point = CoreGraphics.CGPoint;
-#elif NETFX_CORE
+#elif NETFX_CORE || WINUI
 using Point = Windows.Foundation.Point;
 #endif
 #endif
@@ -60,7 +60,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
             }
         }
 
-        private void Controller_OriginCameraChanged(object sender, EventArgs e) => OriginCameraChanged?.Invoke(this, e);
+        private void Controller_OriginCameraChanged(object? sender, EventArgs e) => OriginCameraChanged?.Invoke(this, e);
         
         /// <summary>
         /// Starts device tracking.
@@ -141,7 +141,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
         }
 
         private object locationLock = new object();
-        private void LocationDataSource_LocationChanged(object sender, Location.Location e)
+        private void LocationDataSource_LocationChanged(object? sender, Location.Location e)
         {
             if (_locationTrackingMode == ARLocationTrackingMode.Ignore)
                 return;
@@ -224,7 +224,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 {
                     SpaceEffect = UI.SpaceEffect.None;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.None;
-#if NETFX_CORE
+#if NETFX_CORE|| WINUI
                     if (_cameraView != null)
                     {
                         _cameraView.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -236,7 +236,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 {
                     SpaceEffect = UI.SpaceEffect.Stars;
                     AtmosphereEffect = Esri.ArcGISRuntime.UI.AtmosphereEffect.HorizonOnly;
-#if NETFX_CORE
+#if NETFX_CORE|| WINUI
                     if(_cameraView != null)
                     {
                         _cameraView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
@@ -271,11 +271,24 @@ namespace Esri.ArcGISRuntime.ARToolkit
             get => _controller?.OriginCamera ?? throw new InvalidOperationException();  // Only null in design mode
             set
             {
-                if (_controller != null && value != OriginCamera && value?.IsEqual(OriginCamera) == false)
+                if (_controller != null && value != OriginCamera && !CameraEquals(value, OriginCamera))
                 {
                     _controller.OriginCamera = value;
                 } 
             }
+        }
+
+        private static bool CameraEquals(Mapping.Camera camera1, Mapping.Camera camera2)
+        {
+            if (camera1 is null && camera2 is null) return true;
+            if (camera1 is null && camera2 != null || camera1 != null && camera2 is null) return false;
+            if (ReferenceEquals(camera1, camera2)) return true;
+            return camera1!.Location.X == camera2!.Location.X &&
+                camera1.Location.Y == camera2.Location.Y &&
+                camera1.Location.Z == camera2.Location.Z &&
+                camera1.Heading == camera2.Heading &&
+                camera1.Pitch == camera2.Pitch &&
+                camera1.Roll == camera2.Roll;
         }
 
         /// <summary>

@@ -211,7 +211,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
         }
 
-        private void HandleClearButtonClick(object sender, RoutedEventArgs e) => SearchString = null;
+        private void HandleClearButtonClick(object? sender, RoutedEventArgs e) => SearchString = null;
 
         private static string AsFilterString(object input)
         {

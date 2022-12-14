@@ -4,15 +4,14 @@
       "src": [
         {
           "files": [ 
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj" 
+            "Toolkit/Toolkit.WPF/Esri.ArcGISRuntime.Toolkit.WPF.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
+          "src" : "../src/"
         }
       ],
       "dest": "../output/docs/api/netfx",
-      "properties": { "TargetFramework": "net461" },
+      "properties": { "TargetFramework": "net472" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },    
@@ -20,14 +19,16 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj" ],
+            "Toolkit/Toolkit.WPF/Esri.ArcGISRuntime.Toolkit.WPF.csproj",
+            "Toolkit/Toolkit.WinUI/Esri.ArcGISRuntime.Toolkit.WinUI.csproj",
+            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj"
+          ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
+          "src" : "../src/"
         }
       ],
-      "dest": "../output/docs/api/netcore",
-      "properties": { "TargetFramework": "netcoreapp3.1" },
+      "dest": "../output/docs/api/net6",
+      "properties": { "TargetFramework": "net6.0-windows10.0.19041.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -35,18 +36,16 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
-            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj",
+            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
             "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj"
+            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
+          "src" : "../src/"
         }
       ],
       "dest": "../output/docs/api/android",
-      "properties": { "TargetFramework": "monoandroid81" },
+      "properties": { "TargetFramework": "net6.0-android" },
       "filter": "filterConfig.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
@@ -55,18 +54,16 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
-            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj",
+            "Toolkit/Toolkit.Maui/Esri.ArcGISRuntime.Toolkit.Maui.csproj",
             "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj"
+            "ARToolkit.Maui/Esri.ArcGISRuntime.ARToolkit.Maui.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
+          "src" : "../src/"
         }
       ],
       "dest": "../output/docs/api/ios",
-      "properties": { "TargetFramework": "xamarinios10" },
+      "properties": { "TargetFramework": "net6.0-ios" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     },
@@ -74,36 +71,15 @@
       "src": [
         {
           "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
-            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj"
+            "Toolkit/Toolkit.UWP/Esri.ArcGISRuntime.Toolkit.UWP.csproj"
           ],
           "exclude": [ "**/bin/**", "**/obj/**" ],
           "src" : "../src/",
         }
       ],
       "dest": "../output/docs/api/uwp",
-      "properties": { "TargetFramework": "uap10.0.16299" },
+      "properties": { "TargetFramework": "uap10.0.19041" },
       "filter": "filterConfig.yml",
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    },
-    {
-      "src": [
-        {
-          "files": [
-            "Toolkit/Toolkit/Esri.ArcGISRuntime.Toolkit.csproj",
-            "Toolkit.Forms/Esri.ArcGISRuntime.Toolkit.Xamarin.Forms.csproj",
-            "Toolkit.Preview/Toolkit.Preview/Esri.ArcGISRuntime.Toolkit.Preview.csproj",
-            "ARToolkit/Esri.ArcGISRuntime.ARToolkit.csproj",
-            "ARToolkit.Forms/Esri.ArcGISRuntime.ARToolkit.Forms.csproj"
-          ],
-          "exclude": [ "**/bin/**", "**/obj/**" ],
-          "src" : "../src/",
-        }
-      ],
-      "dest": "../output/docs/api/netstd",
-      "properties": { "TargetFramework": "netstandard2.0" },
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }

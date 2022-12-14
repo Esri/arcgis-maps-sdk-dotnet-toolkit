@@ -25,18 +25,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
-using Esri.ArcGISRuntime.Toolkit.UI;
-#if XAMARIN_FORMS
-using Esri.ArcGISRuntime.Xamarin.Forms;
+#if MAUI
+using Esri.ArcGISRuntime.Maui;
 #else
 using Esri.ArcGISRuntime.UI.Controls;
-#if NETFX_CORE
-using Windows.UI.Core;
-#endif
 #endif
 
-#if XAMARIN_FORMS
-namespace Esri.ArcGISRuntime.Toolkit.Xamarin.Forms
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 #else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
@@ -120,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _currentScale = (newGeoview as MapView)?.MapScale ?? double.NaN;
         }
 
-#if !XAMARIN_FORMS
+#if !MAUI
         private List<LegendEntry> GenerateDesignData()
         {
             var items = new List<LegendEntry>();
@@ -202,7 +198,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         protected override List<LegendEntry> OnRebuildCollection()
         {
-#if !XAMARIN_FORMS
+#if !MAUI
             if (DesignTime.IsDesignMode)
             {
                 return GenerateDesignData();

@@ -124,3 +124,5 @@ src/ARToolkit/.vs/
 src/Samples/Toolkit.SampleApp.Android/Resources/Resource.Designer.cs
 src/Samples/Toolkit.Samples.Forms/Toolkit.Samples.Forms.UWP/BundleArtifacts
 src/ProjectTemplates/.vs
+src/Samples/Toolkit.SampleApp.WinUI/Samples
+src/Toolkit/Toolkit.UWP/LocalizedStrings/en-US/Resources.resw

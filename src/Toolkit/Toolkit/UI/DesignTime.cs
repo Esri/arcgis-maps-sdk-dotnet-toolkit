@@ -17,9 +17,13 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
+namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
-    internal static partial class DesignTime
+    internal static class DesignTime
     {
         private static bool? _isInDesignMode;
 
@@ -29,17 +33,17 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (!_isInDesignMode.HasValue)
                 {
-#if NETFX_CORE
+#if WINDOWS_XAML
                     _isInDesignMode = Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#elif !XAMARIN
+#elif __ANDROID__
+                    // Assume we're in design-time if there is no application context
+                    _isInDesignMode = Android.App.Application.Context == null;
+#elif WPF
                     var prop = DesignerProperties.IsInDesignModeProperty;
                     _isInDesignMode
                         = (bool)DependencyPropertyDescriptor
                         .FromProperty(prop, typeof(FrameworkElement))
                         .Metadata.DefaultValue;
-#elif __ANDROID__
-                    // Assume we're in design-time if there is no application context
-                    _isInDesignMode = Android.App.Application.Context == null;
 #else
                     _isInDesignMode = false;
 #endif

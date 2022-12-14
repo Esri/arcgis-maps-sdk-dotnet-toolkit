@@ -14,14 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
-using System;
+#if WPF || WINDOWS_XAML
 using System.Globalization;
-#if NETFX_CORE
-using Windows.UI.Xaml.Data;
-#else
-using System.Windows.Data;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
@@ -33,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     {
         /// <inheritdoc />
         object? IValueConverter.Convert(object? value, Type targetType, object parameter,
-#if NETFX_CORE
+#if WINDOWS_XAML
             string language)
 #else
             CultureInfo culture)
@@ -44,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         /// <inheritdoc />
         object? IValueConverter.ConvertBack(object? value, Type targetType, object parameter,
-#if NETFX_CORE
+#if WINDOWS_XAML
             string language)
 #else
             CultureInfo culture)

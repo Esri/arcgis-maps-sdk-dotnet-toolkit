@@ -1,20 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Compass
 {
@@ -25,7 +10,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Compass
     {
         public SceneViewCompassSample()
         {
-            Scene = new Scene(BasemapType.Imagery);
+            Scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
             Scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));
             this.InitializeComponent();
         }

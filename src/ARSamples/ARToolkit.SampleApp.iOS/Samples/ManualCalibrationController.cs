@@ -46,7 +46,7 @@ namespace ARToolkit.SampleApp.Samples
                 toolbar.BottomAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.BottomAnchor)
             });
 
-            var scene = new Scene(Basemap.CreateImagery());
+            var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
             scene.Basemap.BaseLayers[0].Opacity = .5;
             scene.BaseSurface = new Surface();
             scene.BaseSurface.BackgroundGrid.IsVisible = false;

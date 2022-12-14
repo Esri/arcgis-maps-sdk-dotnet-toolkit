@@ -21,8 +21,13 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Tasks.Geocoding;
 using Esri.ArcGISRuntime.UI;
+using Symbol = Esri.ArcGISRuntime.Symbology.Symbol;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
     /// <summary>
     /// Search source intended for use with the World Geocode Service and similarly-configured geocode services.
@@ -43,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// If no search is successful, it is still possible to have a total number of results less than this threshold.
         /// Does not apply to repeated search with area constraint.
-        /// Set to zero to disable search repeat behavior. Defaults to 1.
+        /// Set to zero to disable search repeat behavior. Defaults to 0.
         /// </remarks>
         public int RepeatSearchResultThreshold { get; set; } = 0;
 
@@ -54,9 +59,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// If no search is successful, it is still possible to have a total number of results less than this threshold.
         /// Does not apply to repeated search with area constraint.
-        /// Set to zero to disable search repeat behavior. Defaults to 6.
+        /// Set to zero to disable search repeat behavior. Defaults to 0.
         /// </remarks>
-        public int RepeatSuggestResultThreshold { get; set; } = 6;
+        public int RepeatSuggestResultThreshold { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets the web style used to find symbols for results.
@@ -105,7 +110,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Add attributes expected from the World Geocoder Service if present, otherwise default to all attributes.
             if (Locator.Uri?.ToString() == WorldGeocoderUriString &&
-                (Locator.LocatorInfo?.ResultAttributes?.Any() ?? false))
+                (Locator.LocatorInfo?.ResultAttributes?.Any() == true))
             {
                 var desiredAttributes = new[] { AddressAttributeKey, LocatorIconAttributeKey };
                 foreach (var attr in desiredAttributes.OfType<string>())

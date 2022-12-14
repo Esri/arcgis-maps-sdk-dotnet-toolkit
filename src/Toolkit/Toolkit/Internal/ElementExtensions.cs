@@ -14,15 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if !MAUI
 using System;
 using System.Collections.Generic;
 using System.Text;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-#else
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;

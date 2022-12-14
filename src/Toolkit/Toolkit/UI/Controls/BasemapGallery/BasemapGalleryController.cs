@@ -23,9 +23,11 @@ using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Portal;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Esri.ArcGISRuntime.Toolkit.Xamarin.Forms")]
-
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     internal class BasemapGalleryController : INotifyPropertyChanged
     {
@@ -316,7 +318,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 listOfBasemaps.Add(new BasemapGalleryItem(basemap));
             }
 
-#if !WINDOWS_UWP && !NETCOREAPP
+#if !WINDOWS_XAML && !NETCOREAPP
             await Task.WhenAll(listOfBasemaps.Select(gi => gi.LoadAsync()));
 #else
             foreach (var item in listOfBasemaps)

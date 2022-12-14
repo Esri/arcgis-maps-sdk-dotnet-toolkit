@@ -11,7 +11,7 @@ namespace ARToolkit.SampleApp.Samples
     [Activity(
         Label = "Earth",
         Theme = "@style/Theme.AppCompat",
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = Android.Content.PM.ScreenOrientation.Locked)]
+        ConfigurationChanges = global::Android.Content.PM.ConfigChanges.Orientation | global::Android.Content.PM.ConfigChanges.ScreenSize, ScreenOrientation = global::Android.Content.PM.ScreenOrientation.Locked)]
     [SampleInfo(DisplayName = "Earth", Description = "Shows the entire earth hovering in front of you allowing you to walk around it")]
     public class EarthSample : ARActivityBase
     {
@@ -20,7 +20,7 @@ namespace ARToolkit.SampleApp.Samples
             base.OnCreate(savedInstanceState);
             try
             {
-                var scene = new Scene(Basemap.CreateImagery());
+                var scene = new Scene(new Basemap(new Uri("https://www.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")));
                 scene.BaseSurface = new Surface();
                 scene.BaseSurface.BackgroundGrid.IsVisible = false;
                 scene.BaseSurface.ElevationSources.Add(new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer")));

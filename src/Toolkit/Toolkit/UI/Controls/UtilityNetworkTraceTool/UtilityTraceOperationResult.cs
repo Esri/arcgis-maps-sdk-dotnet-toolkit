@@ -28,7 +28,11 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI
+#endif
 {
     /// <summary>
     /// Encapsulates a utility network trace operation, with all parameters and results, packaged for convenient use in a UI.
@@ -264,7 +268,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             if (parameter is UtilityTraceOperationResult targetResult)
             {
                 var graphicsExtent = targetResult.ResultOverlay.Extent;
-                var featureExtent = (targetResult.Features?.Any() ?? false) ? GeometryEngine.CombineExtents(targetResult.Features.Select(m => m.Geometry).OfType<Geometry.Geometry>()) : null;
+                var featureExtent = (targetResult.Features?.Any() == true) ? GeometryEngine.CombineExtents(targetResult.Features.Select(m => m.Geometry).OfType<Geometry.Geometry>()) : null;
                 if (targetResult.ResultOverlay.Graphics.Any() && featureExtent != null && graphicsExtent != null && !graphicsExtent.IsEmpty)
                 {
                     _controller.RequestedViewpoint = new Viewpoint(GeometryEngine.CombineExtents(graphicsExtent, featureExtent));

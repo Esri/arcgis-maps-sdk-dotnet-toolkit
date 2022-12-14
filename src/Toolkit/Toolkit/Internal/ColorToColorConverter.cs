@@ -14,14 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WINDOWS
+#if WINDOWS && !MAUI
 
 using System;
 using System.Collections;
 using System.Globalization;
-#if NETFX_CORE
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
+#if WINDOWS_XAML
 using MediaColor = Windows.UI.Color;
 #else
 using System.Windows.Data;
@@ -32,8 +30,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     internal class ColorToColorConverter : IValueConverter
     {
-        object IValueConverter.Convert(object? value, Type targetType, object? parameter,
-#if NETFX_CORE
+        object? IValueConverter.Convert(object? value, Type targetType, object? parameter,
+#if WINDOWS_XAML
             string language)
 #else
             CultureInfo culture)
@@ -53,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 
         /// <inheritdoc />
         object IValueConverter.ConvertBack(object? value, Type targetType, object? parameter,
-#if NETFX_CORE
+#if WINDOWS_XAML
             string language)
 #else
             CultureInfo culture)

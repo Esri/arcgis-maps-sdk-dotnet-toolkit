@@ -1,0 +1,39 @@
+﻿<Window x:Class="Esri.ArcGISRuntime.Toolkit.Samples.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Esri.ArcGISRuntime.Toolkit.Samples"
+        xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+        mc:Ignorable="d" 
+        Title="ArcGIS Maps SDK for .NET Toolkit - Functional Test App" Height="650" Width="925">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Menu x:Name="menu" />
+
+        <Border x:Name="SampleContainer" Grid.Row="1" Margin="10" BorderBrush="Black" BorderThickness="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="ArcGIS Maps SDK for .NET Toolkit (WPF)" FontFamily="Segoe UI Light"
+                      FontSize="48" />
+
+                    <TextBlock Text="Please select a sample from the menu" FontSize="24" />
+                </StackPanel>
+               
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</Window>

@@ -14,14 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !XAMARIN
+#if WPF || WINDOWS_XAML
 using System;
-#if NETFX_CORE
-using Windows.UI.Xaml.Data;
+#if WINDOWS_XAML
 using Culture = System.String;
 #else
-using System.Windows;
-using System.Windows.Data;
 using Culture = System.Globalization.CultureInfo;
 #endif
 
@@ -31,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     /// Converter returns true if the supplied value is null, false otherwise.
     /// </summary>
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    #if NETFX_CORE
+#if WINDOWS_XAML
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1121:Use built-in type alias", Justification = "Alias used to support UWP/WPF differences.")]
     #endif
     public class NullToBoolSelectionConverter : IValueConverter
