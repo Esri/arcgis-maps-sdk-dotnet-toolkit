@@ -3,10 +3,12 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(NetWindowsTargetFramework)</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
     <!--<TargetFramework>net472</TargetFramework>-->
     <UseWPF>true</UseWPF>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
     <NoWarn>$(NoWarn);NU5105;MC3074;MSB4181;MC1000;MC3066</NoWarn>
+    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
