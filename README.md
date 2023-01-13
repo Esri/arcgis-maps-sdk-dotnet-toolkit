@@ -49,7 +49,7 @@ The simplest way to get started is to add the platform-specific NuGet package(s)
 
 ## Customize
 
-The ArcGIS Maps SDK for .NET Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
+The ArcGIS Maps SDK for .NET Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-maps-sdk-dotnet-toolkit/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
 ## Compatibility
 
@@ -59,9 +59,9 @@ Nuget packages for Toolkit are tested and published in sync with the `Esri.ArcGI
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
-Toolkit is provided as an open source project to enable you to customize for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
+Toolkit is provided as an open source project to enable you to customize for your requirements. [See the docs](https://esri.github.io/arcgis-maps-sdk-dotnet-toolkit/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
-Find a bug or want to request a new feature? Please let us know by [submitting an issue](https://github.com/Esri/arcgis-toolkit-dotnet/issues/new).
+Find a bug or want to request a new feature? Please let us know by [submitting an issue](https://esri.github.io/arcgis-maps-sdk-dotnet-toolkit/issues/new).
 
 ## License
 
