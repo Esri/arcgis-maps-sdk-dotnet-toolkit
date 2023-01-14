@@ -3,7 +3,7 @@
 [![Link: Samples](https://img.shields.io/badge/Samples-633b9b?style=flat-square)](https://developers.arcgis.com/net/wpf/sample-code/)
 [![Link: Templates](https://img.shields.io/badge/Templates-633b9b?style=flat-square&logo=visualstudio&labelColor=gray)](https://www.nuget.org/packages?q=ArcGIS+Runtime+Templates)
 [![Link: NuGet](https://img.shields.io/badge/NuGet-633b9b?style=flat-square&logo=nuget&labelColor=gray)](https://www.nuget.org/profiles/Esri_Inc)
-[![Link: Early Adopter Community](https://img.shields.io/badge/🙋-Get%20help%20in%20Early%20Adopter%20Community-633b9b?style=flat-square)](https://esriurl.com/agsrt200beta)
+[![Link: Esri Community](https://img.shields.io/badge/🙋-Get%20help%20in%20Esri%20Community-633b9b?style=flat-square)](https://community.esri.com/t5/net-maps-sdk-questions/bd-p/arcgis-runtime-sdk-dotnet-questions)
 
 # ArcGIS Maps SDK for .NET Toolkit
 
@@ -46,7 +46,7 @@ The simplest way to get started is to add the platform-specific NuGet package(s)
 
 ## Customize
 
-The ArcGIS Maps SDK for .NET Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
+The ArcGIS Maps SDK for .NET Toolkit is provided as an open-source project so you can customize it for your requirements. [See the docs](https://esri.github.io/arcgis-maps-sdk-dotnet-toolkit/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
 ## Compatibility
 
@@ -56,9 +56,9 @@ Nuget packages for Toolkit are tested and published in sync with the `Esri.ArcGI
 
 Anyone and everyone is welcome to [contribute](CONTRIBUTING.md).
 
-Toolkit is provided as an open source project to enable you to customize for your requirements. [See the docs](https://esri.github.io/arcgis-toolkit-dotnet/buildingtoolkit.html) for instructions on building the Toolkit yourself.
+Toolkit is provided as an open source project to enable you to customize for your requirements. [See the docs](https://esri.github.io/arcgis-maps-sdk-dotnet-toolkit/buildingtoolkit.html) for instructions on building the Toolkit yourself.
 
-Find a bug or want to request a new feature? Please let us know by [submitting an issue](https://github.com/Esri/arcgis-toolkit-dotnet/issues/new).
+Find a bug or want to request a new feature? Please let us know by [submitting an issue](https://esri.github.io/arcgis-maps-sdk-dotnet-toolkit/issues/new).
 
 ## License
 
