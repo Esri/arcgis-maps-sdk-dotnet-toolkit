@@ -54,6 +54,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ListView = GetTemplateChild("PART_InnerListView") as ListView;
             _loadingScrim = GetTemplateChild("PART_LoadingScrim") as UIElement;
 
+            if (AvailableBasemaps.Count != 0)
+            {
+                _loadingScrim.Visibility = Visibility.Collapsed;
+                ListView.ItemsSource = AvailableBasemaps;
+            }
+
             SetNewStyle(ActualWidth);
         }
 
