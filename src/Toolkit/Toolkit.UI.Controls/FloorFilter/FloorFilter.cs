@@ -422,6 +422,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 oldView.ViewpointChanged -= HandleGeoViewViewpointChanged;
                 oldView.NavigationCompleted -= HandleGeoViewNavigationCompleted;
+                if (oldView is MapView omv && omv.LocationDisplay != null)
+                {
+                    omv.LocationDisplay.LocationChanged -= LocationDisplay_LocationChanged;
+                }
             }
 
             if (newView != null)
@@ -445,12 +449,60 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 newView.ViewpointChanged += HandleGeoViewViewpointChanged;
                 newView.NavigationCompleted += HandleGeoViewNavigationCompleted;
+                if (newView is MapView mv && mv.LocationDisplay != null)
+                {
+                    mv.LocationDisplay.LocationChanged += LocationDisplay_LocationChanged;
+                }
 
                 // Handle case where geoview loads map while events are being set up
                 HandleGeoModelChanged(null, null);
             }
 
             OnPropertyChanged(nameof(ShowAllFloorsButton));
+        }
+
+        private void LocationDisplay_LocationChanged(object sender, Location.Location e)
+        {
+            try
+            {
+
+            Dispatcher.Invoke(() => {
+                try
+                {
+
+                if (AutomaticSelectionMode == AutomaticSelectionMode.Never)
+                {
+                    return;
+                }
+                if (!e.AdditionalSourceProperties.ContainsKey(LocationSourcePropertyKeys.Floor))
+                {
+                    return;
+                }
+                // TODO = push this into the controller for better code sharing
+                if (_controller.SelectedFacility?.Geometry?.Extent is Envelope boundingExtent)
+                {
+                    var projected = GeometryEngine.Project(e.Position, boundingExtent.SpatialReference);
+                    if (GeometryEngine.Intersects(boundingExtent, projected))
+                    {
+                        var targetOrder = (int)(e.AdditionalSourceProperties[LocationSourcePropertyKeys.Floor]);
+                        var newSelection = _controller.SelectedFacility.Levels.FirstOrDefault(level => level.VerticalOrder == targetOrder);
+                        if (newSelection != null)
+                        {
+                            _controller.SetSelectedLevel(newSelection, true);
+                        }
+                    }
+                }
+                }
+                catch (Exception)
+                {
+                    // IGNORE
+                }
+            });
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
         }
 
         private void HandleGeoViewViewpointChanged(object? sender, EventArgs e)
