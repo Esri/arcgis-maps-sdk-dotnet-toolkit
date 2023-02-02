@@ -73,7 +73,7 @@
   </Choose>
 
   <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.0.26</NerdbankGitVersioningVersion>
+    <NerdbankGitVersioningVersion>3.5.119</NerdbankGitVersioningVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(VersionOverride)'!='true'">
