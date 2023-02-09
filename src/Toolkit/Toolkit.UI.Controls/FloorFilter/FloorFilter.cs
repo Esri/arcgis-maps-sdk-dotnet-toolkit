@@ -18,6 +18,8 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
 #if WPF
@@ -66,8 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public FloorFilter()
         {
             DefaultStyleKey = typeof(FloorFilter);
-
-            DataContext = this;
 
             _controller.AutomaticSelectionMode = AutomaticSelectionMode;
             _controller.PropertyChanged += HandleControllerPropertyChanges;
@@ -177,6 +177,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Add and subscribe
             _autoVisibilityWrapper = GetTemplateChild("PART_AutoVisibilityWrapper") as UIElement;
+            if (_autoVisibilityWrapper is FrameworkElement fe)
+            {
+                fe.DataContext = this;
+            }
+            if (_autoVisibilityWrapper != null && _controller.ShouldDisplayFloorPicker)
+            {
+                _autoVisibilityWrapper.Visibility = Visibility.Visible;
+            }
 
             if (GetTemplateChild("PART_SiteListView") is ListView siteListView)
             {
@@ -282,6 +290,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleControllerPropertyChanges(object? sender, PropertyChangedEventArgs e)
         {
+            _autoVisibilityWrapper?.SetValue(DataContextProperty, this);
             switch (e.PropertyName)
             {
                 case nameof(_controller.SelectedSite):
