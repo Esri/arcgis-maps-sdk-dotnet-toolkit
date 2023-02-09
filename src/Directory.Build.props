@@ -72,14 +72,6 @@
     </When>
   </Choose>
 
-  <PropertyGroup>
-    <NerdbankGitVersioningVersion>3.5.119</NerdbankGitVersioningVersion>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(VersionOverride)'!='true'">
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.119" PrivateAssets="all" />
-  </ItemGroup>
-  
   <ItemGroup Condition="$(IsToolkitLibrary)">
     <None Include="$(MSBuildThisFileDirectory)..\build\icon.png" Pack="true" PackagePath="\">
       <Link>icon.png</Link>
