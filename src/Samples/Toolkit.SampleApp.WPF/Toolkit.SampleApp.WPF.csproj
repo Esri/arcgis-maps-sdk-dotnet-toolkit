@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Samples\BasemapGallery\thumbnail-B.png" />
+    <None Remove="Samples\BasemapGallery\thumbnail-G.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Esri.ArcGISRuntime.WPF">
       <Version>$(ArcGISRuntimePackageVersion)</Version>
     </PackageReference>

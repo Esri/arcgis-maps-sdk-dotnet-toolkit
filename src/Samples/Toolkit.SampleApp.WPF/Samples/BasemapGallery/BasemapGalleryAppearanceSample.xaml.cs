@@ -1,7 +1,10 @@
-﻿using Esri.ArcGISRuntime.Mapping;
+﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.UI;
 using System;
-using System.Linq;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -10,51 +13,56 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
     [SampleInfoAttribute(Category = "BasemapGallery", DisplayName = "BasemapGallery - Appearance", Description = "Sample showing customization options related to appearance")]
     public partial class BasemapGalleryAppearanceSample : UserControl
     {
+
+        private ObservableCollection<BasemapGalleryItem> _availableBasemaps;
+
+        public ObservableCollection<BasemapGalleryItem> AvailableBasemaps
+        {
+            get => _availableBasemaps;
+            set => _availableBasemaps = value;
+        }
+
         public BasemapGalleryAppearanceSample()
         {
+            ArcGISRuntimeEnvironment.ApiKey = "AAPK8a018df60304448aaeebc83f9fd93c34v69aknvg5zkiVUQ_QK5NSdpQzT08ZmU_hHoCNYWTaFdXcsnOB9zUGDcAp8po7357";
+
             InitializeComponent();
-            MyMapView.Map = new Map(BasemapStyle.ArcGISImagery);
-            ViewStyleCombobox.Items.Add("Auto");
-            ViewStyleCombobox.Items.Add("List");
-            ViewStyleCombobox.Items.Add("Grid");
-            ViewStyleCombobox.SelectedIndex = 0;
+
+            MainMapView.Map = new Map(SpatialReference.Create(25833));
+
+            MainMapView.LayerViewStateChanged += MainMapView_LayerViewStateChanged;
+
+            Load();
+      
         }
 
-        private void ViewStyleCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void MainMapView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e)
         {
-            switch (ViewStyleCombobox.SelectedIndex)
+            System.Diagnostics.Debug.WriteLine(e.Layer.Name + ": " + e.LayerViewState.ToString());    
+        }
+
+        private async void Load()
+        {
+            var bm1 = new Basemap() { Name = "GeocacheBasis" };
+            bm1.BaseLayers.Add(new ArcGISVectorTiledLayer(new Uri("https://services.geodataonline.no/arcgis/rest/services/GeocacheVector/GeocacheBasis/VectorTileServer")));
+
+            var bm2 = new Basemap() { Name = "GeocacheGraatone" };
+            bm2.BaseLayers.Add(new ArcGISVectorTiledLayer(new Uri("https://services.geodataonline.no/arcgis/rest/services/GeocacheVector/GeocacheGraatone/VectorTileServer")));
+
+            MainMapView.Map.Basemap= bm1;   
+            var gi1 = await BasemapGalleryItem.CreateAsync(bm1);
+            var gi2 = await BasemapGalleryItem.CreateAsync(bm2);
+
+            AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>
             {
-                case 0:
-                    Gallery.GalleryViewStyle = BasemapGalleryViewStyle.Automatic;
-                    break;
-                case 1:
-                    Gallery.GalleryViewStyle = BasemapGalleryViewStyle.List;
-                    break;
-                case 2:
-                    Gallery.GalleryViewStyle = BasemapGalleryViewStyle.Grid;
-                    break;
-            }
+                gi1, gi2
+            };
         }
 
-        private async void Button_Add_Last(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            BasemapGalleryItem item = await BasemapGalleryItem.CreateAsync(new Basemap());
-            item.Name = "With Thumbnail";
-            item.Tooltip = Guid.NewGuid().ToString();
-            item.Thumbnail = new ArcGISRuntime.UI.RuntimeImage(new Uri("https://www.esri.com/content/dam/esrisites/en-us/home/homepage-tile-arcgis-collaboration.jpg"));
-            Gallery.AvailableBasemaps.Add(item);
-
-            BasemapGalleryItem item2 = await BasemapGalleryItem.CreateAsync(new Basemap());
-            item2.Name = "Without Thumbnail";
-            Gallery.AvailableBasemaps.Add(item2);
-        }
-
-        private void Button_Remove_Last(object sender, RoutedEventArgs e)
-        {
-            if (Gallery.AvailableBasemaps.Any())
-            {
-                Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
-            }
+            BasemapGallery.AvailableBasemaps.Clear();
+            foreach (var basemap in AvailableBasemaps) BasemapGallery.AvailableBasemaps.Add(basemap);
         }
     }
 }
