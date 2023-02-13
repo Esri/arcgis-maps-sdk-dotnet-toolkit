@@ -248,7 +248,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             return other == Basemap || other.Name == Basemap?.Name
                                     || (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
-                                    || other.Uri == Basemap?.Uri;
+                                    || (other.Uri != null && other.Uri == Basemap?.Uri);
         }
 
         /// <inheritdoc />
