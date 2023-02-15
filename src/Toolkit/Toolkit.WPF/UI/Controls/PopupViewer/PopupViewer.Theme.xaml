@@ -5,8 +5,12 @@
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
     <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="PopupViewerTextStyle">
+        <Setter Property="FontSize" Value="14" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="TextBlock" x:Key="PopupViewerTitleStyle">
@@ -25,7 +29,10 @@
                         <Grid.Resources>
                             <internal:HtmlToPlainTextConverter x:Key="HtmlToPlainTextConverter"/>
                         </Grid.Resources>
-                        <TextBlock DataContext="{TemplateBinding Element}"  Text="{Binding Text, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}" TextWrapping="Wrap" />
+                        <TextBlock DataContext="{TemplateBinding Element}" 
+                                   Text="{Binding Text, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}"
+                                   Style="{StaticResource PopupViewerTextStyle}"
+                                   />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -41,8 +48,8 @@
                             <primitives:PopupMediaItemsControl ItemsSource="{Binding Media, Mode=OneWay}">
                                 <primitives:PopupMediaItemsControl.PopupMediaImageTemplate>
                                     <DataTemplate>
-                                        <StackPanel>
-                                            <Image Source="{Binding Value.SourceUrl, Mode=OneWay}" />
+                                        <StackPanel Margin="0,0,0,20">
+                                            <Image Source="{Binding Value.SourceUrl, Mode=OneWay}" Margin="0,5" />
                                             <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
                                             <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
                                         </StackPanel>
@@ -50,10 +57,10 @@
                                 </primitives:PopupMediaItemsControl.PopupMediaImageTemplate>
                                 <primitives:PopupMediaItemsControl.PopupMediaChartTemplate>
                                     <DataTemplate>
-                                        <StackPanel>
+                                        <StackPanel Margin="0,0,0,20">
+                                            <TextBlock Text="TODO: CHART GOES HERE" />
                                             <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
                                             <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
-                                            <TextBlock Text="TODO: CHART GOES HERE" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </primitives:PopupMediaItemsControl.PopupMediaChartTemplate>
@@ -63,21 +70,30 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style TargetType="TextBlock" x:Key="FieldsPopupElementViewTextStyle">
+        <Setter Property="Margin" Value="7" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="#FF323232" />
+    </Style>
     <Style TargetType="{x:Type primitives:FieldsPopupElementView}" >
+        <Setter Property="RowOddBackground" Value="#FFEDEDED" />
+        <Setter Property="RowEvenBackground" Value="#FFFBFBFB" />
+        <Setter Property="DividerBrush" Value="#11333333" />
+        <Setter Property="FieldTextStyle" Value="{StaticResource FieldsPopupElementViewTextStyle}">
+            <!--<Setter.Value>
+                <Style TargetType="TextBlock" x:Key="FieldsPopupElementViewTextStyle">
+                    <Setter Property="Margin" Value="7" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+            </Setter.Value>-->
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:FieldsPopupElementView}">
                     <StackPanel>
                         <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
                         <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
-                        <ListView ItemsSource="{Binding Source=Fields}">
-                            <ListView.View>
-                                <GridView AllowsColumnReorder="False">
-                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Label}" Header="Key" Width="100"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Value}" Header="Value" Width="100"/>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
+                        <ContentPresenter x:Name="TableAreaContent" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -136,7 +152,7 @@
               </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Title}" Style="{StaticResource PopupViewerHeaderStyle}"
                          Visibility="{Binding Title, Converter={StaticResource VisibilityConverter}}" />
-                <Grid Grid.Row="1">
+                <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1">
                     <primitives:PopupElementItemsControl ItemsSource="{Binding Popup.EvaluatedElements}" Margin="0,10" >
                         <primitives:PopupElementItemsControl.TextPopupElementTemplate>
                             <DataTemplate>
@@ -160,7 +176,7 @@
                             </DataTemplate>
                         </primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
                     </primitives:PopupElementItemsControl>
-                </Grid>
+                </ScrollViewer>
             </Grid>
           </Border>
         </ControlTemplate>

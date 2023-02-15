@@ -14,9 +14,7 @@
 
         <Grid Background="#AA333333" Visibility="Collapsed" x:Name="PopupBackground" MouseDown="PopupBackground_MouseDown">
             <Border  BorderBrush="Black" BorderThickness="1" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="5" Width="300" MaxHeight="300" >
-                    <esri:PopupViewer x:Name="popupViewer" />
-                </ScrollViewer>
+                    <esri:PopupViewer x:Name="popupViewer" Margin="5" Width="400" MaxHeight="400" />
             </Border>
         </Grid>
     </Grid>
