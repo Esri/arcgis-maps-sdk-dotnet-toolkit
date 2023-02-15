@@ -16,7 +16,6 @@
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 
-
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
@@ -82,13 +81,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             (d as PopupViewer)?.Refresh();
         }
 
+        /// <summary>
+        /// Gets or sets the vertical scrollbar visibility of the scrollviewer below the title.
+        /// </summary>
         public ScrollBarVisibility VerticalScrollBarVisibility
         {
             get { return (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); }
             set { SetValue(VerticalScrollBarVisibilityProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
-            DependencyProperty.Register("VerticalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(PopupViewer), new PropertyMetadata(ScrollBarVisibility.Auto));
+            DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(PopupViewer), new PropertyMetadata(ScrollBarVisibility.Auto));
     }
 }

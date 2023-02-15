@@ -1,37 +1,66 @@
-﻿using Esri.ArcGISRuntime.Data;
+﻿// /*******************************************************************************
+//  * Copyright 2012-2018 Esri
+//  *
+//  *  Licensed under the Apache License, Version 2.0 (the "License");
+//  *  you may not use this file except in compliance with the License.
+//  *  You may obtain a copy of the License at
+//  *
+//  *  http://www.apache.org/licenses/LICENSE-2.0
+//  *
+//  *   Unless required by applicable law or agreed to in writing, software
+//  *   distributed under the License is distributed on an "AS IS" BASIS,
+//  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  *   See the License for the specific language governing permissions and
+//  *   limitations under the License.
+//  ******************************************************************************/
+
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Documents;
-using System.Windows.Shell;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
+    /// <summary>
+    /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
+    /// used for rendering a <see cref="FieldsPopupElement"/>.
+    /// </summary>
     public class FieldsPopupElementView : Control
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldsPopupElementView"/> class.
+        /// </summary>
         public FieldsPopupElementView()
         {
             DefaultStyleKey = typeof(FieldsPopupElementView);
         }
 
+        /// <summary>
+        /// Gets or sets the FieldsPopupElement.
+        /// </summary>
         public FieldsPopupElement? Element
         {
             get { return GetValue(ElementProperty) as FieldsPopupElement; }
             set { SetValue(ElementProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="Element"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldsPopupElement), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
 
+        /// <summary>
+        /// Gets or sets the GeoElement who's attribute will be showed with the <see cref="FieldsPopupElement"/>.
+        /// </summary>
         public GeoElement? GeoElement
         {
             get { return GetValue(GeoElementProperty) as GeoElement; }
             set { SetValue(GeoElementProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="GeoElement"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty GeoElementProperty =
             DependencyProperty.Register(nameof(GeoElement), typeof(GeoElement), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
 
@@ -65,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 g.Children.Add(t);
 
                 Uri? uri = null;
-                string? value = GeoElement?.Attributes[field.FieldName]?.ToString();
+                string? value = GeoElement?.Attributes.ContainsKey(field.FieldName) == true ? GeoElement.Attributes[field.FieldName]?.ToString() : string.Empty;
                 bool isUrl = (value != null &&
                     (value.StartsWith("http://") || value.StartsWith("https://"))
                     && Uri.TryCreate(value, UriKind.Absolute, out uri));
@@ -107,39 +136,63 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             presenter.Content = g;
         }
 
+        /// <summary>
+        /// Gets or sets the background of the odd rows in the table.
+        /// </summary>
         public Brush RowOddBackground
         {
             get { return (Brush)GetValue(RowOddBackgroundProperty); }
             set { SetValue(RowOddBackgroundProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="RowOddBackground"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty RowOddBackgroundProperty =
             DependencyProperty.Register(nameof(RowOddBackground), typeof(Brush), typeof(FieldsPopupElementView), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the background of the even rows in the table.
+        /// </summary>
         public Brush RowEvenBackground
         {
             get { return (Brush)GetValue(RowEvenBackgroundProperty); }
             set { SetValue(RowEvenBackgroundProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="RowEvenBackground"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty RowEvenBackgroundProperty =
             DependencyProperty.Register(nameof(RowEvenBackground), typeof(Brush), typeof(FieldsPopupElementView), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the vertical divider brush in the table.
+        /// </summary>
         public Brush DividerBrush
         {
             get { return (Brush)GetValue(DividerBrushProperty); }
             set { SetValue(DividerBrushProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="DividerBrush"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty DividerBrushProperty =
             DependencyProperty.Register(nameof(DividerBrush), typeof(Brush), typeof(FieldsPopupElementView), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the <see cref="TextBlock"/> style applied to the text in the table.
+        /// </summary>
         public Style FieldTextStyle
         {
             get { return (Style)GetValue(FieldTextStyleProperty); }
             set { SetValue(FieldTextStyleProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="FieldTextStyle"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty FieldTextStyleProperty =
             DependencyProperty.Register(nameof(FieldTextStyle), typeof(Style), typeof(FieldsPopupElementView), new PropertyMetadata(null));
 
