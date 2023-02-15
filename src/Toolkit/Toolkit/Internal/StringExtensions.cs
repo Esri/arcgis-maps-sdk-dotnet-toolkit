@@ -35,12 +35,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         internal static string ToPlainText(this string htmlText)
         {
             // Replace HTML line break tags.
-            htmlText = Regex.Replace(htmlText, HtmlLineBreakRegex, string.Empty);
-
+            htmlText = Regex.Replace(htmlText, HtmlLineBreakRegex, System.Environment.NewLine);
+            htmlText = htmlText.Replace("</p>", System.Environment.NewLine + System.Environment.NewLine);
             // Remove the rest of HTML tags.
             htmlText = Regex.Replace(htmlText, HtmlStripperRegex, string.Empty);
 
-            return htmlText;
+            return htmlText.Trim();
         }
     }
 }

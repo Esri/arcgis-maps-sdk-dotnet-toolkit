@@ -7,12 +7,15 @@
     <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="TextBlock" x:Key="PopupViewerTitleStyle">
         <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
         <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="{x:Type primitives:TextPopupElementView}" >
         <Setter Property="Template">
@@ -39,7 +42,7 @@
                                 <primitives:PopupMediaItemsControl.PopupMediaImageTemplate>
                                     <DataTemplate>
                                         <StackPanel>
-                                            <Image Source="{Binding Value.SourceUrl, Mode=OneWay}" MaxHeight="250" />
+                                            <Image Source="{Binding Value.SourceUrl, Mode=OneWay}" />
                                             <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
                                             <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
                                         </StackPanel>
@@ -98,9 +101,14 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:PopupMediaItemsControl}">
                     <Grid>
-                        <ContentPresenter x:Name="ContentPresenter" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                        <Button HorizontalAlignment="Left" Content="&lt;" VerticalAlignment="Center" x:Name="PreviousButton" />
-                        <Button HorizontalAlignment="Right" Content=">" VerticalAlignment="Center" x:Name="NextButton" />
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="25" />
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter Grid.Column="1" x:Name="ContentPresenter" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                        <Button Grid.Column="0" Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="PreviousButton" />
+                        <Button Grid.Column="2" Content="" Background="Transparent" Height="40" Cursor="Hand" BorderThickness="0" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" x:Name="NextButton" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -127,8 +135,7 @@
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Title}" Style="{StaticResource PopupViewerHeaderStyle}"
-                         Visibility="{Binding Title, Converter={StaticResource VisibilityConverter}}"
-                         TextWrapping="Wrap"/>
+                         Visibility="{Binding Title, Converter={StaticResource VisibilityConverter}}" />
                 <Grid Grid.Row="1">
                     <primitives:PopupElementItemsControl ItemsSource="{Binding Popup.EvaluatedElements}" Margin="0,10" >
                         <primitives:PopupElementItemsControl.TextPopupElementTemplate>
