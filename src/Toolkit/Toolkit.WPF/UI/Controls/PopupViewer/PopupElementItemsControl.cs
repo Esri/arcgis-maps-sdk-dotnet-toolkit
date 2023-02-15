@@ -1,6 +1,7 @@
 ﻿using Esri.ArcGISRuntime.Mapping.Popups;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,8 +28,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 ((ContentPresenter)element).ContentTemplate = AttachmentsPopupElementTemplate;
             }
+            else if (item is ExpressionPopupElement)
+            {
+                // TODO
+                Debugger.Break();
+            }
             base.PrepareContainerForItemOverride(element, item);
         }
+
         public DataTemplate TextPopupElementTemplate
         {
             get { return (DataTemplate)GetValue(TextPopupElementTemplateProperty); }
