@@ -14,15 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !WPF
-
 using Esri.ArcGISRuntime.Mapping.Popups;
 
-#if __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -33,25 +26,60 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public partial class PopupViewer : Control
     {
-#if !__ANDROID__
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
         public PopupViewer()
             : base()
         {
-            Initialize();
+            DefaultStyleKey = typeof(PopupViewer);
         }
+
+        /// <inheritdoc/>
+#if WINDOWS_XAML
+        protected override void OnApplyTemplate()
+#else
+        public override void OnApplyTemplate()
 #endif
+        {
+            base.OnApplyTemplate();
+            Refresh();
+        }
+
+        private async void Refresh()
+        {
+            try
+            {
+                if (PopupManager != null)
+                {
+                    var expressions = await PopupManager.EvaluateExpressionsAsync();
+                    var elements = PopupManager.Popup.EvaluatedElements;
+                }
+            }
+            catch
+            {
+            }
+        }
 
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>
         public PopupManager? PopupManager
         {
-            get => PopupManagerImpl;
-            set => PopupManagerImpl = value;
+            get { return GetValue(PopupManagerProperty) as PopupManager; }
+            set { SetValue(PopupManagerProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="PopupManager"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PopupManagerProperty =
+            DependencyProperty.Register(nameof(PopupManager), typeof(PopupManager), typeof(PopupViewer),
+                new PropertyMetadata(null, OnPopupManagerPropertyChanged));
+
+        private static void OnPopupManagerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as PopupViewer)?.Refresh();
         }
     }
 }
-#endif

@@ -2,8 +2,111 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
-    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-  <Style TargetType="{x:Type controls:PopupViewer}" >
+    xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
+    <Style TargetType="TextBlock" x:Key="PopupViewerHeaderStyle">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="PopupViewerTitleStyle">
+        <Setter Property="FontSize" Value="16" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="PopupViewerCaptionStyle">
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style TargetType="{x:Type primitives:TextPopupElementView}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:TextPopupElementView}">
+                    <Grid>
+                        <Grid.Resources>
+                            <internal:HtmlToPlainTextConverter x:Key="HtmlToPlainTextConverter"/>
+                        </Grid.Resources>
+                        <TextBlock DataContext="{TemplateBinding Element}"  Text="{Binding Text, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}" TextWrapping="Wrap" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type primitives:MediaPopupElementView}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:MediaPopupElementView}">
+                        <StackPanel DataContext="{TemplateBinding Element}" >
+                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
+                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
+                            <primitives:PopupMediaItemsControl ItemsSource="{Binding Media, Mode=OneWay}">
+                                <primitives:PopupMediaItemsControl.PopupMediaImageTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Image Source="{Binding Value.SourceUrl, Mode=OneWay}" MaxHeight="250" />
+                                            <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
+                                            <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </primitives:PopupMediaItemsControl.PopupMediaImageTemplate>
+                                <primitives:PopupMediaItemsControl.PopupMediaChartTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
+                                            <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
+                                            <TextBlock Text="TODO: CHART GOES HERE" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </primitives:PopupMediaItemsControl.PopupMediaChartTemplate>
+                            </primitives:PopupMediaItemsControl>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type primitives:FieldsPopupElementView}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:FieldsPopupElementView}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
+                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
+                        <ListView ItemsSource="{Binding Source=Fields}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="False">
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Label}" Header="Key" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Value}" Header="Value" Width="100"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type primitives:AttachmentsPopupElementView}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:AttachmentsPopupElementView}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" />
+                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" />
+                        <TextBlock Text="TODO: Attachments here..." />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type primitives:PopupMediaItemsControl}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:PopupMediaItemsControl}">
+                    <Grid>
+                        <ContentPresenter x:Name="ContentPresenter" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                        <Button HorizontalAlignment="Left" Content="&lt;" VerticalAlignment="Center" x:Name="PreviousButton" />
+                        <Button HorizontalAlignment="Right" Content=">" VerticalAlignment="Center" x:Name="NextButton" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type controls:PopupViewer}" >
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type controls:PopupViewer}">
@@ -23,40 +126,34 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
-              <TextBlock Text="{Binding EditSummary}" 
-                         Visibility="{Binding EditSummary, Converter={StaticResource VisibilityConverter}}"
+                <TextBlock Text="{Binding Title}" Style="{StaticResource PopupViewerHeaderStyle}"
+                         Visibility="{Binding Title, Converter={StaticResource VisibilityConverter}}"
                          TextWrapping="Wrap"/>
-              <Grid Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding DisplayedFields}" 
-                              Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}, ConverterParameter=Reverse}">
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                      <Grid>
-                        <Grid.RowDefinitions>
-                          <RowDefinition Height="Auto"/>
-                          <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="{Binding Field.Label}" Foreground="Gray" />
-                        <TextBox IsReadOnly="True"
-                                 BorderThickness="0"
-                                 Margin="0"
-                                 Padding="0"
-                                 Background="Transparent"
-                                 Text="{Binding FormattedValue, Mode=OneWay}"
-                                 TextWrapping="Wrap" Grid.Row="1"/>
-                      </Grid>
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <TextBox IsReadOnly="True"
-                         BorderThickness="0"
-                         Margin="0"
-                         Padding="0"
-                         Background="Transparent"
-                         Text="{Binding CustomDescriptionHtml, Converter={StaticResource HtmlToPlainTextConverter}, Mode=OneWay}"                           
-                         Visibility="{Binding CustomDescriptionHtml, Converter={StaticResource VisibilityConverter}}"
-                         TextWrapping="Wrap"/>
-              </Grid>
+                <Grid Grid.Row="1">
+                    <primitives:PopupElementItemsControl ItemsSource="{Binding Popup.EvaluatedElements}" Margin="0,10" >
+                        <primitives:PopupElementItemsControl.TextPopupElementTemplate>
+                            <DataTemplate>
+                                <primitives:TextPopupElementView Element="{Binding}" Margin="0,10" />
+                            </DataTemplate>
+                        </primitives:PopupElementItemsControl.TextPopupElementTemplate>
+                        <primitives:PopupElementItemsControl.MediaPopupElementTemplate>
+                            <DataTemplate>
+                                <primitives:MediaPopupElementView Element="{Binding}" Margin="0,10" />
+                            </DataTemplate>
+                        </primitives:PopupElementItemsControl.MediaPopupElementTemplate>
+                        <primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
+                            <DataTemplate>
+                                <primitives:FieldsPopupElementView Element="{Binding}" Margin="0,10"
+                                                                   GeoElement="{Binding PopupManager.Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}" />
+                            </DataTemplate>
+                        </primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
+                          <primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
+                            <DataTemplate>
+                                <primitives:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
+                            </DataTemplate>
+                        </primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
+                    </primitives:PopupElementItemsControl>
+                </Grid>
             </Grid>
           </Border>
         </ControlTemplate>

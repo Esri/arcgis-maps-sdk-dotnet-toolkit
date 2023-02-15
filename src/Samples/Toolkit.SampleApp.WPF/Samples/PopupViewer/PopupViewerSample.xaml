@@ -7,19 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
         <esri:MapView x:Name="mapView" 
-                      Map="https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2" 
+                      Map="https://www.arcgis.com/home/item.html?id=9f3a674e998f461580006e626611f9ad" 
                       GeoViewTapped="mapView_GeoViewTapped"/>
-        <esri:PopupViewer x:Name="popupViewer" 
-                          Grid.Column="1"
-                          Padding="5"
-                          Width="300"
-                          Visibility="Collapsed"
-                          HorizontalAlignment="Stretch" 
-                          VerticalAlignment="Stretch" />        
+
+
+        <Grid Background="#AA333333" Visibility="Collapsed" x:Name="PopupBackground" MouseDown="PopupBackground_MouseDown">
+            <Border  BorderBrush="Black" BorderThickness="1" Background="White" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="5" Width="300" MaxHeight="300" >
+                    <esri:PopupViewer x:Name="popupViewer" />
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
