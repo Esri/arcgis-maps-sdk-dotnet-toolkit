@@ -73,9 +73,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdateContent()
         {
             if (_previousButton != null)
-                _previousButton.Visibility = itemCount == 0 || selectedIndex == 0 ? Visibility.Collapsed : Visibility.Visible;
+                _previousButton.Visibility = itemCount < 2 ? Visibility.Collapsed : Visibility.Visible;
             if (_nextButton != null)
-                _nextButton.Visibility = itemCount == 0 || selectedIndex == itemCount - 1 ? Visibility.Collapsed : Visibility.Visible;
+                _nextButton.Visibility = itemCount < 2 ? Visibility.Collapsed : Visibility.Visible;
             if (_contentPresenter != null)
             {
                 object? content = null;
@@ -106,20 +106,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnPreviousButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (selectedIndex > 0)
+            selectedIndex--;
+            if (selectedIndex < 0)
             {
-                selectedIndex--;
-                UpdateContent();
+                selectedIndex = itemCount - 1;
             }
+            UpdateContent();
         }
 
         private void OnNextButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (selectedIndex + 1< itemCount)
+            selectedIndex++;
+            if (selectedIndex == itemCount)
             {
-                selectedIndex++;
-                UpdateContent();
+                selectedIndex = 0;
             }
+            UpdateContent();
         }
 
         /// <summary>
