@@ -49,10 +49,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             try
             {
-                if (PopupManager != null)
+                if (Popup != null)
                 {
-                    var expressions = await PopupManager.EvaluateExpressionsAsync();
-                    var elements = PopupManager.Popup.EvaluatedElements;
+                    var expre = Popup.EvaluatedElements;
+                    var expressions = await Popup.EvaluateExpressionsAsync();
                 }
             }
             catch
@@ -63,6 +63,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>
+        [Obsolete("Use Popup property.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public PopupManager? PopupManager
         {
             get { return GetValue(PopupManagerProperty) as PopupManager; }
@@ -72,13 +74,40 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Identifies the <see cref="PopupManager"/> dependency property.
         /// </summary>
+        [Obsolete("Use PopupProperty field.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DependencyProperty PopupManagerProperty =
             DependencyProperty.Register(nameof(PopupManager), typeof(PopupManager), typeof(PopupViewer),
                 new PropertyMetadata(null, OnPopupManagerPropertyChanged));
 
         private static void OnPopupManagerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as PopupViewer)?.Refresh();
+#pragma warning disable CS0618 // Type or member is obsolete
+            ((PopupViewer)d).Popup = ((PopupViewer)d).PopupManager?.Popup;
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
+
+        /// <summary>
+        /// Gets or sets the associated PopupManager which contains popup and sketch editor.
+        /// </summary>
+        public Popup? Popup
+        {
+            get { return GetValue(PopupProperty) as Popup; }
+            set { SetValue(PopupProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="PopupManager"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty PopupProperty =
+            DependencyProperty.Register(nameof(Popup), typeof(Popup), typeof(PopupViewer),
+                new PropertyMetadata(null, OnPopupPropertyChanged));
+
+        private static void OnPopupPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var popupViewer = (PopupViewer)d;
+            popupViewer.Refresh();
+        }
         }
 
         /// <summary>
