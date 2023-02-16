@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
                 if (popup != null)
                 {
                     PopupBackground.Visibility = Visibility.Visible;
-                    popupViewer.PopupManager = new PopupManager(popup);
+                    popupViewer.Popup = popup;
                 }
             }
             catch (Exception ex)
