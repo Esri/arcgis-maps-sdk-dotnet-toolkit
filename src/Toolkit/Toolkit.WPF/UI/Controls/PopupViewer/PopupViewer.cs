@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Popups;
+using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -107,7 +108,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var popupViewer = (PopupViewer)d;
             popupViewer.Refresh();
-        }
         }
 
         /// <summary>
