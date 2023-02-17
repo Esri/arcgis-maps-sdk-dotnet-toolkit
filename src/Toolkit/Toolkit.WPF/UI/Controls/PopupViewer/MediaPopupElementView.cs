@@ -15,6 +15,8 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Popups;
+using System.Collections;
+using System.Windows.Controls.Primitives;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -24,13 +26,111 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public class MediaPopupElementView : Control
     {
+        private ButtonBase? _previousButton;
+        private ButtonBase? _nextButton;
+        private int selectedIndex = 0;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MediaPopupElementView"/> class.
         /// </summary>
         public MediaPopupElementView()
         {
-            DefaultStyleKey = typeof(MediaPopupElementView);
+            DefaultStyleKey= typeof(MediaPopupElementView);
         }
+        
+        /// <inheritdoc />
+        public override void OnApplyTemplate()
+        {
+            if (_previousButton != null)
+            {
+                _previousButton.Click -= OnPreviousButtonClicked;
+            }
+            if (_nextButton != null)
+            {
+                _nextButton.Click -= OnNextButtonClicked;
+            }
+            _previousButton = GetTemplateChild("PreviousButton") as ButtonBase;
+            if (_previousButton != null)
+            {
+                _previousButton.Click += OnPreviousButtonClicked;
+            }
+            _nextButton = GetTemplateChild("NextButton") as ButtonBase;
+            if (_nextButton != null)
+            {
+                _nextButton.Click += OnNextButtonClicked;
+            }
+            UpdateContent();
+            base.OnApplyTemplate();
+        }
+
+        /// <summary>
+        /// Gets or sets the currently display <see cref="PopupMedia"/>.
+        /// </summary>
+        public PopupMedia? CurrentItem
+        {
+            get => GetValue(CurrentItemProperty) as PopupMedia;
+            set => SetValue(CurrentItemProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="CurrentItem"/> dependency property.
+        /// </summary>       
+        public static readonly DependencyProperty CurrentItemProperty =
+            DependencyProperty.Register(nameof(CurrentItem), typeof(PopupMedia), typeof(MediaPopupElementView), new PropertyMetadata(null));
+
+        private void UpdateContent()
+        {
+            var itemCount = Element?.Media?.Count ?? 0;
+            if (_previousButton != null)
+                _previousButton.Visibility = itemCount < 2 ? Visibility.Collapsed : Visibility.Visible;
+            if (_nextButton != null)
+                _nextButton.Visibility = itemCount < 2 ? Visibility.Collapsed : Visibility.Visible;
+            PopupMedia? content = null;
+            if (Element?.Media != null)
+            {
+                if(selectedIndex >= 0 && selectedIndex < itemCount)
+                {
+                    content = Element.Media[selectedIndex];
+                }
+            }
+            CurrentItem = content;
+        }
+
+        private void OnPreviousButtonClicked(object sender, RoutedEventArgs e)
+        {
+            selectedIndex--;
+            if (selectedIndex < 0)
+            {
+                selectedIndex = Element?.Media?.Count ?? 1 - 1;
+            }
+            UpdateContent();
+        }
+
+        private void OnNextButtonClicked(object sender, RoutedEventArgs e)
+        {
+            selectedIndex++;
+            if (selectedIndex >= (Element?.Media?.Count ?? 0))
+            {
+                selectedIndex = 0;
+            }
+            UpdateContent();
+        }
+
+        /// <summary>
+        /// Gets or sets the template for popup media items.
+        /// </summary>
+        public DataTemplate ItemTemplate
+        {
+            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
+            set { SetValue(ItemTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ItemTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ItemTemplateProperty =
+            DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(MediaPopupElementView), new PropertyMetadata(null));
+
 
         /// <summary>
         /// Gets or sets the MediaPopupElement.
@@ -49,6 +149,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnElementPropertyChanged()
         {
+            selectedIndex = 0;
+            UpdateContent();
         }
     }
 }

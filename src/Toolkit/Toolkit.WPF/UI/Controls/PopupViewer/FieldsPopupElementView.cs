@@ -64,6 +64,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty GeoElementProperty =
             DependencyProperty.Register(nameof(GeoElement), typeof(GeoElement), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
 
+        /// <summary>
+        /// Gets or sets the Popup definition used to render the GeoElement fields.
+        /// </summary>
+        public Popup Popup
+        {
+            get => (Popup)GetValue(PopupProperty);
+            set => SetValue(PopupProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="Popup"/> dependency property.
+        /// </summary>       
+        public static readonly DependencyProperty PopupProperty =
+            DependencyProperty.Register(nameof(Popup), typeof(Popup), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
+
         private void RefreshTable()
         {
             var presenter = GetTemplateChild("TableAreaContent") as ContentPresenter;
@@ -73,6 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 presenter.Content = null;
                 return;
             }
+            var popup = Popup ?? new Popup(GeoElement, null);
             Grid g = new Grid();
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Pixel) });
@@ -80,6 +96,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             int i = 0;
             foreach (var field in Element.Fields)
             {
+                if (!field.IsVisible)
+                    continue;
                 g.RowDefinitions.Add(new RowDefinition());
                 Border b = new Border() { Background = i % 2 == 1 ? RowEvenBackground : RowOddBackground };
                 Grid.SetColumnSpan(b, 3);
@@ -94,10 +112,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 g.Children.Add(t);
 
                 Uri? uri = null;
-                string? value = GeoElement?.Attributes.ContainsKey(field.FieldName) == true ? GeoElement.Attributes[field.FieldName]?.ToString() : string.Empty;
-                bool isUrl = (value != null &&
-                    (value.StartsWith("http://") || value.StartsWith("https://"))
-                    && Uri.TryCreate(value, UriKind.Absolute, out uri));
+                string? strValue = "";
+                var pf = popup.PopupDefinition.Fields.FirstOrDefault(f => f.FieldName == field.FieldName);
+                if (pf != null)
+                    strValue = popup.GetFormattedValue(pf);
+                else
+                    strValue = GeoElement?.Attributes.ContainsKey(field.FieldName) == true ? GeoElement.Attributes[field.FieldName]?.ToString() : string.Empty;
+
+                bool isUrl = (strValue != null &&
+                    (strValue.StartsWith("http://") || strValue.StartsWith("https://"))
+                    && Uri.TryCreate(strValue, UriKind.Absolute, out uri));
 
                 t = new TextBlock()
                 {
@@ -121,7 +145,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
                 else
                 {
-                    t.Text = value;
+                    t.Text = strValue;
                 }
 
                 Grid.SetRow(t, i);

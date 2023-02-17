@@ -14,7 +14,9 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using System.Windows.Controls.Primitives;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -22,14 +24,81 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="AttachmentsPopupElement"/>.
     /// </summary>
+    [TemplatePart(Name ="AttachmentList", Type= typeof(ListBox))]
     public class AttachmentsPopupElementView : Control
     {
+        private ListBox? itemsList;
         /// <summary>
         /// Initializes a new instance of the <see cref="AttachmentsPopupElementView"/> class.
         /// </summary>
         public AttachmentsPopupElementView()
         {
             DefaultStyleKey = typeof(AttachmentsPopupElementView);
+        }
+
+        /// <inheritdoc />
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            itemsList = GetTemplateChild("AttachmentList") as ListBox;
+            if (itemsList != null)
+            {
+                itemsList.SelectionMode = SelectionMode.Single;
+                itemsList.SelectionChanged += ItemsList_SelectionChanged;
+                LoadAttachments();
+            }
+        }
+
+        private void ItemsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(e.AddedItems != null && e.AddedItems.Count > 0)
+            {
+                var attachment = e.AddedItems[0] as Attachment;
+                if(attachment != null)
+                {
+                    OnAttachmentClicked(attachment);
+                }
+                if (sender is Selector s)
+                    s.SelectedValue = null;
+            }
+        }
+
+        /// <summary>
+        /// Occurs when an attachment is clicked.
+        /// </summary>
+        /// <remarks>Override this to prevent the default action.</remarks>
+        /// <param name="attachment">Attachment clicked.</param>
+        public virtual void OnAttachmentClicked(Attachment attachment)
+        {
+            if (GeoElement is ArcGISFeature feature && feature.FeatureTable is ServiceFeatureTable table && table.Source != null)
+            {
+                string uri = $"{table.Source.OriginalString}/{feature.Attributes[table.ObjectIdField]}/attachments/{attachment.Id}";
+#if NET6_0_OR_GREATER
+                //https://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0/1673594/attachments/50403
+                _ = Windows.System.Launcher.LaunchUriAsync(new Uri(uri));
+#endif
+            }
+        }
+
+        private async void LoadAttachments()
+        {
+            if (itemsList is null) return;
+            Visibility = Visibility.Collapsed;
+            var feature = GeoElement as ArcGISFeature;
+            if(feature is null || Element is null || feature.FeatureTable is ArcGISFeatureTable aft && !aft.HasAttachments)
+            {
+                itemsList.ItemsSource = null;
+                return;
+            }
+            try
+            {
+                var attachments = await feature.GetAttachmentsAsync();
+                itemsList.ItemsSource = attachments;
+                Visibility = attachments.Count > 0 ? Visibility = Visibility.Visible : Visibility.Collapsed;
+            }
+            catch
+            {
+            }
         }
 
         /// <summary>
@@ -45,10 +114,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null, (s, e) => ((AttachmentsPopupElementView)s).OnElementPropertyChanged()));
+            DependencyProperty.Register(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null));
 
-        private void OnElementPropertyChanged()
+        /// <summary>
+        /// Gets or sets the GeoElement who's attachments will be showed with the <see cref="AttachmentsPopupElement"/>.
+        /// </summary>
+        public GeoElement? GeoElement
         {
+            get => GetValue(GeoElementProperty) as GeoElement;
+            set => SetValue(GeoElementProperty, value);
         }
+
+        /// <summary>
+        /// Identifies the <see cref="GeoElement"/> dependency property.
+        /// </summary>       
+        public static readonly DependencyProperty GeoElementProperty =
+            DependencyProperty.Register(nameof(GeoElement), typeof(GeoElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null, (s, e) => ((AttachmentsPopupElementView)s).LoadAttachments()));
+
     }
 }
