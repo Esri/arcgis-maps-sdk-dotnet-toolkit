@@ -294,7 +294,7 @@
     </Style>
 
     <ControlTemplate x:Key="DefaultSearchViewTemplate" TargetType="{x:Type controls:SearchView}">
-        <Grid>
+        <Grid x:Name="PART_ContextWrapper">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />

@@ -18,6 +18,8 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
 #if WPF
@@ -66,8 +68,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public FloorFilter()
         {
             DefaultStyleKey = typeof(FloorFilter);
-
-            DataContext = this;
 
             _controller.AutomaticSelectionMode = AutomaticSelectionMode;
             _controller.PropertyChanged += HandleControllerPropertyChanges;
@@ -177,6 +177,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             // Add and subscribe
             _autoVisibilityWrapper = GetTemplateChild("PART_AutoVisibilityWrapper") as UIElement;
+            if (_autoVisibilityWrapper is FrameworkElement fe)
+            {
+                fe.DataContext = this;
+            }
+            if (_autoVisibilityWrapper != null && _controller.ShouldDisplayFloorPicker)
+            {
+                _autoVisibilityWrapper.Visibility = Visibility.Visible;
+            }
 
             if (GetTemplateChild("PART_SiteListView") is ListView siteListView)
             {
@@ -282,6 +290,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void HandleControllerPropertyChanges(object? sender, PropertyChangedEventArgs e)
         {
+            _autoVisibilityWrapper?.SetValue(DataContextProperty, this);
             switch (e.PropertyName)
             {
                 case nameof(_controller.SelectedSite):
@@ -422,6 +431,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 oldView.ViewpointChanged -= HandleGeoViewViewpointChanged;
                 oldView.NavigationCompleted -= HandleGeoViewNavigationCompleted;
+                if (oldView is MapView omv && omv.LocationDisplay != null)
+                {
+                    omv.LocationDisplay.LocationChanged -= LocationDisplay_LocationChanged;
+                }
             }
 
             if (newView != null)
@@ -445,12 +458,60 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
                 newView.ViewpointChanged += HandleGeoViewViewpointChanged;
                 newView.NavigationCompleted += HandleGeoViewNavigationCompleted;
+                if (newView is MapView mv && mv.LocationDisplay != null)
+                {
+                    mv.LocationDisplay.LocationChanged += LocationDisplay_LocationChanged;
+                }
 
                 // Handle case where geoview loads map while events are being set up
                 HandleGeoModelChanged(null, null);
             }
 
             OnPropertyChanged(nameof(ShowAllFloorsButton));
+        }
+
+        private void LocationDisplay_LocationChanged(object sender, Location.Location e)
+        {
+            try
+            {
+
+            Dispatcher.Invoke(() => {
+                try
+                {
+
+                if (AutomaticSelectionMode == AutomaticSelectionMode.Never)
+                {
+                    return;
+                }
+                if (!e.AdditionalSourceProperties.ContainsKey(LocationSourcePropertyKeys.Floor))
+                {
+                    return;
+                }
+                // TODO = push this into the controller for better code sharing
+                if (_controller.SelectedFacility?.Geometry?.Extent is Envelope boundingExtent)
+                {
+                    var projected = GeometryEngine.Project(e.Position, boundingExtent.SpatialReference);
+                    if (GeometryEngine.Intersects(boundingExtent, projected))
+                    {
+                        var targetOrder = (int)(e.AdditionalSourceProperties[LocationSourcePropertyKeys.Floor]);
+                        var newSelection = _controller.SelectedFacility.Levels.FirstOrDefault(level => level.VerticalOrder == targetOrder);
+                        if (newSelection != null)
+                        {
+                            _controller.SetSelectedLevel(newSelection, true);
+                        }
+                    }
+                }
+                }
+                catch (Exception)
+                {
+                    // IGNORE
+                }
+            });
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
         }
 
         private void HandleGeoViewViewpointChanged(object? sender, EventArgs e)

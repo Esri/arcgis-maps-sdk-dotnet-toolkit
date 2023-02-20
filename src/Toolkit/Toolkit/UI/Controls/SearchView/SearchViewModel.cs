@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// </summary>
     public class SearchViewModel : INotifyPropertyChanged
     {
-        private const int QueryTimeoutMilliseconds = 2000;
+        private const int QueryTimeoutMilliseconds = 5000;
         private ISearchSource? _activeSource;
         private SearchResult? _selectedResult;
         private string? _currentQuery;

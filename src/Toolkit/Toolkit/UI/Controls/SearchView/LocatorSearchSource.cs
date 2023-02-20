@@ -54,7 +54,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (_worldGeocoderTask == null)
             {
                 _worldGeocoderTask = new LocatorTask(new Uri(WorldGeocoderUriString));
-                await _worldGeocoderTask.LoadAsync();
+                try
+                {
+                    await _worldGeocoderTask.LoadAsync();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error loading world geocoder - {ex}");
+                }
             }
 
             cancellationToken.ThrowIfCancellationRequested();
