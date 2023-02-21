@@ -16,8 +16,12 @@
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
+using System.IO;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Xaml;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -46,12 +50,38 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (PopupMedia.Type == PopupMediaType.Image)
             {
                 Image img = Content as Image ?? new Image();
-                if (PopupMedia.Value.SourceUrl != null)
+                var sourceUrl = PopupMedia.Value.SourceUrl;
+                if (!string.IsNullOrEmpty(sourceUrl))
                 {
-                    if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != PopupMedia.Value.SourceUrl)
+                    if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
                     {
-                        img.Source = new BitmapImage(new Uri(PopupMedia.Value.SourceUrl));
+                        if (sourceUrl.StartsWith("data:image/"))
+                        {
+                            // might be base64
+                            var idx = sourceUrl.IndexOf(";base64,");
+                            if(idx>11 && sourceUrl.Length > idx+8)
+                            {
+                                try
+                                {
+                                    var base64data = sourceUrl.Substring(idx + 8);
+                                    var data = Convert.FromBase64String(base64data);
+                                    var source = new BitmapImage();
+                                    source.BeginInit();
+                                    source.StreamSource = new MemoryStream(data);
+                                    source.EndInit();
+                                    img.Source = source;
+                                }
+                                catch { }
+                            }
+                        }
+                        else if (Uri.TryCreate(PopupMedia.Value.SourceUrl, UriKind.Absolute, out Uri result))
+                            img.Source = new BitmapImage(result);
                     }
+                }
+                if (!string.IsNullOrEmpty(PopupMedia.Value.LinkUrl) && Uri.TryCreate(PopupMedia.Value.LinkUrl, UriKind.Absolute, out var linkUrl))
+                {
+                    img.Cursor = Cursors.Hand;
+                    img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
                 }
                 Content = img;
             }
