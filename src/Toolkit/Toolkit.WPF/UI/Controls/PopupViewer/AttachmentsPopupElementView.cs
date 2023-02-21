@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Windows.Controls.Primitives;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -73,10 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (GeoElement is ArcGISFeature feature && feature.FeatureTable is ServiceFeatureTable table && table.Source != null)
             {
                 string uri = $"{table.Source.OriginalString}/{feature.Attributes[table.ObjectIdField]}/attachments/{attachment.Id}";
-#if NET6_0_OR_GREATER
-                //https://sampleserver6.arcgisonline.com/arcgis/rest/services/DamageAssessment/FeatureServer/0/1673594/attachments/50403
-                _ = Windows.System.Launcher.LaunchUriAsync(new Uri(uri));
-#endif
+                _ = Launcher.LaunchUriAsync(new Uri(uri));
             }
         }
 

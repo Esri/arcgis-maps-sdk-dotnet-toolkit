@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Windows.Documents;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -134,11 +135,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     Hyperlink hl = new Hyperlink() { NavigateUri = uri };
                     hl.Click += (s, e) =>
                     {
-#if NET6_0_OR_GREATER
-                        _ = Windows.System.Launcher.LaunchUriAsync(uri);
-#else
-//TODO
-#endif
+                        if (uri is not null)
+                            _ = Launcher.LaunchUriAsync(uri);
                     };
                     hl.Inlines.Add("View");
                     t.Inlines.Add(hl);
