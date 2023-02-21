@@ -35,6 +35,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DefaultStyleKey = typeof(FieldsPopupElementView);
         }
 
+        /// <inheritdoc />
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            RefreshTable();
+        }
+
         /// <summary>
         /// Gets or sets the FieldsPopupElement.
         /// </summary>
@@ -50,55 +57,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldsPopupElement), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
 
-        /// <summary>
-        /// Gets or sets the GeoElement who's attribute will be showed with the <see cref="FieldsPopupElement"/>.
-        /// </summary>
-        public GeoElement? GeoElement
-        {
-            get { return GetValue(GeoElementProperty) as GeoElement; }
-            set { SetValue(GeoElementProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="GeoElement"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty GeoElementProperty =
-            DependencyProperty.Register(nameof(GeoElement), typeof(GeoElement), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
-
-        /// <summary>
-        /// Gets or sets the Popup definition used to render the GeoElement fields.
-        /// </summary>
-        public Popup Popup
-        {
-            get => (Popup)GetValue(PopupProperty);
-            set => SetValue(PopupProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Popup"/> dependency property.
-        /// </summary>       
-        public static readonly DependencyProperty PopupProperty =
-            DependencyProperty.Register(nameof(Popup), typeof(Popup), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
-
         private void RefreshTable()
         {
             var presenter = GetTemplateChild("TableAreaContent") as ContentPresenter;
             if (presenter is null) return;
-            if(Element is null || GeoElement is null)
+            if (Element is null) // || GeoElement is null)
             {
                 presenter.Content = null;
                 return;
             }
-            var popup = Popup ?? new Popup(GeoElement, null);
             Grid g = new Grid();
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Pixel) });
             g.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             int i = 0;
-            foreach (var field in Element.Fields)
+            for (i = 0; i < Math.Min(Element.Labels.Count, Element.FormattedValues.Count); i++)
             {
-                if (!field.IsVisible)
-                    continue;
+
                 g.RowDefinitions.Add(new RowDefinition());
                 Border b = new Border() { Background = i % 2 == 1 ? RowEvenBackground : RowOddBackground };
                 Grid.SetColumnSpan(b, 3);
@@ -106,23 +81,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 g.Children.Add(b);
                 TextBlock t = new TextBlock()
                 {
-                    Text = field.Label ?? field.FieldName,
+                    Text = Element.Labels[i],
                     Style = FieldTextStyle
                 };
                 Grid.SetRow(t, i);
                 g.Children.Add(t);
-
-                Uri? uri = null;
-                string? strValue = "";
-                var pf = popup.PopupDefinition.Fields.FirstOrDefault(f => f.FieldName == field.FieldName);
-                if (pf != null)
-                    strValue = popup.GetFormattedValue(pf);
-                else
-                    strValue = GeoElement?.Attributes.ContainsKey(field.FieldName) == true ? GeoElement.Attributes[field.FieldName]?.ToString() : string.Empty;
-
-                bool isUrl = (strValue != null &&
-                    (strValue.StartsWith("http://") || strValue.StartsWith("https://"))
-                    && Uri.TryCreate(strValue, UriKind.Absolute, out uri));
 
                 t = new TextBlock()
                 {
@@ -130,6 +93,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     Style = FieldTextStyle
                 };
 
+                var strValue = Element.FormattedValues[i];
+                Uri? uri = null;
+                bool isUrl = (strValue != null &&
+                   (strValue.StartsWith("http://") || strValue.StartsWith("https://"))
+                   && Uri.TryCreate(strValue, UriKind.Absolute, out uri));
                 if (isUrl)
                 {
                     Hyperlink hl = new Hyperlink() { NavigateUri = uri };
@@ -149,8 +117,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Grid.SetRow(t, i);
                 Grid.SetColumn(t, 3);
                 g.Children.Add(t);
-                i++;
             }
+
             Border verticalDivider = new Border() { Background = DividerBrush };
             Grid.SetRowSpan(verticalDivider, i);
             Grid.SetColumn(verticalDivider, 1);

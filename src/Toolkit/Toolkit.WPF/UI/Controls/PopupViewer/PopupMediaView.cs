@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.UI;
 using System.Windows.Media.Imaging;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -54,29 +55,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
                 Content = img;
             }
-            else if (GeoElement is null)
-            {
-                // Chart but no attributes
-                Content = null;
-                return;
-            }
             else // Chart
             {
-                var fields = PopupMedia.Value.FieldNames;
-                List<object?> data = new List<object?>(PopupMedia.Value.FieldNames.Count);
-                foreach (var field in fields)
-                {
-                    if (GeoElement.Attributes.ContainsKey(field))
-                    {
-                        data.Add(GeoElement.Attributes[field]);
-                    }
-                }
-                object? normalizeData = !string.IsNullOrEmpty(PopupMedia.Value.NormalizeFieldName) && GeoElement.Attributes.ContainsKey(PopupMedia.Value.NormalizeFieldName) ?
-                     GeoElement.Attributes[PopupMedia.Value.NormalizeFieldName] : null;
-
                 try
                 {
-                    Content = await GenerateChartAsync(PopupMedia.Type, data, normalizeData);
+                    Content = await GenerateChartAsync();
                 }
                 catch
                 {
@@ -84,11 +67,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
         }
-
-        // TODO:
-        internal virtual Task<UIElement> GenerateChartAsync(PopupMediaType type, IEnumerable<object?> data, object? normalizeValue)
+        
+        internal virtual async Task<UIElement?> GenerateChartAsync()
         {
-            return Task.FromResult<UIElement>(new TextBlock() { Text = type.ToString() + "\nData: " + string.Join(",", data.ToArray()) + "\n" + normalizeValue });
+            if (PopupMedia is null)
+                return null;
+            var width = (int)MaxWidth;
+            if (width < 1) width = 600;
+            var scalefactor = 1f; //TODO: get scale factor
+            width = (int)(width * scalefactor);
+            try
+            {
+                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters(width, width) { Dpi = scalefactor * 96 }); // TODO: Image scale
+                var source = await chart.Image.ToImageSourceAsync();
+                return new Image() { Source = source };
+            }
+            catch { return null; }
+            
         }
 
         /// <summary>
@@ -110,20 +105,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             UpdateChart();
         }
-
-        /// <summary>
-        /// Gets or sets the GeoElement who's attribute will be showed with the <see cref="FieldsPopupElement"/>.
-        /// </summary>
-        public GeoElement? GeoElement
-        {
-            get { return GetValue(GeoElementProperty) as GeoElement; }
-            set { SetValue(GeoElementProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="GeoElement"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty GeoElementProperty =
-            DependencyProperty.Register(nameof(GeoElement), typeof(GeoElement), typeof(PopupMediaView), new PropertyMetadata(null, (s, e) => ((PopupMediaView)s).UpdateChart()));
     }
 }

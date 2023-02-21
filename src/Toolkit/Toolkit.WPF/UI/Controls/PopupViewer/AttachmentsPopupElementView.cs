@@ -14,9 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Toolkit.Internal;
+using Microsoft.Win32;
 using System.Windows.Controls.Primitives;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -54,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if(e.AddedItems != null && e.AddedItems.Count > 0)
             {
-                var attachment = e.AddedItems[0] as Attachment;
+                var attachment = e.AddedItems[0] as PopupAttachment;
                 if(attachment != null)
                 {
                     OnAttachmentClicked(attachment);
@@ -69,12 +68,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         /// <remarks>Override this to prevent the default action.</remarks>
         /// <param name="attachment">Attachment clicked.</param>
-        public virtual void OnAttachmentClicked(Attachment attachment)
+        public virtual async void OnAttachmentClicked(PopupAttachment attachment)
         {
-            if (GeoElement is ArcGISFeature feature && feature.FeatureTable is ServiceFeatureTable table && table.Source != null)
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.FileName = attachment.Name;
+            if (saveFileDialog.ShowDialog() == true)
             {
-                string uri = $"{table.Source.OriginalString}/{feature.Attributes[table.ObjectIdField]}/attachments/{attachment.Id}";
-                _ = Launcher.LaunchUriAsync(new Uri(uri));
+                try
+                {
+                    using var stream = await attachment.Attachment.GetDataAsync();
+                    using var outfile = saveFileDialog.OpenFile();
+                    await stream.CopyToAsync(outfile);
+                }
+                catch { }
             }
         }
 
@@ -82,21 +88,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (itemsList is null) return;
             Visibility = Visibility.Collapsed;
-            var feature = GeoElement as ArcGISFeature;
-            if(feature is null || Element is null || feature.FeatureTable is ArcGISFeatureTable aft && !aft.HasAttachments)
+            itemsList.ItemsSource = null;
+            if (Element is not null)
             {
-                itemsList.ItemsSource = null;
-                return;
+                try
+                {
+                    await Element.GetAttachmentsAsync();
+                }
+                catch
+                {
+
+                }
+                itemsList.ItemsSource = Element?.Attachments;
             }
-            try
-            {
-                var attachments = await feature.GetAttachmentsAsync();
-                itemsList.ItemsSource = attachments;
-                Visibility = attachments.Count > 0 ? Visibility = Visibility.Visible : Visibility.Collapsed;
-            }
-            catch
-            {
-            }
+            Visibility = (Element?.Attachments?.Count ?? 0) > 0 ? Visibility = Visibility.Visible : Visibility.Collapsed;
         }
 
         /// <summary>
@@ -112,22 +117,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null));
-
-        /// <summary>
-        /// Gets or sets the GeoElement who's attachments will be showed with the <see cref="AttachmentsPopupElement"/>.
-        /// </summary>
-        public GeoElement? GeoElement
-        {
-            get => GetValue(GeoElementProperty) as GeoElement;
-            set => SetValue(GeoElementProperty, value);
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="GeoElement"/> dependency property.
-        /// </summary>       
-        public static readonly DependencyProperty GeoElementProperty =
-            DependencyProperty.Register(nameof(GeoElement), typeof(GeoElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null, (s, e) => ((AttachmentsPopupElementView)s).LoadAttachments()));
-
+            DependencyProperty.Register(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null, (s, e) => ((AttachmentsPopupElementView)s).LoadAttachments()));
     }
 }

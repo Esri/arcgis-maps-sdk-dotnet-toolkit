@@ -6,17 +6,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
 {
     internal static class Launcher
     {
-        public static async Task<bool> LaunchUriAsync(Uri uri)
+        public static
+            Task<bool> LaunchUriAsync(Uri uri)
         {
 #if NET6_0_OR_GREATER && WINDOWS || NETFX_CORE
-            return await Windows.System.Launcher.LaunchUriAsync(uri);
+            return Windows.System.Launcher.LaunchUriAsync(uri).AsTask();
 #elif WINDOWS
-            Process.Start(uri.OriginalString);
-            return true;
-#elif __IOS__ || __ANDROID__
-            return await Microsoft.Maui.ApplicationModel.Launcher.Default.TryOpenAsync(uri);
-#endif
+            var process = new System.Diagnostics.Process();
+            process.StartInfo.FileName = "rundll32.exe";
+            process.StartInfo.Arguments = "url.dll,FileProtocolHandler " + uri.OriginalString;
+            process.StartInfo.UseShellExecute = true;
+            return Task.FromResult(process.Start());
+#elif MAUI
+            return Microsoft.Maui.ApplicationModel.Launcher.Default.TryOpenAsync(uri);
 
+#endif
         }
     }
 }

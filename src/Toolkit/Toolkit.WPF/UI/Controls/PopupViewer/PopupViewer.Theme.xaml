@@ -99,8 +99,7 @@
                         <TextBlock Grid.Row="1" Grid.ColumnSpan="3" DataContext="{TemplateBinding Element}" Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
 
                         <StackPanel Grid.Row="2" Margin="0,0,0,20" DataContext="{TemplateBinding CurrentItem}" Grid.Column="1">
-                            <primitives:PopupMediaView PopupMedia="{Binding}" GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}"
-                                                       Margin="0,5" />
+                            <primitives:PopupMediaView PopupMedia="{Binding}" Margin="0,5" />
                             <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                             <TextBlock Text="{Binding Caption, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Caption, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         </StackPanel>
@@ -143,15 +142,12 @@
                         </primitives:PopupElementItemsControl.MediaPopupElementTemplate>
                         <primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
                             <DataTemplate>
-                                <primitives:FieldsPopupElementView Element="{Binding}" Margin="0,10"
-                                                                   GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}" 
-                                                                   Popup="{Binding Popup, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}" />
+                                <primitives:FieldsPopupElementView Element="{Binding}" Margin="0,10" />
                             </DataTemplate>
                         </primitives:PopupElementItemsControl.FieldsPopupElementTemplate>
                           <primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
                             <DataTemplate>
-                                <primitives:AttachmentsPopupElementView Element="{Binding}" Margin="0,10"
-                                                                        GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}" />
+                                <primitives:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
                             </DataTemplate>
                         </primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
                     </primitives:PopupElementItemsControl>
