@@ -9,7 +9,7 @@
 
 The ArcGIS Maps SDK for .NET Toolkit contains controls and components to accelerate your development with [ArcGIS Maps SDK for .NET](https://developers.arcgis.com/net/).
 
-> **Note**: At version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
+> **Note**: Starting at version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
 
 # Documentation
 
@@ -34,8 +34,6 @@ The ArcGIS Maps SDK for .NET Toolkit contains controls and components to acceler
 |[UtilityNetworkTraceTool](docs/un-trace.md) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF, UWP, WinUI, MAUI |
 
 ## Get started
-
-> **Note**: At version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
 
 The simplest way to get started is to add the platform-specific NuGet package(s) to your projects:
 
