@@ -46,6 +46,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     presenter.ContentTemplate = AttachmentsPopupElementTemplate;
                 }
+                else if(item is RelationshipPopupElement)
+                {
+                    presenter.ContentTemplate = RelationshipPopupElementTemplate;
+                }
                 else if (item is ExpressionPopupElement)
                 {
                     // This shouldn't happen since the evaluated elements are
@@ -119,5 +123,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty AttachmentsPopupElementTemplateProperty =
             DependencyProperty.Register(nameof(AttachmentsPopupElementTemplate), typeof(DataTemplate), typeof(PopupElementItemsControl), new PropertyMetadata(null));
+
+
+        /// <summary>
+        /// Template used for rendering a <see cref="RelationshipPopupElement"/>.
+        /// </summary>
+        /// <seealso cref="RelationshipPopupElementView"/>
+        public DataTemplate RelationshipPopupElementTemplate
+        {
+            get { return (DataTemplate)GetValue(RelationshipPopupElementTemplateProperty); }
+            set { SetValue(RelationshipPopupElementTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="RelationshipPopupElementTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RelationshipPopupElementTemplateProperty =
+            DependencyProperty.Register(nameof(RelationshipPopupElementTemplate), typeof(DataTemplate), typeof(PopupElementItemsControl), new PropertyMetadata(null));
     }
 }
