@@ -31,6 +31,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public class PopupMediaView : ContentControl
     {
+        private double _lastChartSize = 0;
+        private const double MaxChartSize = 1024;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupMediaView"/> class.
         /// </summary>
@@ -40,7 +43,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             VerticalContentAlignment = VerticalAlignment.Stretch;
         }
 
-        private async void UpdateChart()
+        /// <inheritdoc />
+        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
+        {
+            _lastChartSize = 0;
+            base.OnDpiChanged(oldDpi, newDpi);
+        }
+
+        /// <inheritdoc />
+        protected override Size MeasureOverride(Size constraint)
+        {
+            if (PopupMedia.Type != PopupMediaType.Image)
+            {
+                UpdateChart(constraint);
+            }
+            return base.MeasureOverride(constraint);
+        }
+
+        private void UpdateMedia(Size desiredSize)
         {
             if (PopupMedia is null || PopupMedia.Value is null)
             {
@@ -49,6 +69,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             if (PopupMedia.Type == PopupMediaType.Image)
             {
+                UpdateImage();
+            }
+            else
+            {
+                UpdateChart(desiredSize);
+            }
+        }
+
+        private void UpdateImage()
+        {
+            if (PopupMedia.Type == PopupMediaType.Image)
+            {
+                _lastChartSize = 0;
                 Image img = Content as Image ?? new Image();
                 var sourceUrl = PopupMedia.Value.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
@@ -59,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         {
                             // might be base64
                             var idx = sourceUrl.IndexOf(";base64,");
-                            if(idx>11 && sourceUrl.Length > idx+8)
+                            if (idx > 11 && sourceUrl.Length > idx + 8)
                             {
                                 try
                                 {
@@ -85,30 +118,50 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
                 Content = img;
             }
-            else // Chart
+        }
+        private async void UpdateChart(Size desiredSize)
+        {
+            if (PopupMedia is null || PopupMedia.Value is null)
             {
-                try
+                Content = null;
+                return;
+            }
+            if (PopupMedia.Type != PopupMediaType.Image) // Chart
+            {
+                var desiredWidth = desiredSize.Width;
+                if (desiredWidth > MaxChartSize)
+                    desiredWidth = MaxChartSize;
+                else if (desiredWidth < 1)
+                    desiredWidth = 0;
+                if (desiredWidth == 0)
                 {
-                    Content = await GenerateChartAsync();
-                }
-                catch
-                {
+                    _lastChartSize = 0;
                     Content = null;
+                }
+                else if (_lastChartSize != desiredWidth)
+                {
+                    _lastChartSize = desiredWidth;
+                    try
+                    {
+                        Content = await GenerateChartAsync(desiredWidth, desiredWidth, VisualTreeHelper.GetDpi(this).PixelsPerInchX);
+                    }
+                    catch
+                    {
+                        Content = null;
+                    }
                 }
             }
         }
         
-        internal virtual async Task<UIElement?> GenerateChartAsync()
+        internal async Task<UIElement?> GenerateChartAsync(double width, double height, double dpi)
         {
-            if (PopupMedia is null)
+            if (PopupMedia is null || width < 1 || height < 1)
                 return null;
-            var width = (int)MaxWidth;
-            if (width < 1) width = 600;
-            var scalefactor = 1f; //TODO: get scale factor
-            width = (int)(width * scalefactor);
+            var scalefactor = dpi / 96;
             try
             {
-                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters(width, width) { Dpi = scalefactor * 96 }); // TODO: Image scale
+                const double oversizingFactor = 2; // Charting API currently generates very large text, so we generate the image larger and scale it back down again.
+                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor * oversizingFactor), (int)(height * scalefactor * oversizingFactor)) { Dpi = (float)dpi }); // TODO: Image scale
                 var source = await chart.Image.ToImageSourceAsync();
                 return new Image() { Source = source };
             }
@@ -133,7 +186,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnPopupMediaPropertyChanged()
         {
-            UpdateChart();
+            _lastChartSize = 0;
+            if (PopupMedia?.Type == PopupMediaType.Image)
+            {
+                UpdateImage();
+            }
+            else
+            {
+                InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
+            }
         }
     }
 }
