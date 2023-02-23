@@ -154,7 +154,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
         
-        internal async Task<UIElement?> GenerateChartAsync(double width, double height, double dpi)
+        private async Task<UIElement?> GenerateChartAsync(double width, double height, double dpi)
         {
             if (PopupMedia is null || width < 1 || height < 1)
                 return null;
