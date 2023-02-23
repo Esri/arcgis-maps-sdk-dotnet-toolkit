@@ -34,20 +34,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             Refresh();
         }
 
-        private async void Refresh()
+        private void Refresh()
         {
-            try
-            {
-                if (PopupManager != null)
-                {
-                    var expressions = await PopupManager.EvaluateExpressionsAsync();
-                    var elements = PopupManager.Popup.EvaluatedElements;
-
-                }
-            }
-            catch 
-            {
-            }
         }
 
         /// <summary>
