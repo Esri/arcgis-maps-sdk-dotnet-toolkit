@@ -119,6 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Content = img;
             }
         }
+
         private async void UpdateChart(Size desiredSize)
         {
             if (PopupMedia is null || PopupMedia.Value is null)
@@ -166,7 +167,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 return new Image() { Source = source };
             }
             catch { return null; }
-            
         }
 
         /// <summary>

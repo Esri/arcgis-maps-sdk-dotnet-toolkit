@@ -19,7 +19,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             return Task.FromResult(process.Start());
 #elif MAUI
             return Microsoft.Maui.ApplicationModel.Launcher.Default.TryOpenAsync(uri);
-
 #endif
         }
     }

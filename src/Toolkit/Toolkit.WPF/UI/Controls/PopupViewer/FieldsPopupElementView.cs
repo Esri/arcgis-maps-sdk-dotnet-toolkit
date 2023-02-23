@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             var presenter = GetTemplateChild("TableAreaContent") as ContentPresenter;
             if (presenter is null) return;
-            if (Element is null) // || GeoElement is null)
+            if (Element is null)
             {
                 presenter.Content = null;
                 return;
@@ -185,7 +185,5 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty FieldTextStyleProperty =
             DependencyProperty.Register(nameof(FieldTextStyle), typeof(Style), typeof(FieldsPopupElementView), new PropertyMetadata(null));
-
-
     }
 }
