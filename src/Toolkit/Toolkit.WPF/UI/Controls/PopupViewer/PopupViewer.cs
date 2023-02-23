@@ -24,6 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// manage attachments of an <see cref="Data.ArcGISFeature"/> or a <see cref="ArcGISRuntime.UI.Graphic"/>
     /// as defined in its <see cref="Mapping.Popups.Popup"/>.
     /// </summary>
+    [TemplatePart(Name = "PopupContentScrollViewer", Type = typeof(ScrollViewer))]
     public partial class PopupViewer : Control
     {
         /// <summary>
@@ -108,6 +109,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var popupViewer = (PopupViewer)d;
             popupViewer.Refresh();
+            (popupViewer.GetTemplateChild("PopupContentScrollViewer") as ScrollViewer)?.ScrollToHome();
         }
 
         /// <summary>

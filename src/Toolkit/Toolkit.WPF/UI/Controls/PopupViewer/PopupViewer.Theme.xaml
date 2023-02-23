@@ -149,7 +149,7 @@
               </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Title}" Style="{StaticResource PopupViewerHeaderStyle}"
                          Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1">
+                <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="PopupContentScrollViewer">
                     <primitives:PopupElementItemsControl ItemsSource="{Binding EvaluatedElements}" Margin="0,10" >
                         <primitives:PopupElementItemsControl.TextPopupElementTemplate>
                             <DataTemplate>
