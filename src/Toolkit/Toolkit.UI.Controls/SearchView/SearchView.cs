@@ -57,13 +57,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         public SearchView()
         {
-            DefaultStyleKey = typeof(SearchView);
-            DataContext = this;
             SearchViewModel = new SearchViewModel();
+            DefaultStyleKey = typeof(SearchView);
             _resultOverlay = new GraphicsOverlay { Id = "SearchView_Result_Overlay" };
             ClearCommand = new DelegateCommand(HandleClearSearchCommand);
             SearchCommand = new DelegateCommand(HandleSearchCommand);
             RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
+        }
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            if (GetTemplateChild("PART_ContextWrapper") is FrameworkElement el)
+            {
+                el.DataContext = this;
+            }
+            else
+            {
+                // Compatibility with old templates
+                DataContext = this;
+            }
         }
 
 #if WINDOWS_XAML
@@ -91,6 +103,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _suggestionList.SelectedIndex = -1;
                 _suggestionList.SelectionChanged += SuggestionList_SelectionChanged;
             }
+            DataContext = this;
         }
 
         private void SuggestionList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -134,8 +147,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 await (SearchViewModel?.ConfigureDefaultWorldGeocoder(_configurationCancellationToken.Token) ?? Task.CompletedTask);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.Write(ex);
                 // Ignore
             }
         }

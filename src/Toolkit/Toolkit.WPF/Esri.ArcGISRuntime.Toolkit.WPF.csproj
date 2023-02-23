@@ -9,8 +9,8 @@
     <DefineConstants>$(DefineConstants);WPF</DefineConstants>
     <UseWpf>true</UseWpf>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
-    <SupportedOSPlatformVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</SupportedOSPlatformVersion>
-    <TargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
   <ItemGroup>
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
+     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="200.1.0-daily3794" />
   </ItemGroup>
 
   <ItemGroup>
