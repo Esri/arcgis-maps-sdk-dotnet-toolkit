@@ -80,6 +80,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- Excluded for now - Pending UI Experience design
     <Style TargetType="{x:Type primitives:RelationshipPopupElementView}" >
         <Setter Property="Template">
             <Setter.Value>
@@ -98,7 +100,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style> -->
     <Style TargetType="{x:Type primitives:MediaPopupElementView}" >
         <Setter Property="Template">
             <Setter.Value>
@@ -169,11 +171,11 @@
                                 <primitives:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
                             </DataTemplate>
                         </primitives:PopupElementItemsControl.AttachmentsPopupElementTemplate>
-                        <primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>
+                        <!--<primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>
                             <DataTemplate>
                                 <primitives:RelationshipPopupElementView Element="{Binding}" GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}"  Margin="0,10" />
                             </DataTemplate>
-                        </primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>
+                        </primitives:PopupElementItemsControl.RelationshipPopupElementTemplate>-->
                     </primitives:PopupElementItemsControl>
                 </ScrollViewer>
             </Grid>

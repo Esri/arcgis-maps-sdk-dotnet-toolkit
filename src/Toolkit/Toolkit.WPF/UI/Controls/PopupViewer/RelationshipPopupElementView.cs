@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+/* Excluded for now - Pending UI Experience design
+
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Microsoft.Win32;
@@ -77,9 +79,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         if (Element.DisplayCount > 0)
                             parameters.MaxFeatures = Element.DisplayCount;
                         var relatedRecords = await table.QueryRelatedFeaturesAsync(feature, parameters);
-                        //List<string> records = new List<string>();
-                        //foreach (var result in relatedRecords)
-                        //    records.Add(result.Feature.Attributes[((ArcGISFeatureTable)result.Feature.FeatureTable).LayerInfo.DisplayFieldName]?.ToString());
                         itemsList.ItemsSource = relatedRecords;
                         //TODO: Show related records correctly
                     }
@@ -104,4 +103,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public static readonly DependencyProperty GeoElementProperty =
             DependencyProperty.Register(nameof(GeoElement), typeof(GeoElement), typeof(RelationshipPopupElementView), new PropertyMetadata(null, (s, e) => ((RelationshipPopupElementView)s).LoadRelationship()));
     }
-}
+}*/
