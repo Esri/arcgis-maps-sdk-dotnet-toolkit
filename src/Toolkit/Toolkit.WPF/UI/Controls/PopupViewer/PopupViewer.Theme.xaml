@@ -150,7 +150,7 @@
                 <TextBlock Text="{Binding Title}" Style="{StaticResource PopupViewerHeaderStyle}"
                          Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                 <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="PopupContentScrollViewer">
-                    <primitives:PopupElementItemsControl ItemsSource="{Binding EvaluatedElements}" Margin="0,10" >
+                    <primitives:PopupElementItemsControl ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView">
                         <primitives:PopupElementItemsControl.TextPopupElementTemplate>
                             <DataTemplate>
                                 <primitives:TextPopupElementView Element="{Binding}" Margin="0,10" />

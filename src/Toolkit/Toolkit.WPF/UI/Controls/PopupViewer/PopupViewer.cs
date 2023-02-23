@@ -14,8 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
@@ -25,8 +29,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// as defined in its <see cref="Mapping.Popups.Popup"/>.
     /// </summary>
     [TemplatePart(Name = "PopupContentScrollViewer", Type = typeof(ScrollViewer))]
+    [TemplatePart(Name = "ItemsView", Type = typeof(ItemsControl))]
     public partial class PopupViewer : Control
     {
+        private WeakEventListener<PopupViewer, Mapping.DynamicEntity, object?, DynamicEntityChangedEventArgs>? _dynamicEntityChangedListener;
+        private WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _geoElementPropertyChangedListener;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
@@ -44,22 +52,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
         {
             base.OnApplyTemplate();
-            Refresh();
+            InvalidatePopup();
         }
 
-        private async void Refresh()
+        private bool _isDirty = false;
+        private object _isDirtyLock = new object();
+
+        private void InvalidatePopup()
         {
-            try
+            lock (_isDirtyLock)
             {
-                if (Popup != null)
+                if (_isDirty)
                 {
-                    var expre = Popup.EvaluatedElements;
-                    var expressions = await Popup.EvaluateExpressionsAsync();
+                    Debug.WriteLine("Already dirty - skipping update");
+                    return;
                 }
+                Debug.WriteLine("Initiating cleanup");
+                _isDirty = true;
             }
-            catch
+            _ = Dispatcher.InvokeAsync(async () =>
             {
-            }
+                try
+                {
+                    lock (_isDirtyLock)
+                    {
+                        _isDirty = false;
+                        Debug.WriteLine("Cleanup complete");
+                    }
+                    if (Popup != null)
+                    {
+                        var expressions = await Popup.EvaluateExpressionsAsync();
+                        var ctrl = GetTemplateChild("ItemsView") as ItemsControl;
+                        var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
+                        binding?.UpdateTarget();
+                    }
+                }
+                catch
+                {
+                }
+            });
         }
 
         /// <summary>
@@ -108,7 +139,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private static void OnPopupPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var popupViewer = (PopupViewer)d;
-            popupViewer.Refresh();
+            var oldPopup = e.OldValue as Popup;
+            if (oldPopup?.GeoElement is not null)
+            {
+                popupViewer._dynamicEntityChangedListener?.Detach();
+                popupViewer._dynamicEntityChangedListener = null;
+                popupViewer._geoElementPropertyChangedListener?.Detach();
+                popupViewer._geoElementPropertyChangedListener = null;
+            }
+            var newPopup = e.NewValue as Popup;
+            if(newPopup?.GeoElement is not null)
+            {
+                if(newPopup.GeoElement is Mapping.DynamicEntity de)
+                {
+                    popupViewer._dynamicEntityChangedListener = new WeakEventListener<PopupViewer, Mapping.DynamicEntity, object?, DynamicEntityChangedEventArgs>(popupViewer, de)
+                    {
+                        OnEventAction = static (instance, source, eventArgs) => instance.InvalidatePopup(),
+                        OnDetachAction = static (instance, source, weakEventListener) => source.DynamicEntityChanged -= weakEventListener.OnEvent,
+                    };
+                    de.DynamicEntityChanged += popupViewer._dynamicEntityChangedListener.OnEvent;
+                }
+                else if (newPopup.GeoElement is INotifyPropertyChanged inpc)
+                {
+                    popupViewer._geoElementPropertyChangedListener = new WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(popupViewer, inpc)
+                    {
+                        OnEventAction = static (instance, source, eventArgs) => instance.InvalidatePopup(),
+                        OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                    };
+                    inpc.PropertyChanged += popupViewer._geoElementPropertyChangedListener.OnEvent;
+
+                }
+            }
+            popupViewer.InvalidatePopup();
             (popupViewer.GetTemplateChild("PopupContentScrollViewer") as ScrollViewer)?.ScrollToHome();
         }
 
