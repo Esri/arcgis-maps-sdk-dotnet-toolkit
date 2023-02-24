@@ -19,6 +19,7 @@
 #if WINUI
 using Microsoft.UI.Xaml.Markup;
 #elif NETFX_CORE
+using Windows.UI.Xaml.Markup;
 #endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
