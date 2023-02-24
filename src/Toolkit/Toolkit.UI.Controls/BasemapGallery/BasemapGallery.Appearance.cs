@@ -51,8 +51,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             base.OnApplyTemplate();
 
+            ListView?.ClearValue(ListView.ItemsSourceProperty);
             ListView = GetTemplateChild("PART_InnerListView") as ListView;
+            ListView?.SetBinding(ListView.ItemsSourceProperty, new Binding { Path= new PropertyPath(nameof(_controller.AvailableBasemaps)), Source = _controller, Mode = BindingMode.OneWay });
+            ListView?.SetValue(ListView.SelectedItemProperty, _controller.SelectedBasemap);
             _loadingScrim = GetTemplateChild("PART_LoadingScrim") as UIElement;
+            _loadingScrim?.SetValue(FrameworkElement.VisibilityProperty, _controller.IsLoading ? Visibility.Visible : Visibility.Collapsed);
 
             SetNewStyle(ActualWidth);
         }
