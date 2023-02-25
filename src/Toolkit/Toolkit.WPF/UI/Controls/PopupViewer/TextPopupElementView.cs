@@ -59,6 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void OnElementPropertyChanged()
         {
             // TODO: Convert to pretty html
+            // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
             return;
             if(!string.IsNullOrEmpty(Element?.Text))
             {
