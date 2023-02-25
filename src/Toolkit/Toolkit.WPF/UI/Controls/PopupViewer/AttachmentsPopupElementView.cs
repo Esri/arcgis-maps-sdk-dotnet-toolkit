@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if(e.AddedItems != null && e.AddedItems.Count > 0)
             {
                 var attachment = e.AddedItems[0] as PopupAttachment;
-                if(attachment != null)
+                if(attachment?.Attachment != null)
                 {
                     OnAttachmentClicked(attachment);
                 }
@@ -76,7 +76,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 try
                 {
-                    using var stream = await attachment.Attachment.GetDataAsync();
+                    using var stream = await attachment.Attachment!.GetDataAsync();
                     using var outfile = saveFileDialog.OpenFile();
                     await stream.CopyToAsync(outfile);
                 }

@@ -61,7 +61,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             // TODO: Convert to pretty html
             // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
             return;
-            if(!string.IsNullOrEmpty(Element?.Text))
+            if (!string.IsNullOrEmpty(Element?.Text))
             {
                 HtmlTokenParser parser = new HtmlTokenParser(Element.Text);
                 FlowDocument doc = new FlowDocument();

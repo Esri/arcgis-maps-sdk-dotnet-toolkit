@@ -53,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc />
         protected override Size MeasureOverride(Size constraint)
         {
-            if (PopupMedia.Type != PopupMediaType.Image)
+            if (PopupMedia != null && PopupMedia.Type != PopupMediaType.Image)
             {
                 UpdateChart(constraint);
             }
@@ -79,11 +79,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateImage()
         {
-            if (PopupMedia.Type == PopupMediaType.Image)
+            if(PopupMedia is null)
+            {
+                Content = null;
+            }
+            else if (PopupMedia.Type == PopupMediaType.Image)
             {
                 _lastChartSize = 0;
                 Image img = Content as Image ?? new Image();
-                var sourceUrl = PopupMedia.Value.SourceUrl;
+                var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
                     if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
@@ -107,11 +111,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                                 catch { }
                             }
                         }
-                        else if (Uri.TryCreate(PopupMedia.Value.SourceUrl, UriKind.Absolute, out Uri result))
+                        else if (PopupMedia.Value != null && Uri.TryCreate(PopupMedia.Value.SourceUrl, UriKind.Absolute, out Uri? result))
                             img.Source = new BitmapImage(result);
                     }
                 }
-                if (!string.IsNullOrEmpty(PopupMedia.Value.LinkUrl) && Uri.TryCreate(PopupMedia.Value.LinkUrl, UriKind.Absolute, out var linkUrl))
+                if (!string.IsNullOrEmpty(PopupMedia.Value?.LinkUrl) && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out var linkUrl))
                 {
                     img.Cursor = Cursors.Hand;
                     img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
