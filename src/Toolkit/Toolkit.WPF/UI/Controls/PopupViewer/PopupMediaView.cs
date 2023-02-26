@@ -165,8 +165,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var scalefactor = dpi / 96;
             try
             {
-                const double oversizingFactor = 2; // Charting API currently generates very large text, so we generate the image larger and scale it back down again.
-                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor * oversizingFactor), (int)(height * scalefactor * oversizingFactor)) { Dpi = (float)dpi }); // TODO: Image scale
+                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi });
                 var source = await chart.Image.ToImageSourceAsync();
                 return new Image() { Source = source };
             }
