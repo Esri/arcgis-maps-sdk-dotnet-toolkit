@@ -37,6 +37,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             // Replace HTML line break tags.
             htmlText = Regex.Replace(htmlText, HtmlLineBreakRegex, System.Environment.NewLine);
             htmlText = htmlText.Replace("</p>", System.Environment.NewLine + System.Environment.NewLine);
+            htmlText = htmlText.Replace("&nbsp;", " ");
             // Remove the rest of HTML tags.
             htmlText = Regex.Replace(htmlText, HtmlStripperRegex, string.Empty);
 
