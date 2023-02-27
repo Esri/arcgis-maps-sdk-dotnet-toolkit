@@ -101,7 +101,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             selectedIndex--;
             if (selectedIndex < 0)
             {
-                selectedIndex = Element?.Media?.Count ?? 1 - 1;
+                selectedIndex = (Element?.Media?.Count ?? 1) - 1;
             }
             UpdateContent();
         }
