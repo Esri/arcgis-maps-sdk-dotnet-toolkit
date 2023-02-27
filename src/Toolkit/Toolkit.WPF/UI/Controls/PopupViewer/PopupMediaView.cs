@@ -79,7 +79,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void UpdateImage()
         {
-            if(PopupMedia is null)
+            if (PopupMedia is null)
             {
                 Content = null;
             }

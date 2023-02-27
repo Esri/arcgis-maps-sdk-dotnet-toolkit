@@ -148,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 popupViewer._geoElementPropertyChangedListener = null;
             }
             var newPopup = e.NewValue as Popup;
-            if(newPopup?.GeoElement is not null)
+            if (newPopup?.GeoElement is not null)
             {
                 if(newPopup.GeoElement is Mapping.DynamicEntity de)
                 {
