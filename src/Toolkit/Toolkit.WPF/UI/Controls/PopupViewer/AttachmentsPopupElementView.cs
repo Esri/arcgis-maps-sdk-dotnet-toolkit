@@ -66,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Occurs when an attachment is clicked.
         /// </summary>
-        /// <remarks>Override this to prevent the default action.</remarks>
+        /// <remarks>Override this to prevent the default "save to file dialog" action.</remarks>
         /// <param name="attachment">Attachment clicked.</param>
         public virtual async void OnAttachmentClicked(PopupAttachment attachment)
         {
