@@ -32,24 +32,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 
                 // Retrieves or builds Popup from IdentifyLayerResult
                 var popup = GetPopup(result);
-
-                // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = new Action<object>((s) =>
-                        {
-                            popupViewer.Visibility = Visibility.Visible;
-                            popupViewer.PopupManager = new PopupManager(s as Popup);
-                        });
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
-                }
-                else
-                {
-                    popupViewer.PopupManager = null;
-                    popupViewer.Visibility = Visibility.Collapsed;
+                    PopupBackground.Visibility = Visibility.Visible;
+                    popupViewer.Popup = popup;
                 }
             }
             catch (Exception ex)
@@ -114,6 +100,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
             }
 
             return null; 
+        }
+
+        private void PopupBackground_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            PopupBackground.Visibility = Visibility.Collapsed;
+            popupViewer.PopupManager = null;
         }
     }
 }
