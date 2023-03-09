@@ -16,6 +16,7 @@
 
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -32,7 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     [TemplatePart(Name = "ItemsView", Type = typeof(ItemsControl))]
     public partial class PopupViewer : Control
     {
-        private WeakEventListener<PopupViewer, Mapping.DynamicEntity, object?, DynamicEntityChangedEventArgs>? _dynamicEntityChangedListener;
+        private WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>? _dynamicEntityChangedListener;
         private WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _geoElementPropertyChangedListener;
 
         /// <summary>
@@ -150,9 +151,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             var newPopup = e.NewValue as Popup;
             if(newPopup?.GeoElement is not null)
             {
-                if(newPopup.GeoElement is Mapping.DynamicEntity de)
+                if(newPopup.GeoElement is DynamicEntity de)
                 {
-                    popupViewer._dynamicEntityChangedListener = new WeakEventListener<PopupViewer, Mapping.DynamicEntity, object?, DynamicEntityChangedEventArgs>(popupViewer, de)
+                    popupViewer._dynamicEntityChangedListener = new WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>(popupViewer, de)
                     {
                         OnEventAction = static (instance, source, eventArgs) => instance.InvalidatePopup(),
                         OnDetachAction = static (instance, source, weakEventListener) => source.DynamicEntityChanged -= weakEventListener.OnEvent,
