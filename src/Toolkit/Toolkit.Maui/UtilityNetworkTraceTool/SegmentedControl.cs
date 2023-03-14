@@ -35,26 +35,41 @@ public class SegmentedControl : GraphicsView
         {
             float segmentWidth = dirtyRect.Width / 4;
 
+            Color outline = Colors.Transparent;
+            Color fill = Color.FromArgb("#f3f3f3");
+            Color fillHover = Color.FromArgb("#eaeaea");
+            Color selected = Color.FromArgb("#007ac2");
+            Color selectedHovered = Color.FromArgb("#00619B");
+            Color textColor = Colors.Black;
+
             // Draw background
-            canvas.StrokeColor = Color.FromRgba(0, 0, 0, 0);
+            if (Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark)
+            {
+                fill = Color.FromArgb("#4a4a4a");
+                fillHover = Color.FromArgb("#6a6a6a");
+                selected = Color.FromArgb("#009AF2");
+                selectedHovered = Color.FromArgb("#00A0FF");
+                textColor = Colors.White;
+            }
+            canvas.StrokeColor = outline;
             if (IsHovered)
             {
-                canvas.FillColor = Color.FromRgb(234, 234, 234);
+                canvas.FillColor = fillHover;
             }
             else
             {
-                canvas.FillColor = Color.FromRgb(243, 243, 243);
+                canvas.FillColor = fill;
             }
             canvas.FillRoundedRectangle(0, 0, dirtyRect.Width, dirtyRect.Height, CornerRadius);
 
             // Draw selection background
             if (IsHovered)
             {
-                canvas.FillColor = Color.FromRgb(0, 98, 155);
+                canvas.FillColor = selectedHovered;
             }
             else
             {
-                canvas.FillColor = Color.FromRgb(0, 123, 194);
+                canvas.FillColor = selected;
             }
             
             canvas.FillRoundedRectangle(segmentWidth * SelectedIndex, 0, segmentWidth, 30, CornerRadius);
@@ -64,12 +79,12 @@ public class SegmentedControl : GraphicsView
             {
                 if (x == SelectedIndex)
                 {
-                    canvas.FontColor = Color.FromRgb(255, 255, 255);
+                    canvas.FontColor = Colors.White;
                     
                 }
                 else
                 {
-                    canvas.FontColor = Color.FromRgb(21, 21, 21);
+                    canvas.FontColor = textColor;
                 }
 
                 switch (x)
