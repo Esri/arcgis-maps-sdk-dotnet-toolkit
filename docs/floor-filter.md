@@ -20,6 +20,7 @@ FloorFilter allows users to take advantage of floor-aware maps and scenes by sur
 - Exposes a full range of template and style properties for easy customization
 - Adjusts layout and presentation to work well regardless of positioning - left/right and top/bottom
 - Keeps the selected facility visible in the list while the selection is changing in response to map navigation
+- When used with a MapView with location display configured with a floor-aware data source, the FloorFilter will automatically select the floor from the location data source, if the incoming location is within the currently selected facility and automatic floor selection is enabled.
 
 ## Customization
 
