@@ -1,6 +1,6 @@
 # Legend
 
-Display a legend for a single layer in a map, optionally including sublayers.
+Display a legend for a map or scene view.
 
 <img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" title="Legend" />
 

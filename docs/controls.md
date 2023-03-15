@@ -34,7 +34,7 @@ Browse floor-aware maps and scenes and filter the view to show levels in a facil
 
 ### Legend
 
-Displays a legend for a single layer in your map (and optionally for its sub layers).
+Displays a legend for a map or scene view.
 
 ![Legend](https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png)
 
