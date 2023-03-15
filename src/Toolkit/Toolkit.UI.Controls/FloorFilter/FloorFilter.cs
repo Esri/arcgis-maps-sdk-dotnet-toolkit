@@ -420,6 +420,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
                 }
 
+                if (oldView is MapView mv && mv.LocationDisplay != null)
+                {
+                    mv.LocationDisplay.LocationChanged += LocationDisplay_LocationChanged;
+                }
+
                 oldView.ViewpointChanged -= HandleGeoViewViewpointChanged;
                 oldView.NavigationCompleted -= HandleGeoViewNavigationCompleted;
             }
@@ -443,6 +448,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
                 }
 
+                if (newView is MapView mv && mv.LocationDisplay != null)
+                {
+                    mv.LocationDisplay.LocationChanged += LocationDisplay_LocationChanged;
+                }
+
                 newView.ViewpointChanged += HandleGeoViewViewpointChanged;
                 newView.NavigationCompleted += HandleGeoViewNavigationCompleted;
 
@@ -451,6 +461,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
             OnPropertyChanged(nameof(ShowAllFloorsButton));
+        }
+
+        private void LocationDisplay_LocationChanged(object? sender, Location.Location? e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+
+            try
+            {
+#if NETFX_CORE
+            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+#elif WINUI
+                DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () =>
+#else
+            Dispatcher.Invoke(() =>
+#endif
+                {
+                    _controller.ProcessUpdatedLocation(e);
+                });
+            }
+            catch (Exception)
+            {
+                // Ignore
+            }
         }
 
         private void HandleGeoViewViewpointChanged(object? sender, EventArgs e)

@@ -11,5 +11,28 @@
     <Grid>
         <esri:MapView x:Name="MyMapView" />
         <esri:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
+        <Border
+            Margin="8"
+            Padding="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="White">
+            <StackPanel MaxWidth="140">
+                <TextBlock
+                    Margin="0,0,0,4"
+                    FontWeight="SemiBold"
+                    Text="Click map to test location" />
+                <TextBox x:Name="TestTextbox" Text="" />
+                <TextBlock
+                    MaxWidth="180"
+                    Margin="0,4,0,4"
+                    Text="value above will be used as floor input. This should be passed a value equivalent to vertical order. If the value successfully parsed as int, int will be passed; otherwise string will be passed; if string is empty, no value is provided."
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    Foreground="Red"
+                    Text="Expectation: if the vertical order for the location matches a floor in the currently selected facility and the point falls within that facility's bounding box, the floor will be selected."
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

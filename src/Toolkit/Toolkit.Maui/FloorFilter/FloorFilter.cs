@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Linq;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -302,6 +303,10 @@ public partial class FloorFilter : TemplatedView
             oldView.PropertyChanged -= Handle_GeoModelChanged;
             oldView.ViewpointChanged -= HandleGeoViewViewpointChanged;
             oldView.NavigationCompleted -= HandleGeoViewNavigationCompleted;
+            if (oldView is MapView mv && mv.LocationDisplay != null)
+            {
+                mv.LocationDisplay.LocationChanged -= LocationDisplay_LocationChanged;
+            }
         }
 
         if (newView != null)
@@ -311,11 +316,35 @@ public partial class FloorFilter : TemplatedView
             newView.ViewpointChanged += HandleGeoViewViewpointChanged;
             newView.NavigationCompleted += HandleGeoViewNavigationCompleted;
 
+            if (newView is MapView mv && mv.LocationDisplay != null)
+            {
+                mv.LocationDisplay.LocationChanged += LocationDisplay_LocationChanged;
+            }
+
             // Handle case where geoview loads map while events are being set up
             HandleGeoModelChanged(nameof(MapView.Map));
         }
 
         PART_AllButton?.SetValue(IsVisibleProperty, ShowAllFloorsButton);
+    }
+
+    private void LocationDisplay_LocationChanged(object? sender, Location.Location e)
+    {
+        if (e == null)
+        {
+            return;
+        }
+        try
+        {
+            Dispatcher.Dispatch(() =>
+            {
+                _controller.ProcessUpdatedLocation(e);
+            });
+        }
+        catch (Exception)
+        {
+            // Ignore;
+        }
     }
 
     private void HandleGeoViewViewpointChanged(object? sender, EventArgs e)
@@ -341,9 +370,13 @@ public partial class FloorFilter : TemplatedView
 
     private void HandleGeoModelChanged(string? propertyName)
     {
-        if (propertyName != nameof(MapView.Map) && propertyName != nameof(SceneView.Scene))
+        if (propertyName != nameof(MapView.Map) && propertyName != nameof(SceneView.Scene) && propertyName != nameof(MapView.LocationDisplay))
         {
             return;
+        }
+        if (propertyName != nameof(MapView.LocationDisplay) && GeoView is MapView mv2 && mv2.LocationDisplay != null)
+        {
+            mv2.LocationDisplay.LocationChanged += LocationDisplay_LocationChanged;
         }
 
         _controller.Reset();

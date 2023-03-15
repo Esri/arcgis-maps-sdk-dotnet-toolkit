@@ -20,6 +20,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Mapping.Floor;
 
@@ -356,6 +358,43 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public void UndoSelectAllDisplayLevels()
         {
             SetPropertyChanged(false, ref _allDisplayLevelsSelected, nameof(AllDisplayLevelsSelected), () => SetSelectedLevel(_previousSelection, false));
+        }
+
+        /// <summary>
+        /// Accepts a location from a location data source.
+        /// If the location includes floor information and it is appropriate to do so, the floor selection will be updated.
+        /// </summary>
+        /// <seealso cref="Location.Location.AdditionalSourceProperties"/>
+        /// <param name="location">A location originating from a GeoView's location display.</param>
+        public void ProcessUpdatedLocation(Location.Location location)
+        {
+            try
+            {
+                if (AutomaticSelectionMode == AutomaticSelectionMode.Never)
+                {
+                    return;
+                }
+                if (!location.AdditionalSourceProperties.ContainsKey(LocationSourcePropertyKeys.Floor))
+                {
+                    return;
+                }
+                if (SelectedFacility?.Geometry?.Extent is Envelope boundingExtent && boundingExtent.SpatialReference != null && location.AdditionalSourceProperties.ContainsKey(LocationSourcePropertyKeys.Floor))
+                {
+                    var projected = GeometryEngine.Project(location.Position, boundingExtent.SpatialReference);
+                    if (GeometryEngine.Intersects(boundingExtent, projected) && location.AdditionalSourceProperties[LocationSourcePropertyKeys.Floor] is int incomingFloorValue)
+                    {
+                        var newSelection = SelectedFacility.Levels.FirstOrDefault(level => level.VerticalOrder == incomingFloorValue);
+                        if (newSelection != null)
+                        {
+                            SetSelectedLevel(newSelection, true);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // IGNORE
+            }
         }
 
         private async Task HandleLoad()
