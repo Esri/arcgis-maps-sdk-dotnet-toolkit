@@ -183,9 +183,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                     double avgSize = (oldView.Width + oldView.Height) / 2;
                     double threshold = avgSize / 4;
-                    double distance = GeometryEngine.Distance(oldView.GetCenter(), newView.GetCenter());
-                    double newAvgSize = (newView.Width + newView.Height) / 2;
-                    IsEligibleForRequery = distance > threshold || newAvgSize > avgSize * 1.25 || newAvgSize < avgSize * 0.75;
+                    try
+                    {
+                        double distance = GeometryEngine.Distance(oldView.GetCenter(), newView.GetCenter());
+                        double newAvgSize = (newView.Width + newView.Height) / 2;
+                        IsEligibleForRequery = distance > threshold || newAvgSize > avgSize * 1.25 || newAvgSize < avgSize * 0.75;
+                    }
+                    catch (Exception)
+                    {
+                        // Handle some geometry errors when spatial reference changes
+                        IsEligibleForRequery = true;
+                        return;
+                    }
                 }
                 else if (value == null)
                 {
