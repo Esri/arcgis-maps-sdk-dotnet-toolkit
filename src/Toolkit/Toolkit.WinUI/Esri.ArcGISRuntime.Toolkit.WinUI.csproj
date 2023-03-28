@@ -10,6 +10,7 @@
     <Nullable>enable</Nullable>
     <DefineConstants>$(DefineConstants);WINDOWS_XAML;WINUI</DefineConstants>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
+    <DeployArcGISNetworkAnalystResources>false</DeployArcGISNetworkAnalystResources>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
   <ItemGroup>
