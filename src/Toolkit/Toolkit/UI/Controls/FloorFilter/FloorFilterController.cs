@@ -383,7 +383,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     OnPropertyChanged(nameof(AllFacilities));
                 }
 
-                // If viewpoint set and automatic selction enabled, select site, facility, and floor
+                // If viewpoint set and automatic selection enabled, select site, facility, and floor
                 UpdateSelectionIfNeeded(true);
             }
             catch (Exception)
