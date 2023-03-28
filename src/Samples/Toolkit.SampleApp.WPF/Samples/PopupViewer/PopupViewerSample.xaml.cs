@@ -105,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
         private void PopupBackground_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             PopupBackground.Visibility = Visibility.Collapsed;
-            popupViewer.PopupManager = null;
+            popupViewer.Popup = null;
         }
     }
 }
