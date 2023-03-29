@@ -10,7 +10,7 @@ Displays information from simple [popups](https://pro.arcgis.com/en/pro-app/late
 - Supports charts, media, attachments.
 - Supports basic display of fields and values in non-HTML-based popups.
 
-> **Important**: Support for charts, multimedia, attachments is only available for WPF.
+> **Important**: Support for charts, multimedia, and attachments is currently only available for WPF.
 
 ## Usage
 
