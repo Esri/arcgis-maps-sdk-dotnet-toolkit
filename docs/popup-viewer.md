@@ -2,14 +2,15 @@
 
 Displays information from simple [popups](https://pro.arcgis.com/en/pro-app/latest/help/mapping/navigation/configure-pop-ups.htm). 
 
-<img src="https://user-images.githubusercontent.com/1378165/73389991-1e549080-428a-11ea-81f3-b2f9c29f61ad.png" width="120" />
+<img src="https://user-images.githubusercontent.com/3878047/228625594-d0009216-0cb3-4836-9a62-e197371779ac.png" width="120" />
 
 ## Features
 
 - Supports limited text display from HTML-based popups.
+- Supports charts, media, attachments.
 - Supports basic display of fields and values in non-HTML-based popups.
 
-> **Important**: PopupViewer does not support charts or multimedia.
+> **Important**: Support for charts, multimedia, and attachments is currently only available for WPF.
 
 ## Usage
 
