@@ -130,7 +130,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (d is BasemapGallery gallery)
             {
-                gallery.ListView?.SetBinding(ListView.ItemsSourceProperty, new Binding { Source = gallery._controller.AvailableBasemaps, Mode = BindingMode.OneWay });
                 if (e.NewValue != gallery._controller.AvailableBasemaps)
                 {
                     gallery._controller.AvailableBasemaps = e.NewValue as IList<BasemapGalleryItem>;
