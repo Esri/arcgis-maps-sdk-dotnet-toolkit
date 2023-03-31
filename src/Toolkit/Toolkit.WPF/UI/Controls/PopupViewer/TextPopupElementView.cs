@@ -15,8 +15,11 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping.Popups;
-using System.Diagnostics.CodeAnalysis;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.UI;
 using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Navigation;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -58,132 +61,243 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnElementPropertyChanged()
         {
-            // TODO: Convert to pretty html
             // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
-            return;
-            if (!string.IsNullOrEmpty(Element?.Text))
+            if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild("TextArea") is RichTextBox rtb)
             {
-                HtmlTokenParser parser = new HtmlTokenParser(Element.Text);
-                FlowDocument doc = new FlowDocument();
-                bool isBold = false;
-                bool isItalic = false;
-                bool isHyperLink = false;
-                while (parser.NextToken(out HtmlToken? t))
+                var doc = new FlowDocument();
+                try
                 {
-                    var token = t.Value;
-                    if (token.Type == TokenType.Begin && token.Name == "p")
-                        doc.Blocks.Add(new Paragraph(new Span()));
-                    else if (doc.Blocks.Count == 0)
-                        doc.Blocks.Add(new Paragraph(new Span()));
-
-                    if (token.Name == "b" || token.Name == "strong")
-                        isBold = token.Type == TokenType.Begin;
-                    else if (token.Name == "i" || token.Name == "em")
-                        isItalic = token.Type == TokenType.Begin;
-                    else if (token.Name == "a")
-                        isHyperLink = token.Type == TokenType.Begin;
-
-                    if (token.Name == "br" && token.Type !=  TokenType.End)
-                    {
-                        ((Span)((Paragraph)doc.Blocks.Last()).Inlines.Last()).Inlines.Add(new LineBreak());
-                    }
-                    if (token.Type == TokenType.None)
-                    {
-                        ((Span)((Paragraph)doc.Blocks.Last()).Inlines.Last()).Inlines.Add(new TextBlock()
-                        {
-                            Text = token.Name,
-                            FontWeight = isBold ? FontWeights.Bold : FontWeights.Normal,
-                            FontStyle = isItalic ? FontStyles.Italic : FontStyles.Normal,
-                        });
-                    }
+                    var htmlRoot = HtmlUtility.BuildDocumentTree(Element.Text);
+                    var blocks = VisitAndAddBlocks(htmlRoot.Children).ToList();
+                    doc.Blocks.AddRange(blocks);
                 }
-                if (GetTemplateChild("TextArea") is RichTextBox rtb)
+                catch
                 {
-                    rtb.Document = doc;
+                    // Fallback if something went wrong with the parsing:
+                    // Just display the text without any markup;
+                    var plainText = Element.Text.ToPlainText();
+                    doc.Blocks.Add(new Paragraph(new Run(plainText)));
                 }
+                rtb.Document = doc;
             }
         }
 
-        private class HtmlTokenParser
+        private static IEnumerable<Block> VisitAndAddBlocks(IEnumerable<MarkupNode> nodes)
         {
-            string _html;
-            HtmlToken? currentToken;
-            int _idx = 0;
-            public HtmlTokenParser(string html)
-            { 
-                _html = html;
-            }
-            
-            
-            public bool NextToken([NotNullWhen(true)] out HtmlToken? token)
+            Paragraph? inlineHolder = null;
+            foreach (var node in nodes)
             {
-                token = null;
-                if (_idx < _html.Length && _html[_idx] == '>')
-                    _idx++;
-                if (_idx >= _html.Length)
+                if (MapsToBlock(node))
                 {
-                    return false;
-                }
-                var nextTokenIdx = _html.Substring(_idx).IndexOf('<') + _idx + 1;
-                if (nextTokenIdx > _idx + 1)
-                {
-                    token = new HtmlToken() { Name = _html.Substring(_idx, nextTokenIdx - _idx - 1), Type = TokenType.None };
-                    _idx = nextTokenIdx - 1;
-                }
-                else if (nextTokenIdx < 1)
-                {
-                    //no more tokens
-                    if (_idx < _html.Length)
+                    if (inlineHolder != null)
                     {
-                        token = new HtmlToken() { Name = _html.Substring(_idx), Type = TokenType.None };
-                        _idx = _html.Length;
+                        yield return inlineHolder;
+                        inlineHolder = null;
                     }
+                    yield return VisitBlock(node);
                 }
                 else
                 {
-                    var endTokenIdx = _html.Substring(nextTokenIdx).IndexOf('>') + nextTokenIdx;
-                    //TODO: Handle endTokenIdx==-1
-                    var t = new HtmlToken();
-                    if (_html[nextTokenIdx] == '/')
-                    {
-                        nextTokenIdx++;
-                        t.Type = TokenType.End;
-                    }
-                    else if (_html[endTokenIdx - 1] == '/')
-                    {
-                        t.Type = TokenType.BeginAndEnd;
-                    }
-                    else
-                        t.Type = TokenType.Begin;
-                    var space = _html.Substring(nextTokenIdx, endTokenIdx - nextTokenIdx).IndexOf(' ') + nextTokenIdx + 1;
-                    if (space > nextTokenIdx)
-                    {
-                        t.Attributes = _html.Substring(space, endTokenIdx - space);
-                        t.Name = _html.Substring(nextTokenIdx, space - nextTokenIdx - 1);
-                    }
-                    else
-                    {
-                        t.Name = _html.Substring(nextTokenIdx, endTokenIdx - nextTokenIdx);
-                    }
-                    _idx = endTokenIdx;
-                    token = t;
+                    inlineHolder ??= new Paragraph();
+                    inlineHolder.Inlines.Add(VisitInline(node));
                 }
-                currentToken = token;
-                return token != null;
+            }
+            if (inlineHolder != null)
+                yield return inlineHolder;
+        }
+
+        private static IEnumerable<Inline> VisitAndAddInlines(IEnumerable<MarkupNode> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                if (MapsToBlock(node))
+                {
+                    // Blocks have to be wrapped in an AnchoredBlock (such as Floater) to appear among inlines
+                    var blockHolder = new Floater();
+                    blockHolder.Blocks.Add(VisitBlock(node));
+                    yield return blockHolder;
+                }
+                yield return VisitInline(node);
             }
         }
-        private struct HtmlToken
+
+        private static Block VisitBlock(MarkupNode node)
         {
-            public string Name { get; set; }
-            public string Attributes { get; set; }
-            public TokenType Type { get; set; }
+            switch (node.Type)
+            {
+                case MarkupType.List:
+                    var list = new List();
+                    if (node.Token?.Name == "ol")
+                        list.MarkerStyle = TextMarkerStyle.Decimal;
+                    else
+                        list.MarkerStyle = TextMarkerStyle.Circle;
+                    foreach (var itemNode in node.Children)
+                    {
+                        if (itemNode.Type == MarkupType.ListItem)
+                        {
+                            var listItem = new ListItem();
+                            listItem.Blocks.AddRange(VisitAndAddBlocks(itemNode.Children));
+                        }
+                        // else ignore a misplaced non-list-item node
+                    }
+                    return list;
+
+                case MarkupType.Block:
+                    if (HasAnyBlocks(node))
+                    {
+                        var section = new Section();
+                        ApplyStyle(section, node);
+                        section.Blocks.AddRange(VisitAndAddBlocks(node.Children));
+                        return section;
+                    }
+                    else
+                    {
+                        var para = new Paragraph();
+                        ApplyStyle(para, node);
+                        para.Inlines.AddRange(VisitAndAddInlines(node.Children));
+                        return para;
+                    }
+
+                case MarkupType.Divider:
+                    return new BlockUIContainer(new Separator());
+
+                case MarkupType.Table:
+                    var table = new Table();
+                    var columnCount = node.Children.Max(rowNode => rowNode.Children.Count);
+                    for (int i = 0; i < columnCount; i++)
+                        table.Columns.Add(new TableColumn());
+                    var rowGroup = new TableRowGroup();
+                    foreach (var rowNode in node.Children)
+                    {
+                        var row = new TableRow();
+                        ApplyStyle(row, rowNode);
+                        foreach (var cellNode in rowNode.Children)
+                        {
+                            var cell = new TableCell();
+                            ApplyStyle(cell, cellNode);
+                            cell.Blocks.AddRange(VisitAndAddBlocks(cellNode.Children));
+                            row.Cells.Add(cell);
+                        }
+                        rowGroup.Rows.Add(row);
+                    }
+                    table.RowGroups.Add(rowGroup);
+                    return table;
+
+                default:
+                    return new Section(); // placeholder for unsupported things
+            }
         }
-        private enum TokenType
+
+        private static Inline VisitInline(MarkupNode node)
         {
-            None,
-            Begin,
-            End,
-            BeginAndEnd,
+            switch (node.Type)
+            {
+                case MarkupType.Link:
+                    var link = new Hyperlink();
+                    if (Uri.TryCreate(node.Content, UriKind.Absolute, out var linkUri))
+                    {
+                        link.NavigateUri = linkUri;
+                        link.RequestNavigate += NavigateToUri;
+                    } // else If we can't create a URL, we can't make a link clickable
+                    link.Inlines.AddRange(VisitAndAddInlines(node.Children));
+                    return link;
+
+                case MarkupType.Image:
+                    if (Uri.TryCreate(node.Content, UriKind.Absolute, out var imgUri))
+                    {
+                        var imageElement = new Image { Tag = imgUri };
+                        imageElement.Loaded += static async (sender, e) => // Start loading the image in the background once the image is actually displayed
+                        {
+                            var img = (Image)sender;
+                            var taggedUri = (Uri)img.Tag;
+                            var ri = new RuntimeImage(taggedUri); // Use Runtime's caching and authentication
+                            img.Source = await ri.ToImageSourceAsync();
+                        };
+                        return new InlineUIContainer(imageElement);
+                    }
+                    return new Run(); // TODO find a better placeholder when img src is invalid
+
+                case MarkupType.Span:
+                    var span = new Span();
+                    ApplyStyle(span, node);
+                    span.Inlines.AddRange(VisitAndAddInlines(node.Children));
+                    return span;
+
+                case MarkupType.Sub:
+                    var sub = new Span();
+                    ApplyStyle(sub, node);
+                    Typography.SetVariants(sub, FontVariants.Subscript);
+                    sub.Inlines.AddRange(VisitAndAddInlines(node.Children));
+                    return sub;
+
+                case MarkupType.Sup:
+                    var sup = new Span();
+                    ApplyStyle(sup, node);
+                    Typography.SetVariants(sup, FontVariants.Superscript);
+                    sup.Inlines.AddRange(VisitAndAddInlines(node.Children));
+                    return sup;
+
+                case MarkupType.Break:
+                    return new LineBreak();
+
+                case MarkupType.Text:
+                    return new Run(node.Content);
+
+                default:
+                    return new Run(); // placeholder for unsupported types
+            }
+        }
+
+        private static bool HasAnyBlocks(MarkupNode node)
+        {
+            return node.Children.Any(c => MapsToBlock(c) || HasAnyBlocks(c));
+        }
+
+        private static bool MapsToBlock(MarkupNode node)
+        {
+            return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider;
+        }
+
+        private static void ApplyStyle(TextElement el, MarkupNode node)
+        {
+            if (node.IsBold == true)
+                el.FontWeight = FontWeights.Bold;
+            if (node.IsItalic == true)
+                el.FontStyle = FontStyles.Italic;
+            if (node.FontColor.HasValue)
+                el.Foreground = new SolidColorBrush(ConvertColor(node.FontColor.Value));
+            if (node.BackColor.HasValue)
+                el.Background = new SolidColorBrush(ConvertColor(node.BackColor.Value));
+            if (node.FontSize.HasValue)
+                el.FontSize = 16d * node.FontSize.Value; // based on AGOL's default font size
+            if (node.Alignment.HasValue && el is Block blockEl)
+                blockEl.TextAlignment = ConvertAlignment(node.Alignment);
+            if (node.IsUnderline.HasValue)
+            {
+                if (el is Inline inlineEl)
+                    inlineEl.TextDecorations.Add(TextDecorations.Underline);
+                if (el is Paragraph paraEl)
+                    paraEl.TextDecorations.Add(TextDecorations.Underline);
+                // TODO underline inheritance from non-para blocks?
+            }
+        }
+
+        private static System.Windows.Media.Color ConvertColor(System.Drawing.Color color)
+        {
+            return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        private static TextAlignment ConvertAlignment(HtmlAlignment? alignment) => alignment switch
+        {
+            HtmlAlignment.Left => TextAlignment.Left,
+            HtmlAlignment.Center => TextAlignment.Center,
+            HtmlAlignment.Right => TextAlignment.Right,
+            _ => TextAlignment.Left,
+        };
+
+        private static async void NavigateToUri(object sender, RequestNavigateEventArgs ea)
+        {
+            await Launcher.LaunchUriAsync(ea.Uri);
         }
     }
 }
