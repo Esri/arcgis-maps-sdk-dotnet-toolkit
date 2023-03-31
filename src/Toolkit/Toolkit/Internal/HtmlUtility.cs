@@ -1,4 +1,4 @@
-#if WINDOWS
+#if WPF
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

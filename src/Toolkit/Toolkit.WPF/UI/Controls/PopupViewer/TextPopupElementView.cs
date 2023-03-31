@@ -68,8 +68,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 try
                 {
                     var htmlRoot = HtmlUtility.BuildDocumentTree(Element.Text);
-                    var kids = VisitAndAddBlocks(htmlRoot.Children).ToList();
-                    doc.Blocks.AddRange(kids);
+                    var blocks = VisitAndAddBlocks(htmlRoot.Children).ToList();
+                    doc.Blocks.AddRange(blocks);
                 }
                 catch
                 {
