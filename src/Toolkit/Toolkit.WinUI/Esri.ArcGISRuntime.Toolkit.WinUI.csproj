@@ -11,6 +11,10 @@
     <DefineConstants>$(DefineConstants);WINDOWS_XAML;WINUI</DefineConstants>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
     <DeployArcGISNetworkAnalystResources>false</DeployArcGISNetworkAnalystResources>
+    <GenerateLibraryLayout>True</GenerateLibraryLayout>
+    <UseWinUI>true</UseWinUI>
+    <IncludeXamlFilesInNugetPackage>False</IncludeXamlFilesInNugetPackage>
+    <DisableEmbeddedXbf>false</DisableEmbeddedXbf>
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
   <ItemGroup>
@@ -29,6 +33,7 @@
 
   <ItemGroup>
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
+      <Content Update="Assets\*.*" PackagePath="contentFiles\any\net6.0-windows10.0.19041\$(PackageId)\Assets\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
