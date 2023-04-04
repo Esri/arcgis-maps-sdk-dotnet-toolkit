@@ -21,7 +21,7 @@
                 <esriUI:GraphicsOverlay Renderer="{StaticResource SR}" />
             </esri:MapView.GraphicsOverlays>
         </esri:MapView>
-        <toolkit:MeasureToolbar VerticalAlignment="Top"
+        <toolkit:MeasureToolbar VerticalAlignment="Top" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                                 HorizontalAlignment="Right"
                                 MapView="{Binding ElementName=mapView}" />
     </Grid>
