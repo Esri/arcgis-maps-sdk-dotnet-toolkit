@@ -364,6 +364,8 @@ internal class HtmlUtility
                     newNode.FontColor = ParseCssColor(colorString);
                 if (styles.TryGetValue("font-size", out var fontSizeString) && TryParseCssFontSize(fontSizeString, out var fontSize))
                     newNode.FontSize = fontSize;
+                if (styles.TryGetValue("font-weight", out var fontWeightStr) && ParseCssFontWeight(fontWeightStr) is bool isBold)
+                    newNode.IsBold = isBold;
                 if (styles.TryGetValue("text-align", out var alignStr) && Enum.TryParse<HtmlAlignment>(alignStr, true, out var align))
                     newNode.Alignment = align;
                 if (styles.TryGetValue("background-color", out var backColorString))
@@ -481,6 +483,31 @@ internal class HtmlUtility
         };
 
         return !double.IsNaN(emValue);
+    }
+
+    // Parses the value of CSS font-weight into a boolean. Returns null for invalid values.
+    private static bool? ParseCssFontWeight(string rawValue)
+    {
+        if (string.IsNullOrEmpty(rawValue))
+            return null;
+
+        string normalizedValue = rawValue.Trim().ToLowerInvariant();
+        switch (normalizedValue)
+        {
+            case "normal":
+            case "lighter":
+                return false;
+            case "bold":
+            case "bolder":
+                return true;
+            default:
+                if (int.TryParse(normalizedValue, out int numericValue) && numericValue > 0)
+                {
+                    // Any numeric value greater than 400 represents a bolder-than-normal font weight
+                    return numericValue > 400;
+                }
+                return null;
+        }
     }
 
     /// <summary>
