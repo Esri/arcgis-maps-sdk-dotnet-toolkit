@@ -451,8 +451,8 @@
                             Text="{Binding ElementName=FractionAlongSlider, Path=Value, Mode=TwoWay}"
                             Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}" />
                         <Button Command="{Binding DeleteCommand}" Margin="0,0,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2" Style="{StaticResource UNTraceIconButton}">
-							<FontIcon Glyph="&#xE74D;" FontFamily="Segoe MDL2 Assets" Foreground="{ThemeResource UNTraceTintNormal}" />
-						</Button>
+                            <FontIcon Glyph="&#xE74D;" FontFamily="Segoe MDL2 Assets" Foreground="{ThemeResource UNTraceTintNormal}" />
+                        </Button>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
@@ -550,8 +550,8 @@
                                                                 Content="Delete"
                                                                 Style="{StaticResource UNTraceSecondaryButton}" />
                                                         </Grid>
-                                                        <internal:StartingPointListView x:Name="PART_StartingPointsList" ItemTemplate="{TemplateBinding StartingPointItemTemplate}">
-                                                            <internal:StartingPointListView.InspectorViewTemplate>
+                                                        <controls:StartingPointListView x:Name="PART_StartingPointsList" ItemTemplate="{TemplateBinding StartingPointItemTemplate}">
+                                                            <controls:StartingPointListView.InspectorViewTemplate>
                                                                 <DataTemplate>
                                                                     <Border HorizontalAlignment="Stretch" Background="Transparent">
                                                                         <StackPanel HorizontalAlignment="Stretch">
@@ -674,8 +674,8 @@
                                                                         </StackPanel>
                                                                     </Border>
                                                                 </DataTemplate>
-                                                            </internal:StartingPointListView.InspectorViewTemplate>
-                                                        </internal:StartingPointListView>
+                                                            </controls:StartingPointListView.InspectorViewTemplate>
+                                                        </controls:StartingPointListView>
 
                                                         <TextBlock
                                                             x:Name="PART_IsAddingStartingPointsIndicator"

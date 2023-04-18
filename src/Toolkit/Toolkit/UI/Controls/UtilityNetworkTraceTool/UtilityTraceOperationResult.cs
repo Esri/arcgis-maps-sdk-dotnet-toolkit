@@ -27,6 +27,7 @@ using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UtilityNetworks;
+using DelegateCommand = Esri.ArcGISRuntime.Toolkit.DelegateCommand;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui

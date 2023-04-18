@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
     /// <summary>
     /// Models a starting point used for a utility network trace.
     /// </summary>
-    internal class StartingPointModel : IEquatable<StartingPointModel>
+    public class StartingPointModel : IEquatable<StartingPointModel>
     {
         private UtilityNetworkTraceToolController? _controller;
 
@@ -49,6 +49,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             {
                 _controller.StartingPoints.Remove(this);
                 _controller = null;
+            });
+
+            // Create popup if possible.
+            if (feature is ArcGISFeature arcFeature && arcFeature.FeatureTable?.PopupDefinition is PopupDefinition featurePopupDef)
+            {
+                PopupManager = new PopupManager(new Popup(feature, featurePopupDef));
+            }
+
+            // Get symbol if possible
+            if (feature.FeatureTable?.Layer is FeatureLayer featureLayer && featureLayer.Renderer?.GetSymbol(feature) is Symbol symbol)
+            {
+                Symbol = symbol;
+            }
+        }
+        public StartingPointModel(Action deleteAction, UtilityElement element, Graphic selectionGraphic, Feature feature, Envelope? zoomToExtent)
+        {
+            StartingPoint = element;
+            SelectionGraphic = selectionGraphic;
+            ZoomToExtent = zoomToExtent;
+            DeleteCommand = new DelegateCommand(() =>
+            {
+                deleteAction?.Invoke();
             });
 
             // Create popup if possible.

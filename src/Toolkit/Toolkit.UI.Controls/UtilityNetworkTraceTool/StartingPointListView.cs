@@ -20,13 +20,13 @@ using System.Windows;
 using System.Windows.Input;
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
-namespace Esri.ArcGISRuntime.Toolkit.Internal
+namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
     /// Special listview that facilitates inspecting individual items. Created for use with <see cref="UtilityNetworkTraceTool"/>.
     /// </summary>
     [TemplatePart(Name = "PART_InnerListView", Type = typeof(ListView))]
-    internal class StartingPointListView : ListView
+    public class StartingPointListView : ListView
     {
         private ListView? _innerListView;
 
@@ -62,6 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
         }
 #endif
 
+        /// <inheritdoc/>
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
 #else
@@ -101,13 +102,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
             {
                 if (SelectedItems.Contains(item))
                 {
-                    #if WINDOWS_UWP
+#if WINDOWS_UWP
                     _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal,() => SelectedItems.Remove(item));
-                    #elif WINUI
+#elif WINUI
                     DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Normal, () => SelectedItems.Remove(item));
-                    #else
+#else
                     SelectedItems.Remove(item);
-                    #endif
+#endif
                 }
             }
         }

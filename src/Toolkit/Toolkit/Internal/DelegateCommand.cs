@@ -17,12 +17,12 @@
 using System;
 using System.Windows.Input;
 
-namespace Esri.ArcGISRuntime.Toolkit.Internal
+namespace Esri.ArcGISRuntime.Toolkit
 {
     /// <summary>
     /// Simple command implementation.
     /// </summary>
-    internal class DelegateCommand : ICommand
+    public class DelegateCommand : ICommand
     {
         private bool _canExecute = true;
         private readonly Action<object?>? _onExecute;

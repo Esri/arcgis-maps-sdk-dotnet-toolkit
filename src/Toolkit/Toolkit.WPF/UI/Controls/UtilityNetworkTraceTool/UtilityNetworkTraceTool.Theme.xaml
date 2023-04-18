@@ -480,7 +480,7 @@
                             Margin="8,4,0,4"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=internal:StartingPointListView}, Path=ZoomToCommand}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=controls:StartingPointListView}, Path=ZoomToCommand}"
                             CommandParameter="{Binding}"
                             KeyboardNavigation.TabIndex="1"
                             Style="{StaticResource UNTraceIconButton}">
@@ -491,7 +491,7 @@
                             Grid.Column="3"
                             Margin="8,4,0,4"
                             VerticalAlignment="Center"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=internal:StartingPointListView}, Path=OpenInspectorCommand}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=controls:StartingPointListView}, Path=OpenInspectorCommand}"
                             CommandParameter="{Binding}"
                             KeyboardNavigation.TabIndex="2"
                             Style="{StaticResource UNTraceIconButton}">
@@ -503,7 +503,7 @@
                             Margin="8,4,0,4"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=internal:StartingPointListView}, Path=DeleteSelectedCommand}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=controls:StartingPointListView}, Path=DeleteSelectedCommand}"
                             CommandParameter="{Binding}"
                             KeyboardNavigation.TabIndex="3"
                             Style="{StaticResource UNTraceIconButton}">
@@ -561,9 +561,9 @@
                                                     Header="Starting points"
                                                     Style="{StaticResource UNTraceGroupBox}">
                                                     <StackPanel Orientation="Vertical">
-                                                        <internal:StartingPointListView x:Name="PART_StartingPointsList"
+                                                        <controls:StartingPointListView x:Name="PART_StartingPointsList"
                                                             ItemTemplate="{TemplateBinding StartingPointItemTemplate}">
-                                                            <internal:StartingPointListView.InspectorViewTemplate>
+                                                            <controls:StartingPointListView.InspectorViewTemplate>
                                                                 <DataTemplate>
                                                                     <Border Background="Transparent">
                                                                         <StackPanel>
@@ -690,8 +690,8 @@
                                                                         </StackPanel>
                                                                     </Border>
                                                                 </DataTemplate>
-                                                            </internal:StartingPointListView.InspectorViewTemplate>
-                                                        </internal:StartingPointListView>
+                                                            </controls:StartingPointListView.InspectorViewTemplate>
+                                                        </controls:StartingPointListView>
                                                         <TextBlock x:Name="PART_IsAddingStartingPointsIndicator"
                                                             Margin="2"
                                                             FontWeight="SemiBold"
@@ -774,7 +774,7 @@
                                                         TextWrapping="Wrap" />
                                                 </StackPanel>
                                             </StackPanel>
-                                        </ScrollViewer> 
+                                        </ScrollViewer>
                                         <Grid Grid.Row="1" Background="{StaticResource UNTraceBackground0}">
                                             <Border x:Name="PART_NeedMoreStartingPointsWarningContainer"
                                                 Grid.Row="1"

@@ -25,7 +25,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 using Grid = Microsoft.Maui.Controls.Grid;
-
+using DelegateCommand = Esri.ArcGISRuntime.Toolkit.DelegateCommand;
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
 /// <summary>
@@ -250,7 +250,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
         {
             SearchViewModel.ActiveSource = null;
         }
-        else 
+        else
         {
             SearchViewModel.ActiveSource = SearchViewModel.Sources.First(source => source.DisplayName == selectedSource);
         }
@@ -574,7 +574,7 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
                         Console.WriteLine(grouped.First().Key);
                     }
 
-                    PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, grouped ?? new IGrouping<ISearchSource, SearchSuggestion>[] {});
+                    PART_SuggestionsView?.SetValue(CollectionView.ItemsSourceProperty, grouped ?? new IGrouping<ISearchSource, SearchSuggestion>[] { });
                 }
                 else
                 {

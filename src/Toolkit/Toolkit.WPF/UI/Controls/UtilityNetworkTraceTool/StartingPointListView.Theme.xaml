@@ -3,14 +3,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
-    xmlns:internalcontrols="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:v4="http://schemas.microsoft.com/netfx/2009/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="./UNVisualResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <internal:VisibilityConverter x:Key="VisibilityConverter" />
 
-    <ControlTemplate x:Key="StartingPointListViewTemplate" TargetType="internalcontrols:StartingPointListView">
+    <ControlTemplate x:Key="StartingPointListViewTemplate" TargetType="controls:StartingPointListView">
         <StackPanel>
             <StackPanel Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsInspecting, Converter={StaticResource VisibilityConverter}}">
                 <Grid Background="Transparent">
@@ -36,7 +35,7 @@
                         Margin="8,4,0,4"
                         VerticalAlignment="Center"
                         Command="{TemplateBinding ZoomToCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=internalcontrols:StartingPointListView}, Path=SelectedItem}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=controls:StartingPointListView}, Path=SelectedItem}"
                         Style="{StaticResource UNTraceIconButton}">
                         <Path Data="{StaticResource UNTraceIconZoomTo}" Style="{StaticResource UNTracePathCommandIconStyle}" />
                     </Button>
@@ -45,7 +44,7 @@
                         Margin="8,4,0,4"
                         VerticalAlignment="Center"
                         Command="{TemplateBinding DeleteSelectedCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=internalcontrols:StartingPointListView}, Path=SelectedItem}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=controls:StartingPointListView}, Path=SelectedItem}"
                         Style="{StaticResource UNTraceIconButton}">
                         <Path Data="{StaticResource UNTraceIconDelete}" Style="{StaticResource UNTracePathCommandIconStyle}" />
                     </Button>
@@ -95,7 +94,7 @@
             </StackPanel>
         </StackPanel>
     </ControlTemplate>
-    <Style TargetType="internalcontrols:StartingPointListView">
+    <Style TargetType="controls:StartingPointListView">
         <Setter Property="Template" Value="{StaticResource StartingPointListViewTemplate}" />
     </Style>
 </ResourceDictionary>
