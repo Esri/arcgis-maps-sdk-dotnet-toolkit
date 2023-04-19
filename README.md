@@ -9,7 +9,7 @@
 
 The ArcGIS Maps SDK for .NET Toolkit contains controls and components to accelerate your development with [ArcGIS Maps SDK for .NET](https://developers.arcgis.com/net/).
 
-> **Note**: At version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
+> **Note**: Starting at version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
 
 # Documentation
 
@@ -27,6 +27,7 @@ The ArcGIS Maps SDK for .NET Toolkit contains controls and components to acceler
 | [Legend](docs/legend.md)   | <img src="https://user-images.githubusercontent.com/1378165/73389924-011fc200-428a-11ea-91bf-4ea1c2bf6683.png" width="105" title="Legend" />| Display a legend for a map or scene view. | WinUI, MAUI, UWP, WPF |
 | [MeasureToolbar](docs/measure-toolbar.md)  | ![MeasureToolbar](https://user-images.githubusercontent.com/1378165/73389958-0f6dde00-428a-11ea-8c78-7192d49ea605.png) | Measure distances, areas, and features in a map view. | UWP, WPF |
 |[OverviewMap](docs/overview-map.md) | <img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" width="150" title="Overview Map" /> | Display an interactive inset map for a map or scene. | WinUI, MAUI, UWP, WPF |
+|[PopupViewer](docs/popup-viewer.md) | <img src="https://user-images.githubusercontent.com/3878047/228625594-d0009216-0cb3-4836-9a62-e197371779ac.png" width="150" title="Popup Viewer" /> | Displays information from simple popups. | WinUI, MAUI, UWP, WPF |
 | [ScaleLine](docs/scale-line.md)   | ![ScaleLine](https://user-images.githubusercontent.com/1378165/73390077-3debb900-428a-11ea-8b2f-dfd4914a637e.png) | Display the current scale reference for a map. | WinUI, MAUI, UWP, WPF |
 |[SearchView](docs/search-view.md) | <img title="Search View" width="150" src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" /> | Search using one or more locators, with support for suggestions, automatic zooming, and custom search sources. | WinUI, MAUI, UWP, WPF |
 | [SymbolDisplay](docs/symbol-display.md)   | ![SymbolDisplay](https://user-images.githubusercontent.com/1378165/73390051-31676080-428a-11ea-9feb-afb5d2aa6385.png) | Render a symbol in a control. | WinUI, MAUI, UWP, WPF |
@@ -34,8 +35,6 @@ The ArcGIS Maps SDK for .NET Toolkit contains controls and components to acceler
 |[UtilityNetworkTraceTool](docs/un-trace.md) | ![Utility Network Trace Tool on WPF](https://user-images.githubusercontent.com/29742178/173907265-73cd3a39-c836-433e-baf0-4c60f921ba86.png) | Use named trace configurations defined in a web map to perform connected trace operations and compare results. | WPF, UWP, WinUI, MAUI |
 
 ## Get started
-
-> **Note**: At version 200.0, Toolkit assemblies are now built individually for each platform. Please replace any existing `Esri.ArcGISRuntime.Toolkit` NuGet reference with Toolkit NuGet package specific to that platform. For example if you have a WPF application using Toolkit, you will need to uninstall `Esri.ArcGISRuntime.Toolkit` NuGet package and add `Esri.ArcGISRuntime.Toolkit.WPF` NuGet package.
 
 The simplest way to get started is to add the platform-specific NuGet package(s) to your projects:
 

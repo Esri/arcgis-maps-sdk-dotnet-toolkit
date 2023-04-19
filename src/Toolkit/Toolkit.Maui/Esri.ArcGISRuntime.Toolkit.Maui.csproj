@@ -32,6 +32,8 @@
       <EmbeddedResource Include="Assets\x-small.png" />
       <EmbeddedResource Include="Assets\x.png" />
       <EmbeddedResource Include="Assets\pin-red.png" />
+      <None Include="build\**\*.*" PackagePath="build;buildTransitive" Pack="true" />
+      <None Include="Resources\Fonts\calcite-ui-icons-24.ttf" Pack="true" PackagePath="Resources\Fonts" />
     </ItemGroup>
 
     <ItemGroup>

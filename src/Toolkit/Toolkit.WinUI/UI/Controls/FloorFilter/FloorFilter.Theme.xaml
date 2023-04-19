@@ -736,7 +736,7 @@
 
     <Style TargetType="toolkit:FloorFilter">
         <Setter Property="BrowseLabel" Value="Browse" />
-        <Setter Property="BrowseSitesLabel" Value="Selct a Site" />
+        <Setter Property="BrowseSitesLabel" Value="Select a Site" />
         <Setter Property="BrowseFacilitiesLabel" Value="Select a Facility" />
         <Setter Property="CloseLabel" Value="Close" />
         <Setter Property="CollapseLabel" Value="Collapse" />

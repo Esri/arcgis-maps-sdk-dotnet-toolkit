@@ -14,6 +14,8 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if !WPF
+
 using Esri.ArcGISRuntime.Mapping.Popups;
 
 #if __IOS__
@@ -52,3 +54,4 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#endif
