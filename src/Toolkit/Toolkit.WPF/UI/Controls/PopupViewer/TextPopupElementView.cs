@@ -131,13 +131,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (node.Token?.Name == "ol")
                         list.MarkerStyle = TextMarkerStyle.Decimal;
                     else
-                        list.MarkerStyle = TextMarkerStyle.Circle;
+                        list.MarkerStyle = TextMarkerStyle.Disc;
                     foreach (var itemNode in node.Children)
                     {
                         if (itemNode.Type == MarkupType.ListItem)
                         {
                             var listItem = new ListItem();
                             listItem.Blocks.AddRange(VisitAndAddBlocks(itemNode.Children));
+                            list.ListItems.Add(listItem);
                         }
                         // else ignore a misplaced non-list-item node
                     }
