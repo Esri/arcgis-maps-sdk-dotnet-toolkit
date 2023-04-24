@@ -48,7 +48,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
         private Popup GetPopup(IdentifyLayerResult result)
         {
             if (result == null)
+            {
                 return null;
+            }
+
             var popup = result.Popups.FirstOrDefault();
             if (popup != null)
             {
@@ -93,6 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
                         return new Popup(geoElement, popupDefinition);
                     }
                 }
+
                 return Popup.FromGeoElement(geoElement);
             }
             return BuildPopupFromGeoElement(result.SublayerResults);
@@ -101,12 +105,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
         private Popup BuildPopupFromGeoElement(IEnumerable<IdentifyLayerResult> results)
         {
             if (results == null)
+            {
                 return null;
+            }
             foreach (var result in results)
             {
                 var popup = BuildPopupFromGeoElement(result);
                 if (popup != null)
+                {
                     return popup;
+                }
             }
             return null;
         }
