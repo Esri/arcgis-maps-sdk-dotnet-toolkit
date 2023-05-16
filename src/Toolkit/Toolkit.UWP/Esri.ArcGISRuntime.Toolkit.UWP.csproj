@@ -28,7 +28,7 @@
     <Page Include="**\*.xaml" Exclude="obj\**\*.*">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-	<Content Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Assets\**\*.*"  Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
+	<Content Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Assets\**\*.*" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
     <Compile Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*" Link="%(RecursiveDir)%(Filename)%(Extension)" />
     <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Themes\Generic.xaml;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\UI\Controls\**\*.Resources.xaml">
         <Generator>MSBuild:Compile</Generator>
@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-     <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" />
+     <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'" />
   </ItemGroup>
 
   <Target Name="CopyResources" BeforeTargets="Build;Rebuild">
@@ -49,7 +49,7 @@
        For UWP NuGet content should all be minversion TFM folder. -->
   <Target Name="FixTFMPathsInPackage" AfterTargets="_SdkIncludeWindowsLibraryLayoutItems">
     <ItemGroup>
-      <TfmSpecificPackageFile Update="**\*.*" >
+      <TfmSpecificPackageFile Update="**\*.*">
         <PackagePath>$([System.String]::Copy('%(PackagePath)').Replace('lib\uap10.0.$(WindowsSDKTargetBuild)','lib\uap10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild)'))</PackagePath>
       </TfmSpecificPackageFile>
     </ItemGroup>
@@ -58,4 +58,5 @@
    <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
 
    <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
+   <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 </Project>

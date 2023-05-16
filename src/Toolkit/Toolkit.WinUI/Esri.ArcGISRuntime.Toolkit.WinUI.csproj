@@ -37,11 +37,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" />
+    <PackageReference Include="Esri.ArcGISRuntime.WinUI" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'"/>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
   </ItemGroup>
 
   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
 
   <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
+  <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 </Project>

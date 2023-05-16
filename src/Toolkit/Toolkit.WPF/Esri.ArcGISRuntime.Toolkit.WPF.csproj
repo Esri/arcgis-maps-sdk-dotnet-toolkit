@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" />
+     <PackageReference Include="Esri.ArcGISRuntime.WPF" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,5 +39,5 @@
 
   <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
   <Import Project="..\Toolkit.UI.Controls\Esri.ArcGISRuntime.Toolkit.UI.Controls.projitems" Label="Shared" />
-
+  <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 </Project>
