@@ -13,7 +13,6 @@
                 Margin="{OnPlatform Default='0,0,0,0',
                                     iOS='0,0,0,16'}"
                 BackgroundColor="White"
-                Foreground="Black"
                 HorizontalOptions="FillAndExpand"
                 IsVisible="False"
                 VerticalOptions="EndAndExpand" />

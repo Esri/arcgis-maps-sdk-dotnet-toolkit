@@ -14,29 +14,27 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if XAMARIN && !MAUI
+#if MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 
-namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
-    public partial class PopupViewer
+    public partial class PopupViewer : TemplatedView
     {
-        private PopupManager? _popupManager;
+        private static readonly ControlTemplate DefaultControlTemplate;
 
-        /// <summary>
-        /// Gets or sets the associated PopupManager which contains popup and sketch editor.
-        /// </summary>
-        private PopupManager? PopupManagerImpl
+        static PopupViewer()
         {
-            get => _popupManager;
-            set
-            {
-                if (_popupManager != value)
-                {
-                    _popupManager = value;
-                    Refresh();
-                }
-            }
+            string template = """
+<ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"
+    x:DataType="controls:PopupViewer" x:Name="Self">
+    <Grid RowSpacing="0" x:Name="PART_VisibilityWrapper" IsVisible="True">
+       <Label Text="POPUPVIEWER HERE" />
+   </Grid>
+</ControlTemplate>
+""";
+            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
         }
     }
 }
