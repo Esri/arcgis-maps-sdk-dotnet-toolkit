@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if WPF
 using System.Diagnostics;
 using Esri.ArcGISRuntime.Mapping.Popups;
 
@@ -143,3 +144,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DependencyProperty.Register(nameof(RelationshipPopupElementTemplate), typeof(DataTemplate), typeof(PopupElementItemsControl), new PropertyMetadata(null));*/
     }
 }
+#endif

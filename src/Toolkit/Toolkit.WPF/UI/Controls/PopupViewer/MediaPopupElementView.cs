@@ -13,6 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
+#if WPF
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Collections;
@@ -154,3 +155,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
+#endif

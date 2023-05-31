@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if WPF
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -201,3 +202,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
+#endif

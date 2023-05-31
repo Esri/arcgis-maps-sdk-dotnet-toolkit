@@ -14,43 +14,29 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if !WPF
-
+#if XAMARIN && !MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
-
-#if __IOS__
-using Control = UIKit.UIView;
-#elif __ANDROID__
-using Control = Android.Views.ViewGroup;
-#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// <summary>
-    /// The PopupViewer control is used to display details and media, edit attributes, geometry and related records,
-    /// manage attachments of an <see cref="Data.ArcGISFeature"/> or a <see cref="ArcGISRuntime.UI.Graphic"/>
-    /// as defined in its <see cref="Mapping.Popups.Popup"/>.
-    /// </summary>
-    public partial class PopupViewer : Control
+    public partial class PopupViewer
     {
-#if !__ANDROID__
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PopupViewer"/> class.
-        /// </summary>
-        public PopupViewer()
-            : base()
-        {
-            Initialize();
-        }
-#endif
+        private PopupManager? _popupManager;
 
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>
-        public PopupManager? PopupManager
+        private PopupManager? PopupManagerImpl
         {
-            get => PopupManagerImpl;
-            set => PopupManagerImpl = value;
+            get => _popupManager;
+            set
+            {
+                if (_popupManager != value)
+                {
+                    _popupManager = value;
+                    Refresh();
+                }
+            }
         }
     }
 }
