@@ -8,14 +8,6 @@
         <Grid>
             <esriUI:MapView x:Name="mapView" />
 
-            <esriTK:PopupViewer
-                x:Name="popupViewer"
-                Margin="{OnPlatform Default='0,0,0,0',
-                                    iOS='0,0,0,16'}"
-                BackgroundColor="White"
-                HorizontalOptions="FillAndExpand"
-                IsVisible="False"
-                VerticalOptions="EndAndExpand" />
         </Grid>
     </ContentPage.Content>
 </ContentPage>

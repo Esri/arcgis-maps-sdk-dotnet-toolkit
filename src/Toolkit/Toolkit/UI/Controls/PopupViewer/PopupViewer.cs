@@ -22,7 +22,7 @@ using System.ComponentModel;
 #if MAUI
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
-using ItemsControl = Microsoft.Maui.Controls.ItemsView;
+using ItemsControl = Microsoft.Maui.Controls.ListView;
 #endif
 
 #if MAUI
@@ -95,7 +95,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                         var expressions = await Popup.EvaluateExpressionsAsync();
                         var ctrl = GetTemplateChild("ItemsView") as ItemsControl;
 
-#if !MAUI // TODO
+#if MAUI
+                        if (ctrl != null)
+                        {
+                            ctrl.ItemsSource = Popup.EvaluatedElements; // TODO: Should update binding instead
+                        }
+#else
                         var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
                         binding?.UpdateTarget();
 #endif

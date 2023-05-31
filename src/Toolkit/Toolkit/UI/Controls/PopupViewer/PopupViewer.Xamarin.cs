@@ -29,8 +29,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 <ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"
     x:DataType="controls:PopupViewer" x:Name="Self">
-    <Grid RowSpacing="0" x:Name="PART_VisibilityWrapper" IsVisible="True">
-       <Label Text="POPUPVIEWER HERE" />
+    <Grid BindingContext="{TemplateBinding Popup}">
+           <Grid.RowDefinitions>
+             <RowDefinition Height="Auto"/>
+             <RowDefinition Height="*"/>
+           </Grid.RowDefinitions>
+       <Label Text="{Binding Title}" />
+       <ScrollView VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" x:Name="PopupContentScrollViewer">
+           <ListView ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView"/>
+       </ScrollView>
    </Grid>
 </ControlTemplate>
 """;
