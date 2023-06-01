@@ -8,6 +8,18 @@
         <Grid>
             <esriUI:MapView x:Name="mapView" />
 
+
+            <Border Background="#99ffffff" x:Name="popupPanel" IsVisible="False">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackgroundTapped"
+                              NumberOfTapsRequired="1" />
+                </Border.GestureRecognizers>
+                <Border MaximumWidthRequest="400" MaximumHeightRequest="400" Background="White" Padding="20" Margin="0,50">
+                    <Grid>
+                        <esriTK:PopupViewer x:Name="popupViewer" />
+                    </Grid>
+                </Border>
+            </Border>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

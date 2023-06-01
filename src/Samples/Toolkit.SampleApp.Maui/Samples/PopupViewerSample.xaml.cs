@@ -3,6 +3,7 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Maui;
 using Esri.ArcGISRuntime.Security;
 using Esri.ArcGISRuntime.UI;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
@@ -31,8 +32,10 @@ namespace Toolkit.SampleApp.Maui.Samples
 
                 if (popup != null)
                 {
-                    var page = new ContentPage() {  Content = new Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer() {  Popup = popup } };
-                    await Navigation.PushModalAsync(page);
+                    popupViewer.Popup = popup;
+                    popupPanel.IsVisible = true;
+                    //var page = new ContentPage() {  Content = new Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer() {  Popup = popup } };
+                    //await Navigation.PushModalAsync(page);
                 }
             }
             catch (Exception ex)
@@ -100,6 +103,11 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
 
             return null;
+        }
+
+        private void OnBackgroundTapped(object sender, EventArgs e)
+        {
+            popupPanel.IsVisible = false;
         }
     }
 }
