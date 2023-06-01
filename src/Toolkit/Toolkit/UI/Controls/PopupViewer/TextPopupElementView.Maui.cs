@@ -18,7 +18,6 @@
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
-using Markdig.Renderers.Html.Inlines;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
