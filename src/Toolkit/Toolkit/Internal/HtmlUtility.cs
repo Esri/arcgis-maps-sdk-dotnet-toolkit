@@ -351,9 +351,9 @@ internal class HtmlUtility
                     break;
             }
 
-            if (name is "div" or "td" or "th" or "tr")
+            if (name is "div" or "p" or "td" or "th" or "tr")
             {
-                if (!attr.TryGetValue("align", out var alignStr) && Enum.TryParse<HtmlAlignment>(alignStr, true, out var align))
+                if (attr.TryGetValue("align", out var alignStr) && Enum.TryParse<HtmlAlignment>(alignStr, true, out var align))
                     newNode.Alignment = align;
             }
 
