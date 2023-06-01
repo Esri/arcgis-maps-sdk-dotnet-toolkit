@@ -22,7 +22,7 @@ using System.ComponentModel;
 #if MAUI
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
-using ItemsControl = Microsoft.Maui.Controls.ListView;
+using ItemsControl = Microsoft.Maui.Controls.CollectionView;
 #endif
 
 #if MAUI

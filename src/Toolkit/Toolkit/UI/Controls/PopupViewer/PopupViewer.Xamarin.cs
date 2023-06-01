@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         {
             string template = """
 <ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui"
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui" xmlns:esriP="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
     x:DataType="controls:PopupViewer" x:Name="Self">
     <Grid BindingContext="{TemplateBinding Popup}">
            <Grid.RowDefinitions>
@@ -36,7 +36,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
            </Grid.RowDefinitions>
        <Label Text="{Binding Title}" />
        <ScrollView VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" x:Name="PopupContentScrollViewer">
-           <ListView ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView"/>
+           <CollectionView ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView">
+               <CollectionView.ItemTemplate>
+                   <esriP:PopupElementTemplateSelector>
+                       <esriP:PopupElementTemplateSelector.TextPopupElementTemplate>
+                           <DataTemplate>
+                               <Label Text="TextPopupElementTemplate" />
+                           </DataTemplate>
+                       </esriP:PopupElementTemplateSelector.TextPopupElementTemplate>
+                   </esriP:PopupElementTemplateSelector>
+               </CollectionView.ItemTemplate>
+           </CollectionView>
        </ScrollView>
    </Grid>
 </ControlTemplate>
