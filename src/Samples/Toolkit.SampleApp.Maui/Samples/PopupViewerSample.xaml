@@ -14,7 +14,7 @@
                     <TapGestureRecognizer Tapped="OnBackgroundTapped"
                               NumberOfTapsRequired="1" />
                 </Border.GestureRecognizers>
-                <Border MaximumWidthRequest="400" MaximumHeightRequest="400" Background="White" Padding="20" Margin="0,50">
+                <Border HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="400" MaximumHeightRequest="400" Background="White" Padding="20" Margin="0,50">
                     <Grid>
                         <esriTK:PopupViewer x:Name="popupViewer" />
                     </Grid>
