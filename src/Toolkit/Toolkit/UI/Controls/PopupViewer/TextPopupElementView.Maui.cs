@@ -14,22 +14,13 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
+#if MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
-#if WPF
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Navigation;
-#endif
+using Markdig.Renderers.Html.Inlines;
 
-
-#if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
-#else
-namespace Esri.ArcGISRuntime.Toolkit.Primitives
-#endif
 {
     /// <summary>
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer"/> control,
