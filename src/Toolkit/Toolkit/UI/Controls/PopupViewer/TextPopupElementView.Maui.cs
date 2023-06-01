@@ -45,10 +45,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             var label = GetTemplateChild("TextArea") as Label;
             if (label is null) return;
+            var text = Element?.Text;
+            
 #if !WINDOWS
             label.TextType = TextType.Html;
+#else
+            if (text != null)
+                text = StringExtensions.ToPlainText(text);
 #endif
-            label.Text = Element?.Text;
+            label.Text = text;
         }
     }
 }
