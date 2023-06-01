@@ -41,9 +41,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                    <esriP:PopupElementTemplateSelector>
                        <esriP:PopupElementTemplateSelector.TextPopupElementTemplate>
                            <DataTemplate>
-                               <Label Text="TextPopupElementTemplate" />
+                               <esriP:TextPopupElementView Element="{Binding}" Margin="0,10" />
                            </DataTemplate>
                        </esriP:PopupElementTemplateSelector.TextPopupElementTemplate>
+                       <esriP:PopupElementTemplateSelector.MediaPopupElementTemplate>
+                           <DataTemplate>
+                                <Label Text="MediaPopupElementView" Margin="0,10" />
+                                <!--<esriP:MediaPopupElementView Element="{Binding}" Margin="0,10" />-->
+                           </DataTemplate>
+                       </esriP:PopupElementTemplateSelector.MediaPopupElementTemplate>
+                       <esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
+                           <DataTemplate>
+                               <Label Text="FieldsPopupElementView" Margin="0,10" />
+                               <!--<esriP:FieldsPopupElementView Element="{Binding}" Margin="0,10" />-->
+                           </DataTemplate>
+                       </esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
+                       <esriP:PopupElementTemplateSelector.AttachmentsPopupElementTemplate>
+                           <DataTemplate>
+                               <Label Text="AttachmentsPopupElementView" Margin="0,10" />
+                               <!--<esriP:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />-->
+                           </DataTemplate>
+                       </esriP:PopupElementTemplateSelector.AttachmentsPopupElementTemplate>
+                       <!--<esriP:PopupElementTemplateSelector.RelationshipPopupElementTemplate>
+                           <DataTemplate>
+                               <esriP:RelationshipPopupElementView Element="{Binding}" GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}"  Margin="0,10" />
+                           </DataTemplate>
+                       </esriP:PopupElementTemplateSelector.RelationshipPopupElementTemplate>-->
                    </esriP:PopupElementTemplateSelector>
                </CollectionView.ItemTemplate>
            </CollectionView>
