@@ -52,8 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                        </esriP:PopupElementTemplateSelector.MediaPopupElementTemplate>
                        <esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
                            <DataTemplate>
-                               <Label Text="FieldsPopupElementView" Margin="0,10" />
-                               <!--<esriP:FieldsPopupElementView Element="{Binding}" Margin="0,10" />-->
+                               <esriP:FieldsPopupElementView Element="{Binding}" Margin="0,10" />
                            </DataTemplate>
                        </esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
                        <esriP:PopupElementTemplateSelector.AttachmentsPopupElementTemplate>
