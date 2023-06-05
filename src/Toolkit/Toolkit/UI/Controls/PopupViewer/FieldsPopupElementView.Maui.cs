@@ -26,6 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     public partial class FieldsPopupElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
+        private static readonly Style DefaultFieldTextStyle;
 
         static FieldsPopupElementView()
         {
@@ -37,6 +38,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 </ControlTemplate>
 """;
             DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
+
+            DefaultFieldTextStyle = new Style(typeof(Label));
+            DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.MarginProperty, Value = new Thickness(7) });
+            DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12d });
+            DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.TextColorProperty, Value = Color.FromRgb(0x32, 0x32, 0x32) });
         }
     }
 }

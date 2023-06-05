@@ -37,7 +37,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public FieldsPopupElementView()
         {
 #if MAUI
+            RowEvenBackground = new SolidColorBrush(Color.FromRgb(0xFB, 0xFB, 0xFB));
+            RowOddBackground = new SolidColorBrush(Color.FromRgb(0xED, 0xED, 0xED));
+            DividerBrush = new SolidColorBrush(Color.FromRgba(0x33, 0x33, 0x33, 0x11));
             ControlTemplate = DefaultControlTemplate;
+            FieldTextStyle = DefaultFieldTextStyle;
 #else
             DefaultStyleKey = typeof(FieldsPopupElementView);
 #endif
@@ -98,6 +102,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                 g.RowDefinitions.Add(new RowDefinition());
                 Border b = new Border() { Background = i % 2 == 1 ? RowEvenBackground : RowOddBackground };
+#if MAUI
+                b.StrokeThickness = 0;
+                b.Stroke = null;
+#endif
                 Grid.SetColumnSpan(b, 3);
                 Grid.SetRow(b, i);
                 g.Children.Add(b);
