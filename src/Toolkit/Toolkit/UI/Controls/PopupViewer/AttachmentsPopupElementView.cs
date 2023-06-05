@@ -14,19 +14,19 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Microsoft.Win32;
+#if WPF
 using System.Windows.Controls.Primitives;
+#else
+using ListBox = Microsoft.Maui.Controls.CollectionView;
+using Selector = Microsoft.Maui.Controls.SelectableItemsView;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    /// <summary>
-    /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
-    /// used for rendering a <see cref="AttachmentsPopupElement"/>.
-    /// </summary>
-    [TemplatePart(Name ="AttachmentList", Type = typeof(ListBox))]
-    public class AttachmentsPopupElementView : Control
+    public partial class AttachmentsPopupElementView
     {
         private ListBox? itemsList;
         /// <summary>
@@ -34,11 +34,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public AttachmentsPopupElementView()
         {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+#else
             DefaultStyleKey = typeof(AttachmentsPopupElementView);
+#endif
         }
 
         /// <inheritdoc />
+#if MAUI
+        protected override void OnApplyTemplate()
+#else
         public override void OnApplyTemplate()
+#endif
         {
             base.OnApplyTemplate();
             itemsList = GetTemplateChild("AttachmentList") as ListBox;
@@ -50,45 +58,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private void ItemsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ItemsList_SelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            if(e.AddedItems != null && e.AddedItems.Count > 0)
+#if MAUI
+            if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
+            {
+                var attachment = e.CurrentSelection[0] as PopupAttachment;
+#else
+            if (e.AddedItems != null && e.AddedItems.Count > 0)
             {
                 var attachment = e.AddedItems[0] as PopupAttachment;
-                if(attachment?.Attachment != null)
+#endif
+                if (attachment?.Attachment != null)
                 {
                     OnAttachmentClicked(attachment);
                 }
                 if (sender is Selector s)
-                    s.SelectedValue = null;
-            }
-        }
-
-        /// <summary>
-        /// Occurs when an attachment is clicked.
-        /// </summary>
-        /// <remarks>Override this to prevent the default "save to file dialog" action.</remarks>
-        /// <param name="attachment">Attachment clicked.</param>
-        public virtual async void OnAttachmentClicked(PopupAttachment attachment)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.FileName = attachment.Name;
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    using var stream = await attachment.Attachment!.GetDataAsync();
-                    using var outfile = saveFileDialog.OpenFile();
-                    await stream.CopyToAsync(outfile);
-                }
-                catch { }
+                    s.SelectedItem = null;
             }
         }
 
         private async void LoadAttachments()
         {
             if (itemsList is null) return;
+#if MAUI
+            IsVisible = false;
+#else
             Visibility = Visibility.Collapsed;
+#endif
             itemsList.ItemsSource = null;
             if (Element is not null)
             {
@@ -102,7 +99,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
                 itemsList.ItemsSource = Element?.Attachments;
             }
-            Visibility = (Element?.Attachments?.Count ?? 0) > 0 ? Visibility = Visibility.Visible : Visibility.Collapsed;
+            bool isVisible = (Element?.Attachments?.Count ?? 0) > 0;
+#if MAUI
+            IsVisible = isVisible;
+#else
+            Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+#endif
+
         }
 
         /// <summary>
@@ -117,8 +120,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ElementProperty =
+            BindableProperty.Create(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), null, propertyChanged: (s, o, n) => ((AttachmentsPopupElementView)s).LoadAttachments());
+#else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null, (s, e) => ((AttachmentsPopupElementView)s).LoadAttachments()));
+#endif
     }
 }
 #endif
