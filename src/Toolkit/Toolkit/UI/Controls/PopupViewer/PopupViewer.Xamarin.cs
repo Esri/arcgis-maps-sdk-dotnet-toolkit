@@ -27,7 +27,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         {
             string template = """
 <ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui" xmlns:esriP="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui" xmlns:esriP="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Maui" xmlns:esriPopups="clr-namespace:Esri.ArcGISRuntime.Mapping.Popups"
     x:DataType="controls:PopupViewer" x:Name="Self">
     <Grid BindingContext="{TemplateBinding Popup}">
            <Grid.RowDefinitions>
@@ -46,8 +46,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                        </esriP:PopupElementTemplateSelector.TextPopupElementTemplate>
                        <esriP:PopupElementTemplateSelector.MediaPopupElementTemplate>
                            <DataTemplate>
-                                <Label Text="MediaPopupElementView" Margin="0,10" />
-                                <!--<esriP:MediaPopupElementView Element="{Binding}" Margin="0,10" />-->
+                                <esriP:MediaPopupElementView Element="{Binding}" Margin="0,10" />
                            </DataTemplate>
                        </esriP:PopupElementTemplateSelector.MediaPopupElementTemplate>
                        <esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
@@ -57,8 +56,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                        </esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
                        <esriP:PopupElementTemplateSelector.AttachmentsPopupElementTemplate>
                            <DataTemplate>
-                               <Label Text="AttachmentsPopupElementView" Margin="0,10" />
-                               <!--<esriP:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />-->
+                               <esriP:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
                            </DataTemplate>
                        </esriP:PopupElementTemplateSelector.AttachmentsPopupElementTemplate>
                        <!--<esriP:PopupElementTemplateSelector.RelationshipPopupElementTemplate>
