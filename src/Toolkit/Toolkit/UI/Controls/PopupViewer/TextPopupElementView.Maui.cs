@@ -15,9 +15,8 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -29,21 +28,28 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     {
         private static readonly ControlTemplate DefaultControlTemplate;
 
+        /// <summary>
+        /// Template name of the <see cref="Label"/> text area.
+        /// </summary>
+        public const string TextAreaName = "TextArea";
+
         static TextPopupElementView()
         {
-            string template = """
-<ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:esriP="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives"
-    x:DataType="esriP:TextPopupElementView" x:Name="Self">
-     <Label x:Name="TextArea" />
-</ControlTemplate>
-""";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
+            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+        }
+
+        private static object BuildDefaultTemplate()
+        {
+            Label textArea = new Label();
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(textArea, nameScope);
+            nameScope.RegisterName(TextAreaName, textArea);
+            return textArea;
         }
 
         private void OnElementPropertyChanged()
         {
-            var label = GetTemplateChild("TextArea") as Label;
+            var label = GetTemplateChild(TextAreaName) as Label;
             if (label is null) return;
             var text = Element?.Text;
             
@@ -51,7 +57,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             label.TextType = TextType.Html;
 #else
             if (text != null)
-                text = StringExtensions.ToPlainText(text);
+                text = Toolkit.Internal.StringExtensions.ToPlainText(text);
 #endif
             label.Text = text;
         }

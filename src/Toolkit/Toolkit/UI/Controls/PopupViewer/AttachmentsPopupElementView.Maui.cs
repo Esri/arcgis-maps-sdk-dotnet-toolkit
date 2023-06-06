@@ -15,8 +15,8 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Microsoft.Win32;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -28,26 +28,42 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     {
         private static readonly ControlTemplate DefaultControlTemplate;
 
+        /// <summary>
+        /// Template name of the <see cref="CollectionView"/> attachment list.
+        /// </summary>
+        public const string AttachmentListName = "AttachmentList";
+
         static AttachmentsPopupElementView()
         {
-            string template = """
-<ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:esriP="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives"
-    x:DataType="esriP:AttachmentsPopupElementView" x:Name="Self">
-     <StackLayout>
-         <Label Text="{TemplateBinding Title}" />
-         <Label Text="{TemplateBinding Description}" />
-         <CollectionView x:Name="AttachmentList">
-             <CollectionView.ItemTemplate>
-                  <DataTemplate>
-                        <Label Text="{Binding Name}" Margin="5" />
-                  </DataTemplate>
-             </CollectionView.ItemTemplate>
-         </CollectionView>
-     </StackLayout>
-</ControlTemplate>
-""";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
+            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+        }
+
+        private static object BuildDefaultTemplate()
+        {
+            StackLayout root = new StackLayout();
+            Label roottitle = new Label();
+            roottitle.SetBinding(Label.TextProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent));
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            root.Add(roottitle);
+            Label rootcaption = new Label();
+            rootcaption.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
+            rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            root.Add(rootcaption);
+            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.Single };
+            cv.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
+            cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
+            root.Add(cv);
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName(AttachmentListName, cv);
+            return root;
+        }
+
+        private static object BuildDefaultItemTemplate()
+        {
+            Label attachment = new Label();
+            attachment.SetBinding(Label.TextProperty, "Name");
+            return attachment;
         }
 
         /// <summary>

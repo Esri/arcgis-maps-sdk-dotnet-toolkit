@@ -26,8 +26,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="FieldsPopupElement"/>.
     /// </summary>
+    [TemplatePart(Name = TableAreaContentName, Type = typeof(ContentPresenter))]
     public partial class FieldsPopupElementView : Control
     {
+        private const string TableAreaContentName = "TableAreaContent";
     }
 }
 #endif

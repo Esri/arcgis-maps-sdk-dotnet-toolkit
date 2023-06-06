@@ -81,7 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void RefreshTable()
         {
-            var presenter = GetTemplateChild("TableAreaContent") as ContentPresenter;
+            var presenter = GetTemplateChild(TableAreaContentName) as ContentPresenter;
             if (presenter is null) return;
             if (Element is null)
             {

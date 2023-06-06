@@ -23,6 +23,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
     {
         private static readonly ControlTemplate DefaultControlTemplate;
 
+        /// <summary>
+        /// Template name of the <see cref="CollectionView"/> items view.
+        /// </summary>
+        public const string ItemsViewName = "ItemsView";
+
+        /// <summary>
+        /// Template name of the popup content's <see cref="ScrollViewer"/>.
+        /// </summary>
+        public const string PopupContentScrollViewerName = "PopupContentScrollViewer";
+        
         static PopupViewer()
         {
             string template = """

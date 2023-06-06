@@ -24,10 +24,13 @@ using System.Diagnostics;
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// </summary>
-    [TemplatePart(Name = "PopupContentScrollViewer", Type = typeof(ScrollViewer))]
-    [TemplatePart(Name = "ItemsView", Type = typeof(ItemsControl))]
+    [TemplatePart(Name = PopupContentScrollViewerName, Type = typeof(ScrollViewer))]
+    [TemplatePart(Name = ItemsViewName, Type = typeof(ItemsControl))]
     public partial class PopupViewer : Control
     {
+        private const string ItemsViewName = "ItemsView";
+        private const string PopupContentScrollViewerName = "PopupContentScrollViewer";
+
         /// <summary>
         /// Gets or sets the associated PopupManager which contains popup and sketch editor.
         /// </summary>

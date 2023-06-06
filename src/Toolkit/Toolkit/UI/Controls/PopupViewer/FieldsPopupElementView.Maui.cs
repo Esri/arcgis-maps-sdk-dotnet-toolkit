@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -28,21 +29,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly Style DefaultFieldTextStyle;
 
+        /// <summary>
+        /// Template name of the <see cref="Label"/> text area.
+        /// </summary>
+        public const string TableAreaContentName = "TableAreaContent";
+
         static FieldsPopupElementView()
         {
-            string template = """
-<ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:esriP="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives"
-    x:DataType="esriP:FieldsPopupElementView" x:Name="Self">
-     <ContentPresenter x:Name="TableAreaContent" />
-</ControlTemplate>
-""";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
-
+            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
             DefaultFieldTextStyle = new Style(typeof(Label));
             DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.MarginProperty, Value = new Thickness(7) });
             DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12d });
             DefaultFieldTextStyle.Setters.Add(new Setter() { Property = Label.TextColorProperty, Value = Color.FromRgb(0x32, 0x32, 0x32) });
+        }
+
+        private static object BuildDefaultTemplate()
+        {
+            var presenter = new ContentPresenter();
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(presenter, nameScope);
+            nameScope.RegisterName(TableAreaContentName, presenter);
+            return presenter;
         }
     }
 }

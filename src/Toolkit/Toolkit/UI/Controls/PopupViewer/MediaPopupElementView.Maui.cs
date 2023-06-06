@@ -17,7 +17,6 @@
 
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -47,8 +46,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
             root.Add(roottitle);
             Label rootcaption = new Label();
-            rootcaption.SetBinding(Label.TextProperty, new Binding("Element.Caption", source: RelativeBindingSource.TemplatedParent));
-            rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Caption", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            rootcaption.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
+            rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
             root.Add(rootcaption);
             CarouselView cv = new CarouselView();
             cv.SetBinding(CarouselView.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));

@@ -25,9 +25,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="AttachmentsPopupElement"/>.
     /// </summary>
-    [TemplatePart(Name ="AttachmentList", Type = typeof(ListBox))]
+    [TemplatePart(Name = AttachmentListName, Type = typeof(ListBox))]
     public partial class AttachmentsPopupElementView : Control
     {
+        private const string AttachmentListName = "AttachmentList";
+
         /// <summary>
         /// Occurs when an attachment is clicked.
         /// </summary>

@@ -32,7 +32,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class AttachmentsPopupElementView
     {
-        private ListBox? itemsList;
         /// <summary>
         /// Initializes a new instance of the <see cref="AttachmentsPopupElementView"/> class.
         /// </summary>
@@ -53,10 +52,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
-            itemsList = GetTemplateChild("AttachmentList") as ListBox;
+            var itemsList = GetTemplateChild(AttachmentListName) as Selector;
             if (itemsList != null)
             {
-                itemsList.SelectionMode = SelectionMode.Single;
                 itemsList.SelectionChanged += ItemsList_SelectionChanged;
                 LoadAttachments();
             }
@@ -84,6 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private async void LoadAttachments()
         {
+            var itemsList = GetTemplateChild(AttachmentListName) as Selector;
             if (itemsList is null) return;
 #if MAUI
             IsVisible = false;

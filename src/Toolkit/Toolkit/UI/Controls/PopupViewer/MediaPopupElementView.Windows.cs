@@ -25,6 +25,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="MediaPopupElement"/>.
     /// </summary>
+    [TemplatePart(Name = "PreviousButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "NextButton", Type = typeof(ButtonBase))]
     public partial class MediaPopupElementView : Control
     {    
         private ButtonBase? _previousButton;

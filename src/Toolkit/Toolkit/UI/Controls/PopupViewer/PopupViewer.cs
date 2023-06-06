@@ -93,7 +93,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (Popup != null)
                     {
                         var expressions = await Popup.EvaluateExpressionsAsync();
-                        var ctrl = GetTemplateChild("ItemsView") as ItemsControl;
+                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
 
 #if MAUI
                         if (ctrl != null)
@@ -169,9 +169,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             popupViewer.InvalidatePopup();
 #if MAUI
-            (popupViewer.GetTemplateChild("PopupContentScrollViewer") as ScrollViewer)?.ScrollToAsync(0,0,false);
+            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
 #else
-            (popupViewer.GetTemplateChild("PopupContentScrollViewer") as ScrollViewer)?.ScrollToHome();
+            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
 #endif
         }
 
