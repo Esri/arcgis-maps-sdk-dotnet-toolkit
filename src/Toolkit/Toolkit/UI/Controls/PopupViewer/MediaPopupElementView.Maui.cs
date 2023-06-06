@@ -44,10 +44,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Label roottitle = new Label();
             roottitle.SetBinding(Label.TextProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            roottitle.Style = PopupViewer.GetPopupViewerTitleStyle();
             root.Add(roottitle);
             Label rootcaption = new Label();
             rootcaption.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(rootcaption);
             CarouselView cv = new CarouselView();
             cv.SetBinding(CarouselView.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));
@@ -71,10 +73,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Label title = new Label();
             title.SetBinding(Label.TextProperty, "Title");
             title.SetBinding(VisualElement.IsVisibleProperty, new Binding("Title", converter: Internal.EmptyToFalseConverter.Instance));
+            title.Style = PopupViewer.GetPopupViewerTitleStyle();
             layout.Add(title);
             Label caption = new Label();
             caption.SetBinding(Label.TextProperty, "Caption");
             caption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Caption", converter: Internal.EmptyToFalseConverter.Instance));
+            caption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             layout.Add(caption);
             return layout;
         }

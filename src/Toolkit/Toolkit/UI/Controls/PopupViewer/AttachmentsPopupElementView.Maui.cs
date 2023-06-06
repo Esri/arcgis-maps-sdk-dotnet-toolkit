@@ -44,10 +44,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Label roottitle = new Label();
             roottitle.SetBinding(Label.TextProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            roottitle.Style = PopupViewer.GetPopupViewerTitleStyle();
             root.Add(roottitle);
             Label rootcaption = new Label();
             rootcaption.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(rootcaption);
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.Single };
             cv.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));

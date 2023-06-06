@@ -24,6 +24,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
     public partial class PopupViewer : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
+        private static readonly Style DefaultPopupViewerHeaderStyle;
+        private static readonly Style DefaultPopupViewerTitleStyle;
+        private static readonly Style DefaultPopupViewerCaptionStyle;
 
         /// <summary>
         /// Template name of the <see cref="CollectionView"/> items view.
@@ -35,14 +38,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// </summary>
         public const string PopupContentScrollViewerName = "PopupContentScrollViewer";
 
-        internal const string PopupViewerHeaderStyleName = "PopupViewerHeaderStyle";
-        internal const string PopupViewerTitleStyleName = "PopupViewerTitleStyle";
-        internal const string PopupViewerCaptionStyleName = "PopupViewerCaptionStyle";
-        internal const string FieldsPopupElementViewTextStyleName = "FieldsPopupElementViewTextStyle";
+        private const string PopupViewerHeaderStyleName = "PopupViewerHeaderStyle";
+        private const string PopupViewerTitleStyleName = "PopupViewerTitleStyle";
+        private const string PopupViewerCaptionStyleName = "PopupViewerCaptionStyle";
 
         static PopupViewer()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+            DefaultPopupViewerHeaderStyle = new Style(typeof(Label));
+            DefaultPopupViewerHeaderStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 16 });
+            DefaultPopupViewerHeaderStyle.Setters.Add(new Setter() { Property = Label.FontAttributesProperty, Value = FontAttributes.Bold });
+            DefaultPopupViewerHeaderStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
+
+            DefaultPopupViewerTitleStyle = new Style(typeof(Label));
+            DefaultPopupViewerTitleStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 16 });
+            DefaultPopupViewerTitleStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
+
+            DefaultPopupViewerCaptionStyle = new Style(typeof(Label));
+            DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12 });
+            DefaultPopupViewerCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
         }
 
         private static object BuildDefaultTemplate()
@@ -51,6 +65,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             Label roottitle = new Label();
+            roottitle.Style = GetPopupViewerHeaderStyle();
             roottitle.SetBinding(Label.TextProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
             root.Add(roottitle);
@@ -69,6 +84,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             nameScope.RegisterName(ItemsViewName, cv);
             return root;
         }
+
+        internal static Style GetStyle(string resourceKey, Style defaultStyle)
+        {
+            if (Application.Current?.Resources?.TryGetValue(resourceKey, out var value) == true && value is Style style)
+            {
+                return style;
+            }
+            return defaultStyle;
+        }
+
+        internal static Style GetPopupViewerHeaderStyle() => GetStyle(PopupViewerHeaderStyleName, DefaultPopupViewerHeaderStyle);
+
+        internal static Style GetPopupViewerTitleStyle() => GetStyle(PopupViewerTitleStyleName, DefaultPopupViewerTitleStyle);
+
+        internal static Style GetPopupViewerCaptionStyle() => GetStyle(PopupViewerCaptionStyleName, DefaultPopupViewerCaptionStyle);
     }
 }
 #endif
