@@ -24,7 +24,11 @@ using ListBox = Microsoft.Maui.Controls.CollectionView;
 using Selector = Microsoft.Maui.Controls.SelectableItemsView;
 #endif
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
 {
     public partial class AttachmentsPopupElementView
     {

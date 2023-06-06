@@ -18,7 +18,7 @@
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Microsoft.Win32;
 
-namespace Esri.ArcGISRuntime.Toolkit.Primitives
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
     /// <summary>
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer"/> control,
