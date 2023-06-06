@@ -15,7 +15,9 @@
 //  ******************************************************************************/
 
 #if MAUI
+using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
@@ -29,59 +31,43 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         public const string ItemsViewName = "ItemsView";
 
         /// <summary>
-        /// Template name of the popup content's <see cref="ScrollViewer"/>.
+        /// Template name of the popup content's <see cref="ScrollView"/>.
         /// </summary>
         public const string PopupContentScrollViewerName = "PopupContentScrollViewer";
-        
+
+        internal const string PopupViewerHeaderStyleName = "PopupViewerHeaderStyle";
+        internal const string PopupViewerTitleStyleName = "PopupViewerTitleStyle";
+        internal const string PopupViewerCaptionStyleName = "PopupViewerCaptionStyle";
+        internal const string FieldsPopupElementViewTextStyleName = "FieldsPopupElementViewTextStyle";
+
         static PopupViewer()
         {
-            string template = """
-<ControlTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui" xmlns:esriP="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Maui" xmlns:esriPopups="clr-namespace:Esri.ArcGISRuntime.Mapping.Popups"
-    x:DataType="controls:PopupViewer" x:Name="Self">
-    <Grid BindingContext="{TemplateBinding Popup}">
-           <Grid.RowDefinitions>
-             <RowDefinition Height="Auto"/>
-             <RowDefinition Height="*"/>
-           </Grid.RowDefinitions>
-       <Label Text="{Binding Title}" />
-       <ScrollView VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" Grid.Row="1" x:Name="PopupContentScrollViewer">
-           <CollectionView ItemsSource="{Binding EvaluatedElements}" Margin="0,10" x:Name="ItemsView">
-               <CollectionView.ItemTemplate>
-                   <esriP:PopupElementTemplateSelector>
-                       <esriP:PopupElementTemplateSelector.TextPopupElementTemplate>
-                           <DataTemplate>
-                               <esriP:TextPopupElementView Element="{Binding}" Margin="0,10" />
-                           </DataTemplate>
-                       </esriP:PopupElementTemplateSelector.TextPopupElementTemplate>
-                       <esriP:PopupElementTemplateSelector.MediaPopupElementTemplate>
-                           <DataTemplate>
-                                <esriP:MediaPopupElementView Element="{Binding}" Margin="0,10" />
-                           </DataTemplate>
-                       </esriP:PopupElementTemplateSelector.MediaPopupElementTemplate>
-                       <esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
-                           <DataTemplate>
-                               <esriP:FieldsPopupElementView Element="{Binding}" Margin="0,10" />
-                           </DataTemplate>
-                       </esriP:PopupElementTemplateSelector.FieldsPopupElementTemplate>
-                       <esriP:PopupElementTemplateSelector.AttachmentsPopupElementTemplate>
-                           <DataTemplate>
-                               <esriP:AttachmentsPopupElementView Element="{Binding}" Margin="0,10" />
-                           </DataTemplate>
-                       </esriP:PopupElementTemplateSelector.AttachmentsPopupElementTemplate>
-                       <!--<esriP:PopupElementTemplateSelector.RelationshipPopupElementTemplate>
-                           <DataTemplate>
-                               <esriP:RelationshipPopupElementView Element="{Binding}" GeoElement="{Binding Popup.GeoElement, RelativeSource={RelativeSource AncestorType=controls:PopupViewer}}"  Margin="0,10" />
-                           </DataTemplate>
-                       </esriP:PopupElementTemplateSelector.RelationshipPopupElementTemplate>-->
-                   </esriP:PopupElementTemplateSelector>
-               </CollectionView.ItemTemplate>
-           </CollectionView>
-       </ScrollView>
-   </Grid>
-</ControlTemplate>
-""";
-            DefaultControlTemplate = new ControlTemplate().LoadFromXaml(template);
+            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+        }
+
+        private static object BuildDefaultTemplate()
+        {
+            Grid root = new Grid();
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+            Label roottitle = new Label();
+            roottitle.SetBinding(Label.TextProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent));
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            root.Add(roottitle);
+            ScrollView scrollView = new ScrollView();
+            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            Grid.SetRow(scrollView, 1);
+            root.Add(scrollView);
+            
+            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None, Margin = new Thickness(0, 10) };
+            cv.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent));
+            cv.ItemTemplate = new PopupElementTemplateSelector();
+            scrollView.Content = cv;
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName(PopupContentScrollViewerName, scrollView);
+            nameScope.RegisterName(ItemsViewName, cv);
+            return root;
         }
     }
 }

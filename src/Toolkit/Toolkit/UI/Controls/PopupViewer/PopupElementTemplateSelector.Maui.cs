@@ -29,13 +29,53 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     /// </summary>
     public class PopupElementTemplateSelector : DataTemplateSelector
     {
-        public PopupElementTemplateSelector() 
+        private static DataTemplate DefaultTextPopupElementTemplate;
+        private static DataTemplate DefaultMediaPopupElementTemplate;
+        private static DataTemplate DefaultFieldsPopupElementTemplate;
+        private static DataTemplate DefaultAttachmentsPopupElementTemplate;
+        
+        static PopupElementTemplateSelector()
         {
+            DefaultTextPopupElementTemplate = new DataTemplate(() =>
+            {
+                var view = new TextPopupElementView() { Margin = new Thickness(0, 10) };
+                view.SetBinding(TextPopupElementView.ElementProperty, Binding.SelfPath);
+                return view;
+            });
+            DefaultMediaPopupElementTemplate = new DataTemplate(() =>
+            {
+                var view = new MediaPopupElementView() { Margin = new Thickness(0, 10) };
+                view.SetBinding(MediaPopupElementView.ElementProperty, Binding.SelfPath);
+                return view;
+            });
+            DefaultFieldsPopupElementTemplate = new DataTemplate(() =>
+            {
+                var view = new FieldsPopupElementView() { Margin = new Thickness(0, 10) };
+                view.SetBinding(FieldsPopupElementView.ElementProperty, Binding.SelfPath);
+                return view;
+            });
+            DefaultAttachmentsPopupElementTemplate = new DataTemplate(() =>
+            {
+                var view = new AttachmentsPopupElementView() { Margin = new Thickness(0, 10) };
+                view.SetBinding(AttachmentsPopupElementView.ElementProperty, Binding.SelfPath);
+                return view;
+            });
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PopupElementTemplateSelector"/> class.
+        /// </summary>
+        public PopupElementTemplateSelector() 
+        {
+            TextPopupElementTemplate = DefaultTextPopupElementTemplate;
+            MediaPopupElementTemplate = DefaultMediaPopupElementTemplate;
+            FieldsPopupElementTemplate = DefaultFieldsPopupElementTemplate;
+            AttachmentsPopupElementTemplate = DefaultAttachmentsPopupElementTemplate;
+        }
+
+        /// <inheritdoc />
         protected override DataTemplate OnSelectTemplate(object item, BindableObject element)
         {
-            //new ListView().templ
             if (item is TextPopupElement)
             {
                 return TextPopupElementTemplate;
