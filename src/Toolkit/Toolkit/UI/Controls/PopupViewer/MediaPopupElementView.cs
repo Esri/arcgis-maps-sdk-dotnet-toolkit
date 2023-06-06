@@ -52,7 +52,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(MediaPopupElement), typeof(MediaPopupElementView), null);
+            BindableProperty.Create(nameof(Element), typeof(MediaPopupElement), typeof(MediaPopupElementView), null, propertyChanged: (s, o, n) => ((MediaPopupElementView)s).OnElementPropertyChanged());
 #else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(MediaPopupElement), typeof(MediaPopupElementView), new PropertyMetadata(null, (s, e) => ((MediaPopupElementView)s).OnElementPropertyChanged()));

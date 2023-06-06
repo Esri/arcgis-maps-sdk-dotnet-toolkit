@@ -15,7 +15,9 @@
 //  ******************************************************************************/
 #if MAUI
 
+using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -26,6 +28,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     public partial class MediaPopupElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
+        
+        /// <summary>
+        /// Name of the carousel control in the template.
+        /// </summary>
+        public const string CarouselName = "Carousel";
 
         static MediaPopupElementView()
         {
@@ -37,17 +44,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             StackLayout root = new StackLayout();
             Label roottitle = new Label();
             roottitle.SetBinding(Label.TextProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent));
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
             root.Add(roottitle);
             Label rootcaption = new Label();
             rootcaption.SetBinding(Label.TextProperty, new Binding("Element.Caption", source: RelativeBindingSource.TemplatedParent));
+            rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Caption", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
             root.Add(rootcaption);
             CarouselView cv = new CarouselView();
             cv.SetBinding(CarouselView.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
-            IndicatorView iv = new IndicatorView();
+            IndicatorView iv = new IndicatorView() { HorizontalOptions = LayoutOptions.Center };
             cv.IndicatorView = iv;
             root.Add(cv);
             root.Add(iv);
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName(CarouselName, cv);
             return root;
         }
 
@@ -59,11 +71,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(pm);
             Label title = new Label();
             title.SetBinding(Label.TextProperty, "Title");
+            title.SetBinding(VisualElement.IsVisibleProperty, new Binding("Title", converter: Internal.EmptyToFalseConverter.Instance));
             layout.Add(title);
             Label caption = new Label();
             caption.SetBinding(Label.TextProperty, "Caption");
+            caption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Caption", converter: Internal.EmptyToFalseConverter.Instance));
             layout.Add(caption);
             return layout;
+        }
+
+        private void OnElementPropertyChanged()
+        {
+            int count = Element?.Media is null ? 0 : Element.Media.Count;
+            var carousel = GetTemplateChild(CarouselName) as CarouselView;
+            if(carousel is not null)
+            {
+                carousel.IsSwipeEnabled = count > 1;
+            }
         }
     }
 }
