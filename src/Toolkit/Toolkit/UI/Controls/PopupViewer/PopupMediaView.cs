@@ -186,7 +186,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var scalefactor = dpi / 96;
             try
             {
-                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi });
+                Mapping.ChartImageStyle style = Mapping.ChartImageStyle.Neutral;
+#if MAUI
+                switch (Application.Current?.RequestedTheme)
+                {
+                    case Microsoft.Maui.ApplicationModel.AppTheme.Dark: style = Mapping.ChartImageStyle.Dark; break;
+                    case Microsoft.Maui.ApplicationModel.AppTheme.Light: style = Mapping.ChartImageStyle.Light; break;
+                    default: style = Mapping.ChartImageStyle.Neutral; break;
+                }
+#endif
+                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi, Style = style });
                 var source = await chart.Image.ToImageSourceAsync();
 #if MAUI
                 return source;
