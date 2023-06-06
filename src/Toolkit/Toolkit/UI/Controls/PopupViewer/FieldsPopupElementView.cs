@@ -142,7 +142,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         if (uri is not null)
                             _ = Launcher.LaunchUriAsync(uri);
                     };
-                    hl.GestureRecognizers.Add(gestureRecognizer);
+                    t.GestureRecognizers.Add(gestureRecognizer);
                     t.FormattedText = new FormattedString();
                     t.FormattedText.Spans.Add(hl);
 #else
