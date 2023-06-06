@@ -42,7 +42,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public PopupMediaView()
         {
 #if !MAUI
-            DefaultStyleKey = typeof(PopupMediaView);
             HorizontalContentAlignment = HorizontalAlignment.Stretch;
             VerticalContentAlignment = VerticalAlignment.Stretch;
 #endif
