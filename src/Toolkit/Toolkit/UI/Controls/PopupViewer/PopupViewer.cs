@@ -20,9 +20,12 @@ using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 using ItemsControl = Microsoft.Maui.Controls.CollectionView;
+#else
+using Esri.ArcGISRuntime.Toolkit.Primitives;
 #endif
 
 #if MAUI
@@ -36,6 +39,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// manage attachments of an <see cref="Data.ArcGISFeature"/> or a <see cref="ArcGISRuntime.UI.Graphic"/>
     /// as defined in its <see cref="Mapping.Popups.Popup"/>.
     /// </summary>
+    /// <remarks>
+    /// <para>The <see cref="PopupViewer"/> consists of a number of sub-controls all in the <see cref="Primitives"/> namespace.
+    /// <list type="bullet">
+    ///  <listheader>
+    ///     <term>Control</term>
+    ///     <description>Description</description>
+    ///   </listheader>
+    ///   <item><term><see cref="AttachmentsPopupElementView"/></term><description>Displays and downloads the attachments defind by the <see cref="AttachmentsPopupElement"/>.</description></item>
+    ///   <item><term><see cref="FieldsPopupElementView"/></term><description>Displays the feature fields defined by the <see cref="FieldsPopupElement"/>.</description></item>
+    ///   <item><term><see cref="MediaPopupElementView"/></term><description>Displays the images and charts defined by the <see cref="MediaPopupElement"/>.</description></item>
+    ///   <item><term><see cref="TextPopupElementView"/></term><description>Displays the text content defined by the <see cref="TextPopupElement"/>.</description></item>
+    /// </list>
+    /// </para>
+    /// <para>In addition to overwrite the control templates of this control and its child controls, the following styles are available for overriding text styling:
+    /// <list type="bullet">
+    ///  <listheader>
+    ///     <term>Resource Key</term>
+    ///     <description>Description</description>
+    ///   </listheader>
+    ///   <item><term>PopupViewerHeaderStyle</term><description>Label style for the main popup header.</description></item>
+    ///   <item><term>PopupViewerTitleStyle</term><description>Label style for the title of each popup element.</description></item>
+    ///   <item><term>PopupViewerCaptionStyle</term><description>Label style for the caption of each popup element.</description></item>
+    /// </list>
+    /// </para>
+    /// </remarks>
     public partial class PopupViewer
     {
         private WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>? _dynamicEntityChangedListener;

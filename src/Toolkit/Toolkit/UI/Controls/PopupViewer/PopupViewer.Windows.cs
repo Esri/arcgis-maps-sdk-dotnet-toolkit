@@ -23,7 +23,6 @@ using System.Diagnostics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
-    /// </summary>
     [TemplatePart(Name = PopupContentScrollViewerName, Type = typeof(ScrollViewer))]
     [TemplatePart(Name = ItemsViewName, Type = typeof(ItemsControl))]
     public partial class PopupViewer : Control
