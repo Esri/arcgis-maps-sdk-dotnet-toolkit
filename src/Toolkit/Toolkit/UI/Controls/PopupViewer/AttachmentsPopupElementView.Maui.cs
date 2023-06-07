@@ -139,9 +139,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
 #if WINDOWS
                 var savePicker = new Windows.Storage.Pickers.FileSavePicker();
-                var initializeWithWindow = savePicker.As<IInitializeWithWindow>();
                 var hwnd = this.Window.Handler.PlatformView.As<IWindowNative>().WindowHandle;
-                initializeWithWindow.Initialize(hwnd);
+                WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
                 savePicker.SuggestedFileName = attachment.Name;
                 var storage = await savePicker.PickSaveFileAsync();
                 using (var stream = await storage.OpenStreamForWriteAsync())
