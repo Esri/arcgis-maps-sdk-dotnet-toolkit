@@ -128,6 +128,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
+#if WINDOWS
+        private bool _isSaveDialogOpen = false;
+#endif
+
         /// <summary>
         /// Occurs when an attachment is clicked.
         /// </summary>
@@ -135,19 +139,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         /// <param name="attachment">Attachment clicked.</param>
         public virtual async void OnAttachmentClicked(PopupAttachment attachment)
         {
+            if (attachment.LoadStatus == LoadStatus.NotLoaded)
+            {
+                _ = attachment.LoadAsync();
+                return;
+            }
             if (attachment.LoadStatus == LoadStatus.Loaded && attachment.Attachment != null)
             {
 #if WINDOWS
+                if (_isSaveDialogOpen) return;
+                _isSaveDialogOpen = true;
                 var savePicker = new Windows.Storage.Pickers.FileSavePicker();
                 var hwnd = this.Window.Handler.PlatformView.As<IWindowNative>().WindowHandle;
                 WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
                 savePicker.SuggestedFileName = attachment.Name;
-                var storage = await savePicker.PickSaveFileAsync();
-                using (var stream = await storage.OpenStreamForWriteAsync())
+                var finfo = new FileInfo(attachment.Name);
+                if(string.IsNullOrEmpty(finfo.Extension))                    
+                    savePicker.FileTypeChoices.Add("*.*", new List<string>() { "." });
+                else
+                    savePicker.FileTypeChoices.Add(finfo.Extension, new List<string>() { finfo.Extension });
+                try
                 {
-                    using var dataStream = await attachment.Attachment.GetDataAsync();
-                    await dataStream.CopyToAsync(stream);
+                    var storage = await savePicker.PickSaveFileAsync();
+                    if (storage is null) return;
+                    using (var stream = await storage.OpenStreamForWriteAsync())
+                    {
+                        using var dataStream = await attachment.Attachment.GetDataAsync();
+                        await dataStream.CopyToAsync(stream);
+                    }
                 }
+                catch {
+                    // TODO
+                }
+                _isSaveDialogOpen = false;
 #elif IOS
                 // TODO: Use QuickLook Previewer
                 //QuickLook.QLPreviewController controller = new QuickLook.QLPreviewController();
