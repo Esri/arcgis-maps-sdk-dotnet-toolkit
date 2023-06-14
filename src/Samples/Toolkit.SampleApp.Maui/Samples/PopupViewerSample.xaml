@@ -10,13 +10,10 @@
 
 
             <Border Background="#99ffffff" x:Name="popupPanel" IsVisible="False">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnBackgroundTapped"
-                              NumberOfTapsRequired="1" />
-                </Border.GestureRecognizers>
-                <Border HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="400" MaximumHeightRequest="400" Background="White" Padding="20" Margin="0,50">
+                <Border HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="400" MaximumHeightRequest="400" Background="White" Margin="0,50" Padding="20">
                     <Grid>
-                        <esriTK:PopupViewer x:Name="popupViewer" />
+                        <esriTK:PopupViewer x:Name="popupViewer" Margin="20" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" />
+                        <Button BorderWidth="0" Text="X" HorizontalOptions="End" VerticalOptions="Start" Clicked="CloseButton_Click" BackgroundColor="Transparent" TextColor="Black" Margin="5" />
                     </Grid>
                 </Border>
             </Border>

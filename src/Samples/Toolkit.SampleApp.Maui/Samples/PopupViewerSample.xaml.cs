@@ -109,5 +109,21 @@ namespace Toolkit.SampleApp.Maui.Samples
         {
             popupPanel.IsVisible = false;
         }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            popupPanel.IsVisible = false;
+        }
+
+        private void popupViewer_PopupAttachmentClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs e)
+        {
+            e.Handled = true; // Prevent default launch action
+            // Share file:
+            // _ = Share.Default.RequestAsync(new ShareFileRequest(new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
+
+            // Open default file handler
+            _ = Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
+                 new Microsoft.Maui.ApplicationModel.OpenFileRequest(e.Attachment.Name, new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
+        }
     }
 }
