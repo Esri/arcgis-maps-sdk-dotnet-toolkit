@@ -99,6 +99,59 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         internal static Style GetPopupViewerTitleStyle() => GetStyle(PopupViewerTitleStyleName, DefaultPopupViewerTitleStyle);
 
         internal static Style GetPopupViewerCaptionStyle() => GetStyle(PopupViewerCaptionStyleName, DefaultPopupViewerCaptionStyle);
+
+        /// <summary>
+        /// Raised when a loaded popup attachment is clicked
+        /// </summary>
+        /// <remarks>
+        /// <para>By default, when an attachment is clicked, the default application for the file type (if any) is launched. To override this,
+        /// listen to this event, set the <see cref="PopupAttachmentClickedEventArgs.Handled"/> property to <c>true</c> and perform
+        /// your own logic. </para>
+        /// <example>
+        /// Example: Use the .NET MAUI share API for the attachment:
+        /// <code language="csharp">
+        /// private async void PopupAttachmentClicked(object sender, PopupAttachmentClickedEventArgs e)
+        /// {
+        ///     e.Handled = true; // Prevent default launch action
+        ///     await Share.Default.RequestAsync(new ShareFileRequest(new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
+        /// }
+        /// </code>
+        /// </example>
+        /// </remarks>
+        public event EventHandler<PopupAttachmentClickedEventArgs>? PopupAttachmentClicked;
+
+        internal bool OnPopupAttachmentClicked(PopupAttachment attachment)
+        {
+            var handler = PopupAttachmentClicked;
+            if (handler is not null)
+            {
+                var args = new PopupAttachmentClickedEventArgs(attachment);
+                PopupAttachmentClicked?.Invoke(this, args);
+                return args.Handled;
+            }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Event argument for the <see cref="PopupViewer.PopupAttachmentClicked"/> event.
+    /// </summary>
+    public class PopupAttachmentClickedEventArgs : EventArgs
+    {
+        internal PopupAttachmentClickedEventArgs(PopupAttachment attachment)
+        {
+            Attachment = attachment;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the event handler has handled the event and the default action should be prevented.
+        /// </summary>
+        public bool Handled { get; set; }
+
+        /// <summary>
+        /// Gets the attachment that was clicked.
+        /// </summary>
+        public PopupAttachment Attachment { get; }
     }
 }
 #endif

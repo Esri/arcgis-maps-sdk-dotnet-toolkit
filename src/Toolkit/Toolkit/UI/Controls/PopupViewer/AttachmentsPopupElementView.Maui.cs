@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(rootcaption);
             root.Add(new Border() { StrokeThickness = 0, HeightRequest = 1, BackgroundColor = Colors.Gray, Margin = new Thickness(0,5) });
-            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.Single };
+            CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None };
             cv.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             root.Add(cv);
@@ -71,6 +71,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultItemTemplate()
         {
             Grid layout = new Grid();
+            TapGestureRecognizer itemTapGesture = new TapGestureRecognizer();
+            itemTapGesture.Tapped += Attachment_Tapped;
+            layout.GestureRecognizers.Add(itemTapGesture);
             layout.ColumnDefinitions.Add(new ColumnDefinition(30));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             layout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
@@ -97,9 +100,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Image image2 = new Image() { WidthRequest = 18, HeightRequest = 18 };
             image2.SetBinding(Image.IsVisibleProperty, new Binding(nameof(AttachmentViewModel.IsDownloadButtonVisible)));
             image2.Source = new FontImageSource() { Glyph = ((char)0xE16C).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
-            TapGestureRecognizer tapGesture = new TapGestureRecognizer();
-            tapGesture.Tapped += TapGesture_Tapped;
-            image2.GestureRecognizers.Add(tapGesture);
             Grid.SetColumn(image2, 2);
             Grid.SetRowSpan(image2, 2);
             layout.Add(image2);
@@ -119,23 +119,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return root;
         }
 
-        private static void TapGesture_Tapped(object? sender, EventArgs e)
+        private static void Attachment_Tapped(object? sender, EventArgs e)
         {
-            var img = sender as Image;
-            if(img?.BindingContext is AttachmentViewModel vm)
+            var cell = sender as View;
+            Element? parent = cell?.Parent;
+            while(parent is View && parent is not AttachmentsPopupElementView)
             {
-                vm.Load();
+                parent = parent.Parent;
+            }
+            if(parent is AttachmentsPopupElementView a && cell?.BindingContext is AttachmentViewModel vm)
+            {
+                a.OnAttachmentClicked(vm.Attachment);
             }
         }
+        
 
 #if WINDOWS
         private bool _isSaveDialogOpen = false;
 #endif
 
+        private PopupViewer? GetPopupViewerParent()
+        {
+            var parent = this.Parent;
+            while(parent is not null && parent is not PopupViewer popup)
+            {
+                parent = parent.Parent;
+            }
+            return parent as PopupViewer;
+        }
+
         /// <summary>
         /// Occurs when an attachment is clicked.
         /// </summary>
-        /// <remarks>Override this to prevent the default "save to file dialog" action.</remarks>
+        /// <remarks>
+        /// <para>Override this to prevent the default open action.</para></remarks>
         /// <param name="attachment">Attachment clicked.</param>
         public virtual async void OnAttachmentClicked(PopupAttachment attachment)
         {
@@ -146,80 +163,44 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             if (attachment.LoadStatus == LoadStatus.Loaded && attachment.Attachment != null)
             {
-#if WINDOWS
-                if (_isSaveDialogOpen) return;
-                _isSaveDialogOpen = true;
-                var savePicker = new Windows.Storage.Pickers.FileSavePicker();
-                var hwnd = this.Window.Handler.PlatformView.As<IWindowNative>().WindowHandle;
-                WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
-                savePicker.SuggestedFileName = attachment.Name;
-                var finfo = new FileInfo(attachment.Name);
-                if(string.IsNullOrEmpty(finfo.Extension))                    
-                    savePicker.FileTypeChoices.Add("*.*", new List<string>() { "." });
-                else
-                    savePicker.FileTypeChoices.Add(finfo.Extension, new List<string>() { finfo.Extension });
+                var viewer = GetPopupViewerParent();
+                if(viewer is not null)
+                {
+                    bool handled = viewer.OnPopupAttachmentClicked(attachment);
+                    if (handled)
+                        return;
+                }
+
                 try
                 {
-                    var storage = await savePicker.PickSaveFileAsync();
-                    if (storage is null) return;
-                    using (var stream = await storage.OpenStreamForWriteAsync())
-                    {
-                        using var dataStream = await attachment.Attachment.GetDataAsync();
-                        await dataStream.CopyToAsync(stream);
-                    }
+                    await Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
+                        new Microsoft.Maui.ApplicationModel.OpenFileRequest(attachment.Name, new ReadOnlyFile(attachment.Filename!, attachment.ContentType)));
                 }
-                catch {
-                    // TODO
+                catch
+                {
                 }
-                _isSaveDialogOpen = false;
-#elif IOS
-                // TODO: Use QuickLook Previewer
-                //QuickLook.QLPreviewController controller = new QuickLook.QLPreviewController();
-                //controller.DataSource = new QuickLookSource(source.Documents);
-                //new QuickLook.QLOpenUrl(controller, new Foundation.NSUrl(attachment.Filename!));
-                //var view = this.Handler.PlatformView as View;
-                //view.Quick
-#elif ANDROID
-                // TODO
-#endif
             }
         }
 
-#if WINDOWS
-        [ComImport]
-        [Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IInitializeWithWindow
-        {
-            void Initialize(IntPtr hwnd);
-        }
-        [ComImport]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid("EECDBF0E-BAE9-4CB6-A68E-9598E1CB57BB")]
-        internal interface IWindowNative
-        {
-            IntPtr WindowHandle { get; }
-        }
-#endif
-
         private class AttachmentViewModel : System.ComponentModel.INotifyPropertyChanged
         {
-            private readonly PopupAttachment _attachment;
             private string? _filename;
 
             public AttachmentViewModel(PopupAttachment attachment)
             {
-                _attachment = attachment;
-                _attachment.PropertyChanged += Attachment_PropertyChanged;
+                Attachment = attachment;
+                Attachment.PropertyChanged += Attachment_PropertyChanged;
             }
 
-            public string Name => _attachment.Name;
+            public PopupAttachment Attachment { get; }
+
+            public string Name => Attachment.Name;
 
             public string Size
             {
                 get
                 {
-                    var size = _attachment.Size;
+                    var size = Attachment.Size;
                     if (size < 1024)
                         return $"{size} B";
                     else if (size < 1024 * 1024)
@@ -235,7 +216,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     OnPropertyChanged(nameof(IsDownloadButtonVisible));
                     OnPropertyChanged(nameof(IsDownloading));
-                    if (_attachment.LoadStatus == LoadStatus.Loaded)
+                    if (Attachment.LoadStatus == LoadStatus.Loaded)
                     {
                         CreateThumbnail();
                     }
@@ -244,7 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             public void Load()
             {
-                _ = _attachment?.LoadAsync();
+                _ = Attachment?.LoadAsync();
             }
 
             private ImageSource? _thumbnail;
@@ -259,23 +240,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 }
             }
             
-            public bool IsDownloadButtonVisible => !_attachment.IsLocal && _attachment.LoadStatus != LoadStatus.Loaded && _attachment.LoadStatus != LoadStatus.Loading;
+            public bool IsDownloadButtonVisible => !Attachment.IsLocal && Attachment.LoadStatus != LoadStatus.Loaded && Attachment.LoadStatus != LoadStatus.Loading;
             
-            public bool IsDownloading => !_attachment.IsLocal && _attachment.LoadStatus == LoadStatus.Loading;
+            public bool IsDownloading => !Attachment.IsLocal && Attachment.LoadStatus == LoadStatus.Loading;
 
             private void CreateThumbnail()
             {
-                if (_attachment.IsLocal || _attachment.LoadStatus == LoadStatus.Loaded)
+                if (Attachment.IsLocal || Attachment.LoadStatus == LoadStatus.Loaded)
                 {
                     _thumbnail = ImageSource.FromStream(async (token) =>
                     {
-                        var img = await _attachment.CreateThumbnailAsync(40, 40);
+                        var img = await Attachment.CreateThumbnailAsync(40, 40);
                         return await img!.GetEncodedBufferAsync();
                     });
                 }
                 else
                 {
-                    _thumbnail = new FontImageSource() { Glyph = ContentTypeToCalciteGlyph(_attachment.ContentType).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
+                    _thumbnail = new FontImageSource() { Glyph = ContentTypeToCalciteGlyph(Attachment.ContentType).ToString(), Color = Colors.Gray, FontFamily = "calcite-ui-icons-24", Size = 18 };
                 }
                 OnPropertyChanged(nameof(Thumbnail));
             }
