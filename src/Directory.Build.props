@@ -38,9 +38,10 @@
     <DotNetTargetFramework>net472</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(WindowsSDKTargetBuild)</UWPTargetFramework>
     <NetWindowsTargetFramework>net6.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
-    <NetAndroidTargetFramework>net6.0-android31.0</NetAndroidTargetFramework>
-    <NetCatalystTargetFramework Condition="$(ArcGISRuntimePackageVersion.StartsWith('200.'))">net6.0-maccatalyst14.2</NetCatalystTargetFramework>
-    <NetiOSTargetFramework>net6.0-ios14.0</NetiOSTargetFramework>
+	<NetMauiWindowsTargetFramework>net7.0-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
+    <NetAndroidTargetFramework>net7.0-android33.0</NetAndroidTargetFramework>
+    <NetCatalystTargetFramework>net7.0-maccatalyst16.1</NetCatalystTargetFramework>
+    <NetiOSTargetFramework>net7.0-ios16.1</NetiOSTargetFramework>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->

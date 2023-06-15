@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>net7.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
     <Description>ArcGIS Maps SDK for .NET Augmented Reality (AR) controls and utilities for .NET MAUI apps including .NET for Android and .NET for iOS</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial Augmented Reality AR 3D .NET MAUI Android iOS toolkit</PackageTags>
     <UseMaui>true</UseMaui>
@@ -15,7 +15,7 @@
     <AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net7.0'">
     <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
