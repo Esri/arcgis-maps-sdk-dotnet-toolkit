@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);$(NetWindowsTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>Toolkit.SampleApp.Maui</RootNamespace>
     <UseMaui>true</UseMaui>
@@ -51,8 +51,6 @@
     <Compile Remove="Samples\TimeSliderSample.xaml.cs" />
     <MauiXaml Remove="Samples\LayerLegendSample.xaml" />
     <MauiXaml Remove="Samples\TimeSliderSample.xaml" />
-
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" />
   </ItemGroup>
 
 

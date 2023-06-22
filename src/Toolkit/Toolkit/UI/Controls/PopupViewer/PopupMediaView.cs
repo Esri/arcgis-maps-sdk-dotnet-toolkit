@@ -44,6 +44,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if !MAUI
             HorizontalContentAlignment = HorizontalAlignment.Stretch;
             VerticalContentAlignment = VerticalAlignment.Stretch;
+#else
+            HorizontalOptions = LayoutOptions.Fill;
+            VerticalOptions = LayoutOptions.Fill;
 #endif
         }
 
@@ -73,16 +76,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             else if (PopupMedia.Type == PopupMediaType.Image)
             {
                 _lastChartSize = 0;
-#if MAUI
-                Image img = this;
-#else
                 Image img = Content as Image ?? new Image();
-#endif
                 var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
 #if MAUI
-                    if (img.Source is not UriImageSource bmi || bmi.Uri?.OriginalString != sourceUrl)
+                    if (!(
+                        img.Source is RuntimeStreamImageSource rsis && rsis.Source?.OriginalString == sourceUrl ||
+                        img.Source is UriImageSource bmi && bmi.Uri?.OriginalString == sourceUrl))
 #else
                     if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
 #endif
@@ -110,36 +111,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                                 catch { }
                             }
                         }
-                        else if (PopupMedia.Value != null && Uri.TryCreate(PopupMedia.Value.SourceUrl, UriKind.Absolute, out Uri? result))
+                        else if (sourceUrl != null && Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri? result))
                         {
 #if MAUI
-                            img.Source = new UriImageSource() { Uri = result };
+                            img.Source = new RuntimeStreamImageSource(result); // ImageSource.FromStream((token) => new ArcGISRuntime.UI.RuntimeImage(result).GetEncodedBufferAsync(token));
+                            //img.Source = ;
+                            //img.Source = new UriImageSource() { Uri = result, CachingEnabled = false };
 #else
                             img.Source = new BitmapImage(result);
 #endif
                         }
                     }
                 }
+
                 if (!string.IsNullOrEmpty(PopupMedia.Value?.LinkUrl) && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out var linkUrl))
                 {
 #if MAUI
+                    img.GestureRecognizers.Clear();
                     var tapGesture = new TapGestureRecognizer();
                     tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
                     img.GestureRecognizers.Add(tapGesture);
 #else
-                    img.Cursor = Cursors.Hand;
-                    img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
+                    img.Tag = linkUrl;
+                    if(img.Cursor != Cursors.Hand)
+                    {
+                        img.Cursor = Cursors.Hand;
+                        img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image).Tag as Uri);
+                    }
 #endif
                 }
-#if !MAUI
                 Content = img;
-#endif
             }
         }
-
-
         private async void UpdateChart(Size desiredSize)
         {
+            var oldContent = base.Content;
             if (PopupMedia is null || PopupMedia.Value is null)
             {
                 Content = null;
@@ -175,11 +181,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
         }
-#if MAUI
-        private async Task<ImageSource?> GenerateChartAsync(double width, double height, double dpi)
-#else
+
         private async Task<Image?> GenerateChartAsync(double width, double height, double dpi)
-#endif
         {
             if (PopupMedia is null || width < 1 || height < 1)
                 return null;
@@ -197,11 +200,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
                 var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi, Style = style });
                 var source = await chart.Image.ToImageSourceAsync();
-#if MAUI
-                return source;
-#else
                 return new Image() { Source = source };
-#endif
             }
             catch { return null; }
         }

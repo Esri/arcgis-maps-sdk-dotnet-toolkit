@@ -166,7 +166,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 g.Children.Add(t);
             }
 
-            Border verticalDivider = new Border() { Background = DividerBrush, StrokeThickness = 0 };
+            Border verticalDivider = new Border()
+            {
+                Background = DividerBrush
+#if MAUI
+                , StrokeThickness = 0
+#endif
+            };
             Grid.SetRowSpan(verticalDivider, i);
             Grid.SetColumn(verticalDivider, 1);
             g.Children.Add(verticalDivider);

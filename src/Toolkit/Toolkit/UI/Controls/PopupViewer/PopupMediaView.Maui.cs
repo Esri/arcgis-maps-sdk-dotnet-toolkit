@@ -15,12 +15,7 @@
 //  ******************************************************************************/
 
 #if MAUI
-using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
-using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
-using System.IO;
-using System.Windows.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -28,17 +23,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer"/> control,
     /// used for rendering a <see cref="Esri.ArcGISRuntime.Mapping.Popups.PopupMedia"/>.
     /// </summary>
-    public partial class PopupMediaView : Image
+    public partial class PopupMediaView : ContentView
     {
-        private ImageSource? Content
-        {
-            get { return Source; }
-            set
-            {
-                Source = value;
-            }
-        }
-
+        /// <inheritdoc />
         protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
         {
             if (PopupMedia != null && PopupMedia.Type != PopupMediaType.Image)
@@ -46,6 +33,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 UpdateChart(new Size(widthConstraint, heightConstraint));
             }
             return base.MeasureOverride(widthConstraint, heightConstraint);
+        }
+
+        private class RuntimeStreamImageSource : StreamImageSource
+        {
+            public RuntimeStreamImageSource(Uri source)
+            {
+                Source = source;
+                Stream = (token) => new ArcGISRuntime.UI.RuntimeImage(source).GetEncodedBufferAsync(token);
+            }
+
+            public Uri Source { get; }
         }
     }
 }

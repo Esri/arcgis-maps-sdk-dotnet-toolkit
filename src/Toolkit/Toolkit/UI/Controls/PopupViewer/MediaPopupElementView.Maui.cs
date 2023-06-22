@@ -51,8 +51,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             rootcaption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
             rootcaption.Style = PopupViewer.GetPopupViewerCaptionStyle();
             root.Add(rootcaption);
+#if WINDOWS
+            CarouselView2 cv = new CarouselView2();
+            cv.SetBinding(CarouselView2.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));
+#else
             CarouselView cv = new CarouselView();
             cv.SetBinding(CarouselView.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));
+#endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             IndicatorView iv = new IndicatorView() { HorizontalOptions = LayoutOptions.Center };
             cv.IndicatorView = iv;
@@ -66,8 +71,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultItemTemplate()
         {
-            StackLayout layout = new StackLayout();
-            var pm = new PopupMediaView() { HeightRequest = 200 };
+            var pm = new PopupMediaView();
+            Grid layout = new Grid() { HeightRequest = 300 };
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             pm.SetBinding(PopupMediaView.PopupMediaProperty, ".");
             layout.Add(pm);
             Label title = new Label();
@@ -79,6 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             caption.SetBinding(Label.TextProperty, "Caption");
             caption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Caption", converter: Internal.EmptyToFalseConverter.Instance));
             caption.Style = PopupViewer.GetPopupViewerCaptionStyle();
+            Grid.SetRow(caption, 2);
             layout.Add(caption);
             return layout;
         }
