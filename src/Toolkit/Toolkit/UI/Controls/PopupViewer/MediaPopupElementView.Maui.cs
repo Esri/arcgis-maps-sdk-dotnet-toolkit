@@ -83,6 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             title.SetBinding(VisualElement.IsVisibleProperty, new Binding("Title", converter: Internal.EmptyToFalseConverter.Instance));
             title.Style = PopupViewer.GetPopupViewerTitleStyle();
             layout.Add(title);
+            Grid.SetRow(title, 1);
             Label caption = new Label();
             caption.SetBinding(Label.TextProperty, "Caption");
             caption.SetBinding(VisualElement.IsVisibleProperty, new Binding("Caption", converter: Internal.EmptyToFalseConverter.Instance));

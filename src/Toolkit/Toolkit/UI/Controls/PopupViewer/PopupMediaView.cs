@@ -81,9 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
 #if MAUI
-                    if (!(
-                        img.Source is RuntimeStreamImageSource rsis && rsis.Source?.OriginalString == sourceUrl ||
-                        img.Source is UriImageSource bmi && bmi.Uri?.OriginalString == sourceUrl))
+                    if (img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl)
 #else
                     if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
 #endif
@@ -114,9 +112,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         else if (sourceUrl != null && Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri? result))
                         {
 #if MAUI
-                            img.Source = new RuntimeStreamImageSource(result); // ImageSource.FromStream((token) => new ArcGISRuntime.UI.RuntimeImage(result).GetEncodedBufferAsync(token));
-                            //img.Source = ;
-                            //img.Source = new UriImageSource() { Uri = result, CachingEnabled = false };
+                            img.Source = new RuntimeStreamImageSource(result);
 #else
                             img.Source = new BitmapImage(result);
 #endif

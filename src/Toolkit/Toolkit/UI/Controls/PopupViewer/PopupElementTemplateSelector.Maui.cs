@@ -54,6 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 view.SetBinding(FieldsPopupElementView.ElementProperty, Binding.SelfPath);
                 return view;
             });
+            
             DefaultAttachmentsPopupElementTemplate = new DataTemplate(() =>
             {
                 var view = new AttachmentsPopupElementView() { Margin = new Thickness(0, 10) };
