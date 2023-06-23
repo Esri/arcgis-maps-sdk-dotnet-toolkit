@@ -33,11 +33,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// </summary>
         public const string ItemsViewName = "ItemsView";
 
-        /// <summary>
-        /// Template name of the popup content's <see cref="ScrollView"/>.
-        /// </summary>
-        public const string PopupContentScrollViewerName = "PopupContentScrollViewer";
-
         private const string PopupViewerHeaderStyleName = "PopupViewerHeaderStyle";
         private const string PopupViewerTitleStyleName = "PopupViewerTitleStyle";
         private const string PopupViewerCaptionStyleName = "PopupViewerCaptionStyle";
@@ -68,22 +63,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             roottitle.Style = GetPopupViewerHeaderStyle();
             roottitle.SetBinding(Label.TextProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("Popup.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
-            root.Add(roottitle);
-            ScrollView scrollView = new ScrollView();
-#if WINDOWS
-            scrollView.Margin = new Thickness(0, 0, -10, 0);
-#endif
-            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
-            Grid.SetRow(scrollView, 1);
-            root.Add(scrollView);
-            
+            root.Add(roottitle);          
             CollectionView cv = new CollectionView() { SelectionMode = SelectionMode.None, Margin = new Thickness(0, 10) };
             cv.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent));
+            cv.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            cv.HorizontalScrollBarVisibility = ScrollBarVisibility.Never;
             cv.ItemTemplate = new PopupElementTemplateSelector();
-            scrollView.Content = cv;
+            Grid.SetRow(cv, 1);
+            root.Add(cv);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(PopupContentScrollViewerName, scrollView);
             nameScope.RegisterName(ItemsViewName, cv);
             return root;
         }

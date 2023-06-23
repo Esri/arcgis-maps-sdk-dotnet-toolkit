@@ -197,7 +197,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             popupViewer.InvalidatePopup();
 #if MAUI
-            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
+            (popupViewer.GetTemplateChild(ItemsViewName) as CollectionView)?.ScrollTo(0, animate: false);
 #else
             (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
 #endif
