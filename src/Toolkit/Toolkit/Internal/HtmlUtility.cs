@@ -351,9 +351,9 @@ internal class HtmlUtility
                     break;
             }
 
-            if (name is "div" or "td" or "th" or "tr")
+            if (name is "div" or "p" or "td" or "th" or "tr")
             {
-                if (!attr.TryGetValue("align", out var alignStr) && Enum.TryParse<HtmlAlignment>(alignStr, true, out var align))
+                if (attr.TryGetValue("align", out var alignStr) && Enum.TryParse<HtmlAlignment>(alignStr, true, out var align))
                     newNode.Alignment = align;
             }
 
@@ -461,11 +461,13 @@ internal class HtmlUtility
             return false;
 
         fontSizeString = fontSizeString.Trim().ToLowerInvariant();
-        if (fontSizeString.EndsWith("px"))
+        if (fontSizeString.EndsWith("px") || fontSizeString.EndsWith("pt"))
         {
-            if (double.TryParse(fontSizeString.Substring(0, fontSizeString.Length - 2), out var pxValue))
+            if (double.TryParse(fontSizeString.Substring(0, fontSizeString.Length - 2), out var pValue))
             {
-                emValue = pxValue / 16d; // 1em == 16px (approx)
+                // Approximate conversion: 1em == 16px == 12pt
+                var conversionFactor = fontSizeString.EndsWith("px") ? 16 : 12;
+                emValue = pValue / conversionFactor;
                 return true;
             }
         }
