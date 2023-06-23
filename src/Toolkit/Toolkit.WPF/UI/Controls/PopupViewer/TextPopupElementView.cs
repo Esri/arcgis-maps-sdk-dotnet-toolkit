@@ -214,7 +214,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                             var img = (Image)sender;
                             var taggedUri = (Uri)img.Tag;
                             var ri = new RuntimeImage(taggedUri); // Use Runtime's caching and authentication
-                            img.Source = await ri.ToImageSourceAsync();
+                            try
+                            {
+                                img.Source = await ri.ToImageSourceAsync();
+                            }
+                            catch
+                            {
+                                // Don't let one bad image take down the whole app. Better to ignore a failed image load.
+                            }
                         };
                         return new InlineUIContainer(imageElement);
                     }
