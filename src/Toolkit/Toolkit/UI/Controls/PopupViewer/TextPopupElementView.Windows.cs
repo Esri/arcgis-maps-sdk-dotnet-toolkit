@@ -178,6 +178,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         link.RequestNavigate += NavigateToUri;
                     } // else If we can't create a URL, we can't make a link clickable
                     link.Inlines.AddRange(VisitAndAddInlines(node.Children));
+                    ApplyStyle(link, node);
                     return link;
 
                 case MarkupType.Image:
