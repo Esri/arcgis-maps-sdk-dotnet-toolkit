@@ -269,8 +269,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 el.Background = new SolidColorBrush(ConvertColor(node.BackColor.Value));
             if (node.FontSize.HasValue)
                 el.FontSize = 16d * node.FontSize.Value; // based on AGOL's default font size
-            if (node.Alignment.HasValue && el is Block blockEl)
-                blockEl.TextAlignment = ConvertAlignment(node.Alignment);
+            if (node.Alignment.HasValue)
+            {
+                // Unfortunately the TextAlignment property is separately defined for these FlowDocument elements
+                if (el is Block blockEl)
+                    blockEl.TextAlignment = ConvertAlignment(node.Alignment);
+                else if (el is TableCell cellEl)
+                    cellEl.TextAlignment = ConvertAlignment(node.Alignment);
+                else if (el is ListItem itemEl)
+                    itemEl.TextAlignment = ConvertAlignment(node.Alignment);
+            }
             if (node.IsUnderline.HasValue)
             {
                 if (el is Inline inlineEl)
