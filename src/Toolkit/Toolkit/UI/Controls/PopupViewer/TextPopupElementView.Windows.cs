@@ -153,6 +153,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         {
                             var cell = new TableCell();
                             ApplyStyle(cell, cellNode);
+
+                            // Apply colspan and rowspan, for non-uniform tables
+                            var attr = HtmlUtility.ParseAttributes(cellNode.Token?.Attributes);
+                            if (attr.TryGetValue("colspan", out var colSpanStr) && byte.TryParse(colSpanStr, out var colSpan))
+                                cell.ColumnSpan = colSpan;
+                            if (attr.TryGetValue("rowspan", out var rowSpanStr) && byte.TryParse(rowSpanStr, out var rowSpan))
+                                cell.RowSpan = rowSpan;
+
                             cell.Blocks.AddRange(VisitAndAddBlocks(cellNode.Children));
                             row.Cells.Add(cell);
                         }
