@@ -23,7 +23,6 @@ using System.ComponentModel;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
-using ItemsControl = Microsoft.Maui.Controls.CollectionView;
 #else
 using Esri.ArcGISRuntime.Toolkit.Primitives;
 #endif
@@ -121,14 +120,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     if (Popup != null)
                     {
                         var expressions = await Popup.EvaluateExpressionsAsync();
-                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
-
 #if MAUI
-                        if (ctrl != null)
+                        var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
+                        if (ctrl != null && ctrl is BindableObject bo)
                         {
-                            ctrl.ItemsSource = Popup.EvaluatedElements; // TODO: Should update binding instead
+                            bo.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent)); // TODO: Should update binding instead
                         }
 #else
+                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
                         var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
                         binding?.UpdateTarget();
 #endif

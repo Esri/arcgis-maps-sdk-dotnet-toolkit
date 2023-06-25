@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static readonly Style DefaultPopupViewerCaptionStyle;
 
         /// <summary>
-        /// Template name of the <see cref="CollectionView"/> items view.
+        /// Template name of the <see cref="IBindableLayout"/> items layout view.
         /// </summary>
         public const string ItemsViewName = "ItemsView";
 
@@ -76,17 +76,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
             Grid.SetRow(scrollView, 1);
             root.Add(scrollView);
-            VerticalStackLayout cv = new VerticalStackLayout()
+            VerticalStackLayout itemsView = new VerticalStackLayout()
             {
                 Margin = new Thickness(0, 10),
             };
-            BindableLayout.SetItemTemplateSelector(cv, new PopupElementTemplateSelector());
-            cv.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent));
-            scrollView.Content = cv;
+            BindableLayout.SetItemTemplateSelector(itemsView, new PopupElementTemplateSelector());
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent));
+            scrollView.Content = itemsView;
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(PopupContentScrollViewerName, scrollView);
-            nameScope.RegisterName(ItemsViewName, cv);
+            nameScope.RegisterName(ItemsViewName, itemsView);
             return root;
         }
 

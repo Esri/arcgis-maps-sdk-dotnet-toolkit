@@ -58,6 +58,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             CarouselView cv = new CarouselView();
             cv.SetBinding(CarouselView.ItemsSourceProperty, new Binding("Element.Media", source: RelativeBindingSource.TemplatedParent));
 #endif
+#if __IOS__ // Workaround for https://github.com/dotnet/maui/issues/12911
+            cv.HeightRequest = 300;
+#endif
             cv.ItemTemplate = new DataTemplate(BuildDefaultItemTemplate);
             IndicatorView iv = new IndicatorView() { HorizontalOptions = LayoutOptions.Center };
             cv.IndicatorView = iv;
@@ -72,7 +75,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultItemTemplate()
         {
             var pm = new PopupMediaView();
-            Grid layout = new Grid() { HeightRequest = 300 };
+            Grid layout = new Grid();
+#if !__IOS__
+            layout.HeightRequest = 300;
+#endif
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
             layout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
