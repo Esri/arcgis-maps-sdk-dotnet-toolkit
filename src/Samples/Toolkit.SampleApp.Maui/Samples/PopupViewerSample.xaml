@@ -10,9 +10,9 @@
 
 
             <Border Background="#99ffffff" x:Name="popupPanel" IsVisible="False">
-                <Border HorizontalOptions="Center" VerticalOptions="Center" MaximumWidthRequest="400" MaximumHeightRequest="400" Background="White" Margin="0,50" Padding="20">
+                <Border HorizontalOptions="Center" VerticalOptions="Center" Background="White" Margin="0,50" Padding="20">
                     <Grid>
-                        <esriTK:PopupViewer x:Name="popupViewer" Margin="20" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" />
+                        <esriTK:PopupViewer x:Name="popupViewer" Margin="20" MaximumWidthRequest="400" HeightRequest="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" />
                         <Button BorderWidth="0" Text="X" HorizontalOptions="End" VerticalOptions="Start" Clicked="CloseButton_Click" BackgroundColor="Transparent" TextColor="Black" Margin="5" />
                     </Grid>
                 </Border>

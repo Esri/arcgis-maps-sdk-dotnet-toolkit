@@ -197,9 +197,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             popupViewer.InvalidatePopup();
 #if MAUI
-#if !WINDOWS // Throws null-ref on Windows and this isn't necessary anyway since it'll already reset scroll position on reload of content.
-            (popupViewer.GetTemplateChild(ItemsViewName) as CollectionView)?.ScrollTo(0, animate: false);
-#endif
+            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
 #else
             (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
 #endif
