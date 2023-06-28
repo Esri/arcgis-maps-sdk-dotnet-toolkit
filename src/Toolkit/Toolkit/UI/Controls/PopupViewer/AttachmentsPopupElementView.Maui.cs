@@ -105,7 +105,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(image2);
             
             ActivityIndicator indicator = new ActivityIndicator() { WidthRequest = 24, HeightRequest = 24, IsRunning = true };
-            //indicator.SetBinding(ActivityIndicator.IsVisibleProperty, new Binding(nameof(AttachmentViewModel.IsDownloading)));
             indicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding(nameof(AttachmentViewModel.IsDownloading)));
             Grid.SetColumn(indicator, 2);
             Grid.SetRowSpan(indicator, 2);
