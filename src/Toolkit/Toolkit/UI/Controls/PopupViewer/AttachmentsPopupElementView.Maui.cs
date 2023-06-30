@@ -131,11 +131,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 a.OnAttachmentClicked(vm.Attachment);
             }
         }
-        
-
-#if WINDOWS
-        private bool _isSaveDialogOpen = false;
-#endif
 
         private PopupViewer? GetPopupViewerParent()
         {
@@ -183,8 +178,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private class AttachmentViewModel : System.ComponentModel.INotifyPropertyChanged
         {
-            private string? _filename;
-
             public AttachmentViewModel(PopupAttachment attachment)
             {
                 Attachment = attachment;
@@ -250,7 +243,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     _thumbnail = ImageSource.FromStream(async (token) =>
                     {
                         var img = await Attachment.CreateThumbnailAsync(40, 40);
-                        return await img!.GetEncodedBufferAsync();
+                        return await img!.GetEncodedBufferAsync(token);
                     });
                 }
                 else

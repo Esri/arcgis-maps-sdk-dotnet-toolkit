@@ -18,7 +18,6 @@ namespace Toolkit.SampleApp.Maui.Samples
             mapView.GeoViewTapped += mapView_GeoViewTapped;
         }
 
-        private RuntimeImage InfoIcon => new RuntimeImage(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png"));
 
         private async void mapView_GeoViewTapped(object? sender, GeoViewInputEventArgs e)
         {
@@ -34,8 +33,6 @@ namespace Toolkit.SampleApp.Maui.Samples
                 {
                     popupViewer.Popup = popup;
                     popupPanel.IsVisible = true;
-                    //var page = new ContentPage() {  Content = new Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer() {  Popup = popup } };
-                    //await Navigation.PushModalAsync(page);
                 }
             }
             catch (Exception ex)
@@ -103,11 +100,6 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
 
             return null;
-        }
-
-        private void OnBackgroundTapped(object sender, EventArgs e)
-        {
-            popupPanel.IsVisible = false;
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
