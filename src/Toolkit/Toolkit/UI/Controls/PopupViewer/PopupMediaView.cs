@@ -132,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if(img.Cursor != Cursors.Hand)
                     {
                         img.Cursor = Cursors.Hand;
-                        img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image).Tag as Uri);
+                        img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
                     }
 #endif
                 }
