@@ -13,6 +13,7 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
+#if WPF
 
 using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Collections;
@@ -24,20 +25,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="MediaPopupElement"/>.
     /// </summary>
-    public class MediaPopupElementView : Control
-    {
+    [TemplatePart(Name = "PreviousButton", Type = typeof(ButtonBase))]
+    [TemplatePart(Name = "NextButton", Type = typeof(ButtonBase))]
+    public partial class MediaPopupElementView : Control
+    {    
         private ButtonBase? _previousButton;
         private ButtonBase? _nextButton;
         private int selectedIndex = 0;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MediaPopupElementView"/> class.
-        /// </summary>
-        public MediaPopupElementView()
-        {
-            DefaultStyleKey= typeof(MediaPopupElementView);
-        }
-        
         /// <inheritdoc />
         public override void OnApplyTemplate()
         {
@@ -88,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             PopupMedia? content = null;
             if (Element?.Media != null)
             {
-                if(selectedIndex >= 0 && selectedIndex < itemCount)
+                if (selectedIndex >= 0 && selectedIndex < itemCount)
                 {
                     content = Element.Media[selectedIndex];
                 }
@@ -116,6 +111,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateContent();
         }
 
+        private void OnElementPropertyChanged()
+        {
+            selectedIndex = 0;
+            UpdateContent();
+        }
+        
+
         /// <summary>
         /// Gets or sets the template for popup media items.
         /// </summary>
@@ -130,27 +132,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ItemTemplateProperty =
             DependencyProperty.Register(nameof(ItemTemplate), typeof(DataTemplate), typeof(MediaPopupElementView), new PropertyMetadata(null));
-
-
-        /// <summary>
-        /// Gets or sets the MediaPopupElement.
-        /// </summary>
-        public MediaPopupElement? Element
-        {
-            get { return GetValue(ElementProperty) as MediaPopupElement; }
-            set { SetValue(ElementProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Element"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(MediaPopupElement), typeof(MediaPopupElementView), new PropertyMetadata(null, (s, e) => ((MediaPopupElementView)s).OnElementPropertyChanged()));
-
-        private void OnElementPropertyChanged()
-        {
-            selectedIndex = 0;
-            UpdateContent();
-        }
     }
 }
+#endif

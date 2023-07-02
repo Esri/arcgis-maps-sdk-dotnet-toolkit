@@ -31,9 +31,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Legend\LegendItemTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MeasureToolbar\MeasureToolbar.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OverviewMap\OverviewMap.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PopupViewer\PopupViewer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PopupViewer\PopupViewer.Windows.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PopupViewer\PopupViewer.Xamarin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScaleLine\ScaleLine.Windows.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SearchView\SearchView.cs" />

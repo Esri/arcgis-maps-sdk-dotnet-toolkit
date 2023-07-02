@@ -14,37 +14,74 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
-using System.Diagnostics;
+#if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
+using DependencyObject = Microsoft.Maui.Controls.BindableObject;
+using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
+#else
+using Esri.ArcGISRuntime.Toolkit.Primitives;
+#endif
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui
+#else
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
+#endif
 {
     /// <summary>
     /// The PopupViewer control is used to display details and media, edit attributes, geometry and related records,
     /// manage attachments of an <see cref="Data.ArcGISFeature"/> or a <see cref="ArcGISRuntime.UI.Graphic"/>
     /// as defined in its <see cref="Mapping.Popups.Popup"/>.
     /// </summary>
-    [TemplatePart(Name = "PopupContentScrollViewer", Type = typeof(ScrollViewer))]
-    [TemplatePart(Name = "ItemsView", Type = typeof(ItemsControl))]
-    public partial class PopupViewer : Control
+    /// <remarks>
+    /// <para>The <see cref="PopupViewer"/> consists of a number of sub-controls all in the <see cref="Primitives"/> namespace.
+    /// <list type="bullet">
+    ///  <listheader>
+    ///     <term>Control</term>
+    ///     <description>Description</description>
+    ///   </listheader>
+    ///   <item><term><see cref="AttachmentsPopupElementView"/></term><description>Displays and downloads the attachments defind by the <see cref="AttachmentsPopupElement"/>.</description></item>
+    ///   <item><term><see cref="FieldsPopupElementView"/></term><description>Displays the feature fields defined by the <see cref="FieldsPopupElement"/>.</description></item>
+    ///   <item><term><see cref="MediaPopupElementView"/></term><description>Displays the images and charts defined by the <see cref="MediaPopupElement"/>.</description></item>
+    ///   <item><term><see cref="TextPopupElementView"/></term><description>Displays the text content defined by the <see cref="TextPopupElement"/>.</description></item>
+    /// </list>
+    /// </para>
+    /// <para>In addition to overwrite the control templates of this control and its child controls, the following styles are available for overriding text styling:
+    /// <list type="bullet">
+    ///  <listheader>
+    ///     <term>Resource Key</term>
+    ///     <description>Description</description>
+    ///   </listheader>
+    ///   <item><term>PopupViewerHeaderStyle</term><description>Label style for the main popup header.</description></item>
+    ///   <item><term>PopupViewerTitleStyle</term><description>Label style for the title of each popup element.</description></item>
+    ///   <item><term>PopupViewerCaptionStyle</term><description>Label style for the caption of each popup element.</description></item>
+    /// </list>
+    /// </para>
+    /// </remarks>
+    public partial class PopupViewer
     {
         private WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>? _dynamicEntityChangedListener;
         private WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _geoElementPropertyChangedListener;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupViewer"/> class.
         /// </summary>
         public PopupViewer()
             : base()
         {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+#else
             DefaultStyleKey = typeof(PopupViewer);
+#endif
         }
-
         /// <inheritdoc/>
-#if WINDOWS_XAML
+#if WINDOWS_XAML || MAUI
         protected override void OnApplyTemplate()
 #else
         public override void OnApplyTemplate()
@@ -53,6 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             base.OnApplyTemplate();
             InvalidatePopup();
         }
+
 
         private bool _isDirty = false;
         private object _isDirtyLock = new object();
@@ -63,60 +101,42 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             {
                 if (_isDirty)
                 {
-                    Debug.WriteLine("Already dirty - skipping update");
                     return;
                 }
-                Debug.WriteLine("Initiating cleanup");
                 _isDirty = true;
             }
+#if MAUI
+            Dispatcher.Dispatch(async () =>
+#else
             _ = Dispatcher.InvokeAsync(async () =>
+#endif
             {
                 try
                 {
                     lock (_isDirtyLock)
                     {
                         _isDirty = false;
-                        Debug.WriteLine("Cleanup complete");
                     }
                     if (Popup != null)
                     {
                         var expressions = await Popup.EvaluateExpressionsAsync();
-                        var ctrl = GetTemplateChild("ItemsView") as ItemsControl;
+#if MAUI
+                        var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
+                        if (ctrl != null && ctrl is BindableObject bo)
+                        {
+                            bo.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Popup.EvaluatedElements", source: RelativeBindingSource.TemplatedParent)); // TODO: Should update binding instead
+                        }
+#else
+                        var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
                         var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
                         binding?.UpdateTarget();
+#endif
                     }
                 }
                 catch
                 {
                 }
             });
-        }
-
-        /// <summary>
-        /// Gets or sets the associated PopupManager which contains popup and sketch editor.
-        /// </summary>
-        [Obsolete("Use Popup property.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public PopupManager? PopupManager
-        {
-            get { return GetValue(PopupManagerProperty) as PopupManager; }
-            set { SetValue(PopupManagerProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="PopupManager"/> dependency property.
-        /// </summary>
-        [Obsolete("Use PopupProperty field.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static readonly DependencyProperty PopupManagerProperty =
-            DependencyProperty.Register(nameof(PopupManager), typeof(PopupManager), typeof(PopupViewer),
-                new PropertyMetadata(null, OnPopupManagerPropertyChanged));
-
-        private static void OnPopupManagerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-#pragma warning disable CS0618 // Type or member is obsolete
-            ((PopupViewer)d).Popup = ((PopupViewer)d).PopupManager?.Popup;
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -131,14 +151,19 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Identifies the <see cref="PopupManager"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty PopupProperty =
+            BindableProperty.Create(nameof(Popup), typeof(Popup), typeof(PopupViewer), null, propertyChanged: OnPopupPropertyChanged);
+#else
         public static readonly DependencyProperty PopupProperty =
             DependencyProperty.Register(nameof(Popup), typeof(Popup), typeof(PopupViewer),
-                new PropertyMetadata(null, OnPopupPropertyChanged));
+                new PropertyMetadata(null, (s,e) => PopupViewer.OnPopupPropertyChanged(s, e.OldValue, e.NewValue)));
+#endif
 
-        private static void OnPopupPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnPopupPropertyChanged(DependencyObject d, object oldValue, object newValue)
         {
             var popupViewer = (PopupViewer)d;
-            var oldPopup = e.OldValue as Popup;
+            var oldPopup = oldValue as Popup;
             if (oldPopup?.GeoElement is not null)
             {
                 popupViewer._dynamicEntityChangedListener?.Detach();
@@ -146,7 +171,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 popupViewer._geoElementPropertyChangedListener?.Detach();
                 popupViewer._geoElementPropertyChangedListener = null;
             }
-            var newPopup = e.NewValue as Popup;
+            var newPopup = newValue as Popup;
             if (newPopup?.GeoElement is not null)
             {
                 if(newPopup.GeoElement is DynamicEntity de)
@@ -170,7 +195,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
             popupViewer.InvalidatePopup();
-            (popupViewer.GetTemplateChild("PopupContentScrollViewer") as ScrollViewer)?.ScrollToHome();
+#if MAUI
+            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
+#else
+            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
+#endif
         }
 
         /// <summary>
@@ -185,7 +214,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty VerticalScrollBarVisibilityProperty =
+            BindableProperty.Create(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(PopupViewer), ScrollBarVisibility.Default);
+#else
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
             DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(PopupViewer), new PropertyMetadata(ScrollBarVisibility.Auto));
+#endif
     }
 }
+#endif

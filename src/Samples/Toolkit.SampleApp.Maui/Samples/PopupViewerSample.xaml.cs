@@ -3,32 +3,25 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Maui;
 using Esri.ArcGISRuntime.Security;
 using Esri.ArcGISRuntime.UI;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     [SampleInfoAttribute(Category = "PopupViewer", Description = "Use PopupViewer to display detailed feature information")]
     public partial class PopupViewerSample : ContentPage
-	{
-		public PopupViewerSample()
-		{
-			InitializeComponent();
-            mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=d4fe39d300c24672b1821fa8450b6ae2"));
-
-            // Used to demonstrate display of EditSummary in PopupViewer
-            // Provides credentials to token-secured layer that has editor-tracking enabled
-            AuthenticationManager.Current.ChallengeHandler = new ChallengeHandler(async (info) =>
-            {
-                return await AuthenticationManager.Current.GenerateCredentialAsync(info.ServiceUri, "user1", "user1");
-            });
-
+    {
+        public PopupViewerSample()
+        {
+            InitializeComponent();
+            mapView.Map = new Esri.ArcGISRuntime.Mapping.Map(new Uri("https://www.arcgis.com/home/item.html?id=9f3a674e998f461580006e626611f9ad"));
             mapView.GeoViewTapped += mapView_GeoViewTapped;
-        }  // Used in Callout to see feature details in PopupViewer
-        private RuntimeImage InfoIcon => new RuntimeImage(new Uri("https://cdn3.iconfinder.com/data/icons/web-and-internet-icons/512/Information-256.png"));
+        }
+
 
         private async void mapView_GeoViewTapped(object? sender, GeoViewInputEventArgs e)
         {
-            Exception error = null;
+            Exception? error = null;
             try
             {
                 var result = await mapView.IdentifyLayersAsync(e.Position, 3, false);
@@ -36,23 +29,10 @@ namespace Toolkit.SampleApp.Maui.Samples
                 // Retrieves or builds Popup from IdentifyLayerResult
                 var popup = GetPopup(result);
 
-                // Displays callout and updates visibility of PopupViewer
                 if (popup != null)
                 {
-                    var callout = new CalloutDefinition(popup.GeoElement);
-                    callout.Tag = popup;
-                    callout.ButtonImage = InfoIcon;
-                    callout.OnButtonClick = new Action<object>((s) =>
-                    {
-                        popupViewer.IsVisible = true;
-                        popupViewer.PopupManager = new PopupManager(s as Popup);
-                    });
-                    mapView.ShowCalloutForGeoElement(popup.GeoElement, e.Position, callout);
-                }
-                else
-                {
-                    popupViewer.PopupManager = null;
-                    popupViewer.IsVisible = false;
+                    popupViewer.Popup = popup;
+                    popupPanel.IsVisible = true;
                 }
             }
             catch (Exception ex)
@@ -120,6 +100,22 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
 
             return null;
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            popupPanel.IsVisible = false;
+        }
+
+        private void popupViewer_PopupAttachmentClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs e)
+        {
+            e.Handled = true; // Prevent default launch action
+            // Share file:
+            // _ = Share.Default.RequestAsync(new ShareFileRequest(new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
+
+            // Open default file handler
+            _ = Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
+                 new Microsoft.Maui.ApplicationModel.OpenFileRequest(e.Attachment.Name, new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
         }
     }
 }

@@ -14,22 +14,24 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using Esri.ArcGISRuntime.Data;
+#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+#if WPF
 using Esri.ArcGISRuntime.UI;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xaml;
+#endif
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
 {
-    /// <summary>
-    /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
-    /// used for rendering a <see cref="PopupMedia"/>.
-    /// </summary>
-    public class PopupMediaView : ContentControl
+    public partial class PopupMediaView
     {
         private double _lastChartSize = 0;
         private const double MaxChartSize = 1024;
@@ -39,25 +41,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public PopupMediaView()
         {
+#if !MAUI
             HorizontalContentAlignment = HorizontalAlignment.Stretch;
             VerticalContentAlignment = VerticalAlignment.Stretch;
-        }
-
-        /// <inheritdoc />
-        protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
-        {
-            _lastChartSize = 0;
-            base.OnDpiChanged(oldDpi, newDpi);
-        }
-
-        /// <inheritdoc />
-        protected override Size MeasureOverride(Size constraint)
-        {
-            if (PopupMedia != null && PopupMedia.Type != PopupMediaType.Image)
-            {
-                UpdateChart(constraint);
-            }
-            return base.MeasureOverride(constraint);
+#else
+            HorizontalOptions = LayoutOptions.Fill;
+            VerticalOptions = LayoutOptions.Fill;
+#endif
         }
 
         private void UpdateMedia(Size desiredSize)
@@ -90,7 +80,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var sourceUrl = PopupMedia.Value?.SourceUrl;
                 if (!string.IsNullOrEmpty(sourceUrl))
                 {
+#if MAUI
+                    if (img.Source is not RuntimeStreamImageSource rsis || rsis.Source?.OriginalString != sourceUrl)
+#else
                     if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
+#endif
                     {
                         if (sourceUrl.StartsWith("data:image/"))
                         {
@@ -102,30 +96,52 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                                 {
                                     var base64data = sourceUrl.Substring(idx + 8);
                                     var data = Convert.FromBase64String(base64data);
+#if MAUI
+                                    var source = new StreamImageSource() { Stream = (token) => Task.FromResult<Stream>(new MemoryStream(data)) };
+#else
                                     var source = new BitmapImage();
                                     source.BeginInit();
                                     source.StreamSource = new MemoryStream(data);
                                     source.EndInit();
+#endif
                                     img.Source = source;
                                 }
                                 catch { }
                             }
                         }
-                        else if (PopupMedia.Value != null && Uri.TryCreate(PopupMedia.Value.SourceUrl, UriKind.Absolute, out Uri? result))
+                        else if (sourceUrl != null && Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri? result))
+                        {
+#if MAUI
+                            img.Source = new RuntimeStreamImageSource(result);
+#else
                             img.Source = new BitmapImage(result);
+#endif
+                        }
                     }
                 }
+
                 if (!string.IsNullOrEmpty(PopupMedia.Value?.LinkUrl) && Uri.TryCreate(PopupMedia.Value?.LinkUrl, UriKind.Absolute, out var linkUrl))
                 {
-                    img.Cursor = Cursors.Hand;
-                    img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
+#if MAUI
+                    img.GestureRecognizers.Clear();
+                    var tapGesture = new TapGestureRecognizer();
+                    tapGesture.Tapped += (s, e) => _ = Launcher.LaunchUriAsync(linkUrl);
+                    img.GestureRecognizers.Add(tapGesture);
+#else
+                    img.Tag = linkUrl;
+                    if(img.Cursor != Cursors.Hand)
+                    {
+                        img.Cursor = Cursors.Hand;
+                        img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+                    }
+#endif
                 }
                 Content = img;
             }
         }
-
         private async void UpdateChart(Size desiredSize)
         {
+            var oldContent = base.Content;
             if (PopupMedia is null || PopupMedia.Value is null)
             {
                 Content = null;
@@ -148,7 +164,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     _lastChartSize = desiredWidth;
                     try
                     {
+#if MAUI
+                        Content = await GenerateChartAsync(desiredWidth, desiredWidth, DeviceDisplay.Current.MainDisplayInfo.Density * 96);
+#else
                         Content = await GenerateChartAsync(desiredWidth, desiredWidth, VisualTreeHelper.GetDpi(this).PixelsPerInchX);
+#endif
                     }
                     catch
                     {
@@ -157,15 +177,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
             }
         }
-        
-        private async Task<UIElement?> GenerateChartAsync(double width, double height, double dpi)
+
+        private async Task<Image?> GenerateChartAsync(double width, double height, double dpi)
         {
             if (PopupMedia is null || width < 1 || height < 1)
                 return null;
             var scalefactor = dpi / 96;
             try
             {
-                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi });
+                Mapping.ChartImageStyle style = Mapping.ChartImageStyle.Neutral;
+#if MAUI
+                switch (Application.Current?.RequestedTheme)
+                {
+                    case Microsoft.Maui.ApplicationModel.AppTheme.Dark: style = Mapping.ChartImageStyle.Dark; break;
+                    case Microsoft.Maui.ApplicationModel.AppTheme.Light: style = Mapping.ChartImageStyle.Light; break;
+                    default: style = Mapping.ChartImageStyle.Neutral; break;
+                }
+#endif
+                var chart = await PopupMedia.GenerateChartAsync(new Mapping.ChartImageParameters((int)(width * scalefactor), (int)(height * scalefactor)) { Dpi = (float)dpi, Style = style });
                 var source = await chart.Image.ToImageSourceAsync();
                 return new Image() { Source = source };
             }
@@ -183,12 +212,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         /// <summary>
         /// Identifies the <see cref="PopupMedia"/> dependency property.
-        /// </summary>       
+        /// </summary>
+#if MAUI
+        public static readonly BindableProperty PopupMediaProperty =
+            BindableProperty.Create(nameof(PopupMedia), typeof(PopupMedia), typeof(PopupMediaView), null, propertyChanged: (s, o, n) => ((PopupMediaView)s).OnPopupMediaPropertyChanged());
+#else
         public static readonly DependencyProperty PopupMediaProperty =
             DependencyProperty.Register(nameof(PopupMedia), typeof(PopupMedia), typeof(PopupMediaView), new PropertyMetadata(null, (s, e) => ((PopupMediaView)s).OnPopupMediaPropertyChanged()));
+#endif
 
         private void OnPopupMediaPropertyChanged()
         {
+            // TODO: Handle PopupMedia.ImageRefreshInterval - Start/Stop/Reset refresh timer if "interval > 0 && IsLoaded==true" + start/stop on load/unload
             _lastChartSize = 0;
             if (PopupMedia?.Type == PopupMediaType.Image)
             {
@@ -201,3 +236,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
+#endif

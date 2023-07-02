@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+#if WPF
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
@@ -21,48 +22,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
+
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     /// <summary>
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer"/> control,
     /// used for rendering a <see cref="TextPopupElement"/>.
     /// </summary>
-    public class TextPopupElementView : Control
+    [TemplatePart(Name = TextAreaName, Type = typeof(RichTextBox))]
+    public partial class TextPopupElementView : Control
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TextPopupElementView"/> class.
-        /// </summary>
-        public TextPopupElementView()
-        {
-            DefaultStyleKey = typeof(TextPopupElementView);
-        }
-
-        /// <inheritdoc />
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            OnElementPropertyChanged();
-        }
-
-        /// <summary>
-        /// Gets or sets the TextPopupElement.
-        /// </summary>
-        public TextPopupElement? Element
-        {
-            get { return GetValue(ElementProperty) as TextPopupElement; }
-            set { SetValue(ElementProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="Element"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(TextPopupElement), typeof(TextPopupElementView), new PropertyMetadata(null, (s, e) => ((TextPopupElementView)s).OnElementPropertyChanged()));
+        private const string TextAreaName = "TextArea";
 
         private void OnElementPropertyChanged()
         {
             // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
-            if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild("TextArea") is RichTextBox rtb)
+            if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is RichTextBox rtb)
             {
                 var doc = new FlowDocument();
                 try
@@ -324,3 +299,4 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
+#endif

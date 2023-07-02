@@ -59,7 +59,7 @@
                     <StackPanel>
                         <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
-                        <ListView x:Name="AttachmentList" BorderThickness="0">
+                        <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" Margin="5" Cursor="Hand"/>
