@@ -477,7 +477,7 @@ internal class HtmlUtility
             "x-small" => ParseHtmlFontSize(1),
             "small" => ParseHtmlFontSize(2),
             "medium" => ParseHtmlFontSize(3),
-            "large " => ParseHtmlFontSize(4),
+            "large" => ParseHtmlFontSize(4),
             "x-large" => ParseHtmlFontSize(5),
             "xx-large" => ParseHtmlFontSize(6),
             "xxx-large" => ParseHtmlFontSize(7),

@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             // Full list of supported tags and attributes here: https://doc.arcgis.com/en/arcgis-online/reference/supported-html.htm
             if (!string.IsNullOrEmpty(Element?.Text) && GetTemplateChild(TextAreaName) is RichTextBox rtb)
             {
-                var doc = new FlowDocument();
+                var doc = new FlowDocument { FontSize = 14d }; // match the default "content" font size on AGOL
                 try
                 {
                     var htmlRoot = HtmlUtility.BuildDocumentTree(Element.Text);
@@ -153,6 +153,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         {
                             var cell = new TableCell();
                             ApplyStyle(cell, cellNode);
+
+                            // Apply colspan and rowspan, for non-uniform tables
+                            var attr = HtmlUtility.ParseAttributes(cellNode.Token?.Attributes);
+                            if (attr.TryGetValue("colspan", out var colSpanStr) && byte.TryParse(colSpanStr, out var colSpan))
+                                cell.ColumnSpan = colSpan;
+                            if (attr.TryGetValue("rowspan", out var rowSpanStr) && byte.TryParse(rowSpanStr, out var rowSpan))
+                                cell.RowSpan = rowSpan;
+
                             cell.Blocks.AddRange(VisitAndAddBlocks(cellNode.Children));
                             row.Cells.Add(cell);
                         }
@@ -178,6 +186,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         link.RequestNavigate += NavigateToUri;
                     } // else If we can't create a URL, we can't make a link clickable
                     link.Inlines.AddRange(VisitAndAddInlines(node.Children));
+                    ApplyStyle(link, node);
                     return link;
 
                 case MarkupType.Image:
@@ -268,8 +277,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 el.Background = new SolidColorBrush(ConvertColor(node.BackColor.Value));
             if (node.FontSize.HasValue)
                 el.FontSize = 16d * node.FontSize.Value; // based on AGOL's default font size
-            if (node.Alignment.HasValue && el is Block blockEl)
-                blockEl.TextAlignment = ConvertAlignment(node.Alignment);
+            if (node.Alignment.HasValue)
+            {
+                // Unfortunately the TextAlignment property is separately defined for these FlowDocument elements
+                if (el is Block blockEl)
+                    blockEl.TextAlignment = ConvertAlignment(node.Alignment);
+                else if (el is TableCell cellEl)
+                    cellEl.TextAlignment = ConvertAlignment(node.Alignment);
+                else if (el is ListItem itemEl)
+                    itemEl.TextAlignment = ConvertAlignment(node.Alignment);
+            }
             if (node.IsUnderline.HasValue)
             {
                 if (el is Inline inlineEl)
