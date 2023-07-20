@@ -323,7 +323,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _autoVisibilityWrapper?.SetValue(VisibilityProperty, _controller.ShouldDisplayFloorPicker ? Visibility.Visible : Visibility.Collapsed);
                     break;
                 case nameof(_controller.AllDisplayLevelsSelected):
-                    OnPropertyChanged(nameof(AllDisplayLevelsSelecteded));
+                    OnPropertyChanged(nameof(AllDisplayLevelsSelected));
                     break;
             }
         }
@@ -640,7 +640,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// This is used for showing an entire facility in 3D.
         /// </remarks>
-        public bool AllDisplayLevelsSelecteded
+        public bool AllDisplayLevelsSelected
         {
             get => _controller.AllDisplayLevelsSelected;
             set
