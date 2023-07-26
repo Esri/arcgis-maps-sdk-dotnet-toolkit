@@ -362,7 +362,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
             if (layers != null)
             {
-                foreach (var layer in layers)
+                if (layers is INotifyCollectionChanged incc)
+                {
+                    var listener = new WeakEventListener<LayerContentDataSource<T>, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
+                    {
+                        OnEventAction = static (instance, source, eventArgs) => instance.Layers_CollectionChanged(source, eventArgs),
+                        OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
+                    };
+                    incc.CollectionChanged += listener.OnEvent;
+                    yield return listener.Detach;
+                }
+
+                foreach (var layer in layers.ToArray())
                 {
                     if (layer is INotifyPropertyChanged inpc)
                     {
@@ -375,21 +386,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         yield return listener.Detach;
                     }
 
-                    foreach (var sublayerAction in TrackLayerContentsRecursive(layer.SublayerContents))
+                    foreach (var sublayerAction in TrackLayerContentsRecursive(layer.SublayerContents).ToArray())
                     {
                         yield return sublayerAction;
                     }
-                }
-
-                if (layers is INotifyCollectionChanged incc)
-                {
-                    var listener = new WeakEventListener<LayerContentDataSource<T>, INotifyCollectionChanged, object?, NotifyCollectionChangedEventArgs>(this, incc)
-                    {
-                        OnEventAction = static (instance, source, eventArgs) => instance.Layers_CollectionChanged(source, eventArgs),
-                        OnDetachAction = static (instance, source, weakEventListener) => source.CollectionChanged -= weakEventListener.OnEvent,
-                    };
-                    incc.CollectionChanged += listener.OnEvent;
-                    yield return listener.Detach;
                 }
             }
         }
