@@ -34,15 +34,13 @@
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Esri.ArcGISRuntime.WinUI">
-            <Version>$(ArcGISRuntimePackageVersion)</Version>
-        </PackageReference>
-    </ItemGroup>
     <Choose>
         <When Condition="'$(UseNugetPackage)'==''">
             <ItemGroup>
-                <ProjectReference Include="..\..\Toolkit\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" />
+              <ProjectReference Include="..\..\Toolkit\Toolkit.WinUI\Esri.ArcGISRuntime.Toolkit.WinUI.csproj" />
+              <PackageReference Include="Esri.ArcGISRuntime.WinUI">
+                <Version>$(ArcGISRuntimePackageVersion)</Version>
+              </PackageReference>
             </ItemGroup>
         </When>
         <Otherwise>
@@ -50,6 +48,9 @@
                 <PackageReference Include="Esri.ArcGISRuntime.Toolkit.WinUI">
                     <Version>$(UseNugetPackage)</Version>
                 </PackageReference>
+              <PackageReference Include="Esri.ArcGISRuntime.WinUI">
+                <Version>$(UseNugetPackage)</Version>
+              </PackageReference>
             </ItemGroup>
         </Otherwise>
     </Choose>

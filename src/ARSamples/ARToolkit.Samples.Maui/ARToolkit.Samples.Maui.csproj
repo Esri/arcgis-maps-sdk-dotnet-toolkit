@@ -45,10 +45,18 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\..\ARToolkit.Maui\Esri.ArcGISRuntime.ARToolkit.Maui.csproj" />
-	</ItemGroup>
-
+  <Choose>
+    <When Condition="'$(UseNugetPackage)'==''">
+      <ItemGroup>
+        <ProjectReference Include="..\..\ARToolkit.Maui\Esri.ArcGISRuntime.ARToolkit.Maui.csproj" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.ARToolkit.Maui" Version="$(UseNugetPackage)" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 	<Import Project="..\SampleHelpers\SampleHelpers.projitems" Label="Shared" />
 
 </Project>

@@ -307,6 +307,9 @@
           <Project>{a6431f30-a608-4c78-80be-548c322cbe75}</Project>
           <Name>Esri.ArcGISRuntime.Toolkit.UWP</Name>
         </ProjectReference>
+       <PackageReference Include="Esri.ArcGISRuntime.UWP">
+         <Version>$(ArcGISRuntimePackageVersion)</Version>
+       </PackageReference>
       </ItemGroup>
     </When>
     <Otherwise>
@@ -314,13 +317,13 @@
         <PackageReference Include="Esri.ArcGISRuntime.Toolkit.UWP">
           <Version>$(UseNugetPackage)</Version>
         </PackageReference>
+        <PackageReference Include="Esri.ArcGISRuntime.UWP">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.UWP">
-      <Version>$(ArcGISRuntimePackageVersion)</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.8" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
       <Version>4.0.0</Version>

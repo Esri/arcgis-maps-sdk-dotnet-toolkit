@@ -22,14 +22,12 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Esri.ArcGISRuntime.WPF">
-      <Version>$(ArcGISRuntimePackageVersion)</Version>
-    </PackageReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.WPF">
+          <Version>$(ArcGISRuntimePackageVersion)</Version>
+        </PackageReference>
         <ProjectReference Include="..\..\Toolkit\Toolkit.WPF\Esri.ArcGISRuntime.Toolkit.WPF.csproj">
           <Project>{332171e3-4d72-4148-9ddf-341cafb61ca3}</Project>
           <Name>Esri.ArcGISRuntime.Toolkit.WPF</Name>
@@ -38,6 +36,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
+        <PackageReference Include="Esri.ArcGISRuntime.WPF">
+          <Version>$(UseNugetPackage)</Version>
+        </PackageReference>
         <PackageReference Include="Esri.ArcGISRuntime.Toolkit.WPF">
           <Version>$(UseNugetPackage)</Version>
         </PackageReference>
