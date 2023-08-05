@@ -1,4 +1,5 @@
-﻿using Esri.ArcGISRuntime.Mapping;
+﻿using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 
 namespace Toolkit.SampleApp.Maui.Samples
@@ -20,7 +21,17 @@ namespace Toolkit.SampleApp.Maui.Samples
 
         private void Slider_ValueChanged(object? sender, ValueChangedEventArgs e)
         {
-            MyMapView.SetViewpointRotationAsync(e.NewValue);
+
+            if (MyMapView.IsVisible == true)
+            {
+                var vp = MyMapView.GetCurrentViewpoint(ViewpointType.CenterAndScale);
+                MyMapView.SetViewpoint(new Viewpoint(vp.TargetGeometry, e.NewValue));
+            }
+            else
+            {
+                var camera = MySceneView.Camera;
+                MySceneView.SetViewpointCamera(camera.RotateTo(e.NewValue, camera.Pitch, camera.Roll));
+            }
         }
 
         private void ToggleViewClick(object? sender, EventArgs e)

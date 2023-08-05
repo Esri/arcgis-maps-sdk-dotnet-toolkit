@@ -26,7 +26,7 @@
                 <Button Clicked="ToggleViewClick" Text="Toggle MapView/SceneView" />
                 <Button Clicked="ToggleModelClick" Text="Apply new Map/Scene" />
                 <Button Clicked="ToggleSymbolsClick" Text="Toggle symbols" />
-                <Label Text="Map rotation (map only):" />
+                <Label Text="Map rotation:" />
                 <Slider Maximum="360" ValueChanged="Slider_ValueChanged" />
                 <Label Text="Scale factor:" />
                 <Slider Maximum="50" Minimum="10" Value="{Binding Source={x:Reference SampleOverview}, Path=ScaleFactor, Mode=TwoWay}" />
