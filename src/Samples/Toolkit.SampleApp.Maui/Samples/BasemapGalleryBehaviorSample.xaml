@@ -14,7 +14,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="150" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <esri:MapView x:Name="MyMapView" IsVisible="False" />
             <esri:SceneView x:Name="MySceneView" IsVisible="False" />
@@ -29,80 +29,76 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Label
-                    Grid.Column="0"
-                    HorizontalTextAlignment="End"
+                    Grid.Column="0" Grid.ColumnSpan="3"
+                    HorizontalTextAlignment="End" VerticalTextAlignment="Center"
                     Text="Gallery View Style:" />
                 <Picker
                     x:Name="ViewStyleCombobox"
-                    Grid.Column="1"
+                    Grid.Column="3" Grid.ColumnSpan="3"
                     HorizontalOptions="FillAndExpand"
                     SelectedIndexChanged="ViewStyleCombobox_SelectedIndexChanged" />
                 <Button
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
-                    Clicked="Button_Disconect_View"
-                    Text="Disconnected" />
-                <Button
-                    Grid.Row="2"
-                    Grid.Column="0"
                     Clicked="Button_Switch_To_Map"
-                    Text="Switch to Map" />
+                    Text="Use MapView" ToolTipProperties.Text="Connect gallery to a MapView" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Clicked="Button_Switch_To_Scene"
+                    Text="Use SceneView" ToolTipProperties.Text="Connect gallery to a SceneView" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="4"
+                    Grid.ColumnSpan="2"
+                    Clicked="Button_Disconnect_View"
+                    Text="Disconnect" ToolTipProperties.Text="Disconnect gallery from any view" />
                 <Button
                     Grid.Row="2"
-                    Grid.Column="1"
-                    Clicked="Button_Switch_To_Scene"
-                    Text="Switch to Scene" />
-                <Button
-                    Grid.Row="3"
                     Grid.Column="0"
+                    Grid.ColumnSpan="3"
                     Clicked="Button_Load_AGOL"
-                    Text="Load ArcGIS Online" />
+                    Text="Load ArcGIS Online" ToolTipProperties.Text="Loads default basemaps from ArcGIS Online" />
                 <Button
-                    Grid.Row="3"
-                    Grid.Column="1"
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    Grid.ColumnSpan="3"
                     Clicked="Button_Load_Portal"
                     Text="Load custom Portal" />
                 <Button
-                    Grid.Row="4"
+                    Grid.Row="3"
                     Grid.Column="0"
+                    Grid.ColumnSpan="2"
                     Clicked="Button_Add_Last"
-                    Text="Add items" />
+                    Text="Add items" ToolTipProperties.Text="Adds two entries to the gallery" />
                 <Button
-                    Grid.Row="4"
-                    Grid.Column="1"
+                    Grid.Row="3"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
                     Clicked="Button_Remove_Last"
-                    Text="Remove last item" />
-                <Button Grid.Row="5" Grid.Column="0"
+                    Text="Remove last item" ToolTipProperties.Text="Removes the last entry in the gallery" />
+                <Button 
+                    Grid.Row="3"
+                    Grid.Column="4"
+                    Grid.ColumnSpan="2"
                     Margin="0,4,0,4"
                     Clicked="Button_Add_WGS84"
-                    Text="Add WGS84" />
-                <Label
-                    Grid.Row="6"
-                    Grid.Column="0"
-                    HorizontalTextAlignment="End"
-                    Text="Selection:" />
-                <Label
-                    Grid.Row="6"
-                    Grid.Column="1"
-                    Text="{Binding Source={x:Reference Gallery}, Path=SelectedBasemap.Name, FallbackValue='None', Mode=OneWay}" />
-                <Label
-                    Grid.Row="7"
-                    Grid.Column="0"
-                    HorizontalTextAlignment="End"
-                    Text="Basemap selection event last raised:" />
-                <Label
-                    x:Name="LastSelectedDateLabel"
-                    Grid.Row="7"
-                    Grid.Column="1"
-                    Text="Never" />
+                    Text="Add WGS84" ToolTipProperties.Text="Adds a wgs84 basemap that is incompatible with connected views" />
+                <HorizontalStackLayout Grid.Row="4" Grid.ColumnSpan="6">
+                    <Label Text="Selection:" />
+                    <Label Text="{Binding Source={x:Reference Gallery}, Path=SelectedBasemap.Name, FallbackValue='None', Mode=OneWay}" />
+                </HorizontalStackLayout>
             </Grid>
 
             <toolkit:BasemapGallery

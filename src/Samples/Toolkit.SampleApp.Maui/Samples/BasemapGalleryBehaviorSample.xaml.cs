@@ -1,5 +1,6 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Toolkit.Maui;
+using System.Diagnostics;
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
@@ -65,7 +66,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             Gallery.GeoModel = MySceneView.Scene;
         }
 
-        private void Button_Disconect_View(object? sender, EventArgs e)
+        private void Button_Disconnect_View(object? sender, EventArgs e)
         {
             MySceneView.IsVisible = false;
             MyMapView.IsVisible = false;
@@ -96,13 +97,13 @@ namespace Toolkit.SampleApp.Maui.Samples
         {
             if (Gallery.AvailableBasemaps?.Any() == true)
             {
-                Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
+                Gallery.AvailableBasemaps.RemoveAt(Gallery.AvailableBasemaps.Count - 1);
             }
         }
 
         private void Gallery_BasemapSelected(object? sender, BasemapGalleryItem e)
         {
-            LastSelectedDateLabel.Text = DateTime.Now.ToLongTimeString();
+            Debug.WriteLine("Basemap selected: " + DateTime.Now.ToLongTimeString());
         }
     }
 }
