@@ -7,14 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    mc:Ignorable="d"
-    RequestedTheme="Light">
+    mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         
         <esri:MapView Map="{x:Bind Map}" x:Name="mapView"/>
 
-        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Background="White" BorderBrush="Black" BorderThickness="1" Width="350">
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderBrush="Black" BorderThickness="1" Width="350">
             <Grid Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -27,7 +26,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Basic Scale Calculation" />
-                <esriToolkit:ScaleLine MapScale="{x:Bind mapView.MapScale, Mode=OneWay}" Grid.Row="1" />
+                <esriToolkit:ScaleLine MapScale="{x:Bind mapView.MapScale, Mode=OneWay}" Grid.Row="1" Foreground="{ThemeResource ApplicationForegroundThemeBrush}"/>
                 <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
                     <ToolTipService.ToolTip>
                         <TextBlock MaxWidth="300" TextWrapping="Wrap">
@@ -39,7 +38,7 @@
                 </TextBlock>
 
                 <TextBlock Text="Advanced Scale Calculation" Grid.Row="2" />
-                <esriToolkit:ScaleLine MapView="{x:Bind mapView}" Grid.Row="3" />
+                <esriToolkit:ScaleLine MapView="{x:Bind mapView}" Grid.Row="3" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" />
                 <TextBlock Text="Ⓘ" FontFamily="Segoe UI" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="24">
                     <ToolTipService.ToolTip>
                         <TextBlock MaxWidth="300" TextWrapping="Wrap">

@@ -8,7 +8,6 @@
     xmlns:mapping="using:Esri.ArcGISRuntime.Mapping"
     xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     mc:Ignorable="d"
-    RequestedTheme="Light"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <DataTemplate x:Key="ItemTemplateOne" x:DataType="mapping:Bookmark">
@@ -16,7 +15,7 @@
         </DataTemplate>
         <DataTemplate x:Key="ItemTemplateTwo" x:DataType="mapping:Bookmark">
             <Grid Background="Red">
-                <TextBlock Foreground="White" Text="{Binding Name}" HorizontalTextAlignment="Center" HorizontalAlignment="Stretch" />
+                <TextBlock Foreground="{ThemeResource ApplicationForegroundThemeBrush}" Text="{Binding Name}" HorizontalTextAlignment="Center" HorizontalAlignment="Stretch" />
             </Grid>
         </DataTemplate>
         <Style TargetType="Button">
@@ -99,7 +98,7 @@
                 Width="375"
                 Padding="10"
                 Margin="0,15, 15, 0"
-                Background="White" BorderBrush="Black" BorderThickness="1">
+                Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
