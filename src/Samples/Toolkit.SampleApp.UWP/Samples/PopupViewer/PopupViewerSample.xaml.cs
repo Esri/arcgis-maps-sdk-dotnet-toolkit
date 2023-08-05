@@ -20,7 +20,10 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.PopupViewer
         public PopupViewerSample()
         {
             this.InitializeComponent();
-
+            Map.Loaded += (s, e) =>
+            {
+                Map.OperationalLayers.RemoveAt(0); // Remove secured layer
+            };
         }
 
         // Webmap configured with Popup
