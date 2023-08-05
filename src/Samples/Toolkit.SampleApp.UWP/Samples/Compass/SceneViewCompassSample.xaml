@@ -6,8 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
     xmlns:esriToolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    mc:Ignorable="d"
-    RequestedTheme="Light">
+    mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <esri:SceneView Scene="{x:Bind Scene}" x:Name="sceneView"/>
@@ -15,7 +14,7 @@
         <esriToolkit:Compass x:Name="compass" GeoView="{x:Bind sceneView, Mode=OneWay}" 
                              Margin="20" AutoHide="{x:Bind autohide.IsChecked.Value, Mode=OneWay}" />
 
-        <Border Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" BorderBrush="Black" Background="#AAFFFFFF">
+        <Border Margin="10" HorizontalAlignment="Left" VerticalAlignment="Top" Padding="10" BorderBrush="{ThemeResource ApplicationForegroundThemeBrush}" BorderThickness="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <StackPanel>
                 <CheckBox x:Name="autohide" Content="Auto-hide when North Up" />
                 <Button Content="Rotate Left" Click="RotateLeft_Click" HorizontalAlignment="Stretch"  Margin="2" />
