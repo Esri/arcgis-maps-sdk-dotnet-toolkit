@@ -34,6 +34,9 @@ public partial class FloorFilter
                 HeightRequest = 48,
                 InputTransparent = false,
                 CascadeInputTransparent = false,
+#if WINDOWS
+                Margin = new Thickness(-21, 0, 21, 0),
+#endif
             };
             containingGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(48) });
             Label textLabel = new Label
