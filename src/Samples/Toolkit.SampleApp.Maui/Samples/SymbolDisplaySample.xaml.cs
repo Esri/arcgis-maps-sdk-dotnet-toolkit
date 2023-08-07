@@ -38,23 +38,23 @@ namespace Toolkit.SampleApp.Maui.Samples
         {
             int columnCount = LayoutRoot.ColumnDefinitions.Count;
             var sd = new SymbolDisplay() { Symbol = symbol };
-            Frame f = new Frame()
+            Border border = new Border()
             {
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
                 Padding = 0,
-                CornerRadius = 0
+                StrokeThickness = 1,
             };
-            f.SetAppThemeColor(Microsoft.Maui.Controls.Frame.BorderColorProperty, Colors.Black, Colors.White);
-            f.Content = sd;
+            border.SetAppThemeColor(Microsoft.Maui.Controls.Border.StrokeProperty, Colors.Black, Colors.White);
+            border.Content = sd;
             int count = LayoutRoot.Children.Count;
             var row = count / columnCount;
             var column = count % columnCount;
             if (column == 0)
                 LayoutRoot.RowDefinitions.Add(new RowDefinition());
-            Grid.SetRow(f, row);
-            Grid.SetColumn(f, column);
-            LayoutRoot.Children.Add(f);
+            Grid.SetRow(border, row);
+            Grid.SetColumn(border, column);
+            LayoutRoot.Children.Add(border);
         }
     }
 }
