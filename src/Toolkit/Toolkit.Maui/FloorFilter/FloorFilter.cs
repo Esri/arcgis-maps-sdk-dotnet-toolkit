@@ -593,25 +593,30 @@ public partial class FloorFilter : TemplatedView
 
             const int maxHeight = 320;
             var desiredHeight = (_displayLevels?.Count ?? 0) * 48;
-
+#if _IOS__ || __MACCATALYST__
+            var limitedHeight = Math.Min(maxHeight, desiredHeight);
+            PART_LevelListView.VerticalOptions = LayoutOptions.End;
+            PART_LevelListView.HeightRequest = limitedHeight;
+            PART_LevelListContainer?.SetValue(MaximumHeightRequestProperty, limitedHeight + 2);
+#endif
             if (desiredHeight > maxHeight)
             {
                 PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Always;
 
                 // ScrollTo causes fail fast excepion in kernelbase.dll
-                #if !WINDOWS
+#if !WINDOWS
                 if (SelectedLevel != null && DisplayLevels != null)
                 {
                     PART_LevelListView?.ScrollTo(DisplayLevels.IndexOf(SelectedLevel));
                 }
-                #endif
+#endif
             }
             else if (DisplayLevels?.Any() == true)
             {
                 PART_LevelListView.VerticalScrollBarVisibility = ScrollBarVisibility.Never;
-                #if !WINDOWS
+#if !WINDOWS
                 PART_LevelListView?.ScrollTo(DisplayLevels.Count - 1);
-                #endif
+#endif
             }
         }
     }
@@ -621,5 +626,5 @@ public partial class FloorFilter : TemplatedView
     /// </summary>
     /// <remarks>The 'All Floors' button is useful in 3D.</remarks>
     public bool ShowAllFloorsButton => GeoView is SceneView sv && sv.Scene is not null && SelectedFacility != null && SelectedFacility.Levels.Count > 1;
-    #endregion UI State Management
+#endregion UI State Management
 }
