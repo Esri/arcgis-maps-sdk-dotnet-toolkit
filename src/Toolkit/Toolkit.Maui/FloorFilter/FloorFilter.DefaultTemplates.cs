@@ -129,7 +129,7 @@ public partial class FloorFilter
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml"" 
     xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui""
     x:DataType=""controls:FloorFilter"" x:Name=""Self"">
-    <Grid RowSpacing=""0"" x:Name=""PART_VisibilityWrapper"" IsVisible=""True"">
+    <Grid RowSpacing=""0"" x:Name=""PART_VisibilityWrapper"" IsVisible=""True"" VerticalOptions=""EndAndExpand"">
         <Grid.Resources>
             <Style TargetType=""Button"">
                 <Setter Property=""Background"" Value=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
@@ -148,11 +148,11 @@ $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmln
         <Grid.RowDefinitions>
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
-           <RowDefinition Height=""Auto"" />
+           <RowDefinition Height=""*"" />
            <RowDefinition Height=""Auto"" />
            <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
-<Frame HasShadow=""False"" BackgroundColor=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" Grid.RowSpan=""5"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" />
+<Border BackgroundColor=""{{AppThemeBinding Light=#dfdfdf, Dark=#404040}}"" Grid.RowSpan=""5"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" />
         <Button x:Name=""{nameof(PART_BrowseButton)}"" Margin=""0"" Padding=""16"" Text=""{IconFont.UrbanModel}"" />
         <Button x:Name=""{nameof(PART_AllButton)}"" Text=""{IconFont.Viewshed}"" Margin=""0,-1,0,0""
            Grid.Row=""1"" />
