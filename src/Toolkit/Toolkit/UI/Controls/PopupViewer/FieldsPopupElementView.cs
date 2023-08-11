@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             var presenter = GetTemplateChild(TableAreaContentName) as ContentPresenter;
             if (presenter is null) return;
-            if (Element is null)
+            if (Element is null || !Element.Fields.Any())
             {
                 presenter.Content = null;
                 return;
