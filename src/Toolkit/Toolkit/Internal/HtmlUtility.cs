@@ -1,4 +1,4 @@
-#if WPF
+#if WPF || MAUI
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -71,6 +71,18 @@ internal class MarkupNode
             sb.Append(" children=" + Children.Count);
         sb.Append('}');
         return sb.ToString();
+    }
+
+    public void InheritAttributes(MarkupNode parent)
+    {
+        // Copy style attributes from the parent node, unless overridden on this node
+        IsBold ??= parent.IsBold;
+        IsItalic ??= parent.IsItalic;
+        IsUnderline ??= parent.IsUnderline;
+        FontSize ??= parent.FontSize;
+        FontColor ??= parent.FontColor;
+        BackColor ??= parent.BackColor;
+        Alignment ??= parent.Alignment;
     }
 }
 
