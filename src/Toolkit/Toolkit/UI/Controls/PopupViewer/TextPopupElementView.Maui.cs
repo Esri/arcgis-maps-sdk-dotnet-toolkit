@@ -19,6 +19,9 @@ using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Microsoft.Maui.ApplicationModel;
+using Esri.ArcGISRuntime.UI;
+using Grid = Microsoft.Maui.Controls.Grid;
+using RuntimeImageExtensions = Esri.ArcGISRuntime.Maui.RuntimeImageExtensions;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -29,6 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     public partial class TextPopupElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
+        private static Thickness ParagraphMargin = new(0, 0, 0, 16);
 
         /// <summary>
         /// Template name of the <see cref="StackLayout"/> text area.
@@ -86,6 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             List<MarkupNode>? inlineNodes = null;
             foreach (var node in parent.Children)
             {
+                node.InheritAttributes(parent);
                 if (MapsToBlock(node) || HasAnyBlocks(node))
                 {
                     if (inlineNodes != null)
@@ -115,37 +120,55 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             switch (node.Type)
             {
                 case MarkupType.List:
-                // TODO: Implement list as a StackLayout-of-items
+                    // Lists (li and ol) are laid out in a grid, with a narrow column of markers and a wide one for the content.
+                    // +-----+----------------------+
+                    // | 1.  | First item content   |
+                    // +-----+----------------------+
+                    // | 2.  | Second item content  |
+                    // +-----+----------------------+
+                    // | ...                        |
+                    // +-----+----------------------+
+                    // | 3.  | Last item content    |
+                    // +-----+----------------------+
+                    bool isOredered = node.Token?.Name == "ol";
+                    var listGrid = new Grid();
+                    listGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // bullets
+                    listGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); // contents
 
-                //var list = new List();
-                //if (node.Token?.Name == "ol")
-                //    list.MarkerStyle = TextMarkerStyle.Decimal;
-                //else
-                //    list.MarkerStyle = TextMarkerStyle.Disc;
-                //foreach (var itemNode in node.Children)
-                //{
-                //    if (itemNode.Type == MarkupType.ListItem)
-                //    {
-                //        var listItem = new ListItem();
-                //        listItem.Blocks.AddRange(VisitAndAddBlocks(itemNode.Children));
-                //        list.ListItems.Add(listItem);
-                //    }
-                //    // else ignore a misplaced non-list-item node
-                //}
-                //return list;
+                    var childItems = node.Children.Where(n => n.Type == MarkupType.ListItem).ToList(); // ignore a misplaced non-list-item node
+
+                    for (int row = 0; row < childItems.Count; row++)
+                    {
+                        listGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                        var markerText = isOredered ? $"{row + 1}." : "\u2022";
+                        listGrid.Add(new Label { Text = markerText, HorizontalTextAlignment = TextAlignment.End, Margin = new Thickness(5, 0) }, 0, row);
+                        var item = VisitBlock(childItems[row]);
+                        listGrid.Add(item, 1, row);
+                    }
+                    return listGrid;
 
                 case MarkupType.Block:
+                case MarkupType.ListItem:
+                    bool isPara = node.Token?.Name == "p";
                     if (HasAnyBlocks(node))
                     {
                         var container = new StackLayout();
+                        if (isPara)
+                            container.Margin = ParagraphMargin;
+                        if (node.BackColor.HasValue)
+                            container.BackgroundColor = ConvertColor(node.BackColor.Value);
+
                         var blocks = VisitAndAddBlocks(node);
-                        foreach (var block in blocks)
+                        foreach (var block in blocks){
                             container.Children.Add(block);
+                        }
                         return container;
                     }
                     else
                     {
                         var label = VisitAndAddInlines(node.Children);
+                        if (isPara)
+                            label.Margin = ParagraphMargin;
                         ApplyStyle(label, node);
                         return label;
                     }
@@ -185,7 +208,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 //return table;
 
                 case MarkupType.Image:
-                // TODO: Implement image
+                    var imageElement = new Image();
+                    if (Uri.TryCreate(node.Content, UriKind.Absolute, out var imgUri))
+                    {
+                        imageElement.Loaded += OnImageElementLoaded;
+
+                        async void OnImageElementLoaded(object? sender, EventArgs e)
+                        {
+                            imageElement.Loaded -= OnImageElementLoaded;
+                            var taggedUri = imgUri;
+                            var ri = new RuntimeImage(taggedUri); // Use Runtime's caching and authentication
+                            try
+                            {
+                                imageElement.Source = await RuntimeImageExtensions.ToImageSourceAsync(ri);
+                            }
+                            catch
+                            {
+                                // Don't let one bad image take down the whole app. Better to ignore a failed image load.
+                            }
+                        }
+                    }
+                    return imageElement;
 
                 case MarkupType.Link:
                 // TODO: Implement link-around-blocks
@@ -323,7 +366,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 el.BackgroundColor = ConvertColor(node.BackColor.Value);
             if (node.FontSize.HasValue)
                 el.FontSize = 16d * node.FontSize.Value; // based on AGOL's default font size
+
+            if (node.Alignment.HasValue)
+                el.HorizontalTextAlignment = ConvertAlignment(node.Alignment);
         }
+
+        private static TextAlignment ConvertAlignment(HtmlAlignment? alignment) => alignment switch
+        {
+            HtmlAlignment.Left => TextAlignment.Start,
+            HtmlAlignment.Center => TextAlignment.Center,
+            HtmlAlignment.Right => TextAlignment.End,
+            _ => TextAlignment.Start,
+        };
 
         private static Color ConvertColor(System.Drawing.Color color)
         {
