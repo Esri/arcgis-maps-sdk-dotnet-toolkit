@@ -98,6 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         var label = VisitAndAddInlines(inlineNodes);
                         ApplyStyle(label, parent);
                         inlineNodes = null;
+                        yield return label;
                     }
                     yield return VisitBlock(node);
                 }
@@ -149,7 +150,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
                 case MarkupType.Block:
                 case MarkupType.ListItem:
+                case MarkupType.TableCell:
                     bool isPara = node.Token?.Name == "p";
+                    View view;
                     if (HasAnyBlocks(node))
                     {
                         var container = new StackLayout();
@@ -159,10 +162,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                             container.BackgroundColor = ConvertColor(node.BackColor.Value);
 
                         var blocks = VisitAndAddBlocks(node);
-                        foreach (var block in blocks){
+                        foreach (var block in blocks)
+                        {
                             container.Children.Add(block);
                         }
-                        return container;
+                        view = container;
                     }
                     else
                     {
@@ -170,42 +174,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         if (isPara)
                             label.Margin = ParagraphMargin;
                         ApplyStyle(label, node);
-                        return label;
+                        view = label;
                     }
+                    if (node.Type == MarkupType.TableCell)
+                        return VerticallyAlignTableCell(node, view);
+                    return view;
 
                 case MarkupType.Divider:
                     return new BoxView { HeightRequest = 1, Color = Colors.Gray }; // TODO: Do we need to set a color?
 
                 case MarkupType.Table:
-                // TODO: Implement table as a boxy layout
-                //var table = new Table();
-                //var columnCount = node.Children.Max(rowNode => rowNode.Children.Count);
-                //for (int i = 0; i < columnCount; i++)
-                //    table.Columns.Add(new TableColumn());
-                //var rowGroup = new TableRowGroup();
-                //foreach (var rowNode in node.Children)
-                //{
-                //    var row = new TableRow();
-                //    ApplyStyle(row, rowNode);
-                //    foreach (var cellNode in rowNode.Children)
-                //    {
-                //        var cell = new TableCell();
-                //        ApplyStyle(cell, cellNode);
-
-                //        // Apply colspan and rowspan, for non-uniform tables
-                //        var attr = HtmlUtility.ParseAttributes(cellNode.Token?.Attributes);
-                //        if (attr.TryGetValue("colspan", out var colSpanStr) && byte.TryParse(colSpanStr, out var colSpan))
-                //            cell.ColumnSpan = colSpan;
-                //        if (attr.TryGetValue("rowspan", out var rowSpanStr) && byte.TryParse(rowSpanStr, out var rowSpan))
-                //            cell.RowSpan = rowSpan;
-
-                //        cell.Blocks.AddRange(VisitAndAddBlocks(cellNode.Children));
-                //        row.Cells.Add(cell);
-                //    }
-                //    rowGroup.Rows.Add(row);
-                //}
-                //table.RowGroups.Add(rowGroup);
-                //return table;
+                    return ConvertTableToGrid(node);
 
                 case MarkupType.Image:
                     var imageElement = new Image();
@@ -230,11 +209,24 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     }
                     return imageElement;
 
-                case MarkupType.Link:
-                // TODO: Implement link-around-blocks
-
                 default:
                     return new Border(); // placeholder for unsupported things
+            }
+
+            static View VerticallyAlignTableCell(MarkupNode node, View cellContent)
+            {
+                cellContent.VerticalOptions = LayoutOptions.Center;
+                // In HTML, table cells are vertically centered by default.
+                if (node.BackColor.HasValue)
+                {
+                    var grid = new Grid { cellContent };
+                    grid.BackgroundColor = ConvertColor(node.BackColor.Value);
+                    return grid;
+                }
+                else
+                {
+                    return cellContent;
+                }
             }
         }
 
@@ -249,7 +241,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     str.Spans.Add(span);
                 }
             }
-            return new Label{FormattedText = str, LineBreakMode = LineBreakMode.WordWrap };
+            return new Label { FormattedText = str, LineBreakMode = LineBreakMode.WordWrap };
         }
 
         private static IEnumerable<Span> VisitInline(MarkupNode node)
@@ -313,10 +305,93 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     ApplyStyle(textSpan, node);
                     yield return textSpan;
                     break;
+
+                default:
+                    break;
             }
         }
 
+        private static Grid ConvertTableToGrid(MarkupNode table)
+        {
+            // Determines the dimensions of a grid necessary to hold a given table.
+            // Utilizes a dynamically-sized 2D bitmap (`grid`) to mark occupied cells while iterating over the table.
+            // Expands the grid as necessary based on cell spans and avoids collisions by checking the bitmap.
+            List<List<bool>> gridMap = new List<List<bool>>();
 
+            int maxRowUsed = -1;
+            int maxColUsed = -1;
+
+            var gridView = new Grid();
+
+            int curRow = 0;
+            foreach (MarkupNode tr in table.Children)
+            {
+                tr.InheritAttributes(table);
+                int curCol = 0;
+                foreach (MarkupNode td in tr.Children)
+                {
+                    // Find the next available cell in this row
+                    EnsureColumnExists(curRow, curCol);
+                    while (gridMap[curRow][curCol])
+                    {
+                        curCol++;
+                        EnsureColumnExists(curRow, curCol);
+                    }
+
+                    int rowSpan = 1;
+                    int colSpan = 1;
+
+                    // Create a View for the current table-cell, and add it to the grid.
+                    td.InheritAttributes(tr);
+                    var cellView = VisitBlock(td);
+                    var attr = HtmlUtility.ParseAttributes(td.Token?.Attributes);
+                    if (attr.TryGetValue("colspan", out var colSpanStr) && ushort.TryParse(colSpanStr, out var colSpanFromAttr))
+                    {
+                        colSpan = colSpanFromAttr;
+                        Grid.SetColumnSpan(cellView, colSpan);
+                    }
+                    if (attr.TryGetValue("rowspan", out var rowSpanStr) && ushort.TryParse(rowSpanStr, out var rowSpanFromAttr))
+                    {
+                        rowSpan = rowSpanFromAttr;
+                        Grid.SetRowSpan(cellView, colSpan);
+                    }
+                    gridView.Add(cellView, curCol, curRow);
+
+                    // Mark grid-cells occupied by the current table-cell
+                    for (int i = 0; i < rowSpan; i++)
+                    {
+                        for (int j = 0; j < colSpan; j++)
+                        {
+                            EnsureColumnExists(curRow + i, curCol + j);
+
+                            gridMap[curRow + i][curCol + j] = true;
+
+                            maxRowUsed = Math.Max(maxRowUsed, curRow + i);
+                            maxColUsed = Math.Max(maxColUsed, curCol + j);
+                        }
+                    }
+                    curCol += colSpan;
+                }
+                curRow++;
+            }
+
+            // Now we know exactly how many rows and columns were necessary to hold the table. Allocate them!
+            for (int i = 0; i <= maxRowUsed; i++)
+                gridView.RowDefinitions.Add(new RowDefinition());
+            for (int i = 0; i <= maxColUsed; i++)
+                gridView.ColumnDefinitions.Add(new ColumnDefinition());
+
+            return gridView;
+
+            // Expand the gridMap as needed to make sure that given row/column exists
+            void EnsureColumnExists(int row, int col)
+            {
+                while (gridMap.Count <= row)
+                    gridMap.Add(new List<bool>());
+                while (gridMap[row].Count <= col)
+                    gridMap[row].Add(false);
+            }
+        }
 
         private static void ApplyStyle(Span el, MarkupNode node)
         {
