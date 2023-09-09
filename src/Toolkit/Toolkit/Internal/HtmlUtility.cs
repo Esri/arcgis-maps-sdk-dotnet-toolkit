@@ -44,7 +44,7 @@ internal class MarkupNode
     public Color? FontColor { get; set; }
     public Color? BackColor { get; set; }
     public HtmlAlignment? Alignment { get; set; }
-    public IList<MarkupNode> Children { get; } = new List<MarkupNode>();
+    public List<MarkupNode> Children { get; } = new List<MarkupNode>();
     public string? Content { get; set; }
 
     public override string ToString()
@@ -420,6 +420,7 @@ internal class HtmlUtility
             }
         }
         RemoveTrailingBreaks(root);
+        OptimizeInternalNodes(root);
         return root;
     }
 
@@ -431,7 +432,7 @@ internal class HtmlUtility
             return;
         var lastChild = node.Children.Last();
 
-        bool thisIsBlock = node.Type is MarkupType.Document or MarkupType.ListItem or MarkupType.TableCell or MarkupType.Block;
+        bool thisIsBlock = IsBlockyNode(node);
         if ((isLastChildInBlock || thisIsBlock)
             && node.Children.Count > 1
             && lastChild.Type == MarkupType.Break)
@@ -443,6 +444,137 @@ internal class HtmlUtility
             bool isLast = ReferenceEquals(child, lastChild);
             RemoveTrailingBreaks(child, isLast && (thisIsBlock || isLastChildInBlock));
         }
+    }
+
+    // Remove internal nodes that only have 1 child and no content.
+    // This simplifies document trees and makes them easier to map to GUI components.
+    private static void OptimizeInternalNodes(MarkupNode parent)
+    {
+        if (parent.Children.Count == 0)
+            return;
+
+        var optimizedChildren = new List<MarkupNode>();
+
+        // Recursively optimize all internal nodes, depth-first.
+        foreach (var child in parent.Children)
+        {
+            OptimizeInternalNodes(child);
+            switch (AnalyzeNode(child))
+            {
+                case NodeAction.None:
+                    optimizedChildren.Add(child);
+                    break;
+                case NodeAction.MergeUp:
+                    // Eliminate grandchild, merge it up
+                    optimizedChildren.Add(Merge(child, child.Children[0], child.Type));
+                    break;
+                case NodeAction.MergeDown:
+                    // Eliminate child, merge it down
+                    optimizedChildren.Add(Merge(child, child.Children[0], child.Children[0].Type));
+                    break;
+                case NodeAction.Skip:
+                    continue;
+            }
+        }
+
+        // Trim leading and trailing whitespace from blocky elements
+        if (IsBlockyNode(parent) && optimizedChildren.Count > 0)
+        {
+            TrimLeadingWhitespace(optimizedChildren);
+            TrimTrailingWhitespace(optimizedChildren);
+            if (optimizedChildren.Count > 1 && optimizedChildren.Last().Type == MarkupType.Break)
+            {
+                // Remove trailing <br> from non-empty blocky elements
+                optimizedChildren.RemoveAt(optimizedChildren.Count - 1);
+                // Remove trailing whitespace before <br>
+                TrimTrailingWhitespace(optimizedChildren);
+            }
+        }
+
+        parent.Children.Clear();
+        parent.Children.AddRange(optimizedChildren);
+
+        static void TrimTrailingWhitespace(List<MarkupNode> optimizedChildren)
+        {
+            while (optimizedChildren.Count > 0)
+            {
+                var lastChild = optimizedChildren.Last();
+                if (lastChild.Type != MarkupType.Text)
+                    break;
+                lastChild.Content = lastChild.Content?.TrimEnd();
+                if (!string.IsNullOrEmpty(lastChild.Content))
+                    break;
+                optimizedChildren.RemoveAt(optimizedChildren.Count - 1);
+            }
+        }
+
+        static void TrimLeadingWhitespace(List<MarkupNode> optimizedChildren)
+        {
+            while (optimizedChildren.Count > 0)
+            {
+                var firstChild = optimizedChildren[0];
+                if (firstChild.Type != MarkupType.Text)
+                    break;
+                firstChild.Content = firstChild.Content?.TrimStart();
+                if (!string.IsNullOrEmpty(firstChild.Content))
+                    break;
+                optimizedChildren.RemoveAt(0);
+            }
+        }
+    }
+
+    private static bool IsBlockyNode(MarkupNode node) => node.Type is (MarkupType.Document or MarkupType.Block or MarkupType.ListItem or MarkupType.TableCell);
+
+    enum NodeAction { None, MergeUp, MergeDown, Skip }
+
+    private static NodeAction AnalyzeNode(MarkupNode node)
+    {
+        // Skip empty inlines (e.g. <b></b>)
+        if (node.Type is (MarkupType.Span or MarkupType.Block or MarkupType.Link) && node.Children.Count == 0)
+            return NodeAction.Skip;
+
+        if (node.Children.Count != 1)
+            return NodeAction.None;
+        var child = node.Children[0];
+
+        // inline node with a single child,
+        // e.g. the span in <span><b>foo</b></span>
+        if (node.Type == MarkupType.Span)
+            return NodeAction.MergeDown;
+        
+        // link with a single inline child,
+        // e.g. the b in <a href="..."><b>foo</b></a>
+        if (node.Type == MarkupType.Link && child.Type is MarkupType.Span)
+            return NodeAction.MergeUp;
+
+        // block node with a single block child,
+        // e.g. the div in <div><p>foo</p></div>
+        if (node.Type == MarkupType.Block && child.Type is (MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider))
+            return NodeAction.MergeDown;
+
+        return NodeAction.None;
+    }
+    
+    // Remove the parent and apply its attributes to the child.
+    // In case of conflict, child attributes take precedence.
+    // Resulting node will 
+    private static MarkupNode Merge(MarkupNode parentToRemove, MarkupNode childToKeep, MarkupType newType)
+    {
+        var newNode = new MarkupNode
+        {
+            Token = childToKeep.Token,
+            Type = newType,
+            IsBold = childToKeep.IsBold ?? parentToRemove.IsBold,
+            IsItalic = childToKeep.IsItalic ?? parentToRemove.IsItalic,
+            IsUnderline = childToKeep.IsUnderline ?? parentToRemove.IsUnderline,
+            FontSize = childToKeep.FontSize ?? parentToRemove.FontSize,
+            FontColor = childToKeep.FontColor ?? parentToRemove.FontColor,
+            BackColor = childToKeep.BackColor ?? parentToRemove.BackColor,
+            Alignment = childToKeep.Alignment ?? parentToRemove.Alignment,
+            Content = childToKeep.Content,
+        };
+        newNode.Children.AddRange(childToKeep.Children);
+        return newNode;
     }
 
     // True if tags of given tokenType cannot have any children/content.
