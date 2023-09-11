@@ -19,9 +19,7 @@ using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Microsoft.Maui.ApplicationModel;
-using Esri.ArcGISRuntime.UI;
 using Grid = Microsoft.Maui.Controls.Grid;
-using RuntimeImageExtensions = Esri.ArcGISRuntime.Maui.RuntimeImageExtensions;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {

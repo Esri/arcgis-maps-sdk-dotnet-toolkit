@@ -211,7 +211,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         // Also used for embedded images in TextPopupElement views
         internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source)
         {
-            source = null;
             if (sourceUri != null && sourceUri.StartsWith("data:image/"))
             {
                 // might be base64
@@ -223,7 +222,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         var base64data = sourceUri.Substring(idx + 8);
                         var data = Convert.FromBase64String(base64data);
 #if MAUI
-                        var newSource = new StreamImageSource() { Stream = (token) => Task.FromResult<Stream>(new MemoryStream(data)) };
+                        var newSource = new StreamImageSource { Stream = (token) => Task.FromResult<Stream>(new MemoryStream(data)) };
 #else
                         var newSource = new BitmapImage();
                         newSource.BeginInit();
@@ -245,6 +244,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
                 return true;
             }
+            source = null;
             return false;
         }
     }
