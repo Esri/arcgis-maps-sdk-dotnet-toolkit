@@ -64,7 +64,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 container.Children.Clear();
                 var htmlRoot = HtmlUtility.BuildDocumentTree(text);
-                var blocks = VisitAndAddBlocks(htmlRoot);
+                var blocks = VisitChildren(htmlRoot);
                 foreach (var block in blocks)
                     container.Children.Add(block);
             }
@@ -85,8 +85,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private static IEnumerable<View> VisitAndAddBlocks(MarkupNode parent)
+        private static IEnumerable<View> VisitChildren(MarkupNode parent)
         {
+            // Create views for all the children of a given node.
+            // Nodes with blocks are converted individually, but consecutive inline-only nodes are grouped into labels.
             List<MarkupNode>? inlineNodes = null;
             foreach (var node in parent.Children)
             {
@@ -95,12 +97,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     if (inlineNodes != null)
                     {
-                        var label = VisitAndAddInlines(inlineNodes);
+                        var label = CreateFormattedText(inlineNodes);
                         ApplyStyle(label, parent);
                         inlineNodes = null;
                         yield return label;
                     }
-                    yield return VisitBlock(node);
+                    yield return CreateBlock(node);
                 }
                 else
                 {
@@ -110,14 +112,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
             if (inlineNodes != null)
             {
-                var label = VisitAndAddInlines(inlineNodes);
+                var label = CreateFormattedText(inlineNodes);
                 ApplyStyle(label, parent);
                 yield return label;
             }
         }
 
-        private static View VisitBlock(MarkupNode node)
+        private static View CreateBlock(MarkupNode node)
         {
+            // Create a view for a single block node.
             switch (node.Type)
             {
                 case MarkupType.List:
@@ -131,7 +134,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     // +-----+----------------------+
                     // | 3.  | Last item content    |
                     // +-----+----------------------+
-                    bool isOredered = node.Token?.Name == "ol";
+                    bool isOrdered = node.Token?.Name == "ol";
                     var listGrid = new Grid { Margin = new Thickness(0, 0, 0, 16) };
                     listGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // bullets
                     listGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); // contents
@@ -141,9 +144,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     for (int row = 0; row < childItems.Count; row++)
                     {
                         listGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                        var markerText = isOredered ? $"{row + 1}." : "\u2022";
+                        var markerText = isOrdered ? $"{row + 1}." : "\u2022";
                         listGrid.Add(new Label { Text = markerText, HorizontalTextAlignment = TextAlignment.End, Margin = new Thickness(5, 0) }, 0, row);
-                        var item = VisitBlock(childItems[row]);
+                        var item = CreateBlock(childItems[row]);
                         listGrid.Add(item, 1, row);
                     }
                     return listGrid;
@@ -161,7 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         if (node.BackColor.HasValue)
                             container.BackgroundColor = ConvertColor(node.BackColor.Value);
 
-                        var blocks = VisitAndAddBlocks(node);
+                        var blocks = VisitChildren(node);
                         foreach (var block in blocks)
                         {
                             container.Children.Add(block);
@@ -170,7 +173,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     }
                     else
                     {
-                        var label = VisitAndAddInlines(node.Children);
+                        var label = CreateFormattedText(node.Children);
                         if (isPara)
                             label.Margin = ParagraphMargin;
                         ApplyStyle(label, node);
@@ -215,10 +218,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             static View VerticallyAlignTableCell(MarkupNode node, View cellContent)
             {
-                cellContent.VerticalOptions = LayoutOptions.Center;
                 // In HTML, table cells are vertically centered by default.
+                cellContent.VerticalOptions = LayoutOptions.Center;
                 if (node.BackColor.HasValue)
                 {
+                    // If a table-cell has a background color, we need to wrap the content in a space-filling Grid,
+                    // otherwise the background color will only show directly behind the text and look patchy.
                     var grid = new Grid { cellContent };
                     grid.BackgroundColor = ConvertColor(node.BackColor.Value);
                     return grid;
@@ -230,9 +235,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private static Label VisitAndAddInlines(IEnumerable<MarkupNode> nodes)
+        private static Label CreateFormattedText(IEnumerable<MarkupNode> nodes)
         {
-            // Flattens given tree of inline nodes into a single FormattedText
+            // Flattens given tree of inline nodes into a single label.
             var str = new FormattedString();
             foreach (var node in nodes)
             {
@@ -246,6 +251,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static IEnumerable<Span> VisitInline(MarkupNode node)
         {
+            // Converts a single inline node into a sequence of spans.
+            // The whole tree is expected to only contain inline nodes. Other nodes are handled by VisitBlock.
             switch (node.Type)
             {
                 case MarkupType.Link:
@@ -305,16 +312,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     ApplyStyle(textSpan, node);
                     yield return textSpan;
                     break;
-
-                default:
-                    break;
             }
         }
 
         private static Grid ConvertTableToGrid(MarkupNode table)
         {
             // Determines the dimensions of a grid necessary to hold a given table.
-            // Utilizes a dynamically-sized 2D bitmap (`grid`) to mark occupied cells while iterating over the table.
+            // Utilizes a dynamically-sized 2D bitmap (`gridMap`) to mark occupied cells while iterating over the table.
             // Expands the grid as necessary based on cell spans and avoids collisions by checking the bitmap.
             List<List<bool>> gridMap = new List<List<bool>>();
 
@@ -343,7 +347,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
                     // Create a View for the current table-cell, and add it to the grid.
                     td.InheritAttributes(tr);
-                    var cellView = VisitBlock(td);
+                    var cellView = CreateBlock(td);
                     var attr = HtmlUtility.ParseAttributes(td.Token?.Attributes);
                     if (attr.TryGetValue("colspan", out var colSpanStr) && ushort.TryParse(colSpanStr, out var colSpanFromAttr))
                     {
