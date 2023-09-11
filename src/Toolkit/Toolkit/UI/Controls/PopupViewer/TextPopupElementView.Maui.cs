@@ -191,25 +191,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
                 case MarkupType.Image:
                     var imageElement = new Image();
-                    if (Uri.TryCreate(node.Content, UriKind.Absolute, out var imgUri))
-                    {
-                        imageElement.Loaded += OnImageElementLoaded;
-
-                        async void OnImageElementLoaded(object? sender, EventArgs e)
-                        {
-                            imageElement.Loaded -= OnImageElementLoaded;
-                            var taggedUri = imgUri;
-                            var ri = new RuntimeImage(taggedUri); // Use Runtime's caching and authentication
-                            try
-                            {
-                                imageElement.Source = await RuntimeImageExtensions.ToImageSourceAsync(ri);
-                            }
-                            catch
-                            {
-                                // Don't let one bad image take down the whole app. Better to ignore a failed image load.
-                            }
-                        }
-                    }
+                    if (PopupMediaView.TryCreateImageSource(node.Content, out var imageSource))
+                        imageElement.Source = imageSource;
                     return imageElement;
 
                 default:
