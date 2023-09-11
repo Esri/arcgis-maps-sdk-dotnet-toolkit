@@ -153,7 +153,7 @@ internal class HtmlUtility
                     "lt" => "<",
                     "gt" => ">",
                     // Common HTML entities used for typography
-                    "nbsp" => " ",
+                    "nbsp" => "\xA0",
                     "copy" => "\xA9",
                     "deg" => "\xB0",
                     "para" => "\xB6",
@@ -951,10 +951,11 @@ internal class HtmlTokenParser
 
     private static string ProcessText(string rawText)
     {
-        // replace HTML entities with their equivalent symbols
+        // Replace HTML entities with their equivalent symbols.
         var unescaped = HtmlUtility.UnescapeHtml(rawText);
-        // trim newlines and collapse remaining whitespace
-        return Regex.Replace(unescaped.Trim('\r', '\n'), @"\s+", " ");
+        // Trim newlines and collapse remaining whitespace,
+        // but leave unbreakable spaces (nbsp\0x00A0) untouched.
+        return Regex.Replace(unescaped, @"[^\S\u00A0]+", " ");
     }
 }
 
