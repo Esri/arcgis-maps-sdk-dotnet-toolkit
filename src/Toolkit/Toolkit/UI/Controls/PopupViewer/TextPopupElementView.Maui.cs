@@ -132,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     // | 3.  | Last item content    |
                     // +-----+----------------------+
                     bool isOredered = node.Token?.Name == "ol";
-                    var listGrid = new Grid();
+                    var listGrid = new Grid { Margin = new Thickness(0, 0, 0, 16) };
                     listGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // bullets
                     listGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star }); // contents
 
