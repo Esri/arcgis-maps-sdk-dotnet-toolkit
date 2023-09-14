@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:maui="using:Microsoft.Maui"
-    xmlns:local="using:Toolkit.SampleApp.Maui.WinUI">
+    xmlns:local="using:Toolkit.SampleApp.Maui.WinUI"
+    RequestedTheme="Light"
+    >
 
 </maui:MauiWinUIApplication>
