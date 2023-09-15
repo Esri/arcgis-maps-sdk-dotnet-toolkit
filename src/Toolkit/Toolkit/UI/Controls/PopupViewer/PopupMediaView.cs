@@ -86,36 +86,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (img.Source is not BitmapImage bmi || bmi.UriSource?.OriginalString != sourceUrl)
 #endif
                     {
-                        if (sourceUrl.StartsWith("data:image/"))
+                        if (TryCreateImageSource(sourceUrl, out var source))
                         {
-                            // might be base64
-                            var idx = sourceUrl.IndexOf(";base64,");
-                            if (idx > 11 && sourceUrl.Length > idx + 8)
-                            {
-                                try
-                                {
-                                    var base64data = sourceUrl.Substring(idx + 8);
-                                    var data = Convert.FromBase64String(base64data);
-#if MAUI
-                                    var source = new StreamImageSource() { Stream = (token) => Task.FromResult<Stream>(new MemoryStream(data)) };
-#else
-                                    var source = new BitmapImage();
-                                    source.BeginInit();
-                                    source.StreamSource = new MemoryStream(data);
-                                    source.EndInit();
-#endif
-                                    img.Source = source;
-                                }
-                                catch { }
-                            }
-                        }
-                        else if (sourceUrl != null && Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri? result))
-                        {
-#if MAUI
-                            img.Source = new RuntimeStreamImageSource(result);
-#else
-                            img.Source = new BitmapImage(result);
-#endif
+                            img.Source = source;
                         }
                     }
                 }
@@ -233,6 +206,46 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 InvalidateMeasure(); // Forces recalculation of available space for generating a new chart
             }
+        }
+
+        // Also used for embedded images in TextPopupElement views
+        internal static bool TryCreateImageSource(string? sourceUri, out ImageSource? source)
+        {
+            if (sourceUri != null && sourceUri.StartsWith("data:image/"))
+            {
+                // might be base64
+                var idx = sourceUri.IndexOf(";base64,");
+                if (idx > 11 && sourceUri.Length > idx + 8)
+                {
+                    try
+                    {
+                        var base64data = sourceUri.Substring(idx + 8);
+                        var data = Convert.FromBase64String(base64data);
+#if MAUI
+                        var newSource = new StreamImageSource { Stream = (token) => Task.FromResult<Stream>(new MemoryStream(data)) };
+#else
+                        var newSource = new BitmapImage();
+                        newSource.BeginInit();
+                        newSource.StreamSource = new MemoryStream(data);
+                        newSource.EndInit();
+#endif
+                        source = newSource;
+                        return true;
+                    }
+                    catch { }
+                }
+            }
+            else if (Uri.TryCreate(sourceUri, UriKind.Absolute, out Uri? result))
+            {
+#if MAUI
+                source = new RuntimeStreamImageSource(result);
+#else
+                source = new BitmapImage(result);
+#endif
+                return true;
+            }
+            source = null;
+            return false;
         }
     }
 }

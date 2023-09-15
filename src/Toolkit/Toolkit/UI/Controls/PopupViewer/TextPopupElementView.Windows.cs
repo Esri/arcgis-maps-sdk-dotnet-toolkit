@@ -190,23 +190,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     return link;
 
                 case MarkupType.Image:
-                    if (Uri.TryCreate(node.Content, UriKind.Absolute, out var imgUri))
+                    if (PopupMediaView.TryCreateImageSource(node.Content, out var imageSource))
                     {
-                        var imageElement = new Image { Tag = imgUri };
-                        imageElement.Loaded += static async (sender, e) => // Start loading the image in the background once the image is actually displayed
-                        {
-                            var img = (Image)sender;
-                            var taggedUri = (Uri)img.Tag;
-                            var ri = new RuntimeImage(taggedUri); // Use Runtime's caching and authentication
-                            try
-                            {
-                                img.Source = await ri.ToImageSourceAsync();
-                            }
-                            catch
-                            {
-                                // Don't let one bad image take down the whole app. Better to ignore a failed image load.
-                            }
-                        };
+                        var imageElement = new Image { Source = imageSource };
                         return new InlineUIContainer(imageElement);
                     }
                     return new Run(); // TODO find a better placeholder when img src is invalid
@@ -287,7 +273,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 else if (el is ListItem itemEl)
                     itemEl.TextAlignment = ConvertAlignment(node.Alignment);
             }
-            if (node.IsUnderline.HasValue)
+            if (node.IsUnderline == true)
             {
                 if (el is Inline inlineEl)
                     inlineEl.TextDecorations.Add(TextDecorations.Underline);
