@@ -38,7 +38,7 @@
     <DotNetTargetFramework>net472</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(WindowsSDKTargetBuild)</UWPTargetFramework>
     <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net6.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
-	<NETMauiTarget Condition="'$(NETMauiTarget)'==''">net7.0</NETMauiTarget>
+    <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net7.0</NETMauiTarget>
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
     <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android33.0</NetAndroidTargetFramework>
     <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst16.1</NetCatalystTargetFramework>
