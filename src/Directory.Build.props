@@ -38,10 +38,11 @@
     <DotNetTargetFramework>net472</DotNetTargetFramework>
     <UWPTargetFramework>uap10.0.$(WindowsSDKTargetBuild)</UWPTargetFramework>
     <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net6.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
-    <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">net7.0-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
-    <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">net7.0-android33.0</NetAndroidTargetFramework>
-    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">net7.0-maccatalyst16.1</NetCatalystTargetFramework>
-    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">net7.0-ios16.1</NetiOSTargetFramework>
+	<NETMauiTarget Condition="'$(NETMauiTarget)'==''">net7.0</NETMauiTarget>
+    <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
+    <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android33.0</NetAndroidTargetFramework>
+    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst16.1</NetCatalystTargetFramework>
+    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios16.1</NetiOSTargetFramework>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->
