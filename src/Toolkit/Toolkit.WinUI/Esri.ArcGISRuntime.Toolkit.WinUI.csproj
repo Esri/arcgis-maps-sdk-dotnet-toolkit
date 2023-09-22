@@ -16,6 +16,12 @@
     <IncludeXamlFilesInNugetPackage>False</IncludeXamlFilesInNugetPackage>
     <DisableEmbeddedXbf>false</DisableEmbeddedXbf>
   </PropertyGroup>
+
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
+    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+    <UseRidGraph>true</UseRidGraph>
+  </PropertyGroup>
+
   <Import Project="..\..\CommonProperties.targets" />
   <ItemGroup>
     <Content Remove="EmbeddedResources\pin_red.png" />
