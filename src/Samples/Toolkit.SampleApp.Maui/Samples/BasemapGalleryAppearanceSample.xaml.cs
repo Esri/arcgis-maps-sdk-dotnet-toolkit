@@ -31,7 +31,7 @@ namespace Toolkit.SampleApp.Maui.Samples
         {
             if (Gallery.AvailableBasemaps?.Any() == true)
             {
-                Gallery.AvailableBasemaps.Remove(Gallery.AvailableBasemaps.Last());
+                Gallery.AvailableBasemaps.RemoveAt(Gallery.AvailableBasemaps.Count - 1);
             }
         }
     }
