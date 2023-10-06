@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>$(NETMauiTarget)-android;$(NETMauiTarget)-ios;$(NETMauiTarget)-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);$(NetMauiWindowsTargetFramework)</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>Toolkit.SampleApp.Maui</RootNamespace>

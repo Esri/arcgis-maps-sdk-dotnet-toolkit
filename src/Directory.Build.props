@@ -30,8 +30,10 @@
     
     <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true' or $(IsTemplateProject) == 'true'">false</IsToolkitLibrary>
     <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true'">true</IsToolkitLibrary>
+  </PropertyGroup>
 
     <!--Framework versions-->
+  <PropertyGroup Condition="'$(ArcGISRuntimePackageVersion)'&lt;'200.3.0'">
     <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">17763</ArcGISRuntime_MinimumSupportedWindowsBuild>
     <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
     <UWPTargetPlatformVersion>10.0.$(WindowsSDKTargetBuild).0</UWPTargetPlatformVersion>
@@ -43,7 +45,24 @@
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
     <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android33.0</NetAndroidTargetFramework>
     <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst16.1</NetCatalystTargetFramework>
-    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios16.1</NetiOSTargetFramework>
+    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios16.1</NetiOSTargetFramework>  
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(ArcGISRuntimePackageVersion)'&gt;='200.3.0'">
+    <ArcGISRuntime_MinimumSupportedWindowsBuild Condition="'$(ArcGISRuntime_MinimumSupportedWindowsBuild)'==''">19041</ArcGISRuntime_MinimumSupportedWindowsBuild>
+    <WindowsSDKTargetBuild Condition="'$(WindowsSDKTargetBuild)'==''">19041</WindowsSDKTargetBuild>
+    <UWPTargetPlatformVersion>10.0.$(WindowsSDKTargetBuild).0</UWPTargetPlatformVersion>
+    <UWPTargetPlatformMinVersion>10.0.$(ArcGISRuntime_MinimumSupportedWindowsBuild).0</UWPTargetPlatformMinVersion>
+    <DotNetTargetFramework>net472</DotNetTargetFramework>
+    <UWPTargetFramework>uap10.0.$(WindowsSDKTargetBuild)</UWPTargetFramework>
+    <NetWindowsTargetFramework Condition="'$(NetWindowsTargetFramework)'==''">net8.0-windows10.0.$(WindowsSDKTargetBuild).0</NetWindowsTargetFramework>
+    <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net8.0</NETMauiTarget>
+    <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
+    <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android34.0</NetAndroidTargetFramework>
+    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst16.1</NetCatalystTargetFramework>
+    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios16.1</NetiOSTargetFramework>  
+  </PropertyGroup>
+  <PropertyGroup>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
 
     <!--Output paths-->
