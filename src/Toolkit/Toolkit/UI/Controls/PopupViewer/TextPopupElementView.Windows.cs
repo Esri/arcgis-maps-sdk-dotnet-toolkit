@@ -66,7 +66,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     if (inlineHolder != null)
                     {
-                        AdjustSpacing(inlineHolder, null);
                         yield return inlineHolder;
                         inlineHolder = null;
                     }
@@ -74,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
                 else
                 {
-                    inlineHolder ??= new Paragraph();
+                    inlineHolder ??= new Paragraph { Margin = new Thickness(0) };
                     inlineHolder.Inlines.Add(VisitInline(node));
                 }
             }
@@ -130,9 +129,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     else
                     {
                         var para = new Paragraph();
+                        // In HTML, <p> has default margin but other blocks (like <div>) do not.
+                        // In WPF, all of these map to Paragraphs that *does* have a default margin.
+                        if (node?.Token?.Name != "p")
+                            para.Margin = new Thickness(0);
                         ApplyStyle(para, node);
                         para.Inlines.AddRange(VisitAndAddInlines(node.Children));
-                        AdjustSpacing(para, node);
                         return para;
                     }
 
@@ -221,24 +223,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     return new LineBreak();
 
                 case MarkupType.Text:
-                    return new Run(node.Content);
+                    var run = new Run(node.Content);
+                    ApplyStyle(run, node);
+                    return run;
 
                 default:
                     return new Run(); // placeholder for unsupported types
             }
-        }
-
-        private static void AdjustSpacing(Paragraph para, MarkupNode? blockNode)
-        {
-            // WPF LineBreaks behave differently from HTML breaks.
-            // In HTML, a <br> is needed inside empty blocks to prevent block height from collapsing.
-            // But in WPF, that <br> just adds an unwanted second line, so we skip it.
-            if (para.Inlines.Count == 1 && para.Inlines.First() is LineBreak lastBreak)
-                para.Inlines.Remove(lastBreak);
-            // In HTML, <p> has default margin but other blocks (like <div>) do not.
-            // In WPF, all of these map to Paragraphs that *does* have a default margin.
-            if (blockNode?.Token?.Name != "p")
-                para.Margin = new Thickness(0);
         }
 
         private static bool HasAnyBlocks(MarkupNode node)
