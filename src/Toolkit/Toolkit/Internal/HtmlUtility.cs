@@ -449,11 +449,11 @@ internal class HtmlUtility
                     break;
                 case NodeAction.MergeUp:
                     // Eliminate grandchild, merge it up
-                    optimizedChildren.Add(Merge(child, child.Children[0], child.Type));
+                    optimizedChildren.Add(Merge(child, child.Children[0], NodeAction.MergeUp));
                     break;
                 case NodeAction.MergeDown:
                     // Eliminate child, merge it down
-                    optimizedChildren.Add(Merge(child, child.Children[0], child.Children[0].Type));
+                    optimizedChildren.Add(Merge(child, child.Children[0], NodeAction.MergeDown));
                     break;
                 case NodeAction.Skip:
                     continue;
@@ -655,20 +655,25 @@ internal class HtmlUtility
             return NodeAction.None;
         var child = node.Children[0];
 
-        // inline node with a single child,
-        // e.g. the span in <span><b>foo</b></span> ==> <b>foo</b>
+        // Merge an inline node with its single child,
+        // e.g. <span><b>foo</b></span> ==> <b>foo</b>
         if (node.Type is MarkupType.Span)
             return NodeAction.MergeDown;
 
-        // link with a single inline child,
-        // e.g. the b in <a href="..."><b>foo</b></a> ==> <a href="..." style="...">foo</a>
+        // Elide a single inline child inside a link,
+        // e.g. <a href="..."><span>foo</span></a> ==> <a href="...">foo</a>
         if (node.Type is MarkupType.Link && child.Type is MarkupType.Span)
             return NodeAction.MergeUp;
 
-        // block node with a single block child,
-        // e.g. the div in <td><div>foo</div></td> ==> <td>foo</td>
+        // Merge a block node with its single blocky child,
+        // e.g. <div><table>...</table></div> ==> <table>...</table>
         if (node.Type is MarkupType.Block && child.Type is (MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider))
             return NodeAction.MergeDown;
+
+        // Elide a single span inside a block,
+        // e.g. <div><span>foo</span></div> ==> <div>foo</div>
+        if (node.Type is MarkupType.Block && child.Type is MarkupType.Span)
+            return NodeAction.MergeUp;
 
         return NodeAction.None;
     }
@@ -676,12 +681,12 @@ internal class HtmlUtility
     // Remove the parent and apply its attributes to the child.
     // In case of conflict, child attributes take precedence.
     // New node's type depends on whether we are merging "down" (eliminating a parent) or "up" (eliminating a child).
-    private static MarkupNode Merge(MarkupNode parent, MarkupNode child, MarkupType newType)
+    private static MarkupNode Merge(MarkupNode parent, MarkupNode child, NodeAction action)
     {
         var newNode = new MarkupNode
         {
-            Token = child.Token,
-            Type = newType,
+            Token = (action == NodeAction.MergeDown) ? child.Token : parent.Token,
+            Type = (action == NodeAction.MergeDown) ? child.Type : parent.Type,
             IsBold = child.IsBold ?? parent.IsBold,
             IsItalic = child.IsItalic ?? parent.IsItalic,
             IsUnderline = child.IsUnderline ?? parent.IsUnderline,
