@@ -171,6 +171,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     }
                     else
                     {
+                        foreach (var child in node.Children) // We have to copy the style down to FormattedText's elements
+                            child.InheritAttributes(node);
                         var label = CreateFormattedText(node.Children);
                         if (isPara)
                             label.Margin = ParagraphMargin;

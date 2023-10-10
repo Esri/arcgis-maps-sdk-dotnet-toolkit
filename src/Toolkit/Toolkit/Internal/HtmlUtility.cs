@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Color = System.Drawing.Color;
@@ -44,7 +43,7 @@ internal class MarkupNode
     public Color? FontColor { get; set; }
     public Color? BackColor { get; set; }
     public HtmlAlignment? Alignment { get; set; }
-    public IList<MarkupNode> Children { get; } = new List<MarkupNode>();
+    public List<MarkupNode> Children { get; } = new List<MarkupNode>();
     public string? Content { get; set; }
 
     public override string ToString()
@@ -153,7 +152,7 @@ internal class HtmlUtility
                     "lt" => "<",
                     "gt" => ">",
                     // Common HTML entities used for typography
-                    "nbsp" => " ",
+                    "nbsp" => "\xA0",
                     "copy" => "\xA9",
                     "deg" => "\xB0",
                     "para" => "\xB6",
@@ -203,6 +202,7 @@ internal class HtmlUtility
     internal static MarkupNode BuildDocumentTree(string snippet)
     {
         var stack = new Stack<MarkupNode>();
+        var hiddenNodes = new HashSet<MarkupNode>(); // We have to parse hidden nodes and their children, but don't add them to the document tree
         var root = new MarkupNode { Type = MarkupType.Document };
         stack.Push(root);
         var tokenator = new HtmlTokenParser(snippet);
@@ -384,13 +384,16 @@ internal class HtmlUtility
                     newNode.BackColor = ParseCssColor(backColorString);
                 else if (styles.TryGetValue("background", out var backString))
                     newNode.BackColor = ParseCssColor(backString); // fallback if background-color is not available
+                if (styles.TryGetValue("display", out var display) && display == "none")
+                    hiddenNodes.Add(newNode);
                 // TODO padding?
                 // TODO margin?
             }
 
             if (tokenType == HtmlTokenType.OpenTag)
             {
-                parent.Children.Add(newNode);
+                if (!hiddenNodes.Contains(newNode))
+                    parent.Children.Add(newNode);
                 stack.Push(newNode);
                 if (t.Name == "p")
                     isInParagraph = true;
@@ -407,7 +410,7 @@ internal class HtmlUtility
                 if (!stack.Any())
                 {
                     // We walked all the way up to root, no more nodes left to close. Give up and return what we have so far.
-                    RemoveTrailingBreaks(root);
+                    SimplifySubtree(root);
                     return root;
                 }
                 var openTag = stack.Pop();
@@ -416,34 +419,288 @@ internal class HtmlUtility
             }
             else
             {
-                parent.Children.Add(newNode);
+                if (!hiddenNodes.Contains(newNode))
+                    parent.Children.Add(newNode);
             }
         }
-        RemoveTrailingBreaks(root);
+        SimplifySubtree(root);
         return root;
     }
 
-    private static void RemoveTrailingBreaks(MarkupNode node, bool isLastChildInBlock = false)
-    {
-        // Per HTML spec, last <br> inside a non-empty block element should be ignored
-        // See https://stackoverflow.com/a/62523690
-        if (node.Children.Count == 0)
-            return;
-        var lastChild = node.Children.Last();
+    #region Tree Simplification
 
-        bool thisIsBlock = node.Type is MarkupType.Document or MarkupType.ListItem or MarkupType.TableCell or MarkupType.Block;
-        if ((isLastChildInBlock || thisIsBlock)
-            && node.Children.Count > 1
-            && lastChild.Type == MarkupType.Break)
+    // Simplify the document tree to make it easier to map to GUI components.
+    // This method tries to remove unnecessary nodes, merge nodes that can be combined, and trim collapsible whitespace.
+    private static void SimplifySubtree(MarkupNode parent)
+    {
+        if (parent.Children.Count == 0)
+            return;
+
+        var optimizedChildren = new List<MarkupNode>();
+
+        // Recursively optimize all internal nodes, depth-first.
+        foreach (var child in parent.Children)
         {
-            node.Children.RemoveAt(node.Children.Count - 1);
+            SimplifySubtree(child);
+            switch (AnalyzeNode(child))
+            {
+                case NodeAction.None:
+                    optimizedChildren.Add(child);
+                    break;
+                case NodeAction.MergeUp:
+                    // Eliminate grandchild, merge it up
+                    optimizedChildren.Add(Merge(child, child.Children[0], NodeAction.MergeUp));
+                    break;
+                case NodeAction.MergeDown:
+                    // Eliminate child, merge it down
+                    optimizedChildren.Add(Merge(child, child.Children[0], NodeAction.MergeDown));
+                    break;
+                case NodeAction.Skip:
+                    continue;
+            }
         }
-        foreach (var child in node.Children)
+
+        // Remove redundant empty text nodes
+        if (IsBlockContainer(parent) || IsInlineContainer(parent))
         {
-            bool isLast = ReferenceEquals(child, lastChild);
-            RemoveTrailingBreaks(child, isLast && (thisIsBlock || isLastChildInBlock));
+            for (int i = 0; i < optimizedChildren.Count; i++)
+            {
+                if (optimizedChildren[i].Type == MarkupType.Text && optimizedChildren[i].Content == " ")
+                {
+                    // A whitespace node is considered redundant if it is adjacent to a blocky node, or immediately follows/precedes whitespace in another text node
+                    var prev = i > 0 ? optimizedChildren[i - 1] : null;
+                    var next = i < optimizedChildren.Count - 1 ? optimizedChildren[i + 1] : null;
+                    if (prev != null && (!IsInlineContainer(prev) && prev.Type != MarkupType.Text || EndsWithSpace(prev)) ||
+                        next != null && (!IsInlineContainer(next) && next.Type != MarkupType.Text || StartsWithSpace(next)))
+                    {
+                        // This whitespace is redundant, remove it
+                        optimizedChildren.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+        }
+
+        if (IsBlockContainer(parent) && optimizedChildren.Count > 0)
+            optimizedChildren = FixWhitespace(optimizedChildren);
+
+        parent.Children.Clear();
+        parent.Children.AddRange(optimizedChildren);
+    }
+    
+    // Trims leading whitespace, trailing whitespace, and the last trailing break from blocky elements.
+    private static List<MarkupNode> FixWhitespace(List<MarkupNode> optimizedChildren)
+    {
+        var newChildren = new List<MarkupNode>();
+
+        // Go over all children and find groups of inline nodes (i.e. IsInlineContainer, Text, or Break).
+        // There might be one group, or many groups, or none. Each group should have at least 1 member.
+        // Groups are separated by one or more block (non-inline) nodes.
+        var inlineGroup = new List<MarkupNode>();
+        for (int i = 0; i < optimizedChildren.Count; i++)
+        {
+            var child = optimizedChildren[i];
+            if (IsInlineContainer(child) || child.Type == MarkupType.Text || child.Type == MarkupType.Break)
+            {
+                inlineGroup.Add(child);
+            }
+            else
+            {
+                ProcessInlineGroup();
+                newChildren.Add(child);
+            }
+        }
+        ProcessInlineGroup();
+
+        void ProcessInlineGroup()
+        {
+            if (inlineGroup.Count > 0)
+            {
+                TrimLeadingWhitespace(inlineGroup);
+                TrimTrailingWhitespace(inlineGroup);
+                if ((HasContent(inlineGroup) || CountBreaks(inlineGroup) > 1) && TrimLastLineBreak(inlineGroup))
+                {
+                    // Remove trailing whitespace that was before <br> too
+                    TrimTrailingWhitespace(inlineGroup);
+                }
+                newChildren.AddRange(inlineGroup);
+                // End the current group
+                inlineGroup.Clear();
+            }
+        }
+        optimizedChildren = newChildren;
+        return optimizedChildren;
+    }
+
+    private static void TrimLeadingWhitespace(List<MarkupNode> group)
+    {
+        while (group.Count > 0)
+        {
+            var firstChild = group[0];
+            if (firstChild.Type != MarkupType.Text)
+                break;
+            firstChild.Content = firstChild.Content?.TrimStart(' ');
+            if (!string.IsNullOrEmpty(firstChild.Content))
+                break;
+            group.RemoveAt(0);
         }
     }
+
+    private static void TrimTrailingWhitespace(List<MarkupNode> group)
+    {
+        while (group.Count > 0)
+        {
+            var lastChild = group.Last();
+            if (lastChild.Type is MarkupType.Span or MarkupType.Link)
+            {
+                TrimTrailingWhitespace(lastChild.Children);
+                if (lastChild.Children.Count > 0)
+                    break;
+            }
+            else if (lastChild.Type == MarkupType.Text)
+            {
+                lastChild.Content = lastChild.Content?.TrimEnd(' ');
+                if (!string.IsNullOrEmpty(lastChild.Content))
+                    break;
+            }
+            else
+            {
+                break;
+            }
+            group.RemoveAt(group.Count - 1);
+        }
+    }
+
+    // Returns true if a group of nodes contain any content
+    // (i.e. anything other than linebreaks and empty spans)
+    private static bool HasContent(List<MarkupNode> group)
+    {
+        foreach (var child in group)
+        {
+            if (!IsInlineContainer(child) && child.Type != MarkupType.Break)
+                return true;
+            if (HasContent(child.Children))
+                return true;
+        }
+        return false;
+    }
+    
+    // Recursively counts the number of descendant nodes of Type Break
+    private static int CountBreaks(List<MarkupNode> group)
+    {
+        int count = 0;
+        foreach (var node in group)
+        {
+            if (node.Type == MarkupType.Break)
+                count++;
+            else
+                count += CountBreaks(node.Children);
+        }
+        return count;
+    }
+
+    // Per HTML spec, last <br> inside a non-empty block element should be ignored
+    // See https://stackoverflow.com/a/62523690
+    private static bool TrimLastLineBreak(List<MarkupNode> group)
+    {
+        if (group.Count == 0)
+            return false;
+        var lastNode = group.Last();
+        if (lastNode.Type == MarkupType.Break)
+        {
+            group.RemoveAt(group.Count - 1);
+            return true;
+        }
+        else if (IsInlineContainer(lastNode))
+        {
+            // Recurse into inline containers (such as span).
+            // From HTML's perspective, 
+            return TrimLastLineBreak(lastNode.Children);
+        }
+        return false;
+    }
+    
+    // True if the last leaf node in this subtree is a Text node that ends with a space.
+    // Stops search and returns false if we encounter a non-inline node.
+    private static bool EndsWithSpace(MarkupNode node)
+    {
+        if (node.Type == MarkupType.Text && node.Content != null)
+            return node.Content.EndsWith(" ");
+        if (IsInlineContainer(node))
+            return node.Children.Count > 0 && EndsWithSpace(node.Children.Last());
+        return false;
+    }
+    
+    // True if the first leaf node in this subtree is a Text node that ends with a space.
+    // Stops search and returns false if we encounter a non-inline node.
+    private static bool StartsWithSpace(MarkupNode node)
+    {
+        if (node.Type == MarkupType.Text && node.Content != null)
+            return node.Content.StartsWith(" ");
+        if (IsInlineContainer(node))
+            return node.Children.Count > 0 && StartsWithSpace(node.Children.First());
+        return false;
+    }
+
+    enum NodeAction { None, MergeUp, MergeDown, Skip }
+
+    private static NodeAction AnalyzeNode(MarkupNode node)
+    {
+        // Remove insignificant empty nodes (e.g. <b></b>)
+        if (node.Children.Count == 0 && (node.Type is MarkupType.Block || IsInlineContainer(node)))
+            return NodeAction.Skip;
+
+        // The rest of the analysis only looks at single-child nodes
+        if (node.Children.Count != 1)
+            return NodeAction.None;
+        var child = node.Children[0];
+
+        // Merge an inline node with its single child,
+        // e.g. <span><b>foo</b></span> ==> <b>foo</b>
+        if (node.Type is MarkupType.Span)
+            return NodeAction.MergeDown;
+
+        // Elide a single inline child inside a link,
+        // e.g. <a href="..."><span>foo</span></a> ==> <a href="...">foo</a>
+        if (node.Type is MarkupType.Link && child.Type is MarkupType.Span)
+            return NodeAction.MergeUp;
+
+        // Merge a block node with its single blocky child,
+        // e.g. <div><table>...</table></div> ==> <table>...</table>
+        if (node.Type is MarkupType.Block && child.Type is (MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider))
+            return NodeAction.MergeDown;
+
+        // Elide a single span inside a block,
+        // e.g. <div><span>foo</span></div> ==> <div>foo</div>
+        if (node.Type is MarkupType.Block && child.Type is MarkupType.Span)
+            return NodeAction.MergeUp;
+
+        return NodeAction.None;
+    }
+
+    // Remove the parent and apply its attributes to the child.
+    // In case of conflict, child attributes take precedence.
+    // New node's type depends on whether we are merging "down" (eliminating a parent) or "up" (eliminating a child).
+    private static MarkupNode Merge(MarkupNode parent, MarkupNode child, NodeAction action)
+    {
+        var newNode = new MarkupNode
+        {
+            Token = (action == NodeAction.MergeDown) ? child.Token : parent.Token,
+            Type = (action == NodeAction.MergeDown) ? child.Type : parent.Type,
+            IsBold = child.IsBold ?? parent.IsBold,
+            IsItalic = child.IsItalic ?? parent.IsItalic,
+            IsUnderline = child.IsUnderline ?? parent.IsUnderline,
+            FontSize = child.FontSize ?? parent.FontSize,
+            FontColor = child.FontColor ?? parent.FontColor,
+            BackColor = child.BackColor ?? parent.BackColor,
+            Alignment = child.Alignment ?? parent.Alignment,
+            Content = child.Content,
+        };
+        newNode.Children.AddRange(child.Children);
+        return newNode;
+    }
+
+    #endregion
 
     // True if tags of given tokenType cannot have any children/content.
     private static bool IsVoidElement(string tagName) => tagName is "br" or "hr" or "img" or "source";
@@ -451,6 +708,10 @@ internal class HtmlUtility
     private static bool CanContainText(string? parentTag) => parentTag is not ("table" or "dl" or "tr" or "ol" or "ul");
 
     private static bool IsBlockContent(string tagName) => tagName is "div" or "h1" or "h2" or "h3" or "h4" or "h5" or "h6" or "figure" or "ol" or "ul" or "dl" or "hr" or "table" or "p";
+
+    private static bool IsInlineContainer(MarkupNode node) => node.Type is MarkupType.Span or MarkupType.Link or MarkupType.Sub or MarkupType.Sup;
+
+    private static bool IsBlockContainer(MarkupNode node) => node.Type is MarkupType.Document or MarkupType.Block or MarkupType.ListItem or MarkupType.TableCell;
 
     // Approximation based on https://stackoverflow.com/a/819121
     private static double ParseHtmlFontSize(int fontSize) =>
@@ -761,7 +1022,6 @@ internal class HtmlTokenParser
         var nextTokenIdx = _html.IndexOf('<', _idx) + 1;
         if (nextTokenIdx > _idx + 1)
         {
-            // TODO collapse whitespace
             var text = ProcessText(_html.Substring(_idx, nextTokenIdx - _idx - 1));
             token = new HtmlToken(text, null, HtmlTokenType.PlainText);
             _idx = nextTokenIdx - 1;
@@ -771,7 +1031,6 @@ internal class HtmlTokenParser
             // no more tokens
             if (_idx < _html.Length)
             {
-                // TODO collapse whitespace
                 var text = ProcessText(_html.Substring(_idx));
                 token = new HtmlToken(text, null, HtmlTokenType.PlainText);
                 _idx = _html.Length;
@@ -819,10 +1078,11 @@ internal class HtmlTokenParser
 
     private static string ProcessText(string rawText)
     {
-        // replace HTML entities with their equivalent symbols
+        // Replace HTML entities with their equivalent symbols.
         var unescaped = HtmlUtility.UnescapeHtml(rawText);
-        // trim newlines and collapse remaining whitespace
-        return Regex.Replace(unescaped.Trim('\r', '\n'), @"\s+", " ");
+        // Trim newlines and collapse remaining whitespace,
+        // but leave unbreakable spaces (nbsp / 0x00A0) untouched.
+        return Regex.Replace(unescaped, @"[^\S\u00A0]+", " ");
     }
 }
 
