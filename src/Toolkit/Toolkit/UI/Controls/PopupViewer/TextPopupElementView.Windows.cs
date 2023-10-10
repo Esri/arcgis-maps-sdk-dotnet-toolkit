@@ -142,7 +142,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     return new BlockUIContainer(new Separator());
 
                 case MarkupType.Table:
-                    var table = new Table();
+                    var table = new Table { Margin = new Thickness(0) };
                     var columnCount = node.Children.Max(rowNode => rowNode.Children.Count);
                     for (int i = 0; i < columnCount; i++)
                         table.Columns.Add(new TableColumn());
