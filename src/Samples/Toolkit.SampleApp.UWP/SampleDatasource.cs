@@ -40,7 +40,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 }
                 if (string.IsNullOrEmpty(sample.Name))
                 {
-                    sample.Name = Regex.Replace(sample.Page.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS");
+                    sample.Name = Regex.Replace(sample.Page.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS").Replace("Geo View", "GeoView").Replace("Geo View", "GeoView");
                     if (sample.Name.EndsWith("Sample"))
                         sample.Name = sample.Name.Substring(0, sample.Name.Length - 6);
                 }

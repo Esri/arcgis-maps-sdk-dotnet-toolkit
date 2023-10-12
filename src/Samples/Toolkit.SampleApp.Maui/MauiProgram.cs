@@ -1,4 +1,5 @@
-﻿using Esri.ArcGISRuntime.Maui;
+﻿using CommunityToolkit.Maui;
+using Esri.ArcGISRuntime.Maui;
 using Esri.ArcGISRuntime.Toolkit.Maui;
 
 namespace Toolkit.SampleApp.Maui;
@@ -14,7 +15,7 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			}).UseArcGISRuntime().UseArcGISToolkit();
+			}).UseArcGISRuntime().UseArcGISToolkit().UseMauiCommunityToolkit();
 
 		return builder.Build();
 	}
