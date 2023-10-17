@@ -39,10 +39,25 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         protected GeoView? ConnectedView => _geoViewWeak?.TryGetTarget(out var view) == true ? view : null;
 
-        private void AttachToGeoView(GeoView mv)
+        /// <summary>
+        /// Attaches a geoview to the controller, or detaches if <c>null</c>.
+        /// </summary>
+        /// <param name="geoView">The <see cref="GeoView"/> to attach, or <c>null</c> is detaching.</param>
+        public void Attach(GeoView? geoView)
+        {
+            if (geoView is null)
+            {
+                if (ConnectedView is not null)
+                    DetachFromGeoView(ConnectedView);
+            }
+            else
+                AttachToGeoView(geoView);
+        }
+
+        private void AttachToGeoView(GeoView geoView)
         {
             var connectedView = ConnectedView;
-            if (connectedView == mv)
+            if (connectedView == geoView)
             {
                 return;
             }
@@ -53,35 +68,35 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 connectedView = null;
             }
             // All event listeners must be weak to avoid holding on to the GeoView if the GeoViewController stays alive
-            _geoViewWeak = new WeakReference<GeoView>(mv);
-            _loadedListener = new WeakEventListener<GeoViewController, GeoView, object?, LoadedEventArgs>(this, mv)
+            _geoViewWeak = new WeakReference<GeoView>(geoView);
+            _loadedListener = new WeakEventListener<GeoViewController, GeoView, object?, LoadedEventArgs>(this, geoView)
             {
                 OnEventAction = static (instance, source, eventArgs) => instance.GeoView_Loaded((GeoView)source!),
                 OnDetachAction = static (instance, source, weakEventListener) => source.Loaded -= weakEventListener.OnEvent,
             };
-            mv.Loaded += _loadedListener.OnEvent;
+            geoView.Loaded += _loadedListener.OnEvent;
 
-            _unloadedListener = new WeakEventListener<GeoViewController, GeoView, object?, LoadedEventArgs>(this, mv)
+            _unloadedListener = new WeakEventListener<GeoViewController, GeoView, object?, LoadedEventArgs>(this, geoView)
             {
                 OnEventAction = static (instance, source, eventArgs) => instance.GeoView_Unloaded((GeoView)source!),
                 OnDetachAction = static (instance, source, weakEventListener) => source.Unloaded -= weakEventListener.OnEvent,
             };
-            mv.Loaded += _loadedListener.OnEvent;
-            mv.Unloaded += _unloadedListener.OnEvent;
-            OnGeoViewAttached(mv);
-            if (mv.IsLoaded)
-                GeoView_Loaded(mv);
+            geoView.Loaded += _loadedListener.OnEvent;
+            geoView.Unloaded += _unloadedListener.OnEvent;
+            OnGeoViewAttached(geoView);
+            if (geoView.IsLoaded)
+                GeoView_Loaded(geoView);
         }
 
-        private void DetachFromGeoView(GeoView mv)
+        private void DetachFromGeoView(GeoView geoView)
         {
             var connectedView = ConnectedView;
-            if (connectedView != null && connectedView == mv)
+            if (connectedView != null && connectedView == geoView)
             {
                 _loadedListener?.Detach();
                 _unloadedListener?.Detach();
                 if (connectedView.IsLoaded)
-                    GeoView_Unloaded(mv);
+                    GeoView_Unloaded(geoView);
                 OnGeoViewDetached(connectedView);
                 _geoViewWeak = null;
             }
@@ -119,10 +134,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
         }
 
-        private void GeoView_Loaded(GeoView sender)
+        private void GeoView_Loaded(GeoView geoView)
         {
-            Debug.Assert(sender == ConnectedView && ConnectedView is not null);
-            OnGeoViewLoaded(sender);
+            Debug.Assert(geoView == ConnectedView && ConnectedView is not null);
+            OnGeoViewLoaded(geoView);
         }
 
         private void GeoView_Unloaded(GeoView sender)
@@ -134,38 +149,38 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         #region Viewpoints
 
         /// <inheritdoc cref="GeoView.GetCurrentViewpoint(ViewpointType)"/>
-        public Viewpoint? GetCurrentViewpoint(ViewpointType viewpointType) => ConnectedView?.GetCurrentViewpoint(viewpointType);
+        public virtual Viewpoint? GetCurrentViewpoint(ViewpointType viewpointType) => ConnectedView?.GetCurrentViewpoint(viewpointType);
 
         /// <inheritdoc cref="GeoView.SetViewpointAsync(Viewpoint)"/>
-        public Task<bool> SetViewpointAsync(Viewpoint viewpoint) => ConnectedView?.SetViewpointAsync(viewpoint) ?? Task.FromResult(false);
+        public virtual Task<bool> SetViewpointAsync(Viewpoint viewpoint) => ConnectedView?.SetViewpointAsync(viewpoint) ?? Task.FromResult(false);
 
         /// <inheritdoc cref="GeoView.SetViewpointAsync(Viewpoint, TimeSpan)"/>
-        public Task<bool> SetViewpointAsync(Viewpoint viewpoint, TimeSpan duration) => ConnectedView?.SetViewpointAsync(viewpoint, duration) ?? Task.FromResult(false);
+        public virtual Task<bool> SetViewpointAsync(Viewpoint viewpoint, TimeSpan duration) => ConnectedView?.SetViewpointAsync(viewpoint, duration) ?? Task.FromResult(false);
 
         /// <inheritdoc cref="GeoView.SetViewpoint(Viewpoint)"/>
-        public void SetViewpoint(Viewpoint viewpoint) => ConnectedView?.SetViewpoint(viewpoint);
+        public virtual void SetViewpoint(Viewpoint viewpoint) => ConnectedView?.SetViewpoint(viewpoint);
 
         #endregion Viewpoints
 
         #region Identify
         
         /// <inheritdoc cref="GeoView.IdentifyLayersAsync(Point, double, bool, CancellationToken)"/>
-        public Task<IReadOnlyList<IdentifyLayerResult>> IdentifyLayersAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
+        public virtual Task<IReadOnlyList<IdentifyLayerResult>> IdentifyLayersAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
             ConnectedView?.IdentifyLayersAsync(screenPoint, tolerance, returnPopupsOnly, cancellationToken) ??
                 Task.FromResult<IReadOnlyList<IdentifyLayerResult>>(new List<IdentifyLayerResult>().AsReadOnly());
         
         /// <inheritdoc cref="GeoView.IdentifyLayerAsync(Layer, Point, double, bool, CancellationToken)"/>
-        public Task<IdentifyLayerResult> IdentifyLayerAsync(Layer layer, Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
+        public virtual Task<IdentifyLayerResult> IdentifyLayerAsync(Layer layer, Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
             ConnectedView?.IdentifyLayerAsync(layer, screenPoint, tolerance, returnPopupsOnly, cancellationToken) ??
                 Task.FromResult<IdentifyLayerResult>(null!);
 
         /// <inheritdoc cref="GeoView.IdentifyGraphicsOverlaysAsync(Point, double, bool, long)" />
-        public Task<IReadOnlyList<IdentifyGraphicsOverlayResult>> IdentifyGraphicsOverlaysAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResultsPerOverlay = 1) =>
+        public virtual Task<IReadOnlyList<IdentifyGraphicsOverlayResult>> IdentifyGraphicsOverlaysAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResultsPerOverlay = 1) =>
             ConnectedView?.IdentifyGraphicsOverlaysAsync(screenPoint, tolerance, returnPopupsOnly, maximumResultsPerOverlay) ??
                 Task.FromResult<IReadOnlyList<IdentifyGraphicsOverlayResult>>(new List<IdentifyGraphicsOverlayResult>().AsReadOnly());
 
         /// <inheritdoc cref="GeoView.IdentifyGraphicsOverlaysAsync(Point, double, bool, long)" />
-        public Task<IdentifyGraphicsOverlayResult> IdentifyGraphicsOverlayAsync(GraphicsOverlay overlay, Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResults = 1) =>
+        public virtual Task<IdentifyGraphicsOverlayResult> IdentifyGraphicsOverlayAsync(GraphicsOverlay overlay, Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResults = 1) =>
             ConnectedView?.IdentifyGraphicsOverlayAsync(overlay, screenPoint, tolerance, returnPopupsOnly, maximumResults) ??
                 Task.FromResult<IdentifyGraphicsOverlayResult>(null!);
         #endregion Identify
@@ -173,13 +188,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         #region Callouts
 
         /// <inheritdoc cref="GeoView.DismissCallout()" />
-        public void DismissCallout() => ConnectedView?.DismissCallout();
+        public virtual void DismissCallout() => ConnectedView?.DismissCallout();
 
         /// <inheritdoc cref="GeoView.ShowCalloutAt(Geometry.MapPoint, CalloutDefinition)" />
-        public void ShowCalloutAt(Esri.ArcGISRuntime.Geometry.MapPoint location, CalloutDefinition definition) => ConnectedView?.ShowCalloutAt(location, definition);
+        public virtual void ShowCalloutAt(Esri.ArcGISRuntime.Geometry.MapPoint location, CalloutDefinition definition) => ConnectedView?.ShowCalloutAt(location, definition);
 
         /// <inheritdoc cref="GeoView.ShowCalloutForGeoElement(GeoElement, Point, CalloutDefinition)" />
-        public void ShowCalloutForGeoElement(GeoElement element, Point tapPosition, CalloutDefinition definition) => ConnectedView?.ShowCalloutForGeoElement(element, tapPosition, definition);
+        public virtual void ShowCalloutForGeoElement(GeoElement element, Point tapPosition, CalloutDefinition definition) => ConnectedView?.ShowCalloutForGeoElement(element, tapPosition, definition);
         #endregion Callouts
 
 #if MAUI
