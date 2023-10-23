@@ -11,6 +11,7 @@ using Windows.UI.Popups;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView
 {
+    [SampleInfo(ApiKeyRequired = true)]
     public sealed partial class SearchViewCustomizationSample : Page
     {
         public SearchViewCustomizationSample()

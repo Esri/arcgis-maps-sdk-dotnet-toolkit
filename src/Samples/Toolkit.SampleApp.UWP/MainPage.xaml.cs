@@ -4,9 +4,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,8 +32,25 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             this.InitializeComponent();
             this.Loaded += RootFrame_Loaded;
             rootFrame.Navigated += RootFrame_Navigated;
+            //CheckAPIKey();
         }
-        private void RootFrame_Loaded(object sender, RoutedEventArgs e)
+
+        private async void CheckAPIKey()
+        {
+            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if(localSettings.Values.ContainsKey("APIKey") && localSettings.Values["APIKey"] is string key)
+            {
+                try
+                {
+                    var basemap = new Mapping.Basemap(Mapping.BasemapStyle.ArcGISStreets) { ApiKey = key };
+                    await basemap.LoadAsync();
+                    ArcGISRuntimeEnvironment.ApiKey = key;
+                }
+                catch { }
+            }
+        }
+
+        private async void RootFrame_Loaded(object sender, RoutedEventArgs e)
         {
             var currentView = SystemNavigationManager.GetForCurrentView();
             currentView.BackRequested += (s, args) =>
@@ -50,6 +70,14 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             }
             else
             {
+
+                ApiKeyWindow.Visibility = Visibility.Collapsed;
+                ApiKeyTask?.TrySetResult(false);
+                if (sample.ApiKeyRequired && string.IsNullOrEmpty(ArcGISRuntimeEnvironment.ApiKey))
+                {
+                    bool ok = await ShowApiKeyWindow();
+                    if (!ok) return;
+                }
                 if (!rootFrame.Navigate(sample.Page))
                 {
                     throw new Exception("Failed to create initial page");
@@ -80,9 +108,17 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             NavigateSample(sample);
         }
 
-        public void NavigateSample(Sample sample)
+        public async void NavigateSample(Sample sample)
         {
             if (sample == null) return;
+
+            ApiKeyWindow.Visibility = Visibility.Collapsed;
+            ApiKeyTask?.TrySetResult(false);
+            if (sample.ApiKeyRequired && string.IsNullOrEmpty(ArcGISRuntimeEnvironment.ApiKey))
+            {
+                bool ok = await ShowApiKeyWindow();
+                if (!ok) return;
+            }
             if (!rootFrame.Navigate(sample.Page, null))
             {
                 throw new Exception("Failed to create initial page");
@@ -91,6 +127,46 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         public Frame SampleFrame
         {
             get { return rootFrame; }
+        }
+
+        public ICollectionView Samples => SampleDatasource.Current.CollectionViewSource.View;
+
+        private TaskCompletionSource<bool> ApiKeyTask; private Task<bool> ShowApiKeyWindow()
+        {
+            ApiKeyTask?.TrySetResult(false);
+            ApiKeyWindow.Visibility = Visibility.Visible;
+            ApiKeyTask = new TaskCompletionSource<bool>();
+            return ApiKeyTask.Task;
+        }
+
+        private void CancelApiKey_Click(object sender, RoutedEventArgs e)
+        {
+            ApiKeyWindow.Visibility = Visibility.Collapsed;
+            ApiKeyTask.TrySetResult(false);
+        }
+
+        private async void SaveApiKey_Click(object sender, RoutedEventArgs e)
+        {
+            string key = ApiKeyInput.Text;
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                // Test API Key
+                try
+                {
+                    var basemap = new Mapping.Basemap(Mapping.BasemapStyle.ArcGISStreets) { ApiKey = key };
+                    await basemap.LoadAsync();
+                    ArcGISRuntimeEnvironment.ApiKey = key;
+                    ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+                    localSettings.Values["APIKey"] = key;
+                    ApiKeyWindow.Visibility = Visibility.Collapsed;
+                    ApiKeyTask.TrySetResult(true);
+                }
+                catch (System.Exception ex)
+                {
+                    MessageDialog dialog = new MessageDialog(ex.Message, "Invalid API Key");
+                    await dialog.ShowAsync();
+                }
+            };
         }
     }
 

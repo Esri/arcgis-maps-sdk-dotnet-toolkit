@@ -9,18 +9,19 @@ using System.Text.RegularExpressions;
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class SampleInfoAttributeAttribute : Attribute
+    public class SampleInfoAttribute : Attribute
     {
-        public SampleInfoAttributeAttribute()
+        public SampleInfoAttribute()
         {
         }
         public string Category { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
+        public bool ApiKeyRequired { get; set; }
     }
 
     [Bindable]
-	public class SampleDatasource
+    public class SampleDatasource
     {
         private SampleDatasource() 
         {
@@ -29,14 +30,15 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                 select t;
 
             Samples = (from p in pages select new Sample() { Page = p }).ToArray();
-			foreach(var sample in Samples)
-			{
-				var attr = sample.Page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttributeAttribute)) as SampleInfoAttributeAttribute;
+            foreach(var sample in Samples)
+            {
+                var attr = sample.Page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttribute)) as SampleInfoAttribute;
                 if (attr != null)
                 {
                     sample.Category = attr.Category;
                     sample.Description = attr.Description;
                     sample.Name = attr.DisplayName;
+                    sample.ApiKeyRequired = attr.ApiKeyRequired;
                 }
                 if (string.IsNullOrEmpty(sample.Name))
                 {
@@ -51,7 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                         sample.Category = sample.Page.Namespace.Substring(sample.Page.Namespace.IndexOf(".Samples.") + 9);
                     }
                 }
-			}
+            }
         }
 
         public IEnumerable<Sample> Samples { get; private set; }
@@ -67,49 +69,49 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             }
         }
 
-		public IEnumerable<SampleGroup> SamplesByCategory
-		{
-			get
-			{
-				var groups = (from item in Samples
-							 orderby item.Category
-							 group item by item.Category into g
-							 select new SampleGroup(g) { Key = g.Key ?? "Misc" });
-				return groups;
-			}
-		}
-		CollectionViewSource m_CollectionViewSource;
-		public CollectionViewSource CollectionViewSource
-		{
-			get
-			{
-				if(m_CollectionViewSource == null)
-				{
-					m_CollectionViewSource = new CollectionViewSource()
-					{
-						IsSourceGrouped = true,
-						Source = SamplesByCategory,
-						ItemsPath = new PropertyPath("Items")
-					};
-				}
-				return m_CollectionViewSource;
-			}
-		}
+        public IEnumerable<SampleGroup> SamplesByCategory
+        {
+            get
+            {
+                var groups = (from item in Samples
+                             orderby item.Category
+                             group item by item.Category into g
+                             select new SampleGroup(g) { Key = g.Key ?? "Misc" });
+                return groups;
+            }
+        }
+        CollectionViewSource m_CollectionViewSource;
+        public CollectionViewSource CollectionViewSource
+        {
+            get
+            {
+                if(m_CollectionViewSource == null)
+                {
+                    m_CollectionViewSource = new CollectionViewSource()
+                    {
+                        IsSourceGrouped = true,
+                        Source = SamplesByCategory,
+                        ItemsPath = new PropertyPath("Items")
+                    };
+                }
+                return m_CollectionViewSource;
+            }
+        }
     }
-	[Bindable]
-	public class SampleGroup
-	{
-		public SampleGroup(IEnumerable<Sample> samples)
-		{
-			Items = samples;
-		}
-		public string Key { get; set; }
+    [Bindable]
+    public class SampleGroup
+    {
+        public SampleGroup(IEnumerable<Sample> samples)
+        {
+            Items = samples;
+        }
+        public string Key { get; set; }
 
-		public IEnumerable<Sample> Items { get; private set; }
-	}
+        public IEnumerable<Sample> Items { get; private set; }
+    }
 
-	[Bindable]
-	public class Sample
+    [Bindable]
+    public class Sample
     {
         public Type Page { get; set; }
         
@@ -117,7 +119,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         
         public string Description { get; set; }
 
-		public string Category { get; set; }
+        public string Category { get; set; }
 
         public double FontSize
         {
@@ -128,5 +130,6 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
             }
         }
         public int Order { get; set; }
+        public bool ApiKeyRequired { get; set; }
     }
 }
