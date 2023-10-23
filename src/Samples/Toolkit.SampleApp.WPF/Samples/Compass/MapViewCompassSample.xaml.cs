@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.Compass
 {
-    [SampleInfoAttribute(Category = "Compass", DisplayName = "Compass - MapView", Description = "Compass used with a MapView")]
+    [SampleInfo(Category = "Compass", DisplayName = "Compass - MapView", Description = "Compass used with a MapView")]
     public partial class MapViewCompassSample : UserControl
     {
         public MapViewCompassSample()

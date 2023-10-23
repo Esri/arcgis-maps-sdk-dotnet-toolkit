@@ -10,9 +10,9 @@ using System.Text.RegularExpressions;
 namespace Esri.ArcGISRuntime.Toolkit.Samples
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class SampleInfoAttributeAttribute : Attribute
+    public class SampleInfoAttribute : Attribute
     {
-        public SampleInfoAttributeAttribute()
+        public SampleInfoAttribute()
         {
         }
         public string Category { get; set; }
@@ -32,7 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             Samples = (from p in pages select new Sample() { Page = p }).ToArray();
             foreach (var sample in Samples)
             {
-                var attr = sample.Page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttributeAttribute)) as SampleInfoAttributeAttribute;
+                var attr = sample.Page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttribute)) as SampleInfoAttribute;
                 if (attr != null)
                 {
                     sample.Category = attr.Category;

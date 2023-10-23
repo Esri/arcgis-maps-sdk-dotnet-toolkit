@@ -21,7 +21,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView
     /// <summary>
     /// Interaction logic for BookmarksViewSample.xaml
     /// </summary>
-    [SampleInfoAttribute(Category = "BookmarksView", DisplayName = "BookmarksView - Comprehensive", Description = "Full BookmarksView scenario")]
+    [SampleInfo(Category = "BookmarksView", DisplayName = "BookmarksView - Comprehensive", Description = "Full BookmarksView scenario")]
     public partial class BookmarksViewSample : UserControl
     {
         private const string webMapOneUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=e50fafe008ac4ce4ad2236de7fd149c3";

@@ -15,7 +15,7 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.SearchView
 {
-    [SampleInfoAttribute(ApiKeyRequired = true)]
+    [SampleInfo(ApiKeyRequired = true)]
     public partial class SearchViewCustomizationSample : UserControl
     {
         public SearchViewCustomizationSample()
