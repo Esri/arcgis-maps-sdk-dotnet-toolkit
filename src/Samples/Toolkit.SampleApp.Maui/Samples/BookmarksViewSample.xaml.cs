@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "BookmarksView", Description = "BookmarksView with MapView sample")]
+    [SampleInfo(Category = "BookmarksView", Description = "BookmarksView with MapView sample")]
     public partial class BookmarksViewSample : ContentPage
     {
         private const string webMapOneUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=e50fafe008ac4ce4ad2236de7fd149c3";

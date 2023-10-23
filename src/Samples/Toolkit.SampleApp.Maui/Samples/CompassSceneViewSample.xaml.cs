@@ -3,7 +3,7 @@
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "Compass", Description = "Compass with SceneView sample")]
+    [SampleInfo(Category = "Compass", Description = "Compass with SceneView sample")]
     public partial class CompassSceneViewSample : ContentPage
     {
         public CompassSceneViewSample()

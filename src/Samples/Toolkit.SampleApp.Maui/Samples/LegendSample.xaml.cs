@@ -4,7 +4,7 @@ using Esri.ArcGISRuntime.Mapping;
 namespace Toolkit.SampleApp.Maui.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "Legend", Description = "Legend with MapView sample")]
+    [SampleInfo(Category = "Legend", Description = "Legend with MapView sample")]
     public partial class LegendSample : ContentPage
 	{
 		public LegendSample ()

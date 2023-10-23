@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "Compass", Description = "Compass with MapView sample")]
+    [SampleInfo(Category = "Compass", Description = "Compass with MapView sample")]
     public partial class CompassMapViewSample : ContentPage
     {
         public CompassMapViewSample()

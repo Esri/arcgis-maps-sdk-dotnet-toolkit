@@ -27,26 +27,28 @@ namespace Toolkit.SampleApp.Maui
             }
         }
     }
-    public class SampleInfoAttributeAttribute : Attribute
+    public class SampleInfoAttribute : Attribute
     {
-        public SampleInfoAttributeAttribute()
+        public SampleInfoAttribute()
         {
         }
         public string? Category { get; set; }
         public string? Description { get; set; }
         public string? DisplayName { get; set; }
+        public bool ApiKeyRequired { get; set; }
     }
     public class Sample
     {
         public Sample(Type page)
         {
             Page = page;
-            var attr = page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttributeAttribute)) as SampleInfoAttributeAttribute;
+            var attr = page.GetTypeInfo().GetCustomAttribute(typeof(SampleInfoAttribute)) as SampleInfoAttribute;
             if (attr != null)
             {
                 Name = attr.DisplayName;
                 Category = attr.Category;
                 Description = attr.Description;
+                ApiKeyRequired = attr.ApiKeyRequired;
             }
             if (string.IsNullOrEmpty(Name))
             {
@@ -71,5 +73,7 @@ namespace Toolkit.SampleApp.Maui
         public string? Description { get; set; }
 
         public string? Category { get; set; }
+
+        public bool ApiKeyRequired { get; set; }
     }
 }

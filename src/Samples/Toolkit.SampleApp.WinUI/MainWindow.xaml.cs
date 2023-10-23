@@ -82,7 +82,8 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
 
         public ICollectionView Samples => SampleDatasource.Current.CollectionViewSource.View;
 
-        private TaskCompletionSource<bool> ApiKeyTask; private Task<bool> ShowApiKeyWindow()
+        private TaskCompletionSource<bool> ApiKeyTask;
+        private Task<bool> ShowApiKeyWindow()
         {
             ApiKeyTask?.TrySetResult(false);
             ApiKeyWindow.Visibility = Visibility.Visible;
@@ -121,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
                     dialog.PrimaryButtonText = "OK";
                     await dialog.ShowAsync();
                 }
-            };
+            }
         }
     }
 }

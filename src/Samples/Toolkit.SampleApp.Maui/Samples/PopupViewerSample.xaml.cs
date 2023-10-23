@@ -8,7 +8,7 @@ using Microsoft.Maui.Controls.Shapes;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "PopupViewer", Description = "Use PopupViewer to display detailed feature information")]
+    [SampleInfo(Category = "PopupViewer", Description = "Use PopupViewer to display detailed feature information")]
     public partial class PopupViewerSample : ContentPage
     {
         public PopupViewerSample()

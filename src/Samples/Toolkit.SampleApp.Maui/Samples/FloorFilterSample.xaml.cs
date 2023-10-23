@@ -1,7 +1,7 @@
 ﻿namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "FloorFilter", Description = "Demonstrates FloorFilter with a floor-aware map.")]
+    [SampleInfo(Category = "FloorFilter", Description = "Demonstrates FloorFilter with a floor-aware map.")]
     public partial class FloorFilterSample : ContentPage
     {
         public FloorFilterSample()

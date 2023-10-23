@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Exercises various bindings, properties, and interaction behaviors")]
+    [SampleInfo(Category = "BasemapGallery", Description = "Exercises various bindings, properties, and interaction behaviors", ApiKeyRequired = true)]
     public partial class BasemapGalleryBehaviorSample : ContentPage
     {
         public BasemapGalleryBehaviorSample()

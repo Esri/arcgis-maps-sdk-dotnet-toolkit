@@ -4,7 +4,7 @@ using Esri.ArcGISRuntime.Toolkit.Maui;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "BasemapGallery", Description = "Appearance customization sample")]
+    [SampleInfo(Category = "BasemapGallery", Description = "Appearance customization sample", ApiKeyRequired = true)]
     public partial class BasemapGalleryAppearanceSample : ContentPage
     {
         public BasemapGalleryAppearanceSample()

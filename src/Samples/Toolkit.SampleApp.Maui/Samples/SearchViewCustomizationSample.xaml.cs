@@ -6,7 +6,7 @@ using Esri.ArcGISRuntime.UI;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "SearchView", Description = "Exercises bindings and advanced customization options.")]
+    [SampleInfo(Category = "SearchView", Description = "Exercises bindings and advanced customization options.", ApiKeyRequired = true)]
     public partial class SearchViewCustomizationSample : ContentPage
     {
         public SearchViewCustomizationSample()

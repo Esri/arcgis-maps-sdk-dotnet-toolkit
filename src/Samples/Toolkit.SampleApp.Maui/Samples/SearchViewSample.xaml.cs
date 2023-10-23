@@ -3,7 +3,7 @@
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "SearchView", Description = "Demonstrates SearchView used with a map.")]
+    [SampleInfo(Category = "SearchView", Description = "Demonstrates SearchView used with a map.", ApiKeyRequired = true)]
     public partial class SearchViewSample : ContentPage
     {
         public SearchViewSample()
