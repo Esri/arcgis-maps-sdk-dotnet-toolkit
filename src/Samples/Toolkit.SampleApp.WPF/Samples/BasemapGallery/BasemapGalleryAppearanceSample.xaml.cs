@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
 {
-    [SampleInfoAttribute(Category = "BasemapGallery", DisplayName = "BasemapGallery - Appearance", Description = "Sample showing customization options related to appearance")]
+    [SampleInfoAttribute(Category = "BasemapGallery", DisplayName = "BasemapGallery - Appearance", Description = "Sample showing customization options related to appearance", ApiKeyRequired = true)]
     public partial class BasemapGalleryAppearanceSample : UserControl
     {
         public BasemapGalleryAppearanceSample()

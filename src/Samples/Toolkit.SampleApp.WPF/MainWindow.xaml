@@ -35,5 +35,36 @@
 
         </Border>
 
+        <Border Grid.Row="1" x:Name="ApiKeyWindow" Background="#ccffffff" d:Visibility="Visible" Visibility="Collapsed">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border Background="CornflowerBlue" Padding="10">
+                    <Grid>
+                        <TextBlock Text="API Key Required" FontSize="14" Foreground="White" FontWeight="DemiBold" />
+                        <Button Content="❌" Foreground="White" HorizontalAlignment="Right"
+                                Padding="10" Margin="-10" Background="Transparent" BorderThickness="0"
+                                Click="CancelApiKey_Click" />
+                    </Grid>
+                </Border>
+                <Border BorderThickness="1" BorderBrush="CornflowerBlue" Padding="20" Grid.Row="1">
+                    <StackPanel>
+                        <TextBlock Text="This functional test requires an API Key to access ArcGIS Location Services." Grid.Row="1" />
+                        <TextBlock Text="Enter API Key:" Margin="0,10,0,5" />
+                        <TextBox x:Name="ApiKeyInput" Width="400" />
+                        <Button HorizontalAlignment="Right" Content="Save" Padding="20,5" 
+                                Background="CornflowerBlue" Foreground="White" BorderBrush="White"
+                                Click="SaveApiKey_Click"
+                                />
+                        <TextBlock TextWrapping="Wrap" Margin="0,10,0,0">
+                            <Span>You can get or create an API key from <Hyperlink NavigateUri="https://developers.arcgis.com/api-keys/" RequestNavigate="Hyperlink_RequestNavigate">your developer dashboard</Hyperlink>.</Span><LineBreak></LineBreak>
+                            <Hyperlink NavigateUri="https://developers.arcgis.com/net/security-and-authentication/#api-keys" RequestNavigate="Hyperlink_RequestNavigate">More info on API Keys</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

@@ -18,6 +18,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
         public string Category { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
+        public bool ApiKeyRequired { get; set; }
     }
 
     public class SampleDatasource
@@ -37,6 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
                     sample.Category = attr.Category;
                     sample.Description = attr.Description;
                     sample.Name = attr.DisplayName;
+                    sample.ApiKeyRequired = attr.ApiKeyRequired;
                 }
                 if (string.IsNullOrEmpty(sample.Name))
                 {
@@ -68,14 +70,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples
             }
         }
     }
+
     public class Sample
     {
         public Type Page { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public string Description { get; set; }
 
-		public string Category { get; set; }
+        public string Category { get; set; }
+
+        public bool ApiKeyRequired { get; set; }
     }
 }

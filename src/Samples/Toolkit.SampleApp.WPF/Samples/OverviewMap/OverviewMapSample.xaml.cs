@@ -5,7 +5,7 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap
 {
-    [SampleInfoAttribute(Category = "OverviewMap", DisplayName = "OverviewMap", Description = "OverviewMap sample")]
+    [SampleInfoAttribute(Category = "OverviewMap", DisplayName = "OverviewMap", Description = "OverviewMap sample", ApiKeyRequired = true)]
     public partial class OverviewMapSample : UserControl
     {
         private bool _mapToggle;
