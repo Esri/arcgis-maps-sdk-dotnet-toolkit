@@ -2,6 +2,7 @@
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.SearchView
 {
+    [SampleInfo(ApiKeyRequired = true)]
     public sealed partial class SearchViewSceneSample : Page
     {
         public SearchViewSceneSample()

@@ -5,7 +5,7 @@ using Microsoft.Maui.Controls;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "SymbolDisplay", Description = "Renders a symbol")]
+    [SampleInfo(Category = "SymbolDisplay", Description = "Renders a symbol")]
     public partial class SymbolDisplaySample : ContentPage
     {
         public SymbolDisplaySample()

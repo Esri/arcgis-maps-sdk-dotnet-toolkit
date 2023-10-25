@@ -3,7 +3,7 @@
 namespace Toolkit.SampleApp.Maui.Samples
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "ScaleLine", Description = "Demonstrates ScaleLine.")]
+    [SampleInfo(Category = "ScaleLine", Description = "Demonstrates ScaleLine.")]
     public partial class ScaleLineSample : ContentPage
 	{
 		public ScaleLineSample ()

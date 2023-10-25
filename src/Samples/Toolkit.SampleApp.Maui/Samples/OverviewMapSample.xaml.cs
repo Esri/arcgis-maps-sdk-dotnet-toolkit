@@ -5,7 +5,7 @@ using Esri.ArcGISRuntime.Symbology;
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "OverviewMap", Description = "Demonstrates various scenarios for the OverviewMap control.")]
+    [SampleInfo(Category = "OverviewMap", Description = "Demonstrates various scenarios for the OverviewMap control.")]
     public partial class OverviewMapSample : ContentPage
     {
         private bool _symbolToggle;

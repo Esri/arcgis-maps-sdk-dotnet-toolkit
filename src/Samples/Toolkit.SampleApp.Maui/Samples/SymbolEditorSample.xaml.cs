@@ -3,7 +3,7 @@
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "SymbolDisplay", Description = "Dynamically edit a symbol")]
+    [SampleInfo(Category = "SymbolDisplay", Description = "Dynamically edit a symbol")]
     public partial class SymbolEditorSample : ContentPage
     {
         public SymbolEditorSample()

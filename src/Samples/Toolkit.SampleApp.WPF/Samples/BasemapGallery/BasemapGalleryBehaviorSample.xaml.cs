@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery
 {
-    [SampleInfoAttribute(Category = "BasemapGallery", DisplayName = "BasemapGallery - Behavior", Description = "Sample showing behaviors")]
+    [SampleInfo(Category = "BasemapGallery", DisplayName = "BasemapGallery - Behavior", Description = "Sample showing behaviors", ApiKeyRequired = true)]
     public partial class BasemapGalleryBehaviorSample : UserControl, INotifyPropertyChanged
     {
         private GeoView _selectedGeoView;

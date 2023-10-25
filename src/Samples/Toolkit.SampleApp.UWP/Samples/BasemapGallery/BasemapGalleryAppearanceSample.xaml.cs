@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery
 {
+    [SampleInfo(ApiKeyRequired = true)]
     public sealed partial class BasemapGalleryAppearanceSample : Page
     {
         public BasemapGalleryAppearanceSample()

@@ -3,7 +3,7 @@
 namespace Toolkit.SampleApp.Maui.Samples
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    [SampleInfoAttribute(Category = "SearchView", Description = "Demonstrates SearchView used with a scene.")]
+    [SampleInfo(Category = "SearchView", Description = "Demonstrates SearchView used with a scene.", ApiKeyRequired = true)]
     public partial class SearchViewSceneSample : ContentPage
     {
         public SearchViewSceneSample()
