@@ -177,7 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <inheritdoc cref="GeoView.IdentifyGraphicsOverlaysAsync(Point, double, bool, long)" />
         public virtual Task<IReadOnlyList<IdentifyGraphicsOverlayResult>> IdentifyGraphicsOverlaysAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResultsPerOverlay = 1) =>
             ConnectedView?.IdentifyGraphicsOverlaysAsync(screenPoint, tolerance, returnPopupsOnly, maximumResultsPerOverlay) ??
-                Task.FromResult<IReadOnlyList<IdentifyGraphicsOverlayResult>>(new List<IdentifyGraphicsOverlayResult>().AsReadOnly());
+                Task.FromResult<IReadOnlyList<IdentifyGraphicsOverlayResult>>(Array.Empty<IdentifyGraphicsOverlayResult>());
 
         /// <inheritdoc cref="GeoView.IdentifyGraphicsOverlaysAsync(Point, double, bool, long)" />
         public virtual Task<IdentifyGraphicsOverlayResult> IdentifyGraphicsOverlayAsync(GraphicsOverlay overlay, Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResults = 1) =>
