@@ -201,7 +201,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Identifies the <see cref="GeoViewController"/> attached property.
         /// </summary>
-        public static BindableProperty GeoViewControllerProperty =
+        public static readonly BindableProperty GeoViewControllerProperty =
             BindableProperty.CreateAttached(
                 "GeoViewController",
                 typeof(GeoViewController),
