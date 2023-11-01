@@ -167,7 +167,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <inheritdoc cref="GeoView.IdentifyLayersAsync(Point, double, bool, CancellationToken)"/>
         public virtual Task<IReadOnlyList<IdentifyLayerResult>> IdentifyLayersAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
             ConnectedView?.IdentifyLayersAsync(screenPoint, tolerance, returnPopupsOnly, cancellationToken) ??
-                Task.FromResult<IReadOnlyList<IdentifyLayerResult>>(new List<IdentifyLayerResult>().AsReadOnly());
+                Task.FromResult<IReadOnlyList<IdentifyLayerResult>>(Array.Empty<IdentifyLayerResult>());
         
         /// <inheritdoc cref="GeoView.IdentifyLayerAsync(Layer, Point, double, bool, CancellationToken)"/>
         public virtual Task<IdentifyLayerResult> IdentifyLayerAsync(Layer layer, Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
