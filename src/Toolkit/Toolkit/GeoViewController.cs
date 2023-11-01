@@ -246,14 +246,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         /// <param name="geoView">The <see cref="GeoView"/> from which to read the property value.</param>
         /// <returns>The value of the <see cref="GeoViewController.GeoViewController"/> XAML attached property on the target element.</returns>
-        public static GeoViewController? GetGeoViewController(GeoViewDPType geoView) => geoView.GetValue(GeoViewControllerProperty) as GeoViewController;
+        public static GeoViewController? GetGeoViewController(GeoViewDPType geoView) => geoView?.GetValue(GeoViewControllerProperty) as GeoViewController;
 
         /// <summary>
         /// Sets the value of the <see cref="GeoViewController.GeoViewController"/> XAML attached property on the specified object.
         /// </summary>
         /// <param name="geoView">The target <see cref="GeoView"/> on which to set the <see cref="GeoViewController.GeoViewController"/> XAML attached property.</param>
         /// <param name="value">The property value to set.</param>
-        public static void SetGeoViewController(GeoViewDPType geoView, GeoViewController? value) => geoView.SetValue(GeoViewControllerProperty, value);
+        public static void SetGeoViewController(GeoViewDPType geoView, GeoViewController? value) => geoView?.SetValue(GeoViewControllerProperty, value) ?? throw new System.ArgumentNullException(nameof(geoView));
 
         private static void OnGeoViewControllerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
