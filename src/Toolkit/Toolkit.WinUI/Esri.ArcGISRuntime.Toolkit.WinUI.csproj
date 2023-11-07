@@ -39,7 +39,7 @@
 
   <ItemGroup>
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
-      <Content Update="Assets\*.*" PackagePath="contentFiles\any\net6.0-windows10.0.19041\$(PackageId)\Assets\%(Filename)%(Extension);lib\net6.0-windows10.0.19041\$(PackageId)\Assets\%(Filename)%(Extension)" />
+      <Content Update="Assets\*.*" PackagePath="contentFiles\any\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Assets\%(Filename)%(Extension);lib\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Assets\%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>
