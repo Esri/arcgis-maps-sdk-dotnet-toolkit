@@ -168,11 +168,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public virtual Task<IReadOnlyList<IdentifyLayerResult>> IdentifyLayersAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
             ConnectedView?.IdentifyLayersAsync(screenPoint, tolerance, returnPopupsOnly, cancellationToken) ??
                 Task.FromResult<IReadOnlyList<IdentifyLayerResult>>(Array.Empty<IdentifyLayerResult>());
-        
+
         /// <inheritdoc cref="GeoView.IdentifyLayerAsync(Layer, Point, double, bool, CancellationToken)"/>
-        public virtual Task<IdentifyLayerResult> IdentifyLayerAsync(Layer layer, Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default) =>
-            ConnectedView?.IdentifyLayerAsync(layer, screenPoint, tolerance, returnPopupsOnly, cancellationToken) ??
-                Task.FromResult<IdentifyLayerResult>(null!);
+        public virtual async Task<IdentifyLayerResult?> IdentifyLayerAsync(Layer layer, Point screenPoint, double tolerance, bool returnPopupsOnly = false, CancellationToken cancellationToken = default)
+        {
+            if (ConnectedView is null) return null;
+            return await ConnectedView.IdentifyLayerAsync(layer, screenPoint, tolerance, returnPopupsOnly, cancellationToken).ConfigureAwait(false);
+        }
 
         /// <inheritdoc cref="GeoView.IdentifyGraphicsOverlaysAsync(Point, double, bool, long)" />
         public virtual Task<IReadOnlyList<IdentifyGraphicsOverlayResult>> IdentifyGraphicsOverlaysAsync(Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResultsPerOverlay = 1) =>
@@ -180,9 +182,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 Task.FromResult<IReadOnlyList<IdentifyGraphicsOverlayResult>>(Array.Empty<IdentifyGraphicsOverlayResult>());
 
         /// <inheritdoc cref="GeoView.IdentifyGraphicsOverlaysAsync(Point, double, bool, long)" />
-        public virtual Task<IdentifyGraphicsOverlayResult> IdentifyGraphicsOverlayAsync(GraphicsOverlay overlay, Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResults = 1) =>
-            ConnectedView?.IdentifyGraphicsOverlayAsync(overlay, screenPoint, tolerance, returnPopupsOnly, maximumResults) ??
-                Task.FromResult<IdentifyGraphicsOverlayResult>(null!);
+        public virtual async Task<IdentifyGraphicsOverlayResult?> IdentifyGraphicsOverlayAsync(GraphicsOverlay overlay, Point screenPoint, double tolerance, bool returnPopupsOnly = false, long maximumResults = 1)
+        {
+            if (ConnectedView is null) return null;
+            return await ConnectedView.IdentifyGraphicsOverlayAsync(overlay, screenPoint, tolerance, returnPopupsOnly, maximumResults).ConfigureAwait(false);
+        }
+
         #endregion Identify
 
         #region Callouts
@@ -253,7 +258,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// </summary>
         /// <param name="geoView">The target <see cref="GeoView"/> on which to set the <see cref="GeoViewController.GeoViewController"/> XAML attached property.</param>
         /// <param name="value">The property value to set.</param>
-        public static void SetGeoViewController(GeoViewDPType geoView, GeoViewController? value) => geoView?.SetValue(GeoViewControllerProperty, value) ?? throw new System.ArgumentNullException(nameof(geoView));
+        public static void SetGeoViewController(GeoViewDPType geoView, GeoViewController? value) => geoView?.SetValue(GeoViewControllerProperty, value);
 
         private static void OnGeoViewControllerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

@@ -16,7 +16,7 @@ public class GeoViewControllerSampleVM
 
     public void OnGeoViewTapped(object sender, GeoViewInputEventArgs eventArgs) => Identify(eventArgs.Position, eventArgs.Location);
 
-    public async void Identify(Point location, MapPoint? mapLocation)
+    public async void Identify(Point location, MapPoint mapLocation)
     {
         Controller.DismissCallout();
         var result = await Controller.IdentifyLayersAsync(location, 10);
