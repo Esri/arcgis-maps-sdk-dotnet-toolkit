@@ -1,0 +1,19 @@
+﻿<Page
+    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.GeoViewController.GeoViewControllerSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.GeoViewController"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+    xmlns:toolkitui="using:Esri.ArcGISRuntime.Toolkit.UI"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <esri:MapView x:Name="MyMapView" Map="{x:Bind VM.Map}"
+                      toolkitui:GeoViewController.GeoViewController="{x:Bind VM.Controller}"
+                      GeoViewTapped="{x:Bind VM.OnGeoViewTapped}" />
+    </Grid>
+</Page>

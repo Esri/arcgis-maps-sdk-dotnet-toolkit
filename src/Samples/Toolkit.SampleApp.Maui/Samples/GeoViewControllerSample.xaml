@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Toolkit.SampleApp.Maui.Samples.GeoViewControllerSample"
+             xmlns:local="clr-namespace:Toolkit.SampleApp.Maui.Samples"
+             xmlns:esri="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
+             xmlns:toolkit="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:toolkitbase="clr-namespace:Esri.ArcGISRuntime.Toolkit;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             xmlns:mauitoolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="GeoViewController">
+    <ContentPage.Resources>
+        <local:GeoViewControllerSampleVM x:Key="VM" />
+    </ContentPage.Resources>
+    <Grid>
+        <esri:MapView x:Name="MyMapView"
+                      Map="{Binding Map, Source={StaticResource VM}}"
+                      toolkit:GeoViewController.GeoViewController="{Binding Controller, Source={StaticResource VM}}">
+            <esri:MapView.Behaviors>
+                <mauitoolkit:EventToCommandBehavior EventName="GeoViewTapped"
+                                                    x:TypeArguments="esri:GeoViewInputEventArgs"
+                                                    Command="{Binding GeoViewTappedCommand, Source={StaticResource VM}}" />
+            </esri:MapView.Behaviors>
+        </esri:MapView>
+    </Grid>
+</ContentPage>

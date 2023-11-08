@@ -53,7 +53,7 @@ namespace Toolkit.SampleApp.Maui
             if (string.IsNullOrEmpty(Name))
             {
                 //Deduce name from type name
-                Name = Regex.Replace(Page.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS");
+                Name = Regex.Replace(Page.Name, @"((?<=\p{Ll})\p{Lu})|((?!\A)\p{Lu}(?>\p{Ll}))", " $0").Replace("Arc GIS", "ArcGIS").Replace("Geo View", "GeoView");
                 if (Name.EndsWith("Sample"))
                     Name = Name.Substring(0, Name.Length - 6);
             }

@@ -53,6 +53,17 @@
     <MauiXaml Remove="Samples\TimeSliderSample.xaml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiXaml Update="Samples\GeoViewControllerSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+  </ItemGroup>
+
 
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">

@@ -134,6 +134,10 @@
     <Compile Include="Samples\FloorFilter\FloorFilterSample.xaml.cs">
       <DependentUpon>FloorFilterSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Samples\GeoViewController\GeoViewControllerSample.xaml.cs">
+      <DependentUpon>GeoViewControllerSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Samples\GeoViewController\GeoViewControllerSampleVM.cs" />
     <Compile Include="Samples\TimeSlider\TimeSliderSample.xaml.cs">
       <DependentUpon>TimeSliderSample.xaml</DependentUpon>
     </Compile>
@@ -226,6 +230,10 @@
     <Page Include="Samples\FloorFilter\FloorFilterSample.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Samples\GeoViewController\GeoViewControllerSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Samples\TimeSlider\TimeSliderSample.xaml">
       <Generator>MSBuild:Compile</Generator>
