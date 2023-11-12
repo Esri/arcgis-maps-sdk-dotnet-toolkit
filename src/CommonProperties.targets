@@ -14,6 +14,7 @@
     <DefineConstants Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net5.0'))">$(DefineConstants);NET5_0_OR_GREATER</DefineConstants>
     <DefineConstants Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net6.0'))">$(DefineConstants);NET6_0_OR_GREATER</DefineConstants>
     <DefineConstants Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net7.0'))">$(DefineConstants);NET7_0_OR_GREATER</DefineConstants>
+    <DefineConstants Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">$(DefineConstants);NET8_0_OR_GREATER</DefineConstants>
     <DefineConstants Condition="'$(IsTargetingWindows)'=='true'">$(DefineConstants);WINDOWS</DefineConstants>
     <DefineConstants Condition="'$(IsTargetingAndroid)'=='true' OR '$(IsTargetingiOS)'=='true'">$(DefineConstants);XAMARIN</DefineConstants>
     <Nullable Condition="'$(SupportsNullable)'=='true'">enable</Nullable>

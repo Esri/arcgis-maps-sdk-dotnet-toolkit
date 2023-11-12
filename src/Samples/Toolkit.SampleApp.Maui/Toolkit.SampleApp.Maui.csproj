@@ -58,12 +58,10 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <MauiXaml Update="Samples\GeoViewControllerSample.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
+  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible($(TargetFramework), 'net8.0'))">
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
   </ItemGroup>
-
 
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
