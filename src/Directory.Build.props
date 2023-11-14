@@ -61,6 +61,7 @@
     <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android34.0</NetAndroidTargetFramework>
     <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst16.1</NetCatalystTargetFramework>
     <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios16.1</NetiOSTargetFramework>  
+    <MauiVersion Condition="'$(MauiVersion)'==''">8.0.3</MauiVersion>
   </PropertyGroup>
   <PropertyGroup>
     <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
