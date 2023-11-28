@@ -8,18 +8,18 @@
 
   <Identity
     Name="1a3f5c3d-27ca-45dd-bbe3-5e2fad821f9d"
-    Publisher="CN=mn"
+    Publisher="CN=Esri"
     Version="1.0.0.0" />
 
   <Properties>
     <DisplayName>Toolkit.SampleApp.WinUI</DisplayName>
-    <PublisherDisplayName>mn</PublisherDisplayName>
+    <PublisherDisplayName>Esri</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.19041.0" MaxVersionTested="10.0.19041.0" />
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.19041.0" />
   </Dependencies>
 
   <Resources>
