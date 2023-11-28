@@ -76,6 +76,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
+            // Ensure bound properties aren't trimmed:
+            _ = Popup?.Title;
+            _ = Popup?.EvaluatedElements;
 #else
             DefaultStyleKey = typeof(PopupViewer);
 #endif

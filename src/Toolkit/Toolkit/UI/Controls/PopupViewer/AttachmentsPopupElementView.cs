@@ -39,6 +39,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
+            // Ensure bound properties aren't trimmed:
+            _ = Element?.Title;
+            _ = Element?.Description;
+            _ = Element?.Attachments;
 #else
             DefaultStyleKey = typeof(AttachmentsPopupElementView);
 #endif

@@ -33,6 +33,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
+            // Ensure bound properties aren't trimmed:
+            _ = Element?.Title;
+            _ = Element?.Description;
+            var m = Element?.Media?.FirstOrDefault();
+            _ = m?.Title;
+            _ = m?.Caption;
 #else
             DefaultStyleKey = typeof(MediaPopupElementView);
 #endif
