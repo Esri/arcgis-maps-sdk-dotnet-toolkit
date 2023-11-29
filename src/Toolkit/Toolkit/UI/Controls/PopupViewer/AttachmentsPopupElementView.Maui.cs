@@ -20,6 +20,7 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Globalization;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 #if WINDOWS
 using WinRT;
 #endif
@@ -44,6 +45,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
+        [DynamicDependency(nameof(AttachmentsPopupElement.Title), "Esri.ArcGISRuntime.Mapping.Popups.AttachmentsPopupElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(AttachmentsPopupElement.Description),"Esri.ArcGISRuntime.Mapping.Popups.AttachmentsPopupElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(AttachmentsPopupElement.Attachments), "Esri.ArcGISRuntime.Mapping.Popups.AttachmentsPopupElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             StackLayout root = new StackLayout();
@@ -68,6 +72,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return root;
         }
 
+
+        [DynamicDependency(nameof(AttachmentViewModel.Thumbnail), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel","Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(AttachmentViewModel.Name), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(AttachmentViewModel.Size), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(AttachmentViewModel.IsDownloadButtonVisible), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(AttachmentViewModel.IsDownloading), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
         private static object BuildDefaultItemTemplate()
         {
             Grid layout = new Grid();

@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Mapping;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -29,6 +30,11 @@ public class Legend : TemplatedView
     private static DataTemplate s_DefaultLegendInfoItemTemplate;
     private static ControlTemplate s_DefaultControlTemplate;
 
+
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Layer.Name), "Esri.ArcGISRuntime.Mapping.Layer", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.ILayerContent.Name), "Esri.ArcGISRuntime.Mapping.ILayerContent", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.LegendInfo.Name), "Esri.ArcGISRuntime.Mapping.LegendInfo", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.LegendInfo.Symbol), "Esri.ArcGISRuntime.Mapping.LegendInfo", "Esri.ArcGISRuntime")]
     static Legend()
     {
         s_DefaultLayerItemTemplate = new DataTemplate(() =>
