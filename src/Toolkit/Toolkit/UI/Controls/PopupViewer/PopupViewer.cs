@@ -19,6 +19,8 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using DependencyObject = Microsoft.Maui.Controls.BindableObject;
@@ -76,9 +78,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
-            // Ensure bound properties aren't trimmed:
-            _ = Popup?.Title;
-            _ = Popup?.EvaluatedElements;
 #else
             DefaultStyleKey = typeof(PopupViewer);
 #endif
@@ -98,7 +97,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isDirty = false;
         private object _isDirtyLock = new object();
 
-        private void InvalidatePopup()
+       [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.EvaluatedElements), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
+       private void InvalidatePopup()
         {
             lock (_isDirtyLock)
             {

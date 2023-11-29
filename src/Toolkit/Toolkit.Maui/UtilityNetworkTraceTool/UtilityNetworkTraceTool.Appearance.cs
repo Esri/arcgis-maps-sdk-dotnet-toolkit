@@ -15,6 +15,7 @@
 //  ******************************************************************************/
 
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -59,6 +60,11 @@ public partial class UtilityNetworkTraceTool
 
     private static readonly ControlTemplate DefaultControlTemplate;
 
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput.Function), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput.Result), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunctionOutput", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityNetworkAttribute.Name), "Esri.ArcGISRuntime.UtilityNetworks.UtilityNetworkAttribute", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction.FunctionType), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction.NetworkAttribute), "Esri.ArcGISRuntime.UtilityNetworks.UtilityTraceFunction", "Esri.ArcGISRuntime")]
     static UtilityNetworkTraceTool()
     {
         const string backgroundColor = "{AppThemeBinding Dark=#353535, Light=#F8F8F8}";
