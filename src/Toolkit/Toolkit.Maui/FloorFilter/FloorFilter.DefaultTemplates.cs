@@ -121,7 +121,6 @@ public partial class FloorFilter
             };
             subtitleLabel.SetAppThemeColor(Label.TextColorProperty, Color.FromArgb("#2e2e2e"), Color.FromArgb("#aaa"));
             subtitleLabel.SetBinding(Label.TextProperty, "Site.Name");
-            
             textStack.Children.Add(titleLabel);
             textStack.Children.Add(subtitleLabel);
             Grid.SetRow(titleLabel, 0);
