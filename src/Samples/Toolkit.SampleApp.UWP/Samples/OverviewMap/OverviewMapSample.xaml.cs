@@ -3,6 +3,7 @@ using Esri.ArcGISRuntime.Symbology;
 
 namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap
 {
+    [SampleInfo(Category = "OverviewMap", DisplayName = "OverviewMap", Description = "OverviewMap sample", ApiKeyRequired = true)]
     public sealed partial class OverviewMapSample : Page
     {
         private bool _symbolToggle;
