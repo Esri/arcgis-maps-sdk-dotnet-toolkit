@@ -19,7 +19,6 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
@@ -97,8 +96,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private bool _isDirty = false;
         private object _isDirtyLock = new object();
 
-       [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.EvaluatedElements), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
-       private void InvalidatePopup()
+#if MAUI
+        [System.Diagnostics.CodeAnalysis.DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Popups.Popup.EvaluatedElements), "Esri.ArcGISRuntime.Mapping.Popups.Popup", "Esri.ArcGISRuntime")]
+#endif
+        private void InvalidatePopup()
         {
             lock (_isDirtyLock)
             {
