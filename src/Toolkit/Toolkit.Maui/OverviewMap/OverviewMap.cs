@@ -16,6 +16,8 @@
 
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
+using Microsoft.Maui.Controls.Internals;
+using System.Diagnostics.CodeAnalysis;
 using Map = Esri.ArcGISRuntime.Mapping.Map;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -30,24 +32,40 @@ public class OverviewMap : TemplatedView
 
     private MapView? _overviewMapView;
 
+
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Map.LoadStatus), "Esri.ArcGISRuntime.Mapping.Map", "Esri.ArcGISRuntime")]
     static OverviewMap()
     {
-        string template = @"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui""
-                                                 xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
-                                                 xmlns:esri=""clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui""
-                                                 xmlns:internal=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Internal;assembly=Esri.ArcGISRuntime.Toolkit.Maui"">
-                                    <Frame Padding=""1"" HorizontalOptions=""FillAndExpand"" VerticalOptions=""FillAndExpand"" CornerRadius=""0"" HasShadow=""False"" BorderColor=""Black"" BackgroundColor=""White"">
-                                    <Grid>
-                                        <Grid.Resources>
-                                            <internal:LoadStatusToVisibilityConverter x:Key=""LoadStatusToVisibilityConverter"" />
-                                        </Grid.Resources>
-                                        <ActivityIndicator IsRunning=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loading'}"" />
-                                        <Label TextColor=""Black"" Text=""Map failed to load. Did you forget an API key?"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='FailedToLoad'}""  />
-                                        <esri:MapView x:Name=""PART_MapView"" IsAttributionTextVisible=""False"" IsVisible=""{Binding Source={x:Reference PART_MapView}, Path=Map.LoadStatus, Converter={StaticResource LoadStatusToVisibilityConverter}, ConverterParameter='Loaded'}"" />
-                                    </Grid>
-                                    </Frame>
-                                </ControlTemplate>";
-        DefaultControlTemplate = Microsoft.Maui.Controls.Xaml.Extensions.LoadFromXaml(new ControlTemplate(), template);
+        DefaultControlTemplate = new ControlTemplate(() =>
+        {
+            var converter = new Internal.LoadStatusToVisibilityConverter();
+            Frame rootFrame = new Frame
+            {
+                Padding = new Thickness(1), HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill,
+                CornerRadius = 0, HasShadow = false, BorderColor = Colors.Black, BackgroundColor = Colors.White
+            };
+            Grid root = new Grid();
+            MapView mapView = new MapView()
+            {
+                IsAttributionTextVisible = false
+            };
+            ActivityIndicator activity = new ActivityIndicator();
+            activity.SetBinding(ActivityIndicator.IsRunningProperty, new Binding("Map.LoadStatus", converter: converter, converterParameter: "Loading", source : mapView));
+            root.Add(activity);
+            Label label = new Label()
+            {
+                TextColor = Colors.Black, Text = "Map failed to load. Did you forget an API key?"
+            };
+            label.SetBinding(VisualElement.IsVisibleProperty, new Binding("Map.LoadStatus", converter: converter, converterParameter: "FailedToLoad", source: mapView));
+            root.Add(label);
+            mapView.SetBinding(VisualElement.IsVisibleProperty, new Binding("Map.LoadStatus", converter: converter, converterParameter: "Loaded", source: mapView));
+            root.Add(mapView);
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(rootFrame, nameScope);
+            nameScope.RegisterName("PART_MapView", mapView);
+            rootFrame.Content = root;
+            return rootFrame;
+        });
     }
 
     /// <summary>

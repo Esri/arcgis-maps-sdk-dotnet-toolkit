@@ -17,6 +17,7 @@
 
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.Popups;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -38,6 +39,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
+        [DynamicDependency(nameof(MediaPopupElement.Title), "Esri.ArcGISRuntime.Mapping.Popups.MediaPopupElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(MediaPopupElement.Description), "Esri.ArcGISRuntime.Mapping.Popups.MediaPopupElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(MediaPopupElement.Media), "Esri.ArcGISRuntime.Mapping.Popups.MediaPopupElement","Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             StackLayout root = new StackLayout();
@@ -72,6 +76,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return root;
         }
 
+        [DynamicDependency(nameof(PopupMedia.Title), "Esri.ArcGISRuntime.Mapping.Popups.PopupMedia", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(PopupMedia.Caption), "Esri.ArcGISRuntime.Mapping.Popups.PopupMedia", "Esri.ArcGISRuntime")]
         private static object BuildDefaultItemTemplate()
         {
             var pm = new PopupMediaView();

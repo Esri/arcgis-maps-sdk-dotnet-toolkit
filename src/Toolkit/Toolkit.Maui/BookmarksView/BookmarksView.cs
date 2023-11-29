@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 using Esri.ArcGISRuntime.Mapping;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
@@ -29,6 +30,7 @@ public class BookmarksView : TemplatedView
     private static readonly DataTemplate DefaultDataTemplate;
     private static readonly ControlTemplate DefaultControlTemplate;
 
+    [DynamicDependency(nameof(Bookmark.Name), "Esri.ArcGISRuntime.Mapping.Bookmark", "Esri.ArcGISRuntime")]
     static BookmarksView()
     {
         DefaultDataTemplate = new DataTemplate(() =>
