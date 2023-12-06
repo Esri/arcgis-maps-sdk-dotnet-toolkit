@@ -34,7 +34,7 @@ Browse floor-aware maps and scenes and filter the view to show levels in a facil
 
 ### GeoViewController
 
-A helper class for enabling easy adoption of MVVM patterns in ArcGIS Maps SDK for .NET applications. 
+A helper class for enabling easy adoption of [Model-View-ViewModel (MVVM)](https://learn.microsoft.com/en-us/dotnet/architecture/maui/mvvm) patterns in ArcGIS Maps SDK for .NET applications.
 
 ### Legend
 
