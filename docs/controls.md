@@ -100,6 +100,7 @@ Use named trace configurations defined in a web map to perform connected trace o
 |[Compass](compass.md)   | ✔ | ✔ | ✔ |
 |[FeatureDataField](feature-data-field.md)   | ✔ | ✔ | ❌ |
 |[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ |
+|[GeoViewController](geoviewcontroller.md | ✔  | ✔ | ✔ |
 |[Legend](legend.md)   | ✔ | ✔ | ✔ |
 |[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ |
 |[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ |
