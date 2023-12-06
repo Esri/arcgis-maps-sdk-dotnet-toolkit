@@ -25,7 +25,8 @@ namespace Toolkit.SampleApp.Maui.Samples
             if (MyMapView.IsVisible == true)
             {
                 var vp = MyMapView.GetCurrentViewpoint(ViewpointType.CenterAndScale);
-                MyMapView.SetViewpoint(new Viewpoint(vp.TargetGeometry, e.NewValue));
+                if (vp != null)
+                    MyMapView.SetViewpoint(new Viewpoint(vp.TargetGeometry, e.NewValue));
             }
             else
             {

@@ -1,7 +1,7 @@
 <Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net8.0;$(NetAndroidTargetFramework);$(NetiOSTargetFramework)</TargetFrameworks>
     <Description>ArcGIS Maps SDK for .NET Augmented Reality (AR) controls and utilities for .NET Android and .NET iOS apps.</Description>
     <PackageTags>ArcGIS Cartography Geo Geographic Geography Geolocation Geospatial GIS Latitude Location Longitude Map Mapping Maps Places Spatial Augmented Reality AR 3D .NET Android iOS toolkit</PackageTags>
     <RootNamespace>Esri.ArcGISRuntime.ARToolkit</RootNamespace>
@@ -10,12 +10,12 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
-    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">14.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == '$(NetAndroidTargetFramework)'">26.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
     <NoWarn>$(NoWarn);ESRI8000</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
 
@@ -26,23 +26,22 @@
     <None Remove="Resources\**\*.*" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(NetAndroidTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.Android" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
-    <PackageReference Include="Esri.ArcGISRuntime.Android" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+    <PackageReference Include="Esri.ArcGISRuntime.Android" Version="$(ArcGISRuntimePackageVersion)" />
     <PackageReference Include="Xamarin.Google.ARCore" Version="1.29.0" />
     <!--<PackageReference Include="Xamarin.Android.SceneForm.Base" Version="1.11.0" />-->
     <PackageReference Include="Xamarin.Android.SceneForm.UX" Version="1.17.1" />
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.4.1.1" />
     <AndroidResource Include="Resources\**\*.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">
-    <PackageReference Include="Esri.ArcGISRuntime.Xamarin.iOS" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'=='100.15.0'" />
-	<PackageReference Include="Esri.ArcGISRuntime.iOS" Version="$(ArcGISRuntimePackageVersion)" Condition="'$(ArcGISRuntimePackageVersion)'!='100.15.0'" />
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+	<PackageReference Include="Esri.ArcGISRuntime.iOS" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net8.0'">
      <PackageReference Include="Esri.ArcGISRuntime" Version="$(ArcGISRuntimePackageVersion)" />
   </ItemGroup>
 
@@ -50,7 +49,7 @@
     <None Remove="GridDot.png" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == '$(NetiOSTargetFramework)'">
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
     <EmbeddedResource Include="GridDot.png" />
   </ItemGroup>
 

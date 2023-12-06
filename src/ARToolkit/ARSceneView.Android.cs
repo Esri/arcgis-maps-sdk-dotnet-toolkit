@@ -19,8 +19,8 @@ using System;
 using System.Threading.Tasks;
 using Android.Content;
 using Android.Runtime;
-using Android.Support.V4.App;
-using Android.Support.V4.Content;
+using AndroidX.Core.App;
+using AndroidX.Core.Content;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI.Controls;
 using Google.AR.Core;
@@ -249,7 +249,7 @@ namespace Esri.ArcGISRuntime.ARToolkit
                 throw new NotSupportedException("Context must be an instance of Activity");
             }
 
-            if(IsUsingARCore && RenderVideoFeed && ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
+            if(IsUsingARCore && RenderVideoFeed && AndroidX.Core.Content.ContextCompat.CheckSelfPermission(activity, Android.Manifest.Permission.Camera) != Android.Content.PM.Permission.Granted)
             {
                 ActivityCompat.RequestPermissions(activity, new string[] { Android.Manifest.Permission.Camera }, 0);
                 return;

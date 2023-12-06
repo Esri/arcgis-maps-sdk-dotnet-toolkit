@@ -44,7 +44,7 @@ namespace Toolkit.SampleApp.Maui.Samples
                 await DisplayAlert(error.GetType().Name, error.Message, "OK");
         }
 
-        private Popup GetPopup(IdentifyLayerResult result)
+        private Popup? GetPopup(IdentifyLayerResult result)
         {
             if (result == null)
             {
@@ -75,7 +75,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             return null;
         }
 
-        private Popup GetPopup(IEnumerable<IdentifyLayerResult> results)
+        private Popup? GetPopup(IEnumerable<IdentifyLayerResult> results)
         {
             if (results == null)
             {
