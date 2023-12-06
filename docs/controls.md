@@ -32,6 +32,10 @@ Browse floor-aware maps and scenes and filter the view to show levels in a facil
 
 ![FloorFilter](https://user-images.githubusercontent.com/29742178/158746908-71a39e28-596f-44b6-9230-e2a04bdaeb9e.png)
 
+### GeoViewController
+
+A helper class for enabling easy adoption of MVVM patterns in ArcGIS Maps SDK for .NET applications. 
+
 ### Legend
 
 Displays a legend for a map or scene view.
@@ -100,6 +104,7 @@ Use named trace configurations defined in a web map to perform connected trace o
 |[Compass](compass.md)   | ✔ | ✔ | ✔ |
 |[FeatureDataField](feature-data-field.md)   | ✔ | ✔ | ❌ |
 |[FloorFilter](floor-filter.md) | ✔  | ✔ | ✔ |
+|[GeoViewController](geoviewcontroller.md | ✔  | ✔ | ✔ |
 |[Legend](legend.md)   | ✔ | ✔ | ✔ |
 |[MeasureToolbar](measure-toolbar.md)   | ✔ | ✔ | ❌ |
 |[OverviewMap](overview-map.md) | ✔ | ✔ | ✔ |
