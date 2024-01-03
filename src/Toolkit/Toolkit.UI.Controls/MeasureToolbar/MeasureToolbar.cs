@@ -15,16 +15,10 @@
 //  ******************************************************************************/
 
 #if WPF || WINDOWS_XAML
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.UI;
-using Esri.ArcGISRuntime.UI.Controls;
 #if WPF
 using System.Windows.Controls.Primitives;
 #endif
@@ -619,7 +613,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the sketch edtiro used for measuring areas.
+        /// Gets or sets the sketch editor used for measuring areas.
         /// </summary>
         public SketchEditor? AreaSketchEditor
         {
