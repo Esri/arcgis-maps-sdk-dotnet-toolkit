@@ -597,15 +597,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="LineSketchEditor"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty LineSketchEditorProperty =
-            DependencyProperty.Register(nameof(LineSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnLineSketchEditorPropertyChanged));
+            DependencyProperty.Register(nameof(LineSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnSketchEditorPropertyChanged));
 
-        private static void OnLineSketchEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnSketchEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var toolbar = (MeasureToolbar)d;
             var newSketchEditor = e.NewValue as SketchEditor;
             if (newSketchEditor == null)
             {
-                throw new ArgumentException($"{nameof(LineSketchEditor)} cannot be null or empty.");
+                throw new ArgumentException($"{nameof(SketchEditor)} cannot be null or empty.");
             }
 
             var oldSketchEditor = e.OldValue as SketchEditor;
@@ -631,26 +631,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="AreaSketchEditor"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty AreaSketchEditorProperty =
-            DependencyProperty.Register(nameof(AreaSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnLineSketchEditorPropertyChanged));
-
-        private static void OnAreaSketchEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var toolbar = (MeasureToolbar)d;
-            var newSketchEditor = e.NewValue as SketchEditor;
-            if (newSketchEditor == null)
-            {
-                throw new ArgumentException($"{nameof(AreaSketchEditor)} cannot be null or empty.");
-            }
-
-            var oldSketchEditor = e.OldValue as SketchEditor;
-            if (oldSketchEditor != null)
-            {
-                oldSketchEditor.GeometryChanged -= toolbar.OnGeometryChanged;
-            }
-
-            newSketchEditor.GeometryChanged += toolbar.OnGeometryChanged;
-            toolbar.DisplayResult(newSketchEditor.Geometry);
-        }
+            DependencyProperty.Register(nameof(AreaSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnSketchEditorPropertyChanged));
 
         /// <summary>
         /// Gets or sets the symbol used for highlighting the polyline feature or graphic whose geometry is measured for distance.
