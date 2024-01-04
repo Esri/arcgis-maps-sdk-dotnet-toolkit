@@ -625,7 +625,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="AreaSketchEditor"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty AreaSketchEditorProperty =
-            DependencyProperty.Register(nameof(AreaSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnLineSketchEditorPropertyChanged));
+            DependencyProperty.Register(nameof(AreaSketchEditor), typeof(SketchEditor), typeof(MeasureToolbar), new PropertyMetadata(null, OnAreaSketchEditorPropertyChanged));
 
         private static void OnAreaSketchEditorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
