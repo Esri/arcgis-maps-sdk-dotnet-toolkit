@@ -30,7 +30,7 @@
         </Style>
         <Style x:Key="AlternateItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="Transparent" />
+            <Setter Property="Foreground" Value="Green" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="Padding" Value="8" />
             <Setter Property="Template">
