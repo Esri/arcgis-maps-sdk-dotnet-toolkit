@@ -161,6 +161,14 @@ public class BookmarksView : TemplatedView
         if (bookmarkView._presentingView != null)
         {
             bookmarkView._presentingView.ItemTemplate = newValue as DataTemplate;
+
+#if WINDOWS
+            // This workaround addresses an issue with MAUI WinUI. 
+            // Without refreshing the items source of the BookmarksView ListView the change is not reflected in the UI.
+            var existingItems = bookmarkView._presentingView.ItemsSource;
+            bookmarkView._presentingView.ItemsSource = null;
+            bookmarkView._presentingView.ItemsSource = existingItems;
+#endif
         }
     }
 
