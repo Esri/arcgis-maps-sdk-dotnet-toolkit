@@ -3,9 +3,28 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:basemapgallery="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
     xmlns:controls="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="BasemapGallery.Resources.xaml" />
-    </ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#6a6a6a" />
+            <SolidColorBrush x:Key="ItemTextForegroundSelected" Color="#151515" />
+            <SolidColorBrush x:Key="SelectionRectangleBorderBrush" Color="#007ac2" />
+            <SolidColorBrush x:Key="SelectionRectangleBackgroundBrush" Color="#e2f1fb" />
+            <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#f3f3f3" />
+            <SolidColorBrush x:Key="ControlBackground" Color="#fff" />
+            <SolidColorBrush x:Key="ControlBorder" Color="#cacaca" />
+            <BitmapImage x:Key="BasemapPlaceholder" UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/Assets/BasemapLight.png" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="ItemTextForegroundUnselected" Color="#ffffff" />
+            <SolidColorBrush x:Key="ItemTextForegroundSelected" Color="#ffffff" />
+            <SolidColorBrush x:Key="SelectionRectangleBorderBrush" Color="#009af2" />
+            <SolidColorBrush x:Key="SelectionRectangleBackgroundBrush" Color="#202020" />
+            <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#2B2B2B" />
+            <SolidColorBrush x:Key="ControlBackground" Color="#353535" />
+            <SolidColorBrush x:Key="ControlBorder" Color="#555555" />
+            <BitmapImage x:Key="BasemapPlaceholder" UriSource="ms-appx:///Esri.ArcGISRuntime.Toolkit.WinUI/Assets/BasemapDark.png" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
     <Style x:Key="BaseContainerStyle" TargetType="ListViewItem">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

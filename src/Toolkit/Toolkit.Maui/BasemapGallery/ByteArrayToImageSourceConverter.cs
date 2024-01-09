@@ -14,6 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
+using Microsoft.Maui.ApplicationModel;
 using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
@@ -30,8 +31,14 @@ internal class ByteArrayToImageSourceConverter : IValueConverter
             return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
         }
 
-        // Return the placeholder image directly rather than null to work around bugs/limitations in MAUI
-        return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.BasemapLight.png", typeof(BasemapGallery).Assembly); ;
+        AppTheme currentTheme = Application.Current.RequestedTheme;
+
+        if (currentTheme == AppTheme.Dark)
+        {
+            return ImageSource.FromFile("basemapdark.png");
+        }
+
+        return ImageSource.FromFile("basemaplight.png");
     }
 
     /// <inheritdoc/>

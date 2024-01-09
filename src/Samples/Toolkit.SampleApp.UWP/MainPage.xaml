@@ -48,8 +48,8 @@
                 <Frame x:Name="rootFrame" Background="{ThemeResource ApplicationForegroundThemeBrush}" />
 
 
-                <Border  x:Name="ApiKeyWindow" Background="#ccffffff" d:Visibility="Visible" Visibility="Collapsed">
-                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="White">
+                <Border  x:Name="ApiKeyWindow" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" d:Visibility="Visible" Visibility="Collapsed">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition />
@@ -68,7 +68,7 @@
                                 <TextBlock Text="Enter API Key:" Margin="0,10,0,5" />
                                 <TextBox x:Name="ApiKeyInput" Width="475" />
                                 <Button HorizontalAlignment="Right" Content="Save" Padding="20,5" 
-                                Background="CornflowerBlue" Foreground="White" BorderBrush="White"
+                                Background="CornflowerBlue" Foreground="White"
                                 Click="SaveApiKey_Click" />
                                 <TextBlock TextWrapping="Wrap" Margin="0,10,0,0">
                             <Span>You can get or create an API key from <Hyperlink NavigateUri="https://developers.arcgis.com/api-keys/">your developer dashboard</Hyperlink>.</Span><LineBreak></LineBreak>

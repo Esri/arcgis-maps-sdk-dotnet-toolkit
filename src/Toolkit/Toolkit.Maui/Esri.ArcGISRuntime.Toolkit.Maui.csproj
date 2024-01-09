@@ -19,8 +19,8 @@
 
     <ItemGroup>
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
-      <EmbeddedResource Include="Assets\BasemapDark.png" />
-      <EmbeddedResource Include="Assets\BasemapLight.png" />
+      <MauiImage Include="Assets\basemapdark.png" />
+      <MauiImage Include="Assets\basemaplight.png" />
       <MauiFont Include="Resources\Fonts\calcite-ui-icons-24.ttf" />
       <EmbeddedResource Include="Assets\caret-down-small.png" />
       <EmbeddedResource Include="Assets\caret-down.png" />
