@@ -33,6 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// The BookmarksView view presents bookmarks, either from a list defined by <see cref="BookmarksOverride" /> or
     /// the Map or Scene shown in the associated <see cref="GeoView" />.
     /// </summary>
+    /// <remarks> The <a href="https://developers.arcgis.com/web-scene-specification/">Web Scene Specification</a> uses presentation slides in lieu of bookmarks. Slides will not show as bookmarks.</remarks>
     public partial class BookmarksView : Control
     {
         private BookmarksViewDataSource _dataSource = new BookmarksViewDataSource();
