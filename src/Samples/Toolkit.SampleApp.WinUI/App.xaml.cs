@@ -47,5 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp
         }
 
         private Window m_window;
+
+        public static IntPtr CurrentWindowHandle => WinRT.Interop.WindowNative.GetWindowHandle(((App)Current).m_window);
     }
 }
