@@ -35,10 +35,11 @@ internal class ByteArrayToImageSourceConverter : IValueConverter
 
         if (currentTheme == AppTheme.Dark)
         {
-            return ImageSource.FromFile("basemapdark.png");
+            return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.basemapdark.png", typeof(BasemapGallery).Assembly);
         }
 
-        return ImageSource.FromFile("basemaplight.png");
+        // Return the placeholder image directly rather than null to work around bugs/limitations in MAUI
+        return ImageSource.FromResource("Esri.ArcGISRuntime.Toolkit.Maui.Assets.basemap.png", typeof(BasemapGallery).Assembly);
     }
 
     /// <inheritdoc/>
