@@ -12,7 +12,7 @@ namespace Toolkit.SampleApp.Maui.Samples
         private const string webMapOneUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=e50fafe008ac4ce4ad2236de7fd149c3";
         private const string webMapTwoUrl = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2";
         private const string webSceneOne = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=6b6588041965408e84ba319e12d9d7ad";
-        private const string webSceneTwo = "https://www.arcgis.com/home/webscene/viewer.html?webscene=b9ad8372ff884bc4a4e78d936b170f7d";
+        private const string webSceneTwo = "https://arcgisruntime.maps.arcgis.com/home/item.html?id=b3e2230e170d4f91aa3d47f88821743d";
         private MapView MyMapView;
         private SceneView MySceneView;
         private Random _randomizer = new Random();
