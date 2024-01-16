@@ -11,8 +11,8 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Border  x:Name="ApiKeyWindow" Background="#ccffffff" IsVisible="false">
-            <Grid HorizontalOptions="Center" VerticalOptions="Center" Background="White">
+        <Border  x:Name="ApiKeyWindow" Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}" IsVisible="false">
+            <Grid HorizontalOptions="Center" VerticalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
@@ -31,13 +31,13 @@
                         <Label Text="Enter API Key:" Margin="0,10,0,5" />
                         <Entry x:Name="ApiKeyInput" MaximumWidthRequest="475" />
                         <Button HorizontalOptions="End" Text="Save" Padding="20,5" 
-                                Background="CornflowerBlue" TextColor="White" BorderColor="White"
+                                Background="CornflowerBlue" TextColor="White"
                                 Clicked="SaveApiKey_Click" />
                         <Label MaxLines="5" Margin="0,10,0,0" >
                             <Label.FormattedText>
                                 <FormattedString>
                                     <Span Text="You can get or create an API key from " />
-                                    <Span Text="your developer dashboard" TextDecorations="Underline" TextColor="Blue" >
+                                    <Span Text="your developer dashboard" TextDecorations="Underline" TextColor="{AppThemeBinding Light={StaticResource Blue100Accent}, Dark={StaticResource Blue300Accent}}" >
                                         <Span.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="DashboardLinkTapped" />
                                         </Span.GestureRecognizers>
@@ -46,7 +46,7 @@
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
-                        <Label MaxLines="5" Margin="0,10,0,0" TextDecorations="Underline" TextColor="Blue" Text="More info on API Keys">
+                        <Label MaxLines="5" Margin="0,10,0,0" TextDecorations="Underline" TextColor="{AppThemeBinding Light={StaticResource Blue100Accent}, Dark={StaticResource Blue300Accent}}" Text="More info on API Keys">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="MoreInfoLinkTapped" />
                             </Label.GestureRecognizers>
