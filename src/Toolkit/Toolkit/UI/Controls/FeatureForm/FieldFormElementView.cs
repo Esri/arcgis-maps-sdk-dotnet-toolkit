@@ -34,7 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public FieldFormElementView()
         {
 #if MAUI
-            ControlTemplate = DefaultControlTemplate;
+            //ControlTemplate = DefaultControlTemplate;
 #else
             DefaultStyleKey = typeof(FieldFormElementView);
 #endif
@@ -48,6 +48,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
+#if !MAUI
+            var content = GetTemplateChild(FieldInputName) as ContentControl;
+            if (content != null)
+            {
+                if (InputTemplateSelector == null)
+                    InputTemplateSelector = new FieldTemplateSelector(this);
+                content.ContentTemplateSelector = InputTemplateSelector;
+            }
+#endif
             OnElementPropertyChanged();
         }
 

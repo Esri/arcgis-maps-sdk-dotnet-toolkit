@@ -21,12 +21,70 @@
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="{x:Type primitives:FieldFormElementView}" >
+        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="ComboBoxFormInputTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <ComboBox ItemsSource="{Binding Input.CodedValues}" IsEnabled="{Binding IsEditable}" DisplayMemberPath="Name" SelectedValuePath="Code"
+                           SelectedValue="{Binding Value, Mode=OneWay}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="RadioButtonsFormInputTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <ItemsControl ItemsSource="{Binding Input.CodedValues}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <RadioButton Content="{Binding Name}" IsEnabled="{Binding IsEditable}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="SwitchFormInputTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <CheckBox IsChecked="{Binding Value, Mode=OneWay}" IsEnabled="{Binding IsEditable}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextAreaFormInputTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBox AcceptsReturn="True" Height="50" MaxLines="5" Text="{Binding Value, Mode=OneWay}" MaxLength="{Binding Input.MaxLength}" IsEnabled="{Binding IsEditable}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextBoxFormInputTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBox AcceptsReturn="False" Text="{Binding Value, Mode=OneWay}" MaxLength="{Binding Input.MaxLength}" IsEnabled="{Binding IsEditable}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BarcodeScannerFormInputTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="Barcore scanner here" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="DateTimePickerFormInputTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <DatePicker SelectedDate="{Binding Value, Mode=OneWay}" IsEnabled="{Binding IsEditable}" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:FieldFormElementView}">
-                    <StackPanel DataContext="{TemplateBinding Element}">
+                    <StackPanel>
                         <TextBlock Text="{Binding Label}" />
-                        <TextBox Text="{Binding FormattedValue}" IsReadOnly="{Binding IsEditable}" />
+                        <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" ToolTip="{Binding Hint}" />
+                        <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
