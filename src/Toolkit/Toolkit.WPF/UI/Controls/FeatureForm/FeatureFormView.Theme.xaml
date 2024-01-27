@@ -46,7 +46,37 @@
         <Setter Property="SwitchFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <CheckBox IsChecked="{Binding Value, Mode=OneWay}" IsEnabled="{Binding IsEditable}" />
+                    <CheckBox IsChecked="{Binding Value, Mode=OneWay}" IsEnabled="{Binding IsEditable}" >
+                        <CheckBox.Template>
+                            <ControlTemplate TargetType="{x:Type CheckBox}">
+                                <StackPanel Orientation="Horizontal" Margin="-4" x:Name="root" HorizontalAlignment="Left">
+                                    <Grid HorizontalAlignment="Left" Margin="4" Width="30" Height="15" Cursor="Hand">
+                                        <Border CornerRadius="7.5" Background="LightGray" x:Name="SwitchBack" />
+                                        <Ellipse Width="15" Fill="White" Stroke="Gray" HorizontalAlignment="Left" x:Name="SwitchThumb" />
+                                    </Grid>
+                                    <TextBlock Text="{Binding Input.OnValue.Name}" VerticalAlignment="Center" Margin="5,0" Visibility="Collapsed" x:Name="OnDisplayValue" />
+                                    <TextBlock Text="{Binding Input.OffValue.Name}" VerticalAlignment="Center" Margin="5,0" Visibility="Visible" x:Name="OffDisplayValue" />
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="false">
+                                        <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Left"/>
+                                        <Setter TargetName="SwitchBack" Property="Background" Value="LightGray"/>
+                                        <Setter TargetName="OnDisplayValue" Property="Visibility" Value="Collapsed"/>
+                                        <Setter TargetName="OffDisplayValue" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="true">
+                                        <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter TargetName="SwitchBack" Property="Background" Value="CornflowerBlue"/>
+                                        <Setter TargetName="OnDisplayValue" Property="Visibility" Value="Visible"/>
+                                        <Setter TargetName="OffDisplayValue" Property="Visibility" Value="Collapsed"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="true">
+                                        <Setter TargetName="root" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </CheckBox.Template>
+                    </CheckBox>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
