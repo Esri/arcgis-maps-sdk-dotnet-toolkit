@@ -6,6 +6,8 @@
     xmlns:converter="using:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
 
+    <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
+    <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
     <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
     <Style TargetType="TextBlock" x:Key="FeatureFormViewHeaderStyle">
         <Setter Property="FontSize" Value="16" />
@@ -21,7 +23,7 @@
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="{x:Type primitives:FieldFormElementView}" >
-        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
         <Setter Property="ComboBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -49,7 +51,7 @@
                     <CheckBox IsChecked="{Binding Value, Mode=OneWay}" IsEnabled="{Binding IsEditable}" >
                         <CheckBox.Template>
                             <ControlTemplate TargetType="{x:Type CheckBox}">
-                                <StackPanel Orientation="Horizontal" Margin="-4" x:Name="root" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal" Margin="-4" x:Name="Root" HorizontalAlignment="Left">
                                     <Grid HorizontalAlignment="Left" Margin="4" Width="30" Height="15" Cursor="Hand">
                                         <Border CornerRadius="7.5" Background="LightGray" x:Name="SwitchBack" />
                                         <Ellipse Width="15" Fill="White" Stroke="Gray" HorizontalAlignment="Left" x:Name="SwitchThumb" />
@@ -66,12 +68,12 @@
                                     </Trigger>
                                     <Trigger Property="IsChecked" Value="true">
                                         <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
-                                        <Setter TargetName="SwitchBack" Property="Background" Value="CornflowerBlue"/>
+                                        <Setter TargetName="SwitchBack" Property="Background" Value="{StaticResource FeatureFormAccentBrush}"/>
                                         <Setter TargetName="OnDisplayValue" Property="Visibility" Value="Visible"/>
                                         <Setter TargetName="OffDisplayValue" Property="Visibility" Value="Collapsed"/>
                                     </Trigger>
                                     <Trigger Property="IsPressed" Value="true">
-                                        <Setter TargetName="root" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                        <Setter TargetName="Root" Property="Background" Value="{StaticResource {x:Static SystemColors.ControlBrushKey}}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -83,7 +85,26 @@
         <Setter Property="TextAreaFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBox AcceptsReturn="True" Height="50" MaxLines="5" Text="{Binding Value, Mode=OneWay}" MaxLength="{Binding Input.MaxLength}" IsEnabled="{Binding IsEditable}" />
+                    <Border BorderThickness="1">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush  StartPoint="0,0" EndPoint="0,20" MappingMode="Absolute">
+                                <LinearGradientBrush.GradientStops>
+                                    <GradientStop Color="#ABADB3" Offset="0.05"/>
+                                    <GradientStop Color="#E2E3EA" Offset="0.07"/>
+                                    <GradientStop Color="#E3E9EF" Offset="1"/>
+                                </LinearGradientBrush.GradientStops>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <StackPanel Background="White">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-17,0,0" >
+                                <TextBlock Text="{Binding Text.Length, ElementName=input}" />
+                                <TextBlock Text="/" />
+                                <TextBlock Text="{Binding MaxLength, ElementName=input}" />
+                            </StackPanel>
+                            <TextBox AcceptsReturn="True" Height="75" MaxLines="5" Text="{Binding Value, Mode=OneWay}"   
+                          MaxLength="{Binding Input.MaxLength}" IsEnabled="{Binding IsEditable}" BorderThickness="0" x:Name="input" />
+                        </StackPanel>
+                    </Border>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -112,9 +133,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:FieldFormElementView}">
                     <StackPanel>
-                        <TextBlock Text="{Binding Label}" />
+                        <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
                         <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" ToolTip="{Binding Hint}" />
-                        <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" />
+                        <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -142,7 +163,8 @@
                     <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView">
                         <primitives:FormElementItemsControl.FieldFormElementTemplate>
                             <DataTemplate>
-                                <primitives:FieldFormElementView Element="{Binding}" Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}"/>
+                                <primitives:FieldFormElementView Element="{Binding}" Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}"
+                                                                 />
                             </DataTemplate>
                         </primitives:FormElementItemsControl.FieldFormElementTemplate>
                         <primitives:FormElementItemsControl.GroupFormElementTemplate>

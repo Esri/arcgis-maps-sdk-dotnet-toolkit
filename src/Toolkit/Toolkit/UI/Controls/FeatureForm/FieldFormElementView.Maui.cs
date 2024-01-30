@@ -25,9 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     /// </summary>
     public partial class FieldFormElementView : TemplatedView
     {
-        private void OnElementPropertyChanged()
-        { 
-        }
     }
 }
 #endif

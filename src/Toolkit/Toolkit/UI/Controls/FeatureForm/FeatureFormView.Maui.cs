@@ -22,11 +22,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
-    [TemplatePart(Name = FeatureFormContentScrollViewerName, Type = typeof(ScrollViewer))]
-    [TemplatePart(Name = ItemsViewName, Type = typeof(ItemsControl))]
     public partial class FeatureFormView : TemplatedView
     {
-       /// <summary>
+        private static readonly ControlTemplate DefaultControlTemplate;
+
+        /// <summary>
         /// Template name of the <see cref="IBindableLayout"/> items layout view.
         /// </summary>
         public const string ItemsViewName = "ItemsView";
@@ -35,6 +35,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         /// Template name of the form's content's <see cref="ScrollView"/>.
         /// </summary>
         public const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
+
+        static FeatureFormView()
+        {
+            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+        }
+
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Title), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
+        private static object BuildDefaultTemplate()
+        {
+            throw new NotImplementedException("TODO");
+        }
     }
 }
 #endif

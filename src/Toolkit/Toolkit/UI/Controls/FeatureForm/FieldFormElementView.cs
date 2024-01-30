@@ -57,7 +57,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 content.ContentTemplateSelector = InputTemplateSelector;
             }
 #endif
-            OnElementPropertyChanged();
         }
 
         /// <summary>
@@ -74,10 +73,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), null, propertyChanged: (s,o,n) => ((FieldFormElementView)s).OnElementPropertyChanged());
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), null);
 #else
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), new PropertyMetadata(null, (s, e) => ((FieldFormElementView)s).OnElementPropertyChanged()));
+            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), new PropertyMetadata(null));
 #endif
 
     }

@@ -88,7 +88,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     if (FeatureForm != null)
                     {
-                        var expressions = await FeatureForm.EvaluateExpressionsAsync();
+                        _ = await FeatureForm.EvaluateExpressionsAsync();
 #if MAUI
                         var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
                         if (ctrl != null && ctrl is BindableObject bo)
@@ -133,13 +133,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             var formView = (FeatureFormView)d;
             var oldForm = oldValue as FeatureForm;
-            if (oldForm is not null)
-            {
-            }
             var newForm = newValue as FeatureForm;
             if (newForm is not null)
             {
-                _ = newForm.EvaluateExpressionsAsync();
+                formView.InvalidateForm();
             }
 
 #if MAUI

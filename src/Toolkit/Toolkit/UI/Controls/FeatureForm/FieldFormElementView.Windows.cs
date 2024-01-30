@@ -16,12 +16,6 @@
 
 #if WPF
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
-using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Navigation;
-
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -35,72 +29,108 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private const string FieldInputName = "FieldInput";
         private DataTemplateSelector? InputTemplateSelector;
 
-        private void OnElementPropertyChanged()
-        {
-        }
-
+        /// <summary>
+        /// Gets or sets the template for the <see cref="BarcodeScannerFormInput"/> element.
+        /// </summary>
         public DataTemplate? BarcodeScannerFormInputTemplate
         {
             get { return (DataTemplate)GetValue(BarcodeScannerFormInputTemplateProperty); }
             set { SetValue(BarcodeScannerFormInputTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="BarcodeScannerFormInputTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty BarcodeScannerFormInputTemplateProperty =
             DependencyProperty.Register(nameof(BarcodeScannerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the template for the <see cref="ComboBoxFormInput"/> element.
+        /// </summary>
         public DataTemplate? ComboBoxFormInputTemplate
         {
             get { return (DataTemplate)GetValue(ComboBoxFormInputTemplateProperty); }
             set { SetValue(ComboBoxFormInputTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="ComboBoxFormInputTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty ComboBoxFormInputTemplateProperty =
             DependencyProperty.Register(nameof(ComboBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 
-        
+        /// <summary>
+        /// Gets or sets the template for the <see cref="SwitchFormInput"/> element.
+        /// </summary>
         public DataTemplate? SwitchFormInputTemplate
         {
             get { return (DataTemplate)GetValue(SwitchFormInputTemplateProperty); }
             set { SetValue(SwitchFormInputTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="SwitchFormInputTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty SwitchFormInputTemplateProperty =
             DependencyProperty.Register(nameof(SwitchFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 
-
+        /// <summary>
+        /// Gets or sets the template for the <see cref="DateTimePickerFormInput"/> element.
+        /// </summary>
         public DataTemplate? DateTimePickerFormInputTemplate
         {
             get { return (DataTemplate)GetValue(DateTimePickerFormInputTemplateProperty); }
             set { SetValue(DateTimePickerFormInputTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="DateTimePickerFormInputTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty DateTimePickerFormInputTemplateProperty =
             DependencyProperty.Register(nameof(DateTimePickerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Gets or sets the template for the <see cref="RadioButtonsFormInput"/> element.
+        /// </summary>
         public DataTemplate? RadioButtonsFormInputTemplate
         {
             get { return (DataTemplate)GetValue(RadioButtonsFormInputTemplateProperty); }
             set { SetValue(RadioButtonsFormInputTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="RadioButtonsFormInputTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty RadioButtonsFormInputTemplateProperty =
             DependencyProperty.Register(nameof(RadioButtonsFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="TextAreaFormInput"/> element.
+        /// </summary>
         public DataTemplate? TextAreaFormInputTemplate
         {
             get { return (DataTemplate)GetValue(TextAreaFormInputTemplateProperty); }
             set { SetValue(TextAreaFormInputTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="TextAreaFormInputTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty TextAreaFormInputTemplateProperty =
             DependencyProperty.Register(nameof(TextAreaFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 
-
+        /// <summary>
+        /// Gets or sets the template for the <see cref="BarcodeScannerFormInput"/> element.
+        /// </summary>
         public DataTemplate? TextBoxFormInputTemplate
         {
             get { return (DataTemplate)GetValue(TextBoxFormInputTemplateProperty); }
             set { SetValue(TextBoxFormInputTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Identifies the <see cref="TextBoxFormInputTemplate"/> dependency property.
+        /// </summary>
         public static readonly DependencyProperty TextBoxFormInputTemplateProperty =
             DependencyProperty.Register(nameof(TextBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 
