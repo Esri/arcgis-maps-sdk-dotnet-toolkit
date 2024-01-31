@@ -82,7 +82,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                ConfigurePickers();
+                if (Dispatcher.CheckAccess())
+                    ConfigurePickers();
+                else
+                    Dispatcher.Invoke(ConfigurePickers);
             }
         }
 
@@ -92,7 +95,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (_rentrancyFlag) return;
             _rentrancyFlag = true;
-            DateTime? selectedDate = (DateTime?)Element?.Value;
+            DateTime? selectedDate = Element?.Value as DateTime? ?? (Element?.Value as DateTimeOffset?)?.DateTime;
             if (Element?.Input is DateTimePickerFormInput input)
             {
                 if (_datePicker is not null)

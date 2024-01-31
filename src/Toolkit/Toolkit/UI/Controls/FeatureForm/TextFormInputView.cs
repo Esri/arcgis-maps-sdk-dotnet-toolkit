@@ -210,16 +210,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (newValue is not null)
             {
-                ((System.ComponentModel.INotifyPropertyChanged)newValue).PropertyChanged += FeatureFormTextInputView_PropertyChanged;
+                ((System.ComponentModel.INotifyPropertyChanged)newValue).PropertyChanged += Element_PropertyChanged;
             }
             ConfigureTextBox();
         }
 
-        private void FeatureFormTextInputView_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                ConfigureTextBox();
+                if (Dispatcher.CheckAccess())
+                    ConfigureTextBox();
+                else 
+                    Dispatcher.Invoke(ConfigureTextBox);
             }
         }
     }

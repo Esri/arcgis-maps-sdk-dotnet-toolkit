@@ -69,7 +69,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                UpdateSelection();
+                if (Dispatcher.CheckAccess())
+                    UpdateSelection();
+                else
+                    Dispatcher.Invoke(UpdateSelection);
             }
         }
 

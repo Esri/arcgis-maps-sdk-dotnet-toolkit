@@ -48,8 +48,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
-            {
-                UpdateCheckState();
+            {            
+                if (Dispatcher.CheckAccess())
+                    UpdateCheckState();
+                else
+                    Dispatcher.Invoke(UpdateCheckState);
             }
         }
 

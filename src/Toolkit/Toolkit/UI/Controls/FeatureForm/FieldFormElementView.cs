@@ -156,7 +156,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                OnValuePropertyChanged();
+                if (Dispatcher.CheckAccess())
+                    OnValuePropertyChanged();
+                else 
+                    Dispatcher.Invoke(OnValuePropertyChanged);
             }
         }
     }
