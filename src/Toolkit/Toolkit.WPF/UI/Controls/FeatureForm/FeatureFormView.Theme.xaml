@@ -56,14 +56,22 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+    <Style TargetType="{x:Type primitives:FeatureFormComboBoxInputView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:FeatureFormComboBoxInputView}">
+                    <ComboBox x:Name="Selector" IsEnabled="{TemplateBinding IsEnabled}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="{x:Type primitives:FieldFormElementView}" >
         <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
         <Setter Property="ComboBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <ComboBox ItemsSource="{Binding Input.CodedValues}" IsEnabled="{Binding IsEditable}" DisplayMemberPath="Name" SelectedValuePath="Code"
-                           SelectedValue="{Binding Value, Mode=OneWay}" />
+                    <primitives:FeatureFormComboBoxInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
