@@ -78,19 +78,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     _textInput.AcceptsReturn = true;
                     _textInput.MaxLength = (int)area.MaxLength;
-                    _textInput.MaxLines = 5;
                 }
                 else if (Element?.Input is TextBoxFormInput box)
                 {
                     _textInput.AcceptsReturn = false;
                     _textInput.MaxLength = (int)box.MaxLength;
-                    _textInput.MaxLines = 1;
                 }
                 else if (Element?.Input is BarcodeScannerFormInput bar)
                 {
                     _textInput.AcceptsReturn = false;
                     _textInput.MaxLength = (int)bar.MaxLength;
-                    _textInput.MaxLines = 1;
                 }
                 _textInput.Text = Element?.Value?.ToString();
             }
@@ -133,6 +130,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var err = Element?.GetValidationErrors();
             }
         }
+
+        /// <summary>
+        /// Gets or sets the minimum number of visible lines.
+        /// </summary>
+        public int MinLines
+        {
+            get { return (int)GetValue(MinLinesProperty); }
+            set { SetValue(MinLinesProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="MinLines"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty MinLinesProperty = 
+            DependencyProperty.Register("MinLines", typeof(int), typeof(TextFormInputView), new PropertyMetadata(1));
+
+        /// <summary>
+        /// Gets or sets the maximum number of visible lines.
+        /// </summary>
+        public int MaxLines
+        {
+            get { return (int)GetValue(MaxLinesProperty); }
+            set { SetValue(MaxLinesProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="MaxLines"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty MaxLinesProperty =
+            DependencyProperty.Register(nameof(MaxLines), typeof(int), typeof(TextFormInputView), new PropertyMetadata(1));
 
         /// <summary>
         /// Gets or sets a value indicating whether the barcode scanner button is available.

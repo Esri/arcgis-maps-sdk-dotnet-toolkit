@@ -103,7 +103,7 @@
                             <TextBlock Text="/" />
                             <TextBlock Text="{Binding MaxLength, ElementName=TextInput}" />
                         </StackPanel>
-                        <TextBox IsEnabled="{TemplateBinding IsEnabled}" BorderThickness="0" x:Name="TextInput" />
+                        <TextBox IsEnabled="{TemplateBinding IsEnabled}" BorderThickness="0" x:Name="TextInput" MaxLines="{TemplateBinding MaxLines}" MinLines="{TemplateBinding MinLines}" />
 
                         <Border x:Name="ErrorBorder" BorderThickness="1" BorderBrush="Red" Visibility="Collapsed" />
                         <TextBlock Text="!" Background="Transparent" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" x:Name="ErrorInfo" />
@@ -161,7 +161,7 @@
         <Setter Property="TextAreaFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:TextFormInputView ShowCharacterCount="true" Element="{Binding}" />
+                    <primitives:TextFormInputView ShowCharacterCount="true" Element="{Binding}" MaxLines="4" MinLines="4" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
