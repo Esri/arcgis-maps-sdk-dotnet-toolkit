@@ -36,16 +36,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
-                inpcOld.PropertyChanged += FeatureFormTextInputView_PropertyChanged;
+                inpcOld.PropertyChanged += Element_PropertyChanged;
             }
             if (newValue is INotifyPropertyChanged inpcNew)
             {
-                inpcNew.PropertyChanged += FeatureFormTextInputView_PropertyChanged;
+                inpcNew.PropertyChanged += Element_PropertyChanged;
             }
             UpdateCheckState();
         }
 
-        private void FeatureFormTextInputView_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
@@ -66,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc/>
         protected override void OnUnchecked(RoutedEventArgs e)
         {
-            if (Element is not null && Element.Input is SwitchFormInput input && !object.Equals(input.OnValue.Code, Element.Value))
+            if (Element is not null && Element.Input is SwitchFormInput input && !object.Equals(input.OffValue.Code, Element.Value))
             {
                 Element.UpdateValue(input.OffValue.Code);
             }
