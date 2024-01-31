@@ -122,7 +122,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             public object? Code { get; set; }
             public string? Name { get; set; }
-            public override string ToString() => Name;
+            public override string ToString() => Name!;
         }
     }
 }

@@ -33,6 +33,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #endif
 {
+    /// <summary>
+    /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
+    /// </summary>
+    /// <seealso cref="Esri.ArcGISRuntime.Data.FeatureTable.FeatureFormDefinition"/>
+    /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     public partial class FeatureFormView
     {
         /// <summary>

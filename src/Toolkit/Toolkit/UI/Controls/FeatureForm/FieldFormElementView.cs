@@ -58,6 +58,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
 #endif
         }
+        
+        /// <summary>
+        /// Gets or sets the FeatureForm that the <see cref="Element"/> belongs to.
+        /// </summary>
+        public FeatureForm FeatureForm
+        {
+            get { return (FeatureForm)GetValue(FeatureFormProperty); }
+            set { SetValue(FeatureFormProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="FeatureForm"/> dependency property.
+        /// </summary>
+#if MAUI
+        public static readonly BindableProperty FeatureFormProperty =
+            BindableProperty.Create(nameof(FeatureForm), typeof(FeatureForm), typeof(FieldFormElementView), null);
+#else
+        public static readonly DependencyProperty FeatureFormProperty =
+            DependencyProperty.Register(nameof(FeatureForm), typeof(FeatureForm), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
 
         /// <summary>
         /// Gets or sets the FieldFormElement.
@@ -76,9 +96,60 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), null);
 #else
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), new PropertyMetadata(null, (s,e) => ((FieldFormElementView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
 #endif
 
+        private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
+        {
+            if (oldValue is not null)
+            {
+                ((System.ComponentModel.INotifyPropertyChanged)oldValue).PropertyChanged += FieldFormElement_PropertyChanged; //TODO: Weak
+            }
+            if (newValue is not null)
+            {
+                ((System.ComponentModel.INotifyPropertyChanged)newValue).PropertyChanged += FieldFormElement_PropertyChanged;
+            }
+        }
+
+        private async void OnValuePropertyChanged()
+        {
+            if (Element is null || FeatureForm is null)
+                return;
+            try
+            {
+                await FeatureForm.EvaluateExpressionsAsync();
+                var errors = Element?.GetValidationErrors();
+
+                string? errMessage = null;
+                if (errors != null && errors.Any())
+                {
+                    errMessage = string.Join("\n", errors.Select(e => e.Message));
+                }
+                else if (Element?.IsRequired == true && (Element.Value is null || Element?.Value is string str && string.IsNullOrEmpty(str)))
+                {
+                    errMessage = "Required";
+                }
+#if WPF
+                if (GetTemplateChild("ErrorLabel") is TextBlock tb)
+                {
+                    tb.Text = errMessage;
+                }
+#endif
+
+            }
+            catch (System.Exception)
+            {
+                //var err = Element?.GetValidationErrors();
+            }
+        }
+
+        private void FieldFormElement_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(FieldFormElement.Value))
+            {
+                OnValuePropertyChanged();
+            }
+        }
     }
 }
 #endif

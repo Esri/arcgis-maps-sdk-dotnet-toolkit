@@ -65,6 +65,68 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style TargetType="{x:Type primitives:FeatureFormTextInputView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:FeatureFormTextInputView}">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="ErrorStates">
+                                <VisualState x:Name="InputError">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorInfo" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorBorder" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="InputValid">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorInfo" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorBorder" Storyboard.TargetProperty="(UIElement.Visibility)">
+                                            <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-17,0,0" x:Name="CharacterCountPanel">
+                            <TextBlock Text="{Binding Text.Length, ElementName=TextInput}" />
+                            <TextBlock Text="/" />
+                            <TextBlock Text="{Binding MaxLength, ElementName=TextInput}" />
+                        </StackPanel>
+                        <TextBox IsEnabled="{TemplateBinding IsEnabled}" BorderThickness="0" x:Name="TextInput" />
+
+                        <Border x:Name="ErrorBorder" BorderThickness="1" BorderBrush="Red" Visibility="Collapsed" />
+                        <TextBlock Text="!" Background="Transparent" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" x:Name="ErrorInfo" />
+                        <Button Grid.Column="1" Content="&#xec5a;" FontFamily="Segoe MDL2 Assets" Visibility="Collapsed" x:Name="BarcodeScannerButton" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ShowCharacterCount" Value="false">
+                            <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="ShowCharacterCount" Value="true">
+                            <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsBarcodeScannerEnabled" Value="false">
+                            <Setter TargetName="BarcodeScannerButton" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsBarcodeScannerEnabled" Value="true">
+                            <Setter TargetName="BarcodeScannerButton" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style TargetType="{x:Type primitives:FieldFormElementView}" >
         <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
@@ -98,40 +160,21 @@
         <Setter Property="TextAreaFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Border BorderThickness="1">
-                        <Border.BorderBrush>
-                            <LinearGradientBrush  StartPoint="0,0" EndPoint="0,20" MappingMode="Absolute">
-                                <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="#ABADB3" Offset="0.05"/>
-                                    <GradientStop Color="#E2E3EA" Offset="0.07"/>
-                                    <GradientStop Color="#E3E9EF" Offset="1"/>
-                                </LinearGradientBrush.GradientStops>
-                            </LinearGradientBrush>
-                        </Border.BorderBrush>
-                        <StackPanel Background="White">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-17,0,0" >
-                                <TextBlock Text="{Binding Text.Length, ElementName=input}" />
-                                <TextBlock Text="/" />
-                                <TextBlock Text="{Binding MaxLength, ElementName=input}" />
-                            </StackPanel>
-                            <TextBox AcceptsReturn="True" Height="75" MaxLines="5" Text="{Binding Value, Mode=OneWay}"   
-                          MaxLength="{Binding Input.MaxLength}" IsEnabled="{Binding IsEditable}" BorderThickness="0" x:Name="input" />
-                        </StackPanel>
-                    </Border>
+                    <primitives:FeatureFormTextInputView ShowCharacterCount="true" Element="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="TextBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBox AcceptsReturn="False" Text="{Binding Value, Mode=OneWay}" MaxLength="{Binding Input.MaxLength}" IsEnabled="{Binding IsEditable}" />
+                    <primitives:FeatureFormTextInputView ShowCharacterCount="false" Element="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="BarcodeScannerFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock Text="Barcore scanner here" />
+                    <primitives:FeatureFormTextInputView ShowCharacterCount="false" IsBarcodeScannerEnabled="true" Element="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -149,6 +192,7 @@
                         <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
                         <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" ToolTip="{Binding Hint}" />
                         <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                        <TextBlock Foreground="Red" x:Name="ErrorLabel" Visibility="{Binding Text, ElementName=ErrorLabel, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
@@ -176,8 +220,8 @@
                     <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView">
                         <primitives:FormElementItemsControl.FieldFormElementTemplate>
                             <DataTemplate>
-                                <primitives:FieldFormElementView Element="{Binding}" Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}"
-                                                                 />
+                                <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
+                                                                 Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
                             </DataTemplate>
                         </primitives:FormElementItemsControl.FieldFormElementTemplate>
                         <primitives:FormElementItemsControl.GroupFormElementTemplate>

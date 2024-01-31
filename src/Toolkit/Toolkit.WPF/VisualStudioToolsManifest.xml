@@ -5,6 +5,7 @@
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField" />
+      <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar" />
       <Item Type="Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap" />
