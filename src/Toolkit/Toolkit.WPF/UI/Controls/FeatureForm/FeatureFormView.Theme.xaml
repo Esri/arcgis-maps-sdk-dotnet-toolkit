@@ -23,10 +23,10 @@
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
-    <Style TargetType="{x:Type primitives:FeatureFormSwitchInputView}">
+    <Style TargetType="{x:Type primitives:SwitchFormInputView}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type primitives:FeatureFormSwitchInputView}">
+                <ControlTemplate TargetType="{x:Type primitives:SwitchFormInputView}">
                     <StackPanel Orientation="Horizontal" Margin="-4" x:Name="Root" HorizontalAlignment="Left">
                         <Grid HorizontalAlignment="Left" Margin="4" Width="30" Height="15" Cursor="Hand">
                             <Border CornerRadius="7.5" Background="LightGray" x:Name="SwitchBack" />
@@ -56,19 +56,19 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="{x:Type primitives:FeatureFormComboBoxInputView}">
+    <Style TargetType="{x:Type primitives:ComboBoxFormInputView}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type primitives:FeatureFormComboBoxInputView}">
+                <ControlTemplate TargetType="{x:Type primitives:ComboBoxFormInputView}">
                     <ComboBox x:Name="Selector" IsEnabled="{TemplateBinding IsEnabled}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <Style TargetType="{x:Type primitives:FeatureFormTextInputView}">
+    <Style TargetType="{x:Type primitives:TextFormInputView}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type primitives:FeatureFormTextInputView}">
+                <ControlTemplate TargetType="{x:Type primitives:TextFormInputView}">
                     <Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ErrorStates">
@@ -133,11 +133,12 @@
         <Setter Property="ComboBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:FeatureFormComboBoxInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+                    <primitives:ComboBoxFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="RadioButtonsFormInputTemplate">
+            <!-- TODO -->
             <Setter.Value>
                 <DataTemplate>
                     <ItemsControl ItemsSource="{Binding Input.CodedValues}">
@@ -153,34 +154,35 @@
         <Setter Property="SwitchFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:FeatureFormSwitchInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+                    <primitives:SwitchFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="TextAreaFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:FeatureFormTextInputView ShowCharacterCount="true" Element="{Binding}" />
+                    <primitives:TextFormInputView ShowCharacterCount="true" Element="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="TextBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:FeatureFormTextInputView ShowCharacterCount="false" Element="{Binding}" />
+                    <primitives:TextFormInputView ShowCharacterCount="false" Element="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="BarcodeScannerFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:FeatureFormTextInputView ShowCharacterCount="false" IsBarcodeScannerEnabled="true" Element="{Binding}" />
+                    <primitives:TextFormInputView ShowCharacterCount="false" IsBarcodeScannerEnabled="true" Element="{Binding}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="DateTimePickerFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
+                    <!-- TODO -->
                     <DatePicker SelectedDate="{Binding Value, Mode=OneWay}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>

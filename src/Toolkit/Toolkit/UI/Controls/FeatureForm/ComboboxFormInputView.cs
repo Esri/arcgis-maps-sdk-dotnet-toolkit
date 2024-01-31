@@ -9,16 +9,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// Checkbox switch for the <see cref="ComboBoxFormInput"/>.
     /// </summary>
     [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
-    public class FeatureFormComboBoxInputView : Control
+    public class ComboBoxFormInputView : Control
     {
         private System.Windows.Controls.Primitives.Selector? _selector;
 
         /// <summary>
-        /// Initializes an instance of the <see cref="FeatureFormComboBoxInputView"/> class.
+        /// Initializes an instance of the <see cref="ComboBoxFormInputView"/> class.
         /// </summary>
-        public FeatureFormComboBoxInputView()
+        public ComboBoxFormInputView()
         {
-            DefaultStyleKey = typeof(FeatureFormComboBoxInputView);
+            DefaultStyleKey = typeof(ComboBoxFormInputView);
         }
 
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FeatureFormComboBoxInputView), new PropertyMetadata(null, (s, e) => ((FeatureFormComboBoxInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(ComboBoxFormInputView), new PropertyMetadata(null, (s, e) => ((ComboBoxFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {

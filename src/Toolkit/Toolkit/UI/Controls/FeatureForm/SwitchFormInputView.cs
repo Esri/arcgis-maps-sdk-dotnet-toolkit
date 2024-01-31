@@ -7,14 +7,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// <summary>
     /// Checkbox switch for the <see cref="SwitchFormInput"/>.
     /// </summary>
-    public class FeatureFormSwitchInputView : CheckBox
+    public class SwitchFormInputView : CheckBox
     {
         /// <summary>
-        /// Initializes an instance of the <see cref="FeatureFormSwitchInputView"/> class.
+        /// Initializes an instance of the <see cref="SwitchFormInputView"/> class.
         /// </summary>
-        public FeatureFormSwitchInputView()
+        public SwitchFormInputView()
         {
-            DefaultStyleKey = typeof(FeatureFormSwitchInputView);
+            DefaultStyleKey = typeof(SwitchFormInputView);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FeatureFormSwitchInputView), new PropertyMetadata(null, (s, e) => ((FeatureFormSwitchInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(SwitchFormInputView), new PropertyMetadata(null, (s, e) => ((SwitchFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {

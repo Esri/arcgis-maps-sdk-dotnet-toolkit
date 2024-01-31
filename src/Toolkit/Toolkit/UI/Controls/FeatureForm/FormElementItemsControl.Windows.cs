@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     /// <summary>
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView"/> control,
-    /// used for rendering a set of popup elements.
+    /// used for rendering a set of popup elements responsible for rendering <see cref="FieldFormElement"/> and <see cref="GroupFormElement"/>.
     /// </summary>
     public class FormElementItemsControl : ItemsControl
     {
@@ -44,8 +44,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Template used for rendering a <see cref="FieldFormElementTemplate"/>.
+        /// Template used for rendering a <see cref="FieldFormElement"/>.
         /// </summary>
+        /// <seealso cref="FieldFormElement"/>
         /// <seealso cref="FieldFormElementView"/>
         public DataTemplate FieldFormElementTemplate
         {
@@ -62,6 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Template used for rendering a <see cref="GroupFormElement"/>.
         /// </summary>
+        /// <seealso cref="GroupFormElement"/>
         public DataTemplate GroupFormElementTemplate
         {
             get { return (DataTemplate)GetValue(GroupFormElementTemplateProperty); }

@@ -19,6 +19,11 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 
+#if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -26,6 +31,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
+    /// <summary>
+    /// Supporting control for the <see cref="FeatureFormView"/> control,
+    /// used for rendering a <see cref="FieldFormElement"/> and picking the correct template for each Input type.
+    /// </summary>
     public partial class FieldFormElementView
     {
         /// <summary>

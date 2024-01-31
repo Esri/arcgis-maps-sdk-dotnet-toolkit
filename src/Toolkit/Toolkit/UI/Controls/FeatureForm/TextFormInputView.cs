@@ -13,16 +13,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// <summary>
     /// Text input for the <see cref="TextAreaFormInput"/>, <see cref="TextBoxFormInput"/> and <see cref="BarcodeScannerFormInput"/> inputs.
     /// </summary>
-    public class FeatureFormTextInputView : Control
+    public class TextFormInputView : Control
     {
         private TextBox? _textInput;
 
         /// <summary>
-        /// Initializes an instance of the <see cref="FeatureFormTextInputView"/> class.
+        /// Initializes an instance of the <see cref="TextFormInputView"/> class.
         /// </summary>
-        public FeatureFormTextInputView()
+        public TextFormInputView()
         {
-            DefaultStyleKey = typeof(FeatureFormTextInputView);
+            DefaultStyleKey = typeof(TextFormInputView);
         }
 
         /// <inheritdoc />
@@ -147,7 +147,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="IsBarcodeScannerEnabled"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty IsBarcodeScannerEnabledProperty =
-            DependencyProperty.Register(nameof(IsBarcodeScannerEnabled), typeof(bool), typeof(FeatureFormTextInputView), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(IsBarcodeScannerEnabled), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
 
         /// <summary>
         /// Gets or sets a value indicating whether the character count is visible.
@@ -162,7 +162,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="ShowCharacterCount"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ShowCharacterCountProperty =
-            DependencyProperty.Register(nameof(ShowCharacterCount), typeof(bool), typeof(FeatureFormTextInputView), new PropertyMetadata(false));
+            DependencyProperty.Register(nameof(ShowCharacterCount), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
 
         /// <summary>
         /// Gets or sets the FieldFormElement.
@@ -177,7 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FeatureFormTextInputView), new PropertyMetadata(null, (s,e) => ((FeatureFormTextInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+            DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), new PropertyMetadata(null, (s,e) => ((TextFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {

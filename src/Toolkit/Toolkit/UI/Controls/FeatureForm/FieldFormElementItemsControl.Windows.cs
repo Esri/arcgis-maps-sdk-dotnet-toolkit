@@ -66,7 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Template used for rendering a <see cref="BarcodeScannerFormInput"/>.
         /// </summary>
-        /// <seealso cref="FeatureFormTextInputView"/>
+        /// <seealso cref="TextFormInputView"/>
         public DataTemplate BarcodeScannerFormInputTemplate
         {
             get { return (DataTemplate)GetValue(BarcodeScannerFormInputTemplateProperty); }
@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Template used for rendering a <see cref="ComboBoxFormInput"/>.
         /// </summary>
-        /// <seealso cref="FeatureFormComboBoxInputView"/>
+        /// <seealso cref="ComboBoxFormInputView"/>
         public DataTemplate ComboBoxFormInputTemplate
         {
             get { return (DataTemplate)GetValue(ComboBoxFormInputTemplateProperty); }
@@ -130,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Template used for rendering a <see cref="SwitchFormInput"/>.
         /// </summary>
-        /// <seealso cref="FeatureFormSwitchInputView"/>
+        /// <seealso cref="SwitchFormInputView"/>
         public DataTemplate SwitchFormInputTemplate
         {
             get { return (DataTemplate)GetValue(SwitchFormInputTemplateProperty); }
@@ -146,7 +146,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Template used for rendering a <see cref="TextAreaFormInput"/>.
         /// </summary>
-        /// <seealso cref="FeatureFormTextInputView"/>
+        /// <seealso cref="TextFormInputView"/>
         public DataTemplate TextAreaFormInputTemplate
         {
             get { return (DataTemplate)GetValue(TextAreaFormInputTemplateProperty); }
@@ -163,7 +163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Template used for rendering a <see cref="TextBoxFormInput"/>.
         /// </summary>
-        /// <seealso cref="FeatureFormTextInputView"/>
+        /// <seealso cref="TextFormInputView"/>
         public DataTemplate TextBoxFormInputTemplate
         {
             get { return (DataTemplate)GetValue(TextBoxFormInputTemplateProperty); }
