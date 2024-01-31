@@ -48,10 +48,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 Element?.UpdateValue(selection);
             }
         }
+
+        /// <inheritdoc />
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new RadioButtonItem() { GroupName = Element?.FieldName + "_" + _formid };
         }
+
+        /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
             if(element is RadioButtonItem radio)
@@ -140,6 +144,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+        /// <inheritdoc />
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
             base.OnSelectionChanged(e);
