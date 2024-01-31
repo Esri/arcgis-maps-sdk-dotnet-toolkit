@@ -1,4 +1,5 @@
 ﻿#if WPF
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using System;
 using System.Collections.Generic;
@@ -114,7 +115,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (_textInput is null || _textInput.Text == Element?.Value as string) return;
             try
             {
-                Element?.UpdateValue(_textInput.Text);
+                string strvalue = _textInput.Text;
+                object value = strvalue;
+                if(Element?.FieldType == FieldType.Int32)
+                    value = int.Parse(strvalue);
+                else if (Element?.FieldType == FieldType.Int16)
+                    value = short.Parse(strvalue);
+                else if (Element?.FieldType == FieldType.Float64)
+                    value = double.Parse(strvalue);
+                else if (Element?.FieldType == FieldType.Float32)
+                    value = float.Parse(strvalue);
+                else if (Element?.FieldType == FieldType.Date)
+                    value = DateTime.Parse(strvalue);
+                Element?.UpdateValue(value);
                 var err = Element?.GetValidationErrors();
                 if(err != null && err.Any())
                 {
@@ -127,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             catch(System.Exception)
             {
-                var err = Element?.GetValidationErrors();
+                VisualStateManager.GoToState(this, "InputError", true);
             }
         }
 
