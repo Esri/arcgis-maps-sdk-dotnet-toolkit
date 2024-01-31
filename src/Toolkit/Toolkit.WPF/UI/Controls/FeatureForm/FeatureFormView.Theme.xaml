@@ -56,20 +56,24 @@
                         <TextBlock DataContext="{TemplateBinding Element}" Text="{Binding Input.OffValue.Name}" VerticalAlignment="Center" Margin="5,0" Visibility="Visible" x:Name="OffDisplayValue" />
                     </StackPanel>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="false">
+                        <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Left"/>
                             <Setter TargetName="SwitchBack" Property="Background" Value="LightGray"/>
                             <Setter TargetName="OnDisplayValue" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="OffDisplayValue" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <Trigger Property="IsChecked" Value="true">
+                        <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
                             <Setter TargetName="SwitchBack" Property="Background" Value="{StaticResource FeatureFormAccentBrush}"/>
                             <Setter TargetName="OnDisplayValue" Property="Visibility" Value="Visible"/>
                             <Setter TargetName="OffDisplayValue" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
+                        <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="Root" Property="Background" Value="{StaticResource {x:Static SystemColors.ControlBrushKey}}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Root" Property="Opacity" Value=".5"/>
+                            <Setter TargetName="SwitchBack" Property="Opacity" Value=".75"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
