@@ -22,7 +22,27 @@
         <Setter Property="FontSize" Value="12" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
-
+    <Style TargetType="{x:Type primitives:TimePicker}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:TimePicker}">
+                    <TextBox x:Name="TimeText" IsEnabled="{TemplateBinding IsEnabled}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type primitives:DateTimePickerFormInputView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:DateTimePickerFormInputView}">
+                    <StackPanel>
+                        <DatePicker x:Name="DatePicker" SelectedDate="{Binding Value, Mode=OneWay}" IsEnabled="{TemplateBinding IsEnabled}" />
+                        <primitives:TimePicker x:Name="TimePicker" IsEnabled="{TemplateBinding IsEnabled}" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="{x:Type primitives:SwitchFormInputView}">
         <Setter Property="Template">
             <Setter.Value>
@@ -150,7 +170,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style TargetType="{x:Type primitives:FieldFormElementView}" >
         <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
         <Setter Property="ComboBoxFormInputTemplate">
@@ -177,29 +196,28 @@
         <Setter Property="TextAreaFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:TextFormInputView ShowCharacterCount="true" Element="{Binding}" MaxLines="4" MinLines="4" />
+                    <primitives:TextFormInputView ShowCharacterCount="true" Element="{Binding}" MaxLines="4" MinLines="4" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="TextBoxFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:TextFormInputView ShowCharacterCount="false" Element="{Binding}" />
+                    <primitives:TextFormInputView ShowCharacterCount="false" Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="BarcodeScannerFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <primitives:TextFormInputView ShowCharacterCount="false" IsBarcodeScannerEnabled="true" Element="{Binding}" />
+                    <primitives:TextFormInputView ShowCharacterCount="false" IsBarcodeScannerEnabled="true" Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="DateTimePickerFormInputTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <!-- TODO -->
-                    <DatePicker SelectedDate="{Binding Value, Mode=OneWay}" IsEnabled="{Binding IsEditable}" />
+                    <primitives:DateTimePickerFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
