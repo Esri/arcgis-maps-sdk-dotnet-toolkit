@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
     xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
-    xmlns:converter="using:Esri.ArcGISRuntime.Toolkit.Internal"
+    xmlns:forms="clr-namespace:Esri.ArcGISRuntime.Mapping.FeatureForms;assembly=Esri.ArcGISRuntime"
     xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
 
     <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
@@ -234,6 +234,97 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="GroupFormElementExpanderButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="RootVisual" Padding="{TemplateBinding Padding}" MinHeight="32">
+                        <Grid Background="Transparent" SnapsToDevicePixels="False">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="19"/>
+                            </Grid.ColumnDefinitions>
+                            <Path x:Name="arrow" Grid.Column="1"   HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5"
+                              Stroke="Black"  StrokeThickness="2" SnapsToDevicePixels="false" />
+                            <ContentPresenter  HorizontalAlignment="Left"  VerticalAlignment="Center" Margin="0"  RecognizesAccessKey="True"  SnapsToDevicePixels="True" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="arrow" Property="Data" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="RootVisual" Property="Background" Value="#11000000" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="GroupFormElementExpanderStyle" TargetType="{x:Type Expander}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+                <DataTrigger.Value>
+                    <forms:FormGroupState>Expanded</forms:FormGroupState>
+                </DataTrigger.Value>
+                <Setter Property="IsExpanded" Value="True" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+                <DataTrigger.Value>
+                    <forms:FormGroupState>Collapsed</forms:FormGroupState>
+                </DataTrigger.Value>
+                <Setter Property="IsExpanded" Value="False" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=FormElements.Count, Mode=OneWay}" Value="0">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </Style.Triggers>
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Expander">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" >
+                        <StackPanel>
+                            <ToggleButton x:Name="HeaderSite" Style="{StaticResource GroupFormElementExpanderButtonStyle}"
+                                  Background="Transparent" BorderThickness="0"
+                                  Margin="0" MinWidth="0" MinHeight="0"
+                                  IsChecked="{Binding Path=IsExpanded,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                  ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  Padding="{TemplateBinding Padding}"
+                                  FontFamily="{TemplateBinding FontFamily}"
+                                  FontSize="{TemplateBinding FontSize}"
+                                  FontStyle="{TemplateBinding FontStyle}"
+                                  FontStretch="{TemplateBinding FontStretch}"
+                                  FontWeight="{TemplateBinding FontWeight}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <ContentPresenter x:Name="ExpandSite"
+                                      Visibility="Collapsed"
+                                      Focusable="false"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Margin="{TemplateBinding Padding}"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="true">
+                            <Setter Property="Visibility" Value="Visible" TargetName="ExpandSite"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <Style TargetType="{x:Type controls:FeatureFormView}" >
      <Setter Property="Template">
       <Setter.Value>
@@ -245,7 +336,25 @@
                    Margin="{TemplateBinding Margin}"
                    MinWidth="{TemplateBinding MinWidth}"
                    MaxWidth="{TemplateBinding MaxWidth}">
-            <Grid DataContext="{TemplateBinding FeatureForm}">
+              <Border.Resources>
+                  <Style x:Key="ExpanderStyle" TargetType="Expander">
+                      <Style.Triggers>
+                          <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+                              <DataTrigger.Value>
+                                  <forms:FormGroupState>Expanded</forms:FormGroupState>
+                              </DataTrigger.Value>
+                              <Setter Property="IsExpanded" Value="True" />
+                          </DataTrigger>
+                          <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+                              <DataTrigger.Value>
+                                  <forms:FormGroupState>Collapsed</forms:FormGroupState>
+                              </DataTrigger.Value>
+                              <Setter Property="IsExpanded" Value="False" />
+                          </DataTrigger>
+                      </Style.Triggers>
+                  </Style>
+              </Border.Resources>
+              <Grid DataContext="{TemplateBinding FeatureForm}">
               <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -262,13 +371,24 @@
                         </primitives:FormElementItemsControl.FieldFormElementTemplate>
                         <primitives:FormElementItemsControl.GroupFormElementTemplate>
                             <DataTemplate>
-                                <Border BorderThickness="1" BorderBrush="Black" Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}">
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
-                                        <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
-                                        <primitives:FormElementItemsControl ItemsSource="{Binding FormElements}" Margin="0,10" />
-                                    </StackPanel>
-                                 </Border>
+                                <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
+                                    <Expander Style="{StaticResource GroupFormElementExpanderStyle}">
+                                        <Expander.Header>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                                                <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <primitives:FormElementItemsControl ItemsSource="{Binding FormElements}" Margin="0,10" >
+                                            <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                                <DataTemplate>
+                                                    <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
+                                                                                     Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                                </DataTemplate>
+                                            </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                        </primitives:FormElementItemsControl>
+                                    </Expander>
+                                </StackPanel>
                             </DataTemplate>
                         </primitives:FormElementItemsControl.GroupFormElementTemplate>
                     </primitives:FormElementItemsControl>
