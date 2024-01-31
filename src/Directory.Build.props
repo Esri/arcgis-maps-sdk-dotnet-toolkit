@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.3.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.3.0</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.4.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.4.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
