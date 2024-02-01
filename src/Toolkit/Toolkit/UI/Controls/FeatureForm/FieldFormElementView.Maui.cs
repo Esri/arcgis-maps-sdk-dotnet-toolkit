@@ -25,6 +25,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     /// </summary>
     public partial class FieldFormElementView : TemplatedView
     {
+        private static readonly ControlTemplate DefaultControlTemplate;
+
+        static FieldFormElementView()
+        {
+            DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+        }
+
+        private static object BuildDefaultTemplate()
+        {
+            throw new NotImplementedException("TODO");
+        }
     }
 }
 #endif

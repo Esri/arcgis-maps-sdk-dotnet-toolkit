@@ -45,7 +45,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
-            throw new NotImplementedException("TODO");
+            Label roottitle = new Label();
+            roottitle.Style = GetPopupViewerHeaderStyle();
+            roottitle.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
+            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            root.Add(roottitle);
+            //TODO...
+            return roottitle;
         }
     }
 }

@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || MAUI
 using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -22,6 +22,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
+using TextBlock = Microsoft.Maui.Controls.Label;
 #else
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
@@ -46,28 +47,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         public FieldFormElementView()
         {
 #if MAUI
-            //ControlTemplate = DefaultControlTemplate;
+            ControlTemplate = DefaultControlTemplate;
 #else
             DefaultStyleKey = typeof(FieldFormElementView);
-#endif
-        }
-
-        /// <inheritdoc />
-#if WINDOWS_XAML || MAUI
-        protected override void OnApplyTemplate()
-#else
-        public override void OnApplyTemplate()
-#endif
-        {
-            base.OnApplyTemplate();
-#if !MAUI
-            var content = GetTemplateChild(FieldInputName) as ContentControl;
-            if (content != null)
-            {
-                if (InputTemplateSelector == null)
-                    InputTemplateSelector = new FieldTemplateSelector(this);
-                content.ContentTemplateSelector = InputTemplateSelector;
-            }
 #endif
         }
         
@@ -113,7 +95,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
-
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
@@ -148,17 +129,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     errMessage = "Required";
                 }
-#if WPF
+
                 if (GetTemplateChild("ErrorLabel") is TextBlock tb)
                 {
                     tb.Text = errMessage;
                 }
-#endif
 
             }
             catch (System.Exception)
             {
-                //var err = Element?.GetValidationErrors();
             }
         }
 
@@ -166,10 +145,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
+#if WPF
                 if (Dispatcher.CheckAccess())
                     OnValuePropertyChanged();
                 else 
                     Dispatcher.Invoke(OnValuePropertyChanged);
+#elif MAUI
+                if (Dispatcher.IsDispatchRequired)
+                    Dispatcher.Dispatch(OnValuePropertyChanged);
+                else
+                    OnValuePropertyChanged();
+#endif
             }
         }
     }

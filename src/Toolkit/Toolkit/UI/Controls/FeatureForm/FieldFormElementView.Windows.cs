@@ -29,6 +29,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private const string FieldInputName = "FieldInput";
         private DataTemplateSelector? InputTemplateSelector;
 
+        /// <inheritdoc />
+#if WINDOWS_XAML
+        protected override void OnApplyTemplate()
+#else
+        public override void OnApplyTemplate()
+#endif
+        {
+            base.OnApplyTemplate();
+            var content = GetTemplateChild(FieldInputName) as ContentControl;
+            if (content != null)
+            {
+                if (InputTemplateSelector == null)
+                    InputTemplateSelector = new FieldTemplateSelector(this);
+                content.ContentTemplateSelector = InputTemplateSelector;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the template for the <see cref="BarcodeScannerFormInput"/> element.
         /// </summary>
