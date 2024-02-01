@@ -14,10 +14,11 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
+#if WPF
+using System.ComponentModel;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
-using Esri.ArcGISRuntime.UI;
+
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
@@ -37,6 +38,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public partial class FieldFormElementView
     {
+        private WeakEventListener<FieldFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldFormElementView"/> class.
         /// </summary>
@@ -110,13 +113,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
-            if (oldValue is not null)
+
+            if (oldValue is INotifyPropertyChanged inpcOld)
             {
-                ((System.ComponentModel.INotifyPropertyChanged)oldValue).PropertyChanged += FieldFormElement_PropertyChanged; //TODO: Weak
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
             }
-            if (newValue is not null)
+            if (newValue is INotifyPropertyChanged inpcNew)
             {
-                ((System.ComponentModel.INotifyPropertyChanged)newValue).PropertyChanged += FieldFormElement_PropertyChanged;
+                _elementPropertyChangedListener = new WeakEventListener<FieldFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.FieldFormElement_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
         }
 
