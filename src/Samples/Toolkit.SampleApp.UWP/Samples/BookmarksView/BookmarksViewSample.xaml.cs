@@ -138,13 +138,7 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BookmarksView
 
         private async void BookmarkSelected(object sender, Bookmark bookmark)
         {
-#if WINUI
-            var dialog = new MessageDialog($"{bookmark.Name} Selected!");
-            WinRT.Interop.InitializeWithWindow.Initialize(dialog, App.CurrentWindowHandle);
-            await dialog.ShowAsync();
-#else
             await new MessageDialog($"{bookmark.Name} Selected!").ShowAsync();
-#endif
         }
 
         private void SelectDefaultItemContainer_Click(object sender, RoutedEventArgs e)
