@@ -1,5 +1,6 @@
 ﻿#if WPF
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -9,6 +10,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public class SwitchFormInputView : CheckBox
     {
+        private WeakEventListener<SwitchFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
+
         /// <summary>
         /// Initializes an instance of the <see cref="SwitchFormInputView"/> class.
         /// </summary>
@@ -36,11 +39,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
-                inpcOld.PropertyChanged += Element_PropertyChanged;
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
             }
             if (newValue is INotifyPropertyChanged inpcNew)
             {
-                inpcNew.PropertyChanged += Element_PropertyChanged;
+                _elementPropertyChangedListener = new WeakEventListener<SwitchFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Element_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateCheckState();
         }

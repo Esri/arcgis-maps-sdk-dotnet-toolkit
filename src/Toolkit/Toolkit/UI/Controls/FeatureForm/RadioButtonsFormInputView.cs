@@ -1,6 +1,7 @@
 ﻿#if WPF
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -11,8 +12,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
     public class RadioButtonsFormInputView : System.Windows.Controls.Primitives.Selector // Control
     {
+        private WeakEventListener<RadioButtonsFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
         private static int s_formcounter = -1;
         private static int _formid = 0; // Used to ensure uniqueness of groupnames
+
         /// <summary>
         /// Initializes an instance of the <see cref="RadioButtonsFormInputView"/> class.
         /// </summary>
@@ -94,16 +97,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
-                inpcOld.PropertyChanged += FeatureFormTextInputView_PropertyChanged; //TODO: Weak
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
             }
             if (newValue is INotifyPropertyChanged inpcNew)
             {
-                inpcNew.PropertyChanged += FeatureFormTextInputView_PropertyChanged;
+                _elementPropertyChangedListener = new WeakEventListener<RadioButtonsFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Element_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateItems();
         }
 
-        private void FeatureFormTextInputView_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {

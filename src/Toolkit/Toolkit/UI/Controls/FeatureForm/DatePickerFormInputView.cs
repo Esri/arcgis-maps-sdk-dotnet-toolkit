@@ -1,5 +1,7 @@
 ﻿#if WPF
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -9,6 +11,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [TemplatePart(Name = "DatePicker", Type = typeof(DatePicker))]
     public class DateTimePickerFormInputView : Control
     {
+        private WeakEventListener<DateTimePickerFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
         private DatePicker? _datePicker;
         private TimePicker? _timePicker;
 
@@ -72,9 +75,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
-            if (newValue is not null)
+            if (oldValue is INotifyPropertyChanged inpcOld)
             {
-                ((System.ComponentModel.INotifyPropertyChanged)newValue).PropertyChanged += Element_PropertyChanged;
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
+            }
+            if (newValue is INotifyPropertyChanged inpcNew)
+            {
+                _elementPropertyChangedListener = new WeakEventListener<DateTimePickerFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Element_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
         }
 

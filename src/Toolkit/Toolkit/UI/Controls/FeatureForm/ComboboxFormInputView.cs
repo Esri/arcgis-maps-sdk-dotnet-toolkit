@@ -1,6 +1,7 @@
 ﻿#if WPF
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
@@ -11,6 +12,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
     public class ComboBoxFormInputView : Control
     {
+        private WeakEventListener<ComboBoxFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
         private System.Windows.Controls.Primitives.Selector? _selector;
 
         /// <summary>
@@ -56,16 +58,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
-                inpcOld.PropertyChanged += FeatureFormTextInputView_PropertyChanged; //TODO: Weak
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
             }
             if (newValue is INotifyPropertyChanged inpcNew)
             {
-                inpcNew.PropertyChanged += FeatureFormTextInputView_PropertyChanged;
+                _elementPropertyChangedListener = new WeakEventListener<ComboBoxFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Element_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateItems();
         }
 
-        private void FeatureFormTextInputView_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {

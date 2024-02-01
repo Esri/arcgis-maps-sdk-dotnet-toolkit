@@ -1,6 +1,7 @@
 ﻿#if WPF
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// </summary>
     public class TextFormInputView : Control
     {
+        private WeakEventListener<TextFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
         private TextBox? _textInput;
 
         /// <summary>
@@ -221,9 +223,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
-            if (newValue is not null)
+             if (oldValue is INotifyPropertyChanged inpcOld)
             {
-                ((System.ComponentModel.INotifyPropertyChanged)newValue).PropertyChanged += Element_PropertyChanged;
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
+            }
+            if (newValue is INotifyPropertyChanged inpcNew)
+            {
+                _elementPropertyChangedListener = new WeakEventListener<TextFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.Element_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             ConfigureTextBox();
         }
