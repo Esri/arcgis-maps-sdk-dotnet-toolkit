@@ -25,11 +25,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
     public partial class FeatureFormView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
+        
+        private static readonly Style DefaultFeatureFormHeaderStyle;
+        private static readonly Style DefaultFeatureFormTitleStyle;
+        private static readonly Style DefaultFeatureFormCaptionStyle;
 
         /// <summary>
         /// Template name of the <see cref="IBindableLayout"/> items layout view.
         /// </summary>
         public const string ItemsViewName = "ItemsView";
+
+        private const string FeatureFormHeaderStyleName = "FeatureFormHeaderStyle";
+        private const string FeatureFormTitleStyleName = "FeatureFormTitleStyle";
+        private const string FeatureFormCaptionStyleName = "FeatureFormCaptionStyle";
 
          /// <summary>
         /// Template name of the form's content's <see cref="ScrollView"/>.
@@ -39,6 +47,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         static FeatureFormView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+
+            DefaultFeatureFormHeaderStyle = new Style(typeof(Label));
+            DefaultFeatureFormHeaderStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 16 });
+            DefaultFeatureFormHeaderStyle.Setters.Add(new Setter() { Property = Label.FontAttributesProperty, Value = FontAttributes.Bold });
+            DefaultFeatureFormHeaderStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
+
+            DefaultFeatureFormTitleStyle = new Style(typeof(Label));
+            DefaultFeatureFormTitleStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 16 });
+            DefaultFeatureFormTitleStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
+
+            DefaultFeatureFormCaptionStyle = new Style(typeof(Label));
+            DefaultFeatureFormCaptionStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12 });
+            DefaultFeatureFormCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
         }
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Title), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
@@ -46,13 +67,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private static object BuildDefaultTemplate()
         {
             Label roottitle = new Label();
-            roottitle.Style = GetPopupViewerHeaderStyle();
+            roottitle.Style = GetFeatureFormHeaderStyle();
             roottitle.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
-            root.Add(roottitle);
             //TODO...
             return roottitle;
         }
+
+        internal static Style GetStyle(string resourceKey, Style defaultStyle)
+        {
+            if (Application.Current?.Resources?.TryGetValue(resourceKey, out var value) == true && value is Style style)
+            {
+                return style;
+            }
+            return defaultStyle;
+        }
+
+        internal static Style GetFeatureFormHeaderStyle() => GetStyle(FeatureFormHeaderStyleName, DefaultFeatureFormHeaderStyle);
+
+        internal static Style GetFeatureFormTitleStyle() => GetStyle(FeatureFormTitleStyleName, DefaultFeatureFormTitleStyle);
+
+        internal static Style GetFeatureFormCaptionStyle() => GetStyle(FeatureFormCaptionStyleName, DefaultFeatureFormCaptionStyle);
     }
 }
 #endif
