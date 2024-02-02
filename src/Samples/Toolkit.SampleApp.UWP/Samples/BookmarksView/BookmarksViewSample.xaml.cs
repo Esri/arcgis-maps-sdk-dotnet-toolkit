@@ -138,7 +138,14 @@ namespace Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BookmarksView
 
         private async void BookmarkSelected(object sender, Bookmark bookmark)
         {
-            await new MessageDialog($"{bookmark.Name} Selected!").ShowAsync();
+            await new ContentDialog
+            {
+                XamlRoot = Dialog.XamlRoot,
+                Title = "Bookmark Selected",
+                Content = bookmark.Name,
+                CloseButtonText = "Ok"
+            }
+            .ShowAsync();
         }
 
         private void SelectDefaultItemContainer_Click(object sender, RoutedEventArgs e)
