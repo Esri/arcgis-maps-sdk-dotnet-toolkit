@@ -22,7 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     /// <summary>
     /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView"/> control,
-    /// used for rendering a set of popup elements.
+    /// used for rendering a set of form inputs.
     /// </summary>
     public class FieldFormElementItemsControl : ItemsControl
     {

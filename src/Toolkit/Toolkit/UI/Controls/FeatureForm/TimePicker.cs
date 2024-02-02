@@ -63,7 +63,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 if (Time.HasValue)
                 {
-                    _timeText.Text = new DateTime(1, 1, 1).Add(Time.Value).ToString("T");
+                    _timeText.Text = DateTime.MinValue.Add(Time.Value).ToString("T");
                 }
                 else
                     _timeText.Text = null;

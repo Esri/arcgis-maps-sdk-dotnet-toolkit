@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 var date = _datePicker.SelectedDate;
                 if(date.HasValue && input.IncludeTime && _timePicker != null && _timePicker.Time.HasValue)
                 {
-                    date = date.Value.Subtract(date.Value.TimeOfDay).Add(_timePicker.Time.Value);
+                    date = date.Value.Date.Add(_timePicker.Time.Value);
                 }
                 if (!object.Equals(Element?.Value, date))
                     Element?.UpdateValue(date);
