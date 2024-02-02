@@ -164,7 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var value = (SelectedItem as CodedValue);
             foreach(var item in GetItemContainers(this))
             {
-                item.IsChecked = (item.DataContext == SelectedItem); // || item.DataContext is RadioButtonNullValue && value is null);
+                item.IsChecked = (item.DataContext == SelectedItem);
             }
         }
 
