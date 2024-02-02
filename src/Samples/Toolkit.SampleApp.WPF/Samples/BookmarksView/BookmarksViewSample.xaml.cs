@@ -137,14 +137,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.BookmarksView
             BookmarksView.ItemTemplate = template;
         }
 
-        private void AddSelectionListener_Click(object sender, RoutedEventArgs e)
+        private void SelectionListenerToggle_Click(object sender, RoutedEventArgs e)
         {
-            BookmarksView.BookmarkSelected += BookmarkSelected;
-        }
-
-        private void RemoveSelectionListener_Click(object sender, RoutedEventArgs e)
-        {
-            BookmarksView.BookmarkSelected -= BookmarkSelected;
+            if (SelectionListenerToggle.IsChecked == true)
+            {
+                BookmarksView.BookmarkSelected += BookmarkSelected;
+                SelectionListenerToggle.Content = "Remove";
+            }
+            else
+            {
+                BookmarksView.BookmarkSelected -= BookmarkSelected;
+                SelectionListenerToggle.Content = "Add";
+            }
         }
 
         private void BookmarkSelected(object sender, Bookmark bookmark)

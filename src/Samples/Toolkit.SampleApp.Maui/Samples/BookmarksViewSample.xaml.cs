@@ -130,14 +130,16 @@ namespace Toolkit.SampleApp.Maui.Samples
             BookmarksView.ItemTemplate = template;
         }
 
-        private void AddSelectionListener_Click(object? sender, EventArgs e)
+        private void BookmarkListenerSwitch_Toggled(object sender, ToggledEventArgs e)
         {
-            BookmarksView.BookmarkSelected += BookmarkSelected;
-        }
-
-        private void RemoveSelectionListener_Click(object? sender, EventArgs e)
-        {
-            BookmarksView.BookmarkSelected -= BookmarkSelected;
+            if (BookmarkListenerSwitch.IsToggled)
+            {
+                BookmarksView.BookmarkSelected += BookmarkSelected;
+            }
+            else
+            {
+                BookmarksView.BookmarkSelected -= BookmarkSelected;
+            }
         }
 
         private void BookmarkSelected(object? sender, Bookmark bookmark)
