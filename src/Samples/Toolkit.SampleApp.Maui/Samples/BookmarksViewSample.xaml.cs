@@ -48,7 +48,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             BookmarksView.SetBinding(Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.GeoViewProperty, geoviewBinding);
         }
 
-        // Note that the Web Scene specification uses presentation slides in lieu of bookmarks.
+        // Note that the Web Scene Specification does not use bookmarks.
         // As such, the BookmarksView will initially be empty, so click the "Set list" button to generate bookmarks.
         private void SetSceneViewBinding_Click(object? sender, EventArgs e)
         {
