@@ -280,7 +280,7 @@
             </DataTrigger.Value>
             <Setter Property="IsExpanded" Value="False" />
         </DataTrigger>
-        <DataTrigger Binding="{Binding Path=FormElements.Count, Mode=OneWay}" Value="0">
+        <DataTrigger Binding="{Binding Path=Elements.Count, Mode=OneWay}" Value="0">
             <Setter Property="Visibility" Value="Collapsed" />
         </DataTrigger>
     </Style.Triggers>
@@ -383,7 +383,7 @@
                               <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                             </StackPanel>
                           </Expander.Header>
-                          <primitives:FormElementItemsControl ItemsSource="{Binding FormElements}" Margin="0,10" >
+                          <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" >
                             <primitives:FormElementItemsControl.FieldFormElementTemplate>
                               <DataTemplate>
                                 <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
