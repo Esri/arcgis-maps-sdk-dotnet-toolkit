@@ -133,7 +133,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 value = datevalue;
             try
             {
-                Element?.UpdateValue(value); // Throws FeatureFormIncorrectValueTypeException if type is incorrect instead of populating ValidationErrors
+                Element?.UpdateValue(value); // Throws FeatureFormIncorrectValueTypeException if type is incorrect instead of populating ValidationErrors IssueRef:apollo#456
             }
             catch (System.Exception)
             {
