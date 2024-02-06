@@ -36,7 +36,7 @@
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type primitives:DateTimePickerFormInputView}">
           <StackPanel>
-            <DatePicker x:Name="DatePicker" SelectedDate="{Binding Value, Mode=OneWay}" IsEnabled="{TemplateBinding IsEnabled}" />
+            <DatePicker x:Name="DatePicker" IsEnabled="{TemplateBinding IsEnabled}" />
             <primitives:TimePicker x:Name="TimePicker" IsEnabled="{TemplateBinding IsEnabled}" />
           </StackPanel>
         </ControlTemplate>

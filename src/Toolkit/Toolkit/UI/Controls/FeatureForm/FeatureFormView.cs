@@ -18,6 +18,8 @@
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using Esri.ArcGISRuntime.Data;
+
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
@@ -170,6 +172,106 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
             DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(FeatureFormView), new PropertyMetadata(ScrollBarVisibility.Auto));
 #endif
+
+        /// <summary>
+        /// Localizes a specific FeatureForm error message and adding contextual type/range/domain information to the error message.
+        /// This error message should be displayed to the user.
+        /// </summary>
+        /// <param name="element">Field Form Element the error is thrown for, to add type/range/domain context to the error message.</param>
+        /// <param name="exception">The returned validation exception.</param>
+        /// <returns>Localized string for the error message.</returns>
+        internal static string? ValidationErrorToLocalizedString(FieldFormElement element, Exception exception)
+        {
+            if (exception is FeatureFormNullNotAllowedException)
+            {
+                return Properties.Resources.GetString("FeatureFormNullNotAllowed");
+            }
+            else if (exception is FeatureFormIncorrectValueTypeException)
+            {
+                if (element.FieldType == FieldType.Int16 || element.FieldType == FieldType.Int32)
+                    return Properties.Resources.GetString("FeatureFormIncorrectValueTypeNumeric");
+                if (element.FieldType == FieldType.Float32 || element.FieldType == FieldType.Float64)
+                    return Properties.Resources.GetString("FeatureFormIncorrectValueTypeFloatingPoint");
+                return Properties.Resources.GetString("FeatureFormIncorrectValueType");
+            }
+            else if (exception is FeatureFormExceedsMaximumDateTimeException)
+            {
+                if (element.Domain is RangeDomain<DateTime> range && element.Input is DateTimePickerFormInput dateinput)
+                {
+                    var formatString = Properties.Resources.GetString("FeatureFormExceedsMaximumDateTime");
+                    return string.Format(formatString!, dateinput.IncludeTime ? range.MaxValue.ToString() : range.MaxValue.Date.ToShortDateString());
+                }
+                return Properties.Resources.GetString("FeatureFormExceedsMaximumDateTimeNoRange");
+            }
+            else if (exception is FeatureFormLessThanMinimumDateTimeException)
+            {
+                if (element.Domain is RangeDomain<DateTime> range && element.Input is DateTimePickerFormInput dateinput)
+                {
+                    var formatString = Properties.Resources.GetString("FeatureFormLessThanMinimumDateTime");
+                    return string.Format(formatString!, dateinput.IncludeTime ? range.MinValue.ToString() : range.MinValue.Date.ToShortDateString());
+                }
+                return Properties.Resources.GetString("FeatureFormLessThanMinimumDateTimeNoRange");
+            }
+            else if (exception is FeatureFormExceedsMaximumLengthException || exception is FeatureFormLessThanMinimumLengthException)
+            {
+                uint max = 0;
+                uint min = 0;
+                if (element.Input is TextAreaFormInput area) { max = area.MaxLength; min = area.MinLength; }
+                else if (element.Input is TextBoxFormInput tb) { max = tb.MaxLength; min = tb.MinLength; }
+                else if (element.Input is BarcodeScannerFormInput bar) { max = bar.MaxLength; min = bar.MinLength; }
+                if (max > 0 && min > 0)
+                    return string.Format(Properties.Resources.GetString("FeatureFormOutsideLengthRange")!, min, max);
+                if (max > 0)
+                    return string.Format(Properties.Resources.GetString("FeatureFormExceedsMaximumLength")!, max);
+                if (exception is FeatureFormExceedsMaximumLengthException)
+                    return Properties.Resources.GetString("FeatureFormExceedsMaximumLengthNoRange");
+                if (min > 0)
+                    return string.Format(Properties.Resources.GetString("FeatureFormLessThanMinimumLength")!, max);
+                return Properties.Resources.GetString("FeatureFormExceedsMaximumLengthNoRange");
+            }
+            else if (exception is FeatureFormExceedsNumericMaximumException || exception is FeatureFormLessThanNumericMinimumException)
+            {
+                double max = double.NaN;
+                double min = double.NaN;
+                if (element.Domain is RangeDomain<int> intrange)
+                {
+                    min = intrange.MinValue;
+                    max = intrange.MaxValue;
+                }
+                else if (element.Domain is RangeDomain<short> shortrange)
+                {
+                    min = shortrange.MinValue;
+                    max = shortrange.MaxValue;
+                }
+                else if (element.Domain is RangeDomain<float> floatrange)
+                {
+                    min = floatrange.MinValue;
+                    max = floatrange.MaxValue;
+                }
+                else if (element.Domain is RangeDomain<double> doublerange)
+                {
+                    min = doublerange.MinValue;
+                    max = doublerange.MaxValue;
+                }
+                else if (element.Domain is RangeDomain<long> longrange)
+                {
+                    min = longrange.MinValue;
+                    max = longrange.MaxValue;
+                }
+                if (!double.IsNaN(max) && !double.IsNaN(min))
+                    return string.Format(Properties.Resources.GetString("FeatureFormExceedsNumericOutsideRange")!, min, max);
+                if (!double.IsNaN(max))
+                    return string.Format(Properties.Resources.GetString("FeatureFormExceedsNumericMaximum")!, max);
+                if (exception is FeatureFormExceedsNumericMaximumException)
+                    return Properties.Resources.GetString("FeatureFormExceedsMaximumLengthNoRange");
+                return Properties.Resources.GetString("FeatureFormLessThanNumericMinimum");
+            }
+            else if (exception is FeatureFormNotInCodedValueDomainException)
+                return Properties.Resources.GetString("FeatureFormNotInCodedValueDomain");
+            else if (exception is FeatureFormFieldIsRequiredException)
+                return Properties.Resources.GetString("FeatureFormFieldIsRequired");
+            return exception.Message;
+        }
     }
 }
 #endif

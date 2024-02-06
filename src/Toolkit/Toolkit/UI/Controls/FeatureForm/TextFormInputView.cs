@@ -115,34 +115,39 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void Apply()
         {
             if (_textInput is null || _textInput.Text == Element?.Value as string) return;
+            string strvalue = _textInput.Text;
+            object? value = strvalue;
+            if (string.IsNullOrEmpty(strvalue))
+            {
+                value = null;
+            }
+            else if (Element?.FieldType == FieldType.Int32 && int.TryParse(strvalue, out var intvalue))
+                value = intvalue;
+            else if (Element?.FieldType == FieldType.Int16 && short.TryParse(strvalue, out var shortvalue))
+                value = shortvalue;
+            else if (Element?.FieldType == FieldType.Float64 && double.TryParse(strvalue, out var doublevalue))
+                value = doublevalue;
+            else if (Element?.FieldType == FieldType.Float32 && float.TryParse(strvalue, out var floatvalue))
+                value = floatvalue;
+            else if (Element?.FieldType == FieldType.Date && DateTime.TryParse(strvalue, out var datevalue))
+                value = datevalue;
             try
             {
-                string strvalue = _textInput.Text;
-                object value = strvalue;
-                if(Element?.FieldType == FieldType.Int32)
-                    value = int.Parse(strvalue);
-                else if (Element?.FieldType == FieldType.Int16)
-                    value = short.Parse(strvalue);
-                else if (Element?.FieldType == FieldType.Float64)
-                    value = double.Parse(strvalue);
-                else if (Element?.FieldType == FieldType.Float32)
-                    value = float.Parse(strvalue);
-                else if (Element?.FieldType == FieldType.Date)
-                    value = DateTime.Parse(strvalue);
-                Element?.UpdateValue(value);
-                var err = Element?.GetValidationErrors();
-                if(err != null && err.Any())
-                {
-                    VisualStateManager.GoToState(this, "InputError", true);
-                }
-                else
-                {
-                    VisualStateManager.GoToState(this, "InputValid", true);
-                }
+                Element?.UpdateValue(value); // Throws FeatureFormIncorrectValueTypeException if type is incorrect instead of populating ValidationErrors
             }
-            catch(System.Exception)
+            catch (System.Exception)
+            {
+                _textInput.Text = Element?.Value?.ToString();  //Reset input to previous valid value
+                return;
+            }
+            var err = Element?.GetValidationErrors();
+            if (err != null && err.Any())
             {
                 VisualStateManager.GoToState(this, "InputError", true);
+            }
+            else
+            {
+                VisualStateManager.GoToState(this, "InputValid", true);
             }
         }
 
