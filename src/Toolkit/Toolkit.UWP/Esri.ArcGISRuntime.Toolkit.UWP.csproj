@@ -28,7 +28,7 @@
     <Page Include="**\*.xaml" Exclude="obj\**\*.*">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-	<Content Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Assets\**\*.*" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Assets\**\*.*" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
     <Compile Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.cs" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*" Link="%(RecursiveDir)%(Filename)%(Extension)" />
     <Page Include="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\**\*.xaml" Exclude="$(MSBuildThisFileDirectory)..\Toolkit.WinUI\obj\**\*.*;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\Themes\Generic.xaml;$(MSBuildThisFileDirectory)..\Toolkit.WinUI\UI\Controls\**\*.Resources.xaml">
         <Generator>MSBuild:Compile</Generator>
@@ -40,9 +40,15 @@
   <ItemGroup>
      <PackageReference Include="Esri.ArcGISRuntime.UWP" Version="$(ArcGISRuntimePackageVersion)" Condition="Exists('$(SolutionDir)toolkit.props')!='true'" />
   </ItemGroup>
-
   <Target Name="CopyResources" BeforeTargets="Build;Rebuild">
-      <Copy SourceFiles="$(MSBuildThisFileDirectory)..\Toolkit\LocalizedStrings\Resources.resx" DestinationFiles="$(MSBuildThisFileDirectory)LocalizedStrings\en-US\Resources.resw" SkipUnchangedFiles="True" />
+    <!-- Converts .resx files to .resw -->
+    <ItemGroup>
+      <ResXResourceFiles Include="$(MSBuildThisFileDirectory)..\Toolkit\LocalizedStrings\Resources.*.resx" Exclude="LocalizedStrings\Resources.sr.resx" />
+      <ResXResourceFiles Update="ResXResourceFiles" TargetPath="LocalizedStrings\$([MSBUILD]::ValueOrDefault('%(Filename)', '').Substring(10))\Resources.resw" />
+      <ResXResourceFiles Include="$(MSBuildThisFileDirectory)..\Toolkit\LocalizedStrings\Resources.resx" TargetPath="LocalizedStrings\en-US\Resources.resw" />
+      <ResXResourceFiles Include="$(MSBuildThisFileDirectory)..\Toolkit\LocalizedStrings\Resources.sr.resx" TargetPath="LocalizedStrings\sr-LATN\Resources.resw" Condition="Exists('$(MSBuildThisFileDirectory)..\Toolkit\LocalizedStrings\Resources.sr.resx')" /> <!-- UWP uses sr-LATN instead of sr -->
+    </ItemGroup>
+    <Copy SourceFiles="@(ResXResourceFiles)" DestinationFiles="@(ResXResourceFiles->'%(TargetPath)')" SkipUnchangedFiles="true" />
   </Target>
   
    <!-- Works around issue where some NuGet content is ending up in TFM folder \lib\uap10.0.[targetversion]\ instead of \lib\uap10.0.[minversion]
