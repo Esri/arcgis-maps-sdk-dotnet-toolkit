@@ -118,12 +118,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             try
             {
                 await FeatureForm.EvaluateExpressionsAsync();
-                var errors = Element?.GetValidationErrors();
+                var errors = Element.GetValidationErrors();
 
                 string? errMessage = null;
                 if (errors != null && errors.Any())
                 {
-                    errMessage = string.Join("\n", errors.Select(e => e.Message));
+                    errMessage = string.Join("\n", errors.Select(e => FeatureFormView.ValidationErrorToLocalizedString(Element, e)!));
                 }
                 else if (Element?.IsRequired == true && (Element.Value is null || Element?.Value is string str && string.IsNullOrEmpty(str)))
                 {
