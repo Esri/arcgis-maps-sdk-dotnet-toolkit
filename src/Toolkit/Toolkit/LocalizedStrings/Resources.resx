@@ -119,7 +119,7 @@
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
-    <comment>Input validation of entered date must be bfore or on the maximum allowed date {0}</comment>
+    <comment>Input validation of entered date must be before or on the maximum allowed date {0}</comment>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
     <value>Date exceeds maximum</value>
