@@ -257,4 +257,28 @@
     <value>mi</value>
     <comment>Abbreviation of "Miles" displayed in the scale bar</comment>
   </data>
+  <data name="SearchViewAllSourcesSelect" xml:space="preserve">
+    <value>All Sources</value>
+    <comment>The text to display for the button used to select all search sources.</comment>
+  </data>
+  <data name="SearchViewClearSearchTooltip" xml:space="preserve">
+    <value>Clear Search</value>
+    <comment>The tooltip text to display for the clear/cancel search button.</comment>
+  </data>
+  <data name="SearchViewNoResults" xml:space="preserve">
+    <value>No Results</value>
+    <comment>The message to show when a geocode search completes with no results</comment>
+  </data>
+  <data name="SearchViewRepeatSearch" xml:space="preserve">
+    <value>Repeat Search Here</value>
+    <comment>The text to display in the 'Repeat Search' button.</comment>
+  </data>
+  <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
+    <value>Find a place or address</value>
+    <comment>The watermark/placeholder text to display in the location search textbox</comment>
+  </data>
+  <data name="SearchViewSearchTooltip" xml:space="preserve">
+    <value>Search</value>
+    <comment>The tooltip text to display for the search button.</comment>
+  </data>
 </root>

@@ -42,7 +42,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private ISearchSource? _activeSource;
         private SearchResult? _selectedResult;
         private string? _currentQuery;
-        private string? _defaultPlaceholder = "Find a place or address";
+        private string? _defaultPlaceholder = Properties.Resources.GetString("SearchViewSearchPlaceholderText");
         private SearchResultMode _searchMode = SearchResultMode.Automatic;
         private Geometry.Geometry? _queryArea;
         private Geometry.Geometry? _lastSetArea;

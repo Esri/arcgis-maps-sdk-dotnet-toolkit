@@ -64,6 +64,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ClearCommand = new DelegateCommand(HandleClearSearchCommand);
             SearchCommand = new DelegateCommand(HandleSearchCommand);
             RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
+            InitializeLocalizedStrings();
+        }
+
+        private void InitializeLocalizedStrings()
+        {
+            NoResultMessage = Properties.Resources.GetString("SearchViewNoResults");
+            AllSourceSelectText = Properties.Resources.GetString("SearchViewAllSourcesSelect");
+            ClearSearchTooltipText = Properties.Resources.GetString("SearchViewClearSearchTooltip");
+            SearchTooltipText = Properties.Resources.GetString("SearchViewSearchTooltip");
+            RepeatSearchButtonText = Properties.Resources.GetString("SearchViewRepeatSearch");
         }
 
 #if WINDOWS_XAML

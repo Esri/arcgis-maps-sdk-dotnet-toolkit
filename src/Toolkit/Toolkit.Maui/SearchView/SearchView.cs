@@ -76,13 +76,18 @@ public partial class SearchView : TemplatedView, INotifyPropertyChanged
 
         BindingContext = this;
         SearchViewModel = new SearchViewModel();
-        NoResultMessage = "No Results";
-        AllSourcesSelectText = "All Sources";
-        RepeatSearchButtonText = "Repeat Search Here";
+        InitializeLocalizedStrings();
         _resultOverlay = new GraphicsOverlay { Id = "SearchView_Result_Overlay" };
         ClearCommand = new DelegateCommand(HandleClearSearchCommand);
         SearchCommand = new DelegateCommand(HandleSearchCommand);
         RepeatSearchHereCommand = new DelegateCommand(HandleRepeatSearchHereCommand);
+    }
+
+    private void InitializeLocalizedStrings()
+    {
+        NoResultMessage = Properties.Resources.GetString("SearchViewNoResults");
+        AllSourcesSelectText = Properties.Resources.GetString("SearchViewAllSourcesSelect");
+        RepeatSearchButtonText = Properties.Resources.GetString("SearchViewRepeatSearch");
     }
 
     /// <summary>
