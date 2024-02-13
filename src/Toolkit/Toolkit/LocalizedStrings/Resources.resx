@@ -119,94 +119,94 @@
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
-    <comment>Date must be on or before {0}</comment>
-  </data>
-  <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>Date exceeds maximum</value>
-    <comment>Date exceeds maximum</comment>
+    <comment>Input validation of entered date must be bfore or on the maximum allowed date {0}</comment>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
     <value>Maximum {0} characters</value>
-    <comment>Maximum {0} characters</comment>
+    <comment>Input validation of entered text exceeds the maximum length of "{0}" characters</comment>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
     <value>Maximum character length exceeded</value>
-    <comment>Maximum character length exceeded</comment>
+    <comment>Input validation of entered text exceeds the maximum length of characters</comment>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>Enter a value at or below {maximum}</value>
-    <comment>Enter a value at or below {maximum}</comment>
+    <value>Enter a value at or below {0}</value>
+    <comment>Input validation of entered number is at or below the allowed maximum of {0} </comment>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
     <value>Exceeds maximum value</value>
-    <comment>Exceeds maximum value</comment>
+    <comment>Input validation of entered number exceeds the maximum number allowed</comment>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
     <value>Enter value from {0} to {1}</value>
-    <comment>Enter value from {0} to {1}</comment>
+    <comment>Input validation of entered number must be between the value {0} and {1}</comment>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
     <value>Required</value>
-    <comment>Required</comment>
+    <comment>Input validation: The field is required and a value must be entered</comment>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
     <value>Value must be of the correct type</value>
-    <comment>Value must be of the correct type</comment>
+    <comment>Input validation: The value entired is of an incorrect type (ie not a date, number etc)</comment>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
     <value>Value must be a number</value>
-    <comment>Value must be a number</comment>
+    <comment>Input validation: The value entered isn't a number</comment>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
     <value>Value must be a whole number</value>
-    <comment>Value must be a whole number</comment>
+    <comment>Input validation: The value entered must be a whole number</comment>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
     <value>Date must be on or after {0}</value>
-    <comment>Date must be on or after {0}</comment>
+    <comment>Input validation of entered date most be on the {0} or later</comment>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
     <value>Date less than minimum</value>
-    <comment>Date less than minimum</comment>
+    <comment>Input validation of entered date is before the required minimum</comment>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
     <value>Enter at least {0} characters</value>
-    <comment>Enter at least {0} characters</comment>
+    <comment>Input validation of entered text must be at least {0} characters long</comment>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>Less than minimum value</value>
-    <comment>Less than minimum value</comment>
+    <comment>Input validation of entered number is below the minimum require value</comment>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Value must be within the domain</value>
-    <comment>Value must be within the domain</comment>
+    <comment>Input validation of domain values is now any of the required domain values</comment>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
     <value>Value must not be empty</value>
-    <comment>Value must not be empty</comment>
+    <comment>Input validation of value was null or empty </comment>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Enter {0} to {1} characters</value>
-    <comment>Enter {0} to {1} characters</comment>
+    <comment>Input validation of entered text must be of a length between {0} and {1} characters</comment>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Enter {0} characters</value>
-    <comment>Enter {0} characters</comment>
+    <comment>Input validation of entered text must be exactly {0} characters long</comment>
   </data>
   <data name="FeetAbbreviation" xml:space="preserve">
     <value>ft</value>
-    <comment>ft</comment>
+    <comment>Abbreviation of "Feet" displayed in the scale bar</comment>
+  </data>
+  <data name="Input validation of entered date" xml:space="preserve">
+    <value>Date exceeds maximum</value>
+    <comment>Input validation of entered date Date exceeds maximum allowed</comment>
   </data>
   <data name="KilometerAbbreviation" xml:space="preserve">
     <value>km</value>
-    <comment>km</comment>
+    <comment>Abbreviation of "Kilometers" displayed in the scale bar</comment>
   </data>
   <data name="MeterAbbreviation" xml:space="preserve">
     <value>m</value>
-    <comment>m</comment>
+    <comment>Abbreviation of "Meters" displayed in the scale bar</comment>
   </data>
   <data name="MilesAbbreviation" xml:space="preserve">
     <value>mi</value>
-    <comment>mi</comment>
+    <comment>Abbreviation of "Miles" displayed in the scale bar</comment>
   </data>
 </root>
