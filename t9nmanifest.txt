@@ -1,1 +1,1 @@
-src/Toolkit/Toolkit/LocalizedStrings/Resources.resx
+src\Toolkit\Toolkit\LocalizedStrings\Resources.resx
