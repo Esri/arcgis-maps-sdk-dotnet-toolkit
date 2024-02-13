@@ -193,6 +193,54 @@
     <value>Enter {0} characters</value>
     <comment>Input validation of entered text must be exactly {0} characters long</comment>
   </data>
+  <data name="FloorFilterAllFacilities" xml:space="preserve">
+    <value>All Sites</value>
+    <comment>The label and tooltip shown for the button that is used to navigate to the list of sites in all facilities when the site browsing view is open</comment>
+  </data>
+  <data name="FloorFilterAllFloors" xml:space="preserve">
+    <value>All Floors</value>
+    <comment>Tooltip on toggle button for togling all floors on and off</comment>
+  </data>
+  <data name="FloorFilterBackButton" xml:space="preserve">
+    <value>Go Back</value>
+    <comment>Tooltip on button for navigating back in the list of floors</comment>
+  </data>
+  <data name="FloorFilterBrowse" xml:space="preserve">
+    <value>Browse</value>
+    <comment>The text and tooltip shown on the button that opens the browsing view</comment>
+  </data>
+  <data name="FloorFilterBrowseFacilities" xml:space="preserve">
+    <value>Select a facility</value>
+    <comment>The text shown on the browsing view header for facilities</comment>
+  </data>
+  <data name="FloorFilterBrowseSites" xml:space="preserve">
+    <value>Select a site</value>
+    <comment>The text and tooltip shown on the browsing view header for sites</comment>
+  </data>
+  <data name="FloorFilterClose" xml:space="preserve">
+    <value>Close</value>
+    <comment>The text and tooltip shown for the button that is used to close the browsing view</comment>
+  </data>
+  <data name="FloorFilterCollapse" xml:space="preserve">
+    <value>Collapse</value>
+    <comment>Text on toggle button that collapses a list of floors</comment>
+  </data>
+  <data name="FloorFilterExpand" xml:space="preserve">
+    <value>Expand</value>
+    <comment>Tooltip on toggle button that expands a list of floors</comment>
+  </data>
+  <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
+    <value>Filter</value>
+    <comment>Placeholder text in filter search box</comment>
+  </data>
+  <data name="FloorFilterNoResultsFound" xml:space="preserve">
+    <value>No results found</value>
+    <comment>Text displayed when a search didn't return any results.</comment>
+  </data>
+  <data name="FloorFilterZoomTo" xml:space="preserve">
+    <value>Zoom To</value>
+    <comment>Text and Tooltip on button for zooming to a selected facility or site</comment>
+  </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
     <value>ft</value>
     <comment>Abbreviation of "Feet" displayed in the scale bar</comment>
