@@ -121,6 +121,10 @@
     <value>Date must be on or before {0}</value>
     <comment>Input validation of entered date must be bfore or on the maximum allowed date {0}</comment>
   </data>
+  <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
+    <value>Date exceeds maximum</value>
+    <comment>Input validation of entered date Date exceeds maximum allowed</comment>
+  </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
     <value>Maximum {0} characters</value>
     <comment>Input validation of entered text exceeds the maximum length of "{0}" characters</comment>
@@ -192,10 +196,6 @@
   <data name="FeetAbbreviation" xml:space="preserve">
     <value>ft</value>
     <comment>Abbreviation of "Feet" displayed in the scale bar</comment>
-  </data>
-  <data name="Input validation of entered date" xml:space="preserve">
-    <value>Date exceeds maximum</value>
-    <comment>Input validation of entered date Date exceeds maximum allowed</comment>
   </data>
   <data name="KilometerAbbreviation" xml:space="preserve">
     <value>km</value>
