@@ -33,7 +33,7 @@ public class OverviewMap : TemplatedView
     private MapView? _overviewMapView;
 
 
-    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.Map.LoadStatus), "Esri.ArcGISRuntime.Mapping.Map", "Esri.ArcGISRuntime")]
+    [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.GeoModel.LoadStatus), "Esri.ArcGISRuntime.Mapping.GeoModel", "Esri.ArcGISRuntime")]
     static OverviewMap()
     {
         DefaultControlTemplate = new ControlTemplate(() =>
