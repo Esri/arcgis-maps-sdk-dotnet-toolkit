@@ -70,8 +70,8 @@
                     <Button Text="Map/Scene" Grid.Row="3" Grid.Column="2" Clicked="AddToMapScene_Click" />
                     <Button Text="Red fore" Grid.Row="4" Grid.Column="1" Clicked="SetItemTemplateOne_Click" />
                     <Button Text="Red back" Grid.Row="4" Grid.Column="2" Clicked="SetItemTemplateTwo_Click" />
-                    <Button Text="Add" Grid.Row="5" Grid.Column="1" Clicked="AddSelectionListener_Click" />
-                    <Button Text="Remove" Grid.Row="5" Grid.Column="2" Clicked="RemoveSelectionListener_Click" />
+                    <Switch x:Name="BookmarkListenerSwitch" Grid.Row="5" Grid.Column="1" HorizontalOptions="Start"
+                            Toggled="BookmarkListenerSwitch_Toggled"/>
                 </Grid>
             </Grid>
         </ScrollView>

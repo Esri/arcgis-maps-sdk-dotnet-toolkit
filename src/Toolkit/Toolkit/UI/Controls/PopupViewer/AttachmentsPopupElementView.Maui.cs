@@ -73,11 +73,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 
 
-        [DynamicDependency(nameof(AttachmentViewModel.Thumbnail), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel","Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(AttachmentViewModel.Name), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(AttachmentViewModel.Size), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(AttachmentViewModel.IsDownloadButtonVisible), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(AttachmentViewModel.IsDownloading), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentViewModel", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(AttachmentViewModel.Thumbnail), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
+        [DynamicDependency(nameof(AttachmentViewModel.Name), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
+        [DynamicDependency(nameof(AttachmentViewModel.Size), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
+        [DynamicDependency(nameof(AttachmentViewModel.IsDownloadButtonVisible), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
+        [DynamicDependency(nameof(AttachmentViewModel.IsDownloading), "Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.AttachmentViewModel", "Esri.ArcGISRuntime.Toolkit.Maui")]
         private static object BuildDefaultItemTemplate()
         {
             Grid layout = new Grid();
@@ -95,7 +95,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             layout.Add(image);
             image.SetBinding(Image.SourceProperty, new Binding(nameof(AttachmentViewModel.Thumbnail)));
             Grid.SetRowSpan(image, 2);
-            
+
             Label name = new Label() { VerticalOptions = LayoutOptions.End };
             name.SetBinding(Label.TextProperty, nameof(AttachmentViewModel.Name));
             Grid.SetColumn(name, 1);
@@ -113,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(image2, 2);
             Grid.SetRowSpan(image2, 2);
             layout.Add(image2);
-            
+
             ActivityIndicator indicator = new ActivityIndicator() { WidthRequest = 24, HeightRequest = 24, IsRunning = true };
             indicator.SetBinding(ActivityIndicator.IsRunningProperty, new Binding(nameof(AttachmentViewModel.IsDownloading)));
             Grid.SetColumn(indicator, 2);
@@ -210,7 +210,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     else
                         return $"{Math.Round(size / 1024d / 1024d, 1)} MB";
                 }
-            } 
+            }
 
             private void Attachment_PropertyChanged(object? sender, PropertyChangedEventArgs e)
             {
@@ -241,9 +241,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     return _thumbnail;
                 }
             }
-            
+
             public bool IsDownloadButtonVisible => !Attachment.IsLocal && Attachment.LoadStatus != LoadStatus.Loaded && Attachment.LoadStatus != LoadStatus.Loading;
-            
+
             public bool IsDownloading => !Attachment.IsLocal && Attachment.LoadStatus == LoadStatus.Loading;
 
             private void CreateThumbnail()
