@@ -140,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _textInput.Text = Element?.Value?.ToString();  //Reset input to previous valid value
                 return;
             }
-            var err = Element?.GetValidationErrors();
+            var err = Element?.ValidationErrors;
             if (err != null && err.Any())
             {
                 VisualStateManager.GoToState(this, "InputError", true);

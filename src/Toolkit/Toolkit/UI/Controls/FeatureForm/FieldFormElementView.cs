@@ -118,7 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             try
             {
                 await FeatureForm.EvaluateExpressionsAsync();
-                var errors = Element.GetValidationErrors();
+                var errors = Element.ValidationErrors;
 
                 string? errMessage = null;
                 if (errors != null && errors.Any())
