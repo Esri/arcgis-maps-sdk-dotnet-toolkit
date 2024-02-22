@@ -118,23 +118,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             try
             {
                 await FeatureForm.EvaluateExpressionsAsync();
-                var errors = Element.ValidationErrors;
-
-                string? errMessage = null;
-                if (errors != null && errors.Any())
-                {
-                    errMessage = string.Join("\n", errors.Select(e => FeatureFormView.ValidationErrorToLocalizedString(Element, e)!));
-                }
-                else if (Element?.IsRequired == true && (Element.Value is null || Element?.Value is string str && string.IsNullOrEmpty(str)))
-                {
-                    errMessage = "Required";
-                }
-
-                if (GetTemplateChild("ErrorLabel") is TextBlock tb)
-                {
-                    tb.Text = errMessage;
-                }
-
             }
             catch (System.Exception)
             {
@@ -156,6 +139,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 else
                     OnValuePropertyChanged();
 #endif
+            }
+            else if (e.PropertyName == nameof(FieldFormElement.ValidationErrors))
+            {
+                UpdateErrorMessages();
+            }
+        }
+
+        private void UpdateErrorMessages()
+        {
+            string? errMessage = null;
+            if (Element is not null)
+            {
+                var errors = Element.ValidationErrors;
+
+                if (errors != null && errors.Any())
+                {
+                    errMessage = string.Join("\n", errors.Select(e => FeatureFormView.ValidationErrorToLocalizedString(Element, e)!));
+                }
+                else if (Element?.IsRequired == true && (Element.Value is null || Element?.Value is string str && string.IsNullOrEmpty(str)))
+                {
+                    errMessage = Properties.Resources.GetString("FeatureFormFieldIsRequired");
+                }
+            }
+            if (GetTemplateChild("ErrorLabel") is TextBlock tb)
+            {
+                tb.Text = errMessage;
             }
         }
     }

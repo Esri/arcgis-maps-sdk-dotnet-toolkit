@@ -29,6 +29,23 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private const string ItemsViewName = "ItemsView";
         private const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
 
+        private static readonly DependencyPropertyKey IsValidPropertyKey
+          = DependencyProperty.RegisterReadOnly(nameof(IsValid), typeof(bool), typeof(FeatureFormView), new FrameworkPropertyMetadata(false));
+
+        /// <summary>
+        /// Identifies the <see cref="IsValid"/> Dependency property.
+        /// </summary>
+        public static readonly DependencyProperty IsValidProperty = IsValidPropertyKey.DependencyProperty;
+
+        /// <summary>
+        /// Gets a value indicating whether this form has any validation errors.
+        /// </summary>
+        /// <seealso cref="FeatureForm.ValidationErrors"/>
+        public bool IsValid
+        {
+            get { return (bool)GetValue(IsValidProperty); }
+            private set { SetValue(IsValidPropertyKey, value); }
+        }
     }
 }
 #endif
