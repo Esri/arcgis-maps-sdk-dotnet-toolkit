@@ -159,7 +159,7 @@
                                 Margin="4,0,0,0"
                                 Command="{Binding ZoomToCommand}"
                                 CommandParameter="{Binding}"
-                                Content="Zoom to"
+                                Content="{internal:LocalizedString Key=UtilityNetworkTraceToolZoomToResult}"
                                 Style="{StaticResource UNTraceSecondaryButton}"
                                 Visibility="{Binding HasAnyResults, Converter={StaticResource VisibilityConverter}}" />
                             <Button
@@ -167,7 +167,7 @@
                                 Margin="4,0,4,0"
                                 Command="{Binding DeleteCommand}"
                                 CommandParameter="{Binding}"
-                                Content="Discard"
+                                Content="{internal:LocalizedString Key=UtilityNetworkTraceToolDiscardResult}"
                                 Style="{StaticResource UNTraceSecondaryButton}" />
                         </Grid>
                         <StackPanel Grid.Row="1" Orientation="Vertical">
@@ -182,12 +182,11 @@
                                     Margin="4"
                                     HorizontalAlignment="Center"
                                     Style="{StaticResource UNTraceBasicText}"
-                                    Text="No results found."
+                                    Text="{internal:LocalizedString Key=UtilityNetworkTraceToolNoResults}"
                                     TextAlignment="Center" />
                             </StackPanel>
-
                             <internal:Expander
-                                Header="Function results"
+                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolFunctionResults}"
                                 IsExpanded="True"
                                 Visibility="{Binding FunctionResults, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
                                 <ListView
@@ -235,13 +234,13 @@
                             </internal:Expander>
 
                             <internal:Expander
-                                Header="Feature results"
+                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolFeatureResults}"
                                 IsExpanded="True"
                                 Visibility="{Binding ElementResultsGrouped.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any', FallbackValue=Collapsed}">
                                 <StackPanel>
                                     <CheckBox
                                         Margin="8"
-                                        Content="Select features on map"
+                                        Content="{internal:LocalizedString Key=UtilityNetworkTraceToolSelectFeatures}"
                                         IsChecked="{Binding AreFeaturesSelected, Mode=TwoWay}"
                                         Style="{StaticResource UNTraceCheckBox}" />
                                     <ListView
@@ -271,13 +270,13 @@
                                 </StackPanel>
                             </internal:Expander>
                             <internal:Expander
-                                Header="Visualization options"
+                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolVisualizationOptions}"
                                 IsExpanded="False"
                                 Visibility="{Binding Graphics, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
                                 <StackPanel Margin="8,0,8,0">
                                     <CheckBox
                                         Margin="0,8,0,0"
-                                        Content="Show graphics on map"
+                                        Content="{internal:LocalizedString Key=UtilityNetworkTraceToolShowGraphics}"
                                         IsChecked="{Binding AreGraphicsShown, Mode=TwoWay}"
                                         Style="{StaticResource UNTraceCheckBox}" />
                                     <internal:ToolkitColorPalette Margin="0,8,0,0" SelectedColor="{Binding GraphicVisualizationColor, Mode=TwoWay}" />
@@ -289,7 +288,7 @@
                                         <TextBlock
                                             HorizontalAlignment="Right"
                                             Style="{StaticResource UNTraceBoldText}"
-                                            Text="Preview:" />
+                                            Text="{internal:LocalizedString Key=UtilityNetworkTraceToolPreview}" />
                                         <ListView
                                             Grid.Column="1"
                                             ItemsSource="{Binding Graphics}"
@@ -317,21 +316,21 @@
                                     </Grid>
                                 </StackPanel>
                             </internal:Expander>
-                            <internal:Expander Header="Trace configuration details">
+                            <internal:Expander Header="{internal:LocalizedString Key=UtilityNetworkTraceToolTraceTypeDetails}">
                                 <StackPanel Margin="8">
-                                    <internal:GroupBox Header="Description" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                    <internal:GroupBox Header="{internal:LocalizedString Key=UtilityNetworkTraceToolTraceTypeDescription}" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <TextBlock
                                             Margin="8,0,8,0"
                                             Style="{StaticResource UNTraceBasicText}"
                                             Text="{Binding Configuration.Description}" />
                                     </internal:GroupBox>
-                                    <internal:GroupBox Header="Creator" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                    <internal:GroupBox Header="{internal:LocalizedString Key=UtilityNetworkTraceToolTraceTypeCreator}" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <TextBlock
                                             Margin="8,0,8,0"
                                             Style="{StaticResource UNTraceBasicText}"
                                             Text="{Binding Configuration.Creator}" />
                                     </internal:GroupBox>
-                                    <internal:GroupBox Header="Tags" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                    <internal:GroupBox Header="{internal:LocalizedString Key=UtilityNetworkTraceToolTraceTypeTags}" Style="{StaticResource UNTraceLabelingGroupBox}">
                                         <ListView
                                             Margin="8,0,8,0"
                                             ItemsSource="{Binding Configuration.Tags}"
@@ -341,7 +340,7 @@
                             </internal:Expander>
                             <internal:Expander
                                 Foreground="{StaticResource UNTraceWarningNormal}"
-                                Header="Warnings"
+                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolWarnings}"
                                 IsExpanded="True"
                                 Visibility="{Binding Warnings.Count, Converter={StaticResource ListSizeVisibilityConverter}, ConverterParameter='any'}">
                                 <ListView
@@ -424,7 +423,8 @@
                             Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Style="{StaticResource UNTraceBasicText}" Text="{Binding Name}" />
+                                    <TextBlock Style="{StaticResource UNTraceBasicText}"
+                                               Text="{Binding Name}" />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -488,7 +488,7 @@
                                 <PivotItem
                                     Margin="0"
                                     Background="{StaticResource UNTraceBackground0}"
-                                    Header="New trace">
+                                    Header="{internal:LocalizedString Key=UtilityNetworkTraceToolNewTrace}">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
@@ -499,13 +499,13 @@
                                             <StackPanel>
                                                 <internal:GroupBox
                                                     x:Name="PART_UtilityNetworkSelectorContainer"
-                                                    Header="Utility networks"
+                                                    Header="{internal:LocalizedString Key=UtilityNetworkTraceToolUtilityNetworks}"
                                                     Style="{StaticResource UNTraceGroupBox}">
                                                     <ComboBox x:Name="PART_UtilityNetworkSelector" Style="{StaticResource UNTraceComboBox}" />
                                                 </internal:GroupBox>
                                                 <internal:GroupBox
                                                     x:Name="PART_TraceConfigurationsContainer"
-                                                    Header="Trace configurations"
+                                                    Header="{internal:LocalizedString Key=UtilityNetworkTraceToolTraceTypes}"
                                                     Style="{StaticResource UNTraceGroupBox}">
                                                     <ComboBox
                                                         x:Name="PART_TraceConfigurationsSelector"
@@ -517,7 +517,7 @@
                                                 <internal:GroupBox
                                                     x:Name="PART_StartingPointsSectionContainer"
                                                     HorizontalAlignment="Stretch"
-                                                    Header="Starting points"
+                                                    Header="{internal:LocalizedString Key=UtilityNetworkTraceToolStartingPoints}"
                                                     Style="{StaticResource UNTraceGroupBox}">
                                                     <StackPanel Orientation="Vertical">
                                                         <Grid
@@ -533,21 +533,21 @@
                                                                 HorizontalAlignment="Stretch"
                                                                 Command="{Binding ElementName=PART_StartingPointsList, Path=ZoomToCommand, Mode=OneWay}"
                                                                 CommandParameter="{Binding ElementName=PART_StartingPointsList, Path=SelectedItem, Mode=OneWay}"
-                                                                Content="Zoom"
+                                                                Content="{internal:LocalizedString Key=UtilityNetworkTraceToolZoomStartingPoint}"
                                                                 Style="{StaticResource UNTraceSecondaryButton}" />
                                                             <Button
                                                                 Grid.Column="1"
                                                                 HorizontalAlignment="Stretch"
                                                                 Command="{Binding ElementName=PART_StartingPointsList, Path=OpenInspectorCommand, Mode=OneWay}"
                                                                 CommandParameter="{Binding ElementName=PART_StartingPointsList, Path=SelectedItem, Mode=OneWay}"
-                                                                Content="Inspect"
+                                                                Content="{internal:LocalizedString Key=UtilityNetworkTraceToolInspectStartingPoint}"
                                                                 Style="{StaticResource UNTraceSecondaryButton}" />
                                                             <Button
                                                                 Grid.Column="2"
                                                                 HorizontalAlignment="Stretch"
                                                                 Command="{Binding ElementName=PART_StartingPointsList, Path=DeleteSelectedCommand, Mode=OneWay}"
                                                                 CommandParameter="{Binding ElementName=PART_StartingPointsList, Path=SelectedItem, Mode=OneWay}"
-                                                                Content="Delete"
+                                                                Content="{internal:LocalizedString Key=UtilityNetworkTraceToolRemoveStartingPoint}"
                                                                 Style="{StaticResource UNTraceSecondaryButton}" />
                                                         </Grid>
                                                         <internal:StartingPointListView x:Name="PART_StartingPointsList" ItemTemplate="{TemplateBinding StartingPointItemTemplate}">
@@ -589,7 +589,7 @@
                                                                             <internal:GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
-                                                                                Header="Terminal"
+                                                                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolTerminal}"
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{Binding TerminalPickerVisible, Converter={StaticResource VisibilityConverter}}">
                                                                                 <ComboBox
@@ -601,7 +601,7 @@
                                                                             <internal:GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
-                                                                                Header="Position along line"
+                                                                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolFractionAlongEdge}"
                                                                                 Style="{StaticResource UNTraceGroupBox}"
                                                                                 Visibility="{Binding FractionSliderVisible, Converter={StaticResource VisibilityConverter}}">
                                                                                 <Slider Style="{StaticResource UNTraceSlider}" Value="{Binding FractionAlongEdge, Mode=TwoWay}" />
@@ -609,7 +609,7 @@
                                                                             <internal:GroupBox
                                                                                 BorderBrush="{StaticResource UNTraceBorder1}"
                                                                                 BorderThickness="0,1,0,0"
-                                                                                Header="Asset details"
+                                                                                Header="{internal:LocalizedString Key=UtilityNetworkTraceToolAssetDetails}"
                                                                                 Style="{StaticResource UNTraceGroupBox}">
                                                                                 <controls:PopupViewer PopupManager="{Binding PopupManager}">
                                                                                     <controls:PopupViewer.Template>
@@ -676,12 +676,11 @@
                                                                 </DataTemplate>
                                                             </internal:StartingPointListView.InspectorViewTemplate>
                                                         </internal:StartingPointListView>
-
                                                         <TextBlock
                                                             x:Name="PART_IsAddingStartingPointsIndicator"
                                                             Margin="2"
                                                             Style="{StaticResource UNTraceBoldText}"
-                                                            Text="Click on the map to identify starting points."
+                                                            Text="{internal:LocalizedString Key=UtilityNetworkTraceToolTapToIdentifyStartingPoints}"
                                                             TextAlignment="Center" />
                                                         <StackPanel
                                                             x:Name="PART_AddRemoveStartingPointButtonsContainer"
@@ -689,35 +688,35 @@
                                                             Spacing="4">
                                                             <Button
                                                                 x:Name="PART_ResetStartingPointsButton"
-                                                                Content="Remove all"
+                                                            	Content="{internal:LocalizedString Key=UtilityNetworkTraceToolRemoveAllStartingPoints}"
                                                                 Style="{StaticResource UNTraceSecondaryButton}" />
                                                             <Button
                                                                 x:Name="PART_AddStartingPointsButton"
-                                                                Content="Add starting point"
+                                                            	Content="{internal:LocalizedString Key=UtilityNetworkTraceToolAddStartingPoint}"
                                                                 Style="{StaticResource UNTracePrimaryButton}" />
                                                         </StackPanel>
-
                                                         <Button
                                                             x:Name="PART_CancelAddStartingPointsButton"
                                                             Margin="4"
                                                             HorizontalAlignment="Stretch"
-                                                            Content="Cancel"
+                                                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolCancel}"
                                                             Style="{StaticResource UNTracePrimaryButton}" />
                                                     </StackPanel>
                                                 </internal:GroupBox>
-                                                <internal:Expander x:Name="PART_AdvancedOptionsContainer" Header="Advanced options">
+                                                <internal:Expander x:Name="PART_AdvancedOptionsContainer" Header="{internal:LocalizedString Key=UtilityNetworkTraceToolAdvancedOptions}">
                                                     <StackPanel Margin="8">
                                                         <CheckBox
                                                             Margin="0,0,0,8"
-                                                            Content="Zoom to result"
+                                                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolZoomToResult}"
                                                             IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AutoZoomToTraceResults, Mode=TwoWay}"
                                                             Style="{StaticResource UNTraceCheckBox}" />
-                                                        <internal:GroupBox Header="Result name (optional)" Style="{StaticResource UNTraceLabelingGroupBox}">
-                                                            <TextBox x:Name="PART_ResultNameTextBox" Style="{StaticResource UNTraceTextBoxStyle}" />
+                                                        <internal:GroupBox Header="{internal:LocalizedString Key=UtilityNetworkTraceToolResultName}" Style="{StaticResource UNTraceLabelingGroupBox}">
+                                                            <TextBox x:Name="PART_ResultNameTextBox"
+                                                                     Style="{StaticResource UNTraceTextBoxStyle}" />
                                                         </internal:GroupBox>
                                                         <internal:GroupBox
                                                             Margin="0,8,0,0"
-                                                            Header="Result visualization color"
+                                                            Header="{internal:LocalizedString Key=UtilityNetworkTraceToolResultVisualizationColor}"
                                                             Style="{StaticResource UNTraceLabelingGroupBox}">
                                                             <StackPanel>
                                                                 <internal:ToolkitColorPalette x:Name="PART_ResultColorPalette" />
@@ -729,7 +728,7 @@
                                                                     <TextBlock
                                                                         HorizontalAlignment="Right"
                                                                         Style="{StaticResource UNTraceBoldText}"
-                                                                        Text="Preview:" />
+                                                                        Text="{internal:LocalizedString Key=UtilityNetworkTraceToolPreview}" />
                                                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                                                         <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultPointSymbol}" />
                                                                         <controls:SymbolDisplay Margin="4,0,0,0" Symbol="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=ResultLineSymbol}" />
@@ -754,7 +753,7 @@
                                                         Margin="0,4,0,0"
                                                         HorizontalAlignment="Center"
                                                         Style="{StaticResource UNTraceBoldText}"
-                                                        Text="No named trace configurations found for the selected utility network."
+                                                        Text="{internal:LocalizedString Key=UtilityNetworkTraceToolNoTraceTypes}"
                                                         TextAlignment="Center" />
                                                 </StackPanel>
                                             </StackPanel>
@@ -771,7 +770,7 @@
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <Path Style="{StaticResource UNTraceIcon32Warning}" />
-                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="The selected trace configuration requires additional starting points." />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolNotEnoughStartingPoints}" />
                                                 </Grid>
                                             </Border>
                                             <Border
@@ -785,7 +784,7 @@
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <Path Style="{StaticResource UNTraceIcon32Warning}" />
-                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="The selected trace configuration has already been run with the selected starting points." />
+                                                    <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolDuplicateTrace}" />
                                                 </Grid>
                                             </Border>
                                             <Border
@@ -794,13 +793,13 @@
                                                 BorderBrush="{StaticResource UNTraceTintNormal}"
                                                 BorderThickness="1,3,1,1"
                                                 Style="{StaticResource UNTraceFloatingWarningBorderStyle}">
-                                                <TextBlock Style="{StaticResource UNTraceAlertText}" Text="There are more starting points than required for the selected trace configuration." />
+                                                <TextBlock Style="{StaticResource UNTraceAlertText}" Text="{internal:LocalizedString Key=UtilityNetworkTraceToolMoreThanRequiredStartingPoints}" />
                                             </Border>
                                         </Grid>
                                         <Button
                                             x:Name="PART_RunTraceButton"
                                             Grid.Row="2"
-                                            Content="Run trace"
+                                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolRunTrace}"
                                             Style="{StaticResource UNTracePrimaryButton}" />
                                         <Grid
                                             x:Name="PART_TraceInProgressIndicator"
@@ -814,12 +813,12 @@
                                                 <TextBlock
                                                     HorizontalAlignment="Center"
                                                     Style="{StaticResource UNTraceBasicText}"
-                                                    Text="Running trace..."
+                                                    Text="{internal:LocalizedString Key=UtilityNetworkTraceToolRuningTrace}"
                                                     TextAlignment="Center" />
                                                 <ProgressBar IsIndeterminate="True" />
                                                 <Button
                                                     x:Name="PART_CancelTraceButton"
-                                                    Content="Cancel"
+                                                    Content="{internal:LocalizedString Key=UtilityNetworkTraceToolCancel}"
                                                     Style="{StaticResource UNTracePrimaryButton}" />
                                             </StackPanel>
                                         </Grid>
@@ -835,12 +834,12 @@
                                                 <TextBlock
                                                     HorizontalAlignment="Center"
                                                     Style="{StaticResource UNTraceBasicText}"
-                                                    Text="Identifying starting points..."
+                                                    Text="{internal:LocalizedString Key=UtilityNetworkTraceToolIdentifyingStartingPoints}"
                                                     TextAlignment="Center" />
                                                 <ProgressBar IsIndeterminate="True" />
                                                 <Button
                                                     x:Name="PART_CancelIdentifyButton"
-                                                    Content="Cancel"
+                                                    Content="{internal:LocalizedString Key=UtilityNetworkTraceToolCancel}"
                                                     Style="{StaticResource UNTracePrimaryButton}" />
                                             </StackPanel>
                                         </Grid>
@@ -850,7 +849,7 @@
                                     x:Name="PART_ResultsTabItem"
                                     Margin="0"
                                     Background="{StaticResource UNTraceBackground0}"
-                                    Header="Results">
+                                    Header="{internal:LocalizedString Key=UtilityNetworkTraceToolResults}">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
@@ -878,7 +877,7 @@
                                             Grid.Row="2"
                                             Margin="4"
                                             HorizontalAlignment="Stretch"
-                                            Content="Clear results"
+                                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolClearResults}"
                                             Style="{StaticResource UNTracePrimaryButton}" />
                                     </Grid>
                                 </PivotItem>
@@ -897,7 +896,7 @@
                                         Margin="4"
                                         HorizontalAlignment="Center"
                                         Style="{StaticResource UNTraceBoldText}"
-                                        Text="No utility networks found."
+                                        Text="{internal:LocalizedString Key=UtilityNetworkTraceToolNoUtilityNetworks}"
                                         TextAlignment="Center" />
                                 </StackPanel>
                             </Grid>
@@ -910,7 +909,7 @@
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         Style="{StaticResource UNTraceBasicText}"
-                                        Text="Loading..."
+                                        Text="{internal:LocalizedString Key=UtilityNetworkTraceToolLoading}"
                                         TextAlignment="Center" />
                                     <ProgressBar IsIndeterminate="True" />
                                 </StackPanel>

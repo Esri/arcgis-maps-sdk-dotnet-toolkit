@@ -326,7 +326,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     IsLoadingNetwork = true;
                     UtilityNetworks.Clear();
 
-                    var utilityNetworks = (sender is Map map ? map.UtilityNetworks : null) ?? throw new ArgumentException("No UtilityNetworks found.");
+                    var utilityNetworks = (sender is Map map ? map.UtilityNetworks : null) ?? throw new ArgumentException(Properties.Resources.GetString("UtilityNetworkTraceToolNoUtilityNetworks"));
 
                     if (_lastObservedNetworkCollection != null)
                     {
@@ -581,17 +581,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 if (SelectedUtilityNetwork == null)
                 {
-                    throw new InvalidOperationException("No utility network selected.");
+                    throw new InvalidOperationException(Properties.Resources.GetString("UtilityNetworkTraceToolNoSelectedUtilityNetwork"));
                 }
 
                 if (SelectedTraceType == null)
                 {
-                    throw new InvalidOperationException("No trace type selected.");
-                }
-
-                if (traceParameters == null)
-                {
-                    throw new InvalidOperationException("No trace parameters created.");
+                    throw new InvalidOperationException(Properties.Resources.GetString("UtilityNetworkTraceToolNoSelectedTraceType"));
                 }
 
                 if (_traceCts != null)
