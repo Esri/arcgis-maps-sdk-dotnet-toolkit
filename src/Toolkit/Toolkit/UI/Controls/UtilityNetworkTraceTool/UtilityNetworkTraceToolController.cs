@@ -326,7 +326,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     IsLoadingNetwork = true;
                     UtilityNetworks.Clear();
 
-                    var utilityNetworks = (sender is Map map ? map.UtilityNetworks : null) ?? throw new ArgumentException(Properties.Resources.GetString("UtilityNetworkTraceToolNoUtilityNetworks"));
+                    var utilityNetworks = (sender is Map map ? map.UtilityNetworks : Enumerable.Empty<UtilityNetwork>());
 
                     if (_lastObservedNetworkCollection != null)
                     {
@@ -357,10 +357,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     {
                         IsReadyToConfigure = true;
                     }
-                }
-                catch (Exception)
-                {
-                    IsReadyToConfigure = false;
                 }
                 finally
                 {
