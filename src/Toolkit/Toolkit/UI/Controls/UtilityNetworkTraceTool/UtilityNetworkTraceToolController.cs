@@ -578,12 +578,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                 if (SelectedUtilityNetwork == null)
                 {
-                    throw new InvalidOperationException(Properties.Resources.GetString("UtilityNetworkTraceToolNoSelectedUtilityNetwork"));
+                    throw new InvalidOperationException("No utility network selected.");
                 }
 
                 if (SelectedTraceType == null)
                 {
-                    throw new InvalidOperationException(Properties.Resources.GetString("UtilityNetworkTraceToolNoSelectedTraceType"));
+                    throw new InvalidOperationException("No trace type selected.");
                 }
 
                 if (_traceCts != null)

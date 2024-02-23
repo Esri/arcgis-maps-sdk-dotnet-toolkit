@@ -361,14 +361,6 @@
     <value>No results found.</value>
     <comment>The warning message when trace returned an empty result.</comment>
   </data>
-  <data name="UtilityNetworkTraceToolNoSelectedTraceType" xml:space="preserve">
-    <value>No trace type selected.</value>
-    <comment>The error message when attempting to trace without a selected trace type.</comment>
-  </data>
-  <data name="UtilityNetworkTraceToolNoSelectedUtilityNetwork" xml:space="preserve">
-    <value>No utility network selected.</value>
-    <comment>The error message when attempting to trace without a selected utility network.</comment>
-  </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
     <value>The selected trace type requires additional starting points.</value>
     <comment>The warning message when there are fewer starting points than the selected trace type requires.</comment>
