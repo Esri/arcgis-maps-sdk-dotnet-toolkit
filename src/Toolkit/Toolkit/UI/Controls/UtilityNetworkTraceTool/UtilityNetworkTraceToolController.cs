@@ -358,6 +358,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                         IsReadyToConfigure = true;
                     }
                 }
+                catch { IsReadyToConfigure = false; }
                 finally
                 {
                     IsLoadingNetwork = false;
