@@ -24,12 +24,12 @@
 					<StackPanel Margin="4" Orientation="Horizontal">
 						<Button
                             Command="{TemplateBinding SelectPreviousItemCommand}"
-                            Content="Previous"
+                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolPrevious}"
                             Style="{StaticResource UNTraceIconButton}" />
 						<TextBlock Margin="8,0,8,0" Text="{TemplateBinding InspectorViewSelectionLabelText}" />
 						<Button
                             Command="{TemplateBinding SelectNextItemCommand}"
-                            Content="Next"
+                            Content="{internal:LocalizedString Key=UtilityNetworkTraceToolSelectNext}"
                             Style="{StaticResource UNTraceIconButton}" />
 					</StackPanel>
 					<Button
@@ -53,7 +53,7 @@
                         Margin="8,4,0,4"
                         VerticalAlignment="Center"
                         Command="{TemplateBinding CloseInspectorCommand}"
-                        Content="Close"
+                        Content="{internal:LocalizedString Key=UtilityNetworkTraceToolNext}"
                         Style="{StaticResource UNTraceIconButton}" />
 				</Grid>
 				<ContentControl

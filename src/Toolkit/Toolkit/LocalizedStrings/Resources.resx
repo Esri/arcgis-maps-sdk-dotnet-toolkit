@@ -281,4 +281,192 @@
     <value>Search</value>
     <comment>The tooltip text to display for the search button.</comment>
   </data>
+  <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
+    <value>Add starting point</value>
+    <comment>The text on button for adding starting points.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
+    <value>Advanced options</value>
+    <comment>The text for expanding advanced options to specify trace result name, color, and zoom to result behavior.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
+    <value>Asset details</value>
+    <comment>The text for listing the asset information of the starting point.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>The text on button to cancel adding starting points or running the trace.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
+    <value>Clear results</value>
+    <comment>The text on button for discarding all trace results.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
+    <value>Close</value>
+    <comment>The text on button for closing the starting point's information.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
+    <value>Discard</value>
+    <comment>The text on button that discards the selected trace result.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
+    <value>The selected trace type has already been run with the same starting points.</value>
+    <comment>The warning message when prior trace ran with the same trace type and starting points.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
+    <value>Feature results</value>
+    <comment>The text for expanding feature result collection.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
+    <value>Position along line</value>
+    <comment>The text for updating the point location along the line.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
+    <value>Function results</value>
+    <comment>The text for expanding  function result collection.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
+    <value>Identifying starting points...</value>
+    <comment>The status message when tapping on features to add as starting points.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
+    <value>Inspect</value>
+    <comment>The text on button for displaying the current starting point's information.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
+    <value>Loading...</value>
+    <comment>The status message when loading contents of this control.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
+    <value>There are more starting points than required for the selected trace type.</value>
+    <comment>The warning message when there are more starting points than the selected trace type requires.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
+    <value>New trace</value>
+    <comment>The text for configuring a new trace.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
+    <value>Next</value>
+    <comment>The text on button for navigating to the next starting point's information.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
+    <value>No feature results.</value>
+    <comment>The warning message when trace returned an empty feature result.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
+    <value>No function results.</value>
+    <comment>The warning message when trace returned an empty function result.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
+    <value>No results found.</value>
+    <comment>The warning message when trace returned an empty result.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
+    <value>The selected trace type requires additional starting points.</value>
+    <comment>The warning message when there are fewer starting points than the selected trace type requires.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
+    <value>No trace types found for the selected utility network.</value>
+    <comment>The error message when the selected utility network has no trace types.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
+    <value>No utility networks found.</value>
+    <comment>The error message when the map has no utility networks.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
+    <value>Preview</value>
+    <comment>The text for previewing the graphic symbol when selected color is used.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
+    <value>Previous</value>
+    <comment>The text on button for navigating to the previous starting point's information.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
+    <value>Remove all</value>
+    <comment>The text on button for removing all starting points.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
+    <value>Remove</value>
+    <comment>The text on button for removing the starting point.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
+    <value>Result name (optional)</value>
+    <comment>The text for specifying a new result name.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
+    <value>Results</value>
+    <comment>The text for listing the trace results.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
+    <value>Result visualization color</value>
+    <comment>The text for selecting a new result symbol color.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
+    <value>Running trace...</value>
+    <comment>The status message when there is a trace is in progress.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
+    <value>Run trace</value>
+    <comment>The text on button for running the trace.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
+    <value>Select features on map</value>
+    <comment>The text to enable selection of feature results.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
+    <value>Show graphics on map</value>
+    <comment>The text to enable display of graphics with aggregated geometry results.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
+    <value>Starting points</value>
+    <comment>The text for listing starting points.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
+    <value>Tap on the map to identify starting points.</value>
+    <comment>The instruction text for identifying starting points on the map.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
+    <value>Terminal</value>
+    <comment>The text for selecting a terminal.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
+    <value>Creator</value>
+    <comment>The text for displaying the creator of the selected trace type.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
+    <value>Description</value>
+    <comment>The text for displaying the description of the selected trace type.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
+    <value>Trace type details</value>
+    <comment>The text for expanding information about the selected trace type.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
+    <value>Trace types</value>
+    <comment>The text for listing trace types.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
+    <value>Tags</value>
+    <comment>The text for listing the tags for the selected trace type.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
+    <value>Utility networks</value>
+    <comment>The text for listing utility networks.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
+    <value>Visualization options</value>
+    <comment>The text for expanding symbol color palette.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
+    <value>Warnings</value>
+    <comment>The text for expanding the list of trace result warnings.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
+    <value>Zoom</value>
+    <comment>The text on button that zooms around the starting point.</comment>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
+    <value>Zoom to result</value>
+    <comment>The text on button that zooms to the selected trace result.</comment>
+  </data>
 </root>
