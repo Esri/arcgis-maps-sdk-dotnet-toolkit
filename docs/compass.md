@@ -14,6 +14,7 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
 
 ### UWP/WinUI:
 
+```xml
 <Grid>
     <esri:MapView x:Name="mapView" />
     <toolkit:Compass Width="50"
@@ -22,6 +23,7 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
                      AutoHide="False"
                      GeoView="{Binding ElementName=mapView}" />
 </Grid>
+```
 
 ### WPF:
 
@@ -33,6 +35,7 @@ xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
 
 ### .NET MAUI:
 
+```xml
 <Grid>
     <esri:MapView x:Name="mapView" />
     <toolkit:Compass Margin="15"
@@ -41,3 +44,4 @@ xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
                      HeightRequest="50"
                      WidthRequest="50" />
 </Grid>
+```

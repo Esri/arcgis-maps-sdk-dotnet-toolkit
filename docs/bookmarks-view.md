@@ -45,7 +45,7 @@ The usage in WPF is identical to UWP/WinUI minus one important distinction. The 
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
 ```
 
-### .NET MAUI
+### .NET MAUI:
 
 ```xml
 <Grid ColumnDefinitions="*,300">
