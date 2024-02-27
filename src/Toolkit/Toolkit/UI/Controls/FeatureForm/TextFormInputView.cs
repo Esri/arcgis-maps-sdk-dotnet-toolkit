@@ -53,6 +53,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 barcodeButton.Click += BarcodeButton_Click;
 #endif
             }
+            UpdateValidationState();
         }
 
         private void BarcodeButton_Click(object sender, RoutedEventArgs e)
@@ -133,21 +134,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 value = datevalue;
             try
             {
-                Element?.UpdateValue(value); // Throws FeatureFormIncorrectValueTypeException if type is incorrect instead of populating ValidationErrors IssueRef:apollo#456
+                Element?.UpdateValue(value);
             }
-            catch (System.Exception)
+            catch (System.Exception) // Unexpected error setting value
             {
                 _textInput.Text = Element?.Value?.ToString();  //Reset input to previous valid value
-                return;
-            }
-            var err = Element?.ValidationErrors;
-            if (err != null && err.Any())
-            {
-                VisualStateManager.GoToState(this, "InputError", true);
-            }
-            else
-            {
-                VisualStateManager.GoToState(this, "InputValid", true);
             }
         }
 
@@ -164,7 +155,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// Identifies the <see cref="MinLines"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty MinLinesProperty = 
-            DependencyProperty.Register("MinLines", typeof(int), typeof(TextFormInputView), new PropertyMetadata(1));
+            DependencyProperty.Register(nameof(MinLines), typeof(int), typeof(TextFormInputView), new PropertyMetadata(1));
 
         /// <summary>
         /// Gets or sets the maximum number of visible lines.
@@ -253,6 +244,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     ConfigureTextBox();
                 else 
                     Dispatcher.Invoke(ConfigureTextBox);
+            }
+            else if (e.PropertyName == nameof(FieldFormElement.ValidationErrors))
+            {
+                if (Dispatcher.CheckAccess())
+                    UpdateValidationState();
+                else
+                    Dispatcher.Invoke(UpdateValidationState);
+            }
+        }
+
+        private void UpdateValidationState()
+        {
+            var err = Element?.ValidationErrors;
+            if (err != null && err.Any())
+            {
+                VisualStateManager.GoToState(this, "InputError", true);
+            }
+            else
+            {
+                VisualStateManager.GoToState(this, "InputValid", true);
             }
         }
     }

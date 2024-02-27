@@ -42,6 +42,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     public partial class FeatureFormView
     {
+        private WeakEventListener<FeatureFormView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureFormView"/> class.
         /// </summary>
@@ -129,27 +131,59 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
 #if MAUI
         public static readonly BindableProperty FeatureFormProperty =
-            BindableProperty.Create(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView), null, propertyChanged: OnFeatureFormPropertyChanged);
+            BindableProperty.Create(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView), null, propertyChanged: (s, oldValue, newValue) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(oldValue, newValue));
 #else
         public static readonly DependencyProperty FeatureFormProperty =
             DependencyProperty.Register(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView),
-                new PropertyMetadata(null, (s, e) => FeatureFormView.OnFeatureFormPropertyChanged(s, e.OldValue, e.NewValue)));
+                new PropertyMetadata(null, (s, e) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(e.OldValue, e.NewValue)));
 #endif
 
-        private static void OnFeatureFormPropertyChanged(DependencyObject d, object oldValue, object newValue)
+        private void OnFeatureFormPropertyChanged(object oldValue, object newValue)
         {
-            var formView = (FeatureFormView)d;
             var oldForm = oldValue as FeatureForm;
             var newForm = newValue as FeatureForm;
             if (newForm is not null)
             {
-                formView.InvalidateForm();
+                InvalidateForm();
             }
 
 #if MAUI
-            (formView.GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
+            (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
 #else
-            (formView.GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
+            (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
+#endif
+
+            if (oldValue is INotifyPropertyChanged inpcOld)
+            {
+                _elementPropertyChangedListener?.Detach();
+                _elementPropertyChangedListener = null;
+            }
+            if (newValue is INotifyPropertyChanged inpcNew)
+            {
+                _elementPropertyChangedListener = new WeakEventListener<FeatureFormView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
+                {
+                    OnEventAction = static (instance, source, eventArgs) => instance.FeatureForm_PropertyChanged(source, eventArgs),
+                    OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
+                };
+                inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
+            }
+            UpdateIsValidProperty();
+        }
+
+        private void FeatureForm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(FeatureForm.ValidationErrors))
+            {
+                UpdateIsValidProperty();
+            }
+        }
+
+        private void UpdateIsValidProperty()
+        {
+#if WPF
+            IsValid = FeatureForm?.ValidationErrors?.Any() != true;
+#elif MAUI
+#warning TODO IsValid read-only property
 #endif
         }
 
