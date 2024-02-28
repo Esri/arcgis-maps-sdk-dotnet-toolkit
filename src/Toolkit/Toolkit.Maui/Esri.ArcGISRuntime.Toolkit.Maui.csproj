@@ -20,7 +20,7 @@
     <ItemGroup>
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
       <MauiFont Include="Resources\Fonts\calcite-ui-icons-24.ttf" />
-      <EmbeddedResource Include="Assets\*.png"/>
+      <EmbeddedResource Include="Assets\*.png" />
       <None Include="build\**\*.*" PackagePath="build;buildTransitive" Pack="true" />
       <None Include="Resources\Fonts\calcite-ui-icons-24.ttf" Pack="true" PackagePath="Resources\Fonts" />
     </ItemGroup>
@@ -47,4 +47,19 @@
     <Import Project="..\Toolkit\Esri.ArcGISRuntime.Toolkit.Shared.projitems" Label="Shared" />
     <Import Project="$(SolutionDir)toolkit.props" Condition="Exists('$(SolutionDir)toolkit.props')" />
 
+    <!-- Analyzers -->
+    <PropertyGroup>
+        <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Analyzers\Toolkit.Maui.Analyzers.CodeFixes\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.csproj" PrivateAssets="all" />
+        <ProjectReference Include="..\..\Analyzers\Toolkit.Maui.Analyzers\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.csproj" PrivateAssets="all" />
+        <None Include="tools\*.ps1" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="tools" />
+    </ItemGroup>
+    <Target Name="_AddAnalyzersToOutput">
+        <ItemGroup>
+            <TfmSpecificPackageFile Include="$(OutputPath)\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.dll" PackagePath="analyzers/dotnet/cs" />
+            <TfmSpecificPackageFile Include="$(OutputPath)\Esri.ArcGISRuntime.Toolkit.Maui.Analyzers.CodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
+        </ItemGroup>
+    </Target>
 </Project>
