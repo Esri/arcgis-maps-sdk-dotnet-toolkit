@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
+    <value>ä_Date must be on or before {0}______________________________Ü</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
+    <value>ä_Date exceeds maximum_____________________Ü</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
+    <value>ä_Maximum {0} characters_______________________Ü</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
+    <value>ä_Maximum character length exceeded__________________Ü</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
+    <value>ä_Enter a value at or below {0}______________________________Ü</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
+    <value>ä_Exceeds maximum value______________________Ü</value>
+  </data>
+  <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
+    <value>ä_Enter value from {0} to {1}____________________________Ü</value>
+  </data>
+  <data name="FeatureFormFieldIsRequired" xml:space="preserve">
+    <value>ä_Required_________________Ü</value>
+  </data>
+  <data name="FeatureFormIncorrectValueType" xml:space="preserve">
+    <value>ä_Value must be of the correct type__________________Ü</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
+    <value>ä_Value must be a number_______________________Ü</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
+    <value>ä_Value must be a whole number_____________________________Ü</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
+    <value>ä_Date must be on or after {0}_____________________________Ü</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
+    <value>ä_Date less than minimum_______________________Ü</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
+    <value>ä_Enter at least {0} characters______________________________Ü</value>
+  </data>
+  <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
+    <value>ä_Less than minimum value________________________Ü</value>
+  </data>
+  <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
+    <value>ä_Value must be within the domain_________________Ü</value>
+  </data>
+  <data name="FeatureFormNullNotAllowed" xml:space="preserve">
+    <value>ä_Value must not be empty________________________Ü</value>
+  </data>
+  <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
+    <value>ä_Enter {0} to {1} characters____________________________Ü</value>
+  </data>
+  <data name="FeatureFormSpecificLength" xml:space="preserve">
+    <value>ä_Enter {0} characters_____________________Ü</value>
+  </data>
+  <data name="FloorFilterAllFacilities" xml:space="preserve">
+    <value>ä_All Sites___________________Ü</value>
+  </data>
+  <data name="FloorFilterAllFloors" xml:space="preserve">
+    <value>ä_All Floors_____________________Ü</value>
+  </data>
+  <data name="FloorFilterBackButton" xml:space="preserve">
+    <value>ä_Go Back_______________Ü</value>
+  </data>
+  <data name="FloorFilterBrowse" xml:space="preserve">
+    <value>ä_Browse_____________Ü</value>
+  </data>
+  <data name="FloorFilterBrowseFacilities" xml:space="preserve">
+    <value>ä_Select a facility__________________Ü</value>
+  </data>
+  <data name="FloorFilterBrowseSites" xml:space="preserve">
+    <value>ä_Select a site______________Ü</value>
+  </data>
+  <data name="FloorFilterClose" xml:space="preserve">
+    <value>ä_Close___________Ü</value>
+  </data>
+  <data name="FloorFilterCollapse" xml:space="preserve">
+    <value>ä_Collapse_________________Ü</value>
+  </data>
+  <data name="FloorFilterExpand" xml:space="preserve">
+    <value>ä_Expand_____________Ü</value>
+  </data>
+  <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
+    <value>ä_Filter_____________Ü</value>
+  </data>
+  <data name="FloorFilterNoResultsFound" xml:space="preserve">
+    <value>ä_No results found_________________Ü</value>
+  </data>
+  <data name="FloorFilterZoomTo" xml:space="preserve">
+    <value>ä_Zoom To_______________Ü</value>
+  </data>
+  <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
+    <value>ä_ft_____Ü</value>
+  </data>
+  <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
+    <value>ä_km_____Ü</value>
+  </data>
+  <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
+    <value>ä_m___Ü</value>
+  </data>
+  <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
+    <value>ä_mi_____Ü</value>
+  </data>
+  <data name="SearchViewAllSourcesSelect" xml:space="preserve">
+    <value>ä_All Sources____________Ü</value>
+  </data>
+  <data name="SearchViewClearSearchTooltip" xml:space="preserve">
+    <value>ä_Clear Search_____________Ü</value>
+  </data>
+  <data name="SearchViewNoResults" xml:space="preserve">
+    <value>ä_No Results_____________________Ü</value>
+  </data>
+  <data name="SearchViewRepeatSearch" xml:space="preserve">
+    <value>ä_Repeat Search Here___________________Ü</value>
+  </data>
+  <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
+    <value>ä_Find a place or address________________________Ü</value>
+  </data>
+  <data name="SearchViewSearchTooltip" xml:space="preserve">
+    <value>ä_Search_____________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
+    <value>ä_Add starting point___________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
+    <value>ä_Advanced options_________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
+    <value>ä_Asset details______________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
+    <value>ä_Cancel_____________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
+    <value>ä_Clear results______________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
+    <value>ä_Close___________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
+    <value>ä_Discard_______________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
+    <value>ä_The selected trace type has already been run with the same starting points_______________________________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
+    <value>ä_Feature results________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
+    <value>ä_Position along line____________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
+    <value>ä_Function results_________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
+    <value>ä_Identifying starting points_______________________________Ü...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
+    <value>ä_Inspect_______________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
+    <value>ä_Loading_____________________Ü...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
+    <value>ä_There are more starting points than required for the selected trace type______________________________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
+    <value>ä_New trace___________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
+    <value>ä_Next_________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
+    <value>ä_No feature results____________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
+    <value>ä_No function results_____________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
+    <value>ä_No results found__________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
+    <value>ä_The selected trace type requires additional starting points_______________________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
+    <value>ä_No trace types found for the selected utility network____________________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
+    <value>ä_No utility networks found___________________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
+    <value>ä_Preview_______________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
+    <value>ä_Previous_________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
+    <value>ä_Remove all_____________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
+    <value>ä_Remove_____________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
+    <value>ä_Result name (optional)_______________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
+    <value>ä_Results_______________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
+    <value>ä_Result visualization color___________________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
+    <value>ä_Running trace_________________Ü...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
+    <value>ä_Run trace___________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
+    <value>ä_Select features on map_______________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
+    <value>ä_Show graphics on map_____________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
+    <value>ä_Starting points________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
+    <value>ä_Tap on the map to identify starting points_______________________Ü.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
+    <value>ä_Terminal_________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
+    <value>ä_Creator_______________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
+    <value>ä_Description____________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
+    <value>ä_Trace type details___________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
+    <value>ä_Trace types____________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
+    <value>ä_Tags_________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
+    <value>ä_Utility networks_________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
+    <value>ä_Visualization options______________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
+    <value>ä_Warnings_________________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
+    <value>ä_Zoom_________Ü</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
+    <value>ä_Zoom to result_______________Ü</value>
+  </data>
+</root>
