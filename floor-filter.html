@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>FloorFilter </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="FloorFilter ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="floorfilter">FloorFilter</h1>
+
+<p>FloorFilter allows users to take advantage of floor-aware maps and scenes by surfacing and then filtering floor data.</p>
+<p><img src="https://user-images.githubusercontent.com/29742178/158746908-71a39e28-596f-44b6-9230-e2a04bdaeb9e.png" alt="image"></p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Automatically hides the floor browsing view when the associated map or scene is not floor-aware</li>
+<li>Selects the facility in view automatically
+<ul>
+<li>This behavior can be configured through the <code>AutomaticSelectionMode</code> property</li>
+</ul>
+</li>
+<li>View is space-efficient and can be expanded/collapsed (WPF only)</li>
+<li>Shows the selected facility's levels in proper vertical order</li>
+<li>Filters the map/scene content to show the selected level</li>
+<li>Allows browsing the full floor-aware hierarchy of sites, facilities, and levels
+<ul>
+<li>When consuming simpler maps, simplifies the UI as needed; for example, the site browsing experience is hidden when there is only one (or no) sites</li>
+</ul>
+</li>
+<li>When browsing, allows dynamic filtering of lists</li>
+<li>Shows the ground floor of all facilities when there is no active selection</li>
+<li>Updates the visibility of floor levels across all facilities (e.g. if you are looking at floor 3 in building A, floor 3 will be shown in neighboring buildings)</li>
+<li>Exposes a full range of template and style properties for easy customization</li>
+<li>Adjusts layout and presentation to work well regardless of positioning - left/right and top/bottom</li>
+<li>Keeps the selected facility visible in the list while the selection is changing in response to map navigation</li>
+</ul>
+<h2 id="customization">Customization</h2>
+<blockquote>
+<p><strong>NOTE</strong>: Some properties aren't available on all platforms due to platform-specific differences in how the view is implemented.</p>
+</blockquote>
+<p>The following properties enable customization of the view:</p>
+<ul>
+<li><code>ZoomToButtonStyle</code></li>
+<li><code>BrowseButtonStyle</code></li>
+<li><code>ExpandCollapseButtonStyle</code></li>
+<li><code>CommonListStyle</code> - style applied to all lists (levels, sites, facilities)</li>
+<li><code>LevelDataTemplate</code> - displays levels in the non-browsing floor filter experience</li>
+<li><code>SiteDataTemplate</code> - displays sites in the browsing view</li>
+<li><code>FacilityDataTemplate</code> - displays facilities in the browsing view</li>
+<li><code>DifferentiatingFacilityDataTemplate</code> - displays facilities in the list of all facilities from all sites</li>
+</ul>
+<p>The following properties enable customization or localization of text displayed in the view:</p>
+<ul>
+<li><code>BackButtonLabel</code></li>
+<li><code>AllFacilitiesLabel</code></li>
+<li><code>AllFloorsLabel</code></li>
+<li><code>CloseLabel</code></li>
+<li><code>ExpandLabel</code></li>
+<li><code>CollapseLabel</code></li>
+<li><code>ZoomToLabel</code></li>
+<li><code>BrowseLabel</code></li>
+<li><code>NoResultsMessage</code></li>
+<li><code>SearchPlaceholder</code></li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>WPF:</p>
+<pre><code class="lang-xml">&lt;Grid&gt;
+    &lt;esri:MapView x:Name=&quot;MyMapView&quot; /&gt;
+    &lt;esri:FloorFilter GeoView=&quot;{Binding ElementName=MyMapView}&quot; /&gt;
+&lt;/Grid&gt;
+</code></pre>
+<p>MAUI:</p>
+<pre><code class="lang-xml">&lt;Grid&gt;
+    &lt;Grid.RowDefinitions&gt;
+        &lt;RowDefinition Height=&quot;*&quot; /&gt;
+        &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
+    &lt;/Grid.RowDefinitions&gt;
+    &lt;Grid.ColumnDefinitions&gt;
+        &lt;ColumnDefinition Width=&quot;48&quot; /&gt;
+        &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+    &lt;/Grid.ColumnDefinitions&gt;
+    &lt;esri:MapView
+        x:Name=&quot;MyMapView&quot;
+        Grid.RowSpan=&quot;2&quot;
+        Grid.ColumnSpan=&quot;2&quot; /&gt;
+    &lt;toolkit:FloorFilter
+        Grid.Row=&quot;1&quot;
+        Grid.Column=&quot;0&quot;
+        Margin=&quot;8,8,8,32&quot;
+        GeoView=&quot;{x:Reference MyMapView}&quot; /&gt;
+&lt;/Grid&gt;
+</code></pre>
+<p>UWP:</p>
+<pre><code class="lang-xml">&lt;Grid&gt;
+    &lt;esri:MapView x:Name=&quot;MyMapView&quot; /&gt;
+    &lt;esri:FloorFilter GeoView=&quot;{Binding ElementName=MyMapView}&quot; /&gt;
+&lt;/Grid&gt;
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/floor-filter.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>BookmarksView </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="BookmarksView ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="bookmarksview">BookmarksView</h1>
+
+<h2 id="features">Features</h2>
+<ul>
+<li>Associate the bookmarks control with a <code>MapView</code> or <code>SceneView</code> (<code>GeoView</code> property), through binding on supported platforms (WPF, UWP, Forms) or plain properties otherwise.</li>
+<li>Display a list of bookmarks, defined by the <code>Map</code> or <code>Scene</code> from the associated <code>GeoView</code> or the <code>BookmarksOverride</code> if set.</li>
+<li>Navigates the associated <code>GeoView</code> to the selected bookmark.</li>
+<li>Customize the display of the list with the <code>ItemTemplate</code> property on UWP and WPF.</li>
+<li>Supports observable collections for <code>BookmarksOverride</code> and handles changes to the <code>Map</code>/<code>Scene</code> properties.</li>
+</ul>
+<h2 id="platform-specific-usage">Platform-specific usage</h2>
+<blockquote>
+<p><strong>NOTE</strong>: See the samples projects to see various usages of this component in action. Samples are available for all supported platforms.</p>
+</blockquote>
+<h3 id="ios">iOS</h3>
+<p>On iOS, <code>BookmarksView</code> is a UIViewController, which can be shown directly, or added as a child view controller to show its view.</p>
+<p>As a view:</p>
+<pre><code class="lang-csharp">public partial class BookmarksMapEventTestController : UIViewController
+    {
+        private BookmarksView _bookmarksView;
+        private MapView _mapView;
+
+        private readonly string _mapUrl = &quot;https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee&quot;;
+
+        private ObservableCollection&lt;Bookmark&gt; _bookmarksObservable = new ObservableCollection&lt;Bookmark&gt;();
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            configureManualList();
+        }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            _mapView = new MapView()
+            {
+                Map = new Map(new Uri(_mapUrl)),
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
+
+            View.AddSubview(_mapView);
+
+            _bookmarksView = new BookmarksView()
+            {
+                GeoView = _mapView
+            };
+
+            AddChildViewController(_bookmarksView);
+            _bookmarksView.View.TranslatesAutoresizingMaskIntoConstraints = false;
+            View.AddSubview(_bookmarksView.View);
+
+            _mapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+            _mapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
+            _mapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor).Active = true;
+            _mapView.BottomAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
+
+            _bookmarksView.View.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor).Active = true;
+            _bookmarksView.View.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor).Active = true;
+            _bookmarksView.View.TopAnchor.ConstraintEqualTo(View.CenterYAnchor).Active = true;
+            _bookmarksView.View.BottomAnchor.ConstraintEqualTo(View.BottomAnchor).Active = true;
+        }
+    }
+</code></pre>
+<p>To show modally in a way that works well on iPad and iPhone:</p>
+<pre><code class="lang-cs">public partial class BookmarksModalSampleViewController : UIViewController
+{
+    // Hold references to UI controls.
+    private MapView _myMapView;
+    private BookmarksView _bookmarksView;
+    private UIBarButtonItem _showBookmarksButton;
+
+    public BookmarksModalSampleViewController()
+    {
+        Title = &quot;Show bookmarks modally&quot;;
+    }
+
+    private void Initialize()
+    {
+        // Create and show the map.
+        _myMapView.Map = new Map(new Uri(&quot;https://arcgisruntime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2&quot;));
+    }
+
+    public override void LoadView()
+    {
+        // Create the views.
+        View = new UIView() { BackgroundColor = UIColor.White };
+
+        _myMapView = new MapView();
+        _myMapView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+        _bookmarksView = new BookmarksView();
+        _bookmarksView.GeoView = _myMapView;
+
+        _showBookmarksButton = new UIBarButtonItem(UIBarButtonSystemItem.Bookmarks);
+
+        // Note: this won't work if there's no navigation controller.
+        NavigationItem.RightBarButtonItem = _showBookmarksButton;
+
+        // Add the views.
+        View.AddSubviews(_myMapView);
+
+        // Lay out the views.
+        NSLayoutConstraint.ActivateConstraints(new[]{
+            _myMapView.TopAnchor.ConstraintEqualTo(View.SafeAreaLayoutGuide.TopAnchor),
+            _myMapView.BottomAnchor.ConstraintEqualTo(View.BottomAnchor),
+            _myMapView.LeadingAnchor.ConstraintEqualTo(View.LeadingAnchor),
+            _myMapView.TrailingAnchor.ConstraintEqualTo(View.TrailingAnchor)
+        });
+    }
+
+    private void _bookmarksView_BookmarkSelected(object sender, Bookmark e)
+    {
+        DismissModalViewController(true);
+    }
+
+    private void ShowBookmarks_Clicked(object sender, EventArgs e)
+    {
+        // Note: BookmarksView is a UIViewController.
+        // This shows bookmarks modally on iPhone, in a popover on iPad
+        _bookmarksView.ModalPresentationStyle = UIModalPresentationStyle.Popover;
+        if (_bookmarksView.PopoverPresentationController is UIPopoverPresentationController popoverPresentationController)
+        {
+            popoverPresentationController.Delegate = new ppDelegate();
+            popoverPresentationController.BarButtonItem = _showBookmarksButton;
+        }
+        // Attempting to show a VC while it is already being presented is an issue (can happen with rapid tapping)
+        try
+        {
+            PresentModalViewController(_bookmarksView, true);
+        }
+        catch (MonoTouchException ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex);
+            // Ignore
+        }
+    }
+
+    /// &lt;summary&gt;
+    /// Helper class, used to ensure modal appears properly for each presentation style
+    /// &lt;/summary&gt;
+    private class ppDelegate : UIPopoverPresentationControllerDelegate
+    {
+        public override UIViewController GetViewControllerForAdaptivePresentation(UIPresentationController controller, UIModalPresentationStyle style)
+        {
+            return new UINavigationController(controller.PresentedViewController);
+        }
+    }
+
+    public override void ViewDidLoad()
+    {
+        base.ViewDidLoad();
+        Initialize();
+    }
+
+    public override void ViewWillAppear(bool animated)
+    {
+        base.ViewWillAppear(animated);
+
+        if (_showBookmarksButton != null)
+        {
+            _showBookmarksButton.Clicked -= ShowBookmarks_Clicked;
+            _showBookmarksButton.Clicked += ShowBookmarks_Clicked;
+        }
+
+        if (_bookmarksView != null)
+        {
+            // Listen for bookmark selections so that the view can be dismissed.
+            _bookmarksView.BookmarkSelected -= _bookmarksView_BookmarkSelected;
+            _bookmarksView.BookmarkSelected += _bookmarksView_BookmarkSelected;
+        }
+    }
+
+    public override void ViewDidDisappear(bool animated)
+    {
+        base.ViewDidDisappear(animated);
+
+        // unsub from events to prevent leaks
+        if (_showBookmarksButton != null)
+        {
+            _showBookmarksButton.Clicked -= ShowBookmarks_Clicked;
+        }
+
+        if (_bookmarksView != null)
+        {
+            _bookmarksView.BookmarkSelected -= _bookmarksView_BookmarkSelected;
+        }
+    }
+}
+</code></pre>
+<h3 id="android">Android</h3>
+<p>The bookmarks control can be used through code or XML layout.</p>
+<p>XML layout:</p>
+<pre><code class="lang-xml">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:orientation=&quot;vertical&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+    &lt;Esri.ArcGISRuntime.UI.Controls.MapView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:layout_weight=&quot;1&quot;
+        android:id=&quot;@+id/mapView&quot; /&gt;
+    &lt;Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:layout_weight=&quot;1&quot;
+        android:id=&quot;@+id/bookmarksView&quot; /&gt;
+&lt;/LinearLayout&gt;
+</code></pre>
+<p>C# code:</p>
+<pre><code class="lang-csharp">[Activity(Label = &quot;Bookmarks&quot;, ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
+public class BookmarksSampleActivity : Activity
+{
+    private MapView _mapView;
+    private BookmarksView _bookmarksView;
+
+    protected override void OnCreate(Bundle savedInstanceState)
+    {
+        base.OnCreate(savedInstanceState);
+        SetContentView(Resource.Layout.BookmarksSample);
+        mapView = FindViewById&lt;MapView&gt;(Resource.Id.mapView);
+        mapView.Map = new Map(new Uri(&quot;https://arcgisruntime.maps.arcgis.com/home/webmap/viewer.html?webmap=1c45a922e9e7465295323f4d2e7e42ee&quot;));
+        _bookmarksView = FindViewById&lt;Bookmarks&gt;(Resource.Id.bookmarksView);
+        _bookmarksView.GeoView = mapView;
+    }
+}
+</code></pre>
+<h3 id="maui">MAUI</h3>
+<p>On MAUI, there are two ways to configure the <code>BookmarksView</code> control:</p>
+<ul>
+<li>Binding in XAML</li>
+<li>Setting properties in code</li>
+</ul>
+<p>The following properties support binding:</p>
+<ul>
+<li><code>BookmarksOverride</code></li>
+<li><code>GeoView</code></li>
+</ul>
+<p>Binding example:</p>
+<pre><code class="lang-xml">&lt;ContentPage xmlns=&quot;http://schemas.microsoft.com/dotnet/2021/maui&quot;
+             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2009/xaml&quot;
+             xmlns:d=&quot;http://schemas.microsoft.com/dotnet/2021/maui/design&quot;
+             xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot;
+             xmlns:toolkit=&quot;clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui&quot;
+             xmlns:esri=&quot;clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui&quot;
+             x:Class=&quot;Toolkit.Samples.Forms.Samples.BookmarksSample&quot;&gt;
+    &lt;ContentPage.Content&gt;
+        &lt;Grid&gt;
+            &lt;Grid.ColumnDefinitions&gt;
+                &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+                &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+            &lt;/Grid.ColumnDefinitions&gt;
+            &lt;esri:MapView x:Name=&quot;MyMapView&quot; Grid.Column=&quot;0&quot; /&gt;
+            &lt;toolkit:BookmarksView Grid.Column=&quot;1&quot;
+                               GeoView=&quot;{x:Reference MyMapView}&quot; /&gt;
+        &lt;/Grid&gt;
+    &lt;/ContentPage.Content&gt;
+&lt;/ContentPage&gt;
+</code></pre>
+<p>The above will automatically support showing the list of bookmarks and navigating to the selected bookmark.</p>
+<h3 id="wpf--uwp">WPF &amp; UWP</h3>
+<p>On WPF and UWP, the bookmarks control supports configuration through binding or by setting properties in code. Additionally, <code>BookmarksView</code> supports customization of bookmark display via the <code>ItemTemplate</code> property.</p>
+<p>Binding example (WPF):</p>
+<pre><code class="lang-xml">&lt;UserControl x:Class=&quot;Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks.MapBookmarksSample&quot;
+      xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+      xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+      xmlns:esri=&quot;http://schemas.esri.com/arcgis/runtime/2013&quot;&gt;
+    &lt;Grid&gt;
+        &lt;Grid.ColumnDefinitions&gt;
+            &lt;ColumnDefinition Width=&quot;2*&quot; /&gt;
+            &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+        &lt;/Grid.ColumnDefinitions&gt;
+        &lt;esri:MapView x:Name=&quot;MyMapView&quot; Grid.Column=&quot;0&quot; /&gt;
+        &lt;esri:BookmarksView Grid.Column=&quot;1&quot;
+                        GeoView=&quot;{Binding ElementName=MyMapView}&quot; /&gt;
+    &lt;/Grid&gt;
+&lt;/UserControl&gt;
+</code></pre>
+<p>Binding example (UWP):</p>
+<pre><code class="lang-xml">&lt;Page
+    x:Class=&quot;Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks.BookmarksMapSample&quot;
+    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+    xmlns:mapping=&quot;using:Esri.ArcGISRuntime.Mapping&quot;
+    xmlns:esri=&quot;using:Esri.ArcGISRuntime.UI.Controls&quot;
+    xmlns:toolkit=&quot;using:Esri.ArcGISRuntime.Toolkit.UI.Controls&quot;
+    Background=&quot;{ThemeResource ApplicationPageBackgroundThemeBrush}&quot;&gt;
+    &lt;Grid&gt;
+        &lt;Grid.ColumnDefinitions&gt;
+            &lt;ColumnDefinition Width=&quot;2*&quot; /&gt;
+            &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+        &lt;/Grid.ColumnDefinitions&gt;
+        &lt;esri:MapView x:Name=&quot;MyMapView&quot; Grid.Column=&quot;0&quot; /&gt;
+        &lt;toolkit:BookmarksView GeoView=&quot;{Binding ElementName=MyMapView}&quot; Grid.Column=&quot;1&quot; /&gt;
+    &lt;/Grid&gt;
+&lt;/Page&gt;
+</code></pre>
+<p>List customization example (WPF):</p>
+<pre><code class="lang-xml">&lt;UserControl x:Class=&quot;Esri.ArcGISRuntime.Toolkit.Samples.Bookmarks.MapBookmarksSample&quot;
+      xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+      xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+      xmlns:esri=&quot;http://schemas.esri.com/arcgis/runtime/2013&quot;&gt;
+    &lt;Grid&gt;
+        &lt;Grid.ColumnDefinitions&gt;
+            &lt;ColumnDefinition Width=&quot;2*&quot; /&gt;
+            &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+        &lt;/Grid.ColumnDefinitions&gt;
+        &lt;esri:MapView x:Name=&quot;MyMapView&quot; Grid.Column=&quot;0&quot; /&gt;
+        &lt;esri:Bookmarks Grid.Column=&quot;1&quot;
+                        GeoView=&quot;{Binding ElementName=MyMapView}&quot;&gt;
+            &lt;esri:BookmarksView.ItemTemplate&gt;
+                &lt;DataTemplate&gt;
+                    &lt;Grid HorizontalAlignment=&quot;Right&quot;&gt;
+                        &lt;TextBlock Text=&quot;{Binding Name}&quot; Foreground=&quot;Red&quot; /&gt;
+                    &lt;/Grid&gt;
+                &lt;/DataTemplate&gt;
+            &lt;/esri:BookmarksView.ItemTemplate&gt;
+        &lt;/esri:Bookmarks&gt;
+    &lt;/Grid&gt;
+&lt;/UserControl&gt;
+</code></pre>
+<p>List customization example (UWP):</p>
+<pre><code class="lang-xml">&lt;Page
+    x:Class=&quot;Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.Bookmarks.BookmarksMapSample&quot;
+    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+    xmlns:mapping=&quot;using:Esri.ArcGISRuntime.Mapping&quot;
+    xmlns:esri=&quot;using:Esri.ArcGISRuntime.UI.Controls&quot;
+    xmlns:toolkit=&quot;using:Esri.ArcGISRuntime.Toolkit.UI.Controls&quot;
+    Background=&quot;{ThemeResource ApplicationPageBackgroundThemeBrush}&quot;&gt;
+    &lt;Grid&gt;
+        &lt;Grid.ColumnDefinitions&gt;
+            &lt;ColumnDefinition Width=&quot;2*&quot; /&gt;
+            &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+        &lt;/Grid.ColumnDefinitions&gt;
+
+        &lt;esri:MapView x:Name=&quot;MyMapView&quot; Grid.Column=&quot;0&quot; /&gt;
+        &lt;toolkit:Bookmarks GeoView=&quot;{Binding ElementName=MyMapView}&quot; Grid.Column=&quot;1&quot;&gt;
+            &lt;toolkit:BookmarksView.ItemTemplate&gt;
+                &lt;DataTemplate x:DataType=&quot;mapping:Bookmark&quot;&gt;
+                    &lt;TextBlock Text=&quot;{Binding Name}&quot; Foreground=&quot;Red&quot; /&gt;
+                &lt;/DataTemplate&gt;
+            &lt;/toolkit:BookmarksView.ItemTemplate&gt;
+        &lt;/toolkit:Bookmarks&gt;
+    &lt;/Grid&gt;
+&lt;/Page&gt;
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/bookmarks-view.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

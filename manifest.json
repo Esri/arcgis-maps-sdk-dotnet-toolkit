@@ -1,0 +1,4244 @@
+{
+  "homepages": [],
+  "source_base_path": "D:/a/arcgis-maps-sdk-dotnet-toolkit/arcgis-maps-sdk-dotnet-toolkit/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.html",
+          "hash": "OPQrOnckB/HQcDM4W5YIQ2656j7ImdUugUHZYSPohcg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.ARSceneView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.ARSceneView.html",
+          "hash": "80O1ADJnYACf5hYjIEXmjkQ9ku3n/MkXn4jGvTOoOPQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.Maui.ARSceneView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.Maui.ARSceneView.html",
+          "hash": "tAA7JbkW+oIJjo+cx2xg9fZs6BYOKshy7Xu0WVit+y8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.Maui.AppHostBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.Maui.AppHostBuilderExtensions.html",
+          "hash": "O6DBI6BC37VR1z67uTZC7nf5kJFJMTN2H0V9jcLpjlg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.ARSceneViewHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.ARSceneViewHandler.html",
+          "hash": "fWYyuOtLJ0o2YBcEMDxylnIFj5u3ZvSLszcwkgPg0NI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.html",
+          "hash": "mwU9FGzAV01QkP8ynfRVCh5zWqdLBa7hxoNEF3Lcwsk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.Maui.IARSceneView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.Maui.IARSceneView.html",
+          "hash": "n/fGYbpRphX5WSoDAuGOmdKf00GE3o+1izPlky29gnM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.Maui.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.Maui.html",
+          "hash": "qt7+pAgKI184Y3NDwQP4UbcU/LQjsbuvS6M9HPvjowg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.ARToolkit.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.ARToolkit.html",
+          "hash": "HEKyBK7COx7nqKogrNPRFps4PRG531VAcaX6c0aAl98="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.AppHostBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.AppHostBuilderExtensions.html",
+          "hash": "MLVeOqbsh7X7PvxmSIG+g6QjptmiE6602lXKqQvtKS4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.AutomaticSelectionMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.AutomaticSelectionMode.html",
+          "hash": "t+6Ax1P9SREG6vsJhArZ9gjCvZaseHnmiO/dbVT9H8A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGallery.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGallery.html",
+          "hash": "6o82xTJMNBa9UXkElipqqRxenRZeGyJ59fRgAHJZNsk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryItem.html",
+          "hash": "dfuOLs1NpJfy5MHDXepBdpxC+Rr6ulXKmwII6q043yA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryViewStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryViewStyle.html",
+          "hash": "VY4epEyrL/knXvNk+qF7/DMTvr0Z0tLmCzPYIXw9A5g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.html",
+          "hash": "KpdbZMYhSBzaJ1XceR4aNUXKV4upUfZrUG6tQ6rWlgw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Compass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Compass.html",
+          "hash": "2NBrlacrFOWsCuDDFvHUXoqudBbgDi6lmUt3LkGWXFs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.FloorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.FloorFilter.html",
+          "hash": "9ZCc4aV9P7r18UmvyUp5cOg2TPa9lBDwJdsJu7jK5t8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.html",
+          "hash": "sku39wvBVyS/RhkVXt7WxOcJG7Mhh7bF4k8RElL4uys="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.CompassHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.CompassHandler.html",
+          "hash": "492ZxI8O5jl+h05JFmDzCFCmS4giYVHzxDQADp0h8cA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.html",
+          "hash": "LX+NS4ezMFHxOryrBNR4Rv00XrRmu1OplviDc48kag0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.ICompass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.ICompass.html",
+          "hash": "ors2QsLTyFAy6IiOyvvLsj/nyvdnE4GfksPnlcg0wTs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.ISearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.ISearchSource.html",
+          "hash": "vol5Rniti7mHvxSsCQZ7GzAYrT0ajjcgeK7XCy8h5Kw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Legend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Legend.html",
+          "hash": "sKXgTTomh+swm5LnkI8hDDbwtqdM0K+fmqeEusjKTbg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.LegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.LegendEntry.html",
+          "hash": "LgQLVbzza1j73eT1U1XNZ5NDGWPBgJO0lDza3M4CVmU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.LocatorSearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.LocatorSearchSource.html",
+          "hash": "ySVKjeuExvQEXBWs95P6ko49cVcZ2gddtiiN5Uf9HEk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.OverviewMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.OverviewMap.html",
+          "hash": "yUoC//MFyJjmm2GAvy4quJnx3P6AOB3cdfWdVuqzIyM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs.html",
+          "hash": "eJbChiXcYyh/fA6hGnVtmVMafnxEETxiCoB1Ad7RTrI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer.html",
+          "hash": "RV0pqcG70ZqMNy7jtTSN2O6Cm6h3cAnRahX9YiHEOx4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.html",
+          "hash": "0VuizbJJi2XR2UvuZ8LNlbBQJwo6ZNAGdSLZHdo2VOA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.FieldsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.FieldsPopupElementView.html",
+          "hash": "Z/EVprFE6pYH50Urk3+dIdmLZbw05LOim/9s4UilRjI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.MediaPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.MediaPopupElementView.html",
+          "hash": "7ieIs59LkgG/tFF2cn37oeWDRzV5BixRLQMDwsMppyE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupElementTemplateSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupElementTemplateSelector.html",
+          "hash": "cuXipWuU0/yYxJgIfcr5918ZT7gHq7ea8iDzyILV2jA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupMediaView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupMediaView.html",
+          "hash": "o5TZBwp9pgaQlgWDQu12QEHofU6xW8f88+bC/rvmKek="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SegmentedControl.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SegmentedControl.html",
+          "hash": "uosCrY6vE77ENXzfoCnT8ZUw0TCl0SvR2BeUMl1vHgY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.TextPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.TextPopupElementView.html",
+          "hash": "fyEY3U9gksdEz1LE+qLouKTPcfADLnccCsOAgrk8cw4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.html",
+          "hash": "2pTwwh7gR8o6Fn/Cf/FPFER45rO/81FLHqLyGd3VWXM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.ScaleLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.ScaleLine.html",
+          "hash": "nZjaS/yGM6iGp0yWhVwL23FvvNKRdrF/M0bxyIkmaNg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchResult.html",
+          "hash": "+xrCRsO2/yBL45ZFPazioQB0+XmZpSbcL87ds61+spc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchResultMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchResultMode.html",
+          "hash": "dSX9qsmqnMIA+Q6/7Drf8iGq1I+cgUMqy7VQITDG0to="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchSuggestion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchSuggestion.html",
+          "hash": "EOnKXiirJyF1/1KomcJixQsOIGRbW9pNlb9gCjL/xJE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchView.html",
+          "hash": "BXJUbishVovLGEpy/t3Wo97UYaBpqd29VZwrkTR0jgU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.SearchViewModel.html",
+          "hash": "XzusCTseAvQUGhedRl8Mk7QBNrBdt6q8z47yDKRuZFU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.SymbolDisplay.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.SymbolDisplay.html",
+          "hash": "Q+4g4clZ50LX7U52tz9ckniUlXUqnhb4DwQ/S4mOvg4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs.html",
+          "hash": "oTa+Joq27nnVxCYqnmw1SH9tfz0zzw2z39TmCqSkt9Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs.html",
+          "hash": "kC4FY7BFzWhJTJc01q7UfxRSwDWFbfRW7nFNlMKRdKo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.html",
+          "hash": "mhXXHLaBGKx2CeFcImdqGvBA6kw1hJRfv/377sLRwG4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/android/Esri.ArcGISRuntime.Toolkit.Maui.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/Esri.ArcGISRuntime.Toolkit.Maui.html",
+          "hash": "+nlHfptbgDDD11gOAFwtRAkDAh1hU/Ra3ykRE506WK0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "../output/docs/api/android/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/toc.html",
+          "hash": "XCGIFzFRMrLlx9DsdVnvZNeilJ+CICK3efFEmLB8T3I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.ARLocationTrackingMode.html",
+          "hash": "CPwrEP2kFvKuThJmkoBq00/eG1SaG4SfgCK40mOMmE0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.ARSceneView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.ARSceneView.html",
+          "hash": "5JliEeyVxDGSbhIq03o6mLtkI33iiL9CdqQ7tOfh7QE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.ARSceneView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.ARSceneView.html",
+          "hash": "Cx2KfFFrO+Vn4v6gXIyAouRvCQa8Q55sDl19AuCNBjU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.AppHostBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.AppHostBuilderExtensions.html",
+          "hash": "zkOVCW0KJABvr7EaBLMnv1Gpx4n/UqUCXiSvkFPjBwg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.ARSceneViewHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.ARSceneViewHandler.html",
+          "hash": "t+BqakJKkiCPqKStd8edCNkPyYkv8eG6HXISXHsR5ws="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.Handlers.html",
+          "hash": "d1zQLQ2bViZsxt+E58g8TvvI8Sfxpf7Clyxrj73Fbzs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.IARSceneView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.IARSceneView.html",
+          "hash": "M8c1QH5itywngkPAcy6tSc5BhfA1xSnJpLi4nyP95ao="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.Maui.html",
+          "hash": "YgIxqwSLhpHOYptbGKkoyrTeMWXPVRaiLm8ncFjxyZ4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.ARToolkit.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.ARToolkit.html",
+          "hash": "p6m0zwB7fION8A/6IvxODjNCHihu+ApLVbjKEE+AvMg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.AppHostBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.AppHostBuilderExtensions.html",
+          "hash": "HT3dexO/kq2MS/FV2exX/Yk2bsyKPgBIJJIDzSAeiWc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.AutomaticSelectionMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.AutomaticSelectionMode.html",
+          "hash": "3BQPT4oiKpNlBzg6tSZTzN52R8a3ieHzAHw+HiKlxfI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGallery.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGallery.html",
+          "hash": "nNsPsJLI7XzeZWdNyTS+hogWcier83rGdUXbuksRWRk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryItem.html",
+          "hash": "CoKho9rdZ6KOnclunRH0SGi9ISLz/hD/u00v8rcxJDQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryViewStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryViewStyle.html",
+          "hash": "tvkKiOqikpQaaRx7MVXt9DaKm7rDuqOOpJ3Jl1+hUog="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.html",
+          "hash": "0Vu0FBz4rrlDRd7T4VppPq65ZnpEmMDJCWhB4Lnuot0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Compass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Compass.html",
+          "hash": "py2zuNvPdrO4oW8XpTEKjtrZRh8TC4EyFo0NvQjneWM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.FloorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.FloorFilter.html",
+          "hash": "f7SqwB6Fn3knuCtfrdv+n5ggx1TJtD5I7kDy51xqF5g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.html",
+          "hash": "R8FhMH5J6zmpeKXP4LXcY8b7Q2wUku/BbqFUZZfAi4M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.CompassHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.CompassHandler.html",
+          "hash": "NbnaiptxBe8WM/DmupQzgoPdS4fZ/0yzijoEAV/yj7o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.html",
+          "hash": "IaIaEoo4CkjZxLnclF9un69ZbtaGlZntTQh57icOwUc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.ICompass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.ICompass.html",
+          "hash": "CVuzvpoTfiozTYgMtaVtsjF5yPgeUiKb/Dx3eCULzSo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.ISearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.ISearchSource.html",
+          "hash": "NfA0NWC6YQTOtsoKIk5VlW/SzE8ydYK2eLo/QmXyZN8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Legend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Legend.html",
+          "hash": "o/Pi8urQ7yavCjry8PCkQh2nEaPoGcjPhPnYcwVaq2c="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.LegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.LegendEntry.html",
+          "hash": "9MGUwMFoGgS99qmnhwey8gY+7owBeQ+UKy+MjaEs5BE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.LocatorSearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.LocatorSearchSource.html",
+          "hash": "/PhG7QUhvHIil2C44v4QGFQ6em2JxWQ4XGxkX6VP4EM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.OverviewMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.OverviewMap.html",
+          "hash": "B/akLf0OegE2NaH02PL98OlGJTqkze6KTYvLLR5qCTc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs.html",
+          "hash": "FsCcRoU+YiHrMzcNJ+mzMfNdA8HFjlR+GOCagnsLEDU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer.html",
+          "hash": "VT4aEDPfoTP9TLp6pQ7tY65ATgurqSW6TbGQO791C+k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.html",
+          "hash": "VusFSj/N/n+3OIAU5qAyQ/Y5wFkt5niqpsRSd7xPYwA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.FieldsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.FieldsPopupElementView.html",
+          "hash": "uG3uyC8c/SYQ0VOYAP4r3K1p9sPAFHUfSQEaxTSsguY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.MediaPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.MediaPopupElementView.html",
+          "hash": "gMHGtuuw9pBK2w679yISY2WWgr9z0avO1L1IKmvwLQ4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupElementTemplateSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupElementTemplateSelector.html",
+          "hash": "ubyR8ScwOfariqFYI1fHgZaWBX75FcjN1e4OU+QGWys="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupMediaView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupMediaView.html",
+          "hash": "qEJqKM2rD/fbtugV9zj1yJMrsImTk41IyU7MQk/z5s0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SegmentedControl.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SegmentedControl.html",
+          "hash": "cWf3BG61zMfJp/AO5ED7Skd+gEBO85a/5CBQuDv6pWs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.TextPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.TextPopupElementView.html",
+          "hash": "tIVRp9iT1Ufjn0N8cRQA7ZcKuz1o7O7DyJ/YDJ4/liw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.html",
+          "hash": "07hDfLXdWbfDId/pUBSeMnh/WWycoM1PnRxnWoskxZM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.ScaleLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.ScaleLine.html",
+          "hash": "z4TShewiaFruk0Fk65L5q+AhPwkmZt04XQ8/FoBSxRs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchResult.html",
+          "hash": "02Mv3VBtu/LCSOtw2nDZlFh56xaIlE5zHAteExXbhlM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchResultMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchResultMode.html",
+          "hash": "NgraMVUplHRX8SV4gOmSKdg0PsaHU+T/KI7TRu8cshE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchSuggestion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchSuggestion.html",
+          "hash": "I324AkQcIkvI6sUssFqih9Ysxo1E2oXT2Z4IeRubK/Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchView.html",
+          "hash": "6zQbf9xdxr9NWnaYn6wOcCxGyYKw28JDyAwmt26e6Sc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SearchViewModel.html",
+          "hash": "p82mSGoS0BXeClA9V35ZsIw3/D8qkTilDJAMIr9cRho="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SymbolDisplay.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.SymbolDisplay.html",
+          "hash": "4wSSAMw69ZrnYEjN9fLFbamYf/p+3mq/0+TvDmBtYCk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs.html",
+          "hash": "nrA1IoAVqhiOKKBj4ypw3sIbYr4n8wsE3gDnEvSKhxw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs.html",
+          "hash": "X3LMAavdbFnF5KdPa0ZE0s9XNpt+damuzD69rJbuQBM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.html",
+          "hash": "A1K5Y8KUdv9yaIJ/SrlcGo9TVyQsYIzcP9IWDnPIGhE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/ios/Esri.ArcGISRuntime.Toolkit.Maui.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/Esri.ArcGISRuntime.Toolkit.Maui.html",
+          "hash": "gGtGo5lAbnJ5hMu3JEvhr6cEBwD3ttX/ufOPZnGpjz8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "../output/docs/api/ios/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/toc.html",
+          "hash": "lqruEaWtkm4QumX0sdw8vvRT90s95pxHcsOK/3GTAmM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.AppHostBuilderExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.AppHostBuilderExtensions.html",
+          "hash": "gRvrWegFnlPF50dTCfPVDPzo3vZuF2ykf1U4hcJC36g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.AutomaticSelectionMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.AutomaticSelectionMode.html",
+          "hash": "p/Xd7+kZXipyfkvC6eOBmURVppPIh2xTl80nF+U+94Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGallery.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGallery.html",
+          "hash": "aUzF+o4Zde/j/QVbzeCu5km7OvZDRA1c7s99gwaaOaU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryItem.html",
+          "hash": "AXx+QQBJMvX9oXB0w5FfJuf3vxZzhnYNf8+uIMzMKVw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryViewStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BasemapGalleryViewStyle.html",
+          "hash": "26vifJAZe9SpVPxUW9DF+0M6B1uA6p2RjhqZ7rWtTfk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.BookmarksView.html",
+          "hash": "J0zdV4bbN9R28TFY6a4Z1v2KMA6bRden4elFfzevd8c="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Compass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Compass.html",
+          "hash": "I/BkzoUdByvLxotNxi9AsYHeItpS/ftR78oIXuW80ew="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.FloorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.FloorFilter.html",
+          "hash": "/j3hqT88GFs+WsbdGXDWUH6W5S2KM5rmsTgEEwMnxQU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.GeoViewController.html",
+          "hash": "MBXuM4iB+/BppCwGvkNu95P/FYnip8BbSKVWmBE8MI0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.CompassHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.CompassHandler.html",
+          "hash": "+zTk5hXY8uuevxViCqbKguU1thTsUzDKyBuywOFYkBk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Handlers.html",
+          "hash": "IaIaEoo4CkjZxLnclF9un69ZbtaGlZntTQh57icOwUc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ICompass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ICompass.html",
+          "hash": "FbLcXZSGidDjCDZTeRBljXPnFKt2ljRvX+JV+4m8lws="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ILayerContentItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ILayerContentItem.html",
+          "hash": "8gJUNGvtMDQ1vx4dC9QLGML1MglQwy9JgWuVpW0E2TU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ISearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ISearchSource.html",
+          "hash": "VKM3xBy48qaq9QK2r3XCyVTtZ5E1+uwsaJLVmoZC0GE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Legend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Legend.html",
+          "hash": "SB0910h0Eky3LidRoUd1wm5J+HzhD81FkekPtyHrGa0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.LegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.LegendEntry.html",
+          "hash": "olWh8US1F92qnmz3xWaSWvC0NqVE3ha5jSigz/N0wn0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.LocatorSearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.LocatorSearchSource.html",
+          "hash": "eLRcitYRambrNpdRwuuclF8mK3t6vGGX5BvBgI/Qx14="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.OverviewMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.OverviewMap.html",
+          "hash": "lve+4kUIUXoelfqLGSBzyg7adRRGFvdbE5le2FFjKBI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.PopupAttachmentClickedEventArgs.html",
+          "hash": "OjdGhCz4lIyXVlVhRhQdID1prnBktnVJWM5zxX6C5Ss="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.PopupViewer.html",
+          "hash": "trFnRJhy9IwfFUJo9cwy/qI8jdTWu10Kf7pdg/1Z+DY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.AttachmentsPopupElementView.html",
+          "hash": "wRKaFFswTRXAguAEQIGQ8K+rAjPJyCYHo+4947XQY6U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.FieldsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.FieldsPopupElementView.html",
+          "hash": "jdQv5cy4adVVQDbTnJfkeNOO/iD0DOCmtg0HqZtC7vw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.MediaPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.MediaPopupElementView.html",
+          "hash": "hn9tK0/tfnTPfYXV4XE0qbZjP+s6yBGFToU8ejpOYkM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupElementTemplateSelector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupElementTemplateSelector.html",
+          "hash": "ydQuADaIy0skQUBatl49Pk4L1kbo5e12u/qX1B47Uas="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupMediaView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.PopupMediaView.html",
+          "hash": "i0HQ3FUAQJfs9khDzGAhZ1zD9MAJdElviiBDAaNwsvs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SegmentedControl.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.SegmentedControl.html",
+          "hash": "pP6tfelcu4DYBz1Hpta9fgLae/ZVYlniwoQnzGBUlW4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.TextPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.TextPopupElementView.html",
+          "hash": "0KM6/MzwGMbL/MHrKgWX3Va8IApntIlUUdpwoxzVwr8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.Primitives.html",
+          "hash": "07hDfLXdWbfDId/pUBSeMnh/WWycoM1PnRxnWoskxZM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ScaleLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.ScaleLine.html",
+          "hash": "hPhXkiMtGQdsFNQZMx5WksukwhoOLQmVzjNXmd5sqdA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchResult.html",
+          "hash": "qRohwN/2MVclDoTJAVKbiYEuFfnjTRGOeypB+hVn5ps="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchResultMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchResultMode.html",
+          "hash": "29NFQT3GcUpEut3mvr6OPengyERJLD9grgbLqHbfeUg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchSuggestion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchSuggestion.html",
+          "hash": "MkRNF99ny0cf6Ycl3B+7Vfpgw6dfmWKBJIvyf4JEggc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchView.html",
+          "hash": "24sD/NoC1cy6hc2qdZyxHiIczA8SndzIx3X+9KuEskE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SearchViewModel.html",
+          "hash": "BEuDs5bHFJSbd4QZWrIq25ZQ9ih8VjMUI1z2r3UTOw8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SymbolDisplay.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.SymbolDisplay.html",
+          "hash": "Vd7nm78xZPyShuhC4xgdv4k0+39CLvLjZOoMpxuHKsc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkChangedEventArgs.html",
+          "hash": "amOdxDq1GNHi1ZTwN7M3XYnh80bZ8R2jkO3cS2xEY48="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceCompletedEventArgs.html",
+          "hash": "GbdB2e8pvvLGdLA7uWMSeA0KAGWHoyC53fRkX2ih+FE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.UtilityNetworkTraceTool.html",
+          "hash": "hV3QEeKWWn26lh3XhdyT6EYKbiMGxruqSCVORTCctIQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Maui.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Maui.html",
+          "hash": "jqsU7WUV50JguvSTnPT0GLLmxw7vPKNDcfXJCoERKj8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.html",
+          "hash": "2N140zxuP3Hr+DIrrrB0LtKJnuwuCxTksIdSrwaJg90="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.html",
+          "hash": "RGPSBcRwnastnzKgl+xeoeuA2UweRaZWtVC8b65zAXc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.html",
+          "hash": "Yt6ywmpxNl6ZYFwqo52pV6v1vM0YgS/JS6mKVcA/GUU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl.html",
+          "hash": "0qrWBwMVGNUrTmvl5ThtyNB3901Iv7sRXZssKQ/8hSE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.html",
+          "hash": "0MfTz0yVgWNpmh3tgZuocFrx5CdwiCfEsoCjrwRA310="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.html",
+          "hash": "v2nKxLDGDLUgSkuXM9Xep4oXwSXt5qqGiIIF8GoCE38="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.Primitives.html",
+          "hash": "0YiMcqbBmTiNIPYdS9qkLeNSGvKR47kZOeqcUTK8YWw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.html",
+          "hash": "tjICWJbEKEk2gYR91znKEu0HXQxgDyDVXOBXCNROu6E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.html",
+          "hash": "9mQisdF1fNwLdiPh6xaGQVysoYrQwz10/eYA5UBw488="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.html",
+          "hash": "k67Cz8X1cT84nPrL+nomHf08ig7FWFYgafYsc6yQdi4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.html",
+          "hash": "mq+GnNBLhYV8/k3SmeaqtT0trDtLXs6IP8QxXmQ8fF4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.html",
+          "hash": "2tGC9vzsycOrvmn1ZmH2Ns4hA2+QFLUFH8093X3yepI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.html",
+          "hash": "me19wwYN44rBnKsgH35rTP0tOhY33Pd3Vndm/3vF2P4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.html",
+          "hash": "+yDKDdA1pK3ovaUqMgL7odlnaHimN4IpTrbaGfDJAcw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.html",
+          "hash": "mhjS3a0He4ws+duH0hq/WOwkcSpaRikksFdu1oUFFy8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.html",
+          "hash": "UZnQfCNgc4/AnWRrGZcVFJQdmL4LASS8vAazqwJlyPw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.html",
+          "hash": "0wDP4PV4WK4oOierhzESOtKQF/9xXVNTb51rtf7o93U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.html",
+          "hash": "3BIg+B/G0Xqs9mjYJUf/MQZnT12T/VZVbBRQjDtDS14="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html",
+          "hash": "4SQlmh+tx0utR8Srf81/sUiq0oY3QrFp6O+GYKkmVJg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.html",
+          "hash": "lSyYabBl/YlmHgHLieYst/y6kgyEzY+eqJSBJAaq2gk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.html",
+          "hash": "caJH+VZtJSwgKFrqj5LchPtydxCMjbHM0yc8ybvLhso="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html",
+          "hash": "tW/075B7UF+Ymozdbgah0KncVtdy+Avb6+ftAiHIIks="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.html",
+          "hash": "JLHKUVDNf9+ffrvFDvAA2VdQC0HJoKLnb6o10WP5OvY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html",
+          "hash": "4jel86TmMspX9H3EgXHRenby2WIEk57xgxBXT/0E+SQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.html",
+          "hash": "WJN2/o1WD8FTVeyQmjlXMuASI4Zpru+0syYs25uyPqk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.html",
+          "hash": "4hRqfO5RBojan3OdTpM8ssT+NMYqINeUJTLy3H98JpI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SuggestionsGrouped.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SuggestionsGrouped.html",
+          "hash": "FDiNN9gBUJtHns4oi+xJ/4kT7ALT5OSYm//G9lksWyI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.html",
+          "hash": "f+bJJeLyYfsNgAD53Cbzu8A8lndYYy/3fh2SMILzrk4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.html",
+          "hash": "gxBCMZ1tjZzASzyoZ7gpJMQeR0S1OD3vbirZDJJRRGI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.html",
+          "hash": "wiGLNisOFW5HlFykDScnaOnDdU5KPeZ14xOZ3jmIB6Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.html",
+          "hash": "XhWkWlibWkOkfApJw8OMO8q9X/xd/uvA9dVlGwILlV4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html",
+          "hash": "w22QbtE3GdRLqPDJV7cLSiSICgsJqwGI2oi74d0kJSA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs.html",
+          "hash": "kapxTobyadgCzCduF0SUMClJHhXCjUlUVR3IsKW7F1M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.html",
+          "hash": "G90jfogn1cFFzyr5eMT0y12Qm1uvBUS+g9ug1s/DrXw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.html",
+          "hash": "JEe0SoOdhCf4R0FiAzXkbt5Mof4YuRfZnr8j2EMHFS0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.html",
+          "hash": "zStACScasveQzX/9D8DeLYYd9SBSH8UjrV+rmfrohuA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.Controls.html",
+          "hash": "S4y/mCW3bn+2HdNYafFa/0oTLQBHeQH4PWmFqtwXzJA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.html",
+          "hash": "aMY/JepPTSi5Z+g+VJSxCwsnfsu1/3ZNvKqsY/SjHEA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.html",
+          "hash": "8/hv+gNCknpHK8/qzyTHmlkwVW8o6nxYahBG0muJkvw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.html",
+          "hash": "nmWo3+6dAOwgW8ZO4QZs0Btd2dx5fibd/42jTT8tENA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.html",
+          "hash": "bBvEDjFySAj7JcW4bcm8RtEUirv7yw4N3ZZZQ8DLicE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.html",
+          "hash": "vogCDOm5+3Syfy2r8HLEDaK/rUY/xhe9HDNwBCLK38Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.html",
+          "hash": "Sj1jGE6NndaI68BDE+2EEgnJBEnXbyzq01vY/0IQHUI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.TocItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.TocItem.html",
+          "hash": "fSCSMfIkYwrfR625yqeOOnunBJl4npB8XJ9iICR3d9E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/net6/Esri.ArcGISRuntime.Toolkit.UI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/Esri.ArcGISRuntime.Toolkit.UI.html",
+          "hash": "d/iXH6FEYfr7hurhckeu2guPfnSoubW2LIRaHtAkDnA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "../output/docs/api/net6/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/toc.html",
+          "hash": "8c1fQ/3R8z+wT0XNh4ErMOUUDdoZIOnge6WmI5AwSpk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.AttachmentsPopupElementView.html",
+          "hash": "9M8UR54t/QXspmp+5Q3k11IU0ms5/REa+RJaCBqJXEk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.FieldsPopupElementView.html",
+          "hash": "1JKOtj0A/TmR+VsuYr8wES2nH/CTjMKkitNxbZEWz08="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.MediaPopupElementView.html",
+          "hash": "dwi8ip+nwv/DYLgt95w0yx1piwLmlWYdR8VzDp9DrEs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupElementItemsControl.html",
+          "hash": "A6xa5nTho1zsEC6aYDsnW89lkOvcqHqYW00HRtcmWHI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.PopupMediaView.html",
+          "hash": "4yvWM9YPJrXQdqEsSJxCoA7hUP05a3u/XTtG9pBe+TM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.TextPopupElementView.html",
+          "hash": "PpOOGpnqiMjfFUH63n4/dyeLe7+5xlJ2PUVnLGdgNJk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.Primitives.html",
+          "hash": "27UiEmLfpyf9/x98CJgwzMjPpVtKVe0h3CJtrV3DUrQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.html",
+          "hash": "daAUNf5Ovou+VMEzrJWCdLng2EJkctvJFo/36bOjMHk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.html",
+          "hash": "Xo8kyDrkz1OZR1Pso4yrI4bkCQrrxMQBdj4/oEkIEkI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.html",
+          "hash": "2NzykkFX3Y/g+9MvSHRGp0Z9BI7BqGzwnf+MRZrKUDU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.html",
+          "hash": "6mXwMcfB1oFmtagxPvuwOexVsIpYqkdOQaKgtgEjm8g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.html",
+          "hash": "7yjOVL0c1KbE45VwcavAvU2YtLWJbEKQGOraVwcXl74="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.html",
+          "hash": "XziP+1PTg+rU/22eD9g33gqz9q219qf2C8ezK2L6k/E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.html",
+          "hash": "61ATNHPAAC77tKbXMKTHsSP76dnsYguldIDU60jaJLM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.html",
+          "hash": "3uAvOAjUFpaN7n8acj9Sbl19Wd4cZ9/FBgKEXy7EkCM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.html",
+          "hash": "8eu9+0o5vXfA3MKMyATl4hRB7dq5KFv6bUppo/TmSRc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.html",
+          "hash": "QnV2tiX9DFfN4MUAkzZsDuJG2djguU1R7yyn+DncWxo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.html",
+          "hash": "tB0xo8J7AVPMdRexYDx47YQcJ8OcH2e3cX8k9kdqFhI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html",
+          "hash": "/Mk/qKzLWj8ad7ooGjmL8DOiJ9EU0SVuTjg3vbloJlM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.html",
+          "hash": "cTOBwhpeLCTa7Q3KVnqAJEvVY3q7loXj/EUPscI+4Lc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.html",
+          "hash": "63v/suHrvDL8uzJlNx9yn3vn9vZgKtYKPJJerht2FjM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html",
+          "hash": "5V8iTWDjkY+Q/KxV+9URWujvPoy4VKEYQFYWAI6eqtg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.html",
+          "hash": "0gvMY2ywsd6lRh3q/RxWkizOoOJOZg25Na/VduJrWPk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html",
+          "hash": "dVj967XzGAnUw8EQB/awte6x+F5wl4VnTtVAKTssVwU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.html",
+          "hash": "X0VKOMQCT9hSaADpo7h5jCAm0r+Wje1Dnie4XCLnXq4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.html",
+          "hash": "2raBfiYPzMEczvQOBcM3Vf0SEe8GJaLVsawVJt3+kEw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.html",
+          "hash": "IwXhJ97K72qAGBFccKGISYXmRQZS6tTPUrWSEDIJVs8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.html",
+          "hash": "QHWA+8dB8kjvyfXN3KeL9PR2m9wm7hXNcuCwX2XivHs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.html",
+          "hash": "gAitwSrrDx/ixaAZlQlkeGHr5Q4KRL3Lgcvlfg/XFvE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TableOfContents.html",
+          "hash": "KvgFSi7ixXtmHxptc/c01cmJCoYIm1Uk1W+Lx7FMyjU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html",
+          "hash": "hzev5NQPkVi7Pj0/2WV32VWQ4dAMz1NV3uF+U4nfyUA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.TocItemContextMenuEventArgs.html",
+          "hash": "iBKi8slxvmJl9Hj4iQExlw9/5NaQ0h4SpL7ke3b8Aus="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.html",
+          "hash": "RvoVxMFoihGC6iITPj4d0eLbqsJaYtLbTxCGTbT1/ew="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.html",
+          "hash": "l2YgHP2SasTRr2/J0EJ9tTQR0IK9bjkc6lVHIgpQLZE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.html",
+          "hash": "5ysY1TwOgHL20kCgJsdDHf1/29TCwjCAplKRuVtfRrM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.Controls.html",
+          "hash": "PwccBuHyfY5w3citqcfRGuenf7CgvcH1V/X7hh5PrfQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.html",
+          "hash": "lsDOyW+ITcFBG7hJdgcICF9nONkkmCpFXPbrsWkcHQA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.html",
+          "hash": "e9ftq6mFLH0wMUO8Di0NWEx8/A6ZKBwlIPT/LtnQKpI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.html",
+          "hash": "UnJ1oGYeJrfYvzYMg+sq6nibWokX7ulk3lTe44X+Do0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.html",
+          "hash": "j+mMYc2C0PpbleMTkV6eRSGigmgRiy+ZRw9H1PCmHFk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.html",
+          "hash": "fJcKXzYRNdknazjrcpF331NPaUiRtEry64WYRzOtr48="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.html",
+          "hash": "Lx8F2Nsv10/0HzoKLnE9UBrBJXuDSt0VVmxHr+2H5aI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TocItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.TocItem.html",
+          "hash": "mbm2IyQH9InDAt4waD8BxOdF+1bCHWvTTNUS4MsEWb4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/netfx/Esri.ArcGISRuntime.Toolkit.UI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/Esri.ArcGISRuntime.Toolkit.UI.html",
+          "hash": "En9K3TNJHrx7XaCeSDbz1ZJ9oJyv8AlRNQ4w5gTgB+o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "../output/docs/api/netfx/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/toc.html",
+          "hash": "qdGrZKqR0zNOTV0wVtbfs0ES5dcFfr1CfIw50PbdopM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.BoolToVisibilityConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.BoolToVisibilityConverter.html",
+          "hash": "obDSAKaXNg/+BwWlFaf3dEXLb5BWuBWgo9SvfLJFlRU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.CollectionIsEmptyToBoolConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.CollectionIsEmptyToBoolConverter.html",
+          "hash": "IyYMWofOF5/9mmBlSdAPulzxLV2oXJnxjNBXFHo1ews="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.CollectionIsEmptyToVisibilityConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.CollectionIsEmptyToVisibilityConverter.html",
+          "hash": "dTbnW0pxO6Zh4T/w5drAMYbEIi+cLVkV/6tGt99Lphk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.CollectionIsSingletonToBoolConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.CollectionIsSingletonToBoolConverter.html",
+          "hash": "msK1Pzf4Wh5+sPCXsIGmDq7nvfFKS1tR1STeAMjrjUI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.EmptyStringToVisibilityConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.EmptyStringToVisibilityConverter.html",
+          "hash": "MXocva2IDTFBiJdfWhgHx7AYG2uInLJ4nRmbjUIY+68="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.HtmlToPlainTextConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.HtmlToPlainTextConverter.html",
+          "hash": "1iSZ7goe+QplEyzBkv10WySe+NuWs3hyVf6IBv1t9l4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.NullToBoolSelectionConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.NullToBoolSelectionConverter.html",
+          "hash": "BbufDymXcenXUXehCM+sawKroGLSwOisn8jjO2DM90g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.StringFormatConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.StringFormatConverter.html",
+          "hash": "MymFJbZ3BTuRBgIu3e+xy5oAj2sl0XhIUAb2jBVemMQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.VisibilityConverter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.VisibilityConverter.html",
+          "hash": "ShJBGWR5gty8OZlH93t5ZQcepWiTxk+77PrGRe9X3lY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Internal.html",
+          "hash": "IlPL5Hq+xuykDgzuqpbDW7qX3BUCwMMK07HYf6VapoE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Primitives.Tickbar.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Primitives.Tickbar.html",
+          "hash": "Y5CAvnN4hmrx7h2Db2uY6RPHslVN3aC/n/qrJv1aQGQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.Primitives.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.Primitives.html",
+          "hash": "CpVVjHIQDLatLejryULum8X5VkBoQDkS5/raIB7AswY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.AttributeValueChangedEventArgs.html",
+          "hash": "Cx/pruKLupxIyE1+x/L2BSsoKotovzOremMT8NoXBFY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.AutomaticSelectionMode.html",
+          "hash": "RRxco/Cg0D8dTuBZ0bh0FUSM3jlVVvH1qcXzewigs/c="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryItem.html",
+          "hash": "pTUstdeBRwR68kJEc4eMfLU9ZsOYfz2H6NpSD5j/THQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.BasemapGalleryViewStyle.html",
+          "hash": "rJmyov3+D+yyLkHT9kTp5LoMG+SbLn6cAzdhAc67dKs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery.html",
+          "hash": "YhfjmEwQbcCA6318nzX46LoaY8Sr8CAAIsk4VAj84Mg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.BookmarksView.html",
+          "hash": "vJTsHJT66SvoXZXqzGACo4zGNnRf5tLK884YT2BV/E8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.Compass.html",
+          "hash": "FGplW2K16RP/83ytP2glPzJYdhPvjZ4CGkhbEjUBSXI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureDataField.html",
+          "hash": "7WChkdR4GBFVXsdFZD2JdcgfF0Hp0WHG12/ECTj2qys="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.FloorFilter.html",
+          "hash": "RdUbYh4Hda7pZgcEux1wE/rIJo/l+8JIVb5Gv4O5OjQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.ISearchSource.html",
+          "hash": "NnMyDNfTwAisWIIcofJmsWLsEVBPMc2CQdMKL1udMlU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.LayerLegend.html",
+          "hash": "LGJhAjinMq4r90+hDwCl57aqmGIiJ39SbYlx0ODX/Gc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.Legend.html",
+          "hash": "qBxxpl5grK8Zc3wOa4Dlc1rQgJECuQ6vCl1dHok5i9A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.LocatorSearchSource.html",
+          "hash": "2QzyGbOSokJ0/PGJsQ8xFzcvUt/ThxG2FjEMKw7RRmw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.MeasureToolbar.html",
+          "hash": "Z7kubLNzpibSTNFv/EEU6dB2xu9tFvci12w7JHJ9dEU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap.html",
+          "hash": "aJDHuVR5ttvBOWEIA976wu2TwBOa59KiV817EwuQ/eo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.PopupViewer.html",
+          "hash": "doNcQ2vGOjmAhtt0YLZiY04WKZ3pHgAUktnz/UJb7Co="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.ScaleLine.html",
+          "hash": "AfwrHMQa1q/NZMOlmUc+YPB/PoZX059WwdKPIoHQHk4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResult.html",
+          "hash": "RM5sOJAJHgZuO7qTHIvCHaVAhryXB715NkmR7+dx3Hs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchResultMode.html",
+          "hash": "QoO2dwmrU5WD8HdnGU7ouMNxUK8NnK0G+JnEMNkylIQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchSuggestion.html",
+          "hash": "TNFAzkL0cKBPMsUUa+JBtfIFqqGDEdgd7+kBfRt9Xp8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SuggestionsGrouped.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.SuggestionsGrouped.html",
+          "hash": "DOYpZq7/QGRe9fGXaIqG9oNTipq8MdCiFrkYQL0XB/o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchView.html",
+          "hash": "QUUAWj8qAZ3OOwRSlZQzo2RqQUYIDaa1Uc9u8a9pkP8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SearchViewModel.html",
+          "hash": "FehcCZC1VN80DPc4DpZoJJDd6MbOYE2/qAui9e86BCk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.SymbolDisplay.html",
+          "hash": "0i6y84dNeuI9fOIkWImRff48iqjSogQKN0BcXnctxnY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.TimeSlider.html",
+          "hash": "afFY8O6Jp7DOteJvVUdnDVLnm7LvLXjEshiGwC0k2/g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkChangedEventArgs.html",
+          "hash": "P0n2YFNtOUeafm1w3dSX4CcgTHX8gXePVwbq8hhhQ60="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceCompletedEventArgs.html",
+          "hash": "MBLKR372NyhkrLenzqMr3guOmfm2KE5L+qbbJXxHP4k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.UtilityNetworkTraceTool.html",
+          "hash": "t0JVFhnl1Abl8v1PGg0IM1yO+OaW69ExgvqUjPf0gi0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.Controls.html",
+          "hash": "+hl8ugYg3lE5iWuAnYM7IamENC4oc096znA0JTTrB4I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.GeoViewController.html",
+          "hash": "BpO7QhUv74pwmRO8uIQa9SWD3xx/MouTCLX1ikIVVe8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.ILayerContentItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.ILayerContentItem.html",
+          "hash": "dc+ZiyQ/LnFHbQszEWoE3S/S0QIj0GsDfDTM1nkHFwA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.LegendEntry.html",
+          "hash": "92bMgaGG7Y9kQvgSpDcYQ7LD054x3T9H0hw7QaJV9s0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.LoopMode.html",
+          "hash": "aSynd7An4DH1ziOSn7c+VtPB7HKeyRKn4ptU58hzGQw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.PlaybackDirection.html",
+          "hash": "J+NSdABbq3nV0z58DWp80oeSyr9rkezF/X5QeqY5sxo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.TimeExtentChangedEventArgs.html",
+          "hash": "Bel1Pxkprnp/FFcT6C4kchbf1OL8+EsBOtzmJ9Llrwg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.TimeSliderLabelMode.html",
+          "hash": "aSYblPQxa6DZ0oaca0nr0Wu5A2dBkThL2mQ6rec47xo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "DuplicateUids"
+      ],
+      "type": "ManagedReference",
+      "source_relative_path": "../output/docs/api/uwp/Esri.ArcGISRuntime.Toolkit.UI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/Esri.ArcGISRuntime.Toolkit.UI.html",
+          "hash": "TWYISB5rdS+nLn0oACB7XwiayaZ9sf8FeyKM11pG4wg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "../output/docs/api/uwp/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/toc.html",
+          "hash": "jmrkPJKReNjE1akpz70GORPRPoy+ZE1P6UYcHDmhmwk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/android/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/android/index.html",
+          "hash": "FEghzN4ulMl5y6IIthbfhhpq8VXL0y/PROiwTHvyrzk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "aNsZRusjL/4FbfM4YSkeSE9hKHby0VxvTE6zkIoYWqs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/ios/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/ios/index.html",
+          "hash": "aeuuAwXQ9FZvdmyzqqI3mTzvzdc6krGuQw6j344VA5c="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/net6/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/net6/index.html",
+          "hash": "oYWkbItTnYHHUZr4lj1GsUMmhbrI04hk0z92ZhDleds="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/netfx/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/netfx/index.html",
+          "hash": "h2lNGyYCWaizU48JFZuSD3JdTVPjsWwkJu0onGmcnGc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/netstd/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/netstd/index.html",
+          "hash": "7z9a0Lu30ScaZmdd9rJHATV34NpxpZwWdKLPSRuTVU0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/uwp/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/uwp/index.html",
+          "hash": "ZJaMnakBoRs/IODO3p2rRTFBYjkoXnw6JtDxkaY9vnY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "ar.md",
+      "output": {
+        ".html": {
+          "relative_path": "ar.html",
+          "hash": "XCeibAduyBfFI1KNfS0kDGMxm4RdD+GTcjTIzaaGSIw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "basemap-gallery.md",
+      "output": {
+        ".html": {
+          "relative_path": "basemap-gallery.html",
+          "hash": "nXNhxFuiVCKwg5XBOrAJNzEkwHWu/00MTVhTl+bwxY0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "bookmarks-view.md",
+      "output": {
+        ".html": {
+          "relative_path": "bookmarks-view.html",
+          "hash": "honWWe3J24rf225c2XtSt/Kl/Zdz3yG9h1NoFy0yl98="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "buildingtoolkit.md",
+      "output": {
+        ".html": {
+          "relative_path": "buildingtoolkit.html",
+          "hash": "cnWqaELHGhPqSfmPGBxdM+zg4xcWTcnG7EPYtY9PKTs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "compass.md",
+      "output": {
+        ".html": {
+          "relative_path": "compass.html",
+          "hash": "hEq/RP58dNxgHUFc66aK6tztGrlPEYJo3Fbx+w90Mwo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "concepts/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "concepts/index.html",
+          "hash": "6wgV5USw6Jze1FpY4ANOTPlMYUozVAi4T1fxE6rVR7E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "concepts/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "concepts/toc.html",
+          "hash": "FmVrDNnXXV9sBlMGcGpRqIMmgZ3Zo3JroEbD33K1+ys="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "controls.md",
+      "output": {
+        ".html": {
+          "relative_path": "controls.html",
+          "hash": "ra/hJL/IWaIXpvTexMbMIkWSuzh3NNV++dR9AUz8KcI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "feature-data-field.md",
+      "output": {
+        ".html": {
+          "relative_path": "feature-data-field.html",
+          "hash": "O3nBqzf1xUM1THjfU49VeS0OkNrqdZSLpKBlbkIboNo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "floor-filter.md",
+      "output": {
+        ".html": {
+          "relative_path": "floor-filter.html",
+          "hash": "/I5bitoflIT9XmSTC8hWMzKL//MwDO93/5D69fAurbM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "geoviewcontroller.md",
+      "output": {
+        ".html": {
+          "relative_path": "geoviewcontroller.html",
+          "hash": "bVS8zmJZtOYMTHxxe7wbxoEaDHZN8yNl3AEEpk0NhmA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "SoNsa6FDVEC0bBdVyvm/jOJN7lMcmvV3XFeLFgTHpFo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "legend.md",
+      "output": {
+        ".html": {
+          "relative_path": "legend.html",
+          "hash": "JgswvoZ3S3WsqMypdXiDRNrr3+7ZVzTTMHAS8k4DSTs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "measure-toolbar.md",
+      "output": {
+        ".html": {
+          "relative_path": "measure-toolbar.html",
+          "hash": "mpM0am9/Ef0OGnEdqvrTq2nYoBEoY8sTFipwNTw4FBc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "overview-map.md",
+      "output": {
+        ".html": {
+          "relative_path": "overview-map.html",
+          "hash": "JRMsiGMkqMRf19xyV8Morle8cA5GSVjIuH8kTAE3n4o="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "popup-viewer.md",
+      "output": {
+        ".html": {
+          "relative_path": "popup-viewer.html",
+          "hash": "gTkRH0kbWLeQmvDJESj1y8luT1a7cxOh8CtZhcOq9nM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "requirements.md",
+      "output": {
+        ".html": {
+          "relative_path": "requirements.html",
+          "hash": "Bg1W1D6ccdksneNH6E7GqBts9P9xS1Ravsjp1UupYnU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "scale-line.md",
+      "output": {
+        ".html": {
+          "relative_path": "scale-line.html",
+          "hash": "1jnVJDKxOh8yA4eSU0aZ6zqK2CnZj5NQpBqKD0eIlCA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "search-view.md",
+      "output": {
+        ".html": {
+          "relative_path": "search-view.html",
+          "hash": "KrV5T2iySqHcsyQmiesEyiRIUaZcMUWTKnevYmUFUp4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "symbol-display.md",
+      "output": {
+        ".html": {
+          "relative_path": "symbol-display.html",
+          "hash": "c4LjGUzIGW6u6Zrz6kHKyIOuEqQOcS+9dO/2p+CS3ew="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "time-slider.md",
+      "output": {
+        ".html": {
+          "relative_path": "time-slider.html",
+          "hash": "hs1OS+qUhTeeNw3mdZmUXpc2bM+inw8QAiJcB2e1LD8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "nkEqgIEOseCNxhbgX6P9XB3DU9uyQ53P6DOQgfeG+aU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "un-trace.md",
+      "output": {
+        ".html": {
+          "relative_path": "un-trace.html",
+          "hash": "eexRij82Yc/Y82YVRfwqRQ2yrSJlHJklXoUlfY+WWuY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 28,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 271,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

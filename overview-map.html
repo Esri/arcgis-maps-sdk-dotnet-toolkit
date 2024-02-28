@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>OverviewMap </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="OverviewMap ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="overviewmap">OverviewMap</h1>
+
+<p>OverviewMap is a small, secondary map (sometimes called an inset map), that can be superimposed on an existing <code>MapView</code>/<code>SceneView</code>. OverviewMap shows a representation of the viewpoint of the <code>GeoView</code> it is connected to.</p>
+<p><img src="https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png" alt="OverviewMap"></p>
+<blockquote>
+<p><strong>NOTE</strong>: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See <a href="https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys">Security and authentication documentation</a> for more information.</p>
+</blockquote>
+<h2 id="features">Features</h2>
+<p>OverviewMap:</p>
+<ul>
+<li>Displays a representation of the current viewpoint for a connected GeoView</li>
+<li>Supports a configurable scaling factor for setting the overview map's zoom level relative to the connected view.</li>
+<li>Supports a configurable symbol for visualizing the current viewpoint</li>
+<li>Supports two-way navigation, so the user can navigate the connected GeoView by panning and zooming the overview.</li>
+<li>Exposes a <code>Map</code> property to allow use of a custom basemap. Defaults to an empty map with a topographic basemap.</li>
+</ul>
+<h2 id="key-properties">Key properties</h2>
+<p>OverviewMap has the following bindable properties:</p>
+<ul>
+<li><code>AreaSymbol</code> - Defines the symbol used to visualize the current viewpoint when connected to a map. This is a red rectangle by default.</li>
+<li><code>GeoView</code> - References the connected MapView or SceneView</li>
+<li><code>Map</code> - Defines the map shown in the inset/overview.</li>
+<li><code>PointSymbol</code> - Defines the symbol used to visualize the current viewpoint when connected to a scene. This is a red cross by default.</li>
+<li><code>ScaleFactor</code> - Defines the scale of the OverviewMap relative to the scale of the connected <code>GeoView</code>. The default is 25.</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>UWP:</p>
+<pre><code class="lang-xml">&lt;Page
+    x:Class=&quot;Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap.OverviewMapSample&quot;
+    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+    xmlns:esri=&quot;using:Esri.ArcGISRuntime.UI.Controls&quot;
+    xmlns:overviewmap=&quot;using:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap&quot;&gt;
+    &lt;Grid Background=&quot;{ThemeResource ApplicationPageBackgroundThemeBrush}&quot;&gt;
+        &lt;esri:MapView x:Name=&quot;mapView&quot; /&gt;
+        &lt;overviewmap:OverviewMap
+            Margin=&quot;4&quot;
+            GeoView=&quot;{Binding ElementName=mapView}&quot; /&gt;
+    &lt;/Grid&gt;
+&lt;/Page&gt;
+</code></pre>
+<p>WPF:</p>
+<pre><code class="lang-xml">&lt;UserControl
+    x:Class=&quot;Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap.OverviewMapWithSceneSample&quot;
+    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+    xmlns:esri=&quot;http://schemas.esri.com/arcgis/runtime/2013&quot;
+    xmlns:overviewmap=&quot;clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;assembly=Esri.ArcGISRuntime.Toolkit&quot;&gt;
+    &lt;Grid&gt;
+        &lt;esri:SceneView x:Name=&quot;MySceneView&quot; /&gt;
+        &lt;overviewmap:OverviewMap
+            Margin=&quot;4&quot;
+            GeoView=&quot;{Binding ElementName=MySceneView}&quot; /&gt;
+    &lt;/Grid&gt;
+&lt;/UserControl&gt;
+</code></pre>
+<p>MAUI:</p>
+<pre><code class="lang-xml">&lt;ContentPage x:Class=&quot;Toolkit.Samples.Forms.Samples.OverviewMapWithSceneSample&quot;
+             xmlns=&quot;http://schemas.microsoft.com/dotnet/2021/maui&quot;
+             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2009/xaml&quot;
+             xmlns:esriTK=&quot;clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui&quot;
+             xmlns:esriUI=&quot;clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui&quot;&gt;
+    &lt;ContentPage.Content&gt;
+        &lt;Grid&gt;
+            &lt;esriUI:SceneView x:Name=&quot;sceneView&quot; /&gt;
+            &lt;StackLayout Margin=&quot;4&quot;
+                         HorizontalOptions=&quot;Start&quot;
+                         VerticalOptions=&quot;Start&quot;&gt;
+                &lt;esriTK:OverviewMap GeoView=&quot;{Binding Source={x:Reference sceneView}}&quot; /&gt;
+            &lt;/StackLayout&gt;
+
+        &lt;/Grid&gt;
+    &lt;/ContentPage.Content&gt;
+&lt;/ContentPage&gt;
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/overview-map.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

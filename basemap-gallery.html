@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>BasemapGallery </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="BasemapGallery ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="basemapgallery">BasemapGallery</h1>
+
+<p>BasemapGallery displays a collection of basemaps from ArcGIS Online, a user-defined portal, or a custom collection. When a basemap is selected from the gallery, the basemap used in the connected GeoModel is replaced.</p>
+<p><img src="https://user-images.githubusercontent.com/29742178/124198151-f2dc6380-da84-11eb-8e78-4e705d14c33d.png" alt="BasemapGallery List View"></p>
+<p><img src="https://user-images.githubusercontent.com/29742178/124198175-ff60bc00-da84-11eb-9a41-6b85a6ed89fd.png" alt="BasemapGallery Grid View"></p>
+<blockquote>
+<p><strong>NOTE</strong>: BasemapGallery uses metered ArcGIS basemaps by default, so you will need to configure an API key. See <a href="https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys">Security and authentication documentation</a> for more information.</p>
+</blockquote>
+<h2 id="features">Features</h2>
+<p>BasemapGallery:</p>
+<ul>
+<li>Can be configured to use a list, grid, or automatic layout. When using an automatic layout, list or grid presentation is chosen based on a defined width threshold.
+<ul>
+<li>Note: Grid layout is not supported on MAUI WinUI. Regardless of settings, the list layout will always be used.</li>
+</ul>
+</li>
+<li>Shows basemaps from a portal, and allows manually adding and removing basemaps from the collection.</li>
+<li>Shows a representation of the map or scene's current basemap if that basemap exists in the gallery.</li>
+<li>Shows a name and thumbnail for each basemap.</li>
+<li>Shows a tooltip on hover on WPF and UWP.</li>
+<li>Supports templating.</li>
+</ul>
+<h2 id="key-properties">Key properties</h2>
+<p>BasemapGallery exposes the following properties:</p>
+<ul>
+<li><code>GeoModel</code> - References the connected Map or Scene (optional).</li>
+<li><code>Portal</code> - Controls which portal is used to find basemaps. Setting the portal will reset the basemap collection.</li>
+<li><code>AvailableBasemaps</code> - Collection of basemaps being shown.</li>
+</ul>
+<p>The following properties enable customization of the gallery's appearance:</p>
+<ul>
+<li><code>GalleryViewStyle</code> - Controls whether the gallery is displayed as a list or a grid.</li>
+<li><code>GridItemTemplate</code> - Template used to display basemaps when using a grid presentation.</li>
+<li><code>ListItemTemplate</code> - Template used to display basemaps when using a list presentation.</li>
+<li><code>ListItemContainerStyle</code> - Container style used when displaying items as a list. Does not apply to MAUI.</li>
+<li><code>GridItemContainerStyle</code> - Container style used when displaying items as a grid. Does not apply to MAUI.</li>
+</ul>
+<h2 id="usage">Usage</h2>
+<p>UWP:</p>
+<pre><code class="lang-xml">&lt;Page
+    x:Class=&quot;Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery.BasemapGallerySample&quot;
+    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+    xmlns:esri=&quot;using:Esri.ArcGISRuntime.UI.Controls&quot;
+    xmlns:basemapgallery=&quot;using:Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery&quot;&gt;
+    &lt;Grid Background=&quot;{ThemeResource ApplicationPageBackgroundThemeBrush}&quot;&gt;
+        &lt;esri:MapView x:Name=&quot;mapView&quot; /&gt;
+        &lt;basemapgallery:BasemapGallery
+            Width=&quot;200&quot;
+            Height=&quot;400&quot;
+            Margin=&quot;4&quot;
+            HorizontalAlignment=&quot;Right&quot;
+            VerticalAlignment=&quot;Top&quot;
+            GeoModel=&quot;{Binding ElementName=mapView, Path=Map}&quot; /&gt;
+    &lt;/Grid&gt;
+&lt;/Page&gt;
+</code></pre>
+<p>WPF:</p>
+<pre><code class="lang-xml">&lt;UserControl
+    x:Class=&quot;Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery.BasemapGalleryWithSceneSample&quot;
+    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+    xmlns:esri=&quot;http://schemas.esri.com/arcgis/runtime/2013&quot;
+    xmlns:basemapgallery=&quot;clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery;assembly=Esri.ArcGISRuntime.Toolkit&quot;&gt;
+    &lt;Grid&gt;
+        &lt;esri:SceneView x:Name=&quot;MySceneView&quot; /&gt;
+        &lt;basemapgallery:BasemapGallery
+            Width=&quot;200&quot;
+            Height=&quot;400&quot;
+            Margin=&quot;8&quot;
+            HorizontalAlignment=&quot;Right&quot;
+            VerticalAlignment=&quot;Top&quot;
+            GeoModel=&quot;{Binding ElementName=MySceneView, Path=Scene}&quot; /&gt;
+    &lt;/Grid&gt;
+&lt;/UserControl&gt;
+</code></pre>
+<p>MAUI:</p>
+<pre><code class="lang-xml">&lt;ContentPage x:Class=&quot;Toolkit.Samples.Forms.Samples.BasemapGalleryWithSceneSample&quot;
+             xmlns=&quot;http://schemas.microsoft.com/dotnet/2021/maui&quot;
+             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2009/xaml&quot;
+             xmlns:esriTK=&quot;clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui&quot;
+             xmlns:esriUI=&quot;clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui&quot;&gt;
+    &lt;ContentPage.Content&gt;
+        &lt;Grid&gt;
+            &lt;esriUI:SceneView x:Name=&quot;sceneView&quot; /&gt;
+            &lt;StackLayout Margin=&quot;4&quot;
+                         HorizontalOptions=&quot;Start&quot;
+                         VerticalOptions=&quot;Start&quot;&gt;
+                &lt;esriTK:BasemapGallery GeoModel=&quot;{Binding Source={x:Reference sceneView}, Path=Scene}&quot;
+                                    HeightRequest=&quot;200&quot;
+                                    WidthRequest=&quot;400&quot; /&gt;
+            &lt;/StackLayout&gt;
+        &lt;/Grid&gt;
+    &lt;/ContentPage.Content&gt;
+&lt;/ContentPage&gt;
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/basemap-gallery.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

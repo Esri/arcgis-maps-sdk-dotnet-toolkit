@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>UtilityNetworkTraceTool </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="UtilityNetworkTraceTool ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="utilitynetworktracetool">UtilityNetworkTraceTool</h1>
+
+<p>Use named trace configurations defined in a web map to perform connected trace operations and compare results.</p>
+<img width="400" src="https://user-images.githubusercontent.com/29742178/173907143-0226ddcf-1104-4745-96a5-eef74fd02197.png">
+<h2 id="features">Features</h2>
+<ul>
+<li><p>Load networks and named trace configurations from a web map</p>
+</li>
+<li><p>Support for templating</p>
+</li>
+<li><p>(UWP, WPF) Identify starting point candidates, then use the inspection view to narrow the selection:</p>
+  <img width="400" src="https://user-images.githubusercontent.com/29742178/173909691-57d8310d-264f-41dc-9cdd-6bd6f0495fd2.png">
+</li>
+<li><p>(UWP, WPF) Run multiple trace scenarios, then use color and name to compare results:</p>
+  <img width="400" src="https://user-images.githubusercontent.com/29742178/173907143-0226ddcf-1104-4745-96a5-eef74fd02197.png">
+</li>
+<li><p>User-friendly warnings help avoid common mistakes, including specifying too many starting points or running the same trace configuration multiple times:</p>
+<table>
+<thead>
+<tr>
+<th>Duplicated trace</th>
+<th>Too few starting points</th>
+<th>Extra starting points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img width="300" src="https://user-images.githubusercontent.com/29742178/173909348-f7fd09b9-0443-4c7c-9bcf-01f3d28e6db7.png"></td>
+<td><img width="299" src="https://user-images.githubusercontent.com/29742178/173910092-f3d481aa-85b3-4462-8613-671c5601bcf7.png"></td>
+<td><img width="298" src="https://user-images.githubusercontent.com/29742178/173909521-88f1ebe0-3eb4-46e8-8305-d4f64ac3d21a.png"></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id="customization">Customization</h2>
+<p>The following properties enable customization (UWP, WPF only):</p>
+<ul>
+<li><code>ResultItemTemplate</code> - override the display of results</li>
+<li><code>StartingPointItemTemplate</code> - override the display of starting points</li>
+<li><code>TraceTypeItemTemplate</code> - override the display of the trace configuration choices</li>
+<li><code>UtilityNetworkItemTemplate</code> - override the display of the Utility Network choices</li>
+</ul>
+<p>All platforms:</p>
+<ul>
+<li><code>Template</code> - allows overriding the appearance of the entire control</li>
+</ul>
+<p>The following properties enable customizing symbology:</p>
+<ul>
+<li><code>StartingPointSymbol</code></li>
+<li><code>ResultFillSymbol</code></li>
+<li><code>ResultLineSymbol</code></li>
+<li><code>ResultPointSymbol</code></li>
+</ul>
+<h2 id="usage">Usage</h2>
+<pre><code class="lang-xml">&lt;Grid&gt;
+    &lt;Grid.ColumnDefinitions&gt;
+        &lt;ColumnDefinition Width=&quot;*&quot; /&gt;
+        &lt;ColumnDefinition Width=&quot;300&quot; /&gt;
+    &lt;/Grid.ColumnDefinitions&gt;
+    &lt;esri:MapView x:Name=&quot;MyMapView&quot; /&gt;
+    &lt;esri:UtilityNetworkTraceTool GeoView=&quot;{Binding ElementName=MyMapView}&quot; Grid.Column=&quot;1&quot; /&gt;
+&lt;/Grid&gt;
+</code></pre>
+<p>The default template for this control is optimized for a panel or side-by-side presentation with a width of around 300 dip.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/un-trace.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

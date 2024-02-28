@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Search View </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Search View ">
+    <meta name="generator" content="docfx 2.59.4.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="concepts/toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="search-view">Search View</h1>
+
+<p>Search View enables searching using one or more locators, with support for suggestions, automatic zooming, and custom search sources.</p>
+<p><img src="https://user-images.githubusercontent.com/29742178/142301018-4bbeb0f2-3021-49a7-b5ec-f642c5700bd0.png" alt="image"></p>
+<blockquote>
+<p><strong>NOTE</strong>: Search View uses metered ArcGIS services by default, so you will need to configure an API key. See <a href="https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys">Security and authentication documentation</a> for more information.</p>
+</blockquote>
+<h2 id="features">Features</h2>
+<ul>
+<li>Updates search suggestions as you type</li>
+<li>Supports using the Esri world geocoder or any other ArcGIS locators</li>
+<li>Supports searching using custom search sources</li>
+<li>Supports searching multiple sources simultaneously</li>
+<li>Allows for customization of the display of search results</li>
+<li>Allows you to repeat a search within a defined area, and shows a button to enable that search when the view's viewpoint changes</li>
+<li>Separates the behavior (<code>SearchViewModel</code>) and the display (<code>SearchView</code>) to allow you to create a custom UI if needed</li>
+</ul>
+<h2 id="customization">Customization</h2>
+<p>The following properties enable customization of the view:</p>
+<ul>
+<li><code>EnableAutomaticConfiguration</code> - Controls whether view is automatically configured for the attached GeoView's map or scene. By default, this will set up a single World Geocoder search source. In future releases, this behavior may be extended to support other web map configuration options.</li>
+<li><code>EnableRepeatSearchHereButton</code> - Controls whether a 'Repeat Search Here' button is shown when the user navigates the attached GeoView after a search is completed.</li>
+<li><code>EnableResultListView</code> - Controls whether a result list is displayed.</li>
+<li><code>EnableIndividualResultDisplay</code> - Controls whether the result list is shown when there is only one result.</li>
+<li><code>MutlipleResultZoomBuffer</code> - Controls the buffer distance around collection results when a GeoView is attached and a search has multiple results.</li>
+</ul>
+<h2 id="usage---wpf">Usage - WPF</h2>
+<pre><code class="lang-xaml">&lt;Grid&gt;
+    &lt;esri:MapView x:Name=&quot;MyMapView&quot; /&gt;
+    &lt;esri:SearchView GeoView=&quot;{Binding ElementName=MyMapView}&quot; /&gt;
+&lt;/Grid&gt;
+</code></pre>
+<h2 id="usage---uwp-and-winui">Usage - UWP and WinUI</h2>
+<pre><code class="lang-xaml">&lt;Grid&gt;
+    &lt;esri:MapView x:Name=&quot;MyMapView&quot; /&gt;
+    &lt;toolkit:SearchView GeoView=&quot;{Binding ElementName=MyMapView}&quot; /&gt;
+&lt;/Grid&gt;
+</code></pre>
+<h2 id="usage---maui">Usage - MAUI</h2>
+<p>SearchView shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the MapView or SceneView.</p>
+<pre><code class="lang-xaml">&lt;Grid RowSpacing=&quot;0&quot;&gt;
+    &lt;Grid.RowDefinitions&gt;
+        &lt;RowDefinition Height=&quot;32&quot; /&gt;
+        &lt;RowDefinition Height=&quot;Auto&quot; /&gt;
+        &lt;RowDefinition Height=&quot;*&quot; /&gt;
+    &lt;/Grid.RowDefinitions&gt;
+    &lt;esri:MapView x:Name=&quot;MyMapView&quot; Grid.Row=&quot;1&quot; Grid.RowSpan=&quot;2&quot; /&gt;
+    &lt;toolkit:SearchView GeoView=&quot;{Binding Source={Reference MyMapView}}&quot; Grid.Row=&quot;0&quot; Grid.RowSpan=&quot;2&quot;   /&gt;
+&lt;/Grid&gt;
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/blob/main/docs/search-view.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>
