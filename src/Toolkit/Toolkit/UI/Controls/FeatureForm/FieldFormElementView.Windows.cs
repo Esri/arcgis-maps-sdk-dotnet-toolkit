@@ -26,9 +26,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     [TemplatePart(Name = FieldInputName, Type = typeof(ContentControl))]
     public partial class FieldFormElementView : Control
     {
-        private const string FieldInputName = "FieldInput";
-        private DataTemplateSelector? InputTemplateSelector;
-
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -150,33 +147,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty TextBoxFormInputTemplateProperty =
             DependencyProperty.Register(nameof(TextBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
-
-        private class FieldTemplateSelector : DataTemplateSelector
-        {
-            private FieldFormElementView _parent;
-            public FieldTemplateSelector(FieldFormElementView parent)
-            {
-                _parent = parent;
-            }
-            public override DataTemplate? SelectTemplate(object item, DependencyObject container)
-            {
-                if (item is FieldFormElement elm)
-                {
-                    return elm.Input switch
-                    {
-                        BarcodeScannerFormInput => _parent.BarcodeScannerFormInputTemplate,
-                        ComboBoxFormInput => _parent.ComboBoxFormInputTemplate,
-                        SwitchFormInput => _parent.SwitchFormInputTemplate,
-                        DateTimePickerFormInput => _parent.DateTimePickerFormInputTemplate,
-                        RadioButtonsFormInput => _parent.RadioButtonsFormInputTemplate,
-                        TextAreaFormInput => _parent.TextAreaFormInputTemplate,
-                        TextBoxFormInput => _parent.TextBoxFormInputTemplate,
-                        _ => base.SelectTemplate(item, container)
-                    };
-                }
-                return base.SelectTemplate(item, container);
-            }
-        }
     }
 }
 #endif

@@ -14,25 +14,21 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-using System.Globalization;
+using Microsoft.Maui.Controls.Shapes;
 
-namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+
+internal class BorderRadiusConverter : IValueConverter
 {
-    public class EmptyToFalseConverter : IValueConverter
-    {
-        public static EmptyToFalseConverter Instance { get; } = new EmptyToFalseConverter();
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is null) return false;
-            if (value is string str) return !string.IsNullOrWhiteSpace(str);
-            if (value is System.Collections.ICollection coll) return coll.Count > 0;
-            if (value is Array arr) return arr.Length > 0;
-            return true;
-        }
+    public static BorderRadiusConverter Instance { get; } = new();
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
+    public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
+    {
+        if (value is int radius && radius >= 0)
+            return new RoundRectangle { CornerRadius = radius };
+        return null;
     }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
+        => throw new NotImplementedException();
 }

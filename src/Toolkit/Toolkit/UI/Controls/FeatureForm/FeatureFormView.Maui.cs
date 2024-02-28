@@ -19,59 +19,86 @@ using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Maui.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui
 {
-    public partial class FeatureFormView : TemplatedView
+    public partial class FeatureFormView : TemplatedView, IBorderElement
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        
-        private static readonly Style DefaultFeatureFormHeaderStyle;
         private static readonly Style DefaultFeatureFormTitleStyle;
-        private static readonly Style DefaultFeatureFormCaptionStyle;
+        private static readonly DataTemplate DefaultFieldFormElementTemplate;
+        private static readonly DataTemplate DefaultGroupFormElementTemplate;
 
-        /// <summary>
-        /// Template name of the <see cref="IBindableLayout"/> items layout view.
-        /// </summary>
-        public const string ItemsViewName = "ItemsView";
-
-        private const string FeatureFormHeaderStyleName = "FeatureFormHeaderStyle";
         private const string FeatureFormTitleStyleName = "FeatureFormTitleStyle";
-        private const string FeatureFormCaptionStyleName = "FeatureFormCaptionStyle";
 
-         /// <summary>
-        /// Template name of the form's content's <see cref="ScrollView"/>.
-        /// </summary>
-        public const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
+        /// <summary>Template name of the <see cref="ScrollView"/> that contains the items view.</summary>
+        public const string ContentScrollViewName = "ContentScrollView";
+
+        /// <summary>Template name of the <see cref="IBindableLayout"/> that presents the form's elements.</summary>
+        public const string ItemsViewName = "ElementsView";
 
         static FeatureFormView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
 
-            DefaultFeatureFormHeaderStyle = new Style(typeof(Label));
-            DefaultFeatureFormHeaderStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 16 });
-            DefaultFeatureFormHeaderStyle.Setters.Add(new Setter() { Property = Label.FontAttributesProperty, Value = FontAttributes.Bold });
-            DefaultFeatureFormHeaderStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
-
             DefaultFeatureFormTitleStyle = new Style(typeof(Label));
-            DefaultFeatureFormTitleStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 16 });
-            DefaultFeatureFormTitleStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
+            DefaultFeatureFormTitleStyle.Setters.Add(new Setter { Property = Label.FontSizeProperty, Value = 16 });
+            DefaultFeatureFormTitleStyle.Setters.Add(new Setter { Property = Label.FontAttributesProperty, Value = FontAttributes.Bold });
 
-            DefaultFeatureFormCaptionStyle = new Style(typeof(Label));
-            DefaultFeatureFormCaptionStyle.Setters.Add(new Setter() { Property = Label.FontSizeProperty, Value = 12 });
-            DefaultFeatureFormCaptionStyle.Setters.Add(new Setter() { Property = Label.LineBreakModeProperty, Value = LineBreakMode.WordWrap });
+            DefaultFieldFormElementTemplate = new DataTemplate(() =>
+            {
+                FieldFormElementView view = new();
+                view.SetBinding(FieldFormElementView.ElementProperty, Binding.SelfPath);
+                return view;
+            });
+            DefaultGroupFormElementTemplate = new DataTemplate(() =>
+            {
+                VerticalStackLayout itemsView = new();
+                itemsView.Margin = new Thickness(0, 10);
+                BindableLayout.SetItemTemplateSelector(itemsView, new FormElementTemplateSelector());
+                itemsView.SetBinding(BindableLayout.ItemsSourceProperty, nameof(GroupFormElement.Elements));
+                return itemsView;
+            });
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Title), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicProperties, typeof(FeatureForm))]
         private static object BuildDefaultTemplate()
         {
-            Label roottitle = new Label();
-            roottitle.Style = GetFeatureFormHeaderStyle();
-            roottitle.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
-            roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
-            //TODO...
-            return roottitle;
+            Border root = new();
+            root.SetBinding(Border.StrokeProperty,
+                new Binding(nameof(BorderColor), source: RelativeBindingSource.TemplatedParent));
+            root.SetBinding(Border.StrokeShapeProperty,
+                new Binding(nameof(CornerRadius), source: RelativeBindingSource.TemplatedParent, converter: Internal.BorderRadiusConverter.Instance));
+            root.SetBinding(Border.StrokeThicknessProperty,
+                new Binding(nameof(BorderWidth), source: RelativeBindingSource.TemplatedParent));
+
+            Grid grid = new();
+            grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            grid.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+            root.Content = grid;
+
+            Label title = new();
+            title.Style = GetFeatureFormTitleStyle();
+            title.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
+            title.SetBinding(IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
+            grid.Add(title, row: 0);
+
+            ScrollView scrollView = new();
+            grid.Add(scrollView, row: 1);
+
+            VerticalStackLayout itemsView = new();
+            itemsView.Margin = new Thickness(0, 10);
+            itemsView.SetBinding(BindableLayout.ItemTemplateSelectorProperty, new Binding(nameof(FormElementTemplateSelector), source: RelativeBindingSource.TemplatedParent));
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent));
+            scrollView.Content = itemsView;
+
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName(FeatureFormTitleStyleName, scrollView);
+            nameScope.RegisterName(ItemsViewName, itemsView);
+
+            return root;
         }
 
         internal static Style GetStyle(string resourceKey, Style defaultStyle)
@@ -83,11 +110,66 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return defaultStyle;
         }
 
-        internal static Style GetFeatureFormHeaderStyle() => GetStyle(FeatureFormHeaderStyleName, DefaultFeatureFormHeaderStyle);
-
         internal static Style GetFeatureFormTitleStyle() => GetStyle(FeatureFormTitleStyleName, DefaultFeatureFormTitleStyle);
 
-        internal static Style GetFeatureFormCaptionStyle() => GetStyle(FeatureFormCaptionStyleName, DefaultFeatureFormCaptionStyle);
+        /// <summary>Bindable property for <see cref="IBorderElement.BorderWidth"/>.</summary>
+        public static readonly BindableProperty FormElementTemplateSelectorProperty = BindableProperty.Create(nameof(FormElementTemplateSelector), typeof(FormElementTemplateSelector), typeof(FeatureFormView), defaultValueCreator: (bindable) => new FormElementTemplateSelector());
+
+        /// <summary>
+        /// Gets or sets the template selector used for rendering the form's elements.
+        /// </summary>
+        public FormElementTemplateSelector FormElementTemplateSelector
+        {
+            get { return (FormElementTemplateSelector)GetValue(FormElementTemplateSelectorProperty); }
+            set { SetValue(FormElementTemplateSelectorProperty, value); }
+        }
+
+        #region IBorderElement
+
+        /// <summary>Bindable property for <see cref="IBorderElement.BorderWidth"/>.</summary>
+        public static readonly BindableProperty BorderWidthProperty = BindableProperty.Create(nameof(IBorderElement.BorderWidth), typeof(double), typeof(IBorderElement), -1d);
+
+        /// <summary>Bindable property for <see cref="IBorderElement.BorderColor"/>.</summary>
+        public static readonly BindableProperty BorderColorProperty =
+            BindableProperty.Create(nameof(IBorderElement.BorderColor), typeof(Color), typeof(IBorderElement), null);
+
+        /// <summary>Bindable property for <see cref="IBorderElement.CornerRadius"/>.</summary>
+        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create(nameof(IBorderElement.CornerRadius), typeof(int), typeof(IBorderElement), -1);
+
+        /// <inheritdoc/>
+        public double BorderWidth
+        {
+            get { return (double)GetValue(BorderWidthProperty); }
+            set { SetValue(BorderWidthProperty, value); }
+        }
+
+        /// <inheritdoc/>
+        public Color BorderColor
+        {
+            get { return (Color)GetValue(BorderColorProperty); }
+            set { SetValue(BorderColorProperty, value); }
+        }
+
+        /// <inheritdoc/>
+        public int CornerRadius
+        {
+            get { return (int)GetValue(CornerRadiusProperty); }
+            set { SetValue(CornerRadiusProperty, value); }
+        }
+
+#pragma warning disable CA1033 // Interface methods should be callable by child types
+        int IBorderElement.CornerRadiusDefaultValue => (int)CornerRadiusProperty.DefaultValue;
+        Color? IBorderElement.BorderColorDefaultValue => (Color?)BorderColorProperty.DefaultValue;
+        double IBorderElement.BorderWidthDefaultValue => (double)BorderWidthProperty.DefaultValue;
+        bool IBorderElement.IsCornerRadiusSet() => IsSet(CornerRadiusProperty);
+        bool IBorderElement.IsBackgroundColorSet() => IsSet(BackgroundColorProperty);
+        bool IBorderElement.IsBackgroundSet() => IsSet(BackgroundProperty);
+        bool IBorderElement.IsBorderColorSet() => IsSet(BorderColorProperty);
+        bool IBorderElement.IsBorderWidthSet() => IsSet(BorderWidthProperty);
+        void IBorderElement.OnBorderColorPropertyChanged(Color oldValue, Color newValue) { }
+#pragma warning restore CA1033 // Interface methods should be callable by child types
+
+        #endregion
     }
 }
 #endif

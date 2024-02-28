@@ -4,6 +4,35 @@
              xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui"
              xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
              x:Class="Toolkit.SampleApp.Maui.Samples.PopupViewerSample" Title="PopupViewer">
+    <ContentPage.Resources>
+        <Style TargetType="esriTK:PopupViewer">
+            <Setter Property="ControlTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid x:Name="root">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label x:Name="roottitle" 
+                                   Style="{StaticResource PopupViewerHeaderStyle}" 
+                                   Text="{Binding Popup.Title, Source={RelativeSource TemplatedParent}}" 
+                                   IsVisible="{Binding Popup.Title, Source={RelativeSource TemplatedParent}, Converter={StaticResource EmptyToFalseConverter}}" />
+                            <ScrollView x:Name="scrollView" 
+                                        HorizontalScrollBarVisibility="Never" 
+                                        VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility, Source={RelativeSource TemplatedParent}}" 
+                                        Grid.Row="1">
+                                <StackLayout x:Name="itemsView" 
+                                             Margin="0,10" 
+                                             BindableLayout.ItemsSource="{Binding Popup.EvaluatedElements, Source={RelativeSource TemplatedParent}}" 
+                                             BindableLayout.ItemTemplateSelector="{StaticResource PopupElementTemplateSelector}" />
+                            </ScrollView>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <esriUI:MapView x:Name="mapView" />
@@ -12,7 +41,9 @@
             <Border Background="#99ffffff" x:Name="popupPanel" IsVisible="False">
                 <Border HorizontalOptions="Center" VerticalOptions="Center" Background="{AppThemeBinding Dark=Black, Light=White}" Margin="0,32" Padding="12">
                     <Grid>
-                        <esriTK:PopupViewer x:Name="popupViewer" Padding="12" MaximumWidthRequest="400" MaximumHeightRequest="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" />
+                        <esriTK:PopupViewer x:Name="popupViewer" Padding="12" MaximumWidthRequest="400" MaximumHeightRequest="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked">
+                            
+                        </esriTK:PopupViewer>
                         <Button BorderWidth="0" Text="X" HorizontalOptions="End" VerticalOptions="Start" Clicked="CloseButton_Click" BackgroundColor="Transparent" TextColor="{AppThemeBinding Dark=White, Light=Black}" Margin="5" />
                     </Grid>
                 </Border>

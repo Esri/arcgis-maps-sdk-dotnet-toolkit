@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
     /// </summary>
-    /// <seealso cref="Esri.ArcGISRuntime.Data.FeatureTable.FeatureFormDefinition"/>
+    /// <seealso cref="Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition"/>
     /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     public partial class FeatureFormView
     {
@@ -148,7 +148,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 
 #if MAUI
-            (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
+            (GetTemplateChild(ContentScrollViewName) as ScrollViewer)?.ScrollToAsync(0, 0, false);
 #else
             (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
 #endif

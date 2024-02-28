@@ -65,6 +65,12 @@
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <MauiXaml Update="Samples\FeatureFormSample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+  </ItemGroup>
+
   <Choose>
     <When Condition="'$(UseNugetPackage)'==''">
       <ItemGroup>
