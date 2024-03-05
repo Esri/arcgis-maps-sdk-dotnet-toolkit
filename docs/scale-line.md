@@ -12,6 +12,30 @@ Display the current scale reference for a map.
 
 ## Usage
 
+Ensure that your `GeoModel` is not null before selecting a basemap with the `BasemapGallery`.
+
+### .NET MAUI:
+
 ```xml
-<esri:ScaleLine MapView="{Binding ElementName=mapView}" />
+<Grid>
+    <esri:MapView x:Name="mapView" />
+    <toolkit:ScaleLine Margin="20" MapView="{x:Reference mapView}" />
+</Grid>
+```
+
+### UWP/WinUI:
+
+```xml
+<Grid>
+    <esri:MapView x:Name="mapView" />
+    <toolkit:ScaleLine Margin="20" MapView="{Binding ElementName=mapView}" />
+</Grid>
+```
+
+### WPF:
+
+The usage in WPF is identical to UWP/WinUI minus one important distinction. The `ScaleLine` should be accessed with the same prefix as the `GeoView`. 
+
+```xml
+xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
 ```
