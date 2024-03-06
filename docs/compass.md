@@ -12,6 +12,19 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
 
 ## Usage
 
+### .NET MAUI:
+
+```xml
+<Grid>
+    <esri:MapView x:Name="mapView" />
+    <toolkit:Compass Margin="15"
+                     AutoHide="False"
+                     GeoView="{x:Reference mapView}"
+                     HeightRequest="50"
+                     WidthRequest="50" />
+</Grid>
+```
+
 ### UWP/WinUI:
 
 ```xml
@@ -31,17 +44,4 @@ The usage in WPF is identical to UWP/WinUI minus one important distinction. The 
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-```
-
-### .NET MAUI:
-
-```xml
-<Grid>
-    <esri:MapView x:Name="mapView" />
-    <toolkit:Compass Margin="15"
-                     AutoHide="False"
-                     GeoView="{x:Reference mapView}"
-                     HeightRequest="50"
-                     WidthRequest="50" />
-</Grid>
 ```

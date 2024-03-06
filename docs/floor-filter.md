@@ -51,6 +51,15 @@ The following properties enable customization or localization of text displayed 
 
 ## Usage
 
+### .NET MAUI:
+
+```xml
+<Grid>
+    <esri:MapView x:Name="mapView" />
+    <toolkit:FloorFilter GeoView="{x:Reference mapView}" />
+</Grid>
+```
+
 ### UWP/WinUI:
 
 ```xml
@@ -66,13 +75,4 @@ The usage in WPF is identical to UWP/WinUI minus one important distinction. The 
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-```
-
-### .NET MAUI:
-
-```xml
-<Grid>
-    <esri:MapView x:Name="mapView" />
-    <toolkit:FloorFilter GeoView="{x:Reference mapView}" />
-</Grid>
 ```

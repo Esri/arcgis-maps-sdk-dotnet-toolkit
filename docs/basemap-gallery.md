@@ -40,6 +40,15 @@ The following properties enable customization of the gallery's appearance:
 
 Ensure that your `GeoModel` is not null before selecting a basemap with the `BasemapGallery`.
 
+### .NET MAUI:
+
+```xml
+<Grid ColumnDefinitions="*,300">
+    <esri:MapView x:Name="mapView" />
+    <toolkit:BasemapGallery Grid.Column="1" GeoModel="{Binding Source={x:Reference mapView}, Path=Map}"/>
+</Grid>
+```
+
 ### UWP/WinUI:
 
 ```xml
@@ -59,13 +68,4 @@ The usage in WPF is identical to UWP/WinUI minus one important distinction. The 
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-```
-
-### .NET MAUI:
-
-```xml
-<Grid ColumnDefinitions="*,300">
-    <esri:MapView x:Name="mapView" />
-    <toolkit:BasemapGallery Grid.Column="1" GeoModel="{Binding Source={x:Reference mapView}, Path=Map}"/>
-</Grid>
 ```

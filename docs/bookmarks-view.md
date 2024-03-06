@@ -12,6 +12,27 @@
 
 For bookmarks to appear in the control, either your `GeoModel.Bookmarks` or `BookmarksView.BookmarksOverride` needs to be set.
 
+### .NET MAUI:
+
+```xml
+<Grid ColumnDefinitions="*,300">
+    <esri:MapView x:Name="mapView" />
+    <toolkit:BookmarksView Grid.Column="1" GeoView="{x:Reference mapView}" />
+</Grid>
+```
+
+To customize the item template:
+
+```xml
+<toolkit:BookmarksView Grid.Column="1" GeoView="{x:Reference mapView}">
+    <toolkit:BookmarksView.ItemTemplate>
+        <DataTemplate>
+            <TextCell Text="{Binding Name}" TextColor="Red" />
+        </DataTemplate>
+    </toolkit:BookmarksView.ItemTemplate>
+</toolkit:BookmarksView>
+```
+
 ### UWP/WinUI:
 
 ```xml
@@ -43,25 +64,4 @@ The usage in WPF is identical to UWP/WinUI minus one important distinction. The 
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-```
-
-### .NET MAUI:
-
-```xml
-<Grid ColumnDefinitions="*,300">
-    <esri:MapView x:Name="mapView" />
-    <toolkit:BookmarksView Grid.Column="1" GeoView="{x:Reference mapView}" />
-</Grid>
-```
-
-To customize the item template:
-
-```xml
-<toolkit:BookmarksView Grid.Column="1" GeoView="{x:Reference mapView}">
-    <toolkit:BookmarksView.ItemTemplate>
-        <DataTemplate>
-            <TextCell Text="{Binding Name}" TextColor="Red" />
-        </DataTemplate>
-    </toolkit:BookmarksView.ItemTemplate>
-</toolkit:BookmarksView>
 ```
