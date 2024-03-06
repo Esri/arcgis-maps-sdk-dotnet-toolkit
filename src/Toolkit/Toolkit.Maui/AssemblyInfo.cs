@@ -5,3 +5,6 @@
 [assembly: System.Runtime.Versioning.SupportedOSPlatform("ios14.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatform("maccatalyst14.0")]
 #endif
+
+[assembly: Microsoft.Maui.Controls.XmlnsPrefix("http://schemas.esri.com/arcgis/runtime/2013", "esri")]
+[assembly: XmlnsDefinition("http://schemas.esri.com/arcgis/runtime/2013", "Esri.ArcGISRuntime.Toolkit.Maui")]
