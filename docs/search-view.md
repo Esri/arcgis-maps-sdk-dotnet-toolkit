@@ -27,36 +27,34 @@ The following properties enable customization of the view:
 - `EnableIndividualResultDisplay` - Controls whether the result list is shown when there is only one result.
 - `MutlipleResultZoomBuffer` - Controls the buffer distance around collection results when a GeoView is attached and a search has multiple results.
 
-## Usage - WPF
+## Usage
 
-```xaml
-<Grid>
-    <esri:MapView x:Name="MyMapView" />
-    <esri:SearchView GeoView="{Binding ElementName=MyMapView}" />
-</Grid>
-```
-
-## Usage - UWP and WinUI
-
-```xaml
-<Grid>
-    <esri:MapView x:Name="MyMapView" />
-    <toolkit:SearchView GeoView="{Binding ElementName=MyMapView}" />
-</Grid>
-```
-
-## Usage - MAUI
+### .NET MAUI:
 
 SearchView shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the MapView or SceneView.
 
 ```xaml
-<Grid RowSpacing="0">
-    <Grid.RowDefinitions>
-        <RowDefinition Height="32" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-    <esri:MapView x:Name="MyMapView" Grid.Row="1" Grid.RowSpan="2" />
-    <toolkit:SearchView GeoView="{Binding Source={Reference MyMapView}}" Grid.Row="0" Grid.RowSpan="2"   />
+<Grid RowDefinitions="32,Auto,*" RowSpacing="0">
+    <toolkit:SearchView Grid.RowSpan="2" GeoView="{Binding Source={Reference mapView}}" />
+    <esri:MapView x:Name="mapView"
+                  Grid.Row="1"
+                  Grid.RowSpan="2" />
 </Grid>
+```
+
+### UWP/WinUI:
+
+```xaml
+<Grid>
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:SearchView Margin="4" GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
+```
+
+### WPF:
+
+The usage in WPF is identical to UWP/WinUI minus one important distinction. The `BasemapGallery` should be accessed with the same prefix as the `GeoView`. 
+
+```xml
+xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
 ```

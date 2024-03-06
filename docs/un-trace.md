@@ -44,6 +44,19 @@ The following properties enable customizing symbology:
 
 ## Usage
 
+The default template for this control is optimized for a panel or side-by-side presentation with a width of around 300 dip.
+
+### .NET MAUI:
+
+```xml
+<Grid ColumnDefinitions="*,300">
+    <esri:MapView x:Name="mapView" />
+    <toolkit:UtilityNetworkTraceTool GeoView="{x:Reference mapView}" Grid.Column="1" />
+</Grid>
+```
+
+### UWP/WinUI:
+
 ```xml
 <Grid>
     <Grid.ColumnDefinitions>
@@ -51,8 +64,14 @@ The following properties enable customizing symbology:
         <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
     <esri:MapView x:Name="MyMapView" />
-    <esri:UtilityNetworkTraceTool GeoView="{Binding ElementName=MyMapView}" Grid.Column="1" />
+    <toolkit:UtilityNetworkTraceTool GeoView="{Binding ElementName=MyMapView}" Grid.Column="1" />
 </Grid>
 ```
 
-The default template for this control is optimized for a panel or side-by-side presentation with a width of around 300 dip.
+### WPF:
+
+The usage in WPF is identical to UWP/WinUI minus one important distinction. The `ScaleLine` should be accessed with the same prefix as the `GeoView`. 
+
+```xml
+xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+```

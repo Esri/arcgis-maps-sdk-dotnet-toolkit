@@ -11,6 +11,8 @@ Displays a symbol outside of a `GeoView`.
 
 ## Usage
 
+### .NET MAUI/UWP/WinUI/WPF:
+
 ```xml
 <esri:SymbolDisplay Symbol="{Binding Symbol}" />
 ```
