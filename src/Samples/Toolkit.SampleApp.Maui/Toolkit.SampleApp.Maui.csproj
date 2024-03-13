@@ -10,6 +10,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <WarningsAsErrors>$(WarningsAsErrors);IL2036;IL2037</WarningsAsErrors>
+
     <!-- Display name -->
     <ApplicationTitle>Toolkit.SampleApp.Maui</ApplicationTitle>
 

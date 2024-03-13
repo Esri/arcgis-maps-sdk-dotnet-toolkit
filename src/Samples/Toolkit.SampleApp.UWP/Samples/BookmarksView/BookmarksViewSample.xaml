@@ -79,6 +79,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Grid x:Name="Dialog" />
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -143,8 +144,8 @@
                 <Button Content="Map/Scene" Grid.Row="3" Grid.Column="2" Click="AddToMapScene_Click" />
                 <Button Content="Red fore" Grid.Row="4" Grid.Column="1" Click="SetItemTemplateOne_Click" />
                 <Button Content="Red back" Grid.Row="4" Grid.Column="2" Click="SetItemTemplateTwo_Click" />
-                <Button Content="Add" Grid.Row="5" Grid.Column="1" Click="AddSelectionListener_Click" />
-                <Button Content="Remove" Grid.Row="5" Grid.Column="2" Click="RemoveSelectionListener_Click" />
+                <ToggleButton x:Name="BookmarkListenerToggle" Content="Add listener" Grid.Row="5" Grid.Column="1" 
+                              Grid.ColumnSpan="2" Click="SelectionListenerToggle_Click" HorizontalAlignment="Stretch" Margin="5" />
                 <Button Content="Default" Grid.Row="6" Grid.Column="1" Click="SelectDefaultItemContainer_Click" />
                 <Button Content="Custom" Grid.Row="6" Grid.Column="2" Click="SelectCustomItemContainer_Click" />
             </Grid>
