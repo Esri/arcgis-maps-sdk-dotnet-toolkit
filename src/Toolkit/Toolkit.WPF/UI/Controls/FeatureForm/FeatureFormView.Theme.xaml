@@ -363,10 +363,10 @@
               </Style>
             </Border.Resources>
             <Grid DataContext="{TemplateBinding FeatureForm}">
-                <Grid.RowDefinitions>
-                  <RowDefinition Height="Auto"/>
-                  <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
               <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}"
                          Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
               <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="FeatureFormContentScrollViewer">
