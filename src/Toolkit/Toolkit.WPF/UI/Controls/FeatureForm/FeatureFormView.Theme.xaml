@@ -5,7 +5,7 @@
   xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
   xmlns:forms="clr-namespace:Esri.ArcGISRuntime.Mapping.FeatureForms;assembly=Esri.ArcGISRuntime"
   xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
-
+ 
   <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
   <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
   <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
