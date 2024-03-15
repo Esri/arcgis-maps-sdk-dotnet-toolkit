@@ -126,7 +126,7 @@
     <comment>Input validation of entered date Date exceeds maximum allowed</comment>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>Maximum {0} characters</value>
+    <value>Maximum characters allowed: {0}</value>
     <comment>Input validation of entered text exceeds the maximum length of "{0}" characters</comment>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
@@ -170,7 +170,7 @@
     <comment>Input validation of entered date is before the required minimum</comment>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>Enter at least {0} characters</value>
+    <value>Minimum characters required: {0}</value>
     <comment>Input validation of entered text must be at least {0} characters long</comment>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
@@ -190,12 +190,12 @@
     <comment>Input validation of entered text must be of a length between {0} and {1} characters</comment>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>Enter {0} characters</value>
+    <value>Number of characters required: {0}</value>
     <comment>Input validation of entered text must be exactly {0} characters long</comment>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>All Sites</value>
-    <comment>The label and tooltip shown for the button that is used to navigate to the list of sites in all facilities when the site browsing view is open</comment>
+    <comment>The label and tooltip shown for the button that is used to navigate to the list of location sites in all facilities when the site browsing view is open</comment>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
     <value>All Floors</value>
@@ -323,7 +323,7 @@
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
     <value>Function results</value>
-    <comment>The text for expanding  function result collection.</comment>
+    <comment>The text for expanding function result collection.</comment>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
     <value>Identifying starting points...</value>
