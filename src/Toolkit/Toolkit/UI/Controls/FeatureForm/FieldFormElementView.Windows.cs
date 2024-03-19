@@ -44,6 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     InputTemplateSelector = new FieldTemplateSelector(this);
                 content.ContentTemplateSelector = InputTemplateSelector;
             }
+            UpdateErrorMessages();
         }
 
         /// <summary>

@@ -181,7 +181,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         private void UpdateIsValidProperty()
         {
 #if WPF
-            IsValid = FeatureForm?.ValidationErrors?.Any() != true;
+            if (Dispatcher.CheckAccess())
+                IsValid = FeatureForm?.ValidationErrors?.Any() != true;
+            else 
+                Dispatcher.Invoke(UpdateIsValidProperty);
 #elif MAUI
 #warning TODO IsValid read-only property
 #endif
