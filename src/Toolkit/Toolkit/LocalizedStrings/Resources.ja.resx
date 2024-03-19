@@ -124,7 +124,7 @@
     <value>須_Date exceeds maximum_____________________鷗</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>須_Maximum {0} characters_______________________鷗</value>
+    <value>須_Maximum characters allowed: {0}_________________鷗</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
     <value>須_Maximum character length exceeded__________________鷗</value>
@@ -157,7 +157,7 @@
     <value>須_Date less than minimum_______________________鷗</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>須_Enter at least {0} characters______________________________鷗</value>
+    <value>須_Minimum characters required: {0}_________________鷗</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>須_Less than minimum value________________________鷗</value>
@@ -172,7 +172,7 @@
     <value>須_Enter {0} to {1} characters____________________________鷗</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>須_Enter {0} characters_____________________鷗</value>
+    <value>須_Number of characters required: {0}__________________鷗</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>須_All Sites___________________鷗</value>

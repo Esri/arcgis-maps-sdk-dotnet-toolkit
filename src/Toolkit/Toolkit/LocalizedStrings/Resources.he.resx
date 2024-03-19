@@ -124,7 +124,7 @@
     <value>כן_Date exceeds maximum_____________________ש</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>כן_Maximum {0} characters_______________________ש</value>
+    <value>כן_Maximum characters allowed: {0}_________________ש</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
     <value>כן_Maximum character length exceeded__________________ש</value>
@@ -157,7 +157,7 @@
     <value>כן_Date less than minimum_______________________ש</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>כן_Enter at least {0} characters______________________________ש</value>
+    <value>כן_Minimum characters required: {0}_________________ש</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>כן_Less than minimum value________________________ש</value>
@@ -172,7 +172,7 @@
     <value>כן_Enter {0} to {1} characters____________________________ש</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>כן_Enter {0} characters_____________________ש</value>
+    <value>כן_Number of characters required: {0}__________________ש</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>כן_All Sites___________________ש</value>

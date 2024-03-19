@@ -124,7 +124,7 @@
     <value>试_Date exceeds maximum_____________________验</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>试_Maximum {0} characters_______________________验</value>
+    <value>试_Maximum characters allowed: {0}_________________验</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
     <value>试_Maximum character length exceeded__________________验</value>
@@ -157,7 +157,7 @@
     <value>试_Date less than minimum_______________________验</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>试_Enter at least {0} characters______________________________验</value>
+    <value>试_Minimum characters required: {0}_________________验</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>试_Less than minimum value________________________验</value>
@@ -172,7 +172,7 @@
     <value>试_Enter {0} to {1} characters____________________________验</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>试_Enter {0} characters_____________________验</value>
+    <value>试_Number of characters required: {0}__________________验</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>试_All Sites___________________验</value>

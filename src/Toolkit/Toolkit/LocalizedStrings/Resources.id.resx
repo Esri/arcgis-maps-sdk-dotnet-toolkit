@@ -124,7 +124,7 @@
     <value>ng_Date exceeds maximum_____________________ny</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>ng_Maximum {0} characters_______________________ny</value>
+    <value>ng_Maximum characters allowed: {0}_________________ny</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
     <value>ng_Maximum character length exceeded__________________ny</value>
@@ -157,7 +157,7 @@
     <value>ng_Date less than minimum_______________________ny</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>ng_Enter at least {0} characters______________________________ny</value>
+    <value>ng_Minimum characters required: {0}_________________ny</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>ng_Less than minimum value________________________ny</value>
@@ -172,7 +172,7 @@
     <value>ng_Enter {0} to {1} characters____________________________ny</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>ng_Enter {0} characters_____________________ny</value>
+    <value>ng_Number of characters required: {0}__________________ny</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>ng_All Sites___________________ny</value>

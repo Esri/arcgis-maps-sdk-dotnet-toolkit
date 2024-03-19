@@ -124,7 +124,7 @@
     <value>ก้_Date exceeds maximum_____________________ษฺ</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>ก้_Maximum {0} characters_______________________ษฺ</value>
+    <value>ก้_Maximum characters allowed: {0}_________________ษฺ</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
     <value>ก้_Maximum character length exceeded__________________ษฺ</value>
@@ -157,7 +157,7 @@
     <value>ก้_Date less than minimum_______________________ษฺ</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>ก้_Enter at least {0} characters______________________________ษฺ</value>
+    <value>ก้_Minimum characters required: {0}_________________ษฺ</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>ก้_Less than minimum value________________________ษฺ</value>
@@ -172,7 +172,7 @@
     <value>ก้_Enter {0} to {1} characters____________________________ษฺ</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>ก้_Enter {0} characters_____________________ษฺ</value>
+    <value>ก้_Number of characters required: {0}__________________ษฺ</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>ก้_All Sites___________________ษฺ</value>

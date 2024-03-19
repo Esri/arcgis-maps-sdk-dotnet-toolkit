@@ -124,7 +124,7 @@
     <value>ґ_Date exceeds maximum_____________________Ї</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>ґ_Maximum {0} characters_______________________Ї</value>
+    <value>ґ_Maximum characters allowed: {0}_________________Ї</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
     <value>ґ_Maximum character length exceeded__________________Ї</value>
@@ -157,7 +157,7 @@
     <value>ґ_Date less than minimum_______________________Ї</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>ґ_Enter at least {0} characters______________________________Ї</value>
+    <value>ґ_Minimum characters required: {0}_________________Ї</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
     <value>ґ_Less than minimum value________________________Ї</value>
@@ -172,7 +172,7 @@
     <value>ґ_Enter {0} to {1} characters____________________________Ї</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>ґ_Enter {0} characters_____________________Ї</value>
+    <value>ґ_Number of characters required: {0}__________________Ї</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>ґ_All Sites___________________Ї</value>
