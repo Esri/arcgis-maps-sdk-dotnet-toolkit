@@ -64,7 +64,7 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `BasemapGallery` should be accessed with the same prefix as the `GeoView`. 
+The usage in WPF is identical to UWP/WinUI with one important distinction: `BasemapGallery` is accessed with the same namespace prefix as `GeoView`. 
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"

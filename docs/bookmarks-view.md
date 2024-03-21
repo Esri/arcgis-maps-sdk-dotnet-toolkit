@@ -10,7 +10,7 @@
 
 ## Usage
 
-For bookmarks to appear in the control, either your `GeoModel.Bookmarks` or `BookmarksView.BookmarksOverride` needs to be set.
+For bookmarks to appear in the control, you must set either `GeoModel.Bookmarks` or `BookmarksView.BookmarksOverride`.
 
 ### .NET MAUI:
 
@@ -46,7 +46,7 @@ To customize the item template:
 </Grid>
 ```
 
-The `BookmarksView` supports customization of the bookmark display. This can be achieved by setting the `ItemTemplate` property to a customized `DataTemplate`. 
+You can customize the `BookmarksView` bookmark display by setting the `ItemTemplate` property with a customized `DataTemplate`. 
 
 ```xml
 <toolkit:BookmarksView Grid.Column="1" GeoView="{Binding ElementName=mapView}">
@@ -60,7 +60,7 @@ The `BookmarksView` supports customization of the bookmark display. This can be 
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `BookmarksView` should be accessed with the same prefix as the `GeoView`. 
+The usage in WPF is identical to UWP/WinUI with one important distinction: `BookmarksView` is accessed with the same namespace prefix as `GeoView`. 
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"

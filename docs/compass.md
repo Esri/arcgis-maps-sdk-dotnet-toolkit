@@ -40,7 +40,7 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `Compass` should be accessed with the same prefix as the `GeoView`. 
+The usage in WPF is identical to UWP/WinUI with one important distinction: `Compass` is accessed with the same namespace prefix as `GeoView`.
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"

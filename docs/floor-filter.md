@@ -71,7 +71,7 @@ The following properties enable customization or localization of text displayed 
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `FloorFilter` should be accessed with the same prefix as the `GeoView`. 
+The usage in WPF is identical to UWP/WinUI with one important distinction: `FloorFilter` is accessed with the same namespace prefix as `GeoView`.
 
 ```xml
 xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
