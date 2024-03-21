@@ -14,6 +14,8 @@ Display and optionally allow editing of a single attribute of a feature.
 
 ## Usage
 
+### UWP/WinUI/WPF:
+
 ```xml
 <esri:FeatureDataField Feature="{Binding selectedFeature}" FieldName="objectid" IsReadOnly="True" />
 ```
