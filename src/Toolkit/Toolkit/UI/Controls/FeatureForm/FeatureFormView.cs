@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
     /// </summary>
-    /// <seealso cref="Esri.ArcGISRuntime.Data.FeatureTable.FeatureFormDefinition"/>
+    /// <seealso cref="Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition"/>
     /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     public partial class FeatureFormView
     {
@@ -255,7 +255,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 uint min = 0;
                 if (element.Input is TextAreaFormInput area) { max = area.MaxLength; min = area.MinLength; }
                 else if (element.Input is TextBoxFormInput tb) { max = tb.MaxLength; min = tb.MinLength; }
-                else if (element.Input is BarcodeScannerFormInput bar) { max = bar.MaxLength; min = bar.MinLength; }
                 if (max > 0 && min > 0)
                     return string.Format(Properties.Resources.GetString("FeatureFormOutsideLengthRange")!, min, max);
                 if (max > 0)
