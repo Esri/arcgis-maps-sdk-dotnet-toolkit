@@ -31,11 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (element is ContentPresenter presenter)
             {
-                if (item is BarcodeScannerFormInput)
-                {
-                    presenter.ContentTemplate = BarcodeScannerFormInputTemplate;
-                }
-                else if (item is ComboBoxFormInput)
+                if (item is ComboBoxFormInput)
                 {
                     presenter.ContentTemplate = ComboBoxFormInputTemplate;
                 }
@@ -62,22 +58,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             base.PrepareContainerForItemOverride(element, item);
         }
-
-        /// <summary>
-        /// Template used for rendering a <see cref="BarcodeScannerFormInput"/>.
-        /// </summary>
-        /// <seealso cref="TextFormInputView"/>
-        public DataTemplate BarcodeScannerFormInputTemplate
-        {
-            get { return (DataTemplate)GetValue(BarcodeScannerFormInputTemplateProperty); }
-            set { SetValue(BarcodeScannerFormInputTemplateProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="BarcodeScannerFormInputTemplate"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty BarcodeScannerFormInputTemplateProperty =
-            DependencyProperty.Register(nameof(BarcodeScannerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementItemsControl), new PropertyMetadata(null));
 
         /// <summary>
         /// Template used for rendering a <see cref="ComboBoxFormInput"/>.

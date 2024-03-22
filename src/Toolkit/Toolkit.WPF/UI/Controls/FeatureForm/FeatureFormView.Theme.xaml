@@ -154,7 +154,6 @@
  
             <Border x:Name="ErrorBorder" BorderThickness="1" BorderBrush="Red" Visibility="Collapsed" />
             <TextBlock Text="!" Background="Transparent" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="ErrorInfo" />
-            <Button Grid.Column="1" Content="&#xec5a;" FontFamily="Segoe MDL2 Assets" Visibility="Collapsed" x:Name="BarcodeScannerButton" />
           </Grid>
           <ControlTemplate.Triggers>
             <Trigger Property="ShowCharacterCount" Value="false">
@@ -162,12 +161,6 @@
             </Trigger>
             <Trigger Property="ShowCharacterCount" Value="true">
               <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Visible"/>
-            </Trigger>
-            <Trigger Property="IsBarcodeScannerEnabled" Value="false">
-              <Setter TargetName="BarcodeScannerButton" Property="Visibility" Value="Collapsed"/>
-            </Trigger>
-            <Trigger Property="IsBarcodeScannerEnabled" Value="true">
-              <Setter TargetName="BarcodeScannerButton" Property="Visibility" Value="Visible"/>
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -208,13 +201,6 @@
       <Setter.Value>
         <DataTemplate>
           <primitives:TextFormInputView ShowCharacterCount="false" Element="{Binding}" IsEnabled="{Binding IsEditable}" />
-        </DataTemplate>
-      </Setter.Value>
-    </Setter>
-    <Setter Property="BarcodeScannerFormInputTemplate">
-      <Setter.Value>
-        <DataTemplate>
-          <primitives:TextFormInputView ShowCharacterCount="false" IsBarcodeScannerEnabled="true" Element="{Binding}" IsEnabled="{Binding IsEditable}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>

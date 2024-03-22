@@ -48,21 +48,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Gets or sets the template for the <see cref="BarcodeScannerFormInput"/> element.
-        /// </summary>
-        public DataTemplate? BarcodeScannerFormInputTemplate
-        {
-            get { return (DataTemplate)GetValue(BarcodeScannerFormInputTemplateProperty); }
-            set { SetValue(BarcodeScannerFormInputTemplateProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="BarcodeScannerFormInputTemplate"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty BarcodeScannerFormInputTemplateProperty =
-            DependencyProperty.Register(nameof(BarcodeScannerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
-
-        /// <summary>
         /// Gets or sets the template for the <see cref="ComboBoxFormInput"/> element.
         /// </summary>
         public DataTemplate? ComboBoxFormInputTemplate
@@ -138,7 +123,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DependencyProperty.Register(nameof(TextAreaFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the template for the <see cref="BarcodeScannerFormInput"/> element.
+        /// Gets or sets the template for the <see cref="TextBoxFormInputTemplate"/> element.
         /// </summary>
         public DataTemplate? TextBoxFormInputTemplate
         {
@@ -165,7 +150,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     return elm.Input switch
                     {
-                        BarcodeScannerFormInput => _parent.BarcodeScannerFormInputTemplate,
                         ComboBoxFormInput => _parent.ComboBoxFormInputTemplate,
                         SwitchFormInput => _parent.SwitchFormInputTemplate,
                         DateTimePickerFormInput => _parent.DateTimePickerFormInputTemplate,

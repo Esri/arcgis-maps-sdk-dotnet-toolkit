@@ -13,7 +13,7 @@ using System.Windows.Input;
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     /// <summary>
-    /// Text input for the <see cref="TextAreaFormInput"/>, <see cref="TextBoxFormInput"/> and <see cref="BarcodeScannerFormInput"/> inputs.
+    /// Text input for the <see cref="TextAreaFormInput"/> and <see cref="TextBoxFormInput"/> inputs.
     /// </summary>
     public class TextFormInputView : Control
     {
@@ -44,34 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _textInput.LostFocus += TextInput_LostFocus;
             }
             ConfigureTextBox();
-            var barcodeButton = GetTemplateChild("BarcodeScannerButton") as ButtonBase;
-            if (barcodeButton is not null)
-            {
-#if !NET6_0_OR_GREATER
-                barcodeButton.Visibility = Visibility.Collapsed; // Barcode scanner API not available in NETFX without external dependency
-#else
-                barcodeButton.Click += BarcodeButton_Click;
-#endif
-            }
             UpdateValidationState();
-        }
-
-        private void BarcodeButton_Click(object sender, RoutedEventArgs e)
-        {
-#if NET6_0_OR_GREATER
-            //TODO...
-            /*
-            var scanner = await Windows.Devices.PointOfService.BarcodeScanner.GetDefaultAsync();
-            var claimedScanner = await scanner.ClaimScannerAsync();
-
-            if (claimedScanner != null)
-            {
-                claimedScanner.DataReceived += (s,e) =>
-                {
-                };
-                await claimedScanner.EnableAsync();
-            }*/
-#endif
         }
 
         private void ConfigureTextBox()
@@ -88,11 +61,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     _textInput.AcceptsReturn = false;
                     _textInput.MaxLength = (int)box.MaxLength;
                 }
-                else if (Element?.Input is BarcodeScannerFormInput bar)
-                {
-                    _textInput.AcceptsReturn = false;
-                    _textInput.MaxLength = (int)bar.MaxLength;
-                }
                 _textInput.Text = Element?.Value?.ToString();
             }
         }
@@ -101,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.Key == Key.Enter)
             {
-                if (Element?.Input is TextBoxFormInput || Element?.Input is BarcodeScannerFormInput)
+                if (Element?.Input is TextBoxFormInput)
                 {
                     Apply();
                 }
@@ -171,21 +139,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty MaxLinesProperty =
             DependencyProperty.Register(nameof(MaxLines), typeof(int), typeof(TextFormInputView), new PropertyMetadata(1));
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the barcode scanner button is available.
-        /// </summary>
-        public bool IsBarcodeScannerEnabled
-        {
-            get { return (bool)GetValue(IsBarcodeScannerEnabledProperty); }
-            set { SetValue(IsBarcodeScannerEnabledProperty, value); }
-        }
-
-        /// <summary>
-        /// Identifies the <see cref="IsBarcodeScannerEnabled"/> dependency property.
-        /// </summary>
-        public static readonly DependencyProperty IsBarcodeScannerEnabledProperty =
-            DependencyProperty.Register(nameof(IsBarcodeScannerEnabled), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
 
         /// <summary>
         /// Gets or sets a value indicating whether the character count is visible.
