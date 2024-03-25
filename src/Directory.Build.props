@@ -1,8 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.3.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.3.0</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.4.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.4.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
@@ -45,8 +45,8 @@
     <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net8.0</NETMauiTarget>
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
     <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android34.0</NetAndroidTargetFramework>
-    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst16.1</NetCatalystTargetFramework>
-    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios16.1</NetiOSTargetFramework>  
+    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst17.0</NetCatalystTargetFramework>
+    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios17.0</NetiOSTargetFramework>  
     <MauiVersion Condition="'$(MauiVersion)'==''">8.0.3</MauiVersion>
   </PropertyGroup>
   <PropertyGroup>

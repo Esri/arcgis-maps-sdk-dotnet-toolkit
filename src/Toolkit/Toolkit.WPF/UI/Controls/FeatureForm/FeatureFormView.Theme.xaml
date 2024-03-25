@@ -1,0 +1,392 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
+  xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+  xmlns:forms="clr-namespace:Esri.ArcGISRuntime.Mapping.FeatureForms;assembly=Esri.ArcGISRuntime"
+  xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
+ 
+  <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
+  <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
+  <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
+  <Style TargetType="TextBlock" x:Key="FeatureFormViewHeaderStyle">
+     <Setter Property="FontSize" Value="16" />
+     <Setter Property="FontWeight" Value="Bold" />
+     <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style TargetType="TextBlock" x:Key="FeatureFormViewTitleStyle">
+     <Setter Property="FontSize" Value="16" />
+     <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style TargetType="TextBlock" x:Key="FeatureFormViewCaptionStyle">
+     <Setter Property="FontSize" Value="12" />
+     <Setter Property="TextWrapping" Value="Wrap" />
+  </Style>
+  <Style TargetType="{x:Type primitives:TimePicker}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type primitives:TimePicker}">
+          <TextBox x:Name="TimeText" IsEnabled="{TemplateBinding IsEnabled}" />
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type primitives:DateTimePickerFormInputView}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type primitives:DateTimePickerFormInputView}">
+          <StackPanel>
+            <DatePicker x:Name="DatePicker" IsEnabled="{TemplateBinding IsEnabled}" />
+            <primitives:TimePicker x:Name="TimePicker" IsEnabled="{TemplateBinding IsEnabled}" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type primitives:SwitchFormInputView}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type primitives:SwitchFormInputView}">
+          <StackPanel Orientation="Horizontal" Margin="-4" x:Name="Root" HorizontalAlignment="Left">
+            <Grid HorizontalAlignment="Left" Margin="4" Width="30" Height="15" Cursor="Hand">
+              <Border CornerRadius="7.5" Background="LightGray" x:Name="SwitchBack" />
+              <Ellipse Width="15" Fill="White" Stroke="Gray" HorizontalAlignment="Left" x:Name="SwitchThumb" />
+            </Grid>
+            <TextBlock DataContext="{TemplateBinding Element}" Text="{Binding Input.OnValue.Name}" VerticalAlignment="Center" Margin="5,0" Visibility="Collapsed" x:Name="OnDisplayValue" />
+            <TextBlock DataContext="{TemplateBinding Element}" Text="{Binding Input.OffValue.Name}" VerticalAlignment="Center" Margin="5,0" Visibility="Visible" x:Name="OffDisplayValue" />
+          </StackPanel>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="False">
+              <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Left"/>
+              <Setter TargetName="SwitchBack" Property="Background" Value="LightGray"/>
+              <Setter TargetName="OnDisplayValue" Property="Visibility" Value="Collapsed"/>
+              <Setter TargetName="OffDisplayValue" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+              <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
+              <Setter TargetName="SwitchBack" Property="Background" Value="{StaticResource FeatureFormAccentBrush}"/>
+              <Setter TargetName="OnDisplayValue" Property="Visibility" Value="Visible"/>
+              <Setter TargetName="OffDisplayValue" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+              <Setter TargetName="Root" Property="Background" Value="{StaticResource {x:Static SystemColors.ControlBrushKey}}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+              <Setter TargetName="Root" Property="Opacity" Value=".5"/>
+              <Setter TargetName="SwitchBack" Property="Opacity" Value=".75"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type primitives:ComboBoxFormInputView}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type primitives:ComboBoxFormInputView}">
+          <ComboBox x:Name="Selector" IsEnabled="{TemplateBinding IsEnabled}" />
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type primitives:RadioButtonsFormInputView}">
+    <Setter Property="ItemsPanel">
+      <Setter.Value>
+        <ItemsPanelTemplate>
+          <StackPanel />
+        </ItemsPanelTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="ItemTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type primitives:RadioButtonsFormInputView}">
+          <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type primitives:TextFormInputView}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type primitives:TextFormInputView}">
+          <Grid>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="ErrorStates">
+                <VisualState x:Name="InputError">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorInfo" Storyboard.TargetProperty="(UIElement.Visibility)">
+                      <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorBorder" Storyboard.TargetProperty="(UIElement.Visibility)">
+                      <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+                <VisualState x:Name="InputValid">
+                  <Storyboard>
+                    <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorInfo" Storyboard.TargetProperty="(UIElement.Visibility)">
+                      <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ErrorBorder" Storyboard.TargetProperty="(UIElement.Visibility)">
+                      <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Collapsed}"/>
+                    </ObjectAnimationUsingKeyFrames>
+                  </Storyboard>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,-17,0,0" x:Name="CharacterCountPanel">
+              <TextBlock Text="{Binding Text.Length, ElementName=TextInput}" />
+              <TextBlock Text="/" />
+              <TextBlock Text="{Binding MaxLength, ElementName=TextInput}" />
+            </StackPanel>
+            <TextBox IsEnabled="{TemplateBinding IsEnabled}" BorderThickness="0" x:Name="TextInput" MaxLines="{TemplateBinding MaxLines}" MinLines="{TemplateBinding MinLines}" />
+ 
+            <Border x:Name="ErrorBorder" BorderThickness="1" BorderBrush="Red" Visibility="Collapsed" />
+            <TextBlock Text="!" Background="Transparent" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="ErrorInfo" />
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger Property="ShowCharacterCount" Value="false">
+              <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="ShowCharacterCount" Value="true">
+              <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Visible"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="{x:Type primitives:FieldFormElementView}" >
+    <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
+    <Setter Property="ComboBoxFormInputTemplate">
+        <Setter.Value>
+            <DataTemplate>
+                <primitives:ComboBoxFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+            </DataTemplate>
+        </Setter.Value>
+    </Setter>
+    <Setter Property="RadioButtonsFormInputTemplate">
+        <Setter.Value>
+            <DataTemplate>
+                <primitives:RadioButtonsFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+            </DataTemplate>
+        </Setter.Value>
+    </Setter>
+    <Setter Property="SwitchFormInputTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <primitives:SwitchFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TextAreaFormInputTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <primitives:TextFormInputView ShowCharacterCount="true" Element="{Binding}" MaxLines="4" MinLines="4" IsEnabled="{Binding IsEditable}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TextBoxFormInputTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <primitives:TextFormInputView ShowCharacterCount="false" Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="DateTimePickerFormInputTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <primitives:DateTimePickerFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type primitives:FieldFormElementView}">
+          <StackPanel>
+            <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
+            <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" ToolTip="{Binding Hint}" />
+            <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+            <TextBlock Foreground="Red" x:Name="ErrorLabel" Visibility="{Binding Text, ElementName=ErrorLabel, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+          </StackPanel>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+ 
+  <Style x:Key="GroupFormElementExpanderButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+          <Border x:Name="RootVisual" Padding="{TemplateBinding Padding}" MinHeight="32">
+            <Grid Background="Transparent" SnapsToDevicePixels="False">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="19"/>
+              </Grid.ColumnDefinitions>
+              <Path x:Name="arrow" Grid.Column="1"   HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 1,1.5 L 4.5,5 L 8,1.5"
+                Stroke="Black"  StrokeThickness="2" SnapsToDevicePixels="false" />
+              <ContentPresenter  HorizontalAlignment="Left"  VerticalAlignment="Center" Margin="0"  RecognizesAccessKey="True"  SnapsToDevicePixels="True" />
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="true">
+              <Setter TargetName="arrow" Property="Data" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="true">
+              <Setter TargetName="RootVisual" Property="Background" Value="#11000000" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style x:Key="GroupFormElementExpanderStyle" TargetType="{x:Type Expander}">
+    <Style.Triggers>
+        <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+            <DataTrigger.Value>
+                <forms:FormGroupState>Expanded</forms:FormGroupState>
+            </DataTrigger.Value>
+            <Setter Property="IsExpanded" Value="True" />
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+            <DataTrigger.Value>
+                <forms:FormGroupState>Collapsed</forms:FormGroupState>
+            </DataTrigger.Value>
+            <Setter Property="IsExpanded" Value="False" />
+        </DataTrigger>
+        <DataTrigger Binding="{Binding Path=Elements.Count, Mode=OneWay}" Value="0">
+            <Setter Property="Visibility" Value="Collapsed" />
+        </DataTrigger>
+    </Style.Triggers>
+    <Setter Property="BorderBrush" Value="Gray" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Expander">
+          <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" >
+            <StackPanel>
+              <ToggleButton x:Name="HeaderSite" Style="{StaticResource GroupFormElementExpanderButtonStyle}"
+                    Background="Transparent" BorderThickness="0"
+                    Margin="0" MinWidth="0" MinHeight="0"
+                    IsChecked="{Binding Path=IsExpanded,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                    Content="{TemplateBinding Header}"
+                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                    ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                    Foreground="{TemplateBinding Foreground}"
+                    Padding="{TemplateBinding Padding}"
+                    FontFamily="{TemplateBinding FontFamily}"
+                    FontSize="{TemplateBinding FontSize}"
+                    FontStyle="{TemplateBinding FontStyle}"
+                    FontStretch="{TemplateBinding FontStretch}"
+                    FontWeight="{TemplateBinding FontWeight}"
+                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+              <ContentPresenter x:Name="ExpandSite"
+                    Visibility="Collapsed"
+                    Focusable="false"
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Margin="{TemplateBinding Padding}"/>
+            </StackPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsExpanded" Value="true">
+              <Setter Property="Visibility" Value="Visible" TargetName="ExpandSite"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+              <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  
+  <Style TargetType="{x:Type controls:FeatureFormView}" >
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type controls:FeatureFormView}">
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}"
+                  Margin="{TemplateBinding Margin}"
+                  MinWidth="{TemplateBinding MinWidth}"
+                  MaxWidth="{TemplateBinding MaxWidth}">
+            <Border.Resources>
+              <Style x:Key="ExpanderStyle" TargetType="Expander">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+                    <DataTrigger.Value>
+                      <forms:FormGroupState>Expanded</forms:FormGroupState>
+                    </DataTrigger.Value>
+                    <Setter Property="IsExpanded" Value="True" />
+                  </DataTrigger>
+                  <DataTrigger Binding="{Binding Path=InitialState, Mode=OneTime}">
+                    <DataTrigger.Value>
+                      <forms:FormGroupState>Collapsed</forms:FormGroupState>
+                    </DataTrigger.Value>
+                    <Setter Property="IsExpanded" Value="False" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </Border.Resources>
+            <Grid DataContext="{TemplateBinding FeatureForm}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+              <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}"
+                         Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+              <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="FeatureFormContentScrollViewer">
+                <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView">
+                  <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                    <DataTemplate>
+                      <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
+                                                       Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                    </DataTemplate>
+                  </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                  <primitives:FormElementItemsControl.GroupFormElementTemplate>
+                    <DataTemplate>
+                      <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
+                        <Expander Style="{StaticResource GroupFormElementExpanderStyle}">
+                          <Expander.Header>
+                            <StackPanel>
+                              <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                              <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                            </StackPanel>
+                          </Expander.Header>
+                          <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" >
+                            <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                              <DataTemplate>
+                                <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
+                                                                 Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                              </DataTemplate>
+                            </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                          </primitives:FormElementItemsControl>
+                        </Expander>
+                      </StackPanel>
+                    </DataTemplate>
+                  </primitives:FormElementItemsControl.GroupFormElementTemplate>
+                </primitives:FormElementItemsControl>
+              </ScrollViewer>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+  </Setter>
+  </Style>
+</ResourceDictionary>

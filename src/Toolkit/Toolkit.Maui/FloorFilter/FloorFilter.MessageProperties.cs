@@ -31,7 +31,7 @@ public partial class FloorFilter
     /// Identifies the <see cref="SearchPlaceholder"/> bindable property.
     /// </summary>
     public static readonly BindableProperty SearchPlaceholderProperty =
-        BindableProperty.Create(nameof(SearchPlaceholder), typeof(string), typeof(FloorFilter), "Filter");
+        BindableProperty.Create(nameof(SearchPlaceholder), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterFilter"));
 
     /// <summary>
     /// Gets or sets the message shown to the user when a list or filtered list is empty.
@@ -46,7 +46,7 @@ public partial class FloorFilter
     /// Identifies the <see cref="NoResultsMessage"/> bindable property.
     /// </summary>
     public static readonly BindableProperty NoResultsMessageProperty =
-        BindableProperty.Create(nameof(NoResultsMessage), typeof(string), typeof(FloorFilter), "No results");
+        BindableProperty.Create(nameof(NoResultsMessage), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterNoResultsFound"));
 
     /// <summary>
     /// Gets or sets the label or tooltip shown on the button that opens the browsing view.
@@ -61,7 +61,7 @@ public partial class FloorFilter
     /// Identifies the <see cref="BrowseLabel"/> bindable property.
     /// </summary>
     public static readonly BindableProperty BrowseLabelProperty =
-        BindableProperty.Create(nameof(BrowseLabel), typeof(string), typeof(FloorFilter), "Browse");
+        BindableProperty.Create(nameof(BrowseLabel), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterBrowse"));
 
     /// <summary>
     /// Gets or sets the label shown on the browsing view header for sites.
@@ -76,7 +76,7 @@ public partial class FloorFilter
     /// Identifies the <see cref="BrowseSitesLabel"/> bindable property.
     /// </summary>
     public static readonly BindableProperty BrowseSitesLabelProperty =
-        BindableProperty.Create(nameof(BrowseSitesLabel), typeof(string), typeof(FloorFilter), "Select a Site");
+        BindableProperty.Create(nameof(BrowseSitesLabel), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterBrowseSites"));
 
     /// <summary>
     /// Gets or sets the label shown on the browsing view for facilities.
@@ -91,7 +91,7 @@ public partial class FloorFilter
     /// Identifies the <see cref="BrowseFacilitiesLabel"/> bindable property.
     /// </summary>
     public static readonly BindableProperty BrowseFacilitiesLabelProperty =
-        BindableProperty.Create(nameof(BrowseFacilitiesLabel), typeof(string), typeof(FloorFilter), "Select a Facility");
+        BindableProperty.Create(nameof(BrowseFacilitiesLabel), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterBrowseFacilities"));
 
     /// <summary>
     /// Gets or sets the label or tooltip shown for the button that is used to navigate to the list of sites in all facilities when the site browsing view is open.
@@ -106,5 +106,5 @@ public partial class FloorFilter
     /// Identifies the <see cref="AllFacilitiesLabel"/> bindable property.
     /// </summary>
     public static readonly BindableProperty AllFacilitiesLabelProperty =
-        BindableProperty.Create(nameof(AllFacilitiesLabel), typeof(string), typeof(FloorFilter), "All Sites");
+        BindableProperty.Create(nameof(AllFacilitiesLabel), typeof(string), typeof(FloorFilter), Properties.Resources.GetString("FloorFilterAllFacilities"));
 }

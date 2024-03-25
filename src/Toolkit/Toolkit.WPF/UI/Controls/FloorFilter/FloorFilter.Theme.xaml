@@ -26,8 +26,8 @@
     <Geometry x:Key="FloorFilterBrowseBuildingsIcon">M13 9h-1V6h4v10h-1V7h-2zM5 5v5h1V3h1V0h2.62L11 1.867V9h-1V2.197L9.115 1H8v3H7v12H0V7h1V5zm-2 6v-1h1V6H2v2H1v7h5v-4zm7-1h4v6H8v-4h2zm1 1v2H9v2h4v-4zm-8 2h2v-1H3z</Geometry>
     <Geometry x:Key="FloorFilterChevronLeftIcon">M10.207 4l-4 4 4 4H8.793l-4-4 4-4z</Geometry>
     <Geometry x:Key="FloorFilterCloseIcon">M3.98 11.303L7.281 8 3.98 4.697l.707-.707L7.99 7.293l.01-.01.01.01 3.304-3.303.707.707L8.718 8l3.303 3.303-.707.707L8.01 8.707l-.01.01-.01-.01-3.304 3.303z</Geometry>
-    <Geometry x:Key="FloorFilterCollapseIcon">M7.793 12l4-4-4-4h1.414l4 4-4 4zm-4.586 0l4-4-4-4H1.793l4 4-4 4z</Geometry>
-    <Geometry x:Key="FloorFilterExpandIcon">M8.207 4l-4 4 4 4H6.793l-4-4 4-4zm4.586 0l-4 4 4 4h1.414l-4-4 4-4z</Geometry>
+    <Geometry x:Key="FloorFilterExpandIcon">M7.793 12l4-4-4-4h1.414l4 4-4 4zm-4.586 0l4-4-4-4H1.793l4 4-4 4z</Geometry>
+    <Geometry x:Key="FloorFilterCollapseIcon">M8.207 4l-4 4 4 4H6.793l-4-4 4-4zm4.586 0l-4 4 4 4h1.414l-4-4 4-4z</Geometry>
     <Geometry x:Key="FloorFilterSearchIcon">M13.936 13.24L9.708 9.01a4.8 4.8 0 1 0-.69.69l4.228 4.228a.488.488 0 0 0 .69-.69zM6.002 9.8A3.8 3.8 0 1 1 8.69 8.686a3.778 3.778 0 0 1-2.687 1.112z</Geometry>
     <Geometry x:Key="FloorFilterZoomToIcon">M15.293 16L12 12.707V15h-1v-4h4v1h-2.293L16 15.293zm0-16L12 3.293V1h-1v4h4V4h-2.293L16 .707zM8 6a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm0 1a1 1 0 1 0 1 1 1 1 0 0 0-1-1zm-7 5h2.293L0 15.293.707 16 4 12.707V15h1v-4H1zm3-8.707L.707 0 0 .707 3.293 4H1v1h4V1H4z</Geometry>
     <Geometry x:Key="FloorFilterAllFloorsIcon">M.088.482A.358.358 0 0 1 .305.205a5.075 5.075 0 0 1 4.104.6c.031.022.06.047.091.069L2.704 3.651c-.023-.013-.046-.022-.068-.037a1.407 1.407 0 0 1-.527-2.009 1.599 1.599 0 0 1 1.227-.604 3.737 3.737 0 0 0-2.6-.099 3.455 3.455 0 0 0 1.647 3.244l-.376.581A3.95 3.95 0 0 1 .088.482zM4 7V6H3v1zm2-6H5v1h1zm2 1H7v1h1zm2 1H9v1h1zM6 8H5v1h1zm-4 5h1v-1H2zm2-1v1h1v-1zm9-5h1V6h-1zm0 2h1V8h-1zm0 2h1v-1h-1zm0 2h1v-1h-1zm-2-4h1V8h-1zm0 2h1v-1h-1zm0 2h1v-1h-1zM9 6v9H6.969v-5H0v6h16V1.002zm-3 9H1v-4h5zm9 0h-5V6.515l5-3.57z</Geometry>
@@ -415,6 +415,7 @@
                                 Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
                                 Stretch="Uniform"
                                 Style="{StaticResource FloorFilterPathIconStyle}"
+                                Data="{StaticResource FloorFilterCollapseIcon}"
                                 Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
                             <Path
                                 x:Name="FloorFilterExpandIcon"
@@ -423,6 +424,7 @@
                                 Fill="{StaticResource FloorFilterDefaultForegroundBrush}"
                                 Stretch="Uniform"
                                 Style="{StaticResource FloorFilterPathIconStyle}"
+                                Data="{StaticResource FloorFilterExpandIcon}"
                                 Visibility="{Binding Path=(controls:FloorFilter.IsExpanded), Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Inverse'}" />
                             <TextBlock
                                 Grid.Column="1"
@@ -737,20 +739,6 @@
     </Style>
 
     <Style TargetType="controls:FloorFilter">
-        <Setter Property="BrowseLabel" Value="Browse" />
-        <Setter Property="BrowseSitesLabel" Value="Select a Site" />
-        <Setter Property="BrowseFacilitiesLabel" Value="Select a Facility" />
-        <Setter Property="CloseLabel" Value="Close" />
-        <Setter Property="CollapseLabel" Value="Collapse" />
-        <Setter Property="ExpandLabel" Value="Expand" />
-        <Setter Property="ZoomToLabel" Value="Zoom To" />
-        <Setter Property="NoResultsMessage" Value="No results found." />
-        <Setter Property="HorizontalAlignment" Value="Right" />
-        <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="AllFacilitiesLabel" Value="All Sites" />
-        <Setter Property="BackButtonLabel" Value="Go Back" />
-        <Setter Property="AllFloorsLabel" Value="All Floors" />
-        <Setter Property="SearchPlaceholder" Value="Filter" />
         <Setter Property="Margin" Value="8" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="controls:FloorFilter.IsExpanded" Value="False" />
