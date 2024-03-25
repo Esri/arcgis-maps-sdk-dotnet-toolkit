@@ -66,12 +66,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
+            Grid root = new Grid();
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             Label roottitle = new Label();
             roottitle.Style = GetFeatureFormHeaderStyle();
             roottitle.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
-            //TODO...
-            return roottitle;
+            root.Add(roottitle);
+            ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never };
+#if WINDOWS
+            scrollView.Padding = new Thickness(0, 0, 10, 0);
+#endif
+            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            Grid.SetRow(scrollView, 1);
+            root.Add(scrollView);
+            VerticalStackLayout itemsView = new VerticalStackLayout()
+            {
+                Margin = new Thickness(0, 10),
+            };
+            
+            BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent));
+            scrollView.Content = itemsView;
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName(FeatureFormContentScrollViewerName, scrollView);
+            nameScope.RegisterName(ItemsViewName, itemsView);
+            return root;
         }
 
         internal static Style GetStyle(string resourceKey, Style defaultStyle)
