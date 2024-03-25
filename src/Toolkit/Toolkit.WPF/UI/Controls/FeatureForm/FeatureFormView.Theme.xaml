@@ -356,7 +356,7 @@
                   <primitives:FormElementItemsControl.FieldFormElementTemplate>
                     <DataTemplate>
                       <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
-                                                       Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                                       />
                     </DataTemplate>
                   </primitives:FormElementItemsControl.FieldFormElementTemplate>
                   <primitives:FormElementItemsControl.GroupFormElementTemplate>
@@ -373,7 +373,7 @@
                             <primitives:FormElementItemsControl.FieldFormElementTemplate>
                               <DataTemplate>
                                 <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
-                                                                 Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                                                 />
                               </DataTemplate>
                             </primitives:FormElementItemsControl.FieldFormElementTemplate>
                           </primitives:FormElementItemsControl>
