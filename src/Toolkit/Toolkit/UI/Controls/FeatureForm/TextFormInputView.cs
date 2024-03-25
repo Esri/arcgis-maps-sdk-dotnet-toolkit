@@ -34,14 +34,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             base.OnApplyTemplate();
             if (_textInput != null)
             {
-                _textInput.KeyDown -= TextInput_KeyDown;
                 _textInput.LostFocus -= TextInput_LostFocus;
+                _textInput.TextChanged -= TextInput_TextChanged;
             }
             _textInput = GetTemplateChild("TextInput") as TextBox;
             if (_textInput != null)
             {
-                _textInput.KeyDown += TextInput_KeyDown;
                 _textInput.LostFocus += TextInput_LostFocus;
+                _textInput.TextChanged += TextInput_TextChanged;
             }
             ConfigureTextBox();
             UpdateValidationState();
@@ -65,15 +65,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private void TextInput_KeyDown(object sender, KeyEventArgs e)
+        private void TextInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                if (Element?.Input is TextBoxFormInput)
-                {
-                    Apply();
-                }
-            }
+            Apply();
         }
 
         private void TextInput_LostFocus(object sender, RoutedEventArgs e)
