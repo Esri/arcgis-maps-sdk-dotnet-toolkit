@@ -9,7 +9,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Analyzers;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class UseToolkitInitializationAnalyzer : DiagnosticAnalyzer
 {
-	public const string DiagnosticId = "AMT001";
+	public const string DiagnosticId = "ArcGISMaps9001";
 
 	const string category = "Initialization";
 

@@ -12,7 +12,7 @@ public class UseToolkitInitializationAnalyzerTests : BaseAnalyzersUnitTest<Analy
     [TestMethod]
 	public void UseToolkitInitializationAnalyzerId()
 	{
-		Assert.AreEqual("AMT001", UseToolkitInitializationAnalyzer.DiagnosticId);
+		Assert.AreEqual("ArcGISMaps9001", UseToolkitInitializationAnalyzer.DiagnosticId);
 	}
 
     [TestMethod]
@@ -40,8 +40,8 @@ public static class MauiProgram
 }
 ";
 
-        var expected = Diagnostic("AMT001").WithLocation(0);
-        //var expected = Diagnostic("AMT001");
+        var expected = Diagnostic("ArcGISMaps9001").WithLocation(0);
+        //var expected = Diagnostic("ArcGISMaps9001");
         await VerifyAnalyzerAsync(testCode, expected);
     }
 
@@ -122,7 +122,7 @@ public static class MauiProgram
 }
 ";
 
-        var expected = Diagnostic("AMT001").WithLocation(0);
+        var expected = Diagnostic("ArcGISMaps9001").WithLocation(0);
         await VerifyCodeFixAsync(testCode, expected, fixedCode);
     }
 

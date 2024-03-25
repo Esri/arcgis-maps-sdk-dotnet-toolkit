@@ -2,6 +2,6 @@
 
 ### New Rules
 
-Rule ID | Severity | Notes
---------|----------|-------
-AMT001 | Error | `.UseArcGISToolkit()` Not Found on MauiAppBuilder
+Rule ID | Category | Severity | Notes
+--------|----------|----------|--------------------
+ArcGISMaps9001 | Initialization | Error | `.UseArcGISToolkit()` Not Found on MauiAppBuilder
