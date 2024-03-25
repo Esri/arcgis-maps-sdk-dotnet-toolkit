@@ -4,7 +4,11 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
 {
     /// <summary>
     /// Checkbox switch for the <see cref="ComboBoxFormInput"/>.

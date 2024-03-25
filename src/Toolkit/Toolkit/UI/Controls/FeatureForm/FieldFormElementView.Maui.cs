@@ -56,7 +56,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultSwitchFormInputTemplate()
         {
-            return new Label() { Text = "Switch goes here" };
+            var input = new SwitchFormInputView();
+            input.SetBinding(SwitchFormInputView.ElementProperty, Binding.SelfPath);
+            return input;
         }
 
         private static object BuildDefaultDateTimePickerFormInputTemplate()
@@ -88,10 +90,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var label = new Label() { Margin = new Thickness(0, 10) };
             label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
             label.SetBinding(View.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             root.Children.Add(label);
             label = new Label() { Margin = new Thickness(0, 10) };
             label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
             label.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
             root.Children.Add(label);
             var content = new DataTemplatedContentPresenter();
             content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, new Binding(nameof(Element), source: RelativeBindingSource.TemplatedParent));
@@ -105,8 +109,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName(ErrorLabelName, label);
             return root;
         }
-
-
 
         /// <inheritdoc/>
         protected override void OnApplyTemplate()
@@ -127,6 +129,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             private void RefreshContent()
             {
                 this.Content = DataTemplateSelector?.SelectTemplate(ContentData, this)?.CreateContent() as View;
+                if (this.Content is not null)
+                    this.Content.BindingContext = ContentData;
             }
 
             public DataTemplateSelector? DataTemplateSelector { get; set; }

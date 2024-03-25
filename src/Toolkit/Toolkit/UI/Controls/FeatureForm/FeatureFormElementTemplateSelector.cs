@@ -35,7 +35,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         {
             DefaultFieldFormElementTemplate = new DataTemplate(() =>
             {
-                var view = new FieldFormElementView() { Margin = new Thickness(0, 10) };
+                var view = new FieldFormElementView() { Margin = new Thickness(0, 0) };
                 view.SetBinding(FieldFormElementView.ElementProperty, Binding.SelfPath);
                 return view;
             });
@@ -44,10 +44,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
                 // TODO: Make expandable/collapsible
                 var layout = new VerticalStackLayout();
                 layout.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
-                var label = new Label() { Margin = new Thickness(0, 10) };
+                var label = new Label() { Margin = new Thickness(0, 10), Style = FeatureFormView.GetFeatureFormTitleStyle() };
                 label.SetBinding(Label.TextProperty, nameof(FormElement.Label));
                 layout.Children.Add(label);
-                label = new Label() { Margin = new Thickness(0, 10) };
+                label = new Label() { Margin = new Thickness(0, 10), Style = FeatureFormView.GetFeatureFormCaptionStyle() };
                 label.SetBinding(Label.TextProperty, nameof(FormElement.Description));
                 layout.Children.Add(label);
                 VerticalStackLayout itemsView = new VerticalStackLayout()

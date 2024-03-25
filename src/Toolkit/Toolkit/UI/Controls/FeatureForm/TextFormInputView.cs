@@ -10,7 +10,11 @@ using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
 {
     /// <summary>
     /// Text input for the <see cref="TextAreaFormInput"/> and <see cref="TextBoxFormInput"/> inputs.
