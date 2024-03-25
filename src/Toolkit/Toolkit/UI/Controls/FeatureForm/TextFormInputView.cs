@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -7,8 +7,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
+#if MAUI
+using TextBox = Microsoft.Maui.Controls.InputView;
+#elif WPF
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+#endif
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -19,36 +23,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// <summary>
     /// Text input for the <see cref="TextAreaFormInput"/> and <see cref="TextBoxFormInput"/> inputs.
     /// </summary>
-    public class TextFormInputView : Control
+    public partial class TextFormInputView
     {
         private WeakEventListener<TextFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
-        private TextBox? _textInput;
 
         /// <summary>
         /// Initializes an instance of the <see cref="TextFormInputView"/> class.
         /// </summary>
         public TextFormInputView()
         {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+#else
             DefaultStyleKey = typeof(TextFormInputView);
-        }
-
-        /// <inheritdoc />
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            if (_textInput != null)
-            {
-                _textInput.LostFocus -= TextInput_LostFocus;
-                _textInput.TextChanged -= TextInput_TextChanged;
-            }
-            _textInput = GetTemplateChild("TextInput") as TextBox;
-            if (_textInput != null)
-            {
-                _textInput.LostFocus += TextInput_LostFocus;
-                _textInput.TextChanged += TextInput_TextChanged;
-            }
-            ConfigureTextBox();
-            UpdateValidationState();
+#endif
         }
 
         private void ConfigureTextBox()
@@ -57,24 +45,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 if (Element?.Input is TextAreaFormInput area)
                 {
+#if MAUI
+                    if (_textLineInput != null) _textLineInput.IsVisible = false;
+                    if (_textAreaInput != null) _textAreaInput.IsVisible = true;
+#else
                     _textInput.AcceptsReturn = true;
+#endif
                     _textInput.MaxLength = (int)area.MaxLength;
                 }
                 else if (Element?.Input is TextBoxFormInput box)
                 {
+#if MAUI
+                    if (_textLineInput != null) _textLineInput.IsVisible = true;
+                    if (_textAreaInput != null) _textAreaInput.IsVisible = false;
+#else
                     _textInput.AcceptsReturn = false;
+#endif
                     _textInput.MaxLength = (int)box.MaxLength;
                 }
                 _textInput.Text = Element?.Value?.ToString();
+#if MAUI
+                bool isNumericInput = Element?.FieldType == FieldType.Int32 ||
+                    Element?.FieldType == FieldType.Int16 ||
+                    Element?.FieldType == FieldType.Float64 ||
+                    Element?.FieldType == FieldType.Float32;
+                _textInput.Keyboard = isNumericInput ? Keyboard.Numeric : Keyboard.Default;
+#endif
             }
         }
 
-        private void TextInput_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextInput_TextChanged(object? sender, TextChangedEventArgs e)
         {
             Apply();
         }
 
+#if MAUI
+        private void TextInput_Unfocused(object? sender, FocusEventArgs e)
+#else
         private void TextInput_LostFocus(object sender, RoutedEventArgs e)
+#endif
         {
             Apply();
         }
@@ -108,6 +117,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+#if !MAUI
         /// <summary>
         /// Gets or sets the minimum number of visible lines.
         /// </summary>
@@ -120,8 +130,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="MinLines"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty MinLinesProperty =
+            BindableProperty.Create(nameof(MinLines), typeof(int), typeof(TextFormInputView), 1);
+#else
         public static readonly DependencyProperty MinLinesProperty = 
             DependencyProperty.Register(nameof(MinLines), typeof(int), typeof(TextFormInputView), new PropertyMetadata(1));
+#endif
 
         /// <summary>
         /// Gets or sets the maximum number of visible lines.
@@ -135,8 +150,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="MaxLines"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty MaxLinesProperty =
+            BindableProperty.Create(nameof(MaxLines), typeof(int), typeof(TextFormInputView), 1);
+#else
         public static readonly DependencyProperty MaxLinesProperty =
             DependencyProperty.Register(nameof(MaxLines), typeof(int), typeof(TextFormInputView), new PropertyMetadata(1));
+#endif
+#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether the character count is visible.
@@ -150,8 +171,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="ShowCharacterCount"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ShowCharacterCountProperty =
+            BindableProperty.Create(nameof(ShowCharacterCount), typeof(bool), typeof(TextFormInputView), false);
+#else
         public static readonly DependencyProperty ShowCharacterCountProperty =
             DependencyProperty.Register(nameof(ShowCharacterCount), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
+#endif
 
         /// <summary>
         /// Gets or sets the FieldFormElement.
@@ -165,8 +191,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ElementProperty =
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((TextFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
+#else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), new PropertyMetadata(null, (s,e) => ((TextFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+#endif
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
@@ -191,18 +222,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                if (Dispatcher.CheckAccess())
-                    ConfigureTextBox();
-                else 
-                    Dispatcher.Invoke(ConfigureTextBox);
+                Dispatch(ConfigureTextBox);
             }
             else if (e.PropertyName == nameof(FieldFormElement.ValidationErrors))
             {
-                if (Dispatcher.CheckAccess())
-                    UpdateValidationState();
-                else
-                    Dispatcher.Invoke(UpdateValidationState);
+                Dispatch(UpdateValidationState);
             }
+        }
+
+        private void Dispatch(Action action)
+        {
+#if WPF
+            if (Dispatcher.CheckAccess())
+                action();
+            else
+                Dispatcher.Invoke(action);
+#elif MAUI
+            if (Dispatcher.IsDispatchRequired)
+                Dispatcher.Dispatch(action);
+            else
+                action();
+#endif
         }
 
         private void UpdateValidationState()
@@ -210,11 +250,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var err = Element?.ValidationErrors;
             if (err != null && err.Any())
             {
+#if MAUI
+                VisualStateManager.GoToState(this, "InputError");
+#else
                 VisualStateManager.GoToState(this, "InputError", true);
+#endif
             }
             else
             {
+#if MAUI
+                VisualStateManager.GoToState(this, "InputValid");
+#else
                 VisualStateManager.GoToState(this, "InputValid", true);
+#endif
             }
         }
     }

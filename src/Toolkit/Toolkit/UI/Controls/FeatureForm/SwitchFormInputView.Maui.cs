@@ -22,6 +22,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             Switch view = new Switch();
+            view.SetBinding(Switch.IsEnabledProperty, "Element.IsEditable");
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(view, nameScope);
             nameScope.RegisterName(SwitchViewName, view);

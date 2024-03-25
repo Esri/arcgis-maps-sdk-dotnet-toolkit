@@ -73,12 +73,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTextAreaFormInputTemplate()
         {
-            return new Label() { Text = "TextArea goes here" };
+            var input = new TextFormInputView() { ShowCharacterCount = true };
+            input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
+            return input;
         }
 
         private static object BuildDefaultTextBoxFormInputTemplate()
         {
-            return new Label() { Text = "TextBox goes here" };
+            var input = new TextFormInputView() { ShowCharacterCount = false };
+            input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
+            return input;
         }
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
@@ -101,6 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, new Binding(nameof(Element), source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(content);
             label = new Label() { Margin = new Thickness(0, 10), TextColor = Colors.Red };
+            root.Children.Add(label);
             label.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
 
             INameScope nameScope = new NameScope();
@@ -118,6 +123,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 content.DataTemplateSelector = new FieldTemplateSelector(this);
             }
+            UpdateErrorMessages();
         }
 
         private class DataTemplatedContentPresenter : ContentPresenter

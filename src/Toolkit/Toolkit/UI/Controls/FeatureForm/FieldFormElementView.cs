@@ -94,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), null);
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), null, propertyChanged: (s, oldValue, newValue) => ((FieldFormElementView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
 #else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), new PropertyMetadata(null, (s,e) => ((FieldFormElementView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
