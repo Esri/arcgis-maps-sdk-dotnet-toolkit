@@ -108,8 +108,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
+#if MAUI
+                this.IsVisible = IsInputSupported();
+#else
+                this.Visibility = IsInputSupported() ? Visibility.Visible : Visibility.Collapsed;
+#endif
             }
         }
+
+        private bool IsInputSupported() =>
+            Element is not null &&
+            (Element.Input is ComboBoxFormInput ||
+            Element.Input is SwitchFormInput ||
+            Element.Input is DateTimePickerFormInput ||
+            Element.Input is RadioButtonsFormInput ||
+            Element.Input is TextAreaFormInput ||
+            Element.Input is TextBoxFormInput);
 
         private async void OnValuePropertyChanged()
         {
