@@ -419,6 +419,6 @@
           </Border>
         </ControlTemplate>
       </Setter.Value>
-      </Setter>
+  </Setter>
   </Style>
 </ResourceDictionary>
