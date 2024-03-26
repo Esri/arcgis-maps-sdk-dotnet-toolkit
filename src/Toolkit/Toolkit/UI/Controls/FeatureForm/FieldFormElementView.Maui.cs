@@ -51,7 +51,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultComboBoxFormInputTemplate()
         {
-            return new Label() { Text = "ComboBox goes here" };
+            var input = new ComboBoxFormInputView();
+            input.SetBinding(ComboBoxFormInputView.ElementProperty, Binding.SelfPath);
+            return input;
         }
 
         private static object BuildDefaultSwitchFormInputTemplate()
@@ -63,12 +65,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultDateTimePickerFormInputTemplate()
         {
-            return new Label() { Text = "DateTimePicker goes here" };
+            var input = new DateTimePickerFormInputView();
+            input.SetBinding(DateTimePickerFormInputView.ElementProperty, Binding.SelfPath);
+            return input;
         }
 
         private static object BuildDefaultRadioButtonsFormInputTemplate()
         {
-            return new Label() { Text = "RadioButtons goes here" };
+            var input = new RadioButtonsFormInputView();
+            input.SetBinding(RadioButtonsFormInputView.ElementProperty, Binding.SelfPath);
+            return input;
         }
 
         private static object BuildDefaultTextAreaFormInputTemplate()

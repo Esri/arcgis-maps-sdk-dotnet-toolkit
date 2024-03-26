@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -13,34 +13,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// <summary>
     /// Checkbox switch for the <see cref="ComboBoxFormInput"/>.
     /// </summary>
-    [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
-    public class ComboBoxFormInputView : Control
+    public partial class ComboBoxFormInputView
     {
         private WeakEventListener<ComboBoxFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
-        private System.Windows.Controls.Primitives.Selector? _selector;
 
         /// <summary>
         /// Initializes an instance of the <see cref="ComboBoxFormInputView"/> class.
         /// </summary>
         public ComboBoxFormInputView()
         {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+#else
             DefaultStyleKey = typeof(ComboBoxFormInputView);
-        }
-
-        /// <inheritdoc />
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            if (_selector != null)
-            {
-                _selector.SelectionChanged -= Selector_SelectionChanged;
-            }
-            _selector = GetTemplateChild("Selector") as System.Windows.Controls.Primitives.Selector;
-            if(_selector != null)
-            {
-                _selector.SelectionChanged += Selector_SelectionChanged;
-            }
-            UpdateItems();
+#endif
         }
 
         /// <summary>
@@ -55,8 +41,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ElementProperty =
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((ComboBoxFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
+#else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(ComboBoxFormInputView), new PropertyMetadata(null, (s, e) => ((ComboBoxFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+#endif
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
@@ -81,11 +72,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                if (Dispatcher.CheckAccess())
-                    UpdateSelection();
-                else
-                    Dispatcher.Invoke(UpdateSelection);
+                Dispatch(UpdateSelection);
             }
+        }
+
+        private void Dispatch(Action action)
+        {
+#if WPF
+            if (Dispatcher.CheckAccess())
+                action();
+            else
+                Dispatcher.Invoke(action);
+#elif MAUI
+            if (Dispatcher.IsDispatchRequired)
+                Dispatcher.Dispatch(action);
+            else
+                action();
+#endif
         }
 
         private void UpdateItems()
@@ -94,7 +97,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 if (Element?.Input is ComboBoxFormInput input)
                 {
+#if !MAUI
                     _selector.DisplayMemberPath = nameof(CodedValue.Name);
+#endif
                     List<object> items = new List<object>();
                     if (input.NoValueOption == FormInputNoValueOption.Show)
                     {

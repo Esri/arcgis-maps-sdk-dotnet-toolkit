@@ -1,4 +1,4 @@
-﻿#if WPF
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -13,8 +13,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     /// <summary>
     /// Radio button view for the <see cref="RadioButtonsFormInput"/>.
     /// </summary>
-    [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
-    public class RadioButtonsFormInputView : System.Windows.Controls.Primitives.Selector // Control
+    public partial class RadioButtonsFormInputView 
     {
         private WeakEventListener<RadioButtonsFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
         private static int s_formcounter = -1;
@@ -25,61 +24,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public RadioButtonsFormInputView()
         {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+#else
             DefaultStyleKey = typeof(RadioButtonsFormInputView);
+#endif
             _formid = Interlocked.Increment(ref s_formcounter);
-        }
-
-        /// <inheritdoc />
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            UpdateItems();
-        }
-
-
-        private class RadioButtonItem : RadioButton
-        {
-            protected override void OnChecked(RoutedEventArgs e)
-            {
-                base.OnChecked(e);
-                ParentSelector?.RaiseCheckedEvent(this, true);
-            }
-            internal RadioButtonsFormInputView? ParentSelector => ItemsControl.ItemsControlFromItemContainer(this) as RadioButtonsFormInputView;
-        }
-
-        private void RaiseCheckedEvent(RadioButtonItem button, bool isChecked)
-        {
-            if (isChecked)
-            {
-                var selection = (button.DataContext as CodedValue)?.Code;
-                Element?.UpdateValue(selection);
-            }
-        }
-
-        /// <inheritdoc />
-        protected override DependencyObject GetContainerForItemOverride()
-        {
-            return new RadioButtonItem() { GroupName = Element?.FieldName + "_" + _formid };
-        }
-
-        /// <inheritdoc />
-        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
-        {
-            if(element is RadioButtonItem radio)
-            {
-                bool isChecked = false;
-                if(item is CodedValue cv)
-                {
-                    if (object.Equals(cv.Code, Element?.Value))
-                        isChecked = true;
-                }
-                else if(item is RadioButtonNullValue && Element?.Value is null)
-                {
-                    isChecked = true;
-                }
-                radio.IsChecked = isChecked;
-            }
-            base.PrepareContainerForItemOverride(element, item);
         }
 
         /// <summary>
@@ -94,8 +44,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ElementProperty =
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(RadioButtonsFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((RadioButtonsFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
+#else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(RadioButtonsFormInputView), new PropertyMetadata(null, (s, e) => ((RadioButtonsFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+#endif
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
@@ -120,18 +75,32 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                if (Dispatcher.CheckAccess())
-                    UpdateSelection();
-                else
-                    Dispatcher.Invoke(UpdateSelection);
+                Dispatch(UpdateSelection);
             }
+        }
+
+        private void Dispatch(Action action)
+        {
+#if WPF
+            if (Dispatcher.CheckAccess())
+                action();
+            else
+                Dispatcher.Invoke(action);
+#elif MAUI
+            if (Dispatcher.IsDispatchRequired)
+                Dispatcher.Dispatch(action);
+            else
+                action();
+#endif
         }
 
         private void UpdateItems()
         {
             if (Element?.Input is RadioButtonsFormInput input)
             {
+#if !MAUI
                 DisplayMemberPath = nameof(CodedValue.Name);
+#endif
                 List<object> items = new List<object>();
                 if (input.NoValueOption == FormInputNoValueOption.Show)
                 {
@@ -160,32 +129,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        /// <inheritdoc />
-        protected override void OnSelectionChanged(SelectionChangedEventArgs e)
-        {
-            base.OnSelectionChanged(e);
-            if (Element is null) return;
-            var value = (SelectedItem as CodedValue);
-            foreach(var item in GetItemContainers(this))
-            {
-                item.IsChecked = (item.DataContext == SelectedItem);
-            }
-        }
-
-        private static IEnumerable<RadioButtonItem> GetItemContainers(DependencyObject depObj)
-        {
-            if (depObj != null)
-            {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-                {
-                    var child = VisualTreeHelper.GetChild(depObj, i);
-                    if (child is RadioButtonItem b)
-                        yield return b;
-                    else foreach (var cb in GetItemContainers(child))
-                            yield return cb;
-                }
-            }
-        }
 
         private class RadioButtonNullValue
         {
