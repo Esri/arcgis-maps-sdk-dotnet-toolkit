@@ -4,8 +4,9 @@
   xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
   xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
   xmlns:forms="clr-namespace:Esri.ArcGISRuntime.Mapping.FeatureForms;assembly=Esri.ArcGISRuntime"
-  xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
- 
+  xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
   <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
   <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
   <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
@@ -216,7 +217,24 @@
         <ControlTemplate TargetType="{x:Type primitives:FieldFormElementView}">
           <StackPanel>
             <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
-            <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" ToolTip="{Binding Hint}" />
+            <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput">
+              <ContentControl.ToolTip>
+                <ToolTip Content="{Binding Hint}">
+                  <ToolTip.Style>
+                    <Style TargetType="{x:Type ToolTip}">
+                      <Style.Triggers>
+                        <Trigger Property="Content" Value="{x:Static sys:String.Empty}">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="Content" Value="{x:Null}">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                      </Style.Triggers>
+                    </Style>
+                  </ToolTip.Style>
+                </ToolTip>
+              </ContentControl.ToolTip>
+            </ContentControl>
             <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
             <TextBlock Foreground="Red" x:Name="ErrorLabel" Visibility="{Binding Text, ElementName=ErrorLabel, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
           </StackPanel>
