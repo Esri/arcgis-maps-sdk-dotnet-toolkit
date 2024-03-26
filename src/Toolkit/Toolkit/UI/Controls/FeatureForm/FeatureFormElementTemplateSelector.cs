@@ -37,27 +37,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             {
                 var view = new FieldFormElementView() { Margin = new Thickness(0, 0) };
                 view.SetBinding(FieldFormElementView.ElementProperty, Binding.SelfPath);
+                view.SetBinding(FieldFormElementView.FeatureFormProperty, new Binding(nameof(FeatureFormView.FeatureForm), source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(FeatureFormView))));
                 return view;
             });
             DefaultGroupElementTemplate = new DataTemplate(() =>
             {
-                // TODO: Make expandable/collapsible
-                var layout = new VerticalStackLayout();
-                layout.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
-                var label = new Label() { Margin = new Thickness(0, 10), Style = FeatureFormView.GetFeatureFormTitleStyle() };
-                label.SetBinding(Label.TextProperty, nameof(FormElement.Label));
-                layout.Children.Add(label);
-                label = new Label() { Margin = new Thickness(0, 10), Style = FeatureFormView.GetFeatureFormCaptionStyle() };
-                label.SetBinding(Label.TextProperty, nameof(FormElement.Description));
-                layout.Children.Add(label);
-                VerticalStackLayout itemsView = new VerticalStackLayout()
-                {
-                    Margin = new Thickness(0, 10),
-                };
-                BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
-                itemsView.SetBinding(BindableLayout.ItemsSourceProperty, nameof(GroupFormElement.Elements));
-                layout.Children.Add(itemsView);
-                return layout;
+                var view = new GroupFormElementView() { Margin = new Thickness(0, 0) };
+                view.SetBinding(GroupFormElementView.ElementProperty, Binding.SelfPath);
+                return view;
             });
         }
 
