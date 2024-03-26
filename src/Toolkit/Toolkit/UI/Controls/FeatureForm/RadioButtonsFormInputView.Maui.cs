@@ -7,16 +7,9 @@ using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    /// <summary>
-    /// Radio button view for the <see cref="RadioButtonsFormInput"/>.
-    /// </summary>
     public partial class RadioButtonsFormInputView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-
-        private System.Collections.IEnumerable? ItemsSource; //TODO
-        private object? SelectedItem; //TODO
-        private int SelectedIndex; //TODO
 
         static RadioButtonsFormInputView()
         {
@@ -25,13 +18,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-            Label view = new Label() { Text = "Radio Buttons Goes Here" };
-#warning TODO
-            //view.SetBinding(Switch.IsEnabledProperty, "Element.IsEditable");
-            //INameScope nameScope = new NameScope();
-            //NameScope.SetNameScope(view, nameScope);
-            //nameScope.RegisterName(ViewName, view);
-            return view;
+            VerticalStackLayout views = new VerticalStackLayout();
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(views, nameScope);
+            nameScope.RegisterName("ItemsPanel", views);
+            return views;
         }
 
         /// <inheritdoc />
@@ -41,8 +32,68 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             UpdateItems();
         }
 
+        private System.Collections.IEnumerable? _itemsSource;
 
+        private System.Collections.IEnumerable? ItemsSource
+        {
+            get => _itemsSource;
+            set
+            {
+                _itemsSource = value;
+                if(GetTemplateChild("ItemsPanel") is Layout layout)
+                {
+                    layout.Children.Clear();
+                    if (_itemsSource is not null)
+                    {
+                        foreach (var item in _itemsSource)
+                        {
+                            var button = new RadioButton();
+                            button.SetBinding(RadioButton.ContentProperty, "Name");
+                            button.BindingContext = item;
+                            button.IsChecked = item == SelectedItem;
+                            button.SetBinding(RadioButton.IsEnabledProperty, new Binding() { Path = "Element.IsEditable", Source = RelativeBindingSource.TemplatedParent });
+                            button.GroupName = Element?.FieldName + "_" + _formid.ToString();
+                            button.CheckedChanged += Button_CheckedChanged;
+                            layout.Children.Add(button);
+                        }
+                    }
+                }
+            }
+        }
 
+        private void Button_CheckedChanged(object? sender, CheckedChangedEventArgs e)
+        {
+            if (e.Value)
+            {
+                var button = (RadioButton)sender!;
+                SelectedItem = button.BindingContext;
+                var selection = (button.BindingContext as CodedValue)?.Code;
+                Element?.UpdateValue(selection);
+            }
+        }
+
+        private object? _selectedItem;
+
+        private object? SelectedItem
+        {
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value;
+                if (GetTemplateChild("ItemsPanel") is Layout layout)
+                {
+                    foreach (var item in layout.Children.OfType<RadioButton>())
+                    {
+                        if(item.BindingContext is RadioButtonNullValue && value is null)
+                            item.IsChecked = true;
+                        else if (item.BindingContext == value)
+                            item.IsChecked = true;
+                        else 
+                            item.IsChecked = false;
+                    }
+                }
+            }
+        }
     }
 }
 #endif

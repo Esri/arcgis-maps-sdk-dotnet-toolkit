@@ -123,7 +123,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 var selection = input.CodedValues.Where(a => object.Equals(a.Code, Element?.Value)).FirstOrDefault();
                 if (selection is null && input.NoValueOption == FormInputNoValueOption.Show)
+                {
+#if MAUI
+                    SelectedItem = null;
+#else
                     SelectedIndex = 0;
+#endif
+                }
                 else
                     SelectedItem = selection;
             }
