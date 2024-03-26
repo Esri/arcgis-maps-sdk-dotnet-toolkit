@@ -46,9 +46,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(textArea, 2);
             textArea.SetBinding(Editor.IsEnabledProperty, "Element.IsEditable");
             root.Add(textArea);
-            
+            Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
+            Grid.SetColumnSpan(errorBorder, 2);
+            root.Add(errorBorder);
+
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName("ErrorBorder", errorBorder);
             nameScope.RegisterName("TextInput", textInput);
             nameScope.RegisterName("TextAreaInput", textArea);
             return root;

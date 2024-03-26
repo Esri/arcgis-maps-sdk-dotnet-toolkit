@@ -201,7 +201,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
-             if (oldValue is INotifyPropertyChanged inpcOld)
+            if (oldValue is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
                 _elementPropertyChangedListener = null;
@@ -251,7 +251,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (err != null && err.Any())
             {
 #if MAUI
-                VisualStateManager.GoToState(this, "InputError");
+                if (GetTemplateChild("ErrorBorder") is Border border)
+                {
+                    border.IsVisible = true;
+                }
 #else
                 VisualStateManager.GoToState(this, "InputError", true);
 #endif
@@ -259,7 +262,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             else
             {
 #if MAUI
-                VisualStateManager.GoToState(this, "InputValid");
+                if (GetTemplateChild("ErrorBorder") is Border border)
+                {
+                    border.IsVisible = false;
+                }
 #else
                 VisualStateManager.GoToState(this, "InputValid", true);
 #endif
