@@ -5,9 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    /// <summary>
-    /// Text input for the <see cref="TextAreaFormInput"/> and <see cref="TextBoxFormInput"/> inputs.
-    /// </summary>
     public partial class TextFormInputView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;

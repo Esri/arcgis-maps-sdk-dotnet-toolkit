@@ -21,10 +21,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    /// <summary>
-    /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.Maui.FeatureFormView"/> control,
-    /// used for rendering a <see cref="FieldFormElement"/>.
-    /// </summary>
     public partial class FieldFormElementView : TemplatedView
     {
         private const string FieldInputName = "FieldInput";

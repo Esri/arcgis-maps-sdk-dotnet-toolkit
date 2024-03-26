@@ -19,10 +19,6 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    /// <summary>
-    /// Supporting control for the <see cref="Esri.ArcGISRuntime.Toolkit.UI.Controls.FeatureFormView"/> control,
-    /// used for rendering a <see cref="FieldFormElement"/>.
-    /// </summary>
     [TemplatePart(Name = FieldInputName, Type = typeof(ContentControl))]
     public partial class FieldFormElementView : Control
     {

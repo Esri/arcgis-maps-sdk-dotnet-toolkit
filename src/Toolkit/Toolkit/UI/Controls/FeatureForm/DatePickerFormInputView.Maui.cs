@@ -6,9 +6,6 @@ using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    /// <summary>
-    /// Picker for the <see cref="DateTimePickerFormInput"/>.
-    /// </summary>
     public partial class DateTimePickerFormInputView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;

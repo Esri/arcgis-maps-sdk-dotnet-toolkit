@@ -12,9 +12,6 @@ using System.Windows.Input;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    /// <summary>
-    /// Text input for the <see cref="TextAreaFormInput"/> and <see cref="TextBoxFormInput"/> inputs.
-    /// </summary>
     public partial class TextFormInputView : Control
     {
             private TextBox? _textInput;
