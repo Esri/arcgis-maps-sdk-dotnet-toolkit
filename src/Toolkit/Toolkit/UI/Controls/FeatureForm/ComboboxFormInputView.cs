@@ -11,7 +11,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
     /// <summary>
-    /// Checkbox switch for the <see cref="ComboBoxFormInput"/>.
+    /// Combobox picker for the <see cref="ComboBoxFormInput"/>.
     /// </summary>
     public partial class ComboBoxFormInputView
     {
@@ -130,12 +130,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         _selector.SelectedItem = selection;
                 }
             }
-        }
-
-        private void Selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var value = (_selector?.SelectedItem as CodedValue)?.Code;
-            Element?.UpdateValue(value);
         }
 
         private class ComboBoxNullValue

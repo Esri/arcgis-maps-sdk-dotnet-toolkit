@@ -7,9 +7,6 @@ using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    /// <summary>
-    /// Checkbox switch for the <see cref="ComboBoxFormInput"/>.
-    /// </summary>
     public partial class ComboBoxFormInputView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
@@ -23,13 +20,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-            Label view = new Label() { Text = "ComboBox Goes Here" };
-#warning TODO
-            //view.SetBinding(Switch.IsEnabledProperty, "Element.IsEditable");
-            //INameScope nameScope = new NameScope();
-            //NameScope.SetNameScope(view, nameScope);
-            //nameScope.RegisterName(ViewName, view);
+            Picker view = new Picker();
+            view.SetBinding(Picker.IsEnabledProperty, "Element.IsEditable");
+            view.ItemDisplayBinding = new Binding(nameof(CodedValue.Name));
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(view, nameScope);
+            nameScope.RegisterName("Picker", view);
             return view;
+        }
+
+        /// <inheritdoc />
+        protected override void OnApplyTemplate()
+        {
+            if (_selector is not null)
+            {
+                _selector.SelectedIndexChanged -= Picker_SelectedIndexChanged;
+            }
+            _selector = GetTemplateChild("Picker") as Picker;
+            if (_selector is not null)
+            {
+                _selector.SelectedIndexChanged += Picker_SelectedIndexChanged;
+            }
+            base.OnApplyTemplate();
+        }
+
+        private void Picker_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            var value = (_selector?.SelectedItem as CodedValue)?.Code;
+            Element?.UpdateValue(value);
         }
     }
 }

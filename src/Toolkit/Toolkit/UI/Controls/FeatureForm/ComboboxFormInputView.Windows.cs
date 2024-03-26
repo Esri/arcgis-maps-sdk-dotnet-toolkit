@@ -6,9 +6,6 @@ using System.ComponentModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
-    /// <summary>
-    /// Checkbox switch for the <see cref="ComboBoxFormInput"/>.
-    /// </summary>
     [TemplatePart(Name ="Selector", Type = typeof(System.Windows.Controls.Primitives.Selector))]
     public partial class ComboBoxFormInputView : Control
     {
@@ -29,6 +26,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _selector.SelectionChanged += Selector_SelectionChanged;
             }
             UpdateItems();
+        }
+
+        private void Selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var value = (_selector?.SelectedItem as CodedValue)?.Code;
+            Element?.UpdateValue(value);
         }
     }
 }
