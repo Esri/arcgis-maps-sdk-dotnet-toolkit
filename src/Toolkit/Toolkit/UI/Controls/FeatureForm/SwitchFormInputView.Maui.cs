@@ -22,7 +22,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static object BuildDefaultTemplate()
         {
             Switch view = new Switch();
-            view.SetBinding(Switch.IsEnabledProperty, "Element.IsEditable");
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(view, nameScope);
             nameScope.RegisterName(SwitchViewName, view);
@@ -38,6 +37,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 switchView.HandlerChanged += SwitchView_HandlerChanged;
 #endif
                 switchView.Toggled += SwitchView_Toggled;
+                UpdateEditableState();
+            }
+        }
+
+        private void UpdateEditableState()
+        {
+            if (GetTemplateChild(SwitchViewName) is Switch switchView)
+            {
+                switchView.IsEnabled = Element?.IsEditable == true;
             }
         }
 

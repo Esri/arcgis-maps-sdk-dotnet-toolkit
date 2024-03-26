@@ -80,7 +80,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _ = Dispatcher.InvokeAsync(UpdateCheckState);
 #endif
             }
-            
+
+#if MAUI
+            if (e.PropertyName == nameof(FieldFormElement.IsEditable))
+            {
+                Dispatcher.Dispatch(UpdateEditableState);
+            }
+#endif
         }
 
         private void Checked()
