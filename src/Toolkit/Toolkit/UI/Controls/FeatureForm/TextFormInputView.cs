@@ -47,7 +47,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
 #if MAUI
                     if (_textLineInput != null) _textLineInput.IsVisible = false;
-                    if (_textAreaInput != null) _textAreaInput.IsVisible = true;
+                    if (_textAreaInput != null)
+                    {
+                        _textAreaInput.IsVisible = true;
+                        _textAreaInput.IsEnabled = Element.IsEditable;
+                    }
 #else
                     _textInput.AcceptsReturn = true;
 #endif
@@ -56,8 +60,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 else if (Element?.Input is TextBoxFormInput box)
                 {
 #if MAUI
-                    if (_textLineInput != null) _textLineInput.IsVisible = true;
                     if (_textAreaInput != null) _textAreaInput.IsVisible = false;
+                    if (_textLineInput != null)
+                    {
+                        _textLineInput.IsVisible = true;
+                        _textLineInput.IsEnabled = Element.IsEditable;
+                    }
 #else
                     _textInput.AcceptsReturn = false;
 #endif
@@ -221,6 +229,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
+            {
+                Dispatch(ConfigureTextBox);
+            }
+            else if (e.PropertyName == nameof(FieldFormElement.IsEditable))
             {
                 Dispatch(ConfigureTextBox);
             }
