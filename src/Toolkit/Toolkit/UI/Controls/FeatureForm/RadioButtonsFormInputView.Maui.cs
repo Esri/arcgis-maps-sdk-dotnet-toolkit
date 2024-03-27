@@ -51,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                             button.SetBinding(RadioButton.ContentProperty, "Name");
                             button.BindingContext = item;
                             button.IsChecked = item == SelectedItem;
-                            button.SetBinding(RadioButton.IsEnabledProperty, new Binding() { Path = "Element.IsEditable", Source = RelativeBindingSource.TemplatedParent });
+                            button.IsEnabled = Element?.IsEditable == true;
                             button.GroupName = Element?.FieldName + "_" + _formid.ToString();
                             button.CheckedChanged += Button_CheckedChanged;
                             layout.Children.Add(button);
@@ -93,6 +93,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     }
                 }
             }
+        }
+
+        private void UpdateEditableState()
+        {
+#if __IOS__
+            // Workaround for https://github.com/dotnet/maui/issues/18668
+            ItemsSource = _itemsSource; // Rebuilds the radiobutton layout
+#else
+            if (GetTemplateChild("ItemsPanel") is Layout layout)
+            {
+                foreach (var button in layout.Children.OfType<RadioButton>())
+                {
+                    button.IsEnabled = Element?.IsEditable == true;
+                }
+            }
+#endif
         }
     }
 }

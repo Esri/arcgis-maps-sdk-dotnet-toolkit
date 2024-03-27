@@ -77,6 +77,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 Dispatch(UpdateSelection);
             }
+#if MAUI
+            else if (e.PropertyName == nameof(FieldFormElement.IsEditable))
+            {
+                Dispatch(UpdateEditableState);
+            }
+#endif
         }
 
         private void Dispatch(Action action)

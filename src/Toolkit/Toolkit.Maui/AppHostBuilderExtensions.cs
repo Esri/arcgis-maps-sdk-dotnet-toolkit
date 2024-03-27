@@ -17,7 +17,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             builder.ConfigureMauiHandlers(delegate (IMauiHandlersCollection a)
             {
                 a.AddHandler(typeof(Compass), typeof(CompassHandler));
-            }).ConfigureFonts(fonts => fonts.AddFont("calcite-ui-icons-24.ttf", "calcite-ui-icons-24"));
+            }).ConfigureFonts(fonts => fonts.AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "calcite-ui-icons-24.ttf", "calcite-ui-icons-24"));
 
             return builder;
         }

@@ -119,16 +119,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+
+        private static object pendingExpressionsLock = new object();
+        private static List<FeatureForm> pendingExpressions = new List<FeatureForm>();
+
         private async void OnValuePropertyChanged()
         {
-            if (Element is null || FeatureForm is null)
+            var form = FeatureForm;
+            if (Element is null || form is null)
                 return;
+            // Don't evaluate expressions if we're already in the process of evaluating
+            // If that's the case, the value changed event triggering this code was
+            // caused by another expression evaluation
+            lock(pendingExpressionsLock)
+            {
+                if (pendingExpressions.Contains(form))
+                    return;
+                pendingExpressions.Add(form);
+            }
             try
             {
-                await FeatureForm.EvaluateExpressionsAsync();
+                await form.EvaluateExpressionsAsync();
             }
-            catch (System.Exception)
+            catch { }
+            finally
             {
+                lock (pendingExpressionsLock)
+                {
+                    if (pendingExpressions.Contains(form))
+                        pendingExpressions.Remove(form);
+                }
             }
         }
 
