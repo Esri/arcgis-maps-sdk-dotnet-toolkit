@@ -30,8 +30,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly ControlTemplate DefaultControlTemplate;
         private const string CollapsibleViewName = "CollapsibleView";
         private const string ClickableAreaName = "ClickableArea";        
-        private const string GroupFormElementViewStyleName = "GroupFormElementViewStyle";
-        private static readonly Style DefaultGroupFormElementViewStyle;
         private WeakEventListener<GroupFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
@@ -41,8 +39,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         static GroupFormElementView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
-            DefaultGroupFormElementViewStyle = new Style(typeof(FieldFormElementView));
-            DefaultGroupFormElementViewStyle.Setters.Add(new Setter() { Property = BackgroundColorProperty, Value = Colors.White });
         }
 
         public GroupFormElementView()
@@ -96,7 +92,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             clickAreaContent.Children.Add(expandedChevron);
 
             layout.Children.Add(clickAreaContent);
-            VerticalStackLayout itemsView = new VerticalStackLayout();
+            VerticalStackLayout itemsView = new VerticalStackLayout() { Margin = new Thickness(0, 10, 0, 0) };
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
             itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Element.Elements", source: RelativeBindingSource.TemplatedParent));
             layout.Children.Add(itemsView);
@@ -107,7 +103,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Border bottomDivider = new Border() { HeightRequest = 1 };
             bottomDivider.SetAppThemeColor(Border.BackgroundProperty, Colors.Black, Colors.White);
             layout.Children.Add(bottomDivider);
-            layout.Style = FeatureFormView.GetStyle(GroupFormElementViewStyleName, DefaultGroupFormElementViewStyle);
             return layout;
         }
 

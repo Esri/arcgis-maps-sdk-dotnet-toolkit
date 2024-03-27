@@ -74,7 +74,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             roottitle.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
             root.Add(roottitle);
-            ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never };
+            ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never, Margin = new Thickness(0, 5, 0, 0) };
 #if WINDOWS
             scrollView.Padding = new Thickness(0, 0, 10, 0);
 #endif

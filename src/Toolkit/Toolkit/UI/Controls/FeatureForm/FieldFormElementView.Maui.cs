@@ -25,8 +25,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     {
         private const string FieldInputName = "FieldInput";
         private const string ErrorLabelName = "ErrorLabel";
-        private const string FieldFormElementViewStyleName = "FieldFormElementViewStyle";
-        private static readonly Style DefaultFieldFormElementViewStyle;
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly DataTemplate DefaultComboBoxFormInputTemplate;
         private static readonly DataTemplate DefaultSwitchFormInputTemplate;
@@ -45,8 +43,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultRadioButtonsFormInputTemplate = new DataTemplate(BuildDefaultRadioButtonsFormInputTemplate);
             DefaultTextAreaFormInputTemplate = new DataTemplate(BuildDefaultTextAreaFormInputTemplate);
             DefaultTextBoxFormInputTemplate = new DataTemplate(BuildDefaultTextBoxFormInputTemplate);
-            DefaultFieldFormElementViewStyle = new Style(typeof(FieldFormElementView));
-            DefaultFieldFormElementViewStyle.Setters.Add(new Setter() { Property = BackgroundColorProperty, Value = Colors.White });
         }
 
         private static object BuildDefaultComboBoxFormInputTemplate()
@@ -97,12 +93,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             var root = new VerticalStackLayout();
             root.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
-            var label = new Label() { Margin = new Thickness(0, 10) };
+            var label = new Label();
             label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
             label.SetBinding(View.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
             root.Children.Add(label);
-            label = new Label() { Margin = new Thickness(0, 10) };
+            label = new Label();
             label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
             label.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
@@ -110,15 +106,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var content = new DataTemplatedContentPresenter();
             content.SetBinding(DataTemplatedContentPresenter.ContentDataProperty, new Binding(nameof(Element), source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(content);
-            label = new Label() { Margin = new Thickness(0, 10), TextColor = Colors.Red };
-            root.Children.Add(label);
-            label.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
+            var errorLabel = new Label() { Margin = new Thickness(0, 2), TextColor = Colors.Red };
+            root.Children.Add(errorLabel);
+            errorLabel.SetBinding(Label.IsVisibleProperty, new Binding("Text", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(FieldInputName, content);
-            nameScope.RegisterName(ErrorLabelName, label);
-            root.Style = FeatureFormView.GetStyle(FieldFormElementViewStyleName, DefaultFieldFormElementViewStyle);
+            nameScope.RegisterName(ErrorLabelName, errorLabel);
             return root;
         }
 
