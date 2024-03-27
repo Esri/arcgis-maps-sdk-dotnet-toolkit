@@ -81,11 +81,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
             Grid.SetRow(scrollView, 1);
             root.Add(scrollView);
-            VerticalStackLayout itemsView = new VerticalStackLayout()
-            {
-                Margin = new Thickness(0, 10),
-            };
-            
+            VerticalStackLayout itemsView = new VerticalStackLayout();            
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
             itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent));
             scrollView.Content = itemsView;

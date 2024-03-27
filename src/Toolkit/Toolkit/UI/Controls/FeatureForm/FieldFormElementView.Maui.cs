@@ -25,6 +25,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     {
         private const string FieldInputName = "FieldInput";
         private const string ErrorLabelName = "ErrorLabel";
+        private const string FieldFormElementViewStyleName = "FieldFormElementViewStyle";
+        private static readonly Style DefaultFieldFormElementViewStyle;
         private static readonly ControlTemplate DefaultControlTemplate;
         private static readonly DataTemplate DefaultComboBoxFormInputTemplate;
         private static readonly DataTemplate DefaultSwitchFormInputTemplate;
@@ -43,6 +45,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultRadioButtonsFormInputTemplate = new DataTemplate(BuildDefaultRadioButtonsFormInputTemplate);
             DefaultTextAreaFormInputTemplate = new DataTemplate(BuildDefaultTextAreaFormInputTemplate);
             DefaultTextBoxFormInputTemplate = new DataTemplate(BuildDefaultTextBoxFormInputTemplate);
+            DefaultFieldFormElementViewStyle = new Style(typeof(FieldFormElementView));
+            DefaultFieldFormElementViewStyle.Setters.Add(new Setter() { Property = BackgroundColorProperty, Value = Colors.White });
         }
 
         private static object BuildDefaultComboBoxFormInputTemplate()
@@ -114,6 +118,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(FieldInputName, content);
             nameScope.RegisterName(ErrorLabelName, label);
+            root.Style = FeatureFormView.GetStyle(FieldFormElementViewStyleName, DefaultFieldFormElementViewStyle);
             return root;
         }
 

@@ -25,11 +25,13 @@ using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    internal class GroupFormElementView : TemplatedView
+    public class GroupFormElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
         private const string CollapsibleViewName = "CollapsibleView";
-        private const string ClickableAreaName = "ClickableArea";
+        private const string ClickableAreaName = "ClickableArea";        
+        private const string GroupFormElementViewStyleName = "GroupFormElementViewStyle";
+        private static readonly Style DefaultGroupFormElementViewStyle;
         private WeakEventListener<GroupFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
@@ -39,6 +41,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         static GroupFormElementView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
+            DefaultGroupFormElementViewStyle = new Style(typeof(FieldFormElementView));
+            DefaultGroupFormElementViewStyle.Setters.Add(new Setter() { Property = BackgroundColorProperty, Value = Colors.White });
         }
 
         public GroupFormElementView()
@@ -74,28 +78,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetRow(label, 1);
             clickAreaContent.Children.Add(label);
 
-            Label collapsedChevron = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
+            Label collapsedChevron = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
 #if IOS
-            collapsedChevron.Text = "˃"; // iOS use right-chevron for expand
+            collapsedChevron.Text = ""; // iOS use right-chevron for expand
 #else
-            collapsedChevron.Text = "˅";
+            collapsedChevron.Text = "";
 #endif
             collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), converter: InvertBoolConverter.Instance, converterParameter: "Inverse", source: RelativeBindingSource.TemplatedParent));
             Grid.SetRowSpan(collapsedChevron, 2);
             Grid.SetColumn(collapsedChevron, 1);
             clickAreaContent.Children.Add(collapsedChevron);
             
-            Label expandedChevron = new Label() { Text = "˄", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
+            Label expandedChevron = new Label() { Text = "", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
             expandedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), source: RelativeBindingSource.TemplatedParent));
             Grid.SetRowSpan(expandedChevron, 2);
             Grid.SetColumn(expandedChevron, 1);
             clickAreaContent.Children.Add(expandedChevron);
 
             layout.Children.Add(clickAreaContent);
-            VerticalStackLayout itemsView = new VerticalStackLayout()
-            {
-                Margin = new Thickness(0, 10),
-            };
+            VerticalStackLayout itemsView = new VerticalStackLayout();
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
             itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Element.Elements", source: RelativeBindingSource.TemplatedParent));
             layout.Children.Add(itemsView);
@@ -103,8 +104,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             NameScope.SetNameScope(layout, nameScope);
             nameScope.RegisterName(ClickableAreaName, clickAreaContent);
             nameScope.RegisterName(CollapsibleViewName, itemsView);
-            Border bottomDivider = new Border() { Background = new SolidColorBrush(Colors.Black), HeightRequest = 1 };
+            Border bottomDivider = new Border() { HeightRequest = 1 };
+            bottomDivider.SetAppThemeColor(Border.BackgroundProperty, Colors.Black, Colors.White);
             layout.Children.Add(bottomDivider);
+            layout.Style = FeatureFormView.GetStyle(GroupFormElementViewStyleName, DefaultGroupFormElementViewStyle);
             return layout;
         }
 
