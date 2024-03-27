@@ -92,6 +92,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             return root;
         }
 
+        private bool _isValid = false;
+
+        /// <summary>
+        /// Gets a value indicating whether this form has any validation errors.
+        /// </summary>
+        /// <seealso cref="FeatureForm.ValidationErrors"/>
+        public bool IsValid
+        {
+            get => _isValid;
+            private set
+            {
+                if (_isValid != value)
+                {
+                    _isValid = value;
+                    base.OnPropertyChanged(nameof(IsValid));
+                }
+            }
+        }
+
         internal static Style GetStyle(string resourceKey, Style defaultStyle)
         {
             if (Application.Current?.Resources?.TryGetValue(resourceKey, out var value) == true && value is Style style)
