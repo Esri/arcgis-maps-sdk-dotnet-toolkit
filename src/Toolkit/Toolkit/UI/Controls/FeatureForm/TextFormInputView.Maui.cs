@@ -2,6 +2,7 @@
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -16,6 +17,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
+        private class StringLengthConverter : IValueConverter
+        {
+            public static StringLengthConverter Instance { get; } = new StringLengthConverter();
+            object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is string str ? str.Length : 0;
+
+            object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
+        }
+
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
@@ -27,7 +36,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             horizontalStackLayout.Margin = new Thickness(0, -17, 0, 0);
             horizontalStackLayout.SetBinding(View.IsVisibleProperty, new Binding(nameof(TextFormInputView.ShowCharacterCount), source: RelativeBindingSource.TemplatedParent));
             Label characterCountLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
-            characterCountLabel.SetBinding(Label.TextProperty, new Binding("Element.Value.Length", source: RelativeBindingSource.TemplatedParent));
+            characterCountLabel.SetBinding(Label.TextProperty, new Binding("Element.Value", source: RelativeBindingSource.TemplatedParent, converter: StringLengthConverter.Instance));
             horizontalStackLayout.Children.Add(characterCountLabel);
             horizontalStackLayout.Children.Add(new Label() { Text = "/", Style = FeatureFormView.GetFeatureFormCaptionStyle() });
             Label maxCountLabel = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
