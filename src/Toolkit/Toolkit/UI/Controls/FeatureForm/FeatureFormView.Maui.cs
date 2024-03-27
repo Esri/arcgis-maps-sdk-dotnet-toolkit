@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private const string FeatureFormTitleStyleName = "FeatureFormTitleStyle";
         private const string FeatureFormCaptionStyleName = "FeatureFormCaptionStyle";
 
-         /// <summary>
+        /// <summary>
         /// Template name of the form's content's <see cref="ScrollView"/>.
         /// </summary>
         public const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
