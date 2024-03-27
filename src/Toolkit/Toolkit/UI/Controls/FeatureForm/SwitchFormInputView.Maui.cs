@@ -21,24 +21,45 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTemplate()
         {
-            Switch view = new Switch();
+            Switch toggleSwitch = new Switch();
+            toggleSwitch.SetBinding(Switch.IsToggledProperty, new Binding(nameof(IsChecked), source: RelativeBindingSource.TemplatedParent));
             INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(view, nameScope);
-            nameScope.RegisterName(SwitchViewName, view);
-            return view;
+            nameScope.RegisterName(SwitchViewName, toggleSwitch);
+#if WINDOWS
+            NameScope.SetNameScope(toggleSwitch, nameScope);
+            return toggleSwitch;
+#else
+            toggleSwitch.VerticalOptions = new LayoutOptions(LayoutAlignment.Center, false);
+            Grid root = new Grid();
+            root.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            root.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
+            Grid.SetColumn(toggleSwitch, 1);
+            Label onText = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, false) };
+            onText.SetBinding(Label.TextProperty, new Binding("Element.Input.OnValue.Name", source: RelativeBindingSource.TemplatedParent));
+            onText.SetBinding(Label.IsVisibleProperty, new Binding(nameof(IsChecked), source: RelativeBindingSource.TemplatedParent));
+            root.Children.Add(onText);
+
+            Label offText = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, false) };
+            offText.SetBinding(Label.TextProperty, new Binding("Element.Input.OffValue.Name", source: RelativeBindingSource.TemplatedParent));
+            offText.SetBinding(Label.IsVisibleProperty, new Binding(nameof(IsChecked), source: RelativeBindingSource.TemplatedParent, converter: Internal.InvertBoolConverter.Instance));
+            root.Children.Add(offText);
+
+            root.Children.Add(toggleSwitch);
+            NameScope.SetNameScope(root, nameScope);
+            return root;
+#endif
         }
         /// <inheritdoc />
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+#if WINDOWS
             if(GetTemplateChild(SwitchViewName) is Switch switchView)
             {
-#if WINDOWS
                 switchView.HandlerChanged += SwitchView_HandlerChanged;
-#endif
-                switchView.Toggled += SwitchView_Toggled;
-                UpdateEditableState();
             }
+#endif
+            UpdateEditableState();
         }
 
         private void UpdateEditableState()
@@ -62,18 +83,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 ts.OnContent = (Element?.Input as SwitchFormInput)?.OnValue?.Name;
                 ts.OffContent = (Element?.Input as SwitchFormInput)?.OffValue?.Name;
-                // Note: ios/android does not have on/off content placeholders
+                // Note: ios/android does not have built-in on/off content placeholders, and is handled with text content instead - see BuildDefaultTemplate
             }
         }
 #endif
-
-        private void SwitchView_Toggled(object? sender, ToggledEventArgs e)
-        {
-            if(e.Value)
-                Checked();
-            else 
-                Unchecked();
-        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this switch is checked or not.
@@ -92,7 +105,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private void OnIsCheckedPropertyChanged(object oldValue, object newValue)
         {
-            if(newValue is bool b && b)
+            var state = (newValue is bool b && b);
+            if (state)
                 Checked();
             else
                 Unchecked();

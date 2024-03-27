@@ -45,13 +45,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             ControlTemplate = DefaultControlTemplate;
         }
-        private class InvertBoolConverter : IValueConverter
-        {
-            public static InvertBoolConverter Instance { get; } = new InvertBoolConverter();
-            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => (value is bool b) ? !b : value;
-
-            public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
-        }
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
@@ -80,7 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #else
             collapsedChevron.Text = "";
 #endif
-            collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), converter: InvertBoolConverter.Instance, converterParameter: "Inverse", source: RelativeBindingSource.TemplatedParent));
+            collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), converter: Internal.InvertBoolConverter.Instance, source: RelativeBindingSource.TemplatedParent));
             Grid.SetRowSpan(collapsedChevron, 2);
             Grid.SetColumn(collapsedChevron, 1);
             clickAreaContent.Children.Add(collapsedChevron);
