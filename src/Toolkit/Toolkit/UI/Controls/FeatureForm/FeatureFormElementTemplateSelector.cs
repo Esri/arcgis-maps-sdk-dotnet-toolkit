@@ -35,14 +35,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         {
             DefaultFieldFormElementTemplate = new DataTemplate(() =>
             {
-                var view = new FieldFormElementView() { Margin = new Thickness(0, 0) };
+                var view = new FieldFormElementView() { Margin = new Thickness(0, 0, 0, 10) };
                 view.SetBinding(FieldFormElementView.ElementProperty, Binding.SelfPath);
                 view.SetBinding(FieldFormElementView.FeatureFormProperty, new Binding(nameof(FeatureFormView.FeatureForm), source: new RelativeBindingSource(RelativeBindingSourceMode.FindAncestor, typeof(FeatureFormView))));
                 return view;
             });
             DefaultGroupElementTemplate = new DataTemplate(() =>
             {
-                var view = new GroupFormElementView() { Margin = new Thickness(0, 0) };
+                var view = new GroupFormElementView() { Margin = new Thickness(0, 0, 0, 10) };
                 view.SetBinding(GroupFormElementView.ElementProperty, Binding.SelfPath);
                 return view;
             });

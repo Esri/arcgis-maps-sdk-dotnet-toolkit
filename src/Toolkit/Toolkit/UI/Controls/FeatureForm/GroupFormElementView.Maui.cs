@@ -21,6 +21,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -44,42 +45,66 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             ControlTemplate = DefaultControlTemplate;
         }
+        private class InvertBoolConverter : IValueConverter
+        {
+            public static InvertBoolConverter Instance { get; } = new InvertBoolConverter();
+            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => (value is bool b) ? !b : value;
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Title), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
+            public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
+        }
+
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
+            
             var layout = new VerticalStackLayout();
-            Border clickArea = new Border();
+
             var clickAreaContent = new Grid() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
             clickAreaContent.RowDefinitions.Add(new RowDefinition());
             clickAreaContent.RowDefinitions.Add(new RowDefinition());
             clickAreaContent.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
             clickAreaContent.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-            var label = new Label() { Margin = new Thickness(0, 10), Style = FeatureFormView.GetFeatureFormTitleStyle() };
-            label.SetBinding(Label.TextProperty, nameof(FormElement.Label));
+            var label = new Label() { Style = FeatureFormView.GetFeatureFormTitleStyle() };
+            label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
             clickAreaContent.Children.Add(label);
-            label = new Label() { Margin = new Thickness(0, 10), Style = FeatureFormView.GetFeatureFormCaptionStyle() };
-            label.SetBinding(Label.TextProperty, nameof(FormElement.Description));
+            label = new Label() { Style = FeatureFormView.GetFeatureFormCaptionStyle() };
+            label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
             Grid.SetRow(label, 1);
             clickAreaContent.Children.Add(label);
-            Label chevron = new Label() { Text = ">", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
-            Grid.SetRowSpan(chevron, 2);
-            Grid.SetColumn(chevron, 1);
-            clickAreaContent.Children.Add(chevron);
-            clickArea.Content = clickAreaContent;
-            layout.Children.Add(clickArea);
+
+            Label collapsedChevron = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
+#if IOS
+            collapsedChevron.Text = "˃"; // iOS use right-chevron for expand
+#else
+            collapsedChevron.Text = "˅";
+#endif
+            collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), converter: InvertBoolConverter.Instance, converterParameter: "Inverse", source: RelativeBindingSource.TemplatedParent));
+            Grid.SetRowSpan(collapsedChevron, 2);
+            Grid.SetColumn(collapsedChevron, 1);
+            clickAreaContent.Children.Add(collapsedChevron);
+            
+            Label expandedChevron = new Label() { Text = "˄", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
+            expandedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), source: RelativeBindingSource.TemplatedParent));
+            Grid.SetRowSpan(expandedChevron, 2);
+            Grid.SetColumn(expandedChevron, 1);
+            clickAreaContent.Children.Add(expandedChevron);
+
+            layout.Children.Add(clickAreaContent);
             VerticalStackLayout itemsView = new VerticalStackLayout()
             {
                 Margin = new Thickness(0, 10),
             };
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
-            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, nameof(GroupFormElement.Elements));
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Element.Elements", source: RelativeBindingSource.TemplatedParent));
             layout.Children.Add(itemsView);
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(layout, nameScope);
-            nameScope.RegisterName(ClickableAreaName, clickArea);
+            nameScope.RegisterName(ClickableAreaName, clickAreaContent);
             nameScope.RegisterName(CollapsibleViewName, itemsView);
+            Border bottomDivider = new Border() { Background = new SolidColorBrush(Colors.Black), HeightRequest = 1 };
+            layout.Children.Add(bottomDivider);
             return layout;
         }
 
