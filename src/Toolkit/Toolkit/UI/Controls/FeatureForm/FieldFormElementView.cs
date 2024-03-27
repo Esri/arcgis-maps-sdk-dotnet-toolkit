@@ -23,6 +23,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
 using TextBlock = Microsoft.Maui.Controls.Label;
+using DependencyProperty = Microsoft.Maui.Controls.BindableProperty;
 #else
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
@@ -48,6 +49,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
+            ComboBoxFormInputTemplate = DefaultComboBoxFormInputTemplate;
+            SwitchFormInputTemplate = DefaultSwitchFormInputTemplate;
+            DateTimePickerFormInputTemplate = DefaultDateTimePickerFormInputTemplate;
+            RadioButtonsFormInputTemplate = DefaultRadioButtonsFormInputTemplate;
+            TextAreaFormInputTemplate = DefaultTextAreaFormInputTemplate;
+            TextBoxFormInputTemplate = DefaultTextBoxFormInputTemplate;
 #else
             DefaultStyleKey = typeof(FieldFormElementView);
 #endif
@@ -87,7 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), null);
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), null, propertyChanged: (s, oldValue, newValue) => ((FieldFormElementView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
 #else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(FieldFormElementView), new PropertyMetadata(null, (s,e) => ((FieldFormElementView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
@@ -112,16 +119,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+
+        private static object pendingExpressionsLock = new object();
+        private static List<FeatureForm> pendingExpressions = new List<FeatureForm>();
+
         private async void OnValuePropertyChanged()
         {
-            if (Element is null || FeatureForm is null)
+            var form = FeatureForm;
+            if (Element is null || form is null)
                 return;
+            // Don't evaluate expressions if we're already in the process of evaluating
+            // If that's the case, the value changed event triggering this code was
+            // caused by another expression evaluation
+            lock(pendingExpressionsLock)
+            {
+                if (pendingExpressions.Contains(form))
+                    return;
+                pendingExpressions.Add(form);
+            }
             try
             {
-                await FeatureForm.EvaluateExpressionsAsync();
+                await form.EvaluateExpressionsAsync();
             }
-            catch (System.Exception)
+            catch { }
+            finally
             {
+                lock (pendingExpressionsLock)
+                {
+                    if (pendingExpressions.Contains(form))
+                        pendingExpressions.Remove(form);
+                }
             }
         }
 
@@ -179,6 +206,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 tb.Text = errMessage;
             }
         }
+
         private void Dispatch(Action action)
         {
 #if WPF
@@ -193,6 +221,120 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     action();
 #endif
         }
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="ComboBoxFormInput"/> element.
+        /// </summary>
+        public DataTemplate? ComboBoxFormInputTemplate
+        {
+            get { return (DataTemplate)GetValue(ComboBoxFormInputTemplateProperty); }
+            set { SetValue(ComboBoxFormInputTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ComboBoxFormInputTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ComboBoxFormInputTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(ComboBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(ComboBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="SwitchFormInput"/> element.
+        /// </summary>
+        public DataTemplate? SwitchFormInputTemplate
+        {
+            get { return (DataTemplate)GetValue(SwitchFormInputTemplateProperty); }
+            set { SetValue(SwitchFormInputTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="SwitchFormInputTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SwitchFormInputTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(SwitchFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(SwitchFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="DateTimePickerFormInput"/> element.
+        /// </summary>
+        public DataTemplate? DateTimePickerFormInputTemplate
+        {
+            get { return (DataTemplate)GetValue(DateTimePickerFormInputTemplateProperty); }
+            set { SetValue(DateTimePickerFormInputTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="DateTimePickerFormInputTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty DateTimePickerFormInputTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(DateTimePickerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(DateTimePickerFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="RadioButtonsFormInput"/> element.
+        /// </summary>
+        public DataTemplate? RadioButtonsFormInputTemplate
+        {
+            get { return (DataTemplate)GetValue(RadioButtonsFormInputTemplateProperty); }
+            set { SetValue(RadioButtonsFormInputTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="RadioButtonsFormInputTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty RadioButtonsFormInputTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(RadioButtonsFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(RadioButtonsFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="TextAreaFormInput"/> element.
+        /// </summary>
+        public DataTemplate? TextAreaFormInputTemplate
+        {
+            get { return (DataTemplate)GetValue(TextAreaFormInputTemplateProperty); }
+            set { SetValue(TextAreaFormInputTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TextAreaFormInputTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TextAreaFormInputTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(TextAreaFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(TextAreaFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
+
+        /// <summary>
+        /// Gets or sets the template for the <see cref="TextBoxFormInputTemplate"/> element.
+        /// </summary>
+        public DataTemplate? TextBoxFormInputTemplate
+        {
+            get { return (DataTemplate)GetValue(TextBoxFormInputTemplateProperty); }
+            set { SetValue(TextBoxFormInputTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="TextBoxFormInputTemplate"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TextBoxFormInputTemplateProperty =
+#if MAUI
+            BindableProperty.Create(nameof(TextBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), null);
+#else
+            DependencyProperty.Register(nameof(TextBoxFormInputTemplate), typeof(DataTemplate), typeof(FieldFormElementView), new PropertyMetadata(null));
+#endif
     }
 }
 #endif

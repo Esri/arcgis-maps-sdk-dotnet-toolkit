@@ -1,14 +1,18 @@
-﻿#if WPF
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
 {
     /// <summary>
     /// Checkbox switch for the <see cref="SwitchFormInput"/>.
     /// </summary>
-    public class SwitchFormInputView : CheckBox
+    public partial class SwitchFormInputView
     {
         private WeakEventListener<SwitchFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
 
@@ -17,7 +21,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public SwitchFormInputView()
         {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+#else
             DefaultStyleKey = typeof(SwitchFormInputView);
+#endif
         }
 
         /// <summary>
@@ -32,8 +40,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ElementProperty =
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(SwitchFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((SwitchFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
+#else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(SwitchFormInputView), new PropertyMetadata(null, (s, e) => ((SwitchFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+#endif
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
@@ -52,37 +65,44 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateCheckState();
+#if MAUI && WINDOWS
+            UpdateOnOffContent();
+#endif
         }
 
         private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
-            {            
-                if (Dispatcher.CheckAccess())
-                    UpdateCheckState();
-                else
-                    Dispatcher.Invoke(UpdateCheckState);
+            {
+#if MAUI
+                Dispatcher.Dispatch(UpdateCheckState);
+#else
+                _ = Dispatcher.InvokeAsync(UpdateCheckState);
+#endif
             }
+
+#if MAUI
+            if (e.PropertyName == nameof(FieldFormElement.IsEditable))
+            {
+                Dispatcher.Dispatch(UpdateEditableState);
+            }
+#endif
         }
 
-        /// <inheritdoc/>
-        protected override void OnChecked(RoutedEventArgs e)
+        private void Checked()
         {
             if (Element is not null && Element.Input is SwitchFormInput input && !object.Equals(input.OnValue.Code, Element.Value))
             {
                 Element.UpdateValue(input.OnValue.Code);
             }
-            base.OnChecked(e);
         }
 
-        /// <inheritdoc/>
-        protected override void OnUnchecked(RoutedEventArgs e)
+        private void Unchecked()
         {
             if (Element is not null && Element.Input is SwitchFormInput input && !object.Equals(input.OffValue.Code, Element.Value))
             {
                 Element.UpdateValue(input.OffValue.Code);
             }
-            base.OnUnchecked(e);
         }
 
         private void UpdateCheckState()
@@ -93,7 +113,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else
             {
+#if MAUI
+                IsChecked = false;
+#else
                 IsChecked = null;
+#endif
             }
         }
     }

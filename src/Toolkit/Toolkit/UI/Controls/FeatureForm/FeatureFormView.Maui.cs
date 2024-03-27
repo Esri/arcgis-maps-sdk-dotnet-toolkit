@@ -39,7 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         private const string FeatureFormTitleStyleName = "FeatureFormTitleStyle";
         private const string FeatureFormCaptionStyleName = "FeatureFormCaptionStyle";
 
-         /// <summary>
+        /// <summary>
         /// Template name of the form's content's <see cref="ScrollView"/>.
         /// </summary>
         public const string FeatureFormContentScrollViewerName = "FeatureFormContentScrollViewer";
@@ -66,12 +66,49 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
+            Grid root = new Grid();
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
             Label roottitle = new Label();
             roottitle.Style = GetFeatureFormHeaderStyle();
             roottitle.SetBinding(Label.TextProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent));
             roottitle.SetBinding(VisualElement.IsVisibleProperty, new Binding("FeatureForm.Title", source: RelativeBindingSource.TemplatedParent, converter: Internal.EmptyToFalseConverter.Instance));
-            //TODO...
-            return roottitle;
+            root.Add(roottitle);
+            ScrollView scrollView = new ScrollView() { HorizontalScrollBarVisibility = ScrollBarVisibility.Never, Margin = new Thickness(0, 5, 0, 0) };
+#if WINDOWS
+            scrollView.Padding = new Thickness(0, 0, 10, 0);
+#endif
+            scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            Grid.SetRow(scrollView, 1);
+            root.Add(scrollView);
+            VerticalStackLayout itemsView = new VerticalStackLayout();            
+            BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
+            itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent));
+            scrollView.Content = itemsView;
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(root, nameScope);
+            nameScope.RegisterName(FeatureFormContentScrollViewerName, scrollView);
+            nameScope.RegisterName(ItemsViewName, itemsView);
+            return root;
+        }
+
+        private bool _isValid = false;
+
+        /// <summary>
+        /// Gets a value indicating whether this form has any validation errors.
+        /// </summary>
+        /// <seealso cref="FeatureForm.ValidationErrors"/>
+        public bool IsValid
+        {
+            get => _isValid;
+            private set
+            {
+                if (_isValid != value)
+                {
+                    _isValid = value;
+                    base.OnPropertyChanged(nameof(IsValid));
+                }
+            }
         }
 
         internal static Style GetStyle(string resourceKey, Style defaultStyle)

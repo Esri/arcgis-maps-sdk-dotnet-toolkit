@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Toolkit.SampleApp.Maui.MainPage">
     <Grid>
-        <ListView x:Name="SamplesList" ItemSelected="SamplesList_ItemSelected">
+        <ListView x:Name="SamplesList" ItemSelected="SamplesList_ItemSelected" Margin="{OnPlatform 0, WinUI=20}" RowHeight="{OnPlatform 60, WinUI=45}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Name}" Detail="{Binding Description}" />
+                    <TextCell Text="{Binding Name}" Detail="{Binding Description}" TextColor="CornflowerBlue" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
