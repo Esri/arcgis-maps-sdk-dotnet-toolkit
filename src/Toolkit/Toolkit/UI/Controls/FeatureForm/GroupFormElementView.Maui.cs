@@ -22,39 +22,49 @@ using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.Globalization;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
+    /// <summary>
+    /// Groups a set of <see cref="FieldFormElementView"/> views in a collapsible group.
+    /// </summary>
     public class GroupFormElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
+        //private static readonly Style DefaultGroupFormElementViewStyle;
         private const string CollapsibleViewName = "CollapsibleView";
         private const string ClickableAreaName = "ClickableArea";        
         private WeakEventListener<GroupFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
         static GroupFormElementView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupFormElementView"/> class.
+        /// </summary>
         public GroupFormElementView()
         {
+            this.SetAppThemeColor(BorderStrokeProperty, Colors.Black, Colors.White);
+            this.SetAppThemeColor(HeaderBackgroundProperty, Color.FromRgb(200,200,200), Colors.DarkGray);
             ControlTemplate = DefaultControlTemplate;
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement.Elements), "Esri.ArcGISRuntime.Mapping.FeatureForms.GroupFormElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
-            
-            var layout = new VerticalStackLayout();
+            Border root = new Border() { StrokeShape = new RoundRectangle() { CornerRadius = 2 } };
+            root.SetBinding(Border.StrokeProperty, new Binding(nameof(BorderStroke), source: RelativeBindingSource.TemplatedParent));
+            root.SetBinding(Border.StrokeThicknessProperty, new Binding(nameof(BorderStrokeThickness), source: RelativeBindingSource.TemplatedParent));
 
+            var layout = new VerticalStackLayout();
             var clickAreaContent = new Grid() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true) };
+            clickAreaContent.SetBinding(Grid.BackgroundProperty, new Binding(nameof(HeaderBackground), source: RelativeBindingSource.TemplatedParent));
+            clickAreaContent.SetBinding(Grid.PaddingProperty, new Binding(nameof(ContentPadding), source: RelativeBindingSource.TemplatedParent));
             clickAreaContent.RowDefinitions.Add(new RowDefinition());
             clickAreaContent.RowDefinitions.Add(new RowDefinition());
             clickAreaContent.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
@@ -85,18 +95,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             clickAreaContent.Children.Add(expandedChevron);
 
             layout.Children.Add(clickAreaContent);
-            VerticalStackLayout itemsView = new VerticalStackLayout() { Margin = new Thickness(0, 10, 0, 0) };
+            VerticalStackLayout itemsView = new VerticalStackLayout();
+            itemsView.SetBinding(VerticalStackLayout.MarginProperty, new Binding(nameof(ContentPadding), source: RelativeBindingSource.TemplatedParent));
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
             itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Element.Elements", source: RelativeBindingSource.TemplatedParent));
             layout.Children.Add(itemsView);
+            root.Content = layout;
             INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(layout, nameScope);
+            NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(ClickableAreaName, clickAreaContent);
             nameScope.RegisterName(CollapsibleViewName, itemsView);
-            Border bottomDivider = new Border() { HeightRequest = 1 };
-            bottomDivider.SetAppThemeColor(Border.BackgroundProperty, Colors.Black, Colors.White);
-            layout.Children.Add(bottomDivider);
-            return layout;
+            return root;
         }
 
         /// <inheritdoc />
@@ -152,6 +161,66 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
+        /// <summary>
+        /// Gets or sets the brush used for the header background
+        /// </summary>
+        public Brush HeaderBackground
+        {
+            get => (Brush)GetValue(HeaderBackgroundProperty);
+            set => SetValue(HeaderBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="HeaderBackground"/> dependency property.
+        /// </summary>
+        public static readonly BindableProperty HeaderBackgroundProperty =
+            BindableProperty.Create(nameof(HeaderBackground), typeof(Brush), typeof(GroupFormElementView), null);
+
+        /// <summary>
+        /// Gets or sets the border stroke brush for the group
+        /// </summary>
+        public Brush BorderStroke
+        {
+            get => (Brush)GetValue(BorderStrokeProperty);
+            set => SetValue(BorderStrokeProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BorderStroke"/> dependency property.
+        /// </summary>
+        public static readonly BindableProperty BorderStrokeProperty =
+            BindableProperty.Create(nameof(BorderStroke), typeof(Brush), typeof(GroupFormElementView), null);
+
+        /// <summary>
+        /// Gets or sets the stroke thickness of the border
+        /// </summary>
+        public double BorderStrokeThickness
+        {
+            get => (double)GetValue(BorderStrokeThicknessProperty);
+            set => SetValue(BorderStrokeThicknessProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="BorderStrokeThickness"/> dependency property.
+        /// </summary>
+        public static readonly BindableProperty BorderStrokeThicknessProperty =
+            BindableProperty.Create(nameof(BorderStrokeThickness), typeof(double), typeof(GroupFormElementView), .5d);
+
+        /// <summary>
+        /// Gets or sets the padding inside the group's border
+        /// </summary>
+        public double ContentPadding
+        {
+            get => (double)GetValue(ContentPaddingProperty);
+            set => SetValue(ContentPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="ContentPadding"/> dependency property.
+        /// </summary>
+        public static readonly BindableProperty ContentPaddingProperty =
+            BindableProperty.Create(nameof(ContentPadding), typeof(double), typeof(GroupFormElementView), 5d);
+
         private void OnElementPropertyChanged(GroupFormElement? oldValue, GroupFormElement? newValue)
         {
             if (oldValue is INotifyPropertyChanged inpcOld)
@@ -187,7 +256,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private void UpdateVisibility()
         {
-            this.IsVisible = Element!= null && Element.IsVisible && Element.Elements.Count > 0;
+            this.IsVisible = Element!= null && Element.IsVisible && Element.Elements.Count > 0; // TODO: Consider also hiding if all elements are not visible
         }
 
         private void Dispatch(Action action)
