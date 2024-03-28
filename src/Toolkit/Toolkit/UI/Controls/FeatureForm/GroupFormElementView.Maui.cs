@@ -32,7 +32,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     public class GroupFormElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        //private static readonly Style DefaultGroupFormElementViewStyle;
         private const string CollapsibleViewName = "CollapsibleView";
         private const string ClickableAreaName = "ClickableArea";        
         private WeakEventListener<GroupFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
