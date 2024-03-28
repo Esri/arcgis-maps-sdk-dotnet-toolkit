@@ -1,58 +1,48 @@
-﻿#if WPF
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 
+#if MAUI
+namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
+#else
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
+#endif
 {
     /// <summary>
     /// Picker for the <see cref="DateTimePickerFormInput"/>.
     /// </summary>
-    [TemplatePart(Name = "DatePicker", Type = typeof(DatePicker))]
-    public class DateTimePickerFormInputView : Control
+    public partial class DateTimePickerFormInputView
     {
         private WeakEventListener<DateTimePickerFormInputView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
-        private DatePicker? _datePicker;
-        private TimePicker? _timePicker;
 
         /// <summary>
         /// Initializes an instance of the <see cref="DateTimePickerFormInputView"/> class.
         /// </summary>
         public DateTimePickerFormInputView()
         {
+#if MAUI
+            ControlTemplate = DefaultControlTemplate;
+#else
             DefaultStyleKey = typeof(DateTimePickerFormInputView);
+#endif
         }
-
-        /// <inheritdoc />
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            _datePicker = GetTemplateChild("DatePicker") as DatePicker;
-            _timePicker = GetTemplateChild("TimePicker") as TimePicker;
-            if (_datePicker != null)
-            {
-                _datePicker.SelectedDateChanged += DatePicker_SelectedDateChanged;
-            }
-            if (_timePicker != null)
-            {
-                _timePicker.TimeChanged += TimePicker_TimeChanged;
-            }
-            ConfigurePickers();
-        }
-
-        private void TimePicker_TimeChanged(object? sender, EventArgs e) => UpdateValue();
-
-        private void DatePicker_SelectedDateChanged(object? sender, SelectionChangedEventArgs e) => UpdateValue();
 
         private void UpdateValue()
         { 
             if (Element?.Input is DateTimePickerFormInput input && _datePicker != null)
             {
+#if MAUI
+                var date = _datePicker.Date;
+                if (date != DateTime.MinValue && input.IncludeTime && _timePicker != null)
+                    date = date.Date.Add(_timePicker.Time);
+#else
                 var date = _datePicker.SelectedDate;
-                if(date.HasValue && input.IncludeTime && _timePicker != null && _timePicker.Time.HasValue)
+                if (date.HasValue && input.IncludeTime && _timePicker != null && _timePicker.Time.HasValue)
                 {
                     date = date.Value.Date.Add(_timePicker.Time.Value);
                 }
+#endif
                 if (!object.Equals(Element?.Value, date))
                     Element?.UpdateValue(date);
             }
@@ -70,8 +60,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
+#if MAUI
+        public static readonly BindableProperty ElementProperty =
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(DateTimePickerFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((DateTimePickerFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
+#else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(DateTimePickerFormInputView), new PropertyMetadata(null, (s, e) => ((DateTimePickerFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
+#endif
 
         private void OnElementPropertyChanged(FieldFormElement? oldValue, FieldFormElement? newValue)
         {
@@ -95,10 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                if (Dispatcher.CheckAccess())
-                    ConfigurePickers();
-                else
-                    Dispatcher.Invoke(ConfigurePickers);
+                this.Dispatch(ConfigurePickers);
             }
         }
 
@@ -113,14 +105,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 if (_datePicker is not null)
                 {
+#if MAUI
+#else
                     _datePicker.SelectedDate = selectedDate;
                     _datePicker.DisplayDateStart = input.Min.HasValue ? input.Min.Value.Date : null;
                     _datePicker.DisplayDateEnd = input.Max.HasValue ? input.Max.Value.Date : null;
+#endif
                 }
                 if (_timePicker != null)
                 {
+#if MAUI
+                    _timePicker.IsVisible = input.IncludeTime;
+                    _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : TimeSpan.Zero;
+#else
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
                     _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
+#endif
                 }
             }
             _rentrancyFlag = false;
