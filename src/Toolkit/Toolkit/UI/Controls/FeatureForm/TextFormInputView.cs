@@ -72,6 +72,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _textInput.Text = Element?.Value?.ToString();
 #if MAUI
                 bool isNumericInput = Element?.FieldType == FieldType.Int32 ||
+                    Element?.FieldType == FieldType.Int64 ||
                     Element?.FieldType == FieldType.Int16 ||
                     Element?.FieldType == FieldType.Float64 ||
                     Element?.FieldType == FieldType.Float32;
@@ -119,6 +120,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else if (Element?.FieldType == FieldType.Int32 && int.TryParse(strvalue, out var intvalue))
                 value = intvalue;
+            else if (Element?.FieldType == FieldType.Int64 && long.TryParse(strvalue, out var longvalue))
+                value = longvalue;
             else if (Element?.FieldType == FieldType.Int16 && short.TryParse(strvalue, out var shortvalue))
                 value = shortvalue;
             else if (Element?.FieldType == FieldType.Float64 && double.TryParse(strvalue, out var doublevalue))
