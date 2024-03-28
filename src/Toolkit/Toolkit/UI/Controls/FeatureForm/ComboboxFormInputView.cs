@@ -72,23 +72,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                Dispatch(UpdateSelection);
+                this.Dispatch(UpdateSelection);
             }
-        }
-
-        private void Dispatch(Action action)
-        {
-#if WPF
-            if (Dispatcher.CheckAccess())
-                action();
-            else
-                Dispatcher.Invoke(action);
-#elif MAUI
-            if (Dispatcher.IsDispatchRequired)
-                Dispatcher.Dispatch(action);
-            else
-                action();
-#endif
         }
 
         private void UpdateItems()

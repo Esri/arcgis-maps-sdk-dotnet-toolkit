@@ -128,15 +128,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                Dispatch(OnValuePropertyChanged);
+                this.Dispatch(OnValuePropertyChanged);
             }
             else if (e.PropertyName == nameof(FieldFormElement.ValidationErrors))
             {
-                Dispatch(UpdateErrorMessages);
+                this.Dispatch(UpdateErrorMessages);
             }
             else if (e.PropertyName == nameof(FieldFormElement.IsVisible))
             {
-                Dispatch(UpdateVisibility);
+                this.Dispatch(UpdateVisibility);
             }
         }
 
@@ -177,21 +177,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 tb.Text = errMessage;
             }
-        }
-
-        private void Dispatch(Action action)
-        {
-#if WPF
-            if (Dispatcher.CheckAccess())
-                action();
-            else
-                Dispatcher.Invoke(action);
-#elif MAUI
-                if (Dispatcher.IsDispatchRequired)
-                    Dispatcher.Dispatch(action);
-                else
-                    action();
-#endif
         }
 
         /// <summary>

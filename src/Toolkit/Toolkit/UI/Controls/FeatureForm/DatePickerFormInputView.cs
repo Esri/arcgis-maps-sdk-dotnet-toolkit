@@ -90,23 +90,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                Dispatch(ConfigurePickers);
+                this.Dispatch(ConfigurePickers);
             }
-        }
-
-        private void Dispatch(Action action)
-        {
-#if WPF
-            if (Dispatcher.CheckAccess())
-                action();
-            else
-                Dispatcher.Invoke(action);
-#elif MAUI
-            if (Dispatcher.IsDispatchRequired)
-                Dispatcher.Dispatch(action);
-            else
-                action();
-#endif
         }
 
         private bool _rentrancyFlag;

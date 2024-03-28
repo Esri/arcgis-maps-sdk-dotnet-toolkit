@@ -250,21 +250,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             if (e.PropertyName == nameof(FormElement.IsVisible))
             {
-                Dispatch(UpdateVisibility);
+                this.Dispatch(UpdateVisibility);
             }
         }
 
         private void UpdateVisibility()
         {
             this.IsVisible = Element!= null && Element.IsVisible && Element.Elements.Count > 0; // TODO: Consider also hiding if all elements are not visible
-        }
-
-        private void Dispatch(Action action)
-        {
-            if (Dispatcher.IsDispatchRequired)
-                Dispatcher.Dispatch(action);
-            else
-                action();
         }
     }
 }

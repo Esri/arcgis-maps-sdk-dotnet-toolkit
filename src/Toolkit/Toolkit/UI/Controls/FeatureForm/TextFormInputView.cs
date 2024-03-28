@@ -255,31 +255,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
-                Dispatch(ConfigureTextBox);
+                this.Dispatch(ConfigureTextBox);
             }
             else if (e.PropertyName == nameof(FieldFormElement.IsEditable))
             {
-                Dispatch(ConfigureTextBox);
+                this.Dispatch(ConfigureTextBox);
             }
             else if (e.PropertyName == nameof(FieldFormElement.ValidationErrors))
             {
-                Dispatch(UpdateValidationState);
+                this.Dispatch(UpdateValidationState);
             }
-        }
-
-        private void Dispatch(Action action)
-        {
-#if WPF
-            if (Dispatcher.CheckAccess())
-                action();
-            else
-                Dispatcher.Invoke(action);
-#elif MAUI
-            if (Dispatcher.IsDispatchRequired)
-                Dispatcher.Dispatch(action);
-            else
-                action();
-#endif
         }
 
         private void UpdateValidationState()
