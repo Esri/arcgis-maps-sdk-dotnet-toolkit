@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
 #if MAUI
         public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(TextFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((ComboBoxFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
+            BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(ComboBoxFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((ComboBoxFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
 #else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(ComboBoxFormInputView), new PropertyMetadata(null, (s, e) => ((ComboBoxFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
