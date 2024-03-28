@@ -4,6 +4,7 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -18,6 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             Picker view = new Picker();
