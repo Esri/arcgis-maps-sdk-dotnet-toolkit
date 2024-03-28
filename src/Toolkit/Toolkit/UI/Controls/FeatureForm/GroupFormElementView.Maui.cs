@@ -79,16 +79,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
             Label collapsedChevron = new Label() { VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
 #if IOS
-            collapsedChevron.Text = ""; // iOS use right-chevron for expand
+            collapsedChevron.Text = "\uE078"; // iOS use right-chevron for expand
 #else
-            collapsedChevron.Text = "";
+            collapsedChevron.Text = "\uE076";
 #endif
             collapsedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), converter: Internal.InvertBoolConverter.Instance, source: RelativeBindingSource.TemplatedParent));
             Grid.SetRowSpan(collapsedChevron, 2);
             Grid.SetColumn(collapsedChevron, 1);
             clickAreaContent.Children.Add(collapsedChevron);
             
-            Label expandedChevron = new Label() { Text = "", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
+            Label expandedChevron = new Label() { Text = "\uE079", VerticalOptions = new LayoutOptions(LayoutAlignment.Center, true), FontFamily = "calcite-ui-icons-24" };
             expandedChevron.SetBinding(VisualElement.IsVisibleProperty, new Binding(nameof(IsExpanded), source: RelativeBindingSource.TemplatedParent));
             Grid.SetRowSpan(expandedChevron, 2);
             Grid.SetColumn(expandedChevron, 1);
