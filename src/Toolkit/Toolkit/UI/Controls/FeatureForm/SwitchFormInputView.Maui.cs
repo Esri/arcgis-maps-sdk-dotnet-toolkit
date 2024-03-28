@@ -2,6 +2,7 @@
 using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -19,6 +20,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         /// </summary>
         public const string SwitchViewName = "SwitchView";
 
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.Input), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.SwitchFormInput.OnValue), "Esri.ArcGISRuntime.Mapping.FeatureForms.SwitchFormInput", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.SwitchFormInput.OffValue), "Esri.ArcGISRuntime.Mapping.FeatureForms.SwitchFormInput", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Data.CodedValue.Name), "Esri.ArcGISRuntime.Data.CodedValue", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             Switch toggleSwitch = new Switch();
