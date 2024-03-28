@@ -48,7 +48,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         public GroupFormElementView()
         {
             this.SetAppThemeColor(BorderStrokeProperty, Colors.Black, Colors.White);
-            this.SetAppThemeColor(HeaderBackgroundProperty, Color.FromRgb(200,200,200), Colors.DarkGray);
+            this.SetAppThemeColor(HeaderBackgroundProperty, Color.FromRgb(225,225,225), Colors.DarkGray);
             ControlTemplate = DefaultControlTemplate;
         }
 
