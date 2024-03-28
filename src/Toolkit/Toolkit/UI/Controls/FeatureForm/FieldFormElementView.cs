@@ -160,7 +160,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdateErrorMessages()
         {
             string? errMessage = null;
-            if (Element is not null)
+            if (Element is not null && Element.IsEditable)
             {
                 var errors = Element.ValidationErrors;
 
@@ -168,7 +168,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     errMessage = string.Join("\n", errors.Select(e => FeatureFormView.ValidationErrorToLocalizedString(Element, e)!));
                 }
-                else if (Element?.IsRequired == true && (Element.Value is null || Element?.Value is string str && string.IsNullOrEmpty(str)))
+                else if (Element.IsRequired == true && (Element.Value is null || Element?.Value is string str && string.IsNullOrEmpty(str)))
                 {
                     errMessage = Properties.Resources.GetString("FeatureFormFieldIsRequired");
                 }

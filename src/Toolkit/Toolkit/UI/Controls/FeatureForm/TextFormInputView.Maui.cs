@@ -12,6 +12,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private InputView? _textInput => Element?.Input is TextAreaFormInput ? _textAreaInput : _textLineInput;
         private Entry? _textLineInput;
         private Editor? _textAreaInput;
+        private Label? _readonlyLabel;
         static TextFormInputView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
@@ -26,6 +27,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.Value), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             
@@ -52,6 +56,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumnSpan(textArea, 2);
             textArea.SetBinding(Editor.IsEnabledProperty, "Element.IsEditable");
             root.Add(textArea);
+            Label readonlyText = new Label() { IsVisible = false, LineBreakMode = LineBreakMode.WordWrap };
+            readonlyText.SetBinding(Label.TextProperty, new Binding("Element.Value",source:RelativeBindingSource.TemplatedParent));
+            Grid.SetColumnSpan(readonlyText, 2);
+            root.Add(readonlyText);
             Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
             Grid.SetColumnSpan(errorBorder, 2);
             root.Add(errorBorder);
@@ -61,6 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("ErrorBorder", errorBorder);
             nameScope.RegisterName("TextInput", textInput);
             nameScope.RegisterName("TextAreaInput", textArea);
+            nameScope.RegisterName("ReadOnlyText", readonlyText);
             return root;
         }
 
@@ -90,6 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 _textAreaInput.Unfocused += TextInput_Unfocused;
                 _textAreaInput.TextChanged += TextInput_TextChanged;
             }
+            _readonlyLabel = GetTemplateChild("ReadOnlyText") as Label;
             ConfigureTextBox();
             UpdateValidationState();
         }

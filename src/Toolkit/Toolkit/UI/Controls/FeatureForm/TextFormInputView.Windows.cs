@@ -14,7 +14,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class TextFormInputView : Control
     {
-            private TextBox? _textInput;
+        private TextBox? _textInput;
+        private TextBlock? _readonlyLabel;
 
 
         /// <inheritdoc />
@@ -32,6 +33,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _textInput.LostFocus += TextInput_LostFocus;
                 _textInput.TextChanged += TextInput_TextChanged;
             }
+            _readonlyLabel = GetTemplateChild("ReadOnlyText") as TextBlock;
             ConfigureTextBox();
             UpdateValidationState();
         }

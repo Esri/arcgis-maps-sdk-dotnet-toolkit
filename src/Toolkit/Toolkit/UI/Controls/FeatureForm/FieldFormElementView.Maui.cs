@@ -75,14 +75,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private static object BuildDefaultTextAreaFormInputTemplate()
         {
-            var input = new TextFormInputView() { ShowCharacterCount = true };
+            var input = new TextFormInputView();
             input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
             return input;
         }
 
         private static object BuildDefaultTextBoxFormInputTemplate()
         {
-            var input = new TextFormInputView() { ShowCharacterCount = false };
+            var input = new TextFormInputView();
             input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
             return input;
         }

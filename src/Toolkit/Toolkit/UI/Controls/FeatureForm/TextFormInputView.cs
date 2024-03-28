@@ -49,8 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (_textLineInput != null) _textLineInput.IsVisible = false;
                     if (_textAreaInput != null)
                     {
-                        _textAreaInput.IsVisible = true;
-                        _textAreaInput.IsEnabled = Element.IsEditable;
+                        _textAreaInput.IsVisible = Element.IsEditable;
                     }
 #else
                     _textInput.AcceptsReturn = true;
@@ -63,8 +62,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     if (_textAreaInput != null) _textAreaInput.IsVisible = false;
                     if (_textLineInput != null)
                     {
-                        _textLineInput.IsVisible = true;
-                        _textLineInput.IsEnabled = Element.IsEditable;
+                        _textLineInput.IsVisible = Element.IsEditable;
                     }
 #else
                     _textInput.AcceptsReturn = false;
@@ -80,6 +78,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _textInput.Keyboard = isNumericInput ? Keyboard.Numeric : Keyboard.Default;
 #endif
             }
+            ShowCharacterCount = Element?.IsEditable == true && Element?.Input is TextAreaFormInput;
+            if (_readonlyLabel is not null)
+            {
+#if MAUI
+                _readonlyLabel.IsVisible = Element?.IsEditable == false;
+#else
+                _readonlyLabel.Visibility = Element?.IsEditable == false ? Visibility.Visible : Visibility.Collapsed;
+#endif
+                _readonlyLabel.Text = Element?.FormattedValue;
+            }
+#if !MAUI
+            if(_textInput != null)
+                _textInput.Visibility = Element?.IsEditable == false ? Visibility.Collapsed : Visibility.Visible;
+#endif
         }
 
         private void TextInput_TextChanged(object? sender, TextChangedEventArgs e)
@@ -168,23 +180,36 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 
         /// <summary>
-        /// Gets or sets a value indicating whether the character count is visible.
+        /// Gets a value indicating whether the character count is visible.
         /// </summary>
         public bool ShowCharacterCount
         {
-            get { return (bool)GetValue(ShowCharacterCountProperty); }
-            set { SetValue(ShowCharacterCountProperty, value); }
+            get {
+#if MAUI
+                return _showCharacterCount;
+#else
+               return (bool)GetValue(ShowCharacterCountPropertyKey.DependencyProperty); 
+#endif
+            }
+            private set
+            {
+#if MAUI
+                if(_showCharacterCount != value)
+                {
+                    _showCharacterCount = value;
+                    OnPropertyChanged(nameof(ShowCharacterCount));
+                }
+#else
+                SetValue(ShowCharacterCountPropertyKey, value); 
+#endif
+            }
         }
 
-        /// <summary>
-        /// Identifies the <see cref="ShowCharacterCount"/> dependency property.
-        /// </summary>
 #if MAUI
-        public static readonly BindableProperty ShowCharacterCountProperty =
-            BindableProperty.Create(nameof(ShowCharacterCount), typeof(bool), typeof(TextFormInputView), false);
+        private bool _showCharacterCount = false;
 #else
-        public static readonly DependencyProperty ShowCharacterCountProperty =
-            DependencyProperty.Register(nameof(ShowCharacterCount), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
+        private static readonly DependencyPropertyKey ShowCharacterCountPropertyKey =
+            DependencyProperty.RegisterReadOnly(nameof(ShowCharacterCount), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
 #endif
 
         /// <summary>
@@ -260,7 +285,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdateValidationState()
         {
             var err = Element?.ValidationErrors;
-            if (err != null && err.Any())
+            if (err != null && err.Any() && Element?.IsEditable == true)
             {
 #if MAUI
                 if (GetTemplateChild("ErrorBorder") is Border border)
