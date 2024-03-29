@@ -27,9 +27,10 @@
     <IsSampleProject Condition="'$(IsSampleProject)'!='true'">$(MSBuildProjectName.Contains('.SampleApp.'))</IsSampleProject>
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
     <IsTemplateProject>$(MSBuildProjectDirectory.Contains('ProjectTemplates'))</IsTemplateProject>
+    <IsAnalyzerProject>$(MSBuildProjectDirectory.Contains('Analyzers'))</IsAnalyzerProject>
     
-    <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true' or $(IsTemplateProject) == 'true'">false</IsToolkitLibrary>
-    <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true'">true</IsToolkitLibrary>
+    <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true' or $(IsTemplateProject) == 'true' or $(IsAnalyzerProject) == 'true'">false</IsToolkitLibrary>
+    <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true' and $(IsAnalyzerProject) != 'true'">true</IsToolkitLibrary>
   </PropertyGroup>
 
   <!--Framework versions-->

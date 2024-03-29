@@ -4,8 +4,9 @@
   xmlns:internal="clr-namespace:Esri.ArcGISRuntime.Toolkit.Internal"
   xmlns:controls="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls"
   xmlns:forms="clr-namespace:Esri.ArcGISRuntime.Mapping.FeatureForms;assembly=Esri.ArcGISRuntime"
-  xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives">
- 
+  xmlns:primitives="clr-namespace:Esri.ArcGISRuntime.Toolkit.Primitives"
+  xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
   <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
   <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
   <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
@@ -150,24 +151,25 @@
               <TextBlock Text="/" />
               <TextBlock Text="{Binding MaxLength, ElementName=TextInput}" />
             </StackPanel>
-            <TextBox IsEnabled="{TemplateBinding IsEnabled}" BorderThickness="0" x:Name="TextInput" MaxLines="{TemplateBinding MaxLines}" MinLines="{TemplateBinding MinLines}" />
- 
+            <TextBox x:Name="TextInput" MaxLines="{TemplateBinding MaxLines}" MinLines="{TemplateBinding MinLines}" /> 
+            <TextBlock x:Name="ReadOnlyText" Visibility="Collapsed" />
             <Border x:Name="ErrorBorder" BorderThickness="1" BorderBrush="Red" Visibility="Collapsed" />
             <TextBlock Text="!" Background="Transparent" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="ErrorInfo" />
-            <Button Grid.Column="1" Content="&#xec5a;" FontFamily="Segoe MDL2 Assets" Visibility="Collapsed" x:Name="BarcodeScannerButton" />
           </Grid>
           <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="false">
+              <Setter TargetName="TextInput" Property="Visibility" Value="Collapsed"/> 
+              <Setter TargetName="ReadOnlyText" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="true">
+              <Setter TargetName="TextInput" Property="Visibility" Value="Visible"/> 
+              <Setter TargetName="ReadOnlyText" Property="Visibility" Value="Collapsed"/>
+            </Trigger>
             <Trigger Property="ShowCharacterCount" Value="false">
               <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="ShowCharacterCount" Value="true">
               <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Visible"/>
-            </Trigger>
-            <Trigger Property="IsBarcodeScannerEnabled" Value="false">
-              <Setter TargetName="BarcodeScannerButton" Property="Visibility" Value="Collapsed"/>
-            </Trigger>
-            <Trigger Property="IsBarcodeScannerEnabled" Value="true">
-              <Setter TargetName="BarcodeScannerButton" Property="Visibility" Value="Visible"/>
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -200,21 +202,14 @@
     <Setter Property="TextAreaFormInputTemplate">
       <Setter.Value>
         <DataTemplate>
-          <primitives:TextFormInputView ShowCharacterCount="true" Element="{Binding}" MaxLines="4" MinLines="4" IsEnabled="{Binding IsEditable}" />
+          <primitives:TextFormInputView Element="{Binding}" MaxLines="4" MinLines="4" IsEnabled="{Binding IsEditable}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
     <Setter Property="TextBoxFormInputTemplate">
       <Setter.Value>
         <DataTemplate>
-          <primitives:TextFormInputView ShowCharacterCount="false" Element="{Binding}" IsEnabled="{Binding IsEditable}" />
-        </DataTemplate>
-      </Setter.Value>
-    </Setter>
-    <Setter Property="BarcodeScannerFormInputTemplate">
-      <Setter.Value>
-        <DataTemplate>
-          <primitives:TextFormInputView ShowCharacterCount="false" IsBarcodeScannerEnabled="true" Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+          <primitives:TextFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
         </DataTemplate>
       </Setter.Value>
     </Setter>
@@ -230,7 +225,24 @@
         <ControlTemplate TargetType="{x:Type primitives:FieldFormElementView}">
           <StackPanel>
             <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
-            <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" ToolTip="{Binding Hint}" />
+            <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput">
+              <ContentControl.ToolTip>
+                <ToolTip Content="{Binding Hint}">
+                  <ToolTip.Style>
+                    <Style TargetType="{x:Type ToolTip}">
+                      <Style.Triggers>
+                        <Trigger Property="Content" Value="{x:Static sys:String.Empty}">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="Content" Value="{x:Null}">
+                          <Setter Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                      </Style.Triggers>
+                    </Style>
+                  </ToolTip.Style>
+                </ToolTip>
+              </ContentControl.ToolTip>
+            </ContentControl>
             <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
             <TextBlock Foreground="Red" x:Name="ErrorLabel" Visibility="{Binding Text, ElementName=ErrorLabel, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
           </StackPanel>
@@ -243,8 +255,8 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type ToggleButton}">
-          <Border x:Name="RootVisual" Padding="{TemplateBinding Padding}" MinHeight="32">
-            <Grid Background="Transparent" SnapsToDevicePixels="False">
+          <Border x:Name="RootVisual" Background="{TemplateBinding Background}" MinHeight="32">
+            <Grid SnapsToDevicePixels="False" Margin="{TemplateBinding Padding}">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="19"/>
@@ -259,7 +271,7 @@
               <Setter TargetName="arrow" Property="Data" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
-              <Setter TargetName="RootVisual" Property="Background" Value="#11000000" />
+              <Setter TargetName="RootVisual" Property="Background" Value="#22000000" />
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -284,16 +296,16 @@
             <Setter Property="Visibility" Value="Collapsed" />
         </DataTrigger>
     </Style.Triggers>
-    <Setter Property="BorderBrush" Value="Gray" />
-    <Setter Property="BorderThickness" Value="0,0,0,1" />
-    <Setter Property="Padding" Value="0" />
-    <Setter Property="Template">
+    <Setter Property="BorderBrush" Value="Black" />
+    <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="Expander">
-          <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" >
+          <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2" >
             <StackPanel>
               <ToggleButton x:Name="HeaderSite" Style="{StaticResource GroupFormElementExpanderButtonStyle}"
-                    Background="Transparent" BorderThickness="0"
+                    Background="#11000000" BorderThickness="0"
                     Margin="0" MinWidth="0" MinHeight="0"
                     IsChecked="{Binding Path=IsExpanded,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
                     Content="{TemplateBinding Header}"
@@ -369,8 +381,7 @@
                 <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView">
                   <primitives:FormElementItemsControl.FieldFormElementTemplate>
                     <DataTemplate>
-                      <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
-                                                       Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                      <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
                     </DataTemplate>
                   </primitives:FormElementItemsControl.FieldFormElementTemplate>
                   <primitives:FormElementItemsControl.GroupFormElementTemplate>
@@ -378,7 +389,7 @@
                       <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
                         <Expander Style="{StaticResource GroupFormElementExpanderStyle}">
                           <Expander.Header>
-                            <StackPanel>
+                            <StackPanel VerticalAlignment="Center">
                               <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
                               <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                             </StackPanel>
@@ -386,8 +397,7 @@
                           <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" >
                             <primitives:FormElementItemsControl.FieldFormElementTemplate>
                               <DataTemplate>
-                                <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}"
-                                                                 Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
+                                <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
                               </DataTemplate>
                             </primitives:FormElementItemsControl.FieldFormElementTemplate>
                           </primitives:FormElementItemsControl>

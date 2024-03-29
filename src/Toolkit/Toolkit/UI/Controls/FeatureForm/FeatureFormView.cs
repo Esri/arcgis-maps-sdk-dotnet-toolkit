@@ -38,7 +38,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// <summary>
     /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
     /// </summary>
-    /// <seealso cref="Esri.ArcGISRuntime.Data.FeatureTable.FeatureFormDefinition"/>
+    /// <seealso cref="Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition"/>
     /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     public partial class FeatureFormView
     {
@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     }
                     if (FeatureForm != null)
                     {
-                        _ = await FeatureForm.EvaluateExpressionsAsync();
+                        await EvaluateExpressions(FeatureForm);
 #if MAUI
                         var ctrl = GetTemplateChild(ItemsViewName) as IBindableLayout;
                         if (ctrl != null && ctrl is BindableObject bo)
@@ -115,6 +115,37 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 {
                 }
             });
+        }
+
+        private static object pendingExpressionsLock = new object();
+        private static List<FeatureForm> pendingExpressions = new List<FeatureForm>();
+
+        internal static async Task EvaluateExpressions(FeatureForm? form)
+        {
+            if (form is null)
+                return;
+            // Don't evaluate expressions if we're already in the process of evaluating
+            // If that's the case, the value changed event triggering this code was
+            // caused by another expression evaluation
+            lock (pendingExpressionsLock)
+            {
+                if (pendingExpressions.Contains(form))
+                    return;
+                pendingExpressions.Add(form);
+            }
+            try
+            {
+                await form.EvaluateExpressionsAsync();
+            }
+            catch { }
+            finally
+            {
+                lock (pendingExpressionsLock)
+                {
+                    if (pendingExpressions.Contains(form))
+                        pendingExpressions.Remove(form);
+                }
+            }
         }
 
         /// <summary>
@@ -174,20 +205,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (e.PropertyName == nameof(FeatureForm.ValidationErrors))
             {
-                UpdateIsValidProperty();
+                this.Dispatch(UpdateIsValidProperty);
             }
         }
 
         private void UpdateIsValidProperty()
         {
-#if WPF
-            if (Dispatcher.CheckAccess())
-                IsValid = FeatureForm?.ValidationErrors?.Any() != true;
-            else 
-                Dispatcher.Invoke(UpdateIsValidProperty);
-#elif MAUI
-#warning TODO IsValid read-only property
-#endif
+            IsValid = FeatureForm?.ValidationErrors?.Any() != true;
         }
 
         /// <summary>
@@ -255,7 +279,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 uint min = 0;
                 if (element.Input is TextAreaFormInput area) { max = area.MaxLength; min = area.MinLength; }
                 else if (element.Input is TextBoxFormInput tb) { max = tb.MaxLength; min = tb.MinLength; }
-                else if (element.Input is BarcodeScannerFormInput bar) { max = bar.MaxLength; min = bar.MinLength; }
                 if (max > 0 && min > 0)
                     return string.Format(Properties.Resources.GetString("FeatureFormOutsideLengthRange")!, min, max);
                 if (max > 0)
