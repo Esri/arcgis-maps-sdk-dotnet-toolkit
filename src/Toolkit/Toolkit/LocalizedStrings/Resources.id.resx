@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>ng_Date must be on or before {0}______________________________ny</value>
+    <value>Tanggal harus pada atau sebelum {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>ng_Date exceeds maximum_____________________ny</value>
+    <value>Tanggal melebihi maksimal</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>ng_Maximum characters allowed: {0}_________________ny</value>
+    <value>Karakter maksimal yang diizinkan: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>ng_Maximum character length exceeded__________________ny</value>
+    <value>Panjang karakter maksimal terlampaui</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>ng_Enter a value at or below {0}______________________________ny</value>
+    <value>Masukkan nilai pada atau di bawah {0}</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>ng_Exceeds maximum value______________________ny</value>
+    <value>Melebihi nilai maksimal</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>ng_Enter value from {0} to {1}____________________________ny</value>
+    <value>Masukkan nilai dari {0} hingga {1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>ng_Required_________________ny</value>
+    <value>Wajib</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>ng_Value must be of the correct type__________________ny</value>
+    <value>Nilai harus dari jenis yang benar</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>ng_Value must be a number_______________________ny</value>
+    <value>Nilai harus berupa angka</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>ng_Value must be a whole number_____________________________ny</value>
+    <value>Nilai harus berupa bilangan bulat</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>ng_Date must be on or after {0}_____________________________ny</value>
+    <value>Tanggal harus pada atau setelah {0}</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>ng_Date less than minimum_______________________ny</value>
+    <value>Tanggal kurang dari minimal</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>ng_Minimum characters required: {0}_________________ny</value>
+    <value>Karakter minimal yang diwajibkan: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>ng_Less than minimum value________________________ny</value>
+    <value>Kurang dari nilai minimal</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>ng_Value must be within the domain_________________ny</value>
+    <value>Nilai harus berada dalam domain</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>ng_Value must not be empty________________________ny</value>
+    <value>Nilai tidak boleh kosong</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>ng_Enter {0} to {1} characters____________________________ny</value>
+    <value>Masukkan {0} hingga {1} karakter</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>ng_Number of characters required: {0}__________________ny</value>
+    <value>Jumlah karakter yang diwajibkan: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>ng_All Sites___________________ny</value>
+    <value>Semua Situs</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>ng_All Floors_____________________ny</value>
+    <value>Semua Lantai</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>ng_Go Back_______________ny</value>
+    <value>Kembali</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>ng_Browse_____________ny</value>
+    <value>Jelajahi</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>ng_Select a facility__________________ny</value>
+    <value>Pilih fasilitas</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>ng_Select a site______________ny</value>
+    <value>Pilih situs</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>ng_Close___________ny</value>
+    <value>Tutup</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>ng_Collapse_________________ny</value>
+    <value>Tutup</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>ng_Expand_____________ny</value>
+    <value>Bentang</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>ng_Filter_____________ny</value>
+    <value>Filter</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>ng_No results found_________________ny</value>
+    <value>Tidak ada hasil yang ditemukan</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>ng_Zoom To_______________ny</value>
+    <value>Zoom Ke</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>ng_ft_____ny</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>ng_km_____ny</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>ng_m___ny</value>
+    <value>mnt</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>ng_mi_____ny</value>
+    <value>mil</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>ng_All Sources____________ny</value>
+    <value>Semua Sumber</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>ng_Clear Search_____________ny</value>
+    <value>Hapus Pencarian</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>ng_No Results_____________________ny</value>
+    <value>Tidak Ada Hasil</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>ng_Repeat Search Here___________________ny</value>
+    <value>Ulangi Pencarian Di Sini</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>ng_Find a place or address________________________ny</value>
+    <value>Temukan tempat atau alamat</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>ng_Search_____________ny</value>
+    <value>Cari</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>ng_Add starting point___________________ny</value>
+    <value>Tambahkan titik awal</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>ng_Advanced options_________________ny</value>
+    <value>Opsi lanjutan</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>ng_Asset details______________ny</value>
+    <value>Detail aset</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>ng_Cancel_____________ny</value>
+    <value>Batalkan</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>ng_Clear results______________ny</value>
+    <value>Bersihkan hasil</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>ng_Close___________ny</value>
+    <value>Tutup</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>ng_Discard_______________ny</value>
+    <value>Buang</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>ng_The selected trace type has already been run with the same starting points_______________________________________ny.</value>
+    <value>Jenis pelacakan yang dipilih sudah dijalankan dengan titik awal yang sama.</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>ng_Feature results________________ny</value>
+    <value>Hasil fitur</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>ng_Position along line____________________ny</value>
+    <value>Posisi sepanjang garis</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>ng_Function results_________________ny</value>
+    <value>Hasil fungsi</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>ng_Identifying starting points_______________________________ny...</value>
+    <value>Mengidentifikasi titik awal...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>ng_Inspect_______________ny</value>
+    <value>Periksa</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>ng_Loading_____________________ny...</value>
+    <value>Memuat...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>ng_There are more starting points than required for the selected trace type______________________________________ny.</value>
+    <value>Ada lebih banyak titik awal yang diperlukan untuk jenis pelacakan yang dipilih.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>ng_New trace___________________ny</value>
+    <value>Pelacakan baru</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>ng_Next_________ny</value>
+    <value>Selanjutnya</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>ng_No feature results____________________ny.</value>
+    <value>Tidak ada hasil fitur.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>ng_No function results_____________________ny.</value>
+    <value>Tidak ada hasil fungsi.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>ng_No results found__________________ny.</value>
+    <value>Tidak ada hasil yang ditemukan.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>ng_The selected trace type requires additional starting points_______________________________ny.</value>
+    <value>Jenis pelacakan yang dipilih memerlukan titik awal tambahan.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>ng_No trace types found for the selected utility network____________________________ny.</value>
+    <value>Tidak ditemukan jenis pelacakan untuk jaringan utilitas yang dipilih.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>ng_No utility networks found___________________________ny.</value>
+    <value>Tidak ada jaringan utilitas yang ditemukan.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>ng_Preview_______________ny</value>
+    <value>Pratinjau</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>ng_Previous_________________ny</value>
+    <value>Sebelumnya</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>ng_Remove all_____________________ny</value>
+    <value>Hapus semua</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>ng_Remove_____________ny</value>
+    <value>Hapus</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>ng_Result name (optional)_______________________ny</value>
+    <value>Nama hasil (opsional)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>ng_Results_______________ny</value>
+    <value>Hasil</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>ng_Result visualization color___________________________ny</value>
+    <value>Warna visualisasi hasil</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>ng_Running trace_________________ny...</value>
+    <value>Menjalankan pelacakan...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>ng_Run trace___________________ny</value>
+    <value>Jalankan pelacakan</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>ng_Select features on map_______________________ny</value>
+    <value>Pilih fitur di peta</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>ng_Show graphics on map_____________________ny</value>
+    <value>Tampilkan grafik di peta</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>ng_Starting points________________ny</value>
+    <value>Titik awal</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>ng_Tap on the map to identify starting points_______________________ny.</value>
+    <value>Ketuk peta untuk mengidentifikasi titik awal.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>ng_Terminal_________________ny</value>
+    <value>Terminal</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>ng_Creator_______________ny</value>
+    <value>Pembuat</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>ng_Description____________ny</value>
+    <value>Keterangan</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>ng_Trace type details___________________ny</value>
+    <value>Detail jenis pelacakan</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>ng_Trace types____________ny</value>
+    <value>Jenis pelacakan</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>ng_Tags_________ny</value>
+    <value>Label</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>ng_Utility networks_________________ny</value>
+    <value>Jaringan utilitas</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>ng_Visualization options______________________ny</value>
+    <value>Opsi visualisasi</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>ng_Warnings_________________ny</value>
+    <value>Peringatan</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>ng_Zoom_________ny</value>
+    <value>Zoom</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>ng_Zoom to result_______________ny</value>
+    <value>Perbesar hasil</value>
   </data>
 </root>

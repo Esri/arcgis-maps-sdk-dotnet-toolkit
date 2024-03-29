@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>í_Date must be on or before {0}______________________________ő</value>
+    <value>A dátumnak a következő időpontra vagy azelőttre kell esnie: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>í_Date exceeds maximum_____________________ő</value>
+    <value>A dátum túllépi a maximális értéket</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>í_Maximum characters allowed: {0}_________________ő</value>
+    <value>A maximális hossz {0} karakter.</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>í_Maximum character length exceeded__________________ő</value>
+    <value>A maximális karakterhossz túllépve.</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>í_Enter a value at or below {0}______________________________ő</value>
+    <value>Adjon meg egy {0} értéket vagy az alatti értéket</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>í_Exceeds maximum value______________________ő</value>
+    <value>Több, mint a maximális érték</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>í_Enter value from {0} to {1}____________________________ő</value>
+    <value>Adjon meg egy {0} és {1} közötti értéket</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>í_Required_________________ő</value>
+    <value>Szükséges</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>í_Value must be of the correct type__________________ő</value>
+    <value>Az értéknek megfelelő típusúnak kell lennie</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>í_Value must be a number_______________________ő</value>
+    <value>Az értéknek számnak kell lennie</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>í_Value must be a whole number_____________________________ő</value>
+    <value>Az értéknek egész számnak kell lennie</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>í_Date must be on or after {0}_____________________________ő</value>
+    <value>A dátumnak a következő időpontra vagy azutánra kell esnie: {0}</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>í_Date less than minimum_______________________ő</value>
+    <value>A dátum nem éri el a minimális értéket</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>í_Minimum characters required: {0}_________________ő</value>
+    <value>Minimálisan szükséges karakterek: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>í_Less than minimum value________________________ő</value>
+    <value>Kisebb, mint a minimális érték</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>í_Value must be within the domain_________________ő</value>
+    <value>Az értéknek a tartományon belül kell lennie</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>í_Value must not be empty________________________ő</value>
+    <value>Az érték nem lehet üres</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>í_Enter {0} to {1} characters____________________________ő</value>
+    <value>Adjon meg {0}–{1} karaktert</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>í_Number of characters required: {0}__________________ő</value>
+    <value>Szükséges karakterek száma: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>í_All Sites___________________ő</value>
+    <value>Összes hely</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>í_All Floors_____________________ő</value>
+    <value>Összes szint</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>í_Go Back_______________ő</value>
+    <value>Vissza</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>í_Browse_____________ő</value>
+    <value>Tallózás</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>í_Select a facility__________________ő</value>
+    <value>Válasszon ki egy létesítményt</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>í_Select a site______________ő</value>
+    <value>Válasszon ki egy helyet</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>í_Close___________ő</value>
+    <value>Bezárás</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>í_Collapse_________________ő</value>
+    <value>Összecsukás</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>í_Expand_____________ő</value>
+    <value>Kibontás</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>í_Filter_____________ő</value>
+    <value>Szűrő</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>í_No results found_________________ő</value>
+    <value>Nincs találat</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>í_Zoom To_______________ő</value>
+    <value>Nagyítás/kicsinyítés:</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>í_ft_____ő</value>
+    <value>láb</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>í_km_____ő</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>í_m___ő</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>í_mi_____ő</value>
+    <value>mérföld</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>í_All Sources____________ő</value>
+    <value>Összes forrás</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>í_Clear Search_____________ő</value>
+    <value>Keresés törlése</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>í_No Results_____________________ő</value>
+    <value>Nincs találat</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>í_Repeat Search Here___________________ő</value>
+    <value>Ismételje meg a keresést itt</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>í_Find a place or address________________________ő</value>
+    <value>Hely vagy cím keresése</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>í_Search_____________ő</value>
+    <value>Keresés</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>í_Add starting point___________________ő</value>
+    <value>Kiindulási pont hozzáadása</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>í_Advanced options_________________ő</value>
+    <value>Speciális beállítások</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>í_Asset details______________ő</value>
+    <value>Eszköz részletei</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>í_Cancel_____________ő</value>
+    <value>Mégse</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>í_Clear results______________ő</value>
+    <value>Eredmények törlése</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>í_Close___________ő</value>
+    <value>Bezárás</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>í_Discard_______________ő</value>
+    <value>Elvetés</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>í_The selected trace type has already been run with the same starting points_______________________________________ő.</value>
+    <value>A kiválasztott nyomkövetési típus már lefutott ugyanazokkal a kiindulási pontokkal.</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>í_Feature results________________ő</value>
+    <value>Vektoros elem eredményei</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>í_Position along line____________________ő</value>
+    <value>Pozíció a vonal mentén</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>í_Function results_________________ő</value>
+    <value>Funkció eredményei</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>í_Identifying starting points_______________________________ő...</value>
+    <value>Kiindulási pontok azonosítása...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>í_Inspect_______________ő</value>
+    <value>Vizsgálat</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>í_Loading_____________________ő...</value>
+    <value>Betöltés…</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>í_There are more starting points than required for the selected trace type______________________________________ő.</value>
+    <value>A kiválasztott nyomkövetési típushoz a szükségesnél több kiindulási pont tartozik.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>í_New trace___________________ő</value>
+    <value>Új nyomkövetés</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>í_Next_________ő</value>
+    <value>Tovább</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>í_No feature results____________________ő.</value>
+    <value>Nincsenek vektoros elem eredmények.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>í_No function results_____________________ő.</value>
+    <value>Nincsenek funkció eredmények.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>í_No results found__________________ő.</value>
+    <value>Nincs találat.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>í_The selected trace type requires additional starting points_______________________________ő.</value>
+    <value>A kiválasztott nyomkövetési típus további kiindulási pontokat igényel.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>í_No trace types found for the selected utility network____________________________ő.</value>
+    <value>A kiválasztott közműhálózathoz nem találhatók nyomkövetési típusok.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>í_No utility networks found___________________________ő.</value>
+    <value>Nem találhatók közüzemi hálózatok.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>í_Preview_______________ő</value>
+    <value>Előnézet</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>í_Previous_________________ő</value>
+    <value>Előző</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>í_Remove all_____________________ő</value>
+    <value>Összes eltávolítása</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>í_Remove_____________ő</value>
+    <value>Eltávolítás</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>í_Result name (optional)_______________________ő</value>
+    <value>Eredmény neve (opcionális)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>í_Results_______________ő</value>
+    <value>Eredmények</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>í_Result visualization color___________________________ő</value>
+    <value>Eredmény megjelenítésének színe</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>í_Running trace_________________ő...</value>
+    <value>Nyomonkövetés futtatása...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>í_Run trace___________________ő</value>
+    <value>Nyomonkövetés futtatása</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>í_Select features on map_______________________ő</value>
+    <value>Válasszon vektoros elemet a térképen</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>í_Show graphics on map_____________________ő</value>
+    <value>Grafikák megjelenítése a térképen</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>í_Starting points________________ő</value>
+    <value>Kiindulási pontok</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>í_Tap on the map to identify starting points_______________________ő.</value>
+    <value>Érintse meg a térképet a kiindulási pontok azonosításához.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>í_Terminal_________________ő</value>
+    <value>Terminál</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>í_Creator_______________ő</value>
+    <value>Készítő</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>í_Description____________ő</value>
+    <value>Leírás</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>í_Trace type details___________________ő</value>
+    <value>Nyomon követés típusának részletei</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>í_Trace types____________ő</value>
+    <value>Nyomon követési típusok</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>í_Tags_________ő</value>
+    <value>Címkék</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>í_Utility networks_________________ő</value>
+    <value>Közüzemi hálózatok</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>í_Visualization options______________________ő</value>
+    <value>Megjelenítési opciók</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>í_Warnings_________________ő</value>
+    <value>Figyelmeztetések</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>í_Zoom_________ő</value>
+    <value>Nagyítás/Kicsinyítés</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>í_Zoom to result_______________ő</value>
+    <value>Nagyítás az eredményre</value>
   </data>
 </root>

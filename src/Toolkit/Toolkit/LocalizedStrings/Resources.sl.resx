@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>Š_Date must be on or before {0}______________________________č</value>
+    <value>Datum mora biti na ali pred {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>Š_Date exceeds maximum_____________________č</value>
+    <value>Datum presega največjo vrednost</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>Š_Maximum characters allowed: {0}_________________č</value>
+    <value>Največje dovoljeno število znakov: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>Š_Maximum character length exceeded__________________č</value>
+    <value>Največja dolžina znakov je presežena.</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>Š_Enter a value at or below {0}______________________________č</value>
+    <value>Vnesite vrednost, ki je enaka ali nižja {0}</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>Š_Exceeds maximum value______________________č</value>
+    <value>Presega največjo vrednost</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>Š_Enter value from {0} to {1}____________________________č</value>
+    <value>Vnesite vrednosti od {0} do {1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>Š_Required_________________č</value>
+    <value>Zahtevano</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>Š_Value must be of the correct type__________________č</value>
+    <value>Vrednost mora biti ustrezne vrste</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>Š_Value must be a number_______________________č</value>
+    <value>Vrednost mora biti število</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>Š_Value must be a whole number_____________________________č</value>
+    <value>Vrednost mora biti celo število</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>Š_Date must be on or after {0}_____________________________č</value>
+    <value>Datum mora biti na ali po {0}</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>Š_Date less than minimum_______________________č</value>
+    <value>Datum je nižji od dovoljenega</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>Š_Minimum characters required: {0}_________________č</value>
+    <value>Najmanjše zahtevano število znakov: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>Š_Less than minimum value________________________č</value>
+    <value>Manj kot najmanjša vrednost</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>Š_Value must be within the domain_________________č</value>
+    <value>Vrednost mora biti znotraj domene</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>Š_Value must not be empty________________________č</value>
+    <value>Vrednost ne sme biti prazna</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>Š_Enter {0} to {1} characters____________________________č</value>
+    <value>Vnesite {0} do {1} znakov</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>Š_Number of characters required: {0}__________________č</value>
+    <value>Zahtevano število znakov: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>Š_All Sites___________________č</value>
+    <value>Vsa spletna mesta</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>Š_All Floors_____________________č</value>
+    <value>Vsa nadstropja</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>Š_Go Back_______________č</value>
+    <value>Pojdi nazaj</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>Š_Browse_____________č</value>
+    <value>Prebrskaj</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>Š_Select a facility__________________č</value>
+    <value>Izberi objekt</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>Š_Select a site______________č</value>
+    <value>Izberi mesto</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>Š_Close___________č</value>
+    <value>Zapri</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>Š_Collapse_________________č</value>
+    <value>Strni</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>Š_Expand_____________č</value>
+    <value>Razširi</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>Š_Filter_____________č</value>
+    <value>Filter</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>Š_No results found_________________č</value>
+    <value>Ni najdenih rezultatov</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>Š_Zoom To_______________č</value>
+    <value>Povečaj na</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>Š_ft_____č</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>Š_km_____č</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>Š_m___č</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>Š_mi_____č</value>
+    <value>mi</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>Š_All Sources____________č</value>
+    <value>Vsi viri</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>Š_Clear Search_____________č</value>
+    <value>Počisti iskanje</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>Š_No Results_____________________č</value>
+    <value>Ni rezultatov</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>Š_Repeat Search Here___________________č</value>
+    <value>Ponovi iskanje tukaj</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>Š_Find a place or address________________________č</value>
+    <value>Najdi kraj ali naslov</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>Š_Search_____________č</value>
+    <value>Išči</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>Š_Add starting point___________________č</value>
+    <value>Dodaj začetno točko</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>Š_Advanced options_________________č</value>
+    <value>Napredne možnosti</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>Š_Asset details______________č</value>
+    <value>Podrobnosti o sredstvu</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>Š_Cancel_____________č</value>
+    <value>Prekliči</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>Š_Clear results______________č</value>
+    <value>Počisti rezultate</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>Š_Close___________č</value>
+    <value>Zapri</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>Š_Discard_______________č</value>
+    <value>Zavrzi</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>Š_The selected trace type has already been run with the same starting points_______________________________________č.</value>
+    <value>Izbran tip sledi je že bil izveden z enakimi začetnimi točkami</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>Š_Feature results________________č</value>
+    <value>Rezultati geoobjektov</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>Š_Position along line____________________č</value>
+    <value>Položaj ob liniji</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>Š_Function results_________________č</value>
+    <value>Rezultati funkcije</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>Š_Identifying starting points_______________________________č...</value>
+    <value>Prepoznavanje začetnih točk ...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>Š_Inspect_______________č</value>
+    <value>Preglej</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>Š_Loading_____________________č...</value>
+    <value>Nalaganje...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>Š_There are more starting points than required for the selected trace type______________________________________č.</value>
+    <value>Za izbran tip sledi je na voljo več začetnih točk, kot je potrebno.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>Š_New trace___________________č</value>
+    <value>Nova sled</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>Š_Next_________č</value>
+    <value>Naprej</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>Š_No feature results____________________č.</value>
+    <value>Ni rezultatov geoobjektov.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>Š_No function results_____________________č.</value>
+    <value>Ni rezultatov funkcije.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>Š_No results found__________________č.</value>
+    <value>Ni najdenih rezultatov.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>Š_The selected trace type requires additional starting points_______________________________č.</value>
+    <value>Izbran tip sledi zahteva dodatne začetne točke.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>Š_No trace types found for the selected utility network____________________________č.</value>
+    <value>Za izbrano omrežje pripomočkov niso najdeni nobeni tipi sledi.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>Š_No utility networks found___________________________č.</value>
+    <value>Ni najdenih pomožnih omrežij.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>Š_Preview_______________č</value>
+    <value>Predogled</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>Š_Previous_________________č</value>
+    <value>Nazaj</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>Š_Remove all_____________________č</value>
+    <value>Odstrani vse</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>Š_Remove_____________č</value>
+    <value>Odstrani</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>Š_Result name (optional)_______________________č</value>
+    <value>Ime rezultata (izbirno)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>Š_Results_______________č</value>
+    <value>Rezultati</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>Š_Result visualization color___________________________č</value>
+    <value>Barva vizualizacije rezultata</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>Š_Running trace_________________č...</value>
+    <value>Sled se izvaja ...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>Š_Run trace___________________č</value>
+    <value>Izvedi sled</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>Š_Select features on map_______________________č</value>
+    <value>Izberi geoobjekte na karti</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>Š_Show graphics on map_____________________č</value>
+    <value>Prikaži grafike na karti</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>Š_Starting points________________č</value>
+    <value>Začetne točke</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>Š_Tap on the map to identify starting points_______________________č.</value>
+    <value>Tapni na karto za prepoznavanje začetnih točk.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>Š_Terminal_________________č</value>
+    <value>Terminal</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>Š_Creator_______________č</value>
+    <value>Ustvaril</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>Š_Description____________č</value>
+    <value>Opis</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>Š_Trace type details___________________č</value>
+    <value>Podrobnosti vrste sledi</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>Š_Trace types____________č</value>
+    <value>Vrste sledi</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>Š_Tags_________č</value>
+    <value>Oznake</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>Š_Utility networks_________________č</value>
+    <value>Pomožna omrežja</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>Š_Visualization options______________________č</value>
+    <value>Možnosti vizualizacije</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>Š_Warnings_________________č</value>
+    <value>Opozorila</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>Š_Zoom_________č</value>
+    <value>Povečava</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>Š_Zoom to result_______________č</value>
+    <value>Približaj na rezultat</value>
   </data>
 </root>

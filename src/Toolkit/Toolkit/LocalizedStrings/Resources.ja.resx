@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>須_Date must be on or before {0}______________________________鷗</value>
+    <value>日付は {0} かそれ以前にする必要があります</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>須_Date exceeds maximum_____________________鷗</value>
+    <value>日付が最大値を超えています</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>須_Maximum characters allowed: {0}_________________鷗</value>
+    <value>使用できる最大文字数: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>須_Maximum character length exceeded__________________鷗</value>
+    <value>最大文字長を超えています</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>須_Enter a value at or below {0}______________________________鷗</value>
+    <value>{0} 以下の値を入力してください</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>須_Exceeds maximum value______________________鷗</value>
+    <value>最大値を超えています</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>須_Enter value from {0} to {1}____________________________鷗</value>
+    <value>{0} ～ {1} の値を入力してください</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>須_Required_________________鷗</value>
+    <value>必須</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>須_Value must be of the correct type__________________鷗</value>
+    <value>値を正しいタイプにする必要があります</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>須_Value must be a number_______________________鷗</value>
+    <value>値を数値にする必要があります</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>須_Value must be a whole number_____________________________鷗</value>
+    <value>整数を使用してください</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>須_Date must be on or after {0}_____________________________鷗</value>
+    <value>日付は {0} かそれ以降にする必要があります</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>須_Date less than minimum_______________________鷗</value>
+    <value>日付が最小値未満です</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>須_Minimum characters required: {0}_________________鷗</value>
+    <value>必要な最小文字数: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>須_Less than minimum value________________________鷗</value>
+    <value>最小値未満です</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>須_Value must be within the domain_________________鷗</value>
+    <value>値はドメイン内である必要があります</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>須_Value must not be empty________________________鷗</value>
+    <value>値は空にしてはなりません</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>須_Enter {0} to {1} characters____________________________鷗</value>
+    <value>{0} ～ {1} 文字で入力してください</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>須_Number of characters required: {0}__________________鷗</value>
+    <value>必要な文字数: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>須_All Sites___________________鷗</value>
+    <value>すべてのサイト</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>須_All Floors_____________________鷗</value>
+    <value>すべてのフロア</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>須_Go Back_______________鷗</value>
+    <value>戻る</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>須_Browse_____________鷗</value>
+    <value>参照</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>須_Select a facility__________________鷗</value>
+    <value>施設の選択</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>須_Select a site______________鷗</value>
+    <value>サイトの選択</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>須_Close___________鷗</value>
+    <value>閉じる</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>須_Collapse_________________鷗</value>
+    <value>折りたたむ</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>須_Expand_____________鷗</value>
+    <value>展開</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>須_Filter_____________鷗</value>
+    <value>フィルター</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>須_No results found_________________鷗</value>
+    <value>結果が見つかりません</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>須_Zoom To_______________鷗</value>
+    <value>ズーム</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>須_ft_____鷗</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>須_km_____鷗</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>須_m___鷗</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>須_mi_____鷗</value>
+    <value>mi</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>須_All Sources____________鷗</value>
+    <value>すべてのソース</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>須_Clear Search_____________鷗</value>
+    <value>検索解除</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>須_No Results_____________________鷗</value>
+    <value>結果がありません</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>須_Repeat Search Here___________________鷗</value>
+    <value>ここで検索の繰り返し</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>須_Find a place or address________________________鷗</value>
+    <value>場所または住所の検索</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>須_Search_____________鷗</value>
+    <value>検索</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>須_Add starting point___________________鷗</value>
+    <value>始点を追加</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>須_Advanced options_________________鷗</value>
+    <value>高度なオプション</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>須_Asset details______________鷗</value>
+    <value>アセットの詳細</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>須_Cancel_____________鷗</value>
+    <value>キャンセル</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>須_Clear results______________鷗</value>
+    <value>結果の消去</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>須_Close___________鷗</value>
+    <value>閉じる</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>須_Discard_______________鷗</value>
+    <value>破棄</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>須_The selected trace type has already been run with the same starting points_______________________________________鷗.</value>
+    <value>選択したトレース タイプは、同じ始点ですでに実行されています。</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>須_Feature results________________鷗</value>
+    <value>フィーチャ結果</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>須_Position along line____________________鷗</value>
+    <value>ラインに沿った位置</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>須_Function results_________________鷗</value>
+    <value>関数の結果</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>須_Identifying starting points_______________________________鷗...</value>
+    <value>始点を特定しています...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>須_Inspect_______________鷗</value>
+    <value>調査</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>須_Loading_____________________鷗...</value>
+    <value>読み込んでいます...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>須_There are more starting points than required for the selected trace type______________________________________鷗.</value>
+    <value>選択したトレース タイプには、必要な数以上の始点が含まれています。</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>須_New trace___________________鷗</value>
+    <value>新しいトレース</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>須_Next_________鷗</value>
+    <value>次へ</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>須_No feature results____________________鷗.</value>
+    <value>フィーチャ結果がありません。</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>須_No function results_____________________鷗.</value>
+    <value>関数の結果がありません。</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>須_No results found__________________鷗.</value>
+    <value>結果が見つかりません。</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>須_The selected trace type requires additional starting points_______________________________鷗.</value>
+    <value>選択したトレース タイプには、追加の始点が必要です。</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>須_No trace types found for the selected utility network____________________________鷗.</value>
+    <value>選択したユーティリティ ネットワークにトレース タイプが見つかりません。</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>須_No utility networks found___________________________鷗.</value>
+    <value>ユーティリティ ネットワークが見つかりません。</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>須_Preview_______________鷗</value>
+    <value>プレビュー</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>須_Previous_________________鷗</value>
+    <value>前へ</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>須_Remove all_____________________鷗</value>
+    <value>すべて削除</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>須_Remove_____________鷗</value>
+    <value>削除</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>須_Result name (optional)_______________________鷗</value>
+    <value>結果の名前 (オプション)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>須_Results_______________鷗</value>
+    <value>結果</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>須_Result visualization color___________________________鷗</value>
+    <value>結果の表示の色</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>須_Running trace_________________鷗...</value>
+    <value>トレースを実行しています...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>須_Run trace___________________鷗</value>
+    <value>トレースの実行</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>須_Select features on map_______________________鷗</value>
+    <value>マップ上のフィーチャの選択</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>須_Show graphics on map_____________________鷗</value>
+    <value>マップ上のグラフィックスの表示</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>須_Starting points________________鷗</value>
+    <value>始点</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>須_Tap on the map to identify starting points_______________________鷗.</value>
+    <value>マップをタイプし、始点を特定します。</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>須_Terminal_________________鷗</value>
+    <value>ターミナル</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>須_Creator_______________鷗</value>
+    <value>作成者</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>須_Description____________鷗</value>
+    <value>説明</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>須_Trace type details___________________鷗</value>
+    <value>トレース タイプの詳細</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>須_Trace types____________鷗</value>
+    <value>トレース タイプ</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>須_Tags_________鷗</value>
+    <value>タグ</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>須_Utility networks_________________鷗</value>
+    <value>ユーティリティ ネットワーク</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>須_Visualization options______________________鷗</value>
+    <value>視覚化オプション</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>須_Warnings_________________鷗</value>
+    <value>警告</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>須_Zoom_________鷗</value>
+    <value>ズーム</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>須_Zoom to result_______________鷗</value>
+    <value>結果にズーム</value>
   </data>
 </root>

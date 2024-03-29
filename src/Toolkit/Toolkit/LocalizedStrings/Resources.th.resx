@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>ก้_Date must be on or before {0}______________________________ษฺ</value>
+    <value>วันที่ต้องเท่ากับหรืออยู่ก่อนหน้า {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>ก้_Date exceeds maximum_____________________ษฺ</value>
+    <value>วันที่เกินค่าสูงสุด</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>ก้_Maximum characters allowed: {0}_________________ษฺ</value>
+    <value>จำนวนอักขระสูงสุดที่อนุญาต: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>ก้_Maximum character length exceeded__________________ษฺ</value>
+    <value>จำนวนอักขระเกินความยาวสูงสุด</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>ก้_Enter a value at or below {0}______________________________ษฺ</value>
+    <value>ป้อนค่าเท่ากับหรือต่ำกว่า {0}</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>ก้_Exceeds maximum value______________________ษฺ</value>
+    <value>เกินค่าสูงสุด</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>ก้_Enter value from {0} to {1}____________________________ษฺ</value>
+    <value>ป้อนค่าตั้งแต่ {0} ถึง {1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>ก้_Required_________________ษฺ</value>
+    <value>ต้องการ</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>ก้_Value must be of the correct type__________________ษฺ</value>
+    <value>ค่าต้องเป็นประเภทที่ถูกต้อง</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>ก้_Value must be a number_______________________ษฺ</value>
+    <value>ค่าต้องเป็นตัวเลข</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>ก้_Value must be a whole number_____________________________ษฺ</value>
+    <value>ค่าต้องเป็นจำนวนเต็ม</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>ก้_Date must be on or after {0}_____________________________ษฺ</value>
+    <value>วันที่ต้องเท่ากับหรืออยู่หลังจาก {0}</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>ก้_Date less than minimum_______________________ษฺ</value>
+    <value>วันที่น้อยกว่าค่าขั้นต่ำ</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>ก้_Minimum characters required: {0}_________________ษฺ</value>
+    <value>จำนวนอักขระขั้นต่ำที่ต้องการ: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>ก้_Less than minimum value________________________ษฺ</value>
+    <value>น้อยกว่าค่าขั้นต่ำ</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>ก้_Value must be within the domain_________________ษฺ</value>
+    <value>ค่าต้องอยู่ภายในโดเมน</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>ก้_Value must not be empty________________________ษฺ</value>
+    <value>ค่าต้องไม่ว่างเปล่า</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>ก้_Enter {0} to {1} characters____________________________ษฺ</value>
+    <value>ป้อนอักขระ {0} ถึง {1} ตัว</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>ก้_Number of characters required: {0}__________________ษฺ</value>
+    <value>จำนวนอักขระที่ต้องการ: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>ก้_All Sites___________________ษฺ</value>
+    <value>ไซต์ทั้งหมด</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>ก้_All Floors_____________________ษฺ</value>
+    <value>ชั้นทั้งหมด</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>ก้_Go Back_______________ษฺ</value>
+    <value>ย้อนกลับ</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>ก้_Browse_____________ษฺ</value>
+    <value>เรียกดู</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>ก้_Select a facility__________________ษฺ</value>
+    <value>เลือกอาคารสถานที่</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>ก้_Select a site______________ษฺ</value>
+    <value>เลือกไซต์</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>ก้_Close___________ษฺ</value>
+    <value>ปิด</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>ก้_Collapse_________________ษฺ</value>
+    <value>ย่อลงมา</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>ก้_Expand_____________ษฺ</value>
+    <value>ขยาย</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>ก้_Filter_____________ษฺ</value>
+    <value>ตัวกรอง</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>ก้_No results found_________________ษฺ</value>
+    <value>ไม่พบผลลัพธ์</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>ก้_Zoom To_______________ษฺ</value>
+    <value>ซูมไปยัง</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>ก้_ft_____ษฺ</value>
+    <value>ฟุต</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>ก้_km_____ษฺ</value>
+    <value>กม.</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>ก้_m___ษฺ</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>ก้_mi_____ษฺ</value>
+    <value>ไมล์</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>ก้_All Sources____________ษฺ</value>
+    <value>ต้นทางทั้งหมด</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>ก้_Clear Search_____________ษฺ</value>
+    <value>ล้างการค้นหา</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>ก้_No Results_____________________ษฺ</value>
+    <value>ไม่มีผลลัพธ์</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>ก้_Repeat Search Here___________________ษฺ</value>
+    <value>ทำซ้ำการค้นหาที่นี่</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>ก้_Find a place or address________________________ษฺ</value>
+    <value>ค้นหาสถานที่หรือที่อยู่</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>ก้_Search_____________ษฺ</value>
+    <value>ค้นหา</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>ก้_Add starting point___________________ษฺ</value>
+    <value>เพิ่มจุดเริ่มต้น</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>ก้_Advanced options_________________ษฺ</value>
+    <value>ตัวเลือกขั้นสูง</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>ก้_Asset details______________ษฺ</value>
+    <value>รายละเอียดแอสเซ็ท</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>ก้_Cancel_____________ษฺ</value>
+    <value>ยกเลิก</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>ก้_Clear results______________ษฺ</value>
+    <value>ล้างผลลัพธ์</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>ก้_Close___________ษฺ</value>
+    <value>ปิด</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>ก้_Discard_______________ษฺ</value>
+    <value>ละทิ้ง</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>ก้_The selected trace type has already been run with the same starting points_______________________________________ษฺ.</value>
+    <value>ประเภทการติดตามที่เลือก ถูกรันโดยใช้จุดเริ่มต้นเดียวกันอยู่แล้ว</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>ก้_Feature results________________ษฺ</value>
+    <value>ผลลัพธ์ฟีเจอร์</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>ก้_Position along line____________________ษฺ</value>
+    <value>ตำแหน่งบนเส้น</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>ก้_Function results_________________ษฺ</value>
+    <value>ผลลัพธ์ฟังก์ชัน</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>ก้_Identifying starting points_______________________________ษฺ...</value>
+    <value>การระบุจุดเริ่มต้น...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>ก้_Inspect_______________ษฺ</value>
+    <value>ตรวจสอบ</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>ก้_Loading_____________________ษฺ...</value>
+    <value>กำลังโหลด...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>ก้_There are more starting points than required for the selected trace type______________________________________ษฺ.</value>
+    <value>มีจำนวนจุดเริ่มต้นมากกว่าที่จำเป็นสำหรับประเภทการติดตามที่เลือก</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>ก้_New trace___________________ษฺ</value>
+    <value>การติดตามใหม่</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>ก้_Next_________ษฺ</value>
+    <value>ถัดไป</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>ก้_No feature results____________________ษฺ.</value>
+    <value>ไม่มีผลลัพธ์ฟีเจอร์</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>ก้_No function results_____________________ษฺ.</value>
+    <value>ไม่มีผลลัพธ์ฟังก์ชัน</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>ก้_No results found__________________ษฺ.</value>
+    <value>ไม่พบข้อมูล</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>ก้_The selected trace type requires additional starting points_______________________________ษฺ.</value>
+    <value>ประเภทการติดตามที่เลือก ต้องการจุดเริ่มต้นเพิ่มเติม</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>ก้_No trace types found for the selected utility network____________________________ษฺ.</value>
+    <value>ไม่พบประเภทการติดตามสำหรับเครือข่ายสาธารณูปโภคที่เลือก</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>ก้_No utility networks found___________________________ษฺ.</value>
+    <value>ไม่พบเครือข่ายสาธารณูปโภค</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>ก้_Preview_______________ษฺ</value>
+    <value>แสดงตัวอย่าง</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>ก้_Previous_________________ษฺ</value>
+    <value>ก่อนหน้า</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>ก้_Remove all_____________________ษฺ</value>
+    <value>ลบทั้งหมด</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>ก้_Remove_____________ษฺ</value>
+    <value>ลบทิ้ง</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>ก้_Result name (optional)_______________________ษฺ</value>
+    <value>ชื่อผลลัพธ์ (ไม่บังคับ)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>ก้_Results_______________ษฺ</value>
+    <value>ผลลัพธ์</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>ก้_Result visualization color___________________________ษฺ</value>
+    <value>สีการแสดงภาพผลลัพธ์</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>ก้_Running trace_________________ษฺ...</value>
+    <value>กำลังรันการติดตาม...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>ก้_Run trace___________________ษฺ</value>
+    <value>รันการติดตาม</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>ก้_Select features on map_______________________ษฺ</value>
+    <value>เลือกฟีเจอร์บนแผนที่</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>ก้_Show graphics on map_____________________ษฺ</value>
+    <value>แสดงกราฟิกบนแผนที่</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>ก้_Starting points________________ษฺ</value>
+    <value>จุดเริ่มต้น</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>ก้_Tap on the map to identify starting points_______________________ษฺ.</value>
+    <value>แตะบนแผนที่เพื่อระบุจุดเริ่มต้น</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>ก้_Terminal_________________ษฺ</value>
+    <value>เทอร์มินัล</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>ก้_Creator_______________ษฺ</value>
+    <value>Creator</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>ก้_Description____________ษฺ</value>
+    <value>รายละเอียด</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>ก้_Trace type details___________________ษฺ</value>
+    <value>รายละเอียดประเภทการติดตาม</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>ก้_Trace types____________ษฺ</value>
+    <value>ประเภทการติดตาม</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>ก้_Tags_________ษฺ</value>
+    <value>แท็ก</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>ก้_Utility networks_________________ษฺ</value>
+    <value>เครือข่ายสาธารณูปโภค</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>ก้_Visualization options______________________ษฺ</value>
+    <value>ตัวเลือกการแสดงผล</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>ก้_Warnings_________________ษฺ</value>
+    <value>คำเตือน</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>ก้_Zoom_________ษฺ</value>
+    <value>ซูม</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>ก้_Zoom to result_______________ษฺ</value>
+    <value>ซูมไปยังผลลัพธ์</value>
   </data>
 </root>

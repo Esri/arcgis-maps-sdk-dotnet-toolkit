@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>õ_Date must be on or before {0}______________________________ç</value>
+    <value>A data tem de ser igual ou anterior a {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>õ_Date exceeds maximum_____________________ç</value>
+    <value>A data excede o máximo</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>õ_Maximum characters allowed: {0}_________________ç</value>
+    <value>Máximo de caracteres permitidos: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>õ_Maximum character length exceeded__________________ç</value>
+    <value>Comprimento máximo de caracteres excedido</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>õ_Enter a value at or below {0}______________________________ç</value>
+    <value>Introduza um valor igual ou inferior a {0}</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>õ_Exceeds maximum value______________________ç</value>
+    <value>Excede o valor máximo</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>õ_Enter value from {0} to {1}____________________________ç</value>
+    <value>Introduza um valor entre {0} e {1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>õ_Required_________________ç</value>
+    <value>Exigido</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>õ_Value must be of the correct type__________________ç</value>
+    <value>O valor tem de ser do tipo correto</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>õ_Value must be a number_______________________ç</value>
+    <value>O valor tem de ser um número</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>õ_Value must be a whole number_____________________________ç</value>
+    <value>O valor tem de ser um número inteiro</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>õ_Date must be on or after {0}_____________________________ç</value>
+    <value>A data tem de ser igual ou posterior a {0}</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>õ_Date less than minimum_______________________ç</value>
+    <value>Data inferior ao mínimo</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>õ_Minimum characters required: {0}_________________ç</value>
+    <value>Caracteres mínimos necessários: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>õ_Less than minimum value________________________ç</value>
+    <value>Inferior ao valor mínimo</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>õ_Value must be within the domain_________________ç</value>
+    <value>O valor tem de estar dentro do domínio</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>õ_Value must not be empty________________________ç</value>
+    <value>O valor não pode estar vazio</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>õ_Enter {0} to {1} characters____________________________ç</value>
+    <value>Introduza entre {0} e {1} caracteres</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>õ_Number of characters required: {0}__________________ç</value>
+    <value>Número de caracteres necessários: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>õ_All Sites___________________ç</value>
+    <value>Todos os locais</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>õ_All Floors_____________________ç</value>
+    <value>Todos os pisos</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>õ_Go Back_______________ç</value>
+    <value>Retroceder</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>õ_Browse_____________ç</value>
+    <value>Procurar</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>õ_Select a facility__________________ç</value>
+    <value>Selecione uma instalação</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>õ_Select a site______________ç</value>
+    <value>Selecionar um local</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>õ_Close___________ç</value>
+    <value>Fechar</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>õ_Collapse_________________ç</value>
+    <value>Fechar</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>õ_Expand_____________ç</value>
+    <value>Expandir</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>õ_Filter_____________ç</value>
+    <value>Filtrar</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>õ_No results found_________________ç</value>
+    <value>Nenhum resultado encontrado</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>õ_Zoom To_______________ç</value>
+    <value>Zoom Para</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>õ_ft_____ç</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>õ_km_____ç</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>õ_m___ç</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>õ_mi_____ç</value>
+    <value>mi</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>õ_All Sources____________ç</value>
+    <value>Todas as fontes</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>õ_Clear Search_____________ç</value>
+    <value>Limpar Pesquisa</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>õ_No Results_____________________ç</value>
+    <value>Nenhum Resultado Encontrado</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>õ_Repeat Search Here___________________ç</value>
+    <value>Repetir Pesquisa Aqui</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>õ_Find a place or address________________________ç</value>
+    <value>Encontrar um local ou endereço</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>õ_Search_____________ç</value>
+    <value>Pesquisar</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>õ_Add starting point___________________ç</value>
+    <value>Adicionar ponto de partida</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>õ_Advanced options_________________ç</value>
+    <value>Opções avançadas</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>õ_Asset details______________ç</value>
+    <value>Detalhes do ativo</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>õ_Cancel_____________ç</value>
+    <value>Cancelar</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>õ_Clear results______________ç</value>
+    <value>Limpar resultados</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>õ_Close___________ç</value>
+    <value>Fechar</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>õ_Discard_______________ç</value>
+    <value>Rejeitar</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>õ_The selected trace type has already been run with the same starting points_______________________________________ç.</value>
+    <value>O tipo de rastreio selecionado já foi executado com os mesmos pontos de partida.</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>õ_Feature results________________ç</value>
+    <value>Resultados de elementos</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>õ_Position along line____________________ç</value>
+    <value>Posicionar ao longo da linha</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>õ_Function results_________________ç</value>
+    <value>Resultados de funções</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>õ_Identifying starting points_______________________________ç...</value>
+    <value>A identificar pontos de partida...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>õ_Inspect_______________ç</value>
+    <value>Inspecionar</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>õ_Loading_____________________ç...</value>
+    <value>A carregar...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>õ_There are more starting points than required for the selected trace type______________________________________ç.</value>
+    <value>Existem mais pontos de partida do que os necessários para o tipo de rastreio selecionado.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>õ_New trace___________________ç</value>
+    <value>Novo rastreio</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>õ_Next_________ç</value>
+    <value>Seguinte</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>õ_No feature results____________________ç.</value>
+    <value>Não existem resultados de elementos.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>õ_No function results_____________________ç.</value>
+    <value>Não existem resultados de funções.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>õ_No results found__________________ç.</value>
+    <value>Não foram encontrados resultados.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>õ_The selected trace type requires additional starting points_______________________________ç.</value>
+    <value>O tipo de rastreio selecionado requer pontos de partida adicionais.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>õ_No trace types found for the selected utility network____________________________ç.</value>
+    <value>Não foram encontrados tipos de rastreio para a rede de serviços públicos selecionada.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>õ_No utility networks found___________________________ç.</value>
+    <value>Não foram encontradas redes de serviços públicos.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>õ_Preview_______________ç</value>
+    <value>Pré-visualizar</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>õ_Previous_________________ç</value>
+    <value>Anterior</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>õ_Remove all_____________________ç</value>
+    <value>Remover tudo</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>õ_Remove_____________ç</value>
+    <value>Remover</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>õ_Result name (optional)_______________________ç</value>
+    <value>Nome do resultado (opcional)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>õ_Results_______________ç</value>
+    <value>Resultados</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>õ_Result visualization color___________________________ç</value>
+    <value>Cor de visualização do resultado</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>õ_Running trace_________________ç...</value>
+    <value>A executar rastreio...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>õ_Run trace___________________ç</value>
+    <value>Executar rastreio</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>õ_Select features on map_______________________ç</value>
+    <value>Selecionar elementos no mapa</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>õ_Show graphics on map_____________________ç</value>
+    <value>Exibir gráficos no mapa</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>õ_Starting points________________ç</value>
+    <value>Pontos de partida</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>õ_Tap on the map to identify starting points_______________________ç.</value>
+    <value>Toque no mapa para identificar os pontos de partida.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>õ_Terminal_________________ç</value>
+    <value>Terminal</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>õ_Creator_______________ç</value>
+    <value>Criador</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>õ_Description____________ç</value>
+    <value>Descrição</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>õ_Trace type details___________________ç</value>
+    <value>Detalhes do tipo de rastreio</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>õ_Trace types____________ç</value>
+    <value>Tipos de rastreio</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>õ_Tags_________ç</value>
+    <value>Etiquetas</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>õ_Utility networks_________________ç</value>
+    <value>Redes de serviços públicos</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>õ_Visualization options______________________ç</value>
+    <value>Opções de visualização</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>õ_Warnings_________________ç</value>
+    <value>Avisos</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>õ_Zoom_________ç</value>
+    <value>Zoom</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>õ_Zoom to result_______________ç</value>
+    <value>Aumentar zoom até ao resultado</value>
   </data>
 </root>

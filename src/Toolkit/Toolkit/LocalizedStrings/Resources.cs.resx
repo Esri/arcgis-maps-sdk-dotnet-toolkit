@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>Ř_Date must be on or before {0}______________________________ů</value>
+    <value>Datum musí být {0} nebo dřívější</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>Ř_Date exceeds maximum_____________________ů</value>
+    <value>Datum překračuje maximální hodnotu</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>Ř_Maximum characters allowed: {0}_________________ů</value>
+    <value>Maximální povolený počet znaků: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>Ř_Maximum character length exceeded__________________ů</value>
+    <value>Byl překročen maximální počet znaků</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>Ř_Enter a value at or below {0}______________________________ů</value>
+    <value>Zadejte hodnotu rovnou nebo nižší než {0}</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>Ř_Exceeds maximum value______________________ů</value>
+    <value>Překračuje maximální hodnotu</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>Ř_Enter value from {0} to {1}____________________________ů</value>
+    <value>Zadejte hodnotu od {0} do {1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>Ř_Required_________________ů</value>
+    <value>Povinné</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>Ř_Value must be of the correct type__________________ů</value>
+    <value>Hodnota musí být správného typu</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>Ř_Value must be a number_______________________ů</value>
+    <value>Hodnota musí být číslo</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>Ř_Value must be a whole number_____________________________ů</value>
+    <value>Hodnota musí být celé číslo</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>Ř_Date must be on or after {0}_____________________________ů</value>
+    <value>Datum musí být {0} nebo pozdější</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>Ř_Date less than minimum_______________________ů</value>
+    <value>Datum nedosahuje minimální hodnoty</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>Ř_Minimum characters required: {0}_________________ů</value>
+    <value>Minimální požadovaný počet znaků: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>Ř_Less than minimum value________________________ů</value>
+    <value>Nižší než minimální hodnota</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>Ř_Value must be within the domain_________________ů</value>
+    <value>Hodnota musí být v doméně</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>Ř_Value must not be empty________________________ů</value>
+    <value>Hodnota nesmí být prázdná</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>Ř_Enter {0} to {1} characters____________________________ů</value>
+    <value>Zadejte {0} až {1} znaků</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>Ř_Number of characters required: {0}__________________ů</value>
+    <value>Požadovaný počet znaků: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>Ř_All Sites___________________ů</value>
+    <value>Všechna místa</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>Ř_All Floors_____________________ů</value>
+    <value>Všechna podlaží</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>Ř_Go Back_______________ů</value>
+    <value>Přejít zpět</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>Ř_Browse_____________ů</value>
+    <value>Procházet</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>Ř_Select a facility__________________ů</value>
+    <value>Vybrat zařízení</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>Ř_Select a site______________ů</value>
+    <value>Vybrat lokalitu</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>Ř_Close___________ů</value>
+    <value>Zavřít</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>Ř_Collapse_________________ů</value>
+    <value>Sbalit</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>Ř_Expand_____________ů</value>
+    <value>Rozbalit</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>Ř_Filter_____________ů</value>
+    <value>Filtr</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>Ř_No results found_________________ů</value>
+    <value>Nebyly nalezeny žádné výsledky</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>Ř_Zoom To_______________ů</value>
+    <value>Přiblížit na</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>Ř_ft_____ů</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>Ř_km_____ů</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>Ř_m___ů</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>Ř_mi_____ů</value>
+    <value>mi</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>Ř_All Sources____________ů</value>
+    <value>Všechny zdroje</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>Ř_Clear Search_____________ů</value>
+    <value>Vyčistit vyhledávání</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>Ř_No Results_____________________ů</value>
+    <value>Žádné výsledky</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>Ř_Repeat Search Here___________________ů</value>
+    <value>Opakujte hledání zde</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>Ř_Find a place or address________________________ů</value>
+    <value>Vyhledat místo nebo adresu</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>Ř_Search_____________ů</value>
+    <value>Hledat</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>Ř_Add starting point___________________ů</value>
+    <value>Přidat výchozí bod</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>Ř_Advanced options_________________ů</value>
+    <value>Pokročilé možnosti</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>Ř_Asset details______________ů</value>
+    <value>Podrobnosti o objektu</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>Ř_Cancel_____________ů</value>
+    <value>Storno</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>Ř_Clear results______________ů</value>
+    <value>Vymazat výsledky</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>Ř_Close___________ů</value>
+    <value>Zavřít</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>Ř_Discard_______________ů</value>
+    <value>Zahodit</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>Ř_The selected trace type has already been run with the same starting points_______________________________________ů.</value>
+    <value>Vybraný typ trasování byl již spuštěn se shodnými výchozími body.</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>Ř_Feature results________________ů</value>
+    <value>Výsledky hledání prvků</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>Ř_Position along line____________________ů</value>
+    <value>Pozice podél linie</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>Ř_Function results_________________ů</value>
+    <value>Výsledky funkce</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>Ř_Identifying starting points_______________________________ů...</value>
+    <value>Identifikace výchozích bodů...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>Ř_Inspect_______________ů</value>
+    <value>Provést inspekci</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>Ř_Loading_____________________ů...</value>
+    <value>Načítání…</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>Ř_There are more starting points than required for the selected trace type______________________________________ů.</value>
+    <value>Výchozích bodů je více, než je pro vybraný typ trasování požadováno.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>Ř_New trace___________________ů</value>
+    <value>Nové trasování</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>Ř_Next_________ů</value>
+    <value>Další</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>Ř_No feature results____________________ů.</value>
+    <value>Žádné výsledky prvků.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>Ř_No function results_____________________ů.</value>
+    <value>Žádné výsledky funkce.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>Ř_No results found__________________ů.</value>
+    <value>Nebyly nalezeny žádné výsledky.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>Ř_The selected trace type requires additional starting points_______________________________ů.</value>
+    <value>Vybraný typ trasování vyžaduje další výchozí body.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>Ř_No trace types found for the selected utility network____________________________ů.</value>
+    <value>Pro vybranou inženýrskou síť nebyly nalezeny žádné typy trasování.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>Ř_No utility networks found___________________________ů.</value>
+    <value>Nebyly nalezeny žádné inženýrské sítě.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>Ř_Preview_______________ů</value>
+    <value>Náhled</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>Ř_Previous_________________ů</value>
+    <value>Předchozí</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>Ř_Remove all_____________________ů</value>
+    <value>Odebrat vše</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>Ř_Remove_____________ů</value>
+    <value>Odebrat</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>Ř_Result name (optional)_______________________ů</value>
+    <value>Název výsledku (volitelné)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>Ř_Results_______________ů</value>
+    <value>Výsledky</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>Ř_Result visualization color___________________________ů</value>
+    <value>Barva vizualizace výsledku</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>Ř_Running trace_________________ů...</value>
+    <value>Probíhá trasování...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>Ř_Run trace___________________ů</value>
+    <value>Spustit trasování</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>Ř_Select features on map_______________________ů</value>
+    <value>Vybrat prvky v mapě</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>Ř_Show graphics on map_____________________ů</value>
+    <value>Zobrazit grafiku v mapě</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>Ř_Starting points________________ů</value>
+    <value>Výchozí body</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>Ř_Tap on the map to identify starting points_______________________ů.</value>
+    <value>Klepnutím na mapu určete výchozí body.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>Ř_Terminal_________________ů</value>
+    <value>Vývod</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>Ř_Creator_______________ů</value>
+    <value>Tvůrce</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>Ř_Description____________ů</value>
+    <value>Popis</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>Ř_Trace type details___________________ů</value>
+    <value>Podrobnosti typu trasování</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>Ř_Trace types____________ů</value>
+    <value>Typy trasování</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>Ř_Tags_________ů</value>
+    <value>Klíčová slova</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>Ř_Utility networks_________________ů</value>
+    <value>Inženýrské sítě</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>Ř_Visualization options______________________ů</value>
+    <value>Možnosti vizualizace</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>Ř_Warnings_________________ů</value>
+    <value>Varování</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>Ř_Zoom_________ů</value>
+    <value>Přiblížení</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>Ř_Zoom to result_______________ů</value>
+    <value>Příblížit na výsledek</value>
   </data>
 </root>

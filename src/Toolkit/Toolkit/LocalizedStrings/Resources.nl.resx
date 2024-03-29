@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>Ĳ_Date must be on or before {0}______________________________ä</value>
+    <value>Datum moet op of voor {0} liggen</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>Ĳ_Date exceeds maximum_____________________ä</value>
+    <value>Datum overschrijdt maximum</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>Ĳ_Maximum characters allowed: {0}_________________ä</value>
+    <value>Maximumaantal toegestane tekens: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>Ĳ_Maximum character length exceeded__________________ä</value>
+    <value>Maximale tekenlengte is overschreden</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>Ĳ_Enter a value at or below {0}______________________________ä</value>
+    <value>Voer een waarde in van {0} of lager</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>Ĳ_Exceeds maximum value______________________ä</value>
+    <value>Overschrijdt maximumwaarde</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>Ĳ_Enter value from {0} to {1}____________________________ä</value>
+    <value>Voer waarde in tussen {0} en {1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>Ĳ_Required_________________ä</value>
+    <value>Vereist</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>Ĳ_Value must be of the correct type__________________ä</value>
+    <value>Waarde moet van het juiste type zijn</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>Ĳ_Value must be a number_______________________ä</value>
+    <value>Waarde moet een getal zijn</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>Ĳ_Value must be a whole number_____________________________ä</value>
+    <value>Waarde moet een geheel getal zijn</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>Ĳ_Date must be on or after {0}_____________________________ä</value>
+    <value>Datum moet op of na {0} liggen</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>Ĳ_Date less than minimum_______________________ä</value>
+    <value>Datum is vroeger dan minimum</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>Ĳ_Minimum characters required: {0}_________________ä</value>
+    <value>Minimumaantal vereiste tekens: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>Ĳ_Less than minimum value________________________ä</value>
+    <value>Minder dan minimumwaarde</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>Ĳ_Value must be within the domain_________________ä</value>
+    <value>Waarde moet binnen het domein liggen</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>Ĳ_Value must not be empty________________________ä</value>
+    <value>Waarde mag niet leeg zijn</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>Ĳ_Enter {0} to {1} characters____________________________ä</value>
+    <value>Voer {0} tot {1} tekens in</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>Ĳ_Number of characters required: {0}__________________ä</value>
+    <value>Aantal vereiste tekens: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>Ĳ_All Sites___________________ä</value>
+    <value>Alle locaties</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>Ĳ_All Floors_____________________ä</value>
+    <value>Alle verdiepingen</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>Ĳ_Go Back_______________ä</value>
+    <value>Terug</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>Ĳ_Browse_____________ä</value>
+    <value>Bladeren</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>Ĳ_Select a facility__________________ä</value>
+    <value>Selecteer een faciliteit</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>Ĳ_Select a site______________ä</value>
+    <value>Selecteer een locatie</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>Ĳ_Close___________ä</value>
+    <value>Sluiten</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>Ĳ_Collapse_________________ä</value>
+    <value>Inklappen</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>Ĳ_Expand_____________ä</value>
+    <value>Uitklappen</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>Ĳ_Filter_____________ä</value>
+    <value>Filter</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>Ĳ_No results found_________________ä</value>
+    <value>Kan geen resultaten vinden</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>Ĳ_Zoom To_______________ä</value>
+    <value>Inzoomen op</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>Ĳ_ft_____ä</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>Ĳ_km_____ä</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>Ĳ_m___ä</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>Ĳ_mi_____ä</value>
+    <value>mi</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>Ĳ_All Sources____________ä</value>
+    <value>Alle bronnen</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>Ĳ_Clear Search_____________ä</value>
+    <value>Zoekopdracht wissen</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>Ĳ_No Results_____________________ä</value>
+    <value>Geen resultaten</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>Ĳ_Repeat Search Here___________________ä</value>
+    <value>Zoeken hier herhalen</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>Ĳ_Find a place or address________________________ä</value>
+    <value>Een plaats of adres zoeken</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>Ĳ_Search_____________ä</value>
+    <value>Zoeken</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>Ĳ_Add starting point___________________ä</value>
+    <value>Startpunt toevoegen</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>Ĳ_Advanced options_________________ä</value>
+    <value>Geavanceerde opties</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>Ĳ_Asset details______________ä</value>
+    <value>Details asset</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>Ĳ_Cancel_____________ä</value>
+    <value>Annuleren</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>Ĳ_Clear results______________ä</value>
+    <value>Resultaten wissen</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>Ĳ_Close___________ä</value>
+    <value>Sluiten</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>Ĳ_Discard_______________ä</value>
+    <value>Annuleren</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>Ĳ_The selected trace type has already been run with the same starting points_______________________________________ä.</value>
+    <value>Het geselecteerde type tracering is al uitgevoerd met dezelfde startpunten.</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>Ĳ_Feature results________________ä</value>
+    <value>Objectresultaten</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>Ĳ_Position along line____________________ä</value>
+    <value>Positie langs lijn</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>Ĳ_Function results_________________ä</value>
+    <value>Resultaten functie</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>Ĳ_Identifying starting points_______________________________ä...</value>
+    <value>Bezig met identificeren startpunten...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>Ĳ_Inspect_______________ä</value>
+    <value>Inspecteren</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>Ĳ_Loading_____________________ä...</value>
+    <value>Bezig met laden...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>Ĳ_There are more starting points than required for the selected trace type______________________________________ä.</value>
+    <value>Er zijn meer startpunten dat vereist voor het geselecteerde type tracering.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>Ĳ_New trace___________________ä</value>
+    <value>Nieuwe tracering</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>Ĳ_Next_________ä</value>
+    <value>Volgende</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>Ĳ_No feature results____________________ä.</value>
+    <value>Geen resultaten object.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>Ĳ_No function results_____________________ä.</value>
+    <value>Geen resultaten functie.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>Ĳ_No results found__________________ä.</value>
+    <value>Kan geen resultaten vinden.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>Ĳ_The selected trace type requires additional starting points_______________________________ä.</value>
+    <value>Het geselecteerde type tracering vereist aanvullende startpunten.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>Ĳ_No trace types found for the selected utility network____________________________ä.</value>
+    <value>Kan geen types tracering vinden voor de geselecteerde nutsvoorzieningen.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>Ĳ_No utility networks found___________________________ä.</value>
+    <value>Kan geen nutsvoorzieningen vinden.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>Ĳ_Preview_______________ä</value>
+    <value>Voorbeeld</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>Ĳ_Previous_________________ä</value>
+    <value>Vorige</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>Ĳ_Remove all_____________________ä</value>
+    <value>Alles verwijderen</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>Ĳ_Remove_____________ä</value>
+    <value>Verwijderen</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>Ĳ_Result name (optional)_______________________ä</value>
+    <value>Naam resultaat (optioneel)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>Ĳ_Results_______________ä</value>
+    <value>Resultaten</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>Ĳ_Result visualization color___________________________ä</value>
+    <value>Visualisatiekleur resultaat</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>Ĳ_Running trace_________________ä...</value>
+    <value>Bezig met uitvoeren tracering...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>Ĳ_Run trace___________________ä</value>
+    <value>Tracering uitvoeren</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>Ĳ_Select features on map_______________________ä</value>
+    <value>Objecten op kaart selecteren</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>Ĳ_Show graphics on map_____________________ä</value>
+    <value>Afbeeldingen op kaart weergeven</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>Ĳ_Starting points________________ä</value>
+    <value>Startpunten</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>Ĳ_Tap on the map to identify starting points_______________________ä.</value>
+    <value>Tik op de kaart om startpunten te identificeren.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>Ĳ_Terminal_________________ä</value>
+    <value>Terminal</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>Ĳ_Creator_______________ä</value>
+    <value>Creator</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>Ĳ_Description____________ä</value>
+    <value>Beschrijving</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>Ĳ_Trace type details___________________ä</value>
+    <value>Details type tracering</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>Ĳ_Trace types____________ä</value>
+    <value>Types tracering</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>Ĳ_Tags_________ä</value>
+    <value>Tags</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>Ĳ_Utility networks_________________ä</value>
+    <value>Nutsvoorzieningen</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>Ĳ_Visualization options______________________ä</value>
+    <value>Visualisatieopties</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>Ĳ_Warnings_________________ä</value>
+    <value>Waarschuwingen</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>Ĳ_Zoom_________ä</value>
+    <value>Zoomen</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>Ĳ_Zoom to result_______________ä</value>
+    <value>Inzoomen op resultaat</value>
   </data>
 </root>

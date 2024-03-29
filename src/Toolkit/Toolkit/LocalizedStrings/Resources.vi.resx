@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>Đ_Date must be on or before {0}______________________________ớ</value>
+    <value>Ngày phải vào hoặc trước {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>Đ_Date exceeds maximum_____________________ớ</value>
+    <value>Ngày vượt quá giới hạn tối đa</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>Đ_Maximum characters allowed: {0}_________________ớ</value>
+    <value>Ký tự tối đa cho phép: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>Đ_Maximum character length exceeded__________________ớ</value>
+    <value>Đã vượt quá độ dài ký tự tối đa</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>Đ_Enter a value at or below {0}______________________________ớ</value>
+    <value>Nhập một giá trị bằng hoặc dưới {0}</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>Đ_Exceeds maximum value______________________ớ</value>
+    <value>Vượt quá giá trị tối đa</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>Đ_Enter value from {0} to {1}____________________________ớ</value>
+    <value>Nhập giá trị trong khoảng từ {0} đến {1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>Đ_Required_________________ớ</value>
+    <value>Bắt buộc</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>Đ_Value must be of the correct type__________________ớ</value>
+    <value>Giá trị phải đúng loại</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>Đ_Value must be a number_______________________ớ</value>
+    <value>Giá trị phải là một số</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>Đ_Value must be a whole number_____________________________ớ</value>
+    <value>Giá trị phải là một số nguyên</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>Đ_Date must be on or after {0}_____________________________ớ</value>
+    <value>Ngày phải vào hoặc sau {0}</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>Đ_Date less than minimum_______________________ớ</value>
+    <value>Ngày nhỏ hơn giới hạn tối thiểu</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>Đ_Minimum characters required: {0}_________________ớ</value>
+    <value>Số ký tự tối thiểu bắt buộc: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>Đ_Less than minimum value________________________ớ</value>
+    <value>Dưới giá trị tối thiểu</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>Đ_Value must be within the domain_________________ớ</value>
+    <value>Giá trị phải nằm trong miền</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>Đ_Value must not be empty________________________ớ</value>
+    <value>Giá trị không được trống</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>Đ_Enter {0} to {1} characters____________________________ớ</value>
+    <value>Nhập {0} đến {1} ký tự</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>Đ_Number of characters required: {0}__________________ớ</value>
+    <value>Số ký tự bắt buộc: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>Đ_All Sites___________________ớ</value>
+    <value>Tất cả các Địa điểm</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>Đ_All Floors_____________________ớ</value>
+    <value>Tất cả các Tầng</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>Đ_Go Back_______________ớ</value>
+    <value>Quay lại</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>Đ_Browse_____________ớ</value>
+    <value>Duyệt tìm</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>Đ_Select a facility__________________ớ</value>
+    <value>Chọn một cơ sở</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>Đ_Select a site______________ớ</value>
+    <value>Chọn một địa điểm</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>Đ_Close___________ớ</value>
+    <value>Đóng</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>Đ_Collapse_________________ớ</value>
+    <value>Thu gọn</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>Đ_Expand_____________ớ</value>
+    <value>Mở rộng</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>Đ_Filter_____________ớ</value>
+    <value>Bộ lọc</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>Đ_No results found_________________ớ</value>
+    <value>Không tìm thấy kết quả nào</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>Đ_Zoom To_______________ớ</value>
+    <value>Phóng tới</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>Đ_ft_____ớ</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>Đ_km_____ớ</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>Đ_m___ớ</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>Đ_mi_____ớ</value>
+    <value>mi</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>Đ_All Sources____________ớ</value>
+    <value>Tất cả các Nguồn</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>Đ_Clear Search_____________ớ</value>
+    <value>Xóa Tìm kiếm</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>Đ_No Results_____________________ớ</value>
+    <value>Không có kết quả nào</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>Đ_Repeat Search Here___________________ớ</value>
+    <value>Lặp lại Tìm kiếm Tại đây</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>Đ_Find a place or address________________________ớ</value>
+    <value>Tìm địa điểm hoặc địa chỉ</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>Đ_Search_____________ớ</value>
+    <value>Tìm kiếm</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>Đ_Add starting point___________________ớ</value>
+    <value>Thêm điểm bắt đầu</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>Đ_Advanced options_________________ớ</value>
+    <value>Tùy chọn nâng cao</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>Đ_Asset details______________ớ</value>
+    <value>Chi tiết tài sản</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>Đ_Cancel_____________ớ</value>
+    <value>Hủy</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>Đ_Clear results______________ớ</value>
+    <value>Xóa kết quả</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>Đ_Close___________ớ</value>
+    <value>Đóng</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>Đ_Discard_______________ớ</value>
+    <value>Hủy Biên Tập</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>Đ_The selected trace type has already been run with the same starting points_______________________________________ớ.</value>
+    <value>Loại truy dấu được chọn đã chạy với cùng điểm bắt đầu.</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>Đ_Feature results________________ớ</value>
+    <value>Kết quả đối tượng</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>Đ_Position along line____________________ớ</value>
+    <value>Vị trí dọc theo đường</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>Đ_Function results_________________ớ</value>
+    <value>Kết quả hàm</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>Đ_Identifying starting points_______________________________ớ...</value>
+    <value>Xác định điểm bắt đầu...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>Đ_Inspect_______________ớ</value>
+    <value>Kiểm tra</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>Đ_Loading_____________________ớ...</value>
+    <value>Đang tải...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>Đ_There are more starting points than required for the selected trace type______________________________________ớ.</value>
+    <value>Có nhiều điểm bắt đầu hơn mức yêu cầu cho loại truy dấu đã chọn.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>Đ_New trace___________________ớ</value>
+    <value>Truy dấu mới</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>Đ_Next_________ớ</value>
+    <value>Tiếp</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>Đ_No feature results____________________ớ.</value>
+    <value>Không có kết quả đối tượng nào.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>Đ_No function results_____________________ớ.</value>
+    <value>Không có kết quả hàm nào.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>Đ_No results found__________________ớ.</value>
+    <value>Không tìm thấy kết quả nào.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>Đ_The selected trace type requires additional starting points_______________________________ớ.</value>
+    <value>Loại truy dấu được chọn cần thêm điểm bắt đầu.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>Đ_No trace types found for the selected utility network____________________________ớ.</value>
+    <value>Không tìm thấy loại truy dấu nào cho mạng lưới tiện ích đã chọn.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>Đ_No utility networks found___________________________ớ.</value>
+    <value>Không tìm thấy mạng lưới tiện ích nào.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>Đ_Preview_______________ớ</value>
+    <value>Xem trước</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>Đ_Previous_________________ớ</value>
+    <value>Trước</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>Đ_Remove all_____________________ớ</value>
+    <value>Gỡ bỏ tất cả</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>Đ_Remove_____________ớ</value>
+    <value>Gỡ bỏ</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>Đ_Result name (optional)_______________________ớ</value>
+    <value>Tên kết quả (tùy chọn)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>Đ_Results_______________ớ</value>
+    <value>Kết quả</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>Đ_Result visualization color___________________________ớ</value>
+    <value>Màu trực quan hóa kết quả</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>Đ_Running trace_________________ớ...</value>
+    <value>Đang chạy truy dấu...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>Đ_Run trace___________________ớ</value>
+    <value>Chạy truy dấu</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>Đ_Select features on map_______________________ớ</value>
+    <value>Chọn các đối tượng trên bản đồ</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>Đ_Show graphics on map_____________________ớ</value>
+    <value>Hiển thị đồ họa trên bản đồ</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>Đ_Starting points________________ớ</value>
+    <value>Điểm bắt đầu</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>Đ_Tap on the map to identify starting points_______________________ớ.</value>
+    <value>Chạm vào bản đồ để xác định điểm bắt đầu.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>Đ_Terminal_________________ớ</value>
+    <value>Thiết bị đầu cuối</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>Đ_Creator_______________ớ</value>
+    <value>Creator</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>Đ_Description____________ớ</value>
+    <value>Thông tin mô tả</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>Đ_Trace type details___________________ớ</value>
+    <value>Thông tin Chi tiết loại truy dấu</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>Đ_Trace types____________ớ</value>
+    <value>Loại truy dấu</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>Đ_Tags_________ớ</value>
+    <value>Từ khóa</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>Đ_Utility networks_________________ớ</value>
+    <value>Mạng lưới tiện ích</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>Đ_Visualization options______________________ớ</value>
+    <value>Tùy chọn trực quan hóa</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>Đ_Warnings_________________ớ</value>
+    <value>Cảnh báo</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>Đ_Zoom_________ớ</value>
+    <value>Thu phóng</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>Đ_Zoom to result_______________ớ</value>
+    <value>Thu phóng kết quả</value>
   </data>
 </root>

@@ -118,267 +118,267 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
-    <value>Å_Date must be on or before {0}______________________________ö</value>
+    <value>Päivämäärän on oltava {0} tai sitä ennen</value>
   </data>
   <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
-    <value>Å_Date exceeds maximum_____________________ö</value>
+    <value>Päivämäärä ylittää enimmäisarvon</value>
   </data>
   <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
-    <value>Å_Maximum characters allowed: {0}_________________ö</value>
+    <value>Suurin sallittu merkkimäärä: {0}</value>
   </data>
   <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
-    <value>Å_Maximum character length exceeded__________________ö</value>
+    <value>Suurin sallittu merkkimäärä ylittynyt</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
-    <value>Å_Enter a value at or below {0}______________________________ö</value>
+    <value>Anna {0} tai sitä pienempi arvo</value>
   </data>
   <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
-    <value>Å_Exceeds maximum value______________________ö</value>
+    <value>Suurempi kuin enimmäisarvo</value>
   </data>
   <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
-    <value>Å_Enter value from {0} to {1}____________________________ö</value>
+    <value>Anna arvo väliltä {0}–{1}</value>
   </data>
   <data name="FeatureFormFieldIsRequired" xml:space="preserve">
-    <value>Å_Required_________________ö</value>
+    <value>Pakollinen</value>
   </data>
   <data name="FeatureFormIncorrectValueType" xml:space="preserve">
-    <value>Å_Value must be of the correct type__________________ö</value>
+    <value>Arvon on oltava oikean tyyppinen</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
-    <value>Å_Value must be a number_______________________ö</value>
+    <value>Arvon on oltava numero</value>
   </data>
   <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
-    <value>Å_Value must be a whole number_____________________________ö</value>
+    <value>Arvon on oltava kokonaiskulu</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
-    <value>Å_Date must be on or after {0}_____________________________ö</value>
+    <value>Päivämäärän on oltava {0} tai sen jälkeen</value>
   </data>
   <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
-    <value>Å_Date less than minimum_______________________ö</value>
+    <value>Päivämäärä on pienempi kuin vähimmäisarvo</value>
   </data>
   <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
-    <value>Å_Minimum characters required: {0}_________________ö</value>
+    <value>Vaadittu merkkien vähimmäismäärä: {0}</value>
   </data>
   <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
-    <value>Å_Less than minimum value________________________ö</value>
+    <value>Pienempi kuin vähimmäisarvo</value>
   </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
-    <value>Å_Value must be within the domain_________________ö</value>
+    <value>Arvon on oltava arvoalueella</value>
   </data>
   <data name="FeatureFormNullNotAllowed" xml:space="preserve">
-    <value>Å_Value must not be empty________________________ö</value>
+    <value>Arvo ei saa olla tyhjä</value>
   </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
-    <value>Å_Enter {0} to {1} characters____________________________ö</value>
+    <value>Anna {0}–{1} merkkiä</value>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
-    <value>Å_Number of characters required: {0}__________________ö</value>
+    <value>Vaadittu merkkien määrä: {0}</value>
   </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
-    <value>Å_All Sites___________________ö</value>
+    <value>Kaikki sijainnit</value>
   </data>
   <data name="FloorFilterAllFloors" xml:space="preserve">
-    <value>Å_All Floors_____________________ö</value>
+    <value>Kaikki kerrokset</value>
   </data>
   <data name="FloorFilterBackButton" xml:space="preserve">
-    <value>Å_Go Back_______________ö</value>
+    <value>Siirry takaisin</value>
   </data>
   <data name="FloorFilterBrowse" xml:space="preserve">
-    <value>Å_Browse_____________ö</value>
+    <value>Selaa</value>
   </data>
   <data name="FloorFilterBrowseFacilities" xml:space="preserve">
-    <value>Å_Select a facility__________________ö</value>
+    <value>Valitse palvelu</value>
   </data>
   <data name="FloorFilterBrowseSites" xml:space="preserve">
-    <value>Å_Select a site______________ö</value>
+    <value>Valitse sivusto</value>
   </data>
   <data name="FloorFilterClose" xml:space="preserve">
-    <value>Å_Close___________ö</value>
+    <value>Sulje</value>
   </data>
   <data name="FloorFilterCollapse" xml:space="preserve">
-    <value>Å_Collapse_________________ö</value>
+    <value>Kutista</value>
   </data>
   <data name="FloorFilterExpand" xml:space="preserve">
-    <value>Å_Expand_____________ö</value>
+    <value>Laajenna</value>
   </data>
   <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
-    <value>Å_Filter_____________ö</value>
+    <value>Suodata</value>
   </data>
   <data name="FloorFilterNoResultsFound" xml:space="preserve">
-    <value>Å_No results found_________________ö</value>
+    <value>Tuloksia ei löytynyt</value>
   </data>
   <data name="FloorFilterZoomTo" xml:space="preserve">
-    <value>Å_Zoom To_______________ö</value>
+    <value>Tarkenna kohteeseen</value>
   </data>
   <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
-    <value>Å_ft_____ö</value>
+    <value>ft</value>
   </data>
   <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
-    <value>Å_km_____ö</value>
+    <value>km</value>
   </data>
   <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
-    <value>Å_m___ö</value>
+    <value>m</value>
   </data>
   <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
-    <value>Å_mi_____ö</value>
+    <value>mi</value>
   </data>
   <data name="SearchViewAllSourcesSelect" xml:space="preserve">
-    <value>Å_All Sources____________ö</value>
+    <value>Kaikki lähteet</value>
   </data>
   <data name="SearchViewClearSearchTooltip" xml:space="preserve">
-    <value>Å_Clear Search_____________ö</value>
+    <value>Tyhjennä haku</value>
   </data>
   <data name="SearchViewNoResults" xml:space="preserve">
-    <value>Å_No Results_____________________ö</value>
+    <value>Ei tuloksia</value>
   </data>
   <data name="SearchViewRepeatSearch" xml:space="preserve">
-    <value>Å_Repeat Search Here___________________ö</value>
+    <value>Toista haku täällä</value>
   </data>
   <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
-    <value>Å_Find a place or address________________________ö</value>
+    <value>Etsi paikka tai osoite</value>
   </data>
   <data name="SearchViewSearchTooltip" xml:space="preserve">
-    <value>Å_Search_____________ö</value>
+    <value>Hae</value>
   </data>
   <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
-    <value>Å_Add starting point___________________ö</value>
+    <value>Lisää aloituspiste</value>
   </data>
   <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
-    <value>Å_Advanced options_________________ö</value>
+    <value>Lisäasetukset</value>
   </data>
   <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
-    <value>Å_Asset details______________ö</value>
+    <value>Omaisuuden tiedot</value>
   </data>
   <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
-    <value>Å_Cancel_____________ö</value>
+    <value>Peruuta</value>
   </data>
   <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
-    <value>Å_Clear results______________ö</value>
+    <value>Tyhjennä tulokset</value>
   </data>
   <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
-    <value>Å_Close___________ö</value>
+    <value>Sulje</value>
   </data>
   <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
-    <value>Å_Discard_______________ö</value>
+    <value>Hylkää</value>
   </data>
   <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
-    <value>Å_The selected trace type has already been run with the same starting points_______________________________________ö.</value>
+    <value>Valittu jäljitystyyppi on jo suoritettu käyttämällä samoja aloituspisteitä.</value>
   </data>
   <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
-    <value>Å_Feature results________________ö</value>
+    <value>Kohteen tulokset</value>
   </data>
   <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
-    <value>Å_Position along line____________________ö</value>
+    <value>Sijainti viivalla</value>
   </data>
   <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
-    <value>Å_Function results_________________ö</value>
+    <value>Funktion tulokset</value>
   </data>
   <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
-    <value>Å_Identifying starting points_______________________________ö...</value>
+    <value>Määritetään aloituspisteitä...</value>
   </data>
   <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
-    <value>Å_Inspect_______________ö</value>
+    <value>Tarkasta</value>
   </data>
   <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
-    <value>Å_Loading_____________________ö...</value>
+    <value>Ladataan...</value>
   </data>
   <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
-    <value>Å_There are more starting points than required for the selected trace type______________________________________ö.</value>
+    <value>Valitulle jäljitystyypille on vaadittua enemmän aloituspisteitä.</value>
   </data>
   <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
-    <value>Å_New trace___________________ö</value>
+    <value>Uusi jäljitys</value>
   </data>
   <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
-    <value>Å_Next_________ö</value>
+    <value>Seuraava</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
-    <value>Å_No feature results____________________ö.</value>
+    <value>Ei kohteen tuloksia</value>
   </data>
   <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
-    <value>Å_No function results_____________________ö.</value>
+    <value>Ei funktion tuloksia.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
-    <value>Å_No results found__________________ö.</value>
+    <value>Tuloksia ei löytynyt.</value>
   </data>
   <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
-    <value>Å_The selected trace type requires additional starting points_______________________________ö.</value>
+    <value>Valittu jäljitystyyppi edellyttää lisäaloituspisteitä.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
-    <value>Å_No trace types found for the selected utility network____________________________ö.</value>
+    <value>Valitulle jakeluverkolle ei löytynyt jäljitystyyppejä.</value>
   </data>
   <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
-    <value>Å_No utility networks found___________________________ö.</value>
+    <value>Utility Network -verkkoja ei löytynyt.</value>
   </data>
   <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
-    <value>Å_Preview_______________ö</value>
+    <value>Esikatselu</value>
   </data>
   <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
-    <value>Å_Previous_________________ö</value>
+    <value>Edellinen</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
-    <value>Å_Remove all_____________________ö</value>
+    <value>Poista kaikki</value>
   </data>
   <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
-    <value>Å_Remove_____________ö</value>
+    <value>Poista</value>
   </data>
   <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
-    <value>Å_Result name (optional)_______________________ö</value>
+    <value>Tuloksen nimi (valinnainen)</value>
   </data>
   <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
-    <value>Å_Results_______________ö</value>
+    <value>Tulokset</value>
   </data>
   <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
-    <value>Å_Result visualization color___________________________ö</value>
+    <value>Tuloksen visualisointiväri</value>
   </data>
   <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
-    <value>Å_Running trace_________________ö...</value>
+    <value>Suoritetaan jäljitystä...</value>
   </data>
   <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
-    <value>Å_Run trace___________________ö</value>
+    <value>Suorita jäljitys</value>
   </data>
   <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
-    <value>Å_Select features on map_______________________ö</value>
+    <value>Valitse kohteet kartalta</value>
   </data>
   <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
-    <value>Å_Show graphics on map_____________________ö</value>
+    <value>Näytä grafiikka kartassa</value>
   </data>
   <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
-    <value>Å_Starting points________________ö</value>
+    <value>Aloituspisteet</value>
   </data>
   <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
-    <value>Å_Tap on the map to identify starting points_______________________ö.</value>
+    <value>Määritä aloituspisteet napauttamalla karttaa.</value>
   </data>
   <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
-    <value>Å_Terminal_________________ö</value>
+    <value>Pääte</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
-    <value>Å_Creator_______________ö</value>
+    <value>Luonut</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
-    <value>Å_Description____________ö</value>
+    <value>Kuvaus</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
-    <value>Å_Trace type details___________________ö</value>
+    <value>Jäljitystyypin tiedot</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
-    <value>Å_Trace types____________ö</value>
+    <value>Jäljitystyypit</value>
   </data>
   <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
-    <value>Å_Tags_________ö</value>
+    <value>Tunnisteet</value>
   </data>
   <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
-    <value>Å_Utility networks_________________ö</value>
+    <value>Jakeluverkot</value>
   </data>
   <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
-    <value>Å_Visualization options______________________ö</value>
+    <value>Visualisointiasetukset</value>
   </data>
   <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
-    <value>Å_Warnings_________________ö</value>
+    <value>Varoitukset</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
-    <value>Å_Zoom_________ö</value>
+    <value>Tarkenna</value>
   </data>
   <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
-    <value>Å_Zoom to result_______________ö</value>
+    <value>Tarkenna tulokseen</value>
   </data>
 </root>
