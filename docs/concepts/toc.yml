@@ -29,6 +29,8 @@
     href: ../overview-map.md
   - name: Popup Viewer
     href: ../popup-viewer.md
+  - name: Feature Form View
+    href: ../featureformview.md
   - name: Scale Line
     href: ../scale-line.md
   - name: Search View
