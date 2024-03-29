@@ -47,8 +47,44 @@ To display a `FeatureForm` in the UI:
 <esri:FeatureFormView x:Name="featureFormView" />
 ```
 
+
 To present a `FeatureForm` in a `FeatureFormView`:
 
 ```cs
 featureFormView.FeatureForm = featureForm;
 ```
+
+To apply the edits, you can make your own buttons and allow users to submit or discard edits.
+
+ ```xml
+ <Button Content="Discard" Click="DiscardButton_Click" />
+ <Button Content="Apply" Click="ApplyButton_Click" IsEnabled="{Binding IsValid, ElementName=featureFormView}" />
+ ```
+ ```cs
+ private void DiscardButton_Click(object sender, RoutedEventArgs e)
+ {
+     var result = MessageBox.Show("Discard edits?", "Confirm", MessageBoxButton.YesNo);
+     if(result == MessageBoxResult.Yes)
+         formViewer.FeatureForm.DiscardEdits();
+ }
+ private async void ApplyButton_Click(object sender, RoutedEventArgs e)
+ {
+	 // Collect all errors to display to the user (If you disable the button with the above 'IsValid' binding expression this step isn't necessary)
+	 // Note that often you'll still be able to apply edits ignoring the feature form's set of rules, as long as those rules don't violate the underlying table schema.
+     var errors = await formViewer.FeatureForm.EvaluateExpressionsAsync(); //Ensure all expressions are fully evaluated.
+     var errorList = formViewer.FeatureForm.Elements.OfType<FieldFormElement>().SelectMany(s => s.ValidationErrors).Concat(errors);
+     if (errorList.Any())
+     {
+         MessageBox.Show("Form has errors:\n" + string.Join("\n", errorList.Select(e => e.Message)), "Can't apply");
+         return;
+     }
+     try
+     {
+         await formViewer.FeatureForm.Feature.FeatureTable.UpdateFeatureAsync(formViewer.FeatureForm.Feature);
+     }
+     catch (Exception ex)
+     {
+         MessageBox.Show("Failed to apply edits:\n" + ex.Message, "Error");
+     }
+ }
+ ```
