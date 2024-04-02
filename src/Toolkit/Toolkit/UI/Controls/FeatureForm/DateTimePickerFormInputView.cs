@@ -33,7 +33,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (_rentrancyFlag) return;
 
-
             if (Element?.Input is DateTimePickerFormInput input && _datePicker != null)
             {
                 DateTime? maybeDate = null;
@@ -43,21 +42,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     maybeDate = winPicker.Date?.UtcDateTime;
                 }
-#else
-                //if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker mauiPicker)
-                //{
-                //    var dateText = mauiPicker.Text;
-                //    if (dateText != null && DateTime.TryParse(dateText, CultureInfo.CurrentCulture, DateTimeStyles.None, out var parsedDate))
-                //    {
-                //        nullableDateTime = parsedDate;
-                //    }
-                //}
-
-                // "No Value" handling for MAUI, where picker's DateTime cannot be set
-                if (_hasValueButton is not null && _hasValueButton.IsToggled)
+#elif ANDROID
+                maybeDate = _datePicker.Date.ToUniversalTime();
+                if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker androidPicker && String.IsNullOrEmpty(androidPicker.Text))
                 {
-                    maybeDate = _datePicker.Date.ToUniversalTime();
+                    maybeDate = null;
                 }
+#else
+
+                maybeDate = _datePicker.Date.ToUniversalTime();
 #endif
 #else // WPF
                 maybeDate = _datePicker.SelectedDate?.ToUniversalTime();
@@ -156,13 +149,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 if (_datePicker is not null)
                 {
 #if MAUI
-                    // "No Value" has to be tracked separately on MAUI because picker's DateTime is not nullable
-                    // See https://github.com/dotnet/maui/issues/1100
-                    if (_hasValueButton is not null)
-                    {
-                        _hasValueButton.IsToggled = selectedDate is not null;
-                    }
-
                     // Min/Max are always converted to local time
                     _datePicker.MinimumDate = input.Min?.ToLocalTime().Date ?? DateTime.MinValue;
                     _datePicker.MaximumDate = input.Max?.ToLocalTime().Date ?? DateTime.MaxValue;
@@ -174,6 +160,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     else if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
                     {
                         winPicker.Date = selectedDate;
+                    }
+#elif ANDROID
+                    if (selectedDate is DateTime date)
+                    {
+                        _datePicker.Date = date;
+                    }
+                    else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker androidPicker)
+                    {
+                        androidPicker.Text = null;
+                    }
+                    if (_clearButton != null)
+                    {
+                        _clearButton.IsVisible = selectedDate is not null;
                     }
 #else
                     _datePicker.Date = selectedDate ?? _datePicker.MinimumDate;

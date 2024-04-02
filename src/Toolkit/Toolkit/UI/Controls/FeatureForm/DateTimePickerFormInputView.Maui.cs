@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+using Microsoft.Maui.Platform;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -14,7 +15,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly ControlTemplate DefaultControlTemplate;
         private DatePicker? _datePicker;
         private TimePicker? _timePicker;
-        private Switch? _hasValueButton;
+        private Button? _clearButton;
 
         static DateTimePickerFormInputView()
         {
@@ -27,27 +28,33 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var container = new Grid();
             container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
             container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
-            container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
+            container.AddColumnDefinition(new ColumnDefinition() { Width = GridLength.Star });
+            container.AddColumnDefinition(new ColumnDefinition() { Width = GridLength.Auto });
             container.SetBinding(IsEnabledProperty, "Element.IsEditable");
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(container, nameScope);
 
-#if !WINDOWS
-            var hasValueButton = new Switch();
-            container.Children.Add(hasValueButton);
-            nameScope.RegisterName("HasValueButton", hasValueButton);
-#endif
-
             var datePicker = new DatePicker();
             datePicker.HorizontalOptions = LayoutOptions.Fill;
             container.Children.Add(datePicker);
-            Grid.SetRow(datePicker, 1);
             nameScope.RegisterName("DatePickerInput", datePicker);
+
+#if !WINDOWS
+            var clearButton = new Button();
+            clearButton.Text = "\u2716";
+            clearButton.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
+            clearButton.HorizontalOptions = LayoutOptions.End;
+            clearButton.Background = new SolidColorBrush(Colors.Transparent);
+            clearButton.BorderWidth = 0;
+            container.Children.Add(clearButton);
+            Grid.SetColumn(clearButton, 1);
+            nameScope.RegisterName("ClearButton", clearButton);
+#endif
 
             var timePicker = new TimePicker();
             container.Children.Add(timePicker);
-            Grid.SetRow(timePicker, 2);
+            Grid.SetRow(timePicker, 1);
             nameScope.RegisterName("TimePickerInput", timePicker);
 
             return container;
@@ -60,10 +67,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             _datePicker = GetTemplateChild("DatePickerInput") as DatePicker;
             _timePicker = GetTemplateChild("TimePickerInput") as TimePicker;
 #if !WINDOWS
-            _hasValueButton = GetTemplateChild("HasValueButton") as Switch;
-            if (_hasValueButton is not null)
+            _clearButton = GetTemplateChild("ClearButton") as Button;
+            if (_clearButton is not null)
             {
-                _hasValueButton.Toggled += NoValueButton_Toggled;
+                _clearButton.Clicked += ClearButton_Clicked;
+                _clearButton.IsVisible = Element?.Value != null;
             }
 #endif
             if (_datePicker is not null)
@@ -77,6 +85,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
+#if !WINDOWS
+        private void ClearButton_Clicked(object? sender, EventArgs e)
+        {
+            Element?.UpdateValue(null); // UI will be synced by triggering Element_PropertyChanged
+        }
+#endif
+
         private void DatePicker_HandlerChanged(object? sender, EventArgs e)
         {
 #if WINDOWS
@@ -84,22 +99,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 winPicker.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
                 winPicker.DateChanged += (s, e) => UpdateValue();
+                winPicker.PlaceholderText = "No date selected";
                 if (Element?.Value is null)
                     winPicker.Date = null;
             }
 #endif
-        }
-
-        private void NoValueButton_Toggled(object? sender, ToggledEventArgs e)
-        {
-            if (_hasValueButton is not null)
+#if ANDROID
+            if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker androidPicker)
             {
-                if (_datePicker is not null)
-                    _datePicker.IsEnabled = _hasValueButton.IsToggled;
-                if (_timePicker is not null)
-                    _timePicker.IsEnabled = _hasValueButton.IsToggled;
-                UpdateValue();
+                if (Element?.Value is null)
+                {
+                    androidPicker.Text = null;
+                    androidPicker.Hint = "No date selected";
+                }
             }
+#endif
         }
 
         private void TimePicker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
