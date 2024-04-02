@@ -20,7 +20,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
-        
+
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
@@ -30,23 +30,26 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
             container.SetBinding(IsEnabledProperty, "Element.IsEditable");
 
+            INameScope nameScope = new NameScope();
+            NameScope.SetNameScope(container, nameScope);
+
+#if !WINDOWS
             var hasValueButton = new Switch();
             container.Children.Add(hasValueButton);
+            nameScope.RegisterName("HasValueButton", hasValueButton);
+#endif
 
             var datePicker = new DatePicker();
             datePicker.HorizontalOptions = LayoutOptions.Fill;
             container.Children.Add(datePicker);
             Grid.SetRow(datePicker, 1);
+            nameScope.RegisterName("DatePickerInput", datePicker);
 
             var timePicker = new TimePicker();
             container.Children.Add(timePicker);
             Grid.SetRow(timePicker, 2);
-
-            INameScope nameScope = new NameScope();
-            NameScope.SetNameScope(container, nameScope);
-            nameScope.RegisterName("DatePickerInput", datePicker);
             nameScope.RegisterName("TimePickerInput", timePicker);
-            nameScope.RegisterName("HasValueButton", hasValueButton);
+
             return container;
         }
 
@@ -56,19 +59,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             base.OnApplyTemplate();
             _datePicker = GetTemplateChild("DatePickerInput") as DatePicker;
             _timePicker = GetTemplateChild("TimePickerInput") as TimePicker;
+#if !WINDOWS
             _hasValueButton = GetTemplateChild("HasValueButton") as Switch;
-            if(_hasValueButton is not null)
+            if (_hasValueButton is not null)
             {
                 _hasValueButton.Toggled += NoValueButton_Toggled;
             }
+#endif
             if (_datePicker is not null)
             {
                 _datePicker.DateSelected += DatePicker_DateSelected;
+                _datePicker.HandlerChanged += DatePicker_HandlerChanged;
             }
             if (_timePicker is not null)
             {
                 _timePicker.PropertyChanged += TimePicker_PropertyChanged;
             }
+        }
+
+        private void DatePicker_HandlerChanged(object? sender, EventArgs e)
+        {
+#if WINDOWS
+            if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
+            {
+                winPicker.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
+                winPicker.DateChanged += (s, e) => UpdateValue();
+                if (Element?.Value is null)
+                    winPicker.Date = null;
+            }
+#endif
         }
 
         private void NoValueButton_Toggled(object? sender, ToggledEventArgs e)

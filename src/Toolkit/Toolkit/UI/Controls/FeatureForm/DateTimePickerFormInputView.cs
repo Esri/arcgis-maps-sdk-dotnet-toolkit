@@ -2,6 +2,7 @@
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using System.Globalization;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -31,55 +32,65 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private void UpdateValue()
         {
             if (_rentrancyFlag) return;
+
+
             if (Element?.Input is DateTimePickerFormInput input && _datePicker != null)
             {
-                TimeSpan time = TimeSpan.Zero;
+                DateTime? maybeDate = null;
 #if MAUI
-                // "No Value" handling for MAUI, where picker's DateTime cannot be set
-                if (_hasValueButton is not null && !_hasValueButton.IsToggled)
+#if WINDOWS
+                if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
                 {
-                    if (Element?.Value is not null)
-                        Element?.UpdateValue(null);
-                    return;
+                    maybeDate = winPicker.Date?.UtcDateTime;
                 }
-                var date = _datePicker.Date; // local
-                if (input.IncludeTime && _timePicker != null)
-                    time = _timePicker.Time;
 #else
-                var maybeDate = _datePicker.SelectedDate; // local
-                if (maybeDate is not DateTime date) // "Not set" represented by null on WPF
+                //if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker mauiPicker)
+                //{
+                //    var dateText = mauiPicker.Text;
+                //    if (dateText != null && DateTime.TryParse(dateText, CultureInfo.CurrentCulture, DateTimeStyles.None, out var parsedDate))
+                //    {
+                //        nullableDateTime = parsedDate;
+                //    }
+                //}
+
+                // "No Value" handling for MAUI, where picker's DateTime cannot be set
+                if (_hasValueButton is not null && _hasValueButton.IsToggled)
                 {
-                    if (Element?.Value is not null)
-                        Element?.UpdateValue(null);
+                    maybeDate = _datePicker.Date.ToUniversalTime();
+                }
+#endif
+#else // WPF
+                maybeDate = _datePicker.SelectedDate?.ToUniversalTime();
+#endif
+                if (maybeDate is DateTime newDate)
+                {
+                    if (input.IncludeTime && _timePicker?.Time is TimeSpan time)
+                    {
+                        maybeDate = newDate.Add(time);
+                    }
+                    else
+                    {
+                        maybeDate = newDate.Date; // truncate time component
+                    }
+
+                    if (Element?.Value is DateTimeOffset attrDto)
+                    {
+                        // Attribute value may be a DateTimeOffset (pre-200.4 or EnableTimestampOffsetSupport=false)
+                        var utcOld = DateTime.SpecifyKind(attrDto.ToUniversalTime().DateTime, DateTimeKind.Utc);
+                        if (utcOld == maybeDate)
+                            return;
+                    }
+                    else if (Element?.Value is DateTime attrDt)
+                    {
+                        if (attrDt == maybeDate)
+                            return;
+                    }
+                }
+                else if (maybeDate is null && Element?.Value is null)
+                {
                     return;
                 }
-                if (input.IncludeTime && _timePicker != null && _timePicker.Time.HasValue)
-                    time = _timePicker.Time.Value;
-#endif
-                DateTime utcNew;
-                if (input.IncludeTime)
-                {
-                    utcNew = date.Add(time).ToUniversalTime();
-                }
-                else
-                {
-                    // Truncate time component again after converting "local date" to "UTC date"
-                    utcNew = date.ToUniversalTime().Date;
-                }
-
-                if (Element?.Value is DateTimeOffset attrDto)
-                {
-                    // Attribute value may be a DateTimeOffset (pre-200.4 or EnableTimestampOffsetSupport=false)
-                    var utcOld = DateTime.SpecifyKind(attrDto.ToUniversalTime().DateTime, DateTimeKind.Utc);
-                    if (utcOld == utcNew)
-                        return;
-                }
-                else if (Element?.Value is DateTime attrDt)
-                {
-                    if (attrDt == utcNew)
-                        return;
-                }
-                Element?.UpdateValue(utcNew);
+                Element?.UpdateValue(maybeDate);
             }
         }
 
@@ -155,9 +166,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     // Min/Max are always converted to local time
                     _datePicker.MinimumDate = input.Min?.ToLocalTime().Date ?? DateTime.MinValue;
                     _datePicker.MaximumDate = input.Max?.ToLocalTime().Date ?? DateTime.MaxValue;
-
+#if WINDOWS
+                    if (selectedDate is DateTime date)
+                    {
+                        _datePicker.Date = selectedDate.Value;
+                    }
+                    else if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
+                    {
+                        winPicker.Date = selectedDate;
+                    }
+#else
                     _datePicker.Date = selectedDate ?? _datePicker.MinimumDate;
                     _datePicker.IsEnabled = selectedDate is not null;
+#endif
 #else
                     _datePicker.SelectedDate = selectedDate;
                     _datePicker.DisplayDateStart = input.Min?.ToLocalTime().Date;
