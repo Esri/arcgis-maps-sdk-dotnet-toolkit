@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
-#else
+#else // WPF
             DefaultStyleKey = typeof(DateTimePickerFormInputView);
 #endif
         }
@@ -42,15 +42,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     maybeDate = winPicker.Date?.UtcDateTime;
                 }
-#elif ANDROID
+#elif !NETSTANDARD
                 maybeDate = _datePicker.Date.ToUniversalTime();
-                if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker androidPicker && String.IsNullOrEmpty(androidPicker.Text))
+                if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker && String.IsNullOrEmpty(nativePicker.Text))
                 {
                     maybeDate = null;
                 }
-#else
-
-                maybeDate = _datePicker.Date.ToUniversalTime();
 #endif
 #else // WPF
                 maybeDate = _datePicker.SelectedDate?.ToUniversalTime();
@@ -102,7 +99,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
         public static readonly BindableProperty ElementProperty =
             BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(DateTimePickerFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((DateTimePickerFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
-#else
+#else // WPF
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(DateTimePickerFormInputView), new PropertyMetadata(null, (s, e) => ((DateTimePickerFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
 #endif
@@ -161,24 +158,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         winPicker.Date = selectedDate;
                     }
-#elif ANDROID
+#elif !NETSTANDARD
                     if (selectedDate is DateTime date)
                     {
                         _datePicker.Date = date;
                     }
-                    else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker androidPicker)
+                    else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
                     {
-                        androidPicker.Text = null;
+                        nativePicker.Text = null;
                     }
                     if (_clearButton != null)
                     {
                         _clearButton.IsVisible = selectedDate is not null;
                     }
-#else
-                    _datePicker.Date = selectedDate ?? _datePicker.MinimumDate;
-                    _datePicker.IsEnabled = selectedDate is not null;
 #endif
-#else
+#else // WPF
                     _datePicker.SelectedDate = selectedDate;
                     _datePicker.DisplayDateStart = input.Min?.ToLocalTime().Date;
                     _datePicker.DisplayDateEnd = input.Max?.ToLocalTime().Date;
@@ -190,7 +184,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     _timePicker.IsVisible = input.IncludeTime;
                     _timePicker.Time = selectedDate?.TimeOfDay ?? TimeSpan.Zero;
                     _timePicker.IsEnabled = selectedDate is not null;
-#else
+#else // WPF
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
                     _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
 #endif

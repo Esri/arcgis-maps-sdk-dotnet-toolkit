@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 using Microsoft.Maui.Platform;
+using Microsoft.Maui;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -28,8 +29,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             var container = new Grid();
             container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
             container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
-            container.AddColumnDefinition(new ColumnDefinition() { Width = GridLength.Star });
-            container.AddColumnDefinition(new ColumnDefinition() { Width = GridLength.Auto });
             container.SetBinding(IsEnabledProperty, "Element.IsEditable");
 
             INameScope nameScope = new NameScope();
@@ -48,7 +47,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             clearButton.Background = new SolidColorBrush(Colors.Transparent);
             clearButton.BorderWidth = 0;
             container.Children.Add(clearButton);
-            Grid.SetColumn(clearButton, 1);
             nameScope.RegisterName("ClearButton", clearButton);
 #endif
 
@@ -103,14 +101,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 if (Element?.Value is null)
                     winPicker.Date = null;
             }
-#endif
-#if ANDROID
-            if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker androidPicker)
+#elif !NETSTANDARD
+            if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
             {
                 if (Element?.Value is null)
                 {
-                    androidPicker.Text = null;
-                    androidPicker.Hint = "No date selected";
+                    nativePicker.Text = null;
+#if ANDROID
+                    nativePicker.Hint = "No date selected";
+#else // IOS || MACCATALYST
+                    nativePicker.Placeholder = "No date selected";
+#endif
                 }
             }
 #endif

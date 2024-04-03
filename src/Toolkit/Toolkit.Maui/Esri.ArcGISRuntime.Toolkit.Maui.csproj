@@ -16,7 +16,11 @@
         <DefineConstants>$(DefineConstants);MAUI</DefineConstants>
         <Nullable>annotations</Nullable>
     </PropertyGroup>
-
+  
+    <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
+      <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    </PropertyGroup>
+  
     <ItemGroup>
       <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
       <EmbeddedResource Include="Resources\Fonts\calcite-ui-icons-24.ttf" />
