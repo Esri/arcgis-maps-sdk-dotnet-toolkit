@@ -94,12 +94,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
         private void DatePicker_HandlerChanged(object? sender, EventArgs e)
         {
+            // Platform-specific workarounds are needed to allow selecting "no date",
+            // because MAUI's own DatePicker does not support empty values.
+            // See https://github.com/dotnet/maui/issues/1100
 #if WINDOWS
             if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
             {
                 winPicker.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
                 winPicker.DateChanged += (s, e) => UpdateValue();
-                winPicker.PlaceholderText = "No date selected";
+                winPicker.PlaceholderText = GetNoValueText();
                 if (Element?.Value is null)
                     winPicker.Date = null;
             }
@@ -110,14 +113,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 {
                     nativePicker.Text = null;
 #if ANDROID
-                    nativePicker.Hint = "No date selected";
+                    nativePicker.Hint = GetNoValueText();
 #else // IOS || MACCATALYST
-                    nativePicker.Placeholder = "No date selected";
+                    nativePicker.Placeholder = GetNoValueText();
 #endif
                 }
             }
 #endif
         }
+
+        private static string GetNoValueText() => Properties.Resources.GetString("FeatureFormNoDateSelected") ?? "No date selected";
 
         private void TimePicker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {

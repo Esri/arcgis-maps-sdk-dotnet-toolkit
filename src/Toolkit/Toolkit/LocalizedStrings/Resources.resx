@@ -193,6 +193,10 @@
     <value>Number of characters required: {0}</value>
     <comment>Input validation of entered text must be exactly {0} characters long</comment>
   </data>
+  <data name="FeatureFormNoDateSelected" xml:space="preserve">
+    <value>No date selected</value>
+    <comment>Placeholder text shown on a date-picker control when it is empty</comment>
+  </data>
   <data name="FloorFilterAllFacilities" xml:space="preserve">
     <value>All Sites</value>
     <comment>The label and tooltip shown for the button that is used to navigate to the list of location sites in all facilities when the site browsing view is open</comment>
