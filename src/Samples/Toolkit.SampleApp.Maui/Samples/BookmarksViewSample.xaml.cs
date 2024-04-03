@@ -1,6 +1,5 @@
 ﻿using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Maui;
-using Esri.ArcGISRuntime.Toolkit.UI;
 using System.Collections.ObjectModel;
 
 namespace Toolkit.SampleApp.Maui.Samples
