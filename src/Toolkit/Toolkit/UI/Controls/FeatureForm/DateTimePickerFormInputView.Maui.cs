@@ -1,13 +1,13 @@
 ﻿#if MAUI
-using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls.Internals;
+using Microsoft.Maui.Platform;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
-using Microsoft.Maui.Platform;
-using Microsoft.Maui;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -16,7 +16,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly ControlTemplate DefaultControlTemplate;
         private DatePicker? _datePicker;
         private TimePicker? _timePicker;
+#if !WINDOWS
         private Button? _clearButton;
+#endif
 
         static DateTimePickerFormInputView()
         {
