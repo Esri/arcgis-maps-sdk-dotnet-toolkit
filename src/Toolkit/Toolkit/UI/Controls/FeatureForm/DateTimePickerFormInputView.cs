@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
-#else // WPF
+#else
             DefaultStyleKey = typeof(DateTimePickerFormInputView);
 #endif
         }
@@ -35,52 +35,58 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
             if (Element?.Input is DateTimePickerFormInput input && _datePicker != null)
             {
-                DateTime? maybeDate = null;
+                // Get the Date from the date picker (null if the input is empty).
+                // We display dates in local time but store them in UTC.
+                DateTime? date = null;
 #if MAUI
+                // MAUI's DatePicker does not have a way to determine if it's empty. Check the platform control instead.
 #if WINDOWS
                 if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
                 {
-                    maybeDate = winPicker.Date?.UtcDateTime;
+                    date = winPicker.Date?.UtcDateTime;
                 }
-#elif !NETSTANDARD
-                maybeDate = _datePicker.Date.ToUniversalTime();
-                if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker && String.IsNullOrEmpty(nativePicker.Text))
+#elif IOS || MACCATALYST || ANDROID
+                date = _datePicker.Date.ToUniversalTime();
+                if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker && String.IsNullOrEmpty(nativePicker.Text))
                 {
-                    maybeDate = null;
+                    date = null;
                 }
 #endif
-#else // WPF
-                maybeDate = _datePicker.SelectedDate?.ToUniversalTime();
+#else
+                date = _datePicker.SelectedDate?.ToUniversalTime();
 #endif
-                if (maybeDate is DateTime newDate)
+                if (date is DateTime newDate)
                 {
                     if (input.IncludeTime && _timePicker?.Time is TimeSpan time)
                     {
-                        maybeDate = newDate.Add(time);
+                        // User specified both date and time, combine them.
+                        date = newDate.Add(time);
                     }
                     else
                     {
-                        maybeDate = newDate.Date; // truncate time component
+                        // User did not specify a time, but UTC conversion may have introduced a time component. Trucate it.
+                        date = newDate.Date;
                     }
+                }
 
-                    if (Element?.Value is DateTimeOffset attrDto)
-                    {
-                        // Attribute value may be a DateTimeOffset (pre-200.4 or EnableTimestampOffsetSupport=false)
-                        var utcOld = DateTime.SpecifyKind(attrDto.ToUniversalTime().DateTime, DateTimeKind.Utc);
-                        if (utcOld == maybeDate)
-                            return;
-                    }
-                    else if (Element?.Value is DateTime attrDt)
-                    {
-                        if (attrDt == maybeDate)
-                            return;
-                    }
-                }
-                else if (maybeDate is null && Element?.Value is null)
+                if (Element.Value is DateTimeOffset oldDto)
                 {
-                    return;
+                    // Old attribute value may be a DateTimeOffset (pre-200.4 or EnableTimestampOffsetSupport=false).
+                    // Convert it to UTC DateTime before comparing.
+                    var oldDate = DateTime.SpecifyKind(oldDto.ToUniversalTime().DateTime, DateTimeKind.Utc);
+                    if (oldDate != date)
+                    {
+                        Element.UpdateValue(date);
+                    }
                 }
-                Element?.UpdateValue(maybeDate);
+                else if (Element.Value is DateTime oldDate && oldDate != date)
+                {
+                    Element.UpdateValue(date);
+                }
+                else if (Element.Value == null && date != null)
+                {
+                    Element.UpdateValue(date);
+                }
             }
         }
 
@@ -99,7 +105,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
         public static readonly BindableProperty ElementProperty =
             BindableProperty.Create(nameof(Element), typeof(FieldFormElement), typeof(DateTimePickerFormInputView), null, propertyChanged: (s, oldValue, newValue) => ((DateTimePickerFormInputView)s).OnElementPropertyChanged(oldValue as FieldFormElement, newValue as FieldFormElement));
-#else // WPF
+#else
         public static readonly DependencyProperty ElementProperty =
             DependencyProperty.Register(nameof(Element), typeof(FieldFormElement), typeof(DateTimePickerFormInputView), new PropertyMetadata(null, (s, e) => ((DateTimePickerFormInputView)s).OnElementPropertyChanged(e.OldValue as FieldFormElement, e.NewValue as FieldFormElement)));
 #endif
@@ -158,7 +164,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         winPicker.Date = selectedDate;
                     }
-#elif !NETSTANDARD
+#elif IOS || MACCATALYST || ANDROID
                     if (selectedDate is DateTime date)
                     {
                         _datePicker.Date = date;
@@ -172,7 +178,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         _clearButton.IsVisible = selectedDate is not null;
                     }
 #endif
-#else // WPF
+#else
                     _datePicker.SelectedDate = selectedDate;
                     _datePicker.DisplayDateStart = input.Min?.ToLocalTime().Date;
                     _datePicker.DisplayDateEnd = input.Max?.ToLocalTime().Date;
@@ -184,7 +190,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     _timePicker.IsVisible = input.IncludeTime;
                     _timePicker.Time = selectedDate?.TimeOfDay ?? TimeSpan.Zero;
                     _timePicker.IsEnabled = selectedDate is not null;
-#else // WPF
+#else
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
                     _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
 #endif

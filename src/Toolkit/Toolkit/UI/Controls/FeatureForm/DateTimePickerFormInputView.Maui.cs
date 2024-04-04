@@ -43,7 +43,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 
 #if !WINDOWS
             var clearButton = new Button();
-            clearButton.Text = "\u2716";
+            clearButton.Text = "\u2716"; // Unicode "Heavy Multiplication X" character
             clearButton.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
             clearButton.HorizontalOptions = LayoutOptions.End;
             clearButton.Background = new SolidColorBrush(Colors.Transparent);
@@ -102,27 +102,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 winPicker.HorizontalAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
                 winPicker.DateChanged += (s, e) => UpdateValue();
-                winPicker.PlaceholderText = GetNoValueText();
                 if (Element?.Value is null)
                     winPicker.Date = null;
             }
-#elif !NETSTANDARD
+#elif IOS || MACCATALYST || ANDROID
             if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
             {
                 if (Element?.Value is null)
                 {
                     nativePicker.Text = null;
-#if ANDROID
-                    nativePicker.Hint = GetNoValueText();
-#else // IOS || MACCATALYST
-                    nativePicker.Placeholder = GetNoValueText();
-#endif
                 }
             }
 #endif
         }
-
-        private static string GetNoValueText() => Properties.Resources.GetString("FeatureFormNoDateSelected") ?? "No date selected";
 
         private void TimePicker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
