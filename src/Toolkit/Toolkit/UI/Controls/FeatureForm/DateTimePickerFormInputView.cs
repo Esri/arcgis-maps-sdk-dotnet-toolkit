@@ -55,35 +55,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
                 date = _datePicker.SelectedDate?.ToUniversalTime();
 #endif
-                if (date is DateTime newDate)
+                if (date is DateTime newDate && input.IncludeTime && _timePicker?.Time is TimeSpan time)
                 {
-                    if (input.IncludeTime && _timePicker?.Time is TimeSpan time)
-                    {
-                        // User specified both date and time, combine them.
-                        date = newDate.Add(time);
-                    }
-                    else
-                    {
-                        // User did not specify a time, but UTC conversion may have introduced a time component. Trucate it.
-                        date = newDate.Date;
-                    }
+                    // User specified both date and time, combine them.
+                    date = newDate.Add(time);
                 }
 
+                DateTime? oldDate = Element.Value as DateTime?;
                 if (Element.Value is DateTimeOffset oldDto)
                 {
                     // Old attribute value may be a DateTimeOffset (pre-200.4 or EnableTimestampOffsetSupport=false).
                     // Convert it to UTC DateTime before comparing.
-                    var oldDate = DateTime.SpecifyKind(oldDto.ToUniversalTime().DateTime, DateTimeKind.Utc);
-                    if (oldDate != date)
-                    {
-                        Element.UpdateValue(date);
-                    }
+                    oldDate = DateTime.SpecifyKind(oldDto.ToUniversalTime().DateTime, DateTimeKind.Utc);
                 }
-                else if (Element.Value is DateTime oldDate && oldDate != date)
-                {
-                    Element.UpdateValue(date);
-                }
-                else if (Element.Value == null && date != null)
+
+                // Only update the value if:
+                // - the date has changed, or
+                // - the value has changed to/from null, or
+                // - the time has changed and IncludeTime is true
+                if (date != oldDate && (date == null || oldDate == null || date != oldDate.Value.Date || input.IncludeTime))
                 {
                     Element.UpdateValue(date);
                 }
