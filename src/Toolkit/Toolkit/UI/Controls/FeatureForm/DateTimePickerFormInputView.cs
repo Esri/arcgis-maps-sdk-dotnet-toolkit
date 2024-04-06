@@ -1,4 +1,4 @@
-#if WPF || MAUI
+﻿#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
@@ -45,11 +45,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     date = winPicker.Date?.UtcDateTime;
                 }
-#elif IOS || MACCATALYST || ANDROID
-                date = _datePicker.Date.ToUniversalTime();
-                if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker && String.IsNullOrEmpty(nativePicker.Text))
+#elif IOS || ANDROID
+                if (_datePicker.Handler?.PlatformView is not Microsoft.Maui.Platform.MauiDatePicker nativePicker || !String.IsNullOrEmpty(nativePicker.Text))
                 {
-                    date = null;
+                    date = _datePicker.Date.ToUniversalTime();
+                }
+#elif MACCATALYST
+                if (_hasValueSwitch?.IsToggled != false)
+                {
+                    date = _datePicker.Date.ToUniversalTime();
                 }
 #endif
 #else
@@ -127,7 +131,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else if (e.PropertyName == nameof(FieldFormElement.IsEditable))
             {
-                this.Dispatch(ConfigurePickerVisibility);
+                this.Dispatch(ConfigurePickerIsEditable);
             }
         }
 
@@ -143,7 +147,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 // Dates are always converted to local time, even if IncludeTime is false
                 selectedDate = selectedDate?.ToLocalTime();
-                if (_datePicker is not null)
+                if (_datePicker != null)
                 {
 #if MAUI
                     // Min/Max are always converted to local time
@@ -158,7 +162,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         winPicker.Date = selectedDate;
                     }
-#elif IOS || MACCATALYST || ANDROID
+#elif IOS || ANDROID
                     if (selectedDate is DateTime date)
                     {
                         _datePicker.Date = date;
@@ -166,6 +170,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
                     {
                         nativePicker.Text = null;
+                    }
+#elif MACCATALYST
+                    if (selectedDate is DateTime date)
+                    {
+                        _datePicker.Date = date;
+                    }
+                    if (_hasValueSwitch != null)
+                    {
+                        _hasValueSwitch.IsToggled = (selectedDate != null);
                     }
 #endif
 #else
@@ -184,20 +197,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
 #endif
                 }
-                ConfigurePickerVisibility();
+                ConfigurePickerIsEditable();
             }
             _rentrancyFlag = false;
         }
 
-        private void ConfigurePickerVisibility()
+        private void ConfigurePickerIsEditable()
         {
             if (Element != null)
             {
+#if MACCATALYST
+                if (_hasValueSwitch != null)
+                    _hasValueSwitch.IsEnabled = Element.IsEditable;
+                if (_datePicker != null)
+                    _datePicker.IsEnabled = Element.IsEditable && Element.Value != null; // On Mac, picker is only enabled when the switch is on
+#else
                 if (_datePicker != null)
                     _datePicker.IsEnabled = Element.IsEditable;
+#endif
                 if (_timePicker != null)
                     _timePicker.IsEnabled = Element.IsEditable && Element.Value != null;
-#if MAUI && (IOS || MACCATALYST || ANDROID)
+#if IOS || ANDROID
                 if (_clearButton != null)
                     _clearButton.IsVisible = Element.IsEditable && Element.Value != null;
 #endif

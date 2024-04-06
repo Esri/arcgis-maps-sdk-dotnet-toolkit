@@ -6,8 +6,6 @@ using Microsoft.Maui;
 using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Platform;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -16,8 +14,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly ControlTemplate DefaultControlTemplate;
         private DatePicker? _datePicker;
         private TimePicker? _timePicker;
-#if !WINDOWS
+#if IOS || ANDROID
         private Button? _clearButton;
+#elif MACCATALYST
+        private Switch? _hasValueSwitch;
 #endif
 
         static DateTimePickerFormInputView()
@@ -39,7 +39,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             container.Children.Add(datePicker);
             nameScope.RegisterName("DatePickerInput", datePicker);
 
-#if !WINDOWS
+#if IOS || ANDROID
+            // Add a button that clears the date picker, overlayed on top of it
             var clearButton = new Button();
             clearButton.Text = "\u2716"; // Unicode "Heavy Multiplication X" character
             clearButton.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
@@ -55,6 +56,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetRow(timePicker, 1);
             nameScope.RegisterName("TimePickerInput", timePicker);
 
+#if MACCATALYST
+            // On Mac, we need to add a switch to allow selecting "no date",
+            // because MAUI's DatePicker on Mac always has a value with no way to clear it.
+
+            var hasValueSwitch = new Switch();
+            container.Children.Add(hasValueSwitch);
+            nameScope.RegisterName("HasValueSwitch", hasValueSwitch);
+            
+            container.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Auto });
+            container.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Star });
+            Grid.SetColumn(datePicker, 1);
+            Grid.SetColumnSpan(timePicker, 2);
+#endif
+
             return container;
         }
 
@@ -64,12 +79,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             base.OnApplyTemplate();
             _datePicker = GetTemplateChild("DatePickerInput") as DatePicker;
             _timePicker = GetTemplateChild("TimePickerInput") as TimePicker;
-#if !WINDOWS
+#if IOS || ANDROID
             _clearButton = GetTemplateChild("ClearButton") as Button;
             if (_clearButton is not null)
             {
                 _clearButton.Clicked += ClearButton_Clicked;
                 _clearButton.IsVisible = Element?.Value != null;
+            }
+#elif MACCATALYST
+            _hasValueSwitch = GetTemplateChild("HasValueSwitch") as Switch;
+            if (_hasValueSwitch is not null)
+            {
+                _hasValueSwitch.Toggled += HasValueSwitch_Toggled;
+                _hasValueSwitch.IsToggled = Element?.Value != null;
             }
 #endif
             if (_datePicker is not null)
@@ -83,8 +105,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-#if !WINDOWS
+#if IOS || ANDROID
         private void ClearButton_Clicked(object? sender, EventArgs e)
+        {
+            Element?.UpdateValue(null); // UI will be synced by triggering Element_PropertyChanged
+        }
+#elif MACCATALYST
+        private void HasValueSwitch_Toggled(object? sender, ToggledEventArgs e)
         {
             Element?.UpdateValue(null); // UI will be synced by triggering Element_PropertyChanged
         }
@@ -103,7 +130,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 if (Element?.Value is null)
                     winPicker.Date = null;
             }
-#elif IOS || MACCATALYST || ANDROID
+#elif IOS || ANDROID
             if (_datePicker is not null && _datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
             {
                 if (Element?.Value is null)
