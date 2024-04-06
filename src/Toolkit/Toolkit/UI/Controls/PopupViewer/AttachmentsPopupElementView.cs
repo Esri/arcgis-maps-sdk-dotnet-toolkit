@@ -16,6 +16,7 @@
 
 #if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
+using Esri.ArcGISRuntime.Toolkit.Internal;
 using Microsoft.Win32;
 #if WPF
 using System.Windows.Controls.Primitives;
@@ -123,13 +124,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), null, propertyChanged: (s, o, n) => ((AttachmentsPopupElementView)s).LoadAttachments());
-#else
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(AttachmentsPopupElement), typeof(AttachmentsPopupElementView), new PropertyMetadata(null, (s, e) => ((AttachmentsPopupElementView)s).LoadAttachments()));
-#endif
+            PropertyHelper.CreateProperty<AttachmentsPopupElement, AttachmentsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.LoadAttachments());
     }
 }
 #endif
