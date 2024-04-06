@@ -1,4 +1,4 @@
-﻿#if MAUI
+#if MAUI
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
@@ -113,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #elif MACCATALYST
         private void HasValueSwitch_Toggled(object? sender, ToggledEventArgs e)
         {
-            Element?.UpdateValue(null); // UI will be synced by triggering Element_PropertyChanged
+            UpdateValue();
         }
 #endif
 
