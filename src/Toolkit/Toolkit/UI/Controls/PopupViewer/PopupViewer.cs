@@ -180,7 +180,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
                 else if (newPopup.GeoElement is INotifyPropertyChanged inpc)
                 {
-                    _geoElementPropertyChangedListener = new WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(tjos, inpc)
+                    _geoElementPropertyChangedListener = new WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpc)
                     {
                         OnEventAction = static (instance, source, eventArgs) => instance.InvalidatePopup(),
                         OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
@@ -210,7 +210,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
-            PropertyHelper.CreateProperty<ScrollBarVisibility, PopupViewer>(nameof(VerticalScrollBarVisibility), ScrollBarVisibility.Default);
+            PropertyHelper.CreateProperty<ScrollBarVisibility, PopupViewer>(nameof(VerticalScrollBarVisibility),
+#if MAUI
+                ScrollBarVisibility.Default
+#else
+                ScrollBarVisibility.Auto
+#endif
+                );
     }
 }
 #endif
