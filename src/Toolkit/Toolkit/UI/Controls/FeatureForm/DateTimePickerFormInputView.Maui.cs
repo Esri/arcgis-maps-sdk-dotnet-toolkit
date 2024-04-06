@@ -1,4 +1,4 @@
-#if MAUI
+﻿#if MAUI
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.Toolkit.Maui.Internal;
@@ -45,8 +45,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             clearButton.Text = "\u2716"; // Unicode "Heavy Multiplication X" character
             clearButton.SetAppThemeColor(Button.TextColorProperty, Colors.Black, Colors.White);
             clearButton.HorizontalOptions = LayoutOptions.End;
+            clearButton.VerticalOptions = LayoutOptions.Center;
             clearButton.Background = new SolidColorBrush(Colors.Transparent);
             clearButton.BorderWidth = 0;
+            clearButton.Margin = new Thickness(0);
             container.Children.Add(clearButton);
             nameScope.RegisterName("ClearButton", clearButton);
 #endif
@@ -67,7 +69,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             container.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Auto });
             container.AddColumnDefinition(new ColumnDefinition { Width = GridLength.Star });
             Grid.SetColumn(datePicker, 1);
-            Grid.SetColumnSpan(timePicker, 2);
+            Grid.SetColumn(timePicker, 1);
 #endif
 
             return container;
