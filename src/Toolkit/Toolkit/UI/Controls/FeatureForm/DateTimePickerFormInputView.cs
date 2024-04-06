@@ -1,4 +1,4 @@
-﻿#if WPF || MAUI
+#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
@@ -125,6 +125,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 this.Dispatch(ConfigurePickers);
             }
+            else if (e.PropertyName == nameof(FieldFormElement.IsEditable))
+            {
+                this.Dispatch(ConfigurePickerVisibility);
+            }
         }
 
         private bool _rentrancyFlag;
@@ -163,10 +167,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         nativePicker.Text = null;
                     }
-                    if (_clearButton != null)
-                    {
-                        _clearButton.IsVisible = selectedDate is not null;
-                    }
 #endif
 #else
                     _datePicker.SelectedDate = selectedDate;
@@ -179,14 +179,29 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #if MAUI
                     _timePicker.IsVisible = input.IncludeTime;
                     _timePicker.Time = selectedDate?.TimeOfDay ?? TimeSpan.Zero;
-                    _timePicker.IsEnabled = selectedDate is not null;
 #else
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
                     _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
 #endif
                 }
+                ConfigurePickerVisibility();
             }
             _rentrancyFlag = false;
+        }
+
+        private void ConfigurePickerVisibility()
+        {
+            if (Element != null)
+            {
+                if (_datePicker != null)
+                    _datePicker.IsEnabled = Element.IsEditable;
+                if (_timePicker != null)
+                    _timePicker.IsEnabled = Element.IsEditable && Element.Value != null;
+#if MAUI && (IOS || MACCATALYST || ANDROID)
+                if (_clearButton != null)
+                    _clearButton.IsVisible = Element.IsEditable && Element.Value != null;
+#endif
+            }
         }
     }
 }

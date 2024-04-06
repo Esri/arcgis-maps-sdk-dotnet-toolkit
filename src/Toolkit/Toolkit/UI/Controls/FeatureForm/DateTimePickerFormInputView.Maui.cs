@@ -25,13 +25,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             var container = new Grid();
             container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
             container.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
-            container.SetBinding(IsEnabledProperty, "Element.IsEditable");
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(container, nameScope);
