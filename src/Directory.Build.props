@@ -8,10 +8,10 @@
     <Authors>Esri Inc.</Authors>
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
-    <PackageReleaseNotes>v$(ArcGISRuntimeToolkitPackageVersion): https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v$(ArcGISRuntimeToolkitPackageVersion)</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
+    <PackageReleaseNotes>v$(ArcGISRuntimeToolkitPackageVersion): https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/releases/tag/v$(ArcGISRuntimeToolkitPackageVersion)</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
