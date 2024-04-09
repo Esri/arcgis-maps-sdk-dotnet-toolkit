@@ -76,6 +76,6 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
     </Grid.ColumnDefinitions>
     <esri:MapView x:Name="MyMapView" />
     <esri:BasemapGallery Grid.Column="1" 
-                            GeoModel="{Binding ElementName=MyMapView, Path=Map}" />
+                         GeoModel="{Binding ElementName=MyMapView, Path=Map}" />
 </Grid>
 ```

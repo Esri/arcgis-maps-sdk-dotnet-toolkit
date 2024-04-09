@@ -18,10 +18,10 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
     <esri:MapView x:Name="MyMapView" />
     <esri:Compass Margin="15"
-                     AutoHide="False"
-                     GeoView="{x:Reference MyMapView}"
-                     HeightRequest="50"
-                     WidthRequest="50" />
+                  AutoHide="False"
+                  GeoView="{x:Reference MyMapView}"
+                  HeightRequest="50"
+                  WidthRequest="50" />
 </Grid>
 ```
 
@@ -45,9 +45,9 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
     <esri:MapView x:Name="MyMapView" />
     <esri:Compass Width="50"
-                     Height="50"
-                     Margin="15"
-                     AutoHide="False"
-                     GeoView="{Binding ElementName=MyMapView}" />
+                  Height="50"
+                  Margin="15"
+                  AutoHide="False"
+                  GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```

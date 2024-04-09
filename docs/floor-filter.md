@@ -78,5 +78,4 @@ The following properties enable customization or localization of text displayed 
     <esri:MapView x:Name="MyMapView" />
     <esri:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
-
 ```
