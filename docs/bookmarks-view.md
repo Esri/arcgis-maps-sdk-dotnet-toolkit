@@ -15,44 +15,52 @@ For bookmarks to appear in the control, you must set either `GeoModel.Bookmarks`
 ### .NET MAUI:
 
 ```xml
-<Grid ColumnDefinitions="*,300">
-    <esri:MapView x:Name="mapView" />
-    <toolkit:BookmarksView Grid.Column="1" GeoView="{x:Reference mapView}" />
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" 
+      ColumnDefinitions="*,300">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:BookmarksView Grid.Column="1" GeoView="{x:Reference MyMapView}" />
 </Grid>
 ```
 
 To customize the item template:
 
 ```xml
-<toolkit:BookmarksView Grid.Column="1" GeoView="{x:Reference mapView}">
-    <toolkit:BookmarksView.ItemTemplate>
+<esri:BookmarksView xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" 
+                    Grid.Column="1" 
+                    GeoView="{x:Reference MyMapView}">
+    <esri:BookmarksView.ItemTemplate>
         <DataTemplate>
             <TextCell Text="{Binding Name}" TextColor="Red" />
         </DataTemplate>
-    </toolkit:BookmarksView.ItemTemplate>
-</toolkit:BookmarksView>
+    </esri:BookmarksView.ItemTemplate>
+</esri:BookmarksView>
 ```
 
 ### UWP/WinUI:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls" 
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
-    <esri:MapView x:Name="mapView" />
-    <toolkit:BookmarksView Grid.Column="1" GeoView="{Binding ElementName=mapView}" />
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:BookmarksView Grid.Column="1" 
+                               GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```
 
 You can customize the `BookmarksView` bookmark display by setting the `ItemTemplate` property with a customized `DataTemplate`. 
 
 ```xml
-<toolkit:BookmarksView Grid.Column="1" GeoView="{Binding ElementName=mapView}">
+<toolkit:BookmarksView xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+                       Grid.Column="1"
+                       GeoView="{Binding ElementName=MyMapView}">
     <toolkit:BookmarksView.ItemTemplate>
         <DataTemplate>
-            <TextBlock Foreground="Red" Text="{Binding Name}" />
+            <TextBlock Foreground="Red" 
+                             Text="{Binding Name}" />
         </DataTemplate>
     </toolkit:BookmarksView.ItemTemplate>
 </toolkit:BookmarksView>
@@ -60,8 +68,14 @@ You can customize the `BookmarksView` bookmark display by setting the `ItemTempl
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI with one important distinction: `BookmarksView` is accessed with the same namespace prefix as `GeoView`. 
-
 ```xml
-xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="300" />
+    </Grid.ColumnDefinitions>
+    <esri:MapView x:Name="MyMapView" />
+    <esri:BookmarksView Grid.Column="1" 
+                            GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
 ```

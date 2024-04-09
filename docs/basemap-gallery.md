@@ -43,29 +43,39 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 ### .NET MAUI:
 
 ```xml
-<Grid ColumnDefinitions="*,300">
-    <esri:MapView x:Name="mapView" />
-    <toolkit:BasemapGallery Grid.Column="1" GeoModel="{Binding Source={x:Reference mapView}, Path=Map}"/>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" 
+      ColumnDefinitions="*,300">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:BasemapGallery Grid.Column="1" 
+                         GeoModel="{Binding Source={x:Reference MyMapView}, Path=Map}" />
 </Grid>
 ```
 
 ### UWP/WinUI:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls" 
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
-    <esri:MapView x:Name="mapView" />
-    <toolkit:BasemapGallery Grid.Column="1" GeoModel="{Binding ElementName=mapView, Path=Map}" />
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:BasemapGallery Grid.Column="1" 
+                            GeoModel="{Binding ElementName=MyMapView, Path=Map}" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI with one important distinction: `BasemapGallery` is accessed with the same namespace prefix as `GeoView`. 
-
 ```xml
-xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="300" />
+    </Grid.ColumnDefinitions>
+    <esri:MapView x:Name="MyMapView" />
+    <esri:BasemapGallery Grid.Column="1" 
+                            GeoModel="{Binding ElementName=MyMapView, Path=Map}" />
+</Grid>
 ```

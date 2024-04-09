@@ -15,11 +15,11 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
 ### .NET MAUI:
 
 ```xml
-<Grid>
-    <esri:MapView x:Name="mapView" />
-    <toolkit:Compass Margin="15"
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:Compass Margin="15"
                      AutoHide="False"
-                     GeoView="{x:Reference mapView}"
+                     GeoView="{x:Reference MyMapView}"
                      HeightRequest="50"
                      WidthRequest="50" />
 </Grid>
@@ -28,20 +28,26 @@ Show a compass direction for a `GeoView`. Resets the view orientation when tappe
 ### UWP/WinUI:
 
 ```xml
-<Grid>
-    <esri:MapView x:Name="mapView" />
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls" 
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <esri:MapView x:Name="MyMapView" />
     <toolkit:Compass Width="50"
                      Height="50"
                      Margin="15"
                      AutoHide="False"
-                     GeoView="{Binding ElementName=mapView}" />
+                     GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI with one important distinction: `Compass` is accessed with the same namespace prefix as `GeoView`.
-
 ```xml
-xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:Compass Width="50"
+                     Height="50"
+                     Margin="15"
+                     AutoHide="False"
+                     GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
 ```

@@ -54,25 +54,29 @@ The following properties enable customization or localization of text displayed 
 ### .NET MAUI:
 
 ```xml
-<Grid>
-    <esri:MapView x:Name="mapView" />
-    <toolkit:FloorFilter GeoView="{x:Reference mapView}" />
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:FloorFilter GeoView="{x:Reference MyMapView}" />
 </Grid>
 ```
 
 ### UWP/WinUI:
 
 ```xml
-<Grid>
-    <esri:MapView x:Name="mapView" />
-    <esri:FloorFilter GeoView="{Binding ElementName=mapView}" />
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls" 
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI with one important distinction: `FloorFilter` is accessed with the same namespace prefix as `GeoView`.
 
 ```xml
-xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
+
 ```
