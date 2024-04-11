@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
+    <value>Дата должна быть {0} или ранее</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
+    <value>Дата превышает максимальную</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
+    <value>Максимальное разрешенное число символов: {0}</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
+    <value>Превышена максимальная длина в символах</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
+    <value>Введите значение в {0} или ниже</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
+    <value>Превышает максимальное значение</value>
+  </data>
+  <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
+    <value>Введите значение от {0} до {1}</value>
+  </data>
+  <data name="FeatureFormFieldIsRequired" xml:space="preserve">
+    <value>Обязательное</value>
+  </data>
+  <data name="FeatureFormIncorrectValueType" xml:space="preserve">
+    <value>Значение должно иметь корректный тип</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
+    <value>Значение должно быть числом</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
+    <value>Значение должно быть целым числом</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
+    <value>Дата должна быть {0} или позже</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
+    <value>Дата меньше минимальной</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
+    <value>Требуемый минимум символов: {0}</value>
+  </data>
+  <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
+    <value>Меньше минимального значения</value>
+  </data>
+  <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
+    <value>Значение должно быть в пределах домена</value>
+  </data>
+  <data name="FeatureFormNullNotAllowed" xml:space="preserve">
+    <value>Значение не должно быть пустым</value>
+  </data>
+  <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
+    <value>Введите от {0} до {1} знаков</value>
+  </data>
+  <data name="FeatureFormSpecificLength" xml:space="preserve">
+    <value>Требуемое количество символов: {0}</value>
+  </data>
+  <data name="FloorFilterAllFacilities" xml:space="preserve">
+    <value>Все участки</value>
+  </data>
+  <data name="FloorFilterAllFloors" xml:space="preserve">
+    <value>Все этажи</value>
+  </data>
+  <data name="FloorFilterBackButton" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="FloorFilterBrowse" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
+  <data name="FloorFilterBrowseFacilities" xml:space="preserve">
+    <value>Выбрать помещение</value>
+  </data>
+  <data name="FloorFilterBrowseSites" xml:space="preserve">
+    <value>Выбрать площадку</value>
+  </data>
+  <data name="FloorFilterClose" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="FloorFilterCollapse" xml:space="preserve">
+    <value>Свернуть</value>
+  </data>
+  <data name="FloorFilterExpand" xml:space="preserve">
+    <value>Развернуть</value>
+  </data>
+  <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="FloorFilterNoResultsFound" xml:space="preserve">
+    <value>Результаты не найдены</value>
+  </data>
+  <data name="FloorFilterZoomTo" xml:space="preserve">
+    <value>Приблизить к</value>
+  </data>
+  <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
+    <value>фт</value>
+  </data>
+  <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
+    <value>км</value>
+  </data>
+  <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
+    <value>м</value>
+  </data>
+  <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
+    <value>мили</value>
+  </data>
+  <data name="SearchViewAllSourcesSelect" xml:space="preserve">
+    <value>Все источники</value>
+  </data>
+  <data name="SearchViewClearSearchTooltip" xml:space="preserve">
+    <value>Очистить поиск</value>
+  </data>
+  <data name="SearchViewNoResults" xml:space="preserve">
+    <value>Нет результатов</value>
+  </data>
+  <data name="SearchViewRepeatSearch" xml:space="preserve">
+    <value>Повторить поиск здесь</value>
+  </data>
+  <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
+    <value>Найти адрес или место</value>
+  </data>
+  <data name="SearchViewSearchTooltip" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
+    <value>Добавить начальную точку</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
+    <value>Расширенные опции</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
+    <value>Сведения об активах</value>
+  </data>
+  <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
+    <value>Очистка результатов</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
+    <value>Выбранный тип трассировки уже был запущен с тех же самых начальных точек.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
+    <value>Результаты объекта</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
+    <value>Положение вдоль линии</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
+    <value>Результаты функции</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
+    <value>Определение начальных точек...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
+    <value>Проверка</value>
+  </data>
+  <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
+    <value>Начальных точек больше, чем требуется для выбранного типа трассировки.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
+    <value>Новая трассировка</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
+    <value>Следующий</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
+    <value>Нет результатов объекта.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
+    <value>Нет результатов функции.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
+    <value>Ничего не найдено.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
+    <value>Для выбранного типа трассировки требуются дополнительные начальные точки.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
+    <value>Не обнаружено типов трассировки для выбранной инженерной сети.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
+    <value>Инженерные сети не найдены</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
+    <value>Предварительный просмотр</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
+    <value>Предыдущий</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
+    <value>Удалить все</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
+    <value>Имя результата (дополнительно)</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
+    <value>Результаты</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
+    <value>Цвет визуализации для результата</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
+    <value>Выполнение трассировки...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
+    <value>Запуск трассировки</value>
+  </data>
+  <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
+    <value>Выбрать объекты на карте</value>
+  </data>
+  <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
+    <value>Показать графику на карте</value>
+  </data>
+  <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
+    <value>Начальные точки</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
+    <value>Коснитесь карты, чтобы определить начальные точки.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
+    <value>Терминал</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
+    <value>Автор</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
+    <value>Сведения о типе трассировки</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
+    <value>Типы трассировки</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
+    <value>Инженерные сети</value>
+  </data>
+  <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
+    <value>Опции визуализации</value>
+  </data>
+  <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
+    <value>Предупреждения</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
+    <value>Приблизить</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
+    <value>Приблизить к результату</value>
+  </data>
+</root>

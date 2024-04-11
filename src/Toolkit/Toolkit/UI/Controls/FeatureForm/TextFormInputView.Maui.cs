@@ -26,7 +26,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FeatureForm", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.Value), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput", "Esri.ArcGISRuntime")]

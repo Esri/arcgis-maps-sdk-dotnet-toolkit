@@ -31,6 +31,7 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+    <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
   </Style>
   <Style TargetType="{x:Type primitives:DateTimePickerFormInputView}">
     <Setter Property="Template">
@@ -43,6 +44,7 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+    <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
   </Style>
   <Style TargetType="{x:Type primitives:SwitchFormInputView}">
     <Setter Property="Template">
@@ -89,6 +91,7 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+    <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
   </Style>
   <Style TargetType="{x:Type primitives:RadioButtonsFormInputView}">
     <Setter Property="ItemsPanel">
@@ -112,6 +115,7 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+    <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
   </Style>
   <Style TargetType="{x:Type primitives:TextFormInputView}">
     <Setter Property="Template">
@@ -175,6 +179,7 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+    <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
   </Style>
   <Style TargetType="{x:Type primitives:FieldFormElementView}" >
     <Setter Property="Margin" Value="{StaticResource FeatureFormElementInputMargin}" />
@@ -225,7 +230,7 @@
         <ControlTemplate TargetType="{x:Type primitives:FieldFormElementView}">
           <StackPanel>
             <TextBlock Text="{Binding Label}" Style="{StaticResource FeatureFormViewTitleStyle}"/>
-            <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput">
+            <ContentControl Margin="0,3" Foreground="Gray" Content="{Binding}" x:Name="FieldInput" KeyboardNavigation.IsTabStop="False">
               <ContentControl.ToolTip>
                 <ToolTip Content="{Binding Hint}">
                   <ToolTip.Style>
@@ -249,6 +254,7 @@
         </ControlTemplate>
       </Setter.Value>
     </Setter>
+    <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
   </Style>
  
   <Style x:Key="GroupFormElementExpanderButtonStyle" TargetType="{x:Type ToggleButton}">
@@ -378,7 +384,7 @@
               <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}"
                          Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
               <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="FeatureFormContentScrollViewer">
-                <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView">
+                <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView" KeyboardNavigation.IsTabStop="False">
                   <primitives:FormElementItemsControl.FieldFormElementTemplate>
                     <DataTemplate>
                       <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
@@ -394,7 +400,7 @@
                               <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                             </StackPanel>
                           </Expander.Header>
-                          <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" >
+                          <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" KeyboardNavigation.IsTabStop="False">
                             <primitives:FormElementItemsControl.FieldFormElementTemplate>
                               <DataTemplate>
                                 <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />

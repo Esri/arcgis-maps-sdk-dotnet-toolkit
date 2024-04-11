@@ -2,6 +2,7 @@
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using System.Globalization;
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -29,22 +30,57 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         private void UpdateValue()
-        { 
+        {
+            if (_rentrancyFlag) return;
+
             if (Element?.Input is DateTimePickerFormInput input && _datePicker != null)
             {
+                // Get the Date from the date picker (null if the input is empty).
+                // We display dates in local time but store them in UTC.
+                DateTime? date = null;
 #if MAUI
-                var date = _datePicker.Date;
-                if (date != DateTime.MinValue && input.IncludeTime && _timePicker != null)
-                    date = date.Date.Add(_timePicker.Time);
-#else
-                var date = _datePicker.SelectedDate;
-                if (date.HasValue && input.IncludeTime && _timePicker != null && _timePicker.Time.HasValue)
+                // MAUI's DatePicker does not have a way to determine if it's empty. Check the platform control instead.
+#if WINDOWS
+                if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
                 {
-                    date = date.Value.Date.Add(_timePicker.Time.Value);
+                    date = winPicker.Date?.UtcDateTime;
+                }
+#elif IOS || ANDROID
+                if (_datePicker.Handler?.PlatformView is not Microsoft.Maui.Platform.MauiDatePicker nativePicker || !String.IsNullOrEmpty(nativePicker.Text))
+                {
+                    date = _datePicker.Date.ToUniversalTime();
+                }
+#elif MACCATALYST
+                if (_hasValueSwitch?.IsToggled != false)
+                {
+                    date = _datePicker.Date.ToUniversalTime();
                 }
 #endif
-                if (!object.Equals(Element?.Value, date))
-                    Element?.UpdateValue(date);
+#else
+                date = _datePicker.SelectedDate?.ToUniversalTime();
+#endif
+                if (date is DateTime newDate && input.IncludeTime && _timePicker?.Time is TimeSpan time)
+                {
+                    // User specified both date and time, combine them.
+                    date = newDate.Add(time);
+                }
+
+                DateTime? oldDate = Element.Value as DateTime?;
+                if (Element.Value is DateTimeOffset oldDto)
+                {
+                    // Old attribute value may be a DateTimeOffset (pre-200.4 or EnableTimestampOffsetSupport=false).
+                    // Convert it to UTC DateTime before comparing.
+                    oldDate = DateTime.SpecifyKind(oldDto.ToUniversalTime().DateTime, DateTimeKind.Utc);
+                }
+
+                // Only update the value if:
+                // - the date has changed, or
+                // - the value has changed to/from null, or
+                // - the time has changed and IncludeTime is true
+                if (date != oldDate && (date == null || oldDate == null || date != oldDate.Value.Date || input.IncludeTime))
+                {
+                    Element.UpdateValue(date);
+                }
             }
         }
 
@@ -84,6 +120,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 };
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
+            ConfigurePickers();
         }
 
         private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -91,6 +128,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (e.PropertyName == nameof(FieldFormElement.Value))
             {
                 this.Dispatch(ConfigurePickers);
+            }
+            else if (e.PropertyName == nameof(FieldFormElement.IsEditable))
+            {
+                this.Dispatch(ConfigurePickerIsEditable);
             }
         }
 
@@ -101,29 +142,86 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (_rentrancyFlag) return;
             _rentrancyFlag = true;
             DateTime? selectedDate = Element?.Value as DateTime? ?? (Element?.Value as DateTimeOffset?)?.DateTime;
+
             if (Element?.Input is DateTimePickerFormInput input)
             {
-                if (_datePicker is not null)
+                // Dates are always converted to local time, even if IncludeTime is false
+                selectedDate = selectedDate?.ToLocalTime();
+                if (_datePicker != null)
                 {
 #if MAUI
+                    // Min/Max are always converted to local time
+                    _datePicker.MinimumDate = input.Min?.ToLocalTime().Date ?? DateTime.MinValue;
+                    _datePicker.MaximumDate = input.Max?.ToLocalTime().Date ?? DateTime.MaxValue;
+#if WINDOWS
+                    if (selectedDate is DateTime date)
+                    {
+                        _datePicker.Date = selectedDate.Value;
+                    }
+                    else if (_datePicker.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.CalendarDatePicker winPicker)
+                    {
+                        winPicker.Date = selectedDate;
+                    }
+#elif IOS || ANDROID
+                    if (selectedDate is DateTime date)
+                    {
+                        _datePicker.Date = date;
+                    }
+                    else if (_datePicker.Handler?.PlatformView is Microsoft.Maui.Platform.MauiDatePicker nativePicker)
+                    {
+                        nativePicker.Text = null;
+                    }
+#elif MACCATALYST
+                    if (selectedDate is DateTime date)
+                    {
+                        _datePicker.Date = date;
+                    }
+                    if (_hasValueSwitch != null)
+                    {
+                        _hasValueSwitch.IsToggled = (selectedDate != null);
+                    }
+#endif
 #else
                     _datePicker.SelectedDate = selectedDate;
-                    _datePicker.DisplayDateStart = input.Min.HasValue ? input.Min.Value.Date : null;
-                    _datePicker.DisplayDateEnd = input.Max.HasValue ? input.Max.Value.Date : null;
+                    _datePicker.DisplayDateStart = input.Min?.ToLocalTime().Date;
+                    _datePicker.DisplayDateEnd = input.Max?.ToLocalTime().Date;
 #endif
                 }
                 if (_timePicker != null)
                 {
 #if MAUI
                     _timePicker.IsVisible = input.IncludeTime;
-                    _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : TimeSpan.Zero;
+                    _timePicker.Time = selectedDate?.TimeOfDay ?? TimeSpan.Zero;
 #else
                     _timePicker.Visibility = input.IncludeTime ? Visibility.Visible : Visibility.Collapsed;
                     _timePicker.Time = selectedDate.HasValue ? selectedDate.Value.TimeOfDay : null;
 #endif
                 }
+                ConfigurePickerIsEditable();
             }
             _rentrancyFlag = false;
+        }
+
+        private void ConfigurePickerIsEditable()
+        {
+            if (Element != null)
+            {
+#if MACCATALYST
+                if (_hasValueSwitch != null)
+                    _hasValueSwitch.IsEnabled = Element.IsEditable;
+                if (_datePicker != null)
+                    _datePicker.IsEnabled = Element.IsEditable && Element.Value != null; // On Mac, picker is only enabled when the switch is on
+#else
+                if (_datePicker != null)
+                    _datePicker.IsEnabled = Element.IsEditable;
+#endif
+                if (_timePicker != null)
+                    _timePicker.IsEnabled = Element.IsEditable && Element.Value != null;
+#if IOS || ANDROID
+                if (_clearButton != null)
+                    _clearButton.IsVisible = Element.IsEditable && Element.Value != null;
+#endif
+            }
         }
     }
 }
