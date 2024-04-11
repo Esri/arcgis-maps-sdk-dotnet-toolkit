@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+             xmlns:prim="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui.Primitives;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
+             x:Class="Toolkit.SampleApp.Maui.Samples.FeatureFormViewSample" Title="Feature Forms">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <esri:MapView x:Name="mapView"
+                          Map="https://www.arcgis.com/home/item.html?id=f72207ac170a40d8992b7a3507b44fad"
+                          GeoViewTapped="mapView_GeoViewTapped" />
+
+            <Border HorizontalOptions="Center" VerticalOptions="Start" Background="#99ffffff" Padding="5" Margin="10" StrokeThickness="1" Stroke="Black">
+                <Label Text="Click a feature to open its FeatureFormView" FontSize="18" />
+            </Border>
+
+            <Border x:Name="SidePanel" IsVisible="False" Grid.Column="1" WidthRequest="300">
+                <Border Background="{AppThemeBinding Dark=Black, Light=White}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <esri:FeatureFormView Background="Transparent" x:Name="formViewer" Padding="12" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Default"/>
+                        <Border Grid.Row="1" StrokeThickness="0" Padding="5" Background="#eeeeee">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Button Text="Close" Background="#007AC2" TextColor="White" Clicked="CloseButton_Click" Grid.Column="0" />
+                                <Button Text="Reset" Background="#D83020" TextColor="White" Clicked="DiscardButton_Click" Grid.Column="1" />
+                                <Button Text="Apply" Background="#35AC46" TextColor="White" Clicked="UpdateButton_Click" Grid.Column="2" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Border>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

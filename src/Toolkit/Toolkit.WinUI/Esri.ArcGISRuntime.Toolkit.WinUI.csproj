@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <EmbeddedResource Include="..\Toolkit\LocalizedStrings\Resources.resx" Link="LocalizedStrings\Resources.resx" />
+      <EmbeddedResource Include="..\Toolkit\LocalizedStrings\*.resx" Link="LocalizedStrings\%(Filename).resx" />
       <Content Update="Assets\*.*" PackagePath="contentFiles\any\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Assets\%(Filename)%(Extension);lib\$(TargetFramework.TrimEnd('.0'))\$(PackageId)\Assets\%(Filename)%(Extension)" />
   </ItemGroup>
 
