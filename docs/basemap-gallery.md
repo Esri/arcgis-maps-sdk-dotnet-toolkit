@@ -38,69 +38,44 @@ The following properties enable customization of the gallery's appearance:
 
 ## Usage
 
-UWP:
+Ensure that your `GeoModel` is not null before selecting a basemap with the `BasemapGallery`.
+
+### .NET MAUI:
 
 ```xml
-<Page
-    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.BasemapGallery.BasemapGallerySample"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
-    xmlns:basemapgallery="using:Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery">
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <esri:MapView x:Name="mapView" />
-        <basemapgallery:BasemapGallery
-            Width="200"
-            Height="400"
-            Margin="4"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            GeoModel="{Binding ElementName=mapView, Path=Map}" />
-    </Grid>
-</Page>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013" 
+      ColumnDefinitions="*,300">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:BasemapGallery Grid.Column="1" 
+                         GeoModel="{Binding Source={x:Reference MyMapView}, Path=Map}" />
+</Grid>
 ```
 
-WPF:
+### UWP/WinUI:
 
 ```xml
-<UserControl
-    x:Class="Esri.ArcGISRuntime.Toolkit.Samples.BasemapGallery.BasemapGalleryWithSceneSample"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-    xmlns:basemapgallery="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.BasemapGallery;assembly=Esri.ArcGISRuntime.Toolkit">
-    <Grid>
-        <esri:SceneView x:Name="MySceneView" />
-        <basemapgallery:BasemapGallery
-            Width="200"
-            Height="400"
-            Margin="8"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            GeoModel="{Binding ElementName=MySceneView, Path=Scene}" />
-    </Grid>
-</UserControl>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls" 
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="300" />
+    </Grid.ColumnDefinitions>
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:BasemapGallery Grid.Column="1" 
+                            GeoModel="{Binding ElementName=MyMapView, Path=Map}" />
+</Grid>
 ```
 
-MAUI:
+### WPF:
 
 ```xml
-<ContentPage x:Class="Toolkit.Samples.Forms.Samples.BasemapGalleryWithSceneSample"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
-             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui">
-    <ContentPage.Content>
-        <Grid>
-            <esriUI:SceneView x:Name="sceneView" />
-            <StackLayout Margin="4"
-                         HorizontalOptions="Start"
-                         VerticalOptions="Start">
-                <esriTK:BasemapGallery GeoModel="{Binding Source={x:Reference sceneView}, Path=Scene}"
-                                    HeightRequest="200"
-                                    WidthRequest="400" />
-            </StackLayout>
-        </Grid>
-    </ContentPage.Content>
-</ContentPage>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="300" />
+    </Grid.ColumnDefinitions>
+    <esri:MapView x:Name="MyMapView" />
+    <esri:BasemapGallery Grid.Column="1" 
+                         GeoModel="{Binding ElementName=MyMapView, Path=Map}" />
+</Grid>
 ```
