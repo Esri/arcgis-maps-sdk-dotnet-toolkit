@@ -1,6 +1,6 @@
 # Compass
 
-Show a compass direction for a `GeoView`. Resets the view orientation when tapped/clicked.
+Show a compass direction for a `MapView` or `SceneView`. Resets the view orientation when tapped/clicked.
 
 ![compass](https://user-images.githubusercontent.com/1378165/73389839-d9c8f500-4289-11ea-923c-18232489b3e0.png)
 
