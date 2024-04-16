@@ -175,7 +175,7 @@ public class Compass : TemplatedView
     public static readonly BindableProperty GeoViewProperty =
         BindableProperty.Create(nameof(Compass.GeoView), typeof(GeoView), typeof(Compass), null, BindingMode.OneWay, propertyChanged: (s, oldValue, newValue) => ((Compass)s).OnGeoViewPropertyChanged(oldValue as GeoView, newValue as GeoView));
 
-    private void OnGeoViewPropertyChanged(GeoView oldValue, GeoView newValue)
+    private void OnGeoViewPropertyChanged(GeoView? oldValue, GeoView? newValue)
     {
         if (oldValue is not null)
         {
