@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>61fbc238-623c-42ff-8c47-95d710a1e66f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Esri.ArcGISRuntime.Toolkit.Analyzers.Test</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\CSharpAnalyzerVerifier`1+Test.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\CSharpAnalyzerVerifier`1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\CSharpCodeFixVerifier`2+Test.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\CSharpCodeFixVerifier`2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\CSharpCodeRefactoringVerifier`1+Test.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\CSharpCodeRefactoringVerifier`1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\CSharpVerifierHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\VisualBasicAnalyzerVerifier`1+Test.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\VisualBasicAnalyzerVerifier`1.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\VisualBasicCodeFixVerifier`2+Test.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\VisualBasicCodeFixVerifier`2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\VisualBasicCodeRefactoringVerifier`1+Test.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Verifiers\VisualBasicCodeRefactoringVerifier`1.cs" />
+  </ItemGroup>
+</Project>

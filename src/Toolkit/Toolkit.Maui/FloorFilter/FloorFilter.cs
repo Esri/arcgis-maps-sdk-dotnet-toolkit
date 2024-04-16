@@ -72,6 +72,16 @@ public partial class FloorFilter : TemplatedView
         _controller.PropertyChanged += HandleControllerPropertyChanges;
     }
 
+    private void InitializeLocalizedStrings()
+    {
+        BrowseLabel = Properties.Resources.GetString("FloorFilterBrowse");
+        BrowseSitesLabel = Properties.Resources.GetString("FloorFilterBrowseSites");
+        BrowseFacilitiesLabel = Properties.Resources.GetString("FloorFilterBrowseFacilities");
+        NoResultsMessage = Properties.Resources.GetString("FloorFilterNoResultsFound");
+        AllFacilitiesLabel = Properties.Resources.GetString("FloorFilterAllFacilities");
+        SearchPlaceholder = Properties.Resources.GetString("FloorFilterFilter");
+    }
+
     /// <inheritdoc/>
     protected override void OnApplyTemplate()
     {

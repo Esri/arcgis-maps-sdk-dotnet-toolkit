@@ -69,6 +69,26 @@ public partial class UtilityNetworkTraceTool
     {
         const string backgroundColor = "{AppThemeBinding Dark=#353535, Light=#F8F8F8}";
         const string foregroundColor = "{AppThemeBinding Dark=#ffffff, Light=#151515}";
+
+        var noUtilityNetworks = Properties.Resources.GetString("UtilityNetworkTraceToolNoUtilityNetworks");
+        var utilityNetworks = Properties.Resources.GetString("UtilityNetworkTraceToolUtilityNetworks");
+        var traceTypes = Properties.Resources.GetString("UtilityNetworkTraceToolTraceTypes");
+        var addStartingPoint = Properties.Resources.GetString("UtilityNetworkTraceToolAddStartingPoint");
+        var cancel = Properties.Resources.GetString("UtilityNetworkTraceToolCancel");
+        var notEnoughStartingPoints = Properties.Resources.GetString("UtilityNetworkTraceToolNotEnoughStartingPoints");
+        var moreThanRequiredStartingPoints = Properties.Resources.GetString("UtilityNetworkTraceToolMoreThanRequiredStartingPoints");
+        var duplicateTrace = Properties.Resources.GetString("UtilityNetworkTraceToolDuplicateTrace");
+        var runTrace = Properties.Resources.GetString("UtilityNetworkTraceToolRunTrace");
+        var noResults = Properties.Resources.GetString("UtilityNetworkTraceToolNoResults");
+        var noFeatureResults = Properties.Resources.GetString("UtilityNetworkTraceToolNoFeatureResults");
+        var noFunctionResults = Properties.Resources.GetString("UtilityNetworkTraceToolNoFunctionResults");
+        var featureResults = Properties.Resources.GetString("UtilityNetworkTraceToolFeatureResults");
+        var functionResults = Properties.Resources.GetString("UtilityNetworkTraceToolFunctionResults");
+        var visualizationOptions = Properties.Resources.GetString("UtilityNetworkTraceToolVisualizationOptions");
+        var showGraphics = Properties.Resources.GetString("UtilityNetworkTraceToolShowGraphics");
+        var selectFeatures = Properties.Resources.GetString("UtilityNetworkTraceToolSelectFeatures");
+        var discardResult = Properties.Resources.GetString("UtilityNetworkTraceToolDiscardResult");
+
         string template =
 $@"<ControlTemplate xmlns=""http://schemas.microsoft.com/dotnet/2021/maui"" xmlns:x=""http://schemas.microsoft.com/winfx/2009/xaml""
 xmlns:ios=""clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls""
@@ -86,13 +106,13 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
         <RowDefinition Height=""*"" />
     </Grid.RowDefinitions>
     <Frame x:Name=""{nameof(PART_NoNetworksWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" Grid.RowSpan=""3"" IsVisible=""false"">
-        <Label Text=""No utility networks found."" />
+        <Label Text=""{noUtilityNetworks}"" />
     </Frame>
     <esriTKPrim:SegmentedControl x:Name=""{nameof(PART_NavigationSegment)}"" Grid.Row=""1"" HeightRequest=""30"" />
     <VerticalStackLayout x:Name=""{nameof(PART_SelectContainer)}"" Grid.Row=""2"" Spacing=""8"">
-        <Label x:Name=""{nameof(PART_LabelNetworks)}"" Text=""Networks"" FontAttributes=""Bold"" IsVisible=""false"" />
+        <Label x:Name=""{nameof(PART_LabelNetworks)}"" Text=""{utilityNetworks}"" FontAttributes=""Bold"" IsVisible=""false"" />
         <Picker x:Name=""{nameof(PART_ListViewNetworks)}"" ItemDisplayBinding=""{{Binding Name}}"" IsVisible=""false"" BackgroundColor=""{{AppThemeBinding Light=#eaeaea,Dark=#151515}}"" Title=""Select a Utility Network"" />
-        <Label x:Name=""{nameof(PART_LabelTraceTypes)}"" Text=""Named trace configurations"" FontAttributes=""Bold"" IsVisible=""false"" />
+        <Label x:Name=""{nameof(PART_LabelTraceTypes)}"" Text=""{traceTypes}"" FontAttributes=""Bold"" IsVisible=""false"" />
         <Picker x:Name=""{nameof(PART_ListViewTraceTypes)}"" IsVisible=""false"" ItemDisplayBinding=""{{Binding Name}}"" BackgroundColor=""{{AppThemeBinding Light=#eaeaea,Dark=#151515}}"" Title=""Select a trace configuration""  />
     </VerticalStackLayout>
     <Grid x:Name=""{nameof(PART_ConfigureContainer)}"" Grid.Row=""2"">
@@ -100,8 +120,8 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             <RowDefinition Height=""Auto"" />
             <RowDefinition Height=""*"" />
         </Grid.RowDefinitions>
-        <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""Add starting point"" IsVisible=""false"" Grid.Row=""0"" />
-        <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""Cancel"" IsVisible=""false"" Grid.Row=""0""/>
+        <Button x:Name=""{nameof(PART_ButtonAddStartingPoint)}"" Text=""{addStartingPoint}"" IsVisible=""false"" Grid.Row=""0"" />
+        <Button x:Name=""{nameof(PART_ButtonCancelAddStartingPoint)}"" Text=""{cancel}"" IsVisible=""false"" Grid.Row=""0""/>
         <CollectionView x:Name=""{nameof(PART_ListViewStartingPoints)}"" Background=""{backgroundColor}"" SelectionMode=""Single"" IsVisible=""false"" Grid.Row=""1"">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -133,19 +153,19 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
             <RowDefinition Height=""Auto"" />
         </Grid.RowDefinitions>
         <Frame x:Name=""{nameof(PART_NeedMoreStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
-            <Label Text=""Not enough starting points. Use the 'Configure' section to add starting points."" TextColor=""{foregroundColor}""  />
+            <Label Text=""{notEnoughStartingPoints}"" TextColor=""{foregroundColor}""  />
         </Frame>
         <Frame x:Name=""{nameof(PART_ExtraStartingPointsWarning)}"" BorderColor=""{{AppThemeBinding Light=#007AC2, Dark=#009AF2}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
-            <Label Text=""There are more starting points than required for the selected trace configuration."" TextColor=""{foregroundColor}""  />
+            <Label Text=""{moreThanRequiredStartingPoints}"" TextColor=""{foregroundColor}""  />
         </Frame>
         <Frame x:Name=""{nameof(PART_DuplicateTraceWarning)}"" BorderColor=""{{AppThemeBinding Light=#EDD317,Dark=#FFC900}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"" Grid.Row=""0"">
-            <Label Text=""The selected trace configuration has already been run with the selected starting points."" TextColor=""{foregroundColor}""  />
+            <Label Text=""{duplicateTrace}"" TextColor=""{foregroundColor}""  />
         </Frame>
-        <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""Run Trace"" IsVisible=""false"" Grid.Row=""2"" />
+        <Button x:Name=""{nameof(PART_ButtonRunTrace)}"" Text=""{runTrace}"" IsVisible=""false"" Grid.Row=""2"" />
     </Grid>
     <Grid x:Name=""{nameof(PART_ViewContainer)}"" Grid.Row=""2"">
         <Frame x:Name=""{nameof(PART_NoResultsWarning)}"" BorderColor=""{{AppThemeBinding Light=#D83020, Dark=#FE583E}}"" CornerRadius=""4"" Margin=""4"" IsVisible=""false"">
-            <Label Text=""No results."" TextColor=""{foregroundColor}""  />
+            <Label Text=""{noResults}"" TextColor=""{foregroundColor}""  />
         </Frame>
         <Grid x:Name=""{nameof(PART_GridResultsDisplay)}"" IsVisible=""false"">
             <BindableLayout.ItemTemplate>
@@ -153,7 +173,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                     <ScrollView>
                     <StackLayout Spacing=""8"">
                         <Label Text=""{{Binding Name}}"" FontSize=""18"" FontAttributes=""Bold"" TextColor=""{foregroundColor}""  />
-                        <Label Text=""Function results"" FontSize=""14"" TextColor=""{foregroundColor}""  />
+                        <Label Text=""{functionResults}"" FontSize=""14"" TextColor=""{foregroundColor}""  />
                         <StackLayout BindableLayout.ItemsSource=""{{Binding FunctionResults}}"">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
@@ -175,12 +195,12 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                             <BindableLayout.EmptyViewTemplate>
                                 <DataTemplate>
                                     <Frame BorderColor=""#D83020"" CornerRadius=""4"" Margin=""4"" Grid.RowSpan=""3"">
-                                        <Label Text=""No function results."" HorizontalOptions=""Center"" Padding=""16"" TextColor=""{foregroundColor}""  />
+                                        <Label Text=""{noFunctionResults}"" HorizontalOptions=""Center"" Padding=""16"" TextColor=""{foregroundColor}""  />
                                     </Frame> 
                                 </DataTemplate>
                             </BindableLayout.EmptyViewTemplate>
                         </StackLayout>
-                        <Label Text=""Feature results"" FontSize=""14"" />
+                        <Label Text=""{featureResults}"" FontSize=""14"" />
                         <StackLayout BindableLayout.ItemsSource=""{{Binding ElementResultsGrouped}}"">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
@@ -196,20 +216,20 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
                             </BindableLayout.ItemTemplate>
                             <BindableLayout.EmptyViewTemplate>
                                 <DataTemplate>
-                                    <Label Text=""No feature results"" HorizontalOptions=""Center"" Padding=""16"" TextColor=""{foregroundColor}""  />
+                                    <Label Text=""{noFeatureResults}"" HorizontalOptions=""Center"" Padding=""16"" TextColor=""{foregroundColor}""  />
                                 </DataTemplate>
                             </BindableLayout.EmptyViewTemplate>
                         </StackLayout>
-                        <Label Text=""Visualization options"" FontSize=""14"" />
+                        <Label Text=""{visualizationOptions}"" FontSize=""14"" />
                         <StackLayout Orientation=""Horizontal"" Spacing=""4"">
                             <CheckBox IsChecked=""{{Binding AreGraphicsShown}}"" />
-                            <Label Text=""Show graphics on map"" VerticalOptions=""Center"" TextColor=""{foregroundColor}""  />
+                            <Label Text=""{showGraphics}"" VerticalOptions=""Center"" TextColor=""{foregroundColor}""  />
                         </StackLayout>
                         <StackLayout Orientation=""Horizontal"" Spacing=""4"">
                             <CheckBox IsChecked=""{{Binding AreFeaturesSelected}}"" />
-                            <Label Text=""Select features on map"" VerticalOptions=""Center""  TextColor=""{foregroundColor}"" />
+                            <Label Text=""{selectFeatures}"" VerticalOptions=""Center""  TextColor=""{foregroundColor}"" />
                         </StackLayout>
-                        <Button Text=""Delete result"" Command=""{{Binding DeleteCommand}}"" CommandParameter=""{{Binding}}"" />
+                        <Button Text=""{discardResult}"" Command=""{{Binding DeleteCommand}}"" CommandParameter=""{{Binding}}"" />
                     </StackLayout>
                     </ScrollView>
                 </DataTemplate>
@@ -219,7 +239,7 @@ xmlns:esriTK=""clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGI
     <Frame x:Name=""{nameof(PART_ActivityIndicator)}"" IsVisible=""false"" Grid.RowSpan=""3"" VerticalOptions=""FillAndExpand"" HorizontalOptions=""FillAndExpand"" Background=""{backgroundColor}"" HasShadow=""False"" CornerRadius=""0"" BorderColor=""{backgroundColor}"">
         <StackLayout Spacing=""8"" VerticalOptions=""Center"" HorizontalOptions=""CenterAndExpand"">
             <ActivityIndicator IsRunning=""True"" Color=""{{AppThemeBinding Light=#007AC2,Dark=#009AF2}}"" />
-            <Button x:Name=""{nameof(PART_ButtonCancelActivity)}"" Text=""Cancel"" />
+            <Button x:Name=""{nameof(PART_ButtonCancelActivity)}"" Text=""{cancel}"" />
         </StackLayout>
     </Frame>
 </Grid>
