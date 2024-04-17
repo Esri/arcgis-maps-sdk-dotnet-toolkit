@@ -19,6 +19,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// <summary>
 /// Defines the public API for the MAUI compass control.
 /// </summary>
+[Obsolete("No longer in use")]
 public interface ICompass : IView
 {
     /// <summary>
