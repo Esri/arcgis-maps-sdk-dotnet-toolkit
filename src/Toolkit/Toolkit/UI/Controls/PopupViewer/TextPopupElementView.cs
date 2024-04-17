@@ -68,14 +68,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(TextPopupElement), typeof(TextPopupElementView), null, propertyChanged: (s,o,n) => ((TextPopupElementView)s).OnElementPropertyChanged());
-#else
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(TextPopupElement), typeof(TextPopupElementView), new PropertyMetadata(null, (s, e) => ((TextPopupElementView)s).OnElementPropertyChanged()));
-#endif
-
+            PropertyHelper.CreateProperty<TextPopupElement, TextPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.OnElementPropertyChanged());
     }
 }
 #endif

@@ -186,13 +186,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="PopupMedia"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty PopupMediaProperty =
-            BindableProperty.Create(nameof(PopupMedia), typeof(PopupMedia), typeof(PopupMediaView), null, propertyChanged: (s, o, n) => ((PopupMediaView)s).OnPopupMediaPropertyChanged());
-#else
         public static readonly DependencyProperty PopupMediaProperty =
-            DependencyProperty.Register(nameof(PopupMedia), typeof(PopupMedia), typeof(PopupMediaView), new PropertyMetadata(null, (s, e) => ((PopupMediaView)s).OnPopupMediaPropertyChanged()));
-#endif
+            PropertyHelper.CreateProperty<PopupMedia, PopupMediaView>(nameof(PopupMedia), null, (s, oldValue, newValue) => s.OnPopupMediaPropertyChanged());
 
         private void OnPopupMediaPropertyChanged()
         {

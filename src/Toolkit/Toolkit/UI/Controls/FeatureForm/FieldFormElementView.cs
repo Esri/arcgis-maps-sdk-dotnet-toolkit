@@ -23,7 +23,6 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui;
 using TextBlock = Microsoft.Maui.Controls.Label;
-using DependencyProperty = Microsoft.Maui.Controls.BindableProperty;
 #else
 using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 #endif
