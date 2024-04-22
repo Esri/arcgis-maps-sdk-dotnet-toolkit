@@ -18,9 +18,9 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
-    <esri:MapView x:Name="mapView" />
+    <esri:MapView x:Name="MyMapView" />
     <esri:ScaleLine Margin="20"
-                    MapView="{x:Reference mapView}" />
+                    MapView="{x:Reference MyMapView}" />
 </Grid>
 ```
 
@@ -29,9 +29,9 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
       xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-    <esri:MapView x:Name="mapView" />
-    <toolkit:ScaleLine Margin="20" 
-                       MapView="{Binding ElementName=mapView}" />
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:ScaleLine Margin="20"
+                       MapView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```
 
@@ -39,8 +39,8 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
-    <esri:MapView x:Name="mapView" />
+    <esri:MapView x:Name="MyMapView" />
     <esri:ScaleLine Margin="20"
-                    MapView="{Binding ElementName=mapView}" />
+                    MapView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```

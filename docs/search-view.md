@@ -38,8 +38,8 @@ SearchView shows results in a list on top of underlying content, so it is best t
       RowDefinitions="32,Auto,*"
       RowSpacing="0">
     <esri:SearchView Grid.RowSpan="2"
-                     GeoView="{Binding Source={Reference mapView}}" />
-    <esri:MapView x:Name="mapView"
+                     GeoView="{Binding Source={Reference MyMapView}}" />
+    <esri:MapView x:Name="MyMapView"
                   Grid.Row="1"
                   Grid.RowSpan="2" />
 </Grid>
@@ -50,9 +50,9 @@ SearchView shows results in a list on top of underlying content, so it is best t
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
       xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-    <esri:MapView x:Name="mapView" />
+    <esri:MapView x:Name="MyMapView" />
     <toolkit:SearchView Margin="4"
-                        GeoView="{Binding ElementName=mapView}" />
+                        GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```
 
@@ -60,8 +60,8 @@ SearchView shows results in a list on top of underlying content, so it is best t
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
-    <esri:MapView x:Name="mapView" />
+    <esri:MapView x:Name="MyMapView" />
     <esri:SearchView Margin="4"
-                     GeoView="{Binding ElementName=mapView}" />
+                     GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```

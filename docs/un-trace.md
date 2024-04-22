@@ -51,8 +51,8 @@ The default template for this control is optimized for a panel or side-by-side p
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
       ColumnDefinitions="*,300">
-    <esri:MapView x:Name="mapView" />
-    <esri:UtilityNetworkTraceTool GeoView="{x:Reference mapView}" 
+    <esri:MapView x:Name="MyMapView" />
+    <esri:UtilityNetworkTraceTool GeoView="{x:Reference MyMapView}"
                                   Grid.Column="1" />
 </Grid>
 ```
@@ -66,8 +66,8 @@ The default template for this control is optimized for a panel or side-by-side p
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
-    <esri:MapView x:Name="mapView" />
-    <toolkit:UtilityNetworkTraceTool GeoView="{Binding ElementName=mapView}" 
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:UtilityNetworkTraceTool GeoView="{Binding ElementName=MyMapView}"
                                      Grid.Column="1" />
 </Grid>
 ```
@@ -80,8 +80,8 @@ The default template for this control is optimized for a panel or side-by-side p
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
-    <esri:MapView x:Name="mapView" />
-    <esri:UtilityNetworkTraceTool GeoView="{Binding ElementName=mapView}" 
+    <esri:MapView x:Name="MyMapView" />
+    <esri:UtilityNetworkTraceTool GeoView="{Binding ElementName=MyMapView}"
                                   Grid.Column="1" />
 </Grid>
 ```
