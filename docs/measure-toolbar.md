@@ -16,16 +16,29 @@ Measure distances, areas, and features in a `MapView`.
 ### UWP/WinUI:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <Grid.RowDefinitions>
         <RowDefinition Height="50" />
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <toolkit:MeasureToolbar HorizontalAlignment="Center" MapView="{Binding ElementName=mapView}" />
+    <toolkit:MeasureToolbar HorizontalAlignment="Center"
+                            MapView="{Binding ElementName=mapView}" />
     <esri:MapView x:Name="mapView" Grid.Row="1" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `MeasureToolbar` should be accessed with the same prefix as the `GeoView`.
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="50" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <esri:MeasureToolbar HorizontalAlignment="Center"
+                         MapView="{Binding ElementName=mapView}" />
+    <esri:MapView x:Name="mapView"
+                  Grid.Row="1" />
+</Grid>
+```

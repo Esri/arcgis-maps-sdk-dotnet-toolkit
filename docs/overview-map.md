@@ -31,21 +31,30 @@ OverviewMap has the following bindable properties:
 ### .NET MAUI:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
     <esri:MapView x:Name="mapView" />
-    <toolkit:OverviewMap Margin="4" GeoView="{x:Reference mapView}" />
+    <esri:OverviewMap Margin="4"
+                      GeoView="{x:Reference mapView}" />
 </Grid>
 ```
 
 ### WinUI/UWP:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <esri:MapView x:Name="mapView" />
-    <toolkit:OverviewMap Margin="4" GeoView="{Binding ElementName=mapView}" />
+    <toolkit:OverviewMap Margin="4"
+                         GeoView="{Binding ElementName=mapView}" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `OverviewMap` should be accessed with the same prefix as the `GeoView`.
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="mapView" />
+    <esri:OverviewMap Margin="4"
+                      GeoView="{Binding ElementName=mapView}" />
+</Grid>
+```

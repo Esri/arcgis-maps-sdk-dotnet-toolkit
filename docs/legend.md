@@ -16,25 +16,39 @@ Display a legend for a map or scene view.
 ### .NET MAUI:
 
 ```xml
-<Grid ColumnDefinitions="*,300">
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+      ColumnDefinitions="*,300">
     <esri:MapView x:Name="mapView"/>
-    <toolkit:Legend GeoView="{x:Reference mapView}" Grid.Column="1" />
+    <esri:Legend GeoView="{x:Reference mapView}"
+                 Grid.Column="1" />
 </Grid>
 ```
 
 ### UWP/WinUI:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="300"/>
     </Grid.ColumnDefinitions>
     <esri:MapView x:Name="mapView"/>
-    <toolkit:Legend GeoView="{Binding ElementName=mapView}" Grid.Column="1" />
+    <toolkit:Legend GeoView="{Binding ElementName=mapView}"
+                    Grid.Column="1" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `Legend` should be accessed with the same prefix as the `GeoView`.
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="300"/>
+    </Grid.ColumnDefinitions>
+    <esri:MapView x:Name="mapView"/>
+    <esri:Legend GeoView="{Binding ElementName=mapView}"
+                 Grid.Column="1" />
+</Grid>
+```
