@@ -17,9 +17,9 @@ Display and optionally allow editing of a single attribute of a feature.
 ### UWP/WinUI:
 
 ```xml
-<esri:FeatureDataField xmlns:esri="using:Esri.ArcGISRuntime.Toolkit.UI.Controls" 
-                       Feature="{Binding SelectedFeature}" 
-                       FieldName="objectid" 
+<esri:FeatureDataField xmlns:esri="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+                       Feature="{Binding SelectedFeature}"
+                       FieldName="objectid"
                        IsReadOnly="True" />
 ```
 
@@ -27,7 +27,7 @@ Display and optionally allow editing of a single attribute of a feature.
 
 ```xml
 <esri:FeatureDataField xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-                       Feature="{Binding SelectedFeature}" 
-                       FieldName="objectid" 
+                       Feature="{Binding SelectedFeature}"
+                       FieldName="objectid"
                        IsReadOnly="True" />
 ```

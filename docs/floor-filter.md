@@ -63,7 +63,7 @@ The following properties enable customization or localization of text displayed 
 ### UWP/WinUI:
 
 ```xml
-<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls" 
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
       xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <esri:MapView x:Name="MyMapView" />
     <toolkit:FloorFilter GeoView="{Binding ElementName=MyMapView}" />
