@@ -18,8 +18,8 @@ Display a legend for a map or scene view.
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
       ColumnDefinitions="*,300">
-    <esri:MapView x:Name="mapView"/>
-    <esri:Legend GeoView="{x:Reference mapView}"
+    <esri:MapView x:Name="MyMapView"/>
+    <esri:Legend GeoView="{x:Reference MyMapView}"
                  Grid.Column="1" />
 </Grid>
 ```
@@ -33,8 +33,8 @@ Display a legend for a map or scene view.
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="300"/>
     </Grid.ColumnDefinitions>
-    <esri:MapView x:Name="mapView"/>
-    <toolkit:Legend GeoView="{Binding ElementName=mapView}"
+    <esri:MapView x:Name="MyMapView"/>
+    <toolkit:Legend GeoView="{Binding ElementName=MyMapView}"
                     Grid.Column="1" />
 </Grid>
 ```
@@ -47,8 +47,8 @@ Display a legend for a map or scene view.
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="300"/>
     </Grid.ColumnDefinitions>
-    <esri:MapView x:Name="mapView"/>
-    <esri:Legend GeoView="{Binding ElementName=mapView}"
+    <esri:MapView x:Name="MyMapView"/>
+    <esri:Legend GeoView="{Binding ElementName=MyMapView}"
                  Grid.Column="1" />
 </Grid>
 ```

@@ -32,9 +32,9 @@ OverviewMap has the following bindable properties:
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
-    <esri:MapView x:Name="mapView" />
+    <esri:MapView x:Name="MyMapView" />
     <esri:OverviewMap Margin="4"
-                      GeoView="{x:Reference mapView}" />
+                      GeoView="{x:Reference MyMapView}" />
 </Grid>
 ```
 
@@ -43,9 +43,9 @@ OverviewMap has the following bindable properties:
 ```xml
 <Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
       xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
-    <esri:MapView x:Name="mapView" />
+    <esri:MapView x:Name="MyMapView" />
     <toolkit:OverviewMap Margin="4"
-                         GeoView="{Binding ElementName=mapView}" />
+                         GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```
 
@@ -53,8 +53,8 @@ OverviewMap has the following bindable properties:
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
-    <esri:MapView x:Name="mapView" />
+    <esri:MapView x:Name="MyMapView" />
     <esri:OverviewMap Margin="4"
-                      GeoView="{Binding ElementName=mapView}" />
+                      GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```
