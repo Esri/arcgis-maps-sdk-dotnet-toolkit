@@ -33,9 +33,12 @@ The following properties enable customization of the view:
 
 SearchView shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the MapView or SceneView.
 
-```xaml
-<Grid RowDefinitions="32,Auto,*" RowSpacing="0">
-    <toolkit:SearchView Grid.RowSpan="2" GeoView="{Binding Source={Reference mapView}}" />
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+      RowDefinitions="32,Auto,*"
+      RowSpacing="0">
+    <esri:SearchView Grid.RowSpan="2"
+                     GeoView="{Binding Source={Reference mapView}}" />
     <esri:MapView x:Name="mapView"
                   Grid.Row="1"
                   Grid.RowSpan="2" />
@@ -44,17 +47,21 @@ SearchView shows results in a list on top of underlying content, so it is best t
 
 ### UWP/WinUI:
 
-```xaml
-<Grid>
-    <esri:MapView x:Name="MyMapView" />
-    <toolkit:SearchView Margin="4" GeoView="{Binding ElementName=MyMapView}" />
+```xml
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <esri:MapView x:Name="mapView" />
+    <toolkit:SearchView Margin="4"
+                        GeoView="{Binding ElementName=mapView}" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `BasemapGallery` should be accessed with the same prefix as the `GeoView`. 
-
 ```xml
-xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="mapView" />
+    <esri:SearchView Margin="4"
+                     GeoView="{Binding ElementName=mapView}" />
+</Grid>
 ```

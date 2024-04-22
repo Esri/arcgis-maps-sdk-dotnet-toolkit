@@ -17,25 +17,30 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
 ### .NET MAUI:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
     <esri:MapView x:Name="mapView" />
-    <toolkit:ScaleLine Margin="20" MapView="{x:Reference mapView}" />
+    <esri:ScaleLine Margin="20"
+                    MapView="{x:Reference mapView}" />
 </Grid>
 ```
 
 ### UWP/WinUI:
 
 ```xml
-<Grid>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <esri:MapView x:Name="mapView" />
-    <toolkit:ScaleLine Margin="20" MapView="{Binding ElementName=mapView}" />
+    <toolkit:ScaleLine Margin="20" 
+                       MapView="{Binding ElementName=mapView}" />
 </Grid>
 ```
 
 ### WPF:
 
-The usage in WPF is identical to UWP/WinUI minus one important distinction. The `ScaleLine` should be accessed with the same prefix as the `GeoView`. 
-
 ```xml
-xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="mapView" />
+    <esri:ScaleLine Margin="20"
+                    MapView="{Binding ElementName=mapView}" />
+</Grid>
 ```
