@@ -31,7 +31,7 @@ The following properties enable customization of the view:
 
 ### .NET MAUI:
 
-SearchView shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the MapView or SceneView.
+`SearchView` shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the `MapView` or `SceneView`.
 
 ```xml
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
