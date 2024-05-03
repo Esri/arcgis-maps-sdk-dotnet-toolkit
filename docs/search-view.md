@@ -52,7 +52,7 @@ The following properties enable customization of the view:
       xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <esri:MapView x:Name="MyMapView" />
     <toolkit:SearchView Margin="4"
-                        GeoView="{Binding ElementName=MyMapView}" />
+                        GeoView="{x:Bind MyMapView}" />
 </Grid>
 ```
 

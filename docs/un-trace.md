@@ -67,7 +67,7 @@ The default template for this control is optimized for a panel or side-by-side p
         <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
     <esri:MapView x:Name="MyMapView" />
-    <toolkit:UtilityNetworkTraceTool GeoView="{Binding ElementName=MyMapView}"
+    <toolkit:UtilityNetworkTraceTool GeoView="{x:Bind MyMapView}"
                                      Grid.Column="1" />
 </Grid>
 ```

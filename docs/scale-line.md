@@ -31,7 +31,7 @@ Ensure that your `GeoModel` is not null before selecting a basemap with the `Bas
       xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <esri:MapView x:Name="MyMapView" />
     <toolkit:ScaleLine Margin="20"
-                       MapView="{Binding ElementName=MyMapView}" />
+                       MapView="{x:Bind MyMapView}" />
 </Grid>
 ```
 
