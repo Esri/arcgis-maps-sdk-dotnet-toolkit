@@ -19,7 +19,7 @@ Display a legend for a map or scene view.
 <Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
       ColumnDefinitions="*,300">
     <esri:MapView x:Name="MyMapView"/>
-    <esri:Legend GeoView="{x:Reference MyMapView}"
+    <esri:Legend GeoView="{x:Bind MyMapView}"
                  Grid.Column="1" />
 </Grid>
 ```

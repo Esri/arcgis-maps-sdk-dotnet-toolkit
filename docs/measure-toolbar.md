@@ -23,7 +23,7 @@ Measure distances, areas, and features in a `MapView`.
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
     <toolkit:MeasureToolbar HorizontalAlignment="Center"
-                            MapView="{Binding ElementName=MyMapView}" />
+                            MapView="{x:Bind MyMapView}" />
     <esri:MapView x:Name="MyMapView"
                   Grid.Row="1" />
 </Grid>
