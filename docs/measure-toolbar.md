@@ -13,6 +13,33 @@ Measure distances, areas, and features in a `MapView`.
 
 ## Usage
 
+### UWP/WinUI:
+
 ```xml
-<esri:MeasureToolbar MapView="{Binding ElementName=mapView}" />
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="50" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <toolkit:MeasureToolbar HorizontalAlignment="Center"
+                            MapView="{x:Bind MyMapView}" />
+    <esri:MapView x:Name="MyMapView"
+                  Grid.Row="1" />
+</Grid>
+```
+
+### WPF:
+
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="50" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <esri:MeasureToolbar HorizontalAlignment="Center"
+                         MapView="{Binding ElementName=MyMapView}" />
+    <esri:MapView x:Name="MyMapView"
+                  Grid.Row="1" />
+</Grid>
 ```
