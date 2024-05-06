@@ -44,15 +44,44 @@ The following properties enable customizing symbology:
 
 ## Usage
 
+The default template for this control is optimized for a panel or side-by-side presentation with a width of around 300 dip.
+
+### .NET MAUI:
+
 ```xml
-<Grid>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+      ColumnDefinitions="*,300">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:UtilityNetworkTraceTool GeoView="{x:Reference MyMapView}"
+                                  Grid.Column="1" />
+</Grid>
+```
+
+### UWP/WinUI:
+
+```xml
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="300" />
     </Grid.ColumnDefinitions>
     <esri:MapView x:Name="MyMapView" />
-    <esri:UtilityNetworkTraceTool GeoView="{Binding ElementName=MyMapView}" Grid.Column="1" />
+    <toolkit:UtilityNetworkTraceTool GeoView="{x:Bind MyMapView}"
+                                     Grid.Column="1" />
 </Grid>
 ```
 
-The default template for this control is optimized for a panel or side-by-side presentation with a width of around 300 dip.
+### WPF:
+
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="300" />
+    </Grid.ColumnDefinitions>
+    <esri:MapView x:Name="MyMapView" />
+    <esri:UtilityNetworkTraceTool GeoView="{Binding ElementName=MyMapView}"
+                                  Grid.Column="1" />
+</Grid>
+```

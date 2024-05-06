@@ -27,36 +27,41 @@ The following properties enable customization of the view:
 - `EnableIndividualResultDisplay` - Controls whether the result list is shown when there is only one result.
 - `MutlipleResultZoomBuffer` - Controls the buffer distance around collection results when a GeoView is attached and a search has multiple results.
 
-## Usage - WPF
+## Usage
 
-```xaml
-<Grid>
-    <esri:MapView x:Name="MyMapView" />
-    <esri:SearchView GeoView="{Binding ElementName=MyMapView}" />
+### .NET MAUI:
+
+`SearchView` shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the `MapView` or `SceneView`.
+
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+      RowDefinitions="32,Auto,*"
+      RowSpacing="0">
+    <esri:SearchView Grid.RowSpan="2"
+                     GeoView="{Binding Source={Reference MyMapView}}" />
+    <esri:MapView x:Name="MyMapView"
+                  Grid.Row="1"
+                  Grid.RowSpan="2" />
 </Grid>
 ```
 
-## Usage - UWP and WinUI
+### UWP/WinUI:
 
-```xaml
-<Grid>
+```xml
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
     <esri:MapView x:Name="MyMapView" />
-    <toolkit:SearchView GeoView="{Binding ElementName=MyMapView}" />
+    <toolkit:SearchView Margin="4"
+                        GeoView="{x:Bind MyMapView}" />
 </Grid>
 ```
 
-## Usage - MAUI
+### WPF:
 
-SearchView shows results in a list on top of underlying content, so it is best to position the view near the top of the page, on top of the MapView or SceneView.
-
-```xaml
-<Grid RowSpacing="0">
-    <Grid.RowDefinitions>
-        <RowDefinition Height="32" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-    <esri:MapView x:Name="MyMapView" Grid.Row="1" Grid.RowSpan="2" />
-    <toolkit:SearchView GeoView="{Binding Source={Reference MyMapView}}" Grid.Row="0" Grid.RowSpan="2"   />
+```xml
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:SearchView Margin="4"
+                     GeoView="{Binding ElementName=MyMapView}" />
 </Grid>
 ```

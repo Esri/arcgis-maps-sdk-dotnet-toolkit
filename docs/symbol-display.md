@@ -11,6 +11,25 @@ Displays a symbol outside of a `GeoView`.
 
 ## Usage
 
+
+
+### .NET MAUI:
+
 ```xml
-<esri:SymbolDisplay Symbol="{Binding Symbol}" />
+<esri:SymbolDisplay xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+                    Symbol="{x:Reference Symbol}" />
+```
+
+## UWP/WinUI:
+
+```xml
+<esri:SymbolDisplay xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls"
+                    Symbol="{x:Bind Symbol}" />
+```
+
+### WPF:
+
+```xml
+<esri:SymbolDisplay xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+                    Symbol="{Binding ElementName=Symbol}" />
 ```
