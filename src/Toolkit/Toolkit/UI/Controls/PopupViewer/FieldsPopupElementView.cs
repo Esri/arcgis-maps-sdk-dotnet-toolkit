@@ -70,14 +70,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="Element"/> dependency property.
         /// </summary>
-
-#if MAUI
-        public static readonly BindableProperty ElementProperty =
-            BindableProperty.Create(nameof(Element), typeof(FieldsPopupElement), typeof(FieldsPopupElementView), null, propertyChanged: (s, o, n) => ((FieldsPopupElementView)s).RefreshTable());
-#else
         public static readonly DependencyProperty ElementProperty =
-            DependencyProperty.Register(nameof(Element), typeof(FieldsPopupElement), typeof(FieldsPopupElementView), new PropertyMetadata(null, (s, e) => ((FieldsPopupElementView)s).RefreshTable()));
-#endif
+            PropertyHelper.CreateProperty<AttachmentsPopupElement, FieldsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.RefreshTable());
 
         private void RefreshTable()
         {
@@ -191,13 +185,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="RowOddBackground"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty RowOddBackgroundProperty =
-            BindableProperty.Create(nameof(RowOddBackground), typeof(Brush), typeof(FieldsPopupElementView), null);
-#else
         public static readonly DependencyProperty RowOddBackgroundProperty =
-            DependencyProperty.Register(nameof(RowOddBackground), typeof(Brush), typeof(FieldsPopupElementView), new PropertyMetadata(null));
-#endif
+            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(RowOddBackground));
 
         /// <summary>
         /// Gets or sets the background of the even rows in the table.
@@ -211,13 +200,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="RowEvenBackground"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty RowEvenBackgroundProperty =
-            BindableProperty.Create(nameof(RowEvenBackground), typeof(Brush), typeof(FieldsPopupElementView), null);
-#else
         public static readonly DependencyProperty RowEvenBackgroundProperty =
-            DependencyProperty.Register(nameof(RowEvenBackground), typeof(Brush), typeof(FieldsPopupElementView), new PropertyMetadata(null));
-#endif
+            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(RowEvenBackground));
 
         /// <summary>
         /// Gets or sets the vertical divider brush in the table.
@@ -231,13 +215,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="DividerBrush"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty DividerBrushProperty =
-            BindableProperty.Create(nameof(DividerBrush), typeof(Brush), typeof(FieldsPopupElementView), null);
-#else
         public static readonly DependencyProperty DividerBrushProperty =
-            DependencyProperty.Register(nameof(DividerBrush), typeof(Brush), typeof(FieldsPopupElementView), new PropertyMetadata(null));
-#endif
+            PropertyHelper.CreateProperty<Brush, FieldsPopupElementView>(nameof(DividerBrush));
 
         /// <summary>
         /// Gets or sets the <see cref="TextBlock"/> style applied to the text in the table.
@@ -251,13 +230,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <summary>
         /// Identifies the <see cref="FieldTextStyle"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty FieldTextStyleProperty =
-            BindableProperty.Create(nameof(FieldTextStyle), typeof(Style), typeof(FieldsPopupElementView), null);
-#else
         public static readonly DependencyProperty FieldTextStyleProperty =
-            DependencyProperty.Register(nameof(FieldTextStyle), typeof(Style), typeof(FieldsPopupElementView), new PropertyMetadata(null));
-#endif
+            PropertyHelper.CreateProperty<Style, FieldsPopupElementView>(nameof(FieldTextStyle));
     }
 }
 #endif

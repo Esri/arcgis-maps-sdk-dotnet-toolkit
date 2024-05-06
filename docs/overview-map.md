@@ -28,60 +28,33 @@ OverviewMap has the following bindable properties:
 
 ## Usage
 
-UWP:
+### .NET MAUI:
 
 ```xml
-<Page
-    x:Class="Esri.ArcGISRuntime.Toolkit.SampleApp.Samples.OverviewMap.OverviewMapSample"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
-    xmlns:overviewmap="using:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap">
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <esri:MapView x:Name="mapView" />
-        <overviewmap:OverviewMap
-            Margin="4"
-            GeoView="{Binding ElementName=mapView}" />
-    </Grid>
-</Page>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:OverviewMap Margin="4"
+                      GeoView="{x:Bind MyMapView}" />
+</Grid>
 ```
 
-WPF:
+### WinUI/UWP:
 
 ```xml
-<UserControl
-    x:Class="Esri.ArcGISRuntime.Toolkit.Samples.OverviewMap.OverviewMapWithSceneSample"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-    xmlns:overviewmap="clr-namespace:Esri.ArcGISRuntime.Toolkit.UI.Controls.OverviewMap;assembly=Esri.ArcGISRuntime.Toolkit">
-    <Grid>
-        <esri:SceneView x:Name="MySceneView" />
-        <overviewmap:OverviewMap
-            Margin="4"
-            GeoView="{Binding ElementName=MySceneView}" />
-    </Grid>
-</UserControl>
+<Grid xmlns:esri="using:Esri.ArcGISRuntime.UI.Controls"
+      xmlns:toolkit="using:Esri.ArcGISRuntime.Toolkit.UI.Controls">
+    <esri:MapView x:Name="MyMapView" />
+    <toolkit:OverviewMap Margin="4"
+                         GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
 ```
 
-MAUI:
+### WPF:
 
 ```xml
-<ContentPage x:Class="Toolkit.Samples.Forms.Samples.OverviewMapWithSceneSample"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:esriTK="clr-namespace:Esri.ArcGISRuntime.Toolkit.Maui;assembly=Esri.ArcGISRuntime.Toolkit.Maui"
-             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Maui;assembly=Esri.ArcGISRuntime.Maui">
-    <ContentPage.Content>
-        <Grid>
-            <esriUI:SceneView x:Name="sceneView" />
-            <StackLayout Margin="4"
-                         HorizontalOptions="Start"
-                         VerticalOptions="Start">
-                <esriTK:OverviewMap GeoView="{Binding Source={x:Reference sceneView}}" />
-            </StackLayout>
-
-        </Grid>
-    </ContentPage.Content>
-</ContentPage>
+<Grid xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013">
+    <esri:MapView x:Name="MyMapView" />
+    <esri:OverviewMap Margin="4"
+                      GeoView="{Binding ElementName=MyMapView}" />
+</Grid>
 ```

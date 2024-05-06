@@ -735,20 +735,10 @@
     </ControlTemplate>
 
     <Style TargetType="toolkit:FloorFilter">
-        <Setter Property="BrowseLabel" Value="Browse" />
-        <Setter Property="BrowseSitesLabel" Value="Select a Site" />
-        <Setter Property="BrowseFacilitiesLabel" Value="Select a Facility" />
         <Setter Property="CloseLabel" Value="Close" />
         <Setter Property="CollapseLabel" Value="Collapse" />
-        <Setter Property="ExpandLabel" Value="Expand" />
-        <Setter Property="ZoomToLabel" Value="Zoom To" />
-        <Setter Property="NoResultsMessage" Value="No results found." />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="AllFacilitiesLabel" Value="All Sites" />
-        <Setter Property="BackButtonLabel" Value="Go Back" />
-        <Setter Property="AllFloorsLabel" Value="All Floors" />
-        <Setter Property="SearchPlaceholder" Value="Filter" />
         <Setter Property="Margin" Value="8,8,8,24" />
         <Setter Property="MaxHeight" Value="360" />
         <Setter Property="FontSize" Value="14" />

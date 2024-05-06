@@ -155,54 +155,45 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Identifies the <see cref="PopupManager"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty PopupProperty =
-            BindableProperty.Create(nameof(Popup), typeof(Popup), typeof(PopupViewer), null, propertyChanged: OnPopupPropertyChanged);
-#else
         public static readonly DependencyProperty PopupProperty =
-            DependencyProperty.Register(nameof(Popup), typeof(Popup), typeof(PopupViewer),
-                new PropertyMetadata(null, (s,e) => PopupViewer.OnPopupPropertyChanged(s, e.OldValue, e.NewValue)));
-#endif
+            PropertyHelper.CreateProperty<Popup, PopupViewer>(nameof(Popup), null, (s, oldValue, newValue) => s.OnPopupPropertyChanged(oldValue, newValue));
 
-        private static void OnPopupPropertyChanged(DependencyObject d, object oldValue, object newValue)
+        private void OnPopupPropertyChanged(Popup? oldPopup, Popup? newPopup)
         {
-            var popupViewer = (PopupViewer)d;
-            var oldPopup = oldValue as Popup;
             if (oldPopup?.GeoElement is not null)
             {
-                popupViewer._dynamicEntityChangedListener?.Detach();
-                popupViewer._dynamicEntityChangedListener = null;
-                popupViewer._geoElementPropertyChangedListener?.Detach();
-                popupViewer._geoElementPropertyChangedListener = null;
+                _dynamicEntityChangedListener?.Detach();
+                _dynamicEntityChangedListener = null;
+                _geoElementPropertyChangedListener?.Detach();
+                _geoElementPropertyChangedListener = null;
             }
-            var newPopup = newValue as Popup;
             if (newPopup?.GeoElement is not null)
             {
                 if(newPopup.GeoElement is DynamicEntity de)
                 {
-                    popupViewer._dynamicEntityChangedListener = new WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>(popupViewer, de)
+                    _dynamicEntityChangedListener = new WeakEventListener<PopupViewer, DynamicEntity, object?, DynamicEntityChangedEventArgs>(this, de)
                     {
                         OnEventAction = static (instance, source, eventArgs) => instance.InvalidatePopup(),
                         OnDetachAction = static (instance, source, weakEventListener) => source.DynamicEntityChanged -= weakEventListener.OnEvent,
                     };
-                    de.DynamicEntityChanged += popupViewer._dynamicEntityChangedListener.OnEvent;
+                    de.DynamicEntityChanged += _dynamicEntityChangedListener.OnEvent;
                 }
                 else if (newPopup.GeoElement is INotifyPropertyChanged inpc)
                 {
-                    popupViewer._geoElementPropertyChangedListener = new WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(popupViewer, inpc)
+                    _geoElementPropertyChangedListener = new WeakEventListener<PopupViewer, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpc)
                     {
                         OnEventAction = static (instance, source, eventArgs) => instance.InvalidatePopup(),
                         OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                     };
-                    inpc.PropertyChanged += popupViewer._geoElementPropertyChangedListener.OnEvent;
+                    inpc.PropertyChanged += _geoElementPropertyChangedListener.OnEvent;
 
                 }
             }
-            popupViewer.InvalidatePopup();
+            InvalidatePopup();
 #if MAUI
-            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
+            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
 #else
-            (popupViewer.GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
+            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
 #endif
         }
 
@@ -218,13 +209,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <summary>
         /// Identifies the <see cref="VerticalScrollBarVisibility"/> dependency property.
         /// </summary>
-#if MAUI
-        public static readonly BindableProperty VerticalScrollBarVisibilityProperty =
-            BindableProperty.Create(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(PopupViewer), ScrollBarVisibility.Default);
-#else
         public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
-            DependencyProperty.Register(nameof(VerticalScrollBarVisibility), typeof(ScrollBarVisibility), typeof(PopupViewer), new PropertyMetadata(ScrollBarVisibility.Auto));
+            PropertyHelper.CreateProperty<ScrollBarVisibility, PopupViewer>(nameof(VerticalScrollBarVisibility),
+#if MAUI
+                ScrollBarVisibility.Default
+#else
+                ScrollBarVisibility.Auto
 #endif
+                );
     }
 }
 #endif

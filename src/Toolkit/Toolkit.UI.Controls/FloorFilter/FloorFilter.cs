@@ -71,6 +71,24 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
             _controller.AutomaticSelectionMode = AutomaticSelectionMode;
             _controller.PropertyChanged += HandleControllerPropertyChanges;
+
+            InitializeLocalizedStrings();
+        }
+
+        private void InitializeLocalizedStrings()
+        {
+            BrowseLabel = Properties.Resources.GetString("FloorFilterBrowse");
+            BrowseSitesLabel = Properties.Resources.GetString("FloorFilterBrowseSites");
+            BrowseFacilitiesLabel = Properties.Resources.GetString("FloorFilterBrowseFacilities");
+            CloseLabel = Properties.Resources.GetString("FloorFilterClose");
+            CollapseLabel = Properties.Resources.GetString("FloorFilterCollapse");
+            ExpandLabel = Properties.Resources.GetString("FloorFilterExpand");
+            ZoomToLabel = Properties.Resources.GetString("FloorFilterZoomTo");
+            NoResultsMessage = Properties.Resources.GetString("FloorFilterNoResultsFound");
+            AllFacilitiesLabel = Properties.Resources.GetString("FloorFilterAllFacilities");
+            BackButtonLabel = Properties.Resources.GetString("FloorFilterBackButton");
+            AllFloorsLabel = Properties.Resources.GetString("FloorFilterAllFloors");
+            SearchPlaceholder = Properties.Resources.GetString("FloorFilterFilter");
         }
 
         /// <inheritdoc/>

@@ -1,17 +1,17 @@
 <Project>
 
   <PropertyGroup>
-    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.3.0</ArcGISRuntimeToolkitPackageVersion>
-    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.3.0</ArcGISRuntimePackageVersion>
+    <ArcGISRuntimeToolkitPackageVersion Condition="'$(ArcGISRuntimeToolkitPackageVersion)'==''">200.4.0</ArcGISRuntimeToolkitPackageVersion>
+    <ArcGISRuntimePackageVersion Condition="'$(ArcGISRuntimePackageVersion)'==''">200.4.0</ArcGISRuntimePackageVersion>
 
     <!--Common package properties-->
     <Authors>Esri Inc.</Authors>
     <PackageIconUrl>http://links.esri.com/dotnetsdklogo</PackageIconUrl>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageProjectUrl>https://github.com/Esri/arcgis-toolkit-dotnet</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>    
-    <PackageReleaseNotes>v$(ArcGISRuntimeToolkitPackageVersion): https://github.com/Esri/arcgis-toolkit-dotnet/releases/tag/v$(ArcGISRuntimeToolkitPackageVersion)</PackageReleaseNotes>
-    <RepositoryUrl>https://github.com/Esri/arcgis-toolkit-dotnet</RepositoryUrl>
+    <PackageReleaseNotes>v$(ArcGISRuntimeToolkitPackageVersion): https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit/releases/tag/v$(ArcGISRuntimeToolkitPackageVersion)</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Esri/arcgis-maps-sdk-dotnet-toolkit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -27,9 +27,10 @@
     <IsSampleProject Condition="'$(IsSampleProject)'!='true'">$(MSBuildProjectName.Contains('.SampleApp.'))</IsSampleProject>
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
     <IsTemplateProject>$(MSBuildProjectDirectory.Contains('ProjectTemplates'))</IsTemplateProject>
+    <IsAnalyzerProject>$(MSBuildProjectDirectory.Contains('Analyzers'))</IsAnalyzerProject>
     
-    <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true' or $(IsTemplateProject) == 'true'">false</IsToolkitLibrary>
-    <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true'">true</IsToolkitLibrary>
+    <IsToolkitLibrary Condition="'$(IsTestProject)' == 'true' or '$(IsSampleProject)' == 'true' or $(IsTemplateProject) == 'true' or $(IsAnalyzerProject) == 'true'">false</IsToolkitLibrary>
+    <IsToolkitLibrary Condition="'$(IsTestProject)' != 'true' and '$(IsSampleProject)' != 'true' and $(IsTemplateProject) != 'true' and $(IsAnalyzerProject) != 'true'">true</IsToolkitLibrary>
   </PropertyGroup>
 
   <!--Framework versions-->
@@ -44,8 +45,8 @@
     <NETMauiTarget Condition="'$(NETMauiTarget)'==''">net8.0</NETMauiTarget>
     <NetMauiWindowsTargetFramework Condition="'$(NetMauiWindowsTargetFramework)'==''">$(NETMauiTarget)-windows10.0.$(WindowsSDKTargetBuild).0</NetMauiWindowsTargetFramework>
     <NetAndroidTargetFramework Condition="'$(NetAndroidTargetFramework)'==''">$(NETMauiTarget)-android34.0</NetAndroidTargetFramework>
-    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst16.1</NetCatalystTargetFramework>
-    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios16.1</NetiOSTargetFramework>  
+    <NetCatalystTargetFramework Condition="'$(NetCatalystTargetFramework)'==''">$(NETMauiTarget)-maccatalyst17.0</NetCatalystTargetFramework>
+    <NetiOSTargetFramework Condition="'$(NetiOSTargetFramework)'==''">$(NETMauiTarget)-ios17.0</NetiOSTargetFramework>  
     <MauiVersion Condition="'$(MauiVersion)'==''">8.0.3</MauiVersion>
   </PropertyGroup>
   <PropertyGroup>

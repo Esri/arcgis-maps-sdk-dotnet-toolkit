@@ -269,12 +269,12 @@ public class ScaleLine : TemplatedView
         var miles = ConvertInchesTo(LinearUnits.Miles);
         SetUsUnit(
             miles >= 1 ? miles : ConvertInchesTo(LinearUnits.Feet),
-            miles >= 1 ? Properties.Resources.GetString("MilesAbbreviation") : Properties.Resources.GetString("FeetAbbreviation"));
+            miles >= 1 ? Properties.Resources.GetString("ScaleLineMilesAbbreviation") : Properties.Resources.GetString("ScaleLineFeetAbbreviation"));
 
         var kilometers = ConvertInchesTo(LinearUnits.Kilometers);
         SetMetricUnit(
             kilometers >= 1 ? kilometers : ConvertInchesTo(LinearUnits.Meters),
-            kilometers >= 1 ? Properties.Resources.GetString("KilometerAbbreviation") : Properties.Resources.GetString("MeterAbbreviation"));
+            kilometers >= 1 ? Properties.Resources.GetString("ScaleLineKilometerAbbreviation") : Properties.Resources.GetString("ScaleLineMeterAbbreviation"));
     }
 
     /// <summary>

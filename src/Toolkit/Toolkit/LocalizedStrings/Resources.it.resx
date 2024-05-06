@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
+    <value>La data deve corrispondere o essere antecedente a {0}</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
+    <value>La data supera il massimo</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
+    <value>Caratteri massimi consentiti: {0}</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
+    <value>Lunghezza massima di caratteri superata</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
+    <value>Immettere un valore uguale o inferiore a {0}</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
+    <value>Supera il valore massimo</value>
+  </data>
+  <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
+    <value>Inserire valore da{0} a {1}</value>
+  </data>
+  <data name="FeatureFormFieldIsRequired" xml:space="preserve">
+    <value>Richiesti</value>
+  </data>
+  <data name="FeatureFormIncorrectValueType" xml:space="preserve">
+    <value>Il valore deve essere del tipo corretto</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
+    <value>Il valore deve essere un numero</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
+    <value>Il valore deve essere un numero intero</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
+    <value>La data deve essere corrispondente o successiva a {0}</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
+    <value>Data inferiore al minimo</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
+    <value>Caratteri minimi necessari: {0}</value>
+  </data>
+  <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
+    <value>Meno del valore minimo</value>
+  </data>
+  <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
+    <value>Il valore deve rientrare nel dominio</value>
+  </data>
+  <data name="FeatureFormNullNotAllowed" xml:space="preserve">
+    <value>Il valore non deve essere vuoto</value>
+  </data>
+  <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
+    <value>Digitare{0} a{1} caratteri</value>
+  </data>
+  <data name="FeatureFormSpecificLength" xml:space="preserve">
+    <value>Numero di caratteri richiesti: {0}</value>
+  </data>
+  <data name="FloorFilterAllFacilities" xml:space="preserve">
+    <value>Tutti i siti</value>
+  </data>
+  <data name="FloorFilterAllFloors" xml:space="preserve">
+    <value>Tutti i piani</value>
+  </data>
+  <data name="FloorFilterBackButton" xml:space="preserve">
+    <value>Indietro</value>
+  </data>
+  <data name="FloorFilterBrowse" xml:space="preserve">
+    <value>Sfoglia</value>
+  </data>
+  <data name="FloorFilterBrowseFacilities" xml:space="preserve">
+    <value>Seleziona un servizio</value>
+  </data>
+  <data name="FloorFilterBrowseSites" xml:space="preserve">
+    <value>Seleziona un sito</value>
+  </data>
+  <data name="FloorFilterClose" xml:space="preserve">
+    <value>Chiudi</value>
+  </data>
+  <data name="FloorFilterCollapse" xml:space="preserve">
+    <value>Comprimi</value>
+  </data>
+  <data name="FloorFilterExpand" xml:space="preserve">
+    <value>Espandi</value>
+  </data>
+  <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="FloorFilterNoResultsFound" xml:space="preserve">
+    <value>Nessun risultato trovato</value>
+  </data>
+  <data name="FloorFilterZoomTo" xml:space="preserve">
+    <value>Zoom a</value>
+  </data>
+  <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
+    <value>piedi</value>
+  </data>
+  <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
+    <value>km</value>
+  </data>
+  <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
+    <value>m</value>
+  </data>
+  <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
+    <value>mi</value>
+  </data>
+  <data name="SearchViewAllSourcesSelect" xml:space="preserve">
+    <value>Tutte le origini</value>
+  </data>
+  <data name="SearchViewClearSearchTooltip" xml:space="preserve">
+    <value>Cancella ricerca</value>
+  </data>
+  <data name="SearchViewNoResults" xml:space="preserve">
+    <value>Nessun risultato</value>
+  </data>
+  <data name="SearchViewRepeatSearch" xml:space="preserve">
+    <value>Ripeti ricerca qui</value>
+  </data>
+  <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
+    <value>Trova luogo o indirizzo</value>
+  </data>
+  <data name="SearchViewSearchTooltip" xml:space="preserve">
+    <value>Cerca</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
+    <value>Aggiungi punto di partenza</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
+    <value>Opzioni avanzate</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
+    <value>Dettagli risorsa</value>
+  </data>
+  <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
+    <value>Elimina risultati</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
+    <value>Chiudi</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
+    <value>Conferma</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
+    <value>Il tipo di traccia selezionato è già stato eseguito con gli stessi punti di partenza.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
+    <value>Risultati feature</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
+    <value>Posizione lungo una linea</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
+    <value>Risultati funzione</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
+    <value>Identificazione punti di partenza...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
+    <value>Controlla</value>
+  </data>
+  <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
+    <value>Caricamento in corso...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
+    <value>Ci sono più punti di partenza del necessario per il tipo di traccia selezionato.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
+    <value>Nuova traccia</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
+    <value>Avanti</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
+    <value>Nessun risultato feature.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
+    <value>Nessun risultato funzione.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
+    <value>Risultati non trovati.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
+    <value>Il tipo di traccia selezionato richiede ulteriori punti di partenza.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
+    <value>Nessun tipo di traccia trovato per la rete di utilità selezionata.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
+    <value>Nessuna utility network trovata.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
+    <value>Anteprima</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
+    <value>Indietro</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
+    <value>Rimuovi tutto</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
+    <value>Rimuovi</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
+    <value>Nome risultato (facoltativo)</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
+    <value>Risultati</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
+    <value>Colore visualizzazione risultato</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
+    <value>Esecuzione traccia...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
+    <value>Esegui traccia</value>
+  </data>
+  <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
+    <value>Seleziona le feature sulla mappa</value>
+  </data>
+  <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
+    <value>Mostra grafica sulla mappa</value>
+  </data>
+  <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
+    <value>Punti di partenza</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
+    <value>Premere sulla mappa per identificare i punti di partenza.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
+    <value>Terminale</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
+    <value>Creatore</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
+    <value>Descrizione</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
+    <value>Dettagli tipo di traccia</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
+    <value>Tipi di traccia</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
+    <value>Reti di utilità</value>
+  </data>
+  <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
+    <value>Opzioni di visualizzazione</value>
+  </data>
+  <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
+    <value>Avvisi</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
+    <value>Zoom al risultato</value>
+  </data>
+</root>

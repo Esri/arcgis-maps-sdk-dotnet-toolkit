@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
+    <value>Tanggal harus pada atau sebelum {0}</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumDateTimeNoRange" xml:space="preserve">
+    <value>Tanggal melebihi maksimal</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLength" xml:space="preserve">
+    <value>Karakter maksimal yang diizinkan: {0}</value>
+  </data>
+  <data name="FeatureFormExceedsMaximumLengthNoRange" xml:space="preserve">
+    <value>Panjang karakter maksimal terlampaui</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximum" xml:space="preserve">
+    <value>Masukkan nilai pada atau di bawah {0}</value>
+  </data>
+  <data name="FeatureFormExceedsNumericMaximumNoRange" xml:space="preserve">
+    <value>Melebihi nilai maksimal</value>
+  </data>
+  <data name="FeatureFormExceedsNumericOutsideRange" xml:space="preserve">
+    <value>Masukkan nilai dari {0} hingga {1}</value>
+  </data>
+  <data name="FeatureFormFieldIsRequired" xml:space="preserve">
+    <value>Wajib</value>
+  </data>
+  <data name="FeatureFormIncorrectValueType" xml:space="preserve">
+    <value>Nilai harus dari jenis yang benar</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeFloatingPoint" xml:space="preserve">
+    <value>Nilai harus berupa angka</value>
+  </data>
+  <data name="FeatureFormIncorrectValueTypeNumeric" xml:space="preserve">
+    <value>Nilai harus berupa bilangan bulat</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTime" xml:space="preserve">
+    <value>Tanggal harus pada atau setelah {0}</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumDateTimeNoRange" xml:space="preserve">
+    <value>Tanggal kurang dari minimal</value>
+  </data>
+  <data name="FeatureFormLessThanMinimumLength" xml:space="preserve">
+    <value>Karakter minimal yang diwajibkan: {0}</value>
+  </data>
+  <data name="FeatureFormLessThanNumericMinimum" xml:space="preserve">
+    <value>Kurang dari nilai minimal</value>
+  </data>
+  <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
+    <value>Nilai harus berada dalam domain</value>
+  </data>
+  <data name="FeatureFormNullNotAllowed" xml:space="preserve">
+    <value>Nilai tidak boleh kosong</value>
+  </data>
+  <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
+    <value>Masukkan {0} hingga {1} karakter</value>
+  </data>
+  <data name="FeatureFormSpecificLength" xml:space="preserve">
+    <value>Jumlah karakter yang diwajibkan: {0}</value>
+  </data>
+  <data name="FloorFilterAllFacilities" xml:space="preserve">
+    <value>Semua Situs</value>
+  </data>
+  <data name="FloorFilterAllFloors" xml:space="preserve">
+    <value>Semua Lantai</value>
+  </data>
+  <data name="FloorFilterBackButton" xml:space="preserve">
+    <value>Kembali</value>
+  </data>
+  <data name="FloorFilterBrowse" xml:space="preserve">
+    <value>Jelajahi</value>
+  </data>
+  <data name="FloorFilterBrowseFacilities" xml:space="preserve">
+    <value>Pilih fasilitas</value>
+  </data>
+  <data name="FloorFilterBrowseSites" xml:space="preserve">
+    <value>Pilih situs</value>
+  </data>
+  <data name="FloorFilterClose" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="FloorFilterCollapse" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="FloorFilterExpand" xml:space="preserve">
+    <value>Bentang</value>
+  </data>
+  <data name="FloorFilterFilterSearchPlaceholder" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="FloorFilterNoResultsFound" xml:space="preserve">
+    <value>Tidak ada hasil yang ditemukan</value>
+  </data>
+  <data name="FloorFilterZoomTo" xml:space="preserve">
+    <value>Zoom Ke</value>
+  </data>
+  <data name="ScaleLineFeetAbbreviation" xml:space="preserve">
+    <value>ft</value>
+  </data>
+  <data name="ScaleLineKilometerAbbreviation" xml:space="preserve">
+    <value>km</value>
+  </data>
+  <data name="ScaleLineMeterAbbreviation" xml:space="preserve">
+    <value>mnt</value>
+  </data>
+  <data name="ScaleLineMilesAbbreviation" xml:space="preserve">
+    <value>mil</value>
+  </data>
+  <data name="SearchViewAllSourcesSelect" xml:space="preserve">
+    <value>Semua Sumber</value>
+  </data>
+  <data name="SearchViewClearSearchTooltip" xml:space="preserve">
+    <value>Hapus Pencarian</value>
+  </data>
+  <data name="SearchViewNoResults" xml:space="preserve">
+    <value>Tidak Ada Hasil</value>
+  </data>
+  <data name="SearchViewRepeatSearch" xml:space="preserve">
+    <value>Ulangi Pencarian Di Sini</value>
+  </data>
+  <data name="SearchViewSearchPlaceholderText" xml:space="preserve">
+    <value>Temukan tempat atau alamat</value>
+  </data>
+  <data name="SearchViewSearchTooltip" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAddStartingPoint" xml:space="preserve">
+    <value>Tambahkan titik awal</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAdvancedOptions" xml:space="preserve">
+    <value>Opsi lanjutan</value>
+  </data>
+  <data name="UtilityNetworkTraceToolAssetDetails" xml:space="preserve">
+    <value>Detail aset</value>
+  </data>
+  <data name="UtilityNetworkTraceToolCancel" xml:space="preserve">
+    <value>Batalkan</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClearResults" xml:space="preserve">
+    <value>Bersihkan hasil</value>
+  </data>
+  <data name="UtilityNetworkTraceToolClose" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDiscardResult" xml:space="preserve">
+    <value>Buang</value>
+  </data>
+  <data name="UtilityNetworkTraceToolDuplicateTrace" xml:space="preserve">
+    <value>Jenis pelacakan yang dipilih sudah dijalankan dengan titik awal yang sama.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFeatureResults" xml:space="preserve">
+    <value>Hasil fitur</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFractionAlongEdge" xml:space="preserve">
+    <value>Posisi sepanjang garis</value>
+  </data>
+  <data name="UtilityNetworkTraceToolFunctionResults" xml:space="preserve">
+    <value>Hasil fungsi</value>
+  </data>
+  <data name="UtilityNetworkTraceToolIdentifyingStartingPoints" xml:space="preserve">
+    <value>Mengidentifikasi titik awal...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolInspectStartingPoint" xml:space="preserve">
+    <value>Periksa</value>
+  </data>
+  <data name="UtilityNetworkTraceToolLoading" xml:space="preserve">
+    <value>Memuat...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolMoreThanRequiredStartingPoints" xml:space="preserve">
+    <value>Ada lebih banyak titik awal yang diperlukan untuk jenis pelacakan yang dipilih.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNewTrace" xml:space="preserve">
+    <value>Pelacakan baru</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNext" xml:space="preserve">
+    <value>Selanjutnya</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFeatureResults" xml:space="preserve">
+    <value>Tidak ada hasil fitur.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoFunctionResults" xml:space="preserve">
+    <value>Tidak ada hasil fungsi.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoResults" xml:space="preserve">
+    <value>Tidak ada hasil yang ditemukan.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNotEnoughStartingPoints" xml:space="preserve">
+    <value>Jenis pelacakan yang dipilih memerlukan titik awal tambahan.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoTraceTypes" xml:space="preserve">
+    <value>Tidak ditemukan jenis pelacakan untuk jaringan utilitas yang dipilih.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolNoUtilityNetworks" xml:space="preserve">
+    <value>Tidak ada jaringan utilitas yang ditemukan.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPreview" xml:space="preserve">
+    <value>Pratinjau</value>
+  </data>
+  <data name="UtilityNetworkTraceToolPrevious" xml:space="preserve">
+    <value>Sebelumnya</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveAllStartingPoints" xml:space="preserve">
+    <value>Hapus semua</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRemoveStartingPoint" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultName" xml:space="preserve">
+    <value>Nama hasil (opsional)</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResults" xml:space="preserve">
+    <value>Hasil</value>
+  </data>
+  <data name="UtilityNetworkTraceToolResultVisualizationColor" xml:space="preserve">
+    <value>Warna visualisasi hasil</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRuningTrace" xml:space="preserve">
+    <value>Menjalankan pelacakan...</value>
+  </data>
+  <data name="UtilityNetworkTraceToolRunTrace" xml:space="preserve">
+    <value>Jalankan pelacakan</value>
+  </data>
+  <data name="UtilityNetworkTraceToolSelectFeatures" xml:space="preserve">
+    <value>Pilih fitur di peta</value>
+  </data>
+  <data name="UtilityNetworkTraceToolShowGraphics" xml:space="preserve">
+    <value>Tampilkan grafik di peta</value>
+  </data>
+  <data name="UtilityNetworkTraceToolStartingPoints" xml:space="preserve">
+    <value>Titik awal</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTapToIdentifyStartingPoints" xml:space="preserve">
+    <value>Ketuk peta untuk mengidentifikasi titik awal.</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTerminal" xml:space="preserve">
+    <value>Terminal</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeCreator" xml:space="preserve">
+    <value>Pembuat</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDescription" xml:space="preserve">
+    <value>Keterangan</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeDetails" xml:space="preserve">
+    <value>Detail jenis pelacakan</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypes" xml:space="preserve">
+    <value>Jenis pelacakan</value>
+  </data>
+  <data name="UtilityNetworkTraceToolTraceTypeTags" xml:space="preserve">
+    <value>Label</value>
+  </data>
+  <data name="UtilityNetworkTraceToolUtilityNetworks" xml:space="preserve">
+    <value>Jaringan utilitas</value>
+  </data>
+  <data name="UtilityNetworkTraceToolVisualizationOptions" xml:space="preserve">
+    <value>Opsi visualisasi</value>
+  </data>
+  <data name="UtilityNetworkTraceToolWarnings" xml:space="preserve">
+    <value>Peringatan</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomStartingPoint" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="UtilityNetworkTraceToolZoomToResult" xml:space="preserve">
+    <value>Perbesar hasil</value>
+  </data>
+</root>

@@ -54,7 +54,7 @@
                         Margin="8,4,0,4"
                         VerticalAlignment="Center"
                         Command="{TemplateBinding CloseInspectorCommand}"
-                        Content="Close"
+                        Content="{internal:LocalizedString Key=UtilityNetworkTraceToolClose}"
                         Style="{StaticResource UNTraceIconButton}" />
                 </Grid>
                 <ContentControl
