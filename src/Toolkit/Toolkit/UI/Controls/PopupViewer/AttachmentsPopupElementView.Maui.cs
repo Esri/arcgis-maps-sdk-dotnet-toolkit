@@ -292,14 +292,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private class AttachmentViewModelConverter : IValueConverter
         {
             internal static AttachmentViewModelConverter Instance { get; } = new AttachmentViewModelConverter();
-            public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 if (value is PopupAttachment attachment)
                     return new AttachmentViewModel(attachment);
                 return value;
             }
 
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotSupportedException();
+            public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotSupportedException();
         }
     }
 }

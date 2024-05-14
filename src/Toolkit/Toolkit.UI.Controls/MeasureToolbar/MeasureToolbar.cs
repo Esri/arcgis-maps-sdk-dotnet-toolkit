@@ -22,7 +22,7 @@ using Esri.ArcGISRuntime.UI;
 #if WPF
 using System.Windows.Controls.Primitives;
 #endif
-
+#pragma warning disable CS0618 // SketchEditor is Obsolete
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
     /// <summary>
@@ -771,4 +771,5 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
     }
 }
+#pragma warning restore CS0618 // SketchEditor is Obsolete
 #endif

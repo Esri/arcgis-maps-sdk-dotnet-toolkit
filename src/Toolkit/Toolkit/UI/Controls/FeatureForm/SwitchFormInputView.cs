@@ -89,7 +89,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         }
 
-        private void Checked()
+        private void OnChecked()
         {
             if (Element is not null && Element.Input is SwitchFormInput input && !object.Equals(input.OnValue.Code, Element.Value))
             {
@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private void Unchecked()
+        private void OnUnchecked()
         {
             if (Element is not null && Element.Input is SwitchFormInput input && !object.Equals(input.OffValue.Code, Element.Value))
             {

@@ -11,6 +11,7 @@
     <TargetPlatformMinVersion>$(UWPTargetPlatformMinVersion)</TargetPlatformMinVersion>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
     <RootNamespace>Esri.ArcGISRuntime.Toolkit</RootNamespace>
+    <AppxBundlePlatforms>AnyCPU</AppxBundlePlatforms> <!-- this has no practical effect on class libraries besides avoiding an irrelevant build warning -->
   </PropertyGroup>
   <Import Project="..\..\CommonProperties.targets" />
 

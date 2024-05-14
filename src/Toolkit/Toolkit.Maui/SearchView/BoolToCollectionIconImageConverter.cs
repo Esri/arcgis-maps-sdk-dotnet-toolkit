@@ -26,7 +26,7 @@ internal class BoolToCollectionIconImageConverter : IValueConverter
     /// <summary>
     /// Converts a bool to an icon representing either a search (true) or an individual result (false).
     /// </summary>
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is bool boolvalue && boolvalue)
         {
@@ -47,7 +47,7 @@ internal class BoolToCollectionIconImageConverter : IValueConverter
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

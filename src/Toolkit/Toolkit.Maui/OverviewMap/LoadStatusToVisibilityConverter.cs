@@ -24,7 +24,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal;
 internal class LoadStatusToVisibilityConverter : IValueConverter
 {
     /// <inheritdoc/>
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (DesignMode.IsDesignModeEnabled)
         {
@@ -66,7 +66,7 @@ internal class LoadStatusToVisibilityConverter : IValueConverter
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

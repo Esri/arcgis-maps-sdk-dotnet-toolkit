@@ -112,9 +112,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             var state = (newValue is bool b && b);
             if (state)
-                Checked();
+                OnChecked();
             else
-                Unchecked();
+                OnUnchecked();
         }
     }
 }

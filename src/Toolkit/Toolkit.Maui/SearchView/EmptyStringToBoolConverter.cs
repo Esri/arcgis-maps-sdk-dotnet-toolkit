@@ -23,7 +23,7 @@ internal class EmptyStringToBoolConverter : IValueConverter
     /// <summary>
     /// Converts a string to a bool, true if not empty, false otherwise.
     /// </summary>
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is string stringvalue && !string.IsNullOrEmpty(stringvalue))
         {
@@ -34,7 +34,7 @@ internal class EmptyStringToBoolConverter : IValueConverter
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

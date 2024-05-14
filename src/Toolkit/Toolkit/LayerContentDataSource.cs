@@ -309,8 +309,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         {
         }
 
-        private void Layer_PropertyChanged(ILayerContent sender, string? propertyName)
+        private void Layer_PropertyChanged(ILayerContent? sender, string? propertyName)
         {
+            if (sender is null) return;
             var layer = sender as ILayerContent;
             if (layer is ILoadable loadable && propertyName == nameof(ILoadable.LoadStatus) && loadable.LoadStatus == LoadStatus.Loaded)
             {
@@ -379,7 +380,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                     {
                         var listener = new WeakEventListener<LayerContentDataSource<T>, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpc)
                         {
-                            OnEventAction = static (instance, source, eventArgs) => instance.Layer_PropertyChanged((ILayerContent)source, eventArgs.PropertyName),
+                            OnEventAction = static (instance, source, eventArgs) => instance.Layer_PropertyChanged((ILayerContent?)source, eventArgs.PropertyName),
                             OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                         };
                         inpc.PropertyChanged += listener.OnEvent;

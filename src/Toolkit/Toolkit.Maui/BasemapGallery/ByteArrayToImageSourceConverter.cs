@@ -24,14 +24,14 @@ internal class ByteArrayToImageSourceConverter : IValueConverter
     /// <summary>
     /// Converts a byte array to an image source for display in Microsoft .NET MAUI.
     /// </summary>
-    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is byte[] rawBuffer)
         {
             return ImageSource.FromStream(() => new MemoryStream(rawBuffer));
         }
 
-        AppTheme currentTheme = Application.Current.RequestedTheme;
+        AppTheme? currentTheme = Application.Current?.RequestedTheme;
 
         if (currentTheme == AppTheme.Dark)
         {
@@ -43,7 +43,7 @@ internal class ByteArrayToImageSourceConverter : IValueConverter
     }
 
     /// <inheritdoc/>
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

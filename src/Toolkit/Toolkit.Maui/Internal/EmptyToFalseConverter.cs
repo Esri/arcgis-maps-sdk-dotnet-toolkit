@@ -21,7 +21,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
     internal class EmptyToFalseConverter : IValueConverter
     {
         public static EmptyToFalseConverter Instance { get; } = new EmptyToFalseConverter();
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is null) return false;
             if (value is string str) return !string.IsNullOrWhiteSpace(str);
@@ -30,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Internal
             return true;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotSupportedException();
         }

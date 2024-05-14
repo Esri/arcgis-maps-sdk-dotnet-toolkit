@@ -10,14 +10,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc/>
         protected override void OnChecked(RoutedEventArgs e)
         {
-            Checked();
+            OnChecked();
             base.OnChecked(e);
         }
 
         /// <inheritdoc/>
         protected override void OnUnchecked(RoutedEventArgs e)
         {
-            Unchecked();
+            OnUnchecked();
             base.OnUnchecked(e);
         }
     }

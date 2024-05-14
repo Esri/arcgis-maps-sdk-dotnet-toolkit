@@ -131,7 +131,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         var para = new Paragraph();
                         // In HTML, <p> has default margin but other blocks (like <div>) do not.
                         // In WPF, all of these map to Paragraphs that *does* have a default margin.
-                        if (node?.Token?.Name != "p")
+                        if (node.Token?.Name != "p")
                             para.Margin = new Thickness(0);
                         ApplyStyle(para, node);
                         para.Inlines.AddRange(VisitAndAddInlines(node.Children));
