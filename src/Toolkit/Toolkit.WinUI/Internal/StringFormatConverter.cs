@@ -27,7 +27,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Internal
     public class StringFormatConverter : IValueConverter
     {
         /// <inheritdoc />
+#pragma warning disable CA1033 // Interface methods should be callable by child types: Solution is to seal the class, but this would be a binary breaking change, so disabling warning instead
         object? IValueConverter.Convert(object? value, Type targetType, object? parameter, string language)
+#pragma warning restore CA1033 // Interface methods should be callable by child types
         {
             if (value != null && parameter is string formatString)
             {

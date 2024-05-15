@@ -344,7 +344,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display, 1);
 #else
             var formattedText = new FormattedText(text ?? textBlock.Text, CultureInfo.CurrentCulture, textBlock.FlowDirection, typeface,
-                textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display);
+                textBlock.FontSize, textBlock.Foreground, new NumberSubstitution(), TextFormattingMode.Display, 96);
 #endif
             return new Size(formattedText.Width, formattedText.Height);
 #endif
