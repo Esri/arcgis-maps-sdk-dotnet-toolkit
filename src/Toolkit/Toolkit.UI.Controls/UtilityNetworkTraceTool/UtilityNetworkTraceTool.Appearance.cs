@@ -64,7 +64,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
     [TemplatePart(Name = "PART_TabsControl", Type = typeof(Pivot))]
 #endif
+#pragma warning disable CA1001
     public partial class UtilityNetworkTraceTool
+#pragma warning restore CA1001
     {
         private UIElement? _loadingScrim;
         private UIElement? _ineligibleScrim;

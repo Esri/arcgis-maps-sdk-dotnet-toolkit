@@ -19,7 +19,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui;
 
+#pragma warning disable CA1001
 public partial class UtilityNetworkTraceTool
+#pragma warning restore CA1001
 {
 #pragma warning disable SA1310, SX1309, SA1306
     // Navigation
