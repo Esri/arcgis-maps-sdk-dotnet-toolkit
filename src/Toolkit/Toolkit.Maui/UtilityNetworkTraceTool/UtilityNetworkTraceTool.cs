@@ -339,10 +339,8 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
     private void PART_NetworksCollectionView_SelectionChanged(object? sender, EventArgs e)
     {
-        if (PART_ListViewNetworks?.SelectedItem is UtilityNetwork newSelection)
-        {
-            _controller.SelectedUtilityNetwork = newSelection;
-        }
+        _controller.SelectedUtilityNetwork = PART_ListViewNetworks?.SelectedItem as UtilityNetwork;
+        UtilityNetworkChanged?.Invoke(this, new UtilityNetworkChangedEventArgs(_controller.SelectedUtilityNetwork));
     }
 
     private void UtilityNetworks_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
