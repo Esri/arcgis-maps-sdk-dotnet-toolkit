@@ -397,11 +397,14 @@ public partial class UtilityNetworkTraceTool : TemplatedView
                     _resultOverlays.Add(item.ResultOverlay);
                     GeoView.GraphicsOverlays.Insert(0, item.ResultOverlay);
                 }
-
-                UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(item.Parameters, item.RawResults));
-                if (item?.Error != null)
+                                
+                if (item.Error != null)
                 {
                     UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(item.Parameters, item.Error));
+                }
+                else
+                {
+                    UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(item.Parameters, item.RawResults));
                 }
             }
         }
