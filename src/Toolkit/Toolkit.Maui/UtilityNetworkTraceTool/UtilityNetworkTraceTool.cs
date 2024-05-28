@@ -339,10 +339,8 @@ public partial class UtilityNetworkTraceTool : TemplatedView
 
     private void PART_NetworksCollectionView_SelectionChanged(object? sender, EventArgs e)
     {
-        if (PART_ListViewNetworks?.SelectedItem is UtilityNetwork newSelection)
-        {
-            _controller.SelectedUtilityNetwork = newSelection;
-        }
+        _controller.SelectedUtilityNetwork = PART_ListViewNetworks?.SelectedItem as UtilityNetwork;
+        UtilityNetworkChanged?.Invoke(this, new UtilityNetworkChangedEventArgs(_controller.SelectedUtilityNetwork));
     }
 
     private void UtilityNetworks_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -397,11 +395,14 @@ public partial class UtilityNetworkTraceTool : TemplatedView
                     _resultOverlays.Add(item.ResultOverlay);
                     GeoView.GraphicsOverlays.Insert(0, item.ResultOverlay);
                 }
-
-                UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(item.Parameters, item.RawResults));
-                if (item?.Error != null)
+                                
+                if (item.Error != null)
                 {
                     UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(item.Parameters, item.Error));
+                }
+                else
+                {
+                    UtilityNetworkTraceCompleted?.Invoke(this, new UtilityNetworkTraceCompletedEventArgs(item.Parameters, item.RawResults));
                 }
             }
         }
