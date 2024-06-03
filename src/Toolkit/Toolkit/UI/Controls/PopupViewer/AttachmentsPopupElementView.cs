@@ -126,6 +126,56 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
             PropertyHelper.CreateProperty<AttachmentsPopupElement, AttachmentsPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.LoadAttachments());
+
+
+        /// <summary>
+        /// Occurs when an attachment is clicked.
+        /// </summary>
+        /// <remarks>
+        /// <para>Override this to prevent the default open action.</para></remarks>
+        /// <param name="attachment">Attachment clicked.</param>
+        public virtual async void OnAttachmentClicked(PopupAttachment attachment)
+        {
+            if (attachment.Attachment != null)
+            {
+                var viewer = GetPopupViewerParent();
+                if (viewer is not null)
+                {
+                    bool handled = viewer.OnPopupAttachmentClicked(attachment);
+                    if (handled)
+                        return;
+                }
+#if MAUI
+                try
+                {
+                    if (attachment.LoadStatus == LoadStatus.NotLoaded)
+                        await attachment.LoadAsync();
+                    await Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
+                        new Microsoft.Maui.ApplicationModel.OpenFileRequest(attachment.Name, new ReadOnlyFile(attachment.Filename!, attachment.ContentType)));
+                }
+                catch(System.Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Failed to open attachment: " + ex.Message);
+                }
+#else
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = attachment.Name;
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    try
+                    {
+                        using var stream = await attachment.Attachment!.GetDataAsync();
+                        using var outfile = saveFileDialog.OpenFile();
+                        await stream.CopyToAsync(outfile);
+                    }
+                    catch(System.Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine($"Failed to save file to disk: " + ex.Message);
+                    }
+                }
+#endif
+            }
+        }
     }
 }
 #endif

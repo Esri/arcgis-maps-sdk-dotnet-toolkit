@@ -124,5 +124,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
             PopupBackground.Visibility = Visibility.Collapsed;
             popupViewer.Popup = null;
         }
+
+        private void popupViewer_PopupAttachmentClicked(object sender, UI.Controls.PopupAttachmentClickedEventArgs e)
+        {
+            // Make first click just load the attachment (or cancel a loading operation). Otherwise fallback to default behavior
+            if (e.Attachment.LoadStatus == LoadStatus.NotLoaded)
+            {
+                e.Handled = true;
+                _ = e.Attachment.LoadAsync();
+            }
+            else if (e.Attachment.LoadStatus == LoadStatus.FailedToLoad)
+            {
+                e.Handled = true;
+                _ = e.Attachment.RetryLoadAsync();
+            }
+            else if (e.Attachment.LoadStatus == LoadStatus.Loading)
+            {
+                e.Handled = true;
+                e.Attachment.CancelLoad();
+            }
+        }
     }
 }

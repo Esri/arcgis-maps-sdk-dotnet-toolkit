@@ -30,25 +30,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private const string AttachmentListName = "AttachmentList";
 
-        /// <summary>
-        /// Occurs when an attachment is clicked.
-        /// </summary>
-        /// <remarks>Override this to prevent the default "save to file dialog" action.</remarks>
-        /// <param name="attachment">Attachment clicked.</param>
-        public virtual async void OnAttachmentClicked(PopupAttachment attachment)
+        private UI.Controls.PopupViewer? GetPopupViewerParent()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.FileName = attachment.Name;
-            if (saveFileDialog.ShowDialog() == true)
+            
+            var parent = VisualTreeHelper.GetParent(this);
+            while(parent is not null && parent is not UI.Controls.PopupViewer popup)
             {
-                try
-                {
-                    using var stream = await attachment.Attachment!.GetDataAsync();
-                    using var outfile = saveFileDialog.OpenFile();
-                    await stream.CopyToAsync(outfile);
-                }
-                catch { }
+                parent = VisualTreeHelper.GetParent(parent);
             }
+            return parent as UI.Controls.PopupViewer;
         }
     }
 }
