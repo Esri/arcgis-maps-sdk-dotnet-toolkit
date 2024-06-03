@@ -341,7 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _autoVisibilityWrapper?.SetValue(VisibilityProperty, _controller.ShouldDisplayFloorPicker ? Visibility.Visible : Visibility.Collapsed);
                     break;
                 case nameof(_controller.AllDisplayLevelsSelected):
-                    OnPropertyChanged(nameof(AllDisplayLevelsSelecteded));
+                    OnPropertyChanged(nameof(AllDisplayLevelsSelected));
                     break;
             }
         }
@@ -658,6 +658,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// This is used for showing an entire facility in 3D.
         /// </remarks>
+        [Obsolete("This property is deprecated. Use AllDisplayLevelsSelected instead.")]
         public bool AllDisplayLevelsSelecteded
         {
             get => _controller.AllDisplayLevelsSelected;
@@ -673,9 +674,31 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-#endregion Selection
 
-#region Read-only list properties
+        /// <summary>
+        /// Gets or sets a value indicating whether all of the levels for the selected facility should be enabled for display.
+        /// </summary>
+        /// <remarks>
+        /// This is used for showing an entire facility in 3D.
+        /// </remarks>
+        public bool AllDisplayLevelsSelected
+        {
+            get => _controller.AllDisplayLevelsSelected;
+            set
+            {
+                if (value)
+                {
+                    _controller.SelectAllDisplayLevels();
+                }
+                else
+                {
+                    _controller.UndoSelectAllDisplayLevels();
+                }
+            }
+        }
+        #endregion Selection
+
+        #region Read-only list properties
 
 #if WINDOWS_XAML
 
