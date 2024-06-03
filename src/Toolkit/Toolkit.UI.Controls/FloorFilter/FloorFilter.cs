@@ -659,6 +659,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// This is used for showing an entire facility in 3D.
         /// </remarks>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("This property is deprecated. Use AllDisplayLevelsSelected instead.")]
         public bool AllDisplayLevelsSelecteded
         {
