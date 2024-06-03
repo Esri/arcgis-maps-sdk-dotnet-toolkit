@@ -341,6 +341,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _autoVisibilityWrapper?.SetValue(VisibilityProperty, _controller.ShouldDisplayFloorPicker ? Visibility.Visible : Visibility.Collapsed);
                     break;
                 case nameof(_controller.AllDisplayLevelsSelected):
+                    OnPropertyChanged(nameof(AllDisplayLevelsSelecteded));
                     OnPropertyChanged(nameof(AllDisplayLevelsSelected));
                     break;
             }
@@ -661,18 +662,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         [Obsolete("This property is deprecated. Use AllDisplayLevelsSelected instead.")]
         public bool AllDisplayLevelsSelecteded
         {
-            get => _controller.AllDisplayLevelsSelected;
-            set
-            {
-                if (value)
-                {
-                    _controller.SelectAllDisplayLevels();
-                }
-                else
-                {
-                    _controller.UndoSelectAllDisplayLevels();
-                }
-            }
+            get => AllDisplayLevelsSelected;
+            set => AllDisplayLevelsSelected = value;
         }
 
         /// <summary>
