@@ -32,7 +32,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private UI.Controls.PopupViewer? GetPopupViewerParent()
         {
-            
             var parent = VisualTreeHelper.GetParent(this);
             while(parent is not null && parent is not UI.Controls.PopupViewer popup)
             {
