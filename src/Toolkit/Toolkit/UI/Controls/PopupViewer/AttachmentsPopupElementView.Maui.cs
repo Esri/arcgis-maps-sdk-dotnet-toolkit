@@ -152,40 +152,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return parent as PopupViewer;
         }
 
-        /// <summary>
-        /// Occurs when an attachment is clicked.
-        /// </summary>
-        /// <remarks>
-        /// <para>Override this to prevent the default open action.</para></remarks>
-        /// <param name="attachment">Attachment clicked.</param>
-        public virtual async void OnAttachmentClicked(PopupAttachment attachment)
-        {
-            if (attachment.LoadStatus == LoadStatus.NotLoaded)
-            {
-                _ = attachment.LoadAsync();
-                return;
-            }
-            if (attachment.LoadStatus == LoadStatus.Loaded && attachment.Attachment != null)
-            {
-                var viewer = GetPopupViewerParent();
-                if(viewer is not null)
-                {
-                    bool handled = viewer.OnPopupAttachmentClicked(attachment);
-                    if (handled)
-                        return;
-                }
-
-                try
-                {
-                    await Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
-                        new Microsoft.Maui.ApplicationModel.OpenFileRequest(attachment.Name, new ReadOnlyFile(attachment.Filename!, attachment.ContentType)));
-                }
-                catch
-                {
-                }
-            }
-        }
-
         private class AttachmentViewModel : System.ComponentModel.INotifyPropertyChanged
         {
             public AttachmentViewModel(PopupAttachment attachment)

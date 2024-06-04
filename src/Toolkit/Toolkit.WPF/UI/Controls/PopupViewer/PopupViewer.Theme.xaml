@@ -57,12 +57,57 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:AttachmentsPopupElementView}">
                     <StackPanel>
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock" x:Key="DownloadIcon" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                                <Setter Property="FontSize" Value="18" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="0,0,5,0" />
+                                <Setter Property="Text" Value="&#xF13E;" />
+                                <Setter Property="RenderTransformOrigin" Value=".5,.5" />
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <RotateTransform />
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.Loading}">
+                                        <Setter Property="Text" Value="&#xE72C;"/>
+                                        <Setter Property="ToolTip" Value="Downloading"/>
+                                        <DataTrigger.EnterActions>
+                                        <BeginStoryboard Name="SpinnerStoryboard">
+                                            <Storyboard RepeatBehavior="Forever" >
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="RenderTransform.Angle" 
+                                                    Duration="0:0:1" From="0" To="360" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="SpinnerStoryboard" />
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.NotLoaded}">
+                                        <Setter Property="Text" Value="&#xE896;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.FailedToLoad}">
+                                        <Setter Property="Text" Value="&#xEA6A;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLocal}" Value="true">
+                                        <Setter Property="Text" Value="&#xF13E;"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Resources>
                         <TextBlock Text="{Binding Title, Mode=OneWay}" Style="{StaticResource PopupViewerTitleStyle}" Visibility="{Binding Title, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource PopupViewerCaptionStyle}" Visibility="{Binding Description, Converter={StaticResource PopupViewerVisibilityConverter}}" />
                         <ListView x:Name="AttachmentList" BorderThickness="0" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Margin="5" Cursor="Hand"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource DownloadIcon}"/>
+                                        <TextBlock Text="{Binding Name}" Margin="5" Cursor="Hand"/>                                        
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

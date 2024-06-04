@@ -124,5 +124,35 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
             PopupBackground.Visibility = Visibility.Collapsed;
             popupViewer.Popup = null;
         }
+
+        private async void popupViewer_PopupAttachmentClicked(object sender, UI.Controls.PopupAttachmentClickedEventArgs e)
+        {
+            if (!e.Attachment.IsLocal) // Attachment hasn't been downloaded
+            {
+                try
+                {
+                    // Make first click just load the attachment (or cancel a loading operation). Otherwise fallback to default behavior
+                    if (e.Attachment.LoadStatus == LoadStatus.NotLoaded)
+                    {
+                        e.Handled = true;
+                        await e.Attachment.LoadAsync();
+                    }
+                    else if (e.Attachment.LoadStatus == LoadStatus.FailedToLoad)
+                    {
+                        e.Handled = true;
+                        await e.Attachment.RetryLoadAsync();
+                    }
+                    else if (e.Attachment.LoadStatus == LoadStatus.Loading)
+                    {
+                        e.Handled = true;
+                        e.Attachment.CancelLoad();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to download attachment", ex.Message);
+                }
+            }
+        }
     }
 }
