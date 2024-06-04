@@ -168,7 +168,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         using var outfile = saveFileDialog.OpenFile();
                         await stream.CopyToAsync(outfile);
                     }
-                    catch(System.Exception ex)
+                    catch (System.Exception ex)
                     {
                         System.Diagnostics.Trace.WriteLine($"Failed to save file to disk: " + ex.Message);
                     }
