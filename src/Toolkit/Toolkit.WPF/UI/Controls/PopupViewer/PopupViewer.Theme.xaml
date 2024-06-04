@@ -63,7 +63,7 @@
                                 <Setter Property="FontSize" Value="18" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Margin" Value="0,0,5,0" />
-                                <Setter Property="Text" Value="&#xE896;" />
+                                <Setter Property="Text" Value="&#xF13E;" />
                                 <Setter Property="RenderTransformOrigin" Value=".5,.5" />
                                 <Setter Property="RenderTransform">
                                     <Setter.Value>
@@ -87,7 +87,13 @@
                                             <StopStoryboard BeginStoryboardName="SpinnerStoryboard" />
                                         </DataTrigger.ExitActions>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.Loaded}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.NotLoaded}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                        <Setter Property="Text" Value="&#xE896;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.FailedToLoad}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                        <Setter Property="Text" Value="&#xEA6A;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsLocal}" Value="true" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
                                         <Setter Property="Text" Value="&#xF13E;"/>
                                     </DataTrigger>
                                 </Style.Triggers>
