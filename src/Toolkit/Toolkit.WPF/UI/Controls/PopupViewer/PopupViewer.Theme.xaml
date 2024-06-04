@@ -63,14 +63,32 @@
                                 <Setter Property="FontSize" Value="18" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                                 <Setter Property="Margin" Value="0,0,5,0" />
-                                <Setter Property="Text" Value="&#xEBD3;" />
+                                <Setter Property="Text" Value="&#xE896;" />
+                                <Setter Property="RenderTransformOrigin" Value=".5,.5" />
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <RotateTransform />
+                                    </Setter.Value>
+                                </Setter>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.Loading}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
-                                        <Setter Property="Text" Value="&#xE826;"/>
+                                        <Setter Property="Text" Value="&#xE72C;"/>
                                         <Setter Property="ToolTip" Value="Downloading"/>
+                                        <DataTrigger.EnterActions>
+                                        <BeginStoryboard Name="SpinnerStoryboard">
+                                            <Storyboard RepeatBehavior="Forever" >
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="RenderTransform.Angle" 
+                                                    Duration="0:0:1" From="0" To="360" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="SpinnerStoryboard" />
+                                        </DataTrigger.ExitActions>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.Loaded}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
-                                        <Setter Property="Text" Value="&#xF28B;"/>
+                                        <Setter Property="Text" Value="&#xF13E;"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
