@@ -125,23 +125,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
             popupViewer.Popup = null;
         }
 
-        private void popupViewer_PopupAttachmentClicked(object sender, UI.Controls.PopupAttachmentClickedEventArgs e)
+        private async void popupViewer_PopupAttachmentClicked(object sender, UI.Controls.PopupAttachmentClickedEventArgs e)
         {
-            // Make first click just load the attachment (or cancel a loading operation). Otherwise fallback to default behavior
-            if (e.Attachment.LoadStatus == LoadStatus.NotLoaded)
+            try
             {
-                e.Handled = true;
-                _ = e.Attachment.LoadAsync();
+                // Make first click just load the attachment (or cancel a loading operation). Otherwise fallback to default behavior
+                if (e.Attachment.LoadStatus == LoadStatus.NotLoaded)
+                {
+                    e.Handled = true;
+                    await e.Attachment.LoadAsync();
+                }
+                else if (e.Attachment.LoadStatus == LoadStatus.FailedToLoad)
+                {
+                    e.Handled = true;
+                    await e.Attachment.RetryLoadAsync();
+                }
+                else if (e.Attachment.LoadStatus == LoadStatus.Loading)
+                {
+                    e.Handled = true;
+                    e.Attachment.CancelLoad();
+                }
             }
-            else if (e.Attachment.LoadStatus == LoadStatus.FailedToLoad)
+            catch (Exception ex)
             {
-                e.Handled = true;
-                _ = e.Attachment.RetryLoadAsync();
-            }
-            else if (e.Attachment.LoadStatus == LoadStatus.Loading)
-            {
-                e.Handled = true;
-                e.Attachment.CancelLoad();
+                MessageBox.Show("Failed to download attachment", ex.Message);
             }
         }
     }
