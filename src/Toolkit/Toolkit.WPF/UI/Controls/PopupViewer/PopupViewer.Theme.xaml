@@ -58,7 +58,7 @@
                 <ControlTemplate TargetType="{x:Type primitives:AttachmentsPopupElementView}">
                     <StackPanel>
                         <StackPanel.Resources>
-                            <Style TargetType="TextBlock" x:Key="DownloadIcon">
+                            <Style TargetType="TextBlock" x:Key="DownloadIcon" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
                                 <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
                                 <Setter Property="FontSize" Value="18" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
@@ -71,7 +71,7 @@
                                     </Setter.Value>
                                 </Setter>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.Loading}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.Loading}">
                                         <Setter Property="Text" Value="&#xE72C;"/>
                                         <Setter Property="ToolTip" Value="Downloading"/>
                                         <DataTrigger.EnterActions>
@@ -87,13 +87,13 @@
                                             <StopStoryboard BeginStoryboardName="SpinnerStoryboard" />
                                         </DataTrigger.ExitActions>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.NotLoaded}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.NotLoaded}">
                                         <Setter Property="Text" Value="&#xE896;"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.FailedToLoad}" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                    <DataTrigger Binding="{Binding LoadStatus}" Value="{x:Static es:LoadStatus.FailedToLoad}">
                                         <Setter Property="Text" Value="&#xEA6A;"/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsLocal}" Value="true" xmlns:es="clr-namespace:Esri.ArcGISRuntime;assembly=Esri.ArcGISRuntime">
+                                    <DataTrigger Binding="{Binding IsLocal}" Value="true">
                                         <Setter Property="Text" Value="&#xF13E;"/>
                                     </DataTrigger>
                                 </Style.Triggers>
