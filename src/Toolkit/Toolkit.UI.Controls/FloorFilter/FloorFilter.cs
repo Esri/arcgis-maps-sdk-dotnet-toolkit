@@ -341,7 +341,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     _autoVisibilityWrapper?.SetValue(VisibilityProperty, _controller.ShouldDisplayFloorPicker ? Visibility.Visible : Visibility.Collapsed);
                     break;
                 case nameof(_controller.AllDisplayLevelsSelected):
+#pragma warning disable CS0618 // Ensure typo property is still set for backwards compatibility purposes.
                     OnPropertyChanged(nameof(AllDisplayLevelsSelecteded));
+#pragma warning restore CS0618
                     OnPropertyChanged(nameof(AllDisplayLevelsSelected));
                     break;
             }
