@@ -342,6 +342,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     break;
                 case nameof(_controller.AllDisplayLevelsSelected):
                     OnPropertyChanged(nameof(AllDisplayLevelsSelecteded));
+                    OnPropertyChanged(nameof(AllDisplayLevelsSelected));
                     break;
             }
         }
@@ -658,7 +659,21 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <remarks>
         /// This is used for showing an entire facility in 3D.
         /// </remarks>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("This property is deprecated. Use AllDisplayLevelsSelected instead.")]
         public bool AllDisplayLevelsSelecteded
+        {
+            get => AllDisplayLevelsSelected;
+            set => AllDisplayLevelsSelected = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether all of the levels for the selected facility should be enabled for display.
+        /// </summary>
+        /// <remarks>
+        /// This is used for showing an entire facility in 3D.
+        /// </remarks>
+        public bool AllDisplayLevelsSelected
         {
             get => _controller.AllDisplayLevelsSelected;
             set
@@ -673,9 +688,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 }
             }
         }
-#endregion Selection
+        #endregion Selection
 
-#region Read-only list properties
+        #region Read-only list properties
 
 #if WINDOWS_XAML
 
