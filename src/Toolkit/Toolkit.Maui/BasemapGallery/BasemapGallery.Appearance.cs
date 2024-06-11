@@ -173,7 +173,7 @@ public partial class BasemapGallery : TemplatedView
                                                     </Style>
                                                 </Grid.Resources>
                                         <CollectionView x:Name=""PART_InnerListView"" HorizontalOptions=""Fill"" VerticalOptions=""Fill"" SelectionMode=""Single"" BackgroundColor=""{{AppThemeBinding Light=#fff,Dark=#353535}}"" />
-                                        <Grid x:Name=""PART_LoadingScrim"">
+                                        <Grid x:Name=""PART_LoadingScrim"" IsVisible=""False"">
                                             <Grid BackgroundColor=""{{AppThemeBinding Light=White, Dark=Black}}"" Opacity=""0.3"" />
                                             <ActivityIndicator IsRunning=""True"" HorizontalOptions=""Center"" VerticalOptions=""Center"" />
                                         </Grid>

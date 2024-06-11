@@ -46,21 +46,10 @@ public partial class BasemapGallery
 
     private void BasemapGallery_Loaded(object? sender, EventArgs e)
     {
-        LoadBasemaps();
-    }
-
-    private void LoadBasemaps()
-    {
-        _controller.IsLoading = true;
-        if (AvailableBasemaps == null)
+        if (AvailableBasemaps is null)
         {
             _ = _controller.LoadFromDefaultPortal();
         }
-        else
-        {
-            _controller.AvailableBasemaps = AvailableBasemaps;
-        }
-        _controller.IsLoading = false;
     }
 
     private void HandleControllerPropertyChanged(object? sender, PropertyChangedEventArgs e)

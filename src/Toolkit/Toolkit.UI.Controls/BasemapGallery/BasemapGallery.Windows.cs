@@ -50,21 +50,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private void BasemapGallery_Loaded(object? sender, RoutedEventArgs e)
         {
-            LoadBasemaps();
-        }
-
-        private void LoadBasemaps()
-        {
-            _controller.IsLoading = true;
-            if (AvailableBasemaps == null)
+            if (AvailableBasemaps is null)
             {
                 _ = _controller.LoadFromDefaultPortal();
             }
-            else
-            {
-                _controller.AvailableBasemaps = AvailableBasemaps;
-            }
-            _controller.IsLoading = false;
         }
 
         private void HandleControllerPropertyChanged(object? sender, PropertyChangedEventArgs e)
