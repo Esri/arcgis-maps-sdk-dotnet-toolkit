@@ -45,7 +45,26 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SizeChanged += BasemapGallerySizeChanged;
             AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>();
             _controller.PropertyChanged += HandleControllerPropertyChanged;
-            _ = _controller.LoadFromDefaultPortal();
+            Loaded += BasemapGallery_Loaded;
+        }
+
+        private void BasemapGallery_Loaded(object? sender, RoutedEventArgs e)
+        {
+            LoadBasemaps();
+        }
+
+        private void LoadBasemaps()
+        {
+            _controller.IsLoading = true;
+            if (AvailableBasemaps == null)
+            {
+                _ = _controller.LoadFromDefaultPortal();
+            }
+            else
+            {
+                _controller.AvailableBasemaps = AvailableBasemaps;
+            }
+            _controller.IsLoading = false;
         }
 
         private void HandleControllerPropertyChanged(object? sender, PropertyChangedEventArgs e)
