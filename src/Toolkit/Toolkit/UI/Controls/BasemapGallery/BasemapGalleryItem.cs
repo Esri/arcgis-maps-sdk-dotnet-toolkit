@@ -246,10 +246,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return false;
             }
 
-            return other == Basemap || (Basemap.BaseLayers.Count == other.BaseLayers.Count
-                                        && Basemap.BaseLayers.All(layer => other?.BaseLayers.FirstOrDefault(l => l.Name == layer.Name) is not null))
-                                    || (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
-                                    || (other.Uri != null && other.Uri == Basemap?.Uri);
+            return other == Basemap || (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
+                                    || (other.Uri != null && other.Uri == Basemap?.Uri)
+                                    || (Basemap?.BaseLayers.Count == other.BaseLayers.Count
+                                        && Basemap.BaseLayers.All(layer => other?.BaseLayers.FirstOrDefault(l => l.Name == layer.Name) is not null));
         }
 
         /// <inheritdoc />
