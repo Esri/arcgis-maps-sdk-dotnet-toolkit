@@ -49,6 +49,9 @@ public partial class BasemapGallery
 
     private async void BasemapGallery_Loaded(object? sender, EventArgs e)
     {
+        // Unsubscribe from the Loaded event to ensure this only runs once.
+        Loaded -= BasemapGallery_Loaded;
+
         if (AvailableBasemaps is null)
         {
             _loadCancellationTokenSource = new CancellationTokenSource();

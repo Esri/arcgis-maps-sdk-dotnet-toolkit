@@ -53,6 +53,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private async void BasemapGallery_Loaded(object? sender, RoutedEventArgs e)
         {
+            // Unsubscribe from the Loaded event to ensure this only runs once.
+            Loaded -= BasemapGallery_Loaded;
+            
             if (AvailableBasemaps is null)
             {
                 _loadCancellationTokenSource = new CancellationTokenSource();
