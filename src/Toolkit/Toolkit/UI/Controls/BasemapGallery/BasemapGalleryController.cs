@@ -224,12 +224,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public async Task LoadFromDefaultPortal()
+        public async Task LoadFromDefaultPortal(CancellationToken cancellationToken = default)
         {
             IsLoading = true;
             try
             {
-                AvailableBasemaps = await PopulateFromDefaultList();
+                AvailableBasemaps = await PopulateFromDefaultList(cancellationToken);
             }
             finally
             {
@@ -305,11 +305,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return listOfBasemaps;
         }
 
-        private static async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList()
+        private static async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList(CancellationToken cancellationToken = default)
         {
-            ArcGISPortal defaultPortal = await ArcGISPortal.CreateAsync();
+            ArcGISPortal defaultPortal = await ArcGISPortal.CreateAsync(cancellationToken);
 
-            var results = await defaultPortal.GetDeveloperBasemapsAsync();
+            var results = await defaultPortal.GetDeveloperBasemapsAsync(cancellationToken);
 
             var listOfBasemaps = new List<BasemapGalleryItem>();
 

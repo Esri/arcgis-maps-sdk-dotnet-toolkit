@@ -26,10 +26,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui;
 /// If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
 /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
 /// </remarks>
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
 public partial class BasemapGallery
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
     private CollectionView? _listView;
     private readonly BasemapGalleryController _controller;
+    private CancellationTokenSource? _loadCancellationTokenSource;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
@@ -44,11 +47,17 @@ public partial class BasemapGallery
         Loaded += BasemapGallery_Loaded;
     }
 
-    private void BasemapGallery_Loaded(object? sender, EventArgs e)
+    private async void BasemapGallery_Loaded(object? sender, EventArgs e)
     {
         if (AvailableBasemaps is null)
         {
-            _ = _controller.LoadFromDefaultPortal();
+            _loadCancellationTokenSource = new CancellationTokenSource();
+            try
+            {
+                await _controller.LoadFromDefaultPortal(_loadCancellationTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            { }
         }
     }
 
@@ -193,7 +202,11 @@ public partial class BasemapGallery
     public IList<BasemapGalleryItem>? AvailableBasemaps
     {
         get => GetValue(AvailableBasemapsProperty) as IList<BasemapGalleryItem>;
-        set => SetValue(AvailableBasemapsProperty, value);
+        set
+        {
+            SetValue(AvailableBasemapsProperty, value);
+            _loadCancellationTokenSource?.Cancel();
+        }
     }
 
     /// <summary>
