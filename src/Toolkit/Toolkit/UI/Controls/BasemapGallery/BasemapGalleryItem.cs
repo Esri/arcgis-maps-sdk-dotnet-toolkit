@@ -248,8 +248,36 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
             return other == Basemap || (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
                                     || (other.Uri != null && other.Uri == Basemap?.Uri)
-                                    || (Basemap?.BaseLayers.Count == other.BaseLayers.Count
-                                        && Basemap.BaseLayers.All(layer => other?.BaseLayers.FirstOrDefault(l => l.Name == layer.Name) is not null));
+                                    || AreBasemapsEqualByLayers(Basemap, other);
+        }
+
+        private static bool AreBasemapsEqualByLayers(Basemap? basemap1, Basemap? basemap2)
+        {
+            if (basemap1 == null || basemap2 == null) return false;
+
+            return LayersEqual(basemap1.BaseLayers, basemap2.BaseLayers)
+                && LayersEqual(basemap1.ReferenceLayers, basemap2.ReferenceLayers);
+        }
+
+        private static bool LayersEqual(LayerCollection layers1, LayerCollection layers2)
+        {
+            return layers1.Count == layers2.Count
+                && layers1.Zip(layers2, (layer1, layer2) => new { Layer1 = layer1, Layer2 = layer2 })
+                    .All(pair => LayerEquals(pair.Layer1, pair.Layer2));
+        }
+
+        private static bool LayerEquals(Layer layer1, Layer layer2)
+        {
+            // This method can be extended to handle more specific layer comparisons if needed
+            if (layer1.GetType() != layer2.GetType()) return false;
+
+            return layer1 switch
+            {
+                ArcGISSceneLayer sceneLayer => sceneLayer.Source == ((ArcGISSceneLayer)layer2).Source,
+                ArcGISTiledLayer tiledLayer => tiledLayer.Source == ((ArcGISTiledLayer)layer2).Source,
+                ArcGISVectorTiledLayer vectorTiledLayer => vectorTiledLayer.Source == ((ArcGISVectorTiledLayer)layer2).Source,
+                _ => false,
+            };
         }
 
         /// <inheritdoc />
