@@ -31,12 +31,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     /// If connected to a GeoView, changing the basemap selection will change the connected Map or Scene's basemap.
     /// Only basemaps whose spatial reference matches the map or scene's spatial reference can be selected for display.
     /// </remarks>
-#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     public partial class BasemapGallery : Control
-#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         private readonly BasemapGalleryController _controller;
-        private CancellationTokenSource? _loadCancellationTokenSource;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
@@ -58,13 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             
             if (AvailableBasemaps is null)
             {
-                _loadCancellationTokenSource = new CancellationTokenSource();
-                try
-                {
-                    await _controller.LoadFromDefaultPortal(_loadCancellationTokenSource.Token);
-                }
-                catch (OperationCanceledException)
-                { }
+                await _controller.LoadFromDefaultPortal();
             }
         }
 

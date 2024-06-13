@@ -29,7 +29,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 namespace Esri.ArcGISRuntime.Toolkit.UI
 #endif
 {
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     internal class BasemapGalleryController : INotifyPropertyChanged
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         private ArcGISPortal? _portal;
         private bool _ignoreEventsFlag;
@@ -37,6 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private GeoModel? _geoModel;
         private BasemapGalleryItem? _selectedBasemap;
         private bool _isLoading;
+        private CancellationTokenSource? _loadCancellationTokenSource;
 
         public bool IsLoading
         {
@@ -72,6 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                     HandleAvailableBasemapsChanged();
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AvailableBasemaps)));
+                    _loadCancellationTokenSource?.Cancel();
                 }
             }
         }
@@ -224,13 +228,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        public async Task LoadFromDefaultPortal(CancellationToken cancellationToken = default)
+        public async Task LoadFromDefaultPortal()
         {
             IsLoading = true;
+            _loadCancellationTokenSource = new CancellationTokenSource();
             try
             {
-                AvailableBasemaps = await PopulateFromDefaultList(cancellationToken);
+                AvailableBasemaps = await PopulateFromDefaultList(_loadCancellationTokenSource.Token);
             }
+            catch (OperationCanceledException)
+            { }
             finally
             {
                 IsLoading = false;
