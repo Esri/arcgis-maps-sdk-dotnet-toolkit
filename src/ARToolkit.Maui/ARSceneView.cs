@@ -91,7 +91,17 @@ namespace Esri.ArcGISRuntime.ARToolkit.Maui
         /// <seealso cref="OriginCamera"/>
         public event EventHandler? OriginCameraChanged;
 
-        void IARSceneView.OnOriginCameraChanged() => OriginCameraChanged?.Invoke(this, EventArgs.Empty);
+        void IARSceneView.OnOriginCameraChanged()
+        {
+#if __IOS__ || __ANDROID__
+            if (NativeARSceneView?.OriginCamera is Mapping.Camera newCam && !ARToolkit.ARSceneView.CameraEquals(this.OriginCamera, newCam))
+            {
+                OriginCamera = newCam;
+            }
+#endif
+            
+            OriginCameraChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         /// <summary>
         /// Identifies the <see cref="RenderVideoFeed"/> bindable property.
