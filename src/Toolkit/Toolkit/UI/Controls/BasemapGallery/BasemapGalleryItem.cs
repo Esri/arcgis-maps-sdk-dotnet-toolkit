@@ -262,8 +262,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private static bool LayersEqual(LayerCollection layers1, LayerCollection layers2)
         {
             return layers1.Count == layers2.Count
-                && layers1.Zip(layers2, (layer1, layer2) => new { Layer1 = layer1, Layer2 = layer2 })
-                    .All(pair => LayerEquals(pair.Layer1, pair.Layer2));
+                && layers1.Zip(layers2, LayerEquals).All(equal => equal);
         }
 
         private static bool LayerEquals(Layer layer1, Layer layer2)
