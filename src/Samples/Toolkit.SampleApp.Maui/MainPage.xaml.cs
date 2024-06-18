@@ -91,11 +91,11 @@ public partial class MainPage : ContentPage
 
     private void DashboardLinkTapped(object sender, TappedEventArgs e)
     {
-        Microsoft.Maui.ApplicationModel.Launcher.OpenAsync("https://developers.arcgis.com/api-keys/");
+        Microsoft.Maui.ApplicationModel.Launcher.OpenAsync("https://links.esri.com/create-an-api-key");
     }
 
     private void MoreInfoLinkTapped(object sender, TappedEventArgs e)
     {
-        Microsoft.Maui.ApplicationModel.Launcher.OpenAsync("https://developers.arcgis.com/net/security-and-authentication/#api-keys");
+        Microsoft.Maui.ApplicationModel.Launcher.OpenAsync("https://developers.arcgis.com/net/security-and-authentication/tutorials/create-an-api-key/");
     }
 }
