@@ -41,7 +41,18 @@ public partial class BasemapGallery
         ListItemTemplate = DefaultListDataTemplate;
         GridItemTemplate = DefaultGridDataTemplate;
         ControlTemplate = DefaultControlTemplate;
-        _ = _controller.LoadFromDefaultPortal();
+        Loaded += BasemapGallery_Loaded;
+    }
+
+    private async void BasemapGallery_Loaded(object? sender, EventArgs e)
+    {
+        // Unsubscribe from the Loaded event to ensure this only runs once.
+        Loaded -= BasemapGallery_Loaded;
+
+        if (AvailableBasemaps is null)
+        {
+            await _controller.LoadFromDefaultPortal();
+        }
     }
 
     private void HandleControllerPropertyChanged(object? sender, PropertyChangedEventArgs e)

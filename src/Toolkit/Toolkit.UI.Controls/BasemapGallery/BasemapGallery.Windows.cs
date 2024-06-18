@@ -45,7 +45,18 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             SizeChanged += BasemapGallerySizeChanged;
             AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>();
             _controller.PropertyChanged += HandleControllerPropertyChanged;
-            _ = _controller.LoadFromDefaultPortal();
+            Loaded += BasemapGallery_Loaded;
+        }
+
+        private async void BasemapGallery_Loaded(object? sender, RoutedEventArgs e)
+        {
+            // Unsubscribe from the Loaded event to ensure this only runs once.
+            Loaded -= BasemapGallery_Loaded;
+            
+            if (AvailableBasemaps is null)
+            {
+                await _controller.LoadFromDefaultPortal();
+            }
         }
 
         private void HandleControllerPropertyChanged(object? sender, PropertyChangedEventArgs e)

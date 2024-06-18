@@ -29,7 +29,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 namespace Esri.ArcGISRuntime.Toolkit.UI
 #endif
 {
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     internal class BasemapGalleryController : INotifyPropertyChanged
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         private ArcGISPortal? _portal;
         private bool _ignoreEventsFlag;
@@ -37,6 +39,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private GeoModel? _geoModel;
         private BasemapGalleryItem? _selectedBasemap;
         private bool _isLoading;
+        private CancellationTokenSource? _loadCancellationTokenSource;
 
         public bool IsLoading
         {
@@ -72,6 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
 
                     HandleAvailableBasemapsChanged();
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AvailableBasemaps)));
+                    _loadCancellationTokenSource?.Cancel();
                 }
             }
         }
@@ -227,10 +231,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         public async Task LoadFromDefaultPortal()
         {
             IsLoading = true;
+            _loadCancellationTokenSource = new CancellationTokenSource();
             try
             {
-                AvailableBasemaps = await PopulateFromDefaultList();
+                AvailableBasemaps = await PopulateFromDefaultList(_loadCancellationTokenSource.Token);
             }
+            catch (OperationCanceledException)
+            { }
             finally
             {
                 IsLoading = false;
@@ -305,11 +312,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             return listOfBasemaps;
         }
 
-        private static async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList()
+        private static async Task<IList<BasemapGalleryItem>> PopulateFromDefaultList(CancellationToken cancellationToken = default)
         {
-            ArcGISPortal defaultPortal = await ArcGISPortal.CreateAsync();
+            ArcGISPortal defaultPortal = await ArcGISPortal.CreateAsync(cancellationToken);
 
-            var results = await defaultPortal.GetDeveloperBasemapsAsync();
+            var results = await defaultPortal.GetDeveloperBasemapsAsync(cancellationToken);
 
             var listOfBasemaps = new List<BasemapGalleryItem>();
 

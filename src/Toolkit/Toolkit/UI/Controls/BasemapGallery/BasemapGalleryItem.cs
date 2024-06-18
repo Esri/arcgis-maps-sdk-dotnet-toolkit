@@ -246,9 +246,53 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 return false;
             }
 
-            return other == Basemap || other.Name == Basemap?.Name
-                                    || (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
-                                    || (other.Uri != null && other.Uri == Basemap?.Uri);
+            return other == Basemap || (other.Item?.ItemId != null && other.Item?.ItemId == Basemap?.Item?.ItemId)
+                                    || (other.Uri != null && other.Uri == Basemap?.Uri)
+                                    || AreBasemapsEqualByLayers(Basemap, other);
+        }
+
+        private static bool AreBasemapsEqualByLayers(Basemap? basemap1, Basemap? basemap2)
+        {
+            if (basemap1 == null || basemap2 == null) return false;
+
+            return LayersEqual(basemap1.BaseLayers, basemap2.BaseLayers)
+                && LayersEqual(basemap1.ReferenceLayers, basemap2.ReferenceLayers);
+        }
+
+        private static bool LayersEqual(LayerCollection layers1, LayerCollection layers2)
+        {
+            return layers1.Count == layers2.Count
+                && layers1.Zip(layers2, LayerEquals).All(equal => equal);
+        }
+
+        private static bool LayerEquals(Layer layer1, Layer layer2)
+        {
+            // This method can be extended to handle more specific layer comparisons if needed
+            if (layer1.GetType() != layer2.GetType()) return false;
+
+            return layer1 switch
+            {
+                AnnotationLayer annotationLayer => annotationLayer.Source == ((AnnotationLayer)layer2).Source,
+                ArcGISMapImageLayer arcGISMapImageLayer => arcGISMapImageLayer.Source == ((ArcGISMapImageLayer)layer2).Source,
+                ArcGISSceneLayer sceneLayer => sceneLayer.Source == ((ArcGISSceneLayer)layer2).Source,
+                ArcGISTiledLayer tiledLayer => tiledLayer.Source == ((ArcGISTiledLayer)layer2).Source,
+                ArcGISVectorTiledLayer vectorTiledLayer => vectorTiledLayer.Source == ((ArcGISVectorTiledLayer)layer2).Source,
+                BingMapsLayer imageServiceLayer => imageServiceLayer.Portal?.Uri == ((BingMapsLayer)layer2).Portal?.Uri,
+                DimensionLayer dimensionLayer => dimensionLayer.Source == ((DimensionLayer)layer2).Source,
+                FeatureCollectionLayer featureCollectionLayer => featureCollectionLayer.FeatureCollection == ((FeatureCollectionLayer)layer2).FeatureCollection,
+                GroupLayer groupLayer => groupLayer.Layers.Count == ((GroupLayer)layer2).Layers.Count && LayersEqual(groupLayer.Layers, ((GroupLayer)layer2).Layers),
+                IntegratedMeshLayer integratedMeshLayer => integratedMeshLayer.Source == ((IntegratedMeshLayer)layer2).Source,
+                KmlLayer kmlLayer => kmlLayer.Dataset?.Source == ((KmlLayer)layer2).Dataset?.Source,
+                Ogc3DTilesLayer ogc3DTilesLayer => ogc3DTilesLayer.Source == ((Ogc3DTilesLayer)layer2).Source,
+                OpenStreetMapLayer openStreetMapLayer => true, // OpenStreetMap layers are considered equal if types match
+                PointCloudLayer pointCloudLayer => pointCloudLayer.Source == ((PointCloudLayer)layer2).Source,
+                WebTiledLayer webTiledLayer => webTiledLayer.TemplateUri == ((WebTiledLayer)layer2).TemplateUri,
+                ServiceImageTiledLayer serviceImageTiledLayer => serviceImageTiledLayer.TileInfo == ((ServiceImageTiledLayer)layer2).TileInfo && serviceImageTiledLayer.FullExtent == ((ServiceImageTiledLayer)layer2).FullExtent,
+                SubtypeFeatureLayer subtypeFeatureLayer => subtypeFeatureLayer.FeatureTable == ((SubtypeFeatureLayer)layer2).FeatureTable,
+                WmsLayer wmsLayer => wmsLayer.Source == ((WmsLayer)layer2).Source,
+                WmtsLayer wmtsLayer => wmtsLayer.Source == ((WmtsLayer)layer2).Source,
+                _ => false,
+            };
         }
 
         /// <inheritdoc />
