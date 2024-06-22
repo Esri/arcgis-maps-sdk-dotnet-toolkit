@@ -64,7 +64,7 @@
                                 Background="CornflowerBlue" Foreground="White"
                                 Click="SaveApiKey_Click" />
                                 <TextBlock TextWrapping="Wrap" Margin="0,10,0,0">
-                                  <Span>You can get or create an API key as described in <Hyperlink NavigateUri="https://links.esri.com/create-an-api-key">this tutorial</Hyperlink>.</Span>
+                                  <Span>You can create an API key access token as described in <Hyperlink NavigateUri="https://links.esri.com/create-an-api-key">this tutorial</Hyperlink>.</Span>
                                 </TextBlock>
                             </StackPanel>
                         </Border>
