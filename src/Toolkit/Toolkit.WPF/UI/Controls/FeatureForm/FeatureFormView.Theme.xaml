@@ -350,7 +350,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:AttachmentsFormElementView}">
-                    <StackPanel>
+                    <StackPanel DataContext="{TemplateBinding Element}">
                         <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
                         <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}" x:Name="AttachmentsListView">
                             <ItemsControl.ItemTemplate>
