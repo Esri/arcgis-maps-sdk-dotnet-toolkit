@@ -352,7 +352,12 @@
                 <ControlTemplate TargetType="{x:Type primitives:AttachmentsFormElementView}">
                     <StackPanel>
                         <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
-                        <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}">
+                        <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}" x:Name="AttachmentsListView">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
                     </StackPanel>

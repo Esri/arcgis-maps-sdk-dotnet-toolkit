@@ -10,6 +10,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
 {
+    /// <summary>
+    /// Displays the list of Attachments in an <see cref="AttachmentsFormElement"/> object.
+    /// </summary>
     public partial class AttachmentsFormElementView
     {
         private WeakEventListener<AttachmentsFormElementView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>? _elementPropertyChangedListener;
@@ -27,7 +30,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
 
         /// <summary>
-        /// Gets or sets the FieldFormElement.
+        /// Gets or sets the AttachmentsFormElement.
         /// </summary>
         public AttachmentsFormElement? Element
         {
