@@ -49,7 +49,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             DependencyProperty.Register(nameof(Element), typeof(AttachmentsFormElement), typeof(AttachmentsFormElementView), new PropertyMetadata(null, (s, e) => ((AttachmentsFormElementView)s).OnElementPropertyChanged(e.OldValue as AttachmentsFormElement, e.NewValue as AttachmentsFormElement)));
 #endif
 
-        private void OnElementPropertyChanged(AttachmentsFormElement? oldValue, AttachmentsFormElement? newValue)
+        private async void OnElementPropertyChanged(AttachmentsFormElement? oldValue, AttachmentsFormElement? newValue)
         {
             if (oldValue is INotifyPropertyChanged inpcOld)
             {
@@ -67,6 +67,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             UpdateVisibility();
             UpdateAttachments();
+
+            if (newValue != null)
+            {
+                try
+                {
+                    await newValue.FetchAttachmentsAsync();
+                }
+                catch (System.Exception) { }
+            }
         }
 
         private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -81,7 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
             else if (e.PropertyName == nameof(AttachmentsFormElement.IsEditable))
             {
-                //this.Dispatch(UpdateVisibility);
+                //this.Dispatch(UpdateEditable);
             }
         }
 
