@@ -360,6 +360,12 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                         <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                        <Button x:Name="AddAttachmentButton" BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Visibility="{Binding IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Cursor="Hand">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <TextBlock Text="{internal:LocalizedString Key=FeatureFormAddAttachmentButton}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
