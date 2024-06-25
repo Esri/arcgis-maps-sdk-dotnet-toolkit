@@ -12,6 +12,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     {
         private static readonly ControlTemplate DefaultControlTemplate;
         private const string AttachmentsListViewName = "AttachmentsListView";
+        private const string AddAttachmentButtonName = "AddAttachmentButton";
+
+        private Button? _addAttachmentButton;
 
         static AttachmentsFormElementView()
         {
@@ -39,21 +42,55 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(label);
 
             VerticalStackLayout itemsView = new VerticalStackLayout();
-            // BindableLayout.SetItemTemplateSelector(itemsView, new AttachmentsFormElementTemplateSelector());
             itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(itemsView);
+            Button addButton = new Button()
+            {
+                Text = "+ " + Properties.Resources.GetString("FeatureFormAddAttachmentButton"),
+                BorderWidth = 0,
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.CornflowerBlue,
+                HorizontalOptions = new LayoutOptions(LayoutAlignment.Start, true), Padding = new Thickness(0, 3, 50, 3)
+            };
+            addButton.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.IsEditable", source: RelativeBindingSource.TemplatedParent));
+            root.Children.Add(addButton);
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(AttachmentsListViewName, itemsView);
+            nameScope.RegisterName(AddAttachmentButtonName, addButton);
             return root;
         }
-
 
         /// <inheritdoc />
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+            if (_addAttachmentButton is not null)
+            {
+                _addAttachmentButton.Clicked -= AddAttachmentButton_Click;
+            }
+            _addAttachmentButton = GetTemplateChild("AddAttachmentButton") as Button;
+            if (_addAttachmentButton is not null)
+            {
+                _addAttachmentButton.Clicked += AddAttachmentButton_Click;
+            }
+        }
+
+        private async void AddAttachmentButton_Click(object? sender, EventArgs e)
+        {
+            if (Element is null) return;
+            try
+            {
+                var result = await FilePicker.Default.PickAsync(new());
+                if (result != null)
+                {
+                    Element.AddAttachment(result.FileName, MimeTypeMap.GetMimeType(result.FileName), File.ReadAllBytes(result.FullPath));
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

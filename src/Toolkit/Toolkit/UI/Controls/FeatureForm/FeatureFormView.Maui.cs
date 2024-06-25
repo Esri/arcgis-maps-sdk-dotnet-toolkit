@@ -79,12 +79,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
             scrollView.Padding = new Thickness(0, 0, 10, 0);
 #endif
             scrollView.SetBinding(ScrollView.VerticalScrollBarVisibilityProperty, new Binding(nameof(VerticalScrollBarVisibility), source: RelativeBindingSource.TemplatedParent));
+            var scrollableContent = new VerticalStackLayout();
+            scrollView.Content = scrollableContent;
             Grid.SetRow(scrollView, 1);
             root.Add(scrollView);
-            VerticalStackLayout itemsView = new VerticalStackLayout();            
+            VerticalStackLayout itemsView = new VerticalStackLayout();
             BindableLayout.SetItemTemplateSelector(itemsView, new FeatureFormElementTemplateSelector());
             itemsView.SetBinding(BindableLayout.ItemsSourceProperty, new Binding("FeatureForm.Elements", source: RelativeBindingSource.TemplatedParent));
-            scrollView.Content = itemsView;
+            scrollableContent.Add(itemsView);
+
+            AttachmentsFormElementView attachmentsView = new AttachmentsFormElementView();
+            attachmentsView.SetBinding(AttachmentsFormElementView.ElementProperty, new Binding("FeatureForm.DefaultAttachmentsElement", source: RelativeBindingSource.TemplatedParent));
+            scrollableContent.Add(attachmentsView);
+
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(FeatureFormContentScrollViewerName, scrollView);
