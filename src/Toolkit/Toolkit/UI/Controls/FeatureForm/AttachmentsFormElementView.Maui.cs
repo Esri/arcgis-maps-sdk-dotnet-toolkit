@@ -28,7 +28,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     public partial class AttachmentsFormElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        private const string AttachmentsListViewName = "AttachmentsListView";
+        //private const string AttachmentsListViewName = "AttachmentsListView";
         private const string AddAttachmentButtonName = "AddAttachmentButton";
 
         private Button? _addAttachmentButton;
@@ -47,39 +47,64 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         {
             var root = new VerticalStackLayout();
             root.SetBinding(VerticalStackLayout.IsVisibleProperty, nameof(FormElement.IsVisible));
+
+            Grid header = new Grid();
+            header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            header.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+            header.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            header.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+
             var label = new Label();
             label.SetBinding(Label.TextProperty, new Binding("Element.Label", source: RelativeBindingSource.TemplatedParent));
             label.SetBinding(View.IsVisibleProperty, new Binding("Element.Label", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
             label.Style = FeatureFormView.GetFeatureFormTitleStyle();
-            root.Children.Add(label);
+            header.Children.Add(label);
             label = new Label();
             label.SetBinding(Label.TextProperty, new Binding("Element.Description", source: RelativeBindingSource.TemplatedParent));
             label.SetBinding(Label.IsVisibleProperty, new Binding("Element.Description", source: RelativeBindingSource.Self, converter: new EmptyStringToBoolConverter()));
             label.Style = FeatureFormView.GetFeatureFormCaptionStyle();
-            root.Children.Add(label);
+            Grid.SetRow(label, 1);
+            header.Children.Add(label);
+            Button addButton = new Button()
+            {
+                Margin = new Thickness(0, -5, 0, 0),
+                Text = "\uE21B",
+                FontFamily = "calcite-ui-icons-24",
+                BorderWidth = 0,
+                FontSize = 24,
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.CornflowerBlue,
+                HorizontalOptions = new LayoutOptions(LayoutAlignment.Start, true),
+                VerticalOptions = new LayoutOptions(LayoutAlignment.Start, true),
+                Padding = new Thickness(5)
+            };
+           
+            
+            Grid.SetColumn(addButton, 1);
+            Grid.SetRowSpan(addButton, 2);
+            addButton.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.IsEditable", source: RelativeBindingSource.TemplatedParent));
+            header.Children.Add(addButton);
+
+            root.Children.Add(header);
 
             CollectionView itemsView = new CollectionView()
             {
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Default,
                 EmptyView = new Label() { Text = Properties.Resources.GetString("FeatureFormNoAttachments"), TextColor = Colors.Gray },
                 ItemsLayout = new GridItemsLayout(1, ItemsLayoutOrientation.Horizontal),
+                ItemTemplate = new DataTemplate(() =>
+                {
+                    var view = new FormAttachmentView();
+                    view.SetBinding(FormAttachmentView.AttachmentProperty, new Binding());
+                    view.SetBinding(FormAttachmentView.ElementProperty, new Binding("Element", source: RelativeBindingSource.TemplatedParent ));
+                    return view;
+                }), MinimumHeightRequest = 75
             };
             itemsView.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(itemsView);
-            Button addButton = new Button()
-            {
-                Text = "+ ",
-                BorderWidth = 0,
-                BackgroundColor = Colors.Transparent,
-                TextColor = Colors.CornflowerBlue,
-                HorizontalOptions = new LayoutOptions(LayoutAlignment.Start, true), Padding = new Thickness(0, 3, 50, 3)
-            };
-            addButton.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.IsEditable", source: RelativeBindingSource.TemplatedParent));
-            root.Children.Add(addButton);
-
+            
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(AttachmentsListViewName, itemsView);
             nameScope.RegisterName(AddAttachmentButtonName, addButton);
             return root;
         }
@@ -107,7 +132,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 var result = await FilePicker.Default.PickAsync(new());
                 if (result != null)
                 {
-                    Element.AddAttachment(result.FileName, MimeTypeMap.GetMimeType(result.FileName), File.ReadAllBytes(result.FullPath));
+                    Element.AddAttachment(result.FileName, MimeTypeMap.GetMimeType(new FileInfo(result.FileName).Extension), File.ReadAllBytes(result.FullPath));
                 }
             }
             catch(System.Exception ex)

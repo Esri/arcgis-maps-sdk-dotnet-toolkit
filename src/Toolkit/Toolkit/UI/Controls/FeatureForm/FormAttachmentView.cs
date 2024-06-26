@@ -44,6 +44,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
 #if MAUI
             ControlTemplate = DefaultControlTemplate;
+            WidthRequest = 92;
+            HeightRequest = 75;
+            var tapGestureRecognizer = new TapGestureRecognizer();
+            tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
+            GestureRecognizers.Add(tapGestureRecognizer);
+            Margin = new Thickness(4, 0);
+            ConfigureFlyout();
 #else
             DefaultStyleKey = typeof(FormAttachmentView);
 #endif
@@ -138,24 +145,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 this.Dispatch(() => UpdateLoadedState(true));
             }
-        }
-
-
-        private void UpdateLoadedState(bool useTransitions)
-        {
-#if MAUI
-            // TODO
-#else
-            if (Attachment?.LoadStatus == LoadStatus.Loading)
-                VisualStateManager.GoToState(this, "Loading", useTransitions);
-            else if (Attachment?.LoadStatus == LoadStatus.Loaded)
-            {
-                UpdateThumbnail();
-                VisualStateManager.GoToState(this, "Loaded", useTransitions);
-            }
-            else
-                VisualStateManager.GoToState(this, "NotLoaded", useTransitions);
-#endif
         }
 
         private async void OnLoadedAttachmentClicked()

@@ -51,17 +51,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         {
             base.OnApplyTemplate();
-            //if (_addAttachmentButton is not null)
-            //{
-            //    _addAttachmentButton.Click -= AddAttachmentButton_Click;
-            //}
-            //_addAttachmentButton = GetTemplateChild("AddAttachmentButton") as ButtonBase;
-            //if(_addAttachmentButton is not null)
-            //{
-            //    _addAttachmentButton.Click += AddAttachmentButton_Click;
-            //}
             UpdateLoadedState(true);
             UpdateThumbnail();
+        }
+
+        private void UpdateLoadedState(bool useTransitions)
+        {
+            if (Attachment?.LoadStatus == LoadStatus.Loading)
+                VisualStateManager.GoToState(this, "Loading", useTransitions);
+            else if (Attachment?.LoadStatus == LoadStatus.Loaded)
+            {
+                UpdateThumbnail();
+                VisualStateManager.GoToState(this, "Loaded", useTransitions);
+            }
+            else
+                VisualStateManager.GoToState(this, "NotLoaded", useTransitions);
         }
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
@@ -77,7 +81,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnAttachmentContextMenu()
         {
-
             ContextMenu? contextMenu = new ContextMenu();
             contextMenu.Items.Add(new MenuItem()
             {
