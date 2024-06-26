@@ -68,7 +68,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             base.OnRenderSizeChanged(sizeInfo);
 
-            if (Attachment != null && Attachment.LoadStatus == LoadStatus.Loaded && Attachment.Type == FormAttachmentType.Image)
+            if (Attachment != null && (Attachment.LoadStatus == LoadStatus.Loaded && Attachment.Type == FormAttachmentType.Image || 
+                (GetTemplateChild("ThumbnailImage") as Image)?.Source is null))
             {
                 UpdateThumbnail();
             }

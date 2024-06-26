@@ -349,10 +349,19 @@
   </Style>
     <Style TargetType="{x:Type primitives:FormAttachmentView}">
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Width" Value="92" />
+        <Setter Property="Height" Value="75" />
+        <Setter Property="Background" Value="#33000000" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type primitives:FormAttachmentView}">
-                    <Border Width="92" Height="75" CornerRadius="4" Background="#33000000" Margin="4">
+                    <Border CornerRadius="4" Background="{TemplateBinding Background}" Margin="4">
+                        <Border.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Size, Converter={StaticResource FeatureFormFileSizeConverter}}" />
+                            </StackPanel>
+                        </Border.ToolTip>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="LoadedStates">
                                 <VisualState x:Name="NotLoaded">
@@ -396,7 +405,7 @@
                         <Grid>
                             <Image x:Name="ThumbnailImage" />
                             <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2">
-                                <TextBlock x:Name="AttachmentName" Text="{Binding Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" />
+                                <TextBlock x:Name="AttachmentName" Text="{Binding Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" TextTrimming="CharacterEllipsis" />
                             </Border>
                             <TextBlock x:Name="FileSizeText" Text="{Binding Size, Converter={StaticResource FeatureFormFileSizeConverter}}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="10" />
                             <TextBlock x:Name="DownloadIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE896;" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="2" />
@@ -429,7 +438,7 @@
                             </Button>
                         </Grid>
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                            <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}" x:Name="AttachmentsListView">
+                            <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
