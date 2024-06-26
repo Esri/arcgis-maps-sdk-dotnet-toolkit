@@ -162,17 +162,15 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
 #if MAUI
         public static readonly BindableProperty FeatureFormProperty =
-            BindableProperty.Create(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView), null, propertyChanged: (s, oldValue, newValue) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(oldValue, newValue));
+            BindableProperty.Create(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView), null, propertyChanged: (s, oldValue, newValue) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(oldValue as FeatureForm, newValue as FeatureForm));
 #else
         public static readonly DependencyProperty FeatureFormProperty =
             DependencyProperty.Register(nameof(FeatureForm), typeof(FeatureForm), typeof(FeatureFormView),
-                new PropertyMetadata(null, (s, e) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(e.OldValue, e.NewValue)));
+                new PropertyMetadata(null, (s, e) => ((FeatureFormView)s).OnFeatureFormPropertyChanged(e.OldValue as FeatureForm, e.NewValue as FeatureForm)));
 #endif
 
-        private void OnFeatureFormPropertyChanged(object oldValue, object newValue)
+        private void OnFeatureFormPropertyChanged(FeatureForm? oldForm, FeatureForm? newForm)
         {
-            var oldForm = oldValue as FeatureForm;
-            var newForm = newValue as FeatureForm;
             if (newForm is not null)
             {
                 InvalidateForm();
@@ -184,12 +182,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             (GetTemplateChild(FeatureFormContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
 #endif
 
-            if (oldValue is INotifyPropertyChanged inpcOld)
+            if (oldForm is INotifyPropertyChanged inpcOld)
             {
                 _elementPropertyChangedListener?.Detach();
                 _elementPropertyChangedListener = null;
             }
-            if (newValue is INotifyPropertyChanged inpcNew)
+            if (newForm is INotifyPropertyChanged inpcNew)
             {
                 _elementPropertyChangedListener = new WeakEventListener<FeatureFormView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
                 {
@@ -332,6 +330,59 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 return Properties.Resources.GetString("FeatureFormFieldIsRequired");
             return exception.Message;
         }
+
+        /// <summary>
+        /// Raised when a feature form attachment is clicked
+        /// </summary>
+        /// <remarks>
+        /// <para>By default, when an attachment is clicked, the default application for the file type (if any) is launched. To override this,
+        /// listen to this event, set the <see cref="FormAttachmentClickedEventArgs.Handled"/> property to <c>true</c> and perform
+        /// your own logic. </para>
+        /// <example>
+        /// Example: Use the .NET MAUI share API for the attachment:
+        /// <code language="csharp">
+        /// private async void FormAttachmentClicked(object sender, FormAttachmentClickedEventArgs e)
+        /// {
+        ///     e.Handled = true; // Prevent default launch action
+        ///     await Share.Default.RequestAsync(new ShareFileRequest(new ReadOnlyFile(e.FilePath!, e.ContentType)));
+        /// }
+        /// </code>
+        /// </example>
+        /// </remarks>
+        public event EventHandler<FormAttachmentClickedEventArgs>? FormAttachmentClicked;
+
+        internal bool OnFormAttachmentClicked(FormAttachment attachment)
+        {
+            var handler = FormAttachmentClicked;
+            if (handler is not null)
+            {
+                var args = new FormAttachmentClickedEventArgs(attachment);
+                FormAttachmentClicked?.Invoke(this, args);
+                return args.Handled;
+            }
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Event argument for the <see cref="FeatureFormView.FormAttachmentClicked"/> event.
+    /// </summary>
+    public class FormAttachmentClickedEventArgs : EventArgs
+    {
+        internal FormAttachmentClickedEventArgs(FormAttachment attachment)
+        {
+            Attachment = attachment;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the event handler has handled the event and the default action should be prevented.
+        /// </summary>
+        public bool Handled { get; set; }
+
+        /// <summary>
+        /// Gets the attachment that was clicked.
+        /// </summary>
+        public FormAttachment Attachment { get; }
     }
 }
 #endif

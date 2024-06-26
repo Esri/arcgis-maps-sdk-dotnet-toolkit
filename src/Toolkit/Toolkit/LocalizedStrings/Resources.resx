@@ -117,10 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FeatureFormAddAttachmentButton" xml:space="preserve">
-    <value>Add</value>
-    <comment>The Add Attachment button text</comment>
-  </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
     <comment>Input validation of entered date must be before or on the maximum allowed date {0}</comment>
@@ -181,6 +177,10 @@
     <value>Less than minimum value</value>
     <comment>Input validation of entered number is below the minimum require value</comment>
   </data>
+  <data name="FeatureFormNoAttachments" xml:space="preserve">
+    <value>No attachments</value>
+    <comment>The text displayed in the attachment list when there are no attachments.</comment>
+  </data>
   <data name="FeatureFormNotInCodedValueDomain" xml:space="preserve">
     <value>Value must be within the domain</value>
     <comment>Input validation of domain values is now any of the required domain values</comment>
@@ -192,6 +192,18 @@
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Enter {0} to {1} characters</value>
     <comment>Input validation of entered text must be of a length between {0} and {1} characters</comment>
+  </data>
+  <data name="FeatureFormRemoveAttachmentMenuItem" xml:space="preserve">
+    <value>Remove</value>
+    <comment>The remove attachment context menu text</comment>
+  </data>
+  <data name="FeatureFormRenameAttachmentMenuItem" xml:space="preserve">
+    <value>Rename</value>
+    <comment>The rename attachment context menu text</comment>
+  </data>
+  <data name="FeatureFormRenameAttachmentWindowTitle" xml:space="preserve">
+    <value>Rename Attachment</value>
+    <comment>The title of the dialog used for renaming feature file attachments</comment>
   </data>
   <data name="FeatureFormSpecificLength" xml:space="preserve">
     <value>Number of characters required: {0}</value>

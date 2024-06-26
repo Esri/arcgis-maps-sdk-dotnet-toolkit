@@ -25,24 +25,18 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
-    public partial class AttachmentsFormElementView : TemplatedView
+    public partial class FormAttachmentView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        private const string AttachmentsListViewName = "AttachmentsListView";
-        private const string AddAttachmentButtonName = "AddAttachmentButton";
 
         private Button? _addAttachmentButton;
 
-        static AttachmentsFormElementView()
+        static FormAttachmentView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement.Attachments), "Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Label), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
-        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.Description), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
+        //[DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormAttachment.Attachment), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormAttachment", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             var root = new VerticalStackLayout();
@@ -68,19 +62,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(itemsView);
             Button addButton = new Button()
             {
-                Text = "+ ",
+                Text = "+ " + Properties.Resources.GetString("FeatureFormAddAttachmentButton"),
                 BorderWidth = 0,
                 BackgroundColor = Colors.Transparent,
                 TextColor = Colors.CornflowerBlue,
-                HorizontalOptions = new LayoutOptions(LayoutAlignment.Start, true), Padding = new Thickness(0, 3, 50, 3)
+                HorizontalOptions = new LayoutOptions(LayoutAlignment.Start, true),
+                Padding = new Thickness(0, 3, 50, 3)
             };
             addButton.SetBinding(VisualElement.IsVisibleProperty, new Binding("Element.IsEditable", source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(addButton);
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
-            nameScope.RegisterName(AttachmentsListViewName, itemsView);
-            nameScope.RegisterName(AddAttachmentButtonName, addButton);
+            //nameScope.RegisterName(AttachmentsListViewName, itemsView);
+            //nameScope.RegisterName(AddAttachmentButtonName, addButton);
             return root;
         }
 
@@ -90,30 +85,34 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             base.OnApplyTemplate();
             if (_addAttachmentButton is not null)
             {
-                _addAttachmentButton.Clicked -= AddAttachmentButton_Click;
+                _addAttachmentButton.Clicked -= AddAttachmentButton_Clicked;
             }
             _addAttachmentButton = GetTemplateChild("AddAttachmentButton") as Button;
             if (_addAttachmentButton is not null)
             {
-                _addAttachmentButton.Clicked += AddAttachmentButton_Click;
+                _addAttachmentButton.Clicked += AddAttachmentButton_Clicked;
             }
+            UpdateThumbnail();
         }
 
-        private async void AddAttachmentButton_Click(object? sender, EventArgs e)
+        private void AddAttachmentButton_Clicked(object? sender, EventArgs e)
         {
-            if (Element is null) return;
-            try
+            // TODO
+        }
+
+        private FeatureFormView? GetFeatureFormViewParent()
+        {
+            var parent = this.Parent;
+            while (parent is not null && parent is not FeatureFormView popup)
             {
-                var result = await FilePicker.Default.PickAsync(new());
-                if (result != null)
-                {
-                    Element.AddAttachment(result.FileName, MimeTypeMap.GetMimeType(result.FileName), File.ReadAllBytes(result.FullPath));
-                }
+                parent = parent.Parent;
             }
-            catch(System.Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
-            }
+            return parent as FeatureFormView;
+        }
+
+        private void UpdateThumbnail()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
