@@ -22,13 +22,15 @@ using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics;
+using Microsoft.Maui.Handlers;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
     public partial class AttachmentsFormElementView : TemplatedView
     {
         private static readonly ControlTemplate DefaultControlTemplate;
-        //private const string AttachmentsListViewName = "AttachmentsListView";
+        private const string AttachmentsListViewName = "AttachmentsListView";
         private const string AddAttachmentButtonName = "AddAttachmentButton";
 
         private Button? _addAttachmentButton;
@@ -106,6 +108,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
             nameScope.RegisterName(AddAttachmentButtonName, addButton);
+            nameScope.RegisterName(AttachmentsListViewName, itemsView);
             return root;
         }
 
@@ -116,15 +119,69 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (_addAttachmentButton is not null)
             {
                 _addAttachmentButton.Clicked -= AddAttachmentButton_Click;
+                FlyoutBase.SetContextFlyout(this, null);
             }
             _addAttachmentButton = GetTemplateChild("AddAttachmentButton") as Button;
             if (_addAttachmentButton is not null)
             {
                 _addAttachmentButton.Clicked += AddAttachmentButton_Click;
+                ConfigureFlyout(_addAttachmentButton);
             }
         }
 
-        private async void AddAttachmentButton_Click(object? sender, EventArgs e)
+        private void ConfigureFlyout(Button button)
+        {
+            MenuFlyout flyout = new MenuFlyout();
+            flyout.Add(new MenuFlyoutItem()
+            {
+                Text = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithCamera"),
+                IconImageSource = new FontImageSource { Glyph = "\uE2D0", FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
+            });
+            flyout.Add(new MenuFlyoutItem()
+            {
+                Text = Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromFile"),
+                IconImageSource = new FontImageSource { Glyph = "\uE02E", FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
+            });
+
+            ((MenuFlyoutItem)flyout[0]).Clicked += async (s, e) =>
+            {
+                if (Element is not null)
+                {
+                    try
+                    {
+                        var result = await MediaPicker.CapturePhotoAsync();
+                        if (result != null)
+                        {
+                            Element.AddAttachment(result.FileName, result.ContentType, File.ReadAllBytes(result.FullPath));
+                            (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
+                        }
+                    }
+                    catch(System.Exception ex)
+                    {
+                        Trace.WriteLine("Failed to capture photo: " + ex.Message);
+                    }
+                }
+            };
+            ((MenuFlyoutItem)flyout[1]).Clicked += (s, e) => AddAttachmentFromFile();
+            
+            FlyoutBase.SetContextFlyout(button, flyout);
+        }
+
+        private void AddAttachmentButton_Click(object? sender, EventArgs e)
+        {
+            if (FlyoutBase.GetContextFlyout((BindableObject)sender!) is MenuFlyout flyout)
+            {
+                var handler = flyout.Handler as IMenuFlyoutHandler;
+                if (flyout is IFlyoutView ifly)
+                    ifly.IsPresented = true;
+
+                handler!.UpdateValue(nameof(IFlyoutView.IsPresented));
+            }
+            else
+                AddAttachmentFromFile();
+        }
+
+        private async void AddAttachmentFromFile()
         {
             if (Element is null) return;
             try
@@ -133,9 +190,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 if (result != null)
                 {
                     Element.AddAttachment(result.FileName, MimeTypeMap.GetMimeType(new FileInfo(result.FileName).Extension), File.ReadAllBytes(result.FullPath));
+                    (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                 }
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Failed to add attachment: " + ex.Message);
             }

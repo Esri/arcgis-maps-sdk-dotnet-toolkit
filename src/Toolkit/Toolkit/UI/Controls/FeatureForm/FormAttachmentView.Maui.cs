@@ -30,8 +30,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
     {
         private static readonly ControlTemplate DefaultControlTemplate;
 
-        private Button? _addAttachmentButton;
-
         static FormAttachmentView()
         {
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
