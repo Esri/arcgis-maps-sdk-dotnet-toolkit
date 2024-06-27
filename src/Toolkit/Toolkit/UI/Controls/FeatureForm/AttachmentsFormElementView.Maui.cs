@@ -181,6 +181,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         {
                             return;
                         }
+                        // Note: iOS returns a PNG image. See https://github.com/dotnet/maui/issues/8251
                         var photo = await MediaPicker.CapturePhotoAsync();
                         if (photo != null && Element != null)
                         {
@@ -189,7 +190,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                                 using var sr = new BinaryReader(stream);
                                 var data = sr.ReadBytes((int)stream.Length);
                                 var contentType = photo.ContentType;
-#if IOS // Workaround https://github.com/dotnet/maui/issues/15562
+#if IOS                         // Workaround https://github.com/dotnet/maui/issues/15562
                                 if (!contentType.Contains('/'))
                                     contentType = "image/" + contentType;
 #endif
