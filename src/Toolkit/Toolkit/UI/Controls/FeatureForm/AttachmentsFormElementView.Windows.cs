@@ -31,6 +31,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     public partial class AttachmentsFormElementView : Control
     {
         private ButtonBase? _addAttachmentButton;
+        private bool _scrollToEnd;
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -48,12 +49,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _addAttachmentButton.Click += AddAttachmentButton_Click;
             }
+            if(GetTemplateChild("ItemsScrollView") is ScrollViewer scrollViewer)
+                scrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
+        }
+
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if(_scrollToEnd)
+            {
+                (sender as ScrollViewer)?.ScrollToRightEnd();
+                _scrollToEnd = false;
+            }
         }
 
         private void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
             if (Element is null) return;
-            // TODO: Allow overriding what happens here
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -62,6 +73,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     var fileInfo = new FileInfo(openFileDialog.FileName);
                     if (fileInfo.Exists)
                     {
+                        _scrollToEnd = true;
                         Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
                     }
                 }
