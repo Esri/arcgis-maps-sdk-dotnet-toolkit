@@ -189,7 +189,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                                 using var sr = new BinaryReader(stream);
                                 var data = sr.ReadBytes((int)stream.Length);
                                 var contentType = photo.ContentType;
-
+#if IOS // Workaround https://github.com/dotnet/maui/issues/15562
+                                if (!contentType.Contains('/'))
+                                    contentType = "image/" + contentType;
+#endif
                                 Element.AddAttachment(photo.FileName, contentType, data);
                             }
                             EvaluateExpressions();
