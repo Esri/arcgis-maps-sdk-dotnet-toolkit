@@ -50,7 +50,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
             GestureRecognizers.Add(tapGestureRecognizer);
             Margin = new Thickness(4, 0);
+#if WINDOWS || MACCATALYST
             ConfigureFlyout();
+#endif
 #else
             DefaultStyleKey = typeof(FormAttachmentView);
 #endif

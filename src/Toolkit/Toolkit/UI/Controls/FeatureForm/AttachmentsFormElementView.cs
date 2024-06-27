@@ -104,10 +104,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 this.Dispatch(UpdateVisibility);
             }
-            //else if (e.PropertyName == nameof(AttachmentsFormElement.IsEditable))
-            //{
-            //    //this.Dispatch(UpdateEditable);
-            //}
         }
 
         private void UpdateVisibility()

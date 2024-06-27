@@ -437,7 +437,7 @@
                                     <TextBlock Text="" FontFamily="Segoe MDL2 Assets" />
                             </Button>
                         </Grid>
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" x:Name="ItemsScrollView">
                             <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>

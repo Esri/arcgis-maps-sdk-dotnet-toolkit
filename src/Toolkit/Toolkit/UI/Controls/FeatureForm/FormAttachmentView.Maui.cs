@@ -23,6 +23,7 @@ using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Maui.Controls.Shapes;
+using System.Runtime.Versioning;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -66,6 +67,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return background;
         }
 
+        [SupportedOSPlatform("windows")]
+        [SupportedOSPlatform("maccatalyst")]
         private void ConfigureFlyout()
         {
             MenuFlyout flyout = new MenuFlyout();

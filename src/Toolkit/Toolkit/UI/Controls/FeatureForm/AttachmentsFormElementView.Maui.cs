@@ -24,6 +24,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
 using Microsoft.Maui.Handlers;
+using Microsoft.Maui.ApplicationModel;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -40,14 +41,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
-        private FeatureFormView? GetFeatureFormViewParent()
+        private FeatureFormView? GetFeatureFormViewParent() => GetParent<FeatureFormView>();
+
+        private T? GetParent<T>() where T : Element
         {
             var parent = this.Parent;
-            while (parent is not null && parent is not FeatureFormView popup)
+            while (parent is not null && parent is not T page)
             {
                 parent = parent.Parent;
             }
-            return parent as FeatureFormView;
+            return parent as T;
         }
 
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement.Attachments), "Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement", "Esri.ArcGISRuntime")]
@@ -135,58 +138,54 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (_addAttachmentButton is not null)
             {
                 _addAttachmentButton.Clicked += AddAttachmentButton_Click;
-                ConfigureFlyout(_addAttachmentButton);
             }
         }
 
-        private void ConfigureFlyout(Button button)
+        private async void AddAttachmentButton_Click(object? sender, EventArgs e)
         {
-            MenuFlyout flyout = new MenuFlyout();
-            flyout.Add(new MenuFlyoutItem()
+            var page = GetParent<Page>();
+            if(page != null)
             {
-                Text = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithCamera"),
-                IconImageSource = new FontImageSource { Glyph = "\uE2D0", FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
-            });
-            flyout.Add(new MenuFlyoutItem()
-            {
-                Text = Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromFile"),
-                IconImageSource = new FontImageSource { Glyph = "\uE02E", FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
-            });
-
-            ((MenuFlyoutItem)flyout[0]).Clicked += async (s, e) =>
-            {
-                if (Element is not null)
+#if ANDROID
+                // Check if manifest allows camera access.
+                if (!Permissions.IsDeclaredInManifest("android.permission.CAMERA"))
+                {
+                    Trace.WriteLine("**Microsoft.Maui.ApplicationModel.PermissionException:** 'You need to declare using the permission: `android.permission.CAMERA` in your AndroidManifest.xml'");
+                    // Fallback to just adding a file
+                    AddAttachmentFromFile();
+                    return;
+                }
+#endif
+                var addAttachment = Properties.Resources.GetString("FeatureFormAddAttachmentMenuFromFile");
+                var camera = Properties.Resources.GetString("FeatureFormAddAttachmentMenuWithCamera");
+                
+                var result = await page.DisplayActionSheet(addAttachment, null, null, camera, addAttachment);
+                if (result == camera)
                 {
                     try
                     {
-                        var result = await MediaPicker.CapturePhotoAsync();
-                        if (result != null)
+                        var status = await Permissions.RequestAsync<Permissions.Camera>();
+                        if (status != PermissionStatus.Granted)
                         {
-                            Element.AddAttachment(result.FileName, result.ContentType, File.ReadAllBytes(result.FullPath));
+                            return;
+                        }
+                        var photo = await MediaPicker.CapturePhotoAsync();
+                        if (photo != null && Element != null)
+                        {
+                            Element.AddAttachment(photo.FileName, photo.ContentType, File.ReadAllBytes(photo.FullPath));
                             EvaluateExpressions();
                             (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                         }
                     }
-                    catch(System.Exception ex)
+                    catch (System.Exception ex)
                     {
-                        Trace.WriteLine("Failed to capture photo: " + ex.Message);
+                        Trace.WriteLine("Failed to add attachment: " + ex.Message);
                     }
                 }
-            };
-            ((MenuFlyoutItem)flyout[1]).Clicked += (s, e) => AddAttachmentFromFile();
-            
-            FlyoutBase.SetContextFlyout(button, flyout);
-        }
-
-        private void AddAttachmentButton_Click(object? sender, EventArgs e)
-        {
-            if (FlyoutBase.GetContextFlyout((BindableObject)sender!) is MenuFlyout flyout)
-            {
-                var handler = flyout.Handler as IMenuFlyoutHandler;
-                if (flyout is IFlyoutView ifly)
-                    ifly.IsPresented = true;
-
-                handler!.UpdateValue(nameof(IFlyoutView.IsPresented));
+                if (result == addAttachment)
+                {
+                    AddAttachmentFromFile();
+                }
             }
             else
                 AddAttachmentFromFile();
