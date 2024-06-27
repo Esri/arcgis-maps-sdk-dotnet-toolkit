@@ -36,8 +36,8 @@
                         <Label MaxLines="5" Margin="0,10,0,0" >
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="You can get or create an API key from " />
-                                    <Span Text="your developer dashboard" TextDecorations="Underline" TextColor="{AppThemeBinding Light={StaticResource Blue100Accent}, Dark={StaticResource Blue300Accent}}" >
+                                    <Span Text="You can create an API key access token as described in " />
+                                    <Span Text="this tutorial" TextDecorations="Underline" TextColor="{AppThemeBinding Light={StaticResource Blue100Accent}, Dark={StaticResource Blue300Accent}}" >
                                         <Span.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="DashboardLinkTapped" />
                                         </Span.GestureRecognizers>
@@ -45,11 +45,6 @@
                                     <Span Text="." />
                                 </FormattedString>
                             </Label.FormattedText>
-                        </Label>
-                        <Label MaxLines="5" Margin="0,10,0,0" TextDecorations="Underline" TextColor="{AppThemeBinding Light={StaticResource Blue100Accent}, Dark={StaticResource Blue300Accent}}" Text="More info on API Keys">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="MoreInfoLinkTapped" />
-                            </Label.GestureRecognizers>
                         </Label>
                     </VerticalStackLayout>
                 </Border>
