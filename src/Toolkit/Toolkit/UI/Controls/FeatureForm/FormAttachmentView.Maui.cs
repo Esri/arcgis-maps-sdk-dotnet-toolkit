@@ -251,7 +251,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     string newName = await page.DisplayPromptAsync(Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle"), "", initialValue: Attachment.Name);
                     if (!string.IsNullOrWhiteSpace(newName))
                     {
-                        RenameAttachment(result.Trim());
+                        RenameAttachment(newName.Trim());
                     }
                 }
                 catch { }
