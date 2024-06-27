@@ -49,7 +49,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             var tapGestureRecognizer = new TapGestureRecognizer();
             tapGestureRecognizer.Tapped += TapGestureRecognizer_Tapped;
             GestureRecognizers.Add(tapGestureRecognizer);
-            Margin = new Thickness(4, 0);
 #if WINDOWS || MACCATALYST
             ConfigureFlyout();
 #endif
@@ -181,6 +180,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         return;
                 }
 #if MAUI
+#if !WINDOWS && !MACCATALYST // Windows and Catalyst supports context menus for the additional options
+                if (await DisplayAttachmentActionSheet())
+                    return;
+#endif
                 try
                 {
                     await Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
@@ -188,7 +191,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 }
                 catch(System.Exception ex)
                 {
-                    System.Diagnostics.Trace.WriteLine($"Failed to open attachment: " + ex.Message);
+                    System.Diagnostics.Trace.WriteLine($"Failed to open attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                 }
 #else
                 var saveFileDialog = new SaveFileDialog();

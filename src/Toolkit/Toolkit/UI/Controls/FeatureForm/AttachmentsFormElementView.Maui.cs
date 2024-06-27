@@ -106,14 +106,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Default,
                 EmptyView = new Label() { Text = Properties.Resources.GetString("FeatureFormNoAttachments"), TextColor = Colors.Gray },
-                ItemsLayout = new GridItemsLayout(1, ItemsLayoutOrientation.Horizontal),
+                ItemsLayout = new GridItemsLayout(1, ItemsLayoutOrientation.Horizontal) {  HorizontalItemSpacing = 4 },
                 ItemTemplate = new DataTemplate(() =>
                 {
                     var view = new FormAttachmentView();
                     view.SetBinding(FormAttachmentView.AttachmentProperty, new Binding());
-                    view.SetBinding(FormAttachmentView.ElementProperty, new Binding("Element", source: RelativeBindingSource.TemplatedParent ));
+                    view.SetBinding(FormAttachmentView.ElementProperty, new Binding("Element", source: RelativeBindingSource.TemplatedParent));
                     return view;
-                }), MinimumHeightRequest = 75
+                }),
+                HeightRequest = 75,
+                //VerticalOptions = LayoutOptions.Start,
+                ItemSizingStrategy = ItemSizingStrategy.MeasureFirstItem
             };
             itemsView.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(itemsView);
@@ -150,7 +153,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 // Check if manifest allows camera access.
                 if (!Permissions.IsDeclaredInManifest("android.permission.CAMERA"))
                 {
-                    Trace.WriteLine("**Microsoft.Maui.ApplicationModel.PermissionException:** 'You need to declare using the permission: `android.permission.CAMERA` in your AndroidManifest.xml'");
+                    Trace.WriteLine("**Microsoft.Maui.ApplicationModel.PermissionException:** 'You need to declare using the permission: `android.permission.CAMERA` in your AndroidManifest.xml'", "ArcGIS Maps SDK Toolkit");
+                    // Fallback to just adding a file
+                    AddAttachmentFromFile();
+                    return;
+                }
+#elif IOS
+                // Check if manifest allows camera access.
+                if (!Permissions.IsKeyDeclaredInInfoPlist("NSCameraUsageDescription"))
+                {
+                    Trace.WriteLine("You must set `NSCameraUsageDescription` in your Info.plist file to use the Permission: Camera.", "ArcGIS Maps SDK Toolkit");
                     // Fallback to just adding a file
                     AddAttachmentFromFile();
                     return;
@@ -172,14 +184,21 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         var photo = await MediaPicker.CapturePhotoAsync();
                         if (photo != null && Element != null)
                         {
-                            Element.AddAttachment(photo.FileName, photo.ContentType, File.ReadAllBytes(photo.FullPath));
+                            using (var stream = await photo.OpenReadAsync())
+                            {
+                                using var sr = new BinaryReader(stream);
+                                var data = sr.ReadBytes((int)stream.Length);
+                                var contentType = photo.ContentType;
+
+                                Element.AddAttachment(photo.FileName, contentType, data);
+                            }
                             EvaluateExpressions();
                             (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                         }
                     }
                     catch (System.Exception ex)
                     {
-                        Trace.WriteLine("Failed to add attachment: " + ex.Message);
+                        Trace.WriteLine("Failed to add attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
                     }
                 }
                 if (result == addAttachment)

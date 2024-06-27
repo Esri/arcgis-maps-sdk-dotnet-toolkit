@@ -197,6 +197,10 @@
     <value>Value must not be empty</value>
     <comment>Input validation of value was null or empty </comment>
   </data>
+  <data name="FeatureFormOpenAttachmentMenuItem" xml:space="preserve">
+    <value>Open</value>
+    <comment>Menu text for opening a file attachment on the device</comment>
+  </data>
   <data name="FeatureFormOutsideLengthRange" xml:space="preserve">
     <value>Enter {0} to {1} characters</value>
     <comment>Input validation of entered text must be of a length between {0} and {1} characters</comment>

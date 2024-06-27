@@ -229,6 +229,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             };
             image.Aspect = Aspect.Center;
         }
+
+        private async Task<bool> DisplayAttachmentActionSheet()
+        {
+            if (Attachment is null) return false;
+            var page = GetPage();
+            if (page is null) return false;
+
+            string delete = Properties.Resources.GetString("FeatureFormRemoveAttachmentMenuItem")!;
+            string rename = Properties.Resources.GetString("FeatureFormRenameAttachmentMenuItem")!;
+            string open = Properties.Resources.GetString("FeatureFormOpenAttachmentMenuItem")!;
+            var result = await page.DisplayActionSheet(Attachment.Name, null, null, delete, rename, open);
+            if (result == delete)
+            {
+                DeleteAttachment();
+            }
+            else if(result == rename)
+            {
+                try
+                {
+                    string newName = await page.DisplayPromptAsync(Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle"), "", initialValue: Attachment.Name);
+                    if (!string.IsNullOrWhiteSpace(newName))
+                    {
+                        RenameAttachment(result.Trim());
+                    }
+                }
+                catch { }
+            }
+            else if (result == open)
+            {
+                return false; // Falls back to default action
+            }
+
+            return true;
+        }
     }
 }
 #endif
