@@ -143,7 +143,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 AvailableBasemaps?.ToList()?.ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(GeoModel));
 
                 // Update selection.
-                _ = UpdateSelectionForGeoModelBasemap();
+                UpdateSelectionForGeoModelBasemap();
             }
             finally
             {
@@ -160,10 +160,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
                 case NotifyCollectionChangedAction.Replace:
                 case NotifyCollectionChangedAction.Reset:
                     e.NewItems?.OfType<BasemapGalleryItem>().ToList().ForEach(bmgi => bmgi.NotifySpatialReferenceChanged(GeoModel));
-                    _ = UpdateSelectionForGeoModelBasemap();
+                    UpdateSelectionForGeoModelBasemap();
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    _ = UpdateSelectionForGeoModelBasemap();
+                    UpdateSelectionForGeoModelBasemap();
                     break;
             }
         }
@@ -171,14 +171,14 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         private void HandleGeoModelChanged()
         {
             AvailableBasemaps?.ToList().ForEach(item => item.NotifySpatialReferenceChanged(GeoModel));
-            _ = UpdateSelectionForGeoModelBasemap();
+            UpdateSelectionForGeoModelBasemap();
         }
 
         private void HandleGeoModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(GeoModel.Basemap) && !_ignoreEventsFlag)
             {
-                _ = UpdateSelectionForGeoModelBasemap();
+                UpdateSelectionForGeoModelBasemap();
             }
             else if (e.PropertyName == nameof(GeoModel.SpatialReference))
             {
@@ -244,11 +244,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
             }
         }
 
-        private async Task UpdateSelectionForGeoModelBasemap()
+        private void UpdateSelectionForGeoModelBasemap()
         {
             if (GeoModel?.Basemap is Basemap inputBasemap)
             {
-                if (await BasemapIsActuallyNotABasemap(inputBasemap))
+                if (BasemapIsActuallyNotABasemap(inputBasemap))
                 {
                     SelectedBasemap = null;
                 }
@@ -270,9 +270,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI
         /// <summary>
         /// Maps and scenes start with an empty basemap that should not be shown in the UI.
         /// </summary>
-        private static async Task<bool> BasemapIsActuallyNotABasemap(Basemap input)
+        private static bool BasemapIsActuallyNotABasemap(Basemap input)
         {
-            await input.LoadAsync();
             if (!input.BaseLayers.Any() && !input.ReferenceLayers.Any())
             {
                 return true;
