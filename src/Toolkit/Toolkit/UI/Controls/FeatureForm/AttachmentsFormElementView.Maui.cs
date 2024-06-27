@@ -106,7 +106,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             {
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Default,
                 EmptyView = new Label() { Text = Properties.Resources.GetString("FeatureFormNoAttachments"), TextColor = Colors.Gray },
-                ItemsLayout = new GridItemsLayout(1, ItemsLayoutOrientation.Horizontal) {  HorizontalItemSpacing = 4 },
+                ItemsLayout = new GridItemsLayout(1, ItemsLayoutOrientation.Horizontal) { HorizontalItemSpacing = 4 },
                 ItemTemplate = new DataTemplate(() =>
                 {
                     var view = new FormAttachmentView();
@@ -114,9 +114,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     view.SetBinding(FormAttachmentView.ElementProperty, new Binding("Element", source: RelativeBindingSource.TemplatedParent));
                     return view;
                 }),
+#if IOS
                 HeightRequest = 75,
+                ItemSizingStrategy = ItemSizingStrategy.MeasureFirstItem,
+#else
+                MinimumHeightRequest = 75,
+#endif
                 //VerticalOptions = LayoutOptions.Start,
-                ItemSizingStrategy = ItemSizingStrategy.MeasureFirstItem
             };
             itemsView.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(itemsView);
@@ -147,7 +151,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private async void AddAttachmentButton_Click(object? sender, EventArgs e)
         {
             var page = GetParent<Page>();
-            if(page != null)
+            if(page != null && MediaPicker.IsCaptureSupported)
             {
 #if ANDROID
                 // Check if manifest allows camera access.
