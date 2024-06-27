@@ -73,6 +73,25 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
+        private void DeleteAttachment()
+        {
+            if (Attachment is not null && Element is not null)
+            {
+                var form = GetFeatureFormViewParent()?.FeatureForm; // Get form before delete, or we won't be able to get to the parent since this instance will be removed from the tree
+                Element.DeleteAttachment(Attachment);
+                _ = form?.EvaluateExpressionsAsync();
+            }
+        }
+
+        private void RenameAttachment(string newName)
+        {
+            if (Attachment != null && Attachment.Name != newName)
+            {
+                Attachment.Name = newName;
+                _ = GetFeatureFormViewParent()?.FeatureForm?.EvaluateExpressionsAsync();
+            }
+        }
+
         /// <summary>
         /// Gets or sets the AttachmentsFormElement.
         /// </summary>
@@ -125,7 +144,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 _elementPropertyChangedListener = new WeakEventListener<FormAttachmentView, INotifyPropertyChanged, object?, PropertyChangedEventArgs>(this, inpcNew)
                 {
-                    OnEventAction = static (instance, source, eventArgs) => instance.Element_PropertyChanged(source, eventArgs),
+                    OnEventAction = static (instance, source, eventArgs) => instance.Attachment_PropertyChanged(source, eventArgs),
                     OnDetachAction = static (instance, source, weakEventListener) => source.PropertyChanged -= weakEventListener.OnEvent,
                 };
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
@@ -139,7 +158,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             UpdateLoadedState(false);
         }
 
-        private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Attachment_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(FormAttachment.LoadStatus))
             {

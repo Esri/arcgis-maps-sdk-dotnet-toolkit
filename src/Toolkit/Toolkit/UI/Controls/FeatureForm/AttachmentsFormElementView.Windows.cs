@@ -32,6 +32,17 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private ButtonBase? _addAttachmentButton;
         private bool _scrollToEnd;
+
+        private UI.Controls.FeatureFormView? GetFeatureFormViewParent()
+        {
+            var parent = VisualTreeHelper.GetParent(this);
+            while (parent is not null && parent is not UI.Controls.FeatureFormView popup)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as UI.Controls.FeatureFormView;
+        }
+
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()
@@ -64,7 +75,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void AddAttachmentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Element is null) return;
+            if (Element is null || !Element.IsEditable) return;
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -75,6 +86,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
                         _scrollToEnd = true;
                         Element.AddAttachment(fileInfo.Name, MimeTypeMap.GetMimeType(fileInfo.Extension), File.ReadAllBytes(fileInfo.FullName));
+                        EvaluateExpressions();
                     }
                 }
             }

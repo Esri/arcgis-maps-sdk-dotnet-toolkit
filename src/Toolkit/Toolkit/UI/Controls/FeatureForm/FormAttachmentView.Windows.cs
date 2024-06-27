@@ -31,8 +31,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class FormAttachmentView : ButtonBase
     {
-        private ButtonBase? _addAttachmentButton;
-
         private UI.Controls.FeatureFormView? GetFeatureFormViewParent()
         {
             var parent = VisualTreeHelper.GetParent(this);
@@ -68,6 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 VisualStateManager.GoToState(this, "NotLoaded", useTransitions);
         }
 
+        /// <inheritdoc/>
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
@@ -95,10 +94,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             
             ((MenuItem)contextMenu.Items[0]).Click += (s, e) =>
             {
-                if (Attachment is not null && Element is not null)
-                {
-                    Element.DeleteAttachment(Attachment);
-                }
+                DeleteAttachment();
             };
             ((MenuItem)contextMenu.Items[1]).Click += (s, e) =>
             {
@@ -117,7 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     panel.Children.Add(textBox);
 
                     StackPanel panel2 = new StackPanel() { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 10, 0, 0) };
-                    Button okButton = new Button() { Content = "OK", MinWidth = 75, IsDefault = true, Margin = new Thickness(0, 0, 10, 0) };
+                    Button okButton = new Button() { Content = "OK", MinWidth = 75, IsDefault = true, Margin = new Thickness(0, 0, 10, 0), IsEnabled = false };
                     okButton.Click += (s,e) => renameDialog.DialogResult = true;
                     Button cancelButton = new Button() { Content = "Cancel", MinWidth = 75, IsCancel = true };
                     panel2.Children.Add(okButton);
@@ -127,13 +123,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
                     textBox.TextChanged += (s, e) =>
                     {
-                        okButton.IsEnabled = !string.IsNullOrEmpty(textBox.Text.Trim());
+                        okButton.IsEnabled = !string.IsNullOrEmpty(textBox.Text.Trim()) && textBox.Text.Trim() != Attachment.Name;
                     };
                     bool? ok = renameDialog.ShowDialog();
 
                     if(ok.HasValue && ok.Value == true && !string.IsNullOrEmpty(textBox.Text.Trim()))
                     {
-                        Attachment.Name = textBox.Text.Trim();
+                        RenameAttachment(textBox.Text.Trim());
                     }
                 }
             };
@@ -145,7 +141,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         protected override void OnStylusSystemGesture(StylusSystemGestureEventArgs e)
         {
             base.OnStylusSystemGesture(e);
-            if (e.SystemGesture == SystemGesture.HoldEnter)
+            if (e.SystemGesture == SystemGesture.HoldEnter && Element is not null && Element.IsEditable)
             {
                 OnAttachmentContextMenu();
             }
@@ -155,8 +151,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseRightButtonDown(e);
-            e.Handled = true;
-            OnAttachmentContextMenu();
+            if (Element is not null && Element.IsEditable)
+            {
+                e.Handled = true;
+                OnAttachmentContextMenu();
+            }
         }
 
         /// <inheritdoc />

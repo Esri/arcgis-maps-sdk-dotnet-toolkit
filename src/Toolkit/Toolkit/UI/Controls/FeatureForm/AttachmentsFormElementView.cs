@@ -46,6 +46,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         }
 
+        private void EvaluateExpressions()
+        {
+            _ = GetFeatureFormViewParent()?.FeatureForm?.EvaluateExpressionsAsync();
+        }
+
         /// <summary>
         /// Gets or sets the AttachmentsFormElement.
         /// </summary>
@@ -83,8 +88,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 inpcNew.PropertyChanged += _elementPropertyChangedListener.OnEvent;
             }
             UpdateVisibility();
-            UpdateAttachments();
-
             if (newValue != null)
             {
                 try
@@ -97,22 +100,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void Element_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(AttachmentsFormElement.Attachments))
-            {
-                this.Dispatch(UpdateAttachments);
-            }
-            else if (e.PropertyName == nameof(AttachmentsFormElement.IsVisible))
+            if (e.PropertyName == nameof(AttachmentsFormElement.IsVisible))
             {
                 this.Dispatch(UpdateVisibility);
             }
-            else if (e.PropertyName == nameof(AttachmentsFormElement.IsEditable))
-            {
-                //this.Dispatch(UpdateEditable);
-            }
-        }
-
-        private void UpdateAttachments()
-        {
+            //else if (e.PropertyName == nameof(AttachmentsFormElement.IsEditable))
+            //{
+            //    //this.Dispatch(UpdateEditable);
+            //}
         }
 
         private void UpdateVisibility()

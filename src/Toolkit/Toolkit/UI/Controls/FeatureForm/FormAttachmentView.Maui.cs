@@ -80,13 +80,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 IconImageSource = new FontImageSource { Glyph = "\uE209", FontFamily = "calcite-ui-icons-24", Size = 32, Color = Colors.Gray }
             });
 
-            ((MenuFlyoutItem)flyout[0]).Clicked += (s, e) =>
-            {
-                if (Attachment is not null && Element is not null)
-                {
-                    Element.DeleteAttachment(Attachment);
-                }
-            };
+            ((MenuFlyoutItem)flyout[0]).Clicked += (s, e) => DeleteAttachment();
+
             ((MenuFlyoutItem)flyout[1]).Clicked += async (s, e) =>
             {
                 if (Attachment is not null && Element is not null && GetPage() is Page page)
@@ -95,7 +90,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     {
                         string result = await page.DisplayPromptAsync(Properties.Resources.GetString("FeatureFormRenameAttachmentWindowTitle"), "", initialValue: Attachment.Name);
                         if (!string.IsNullOrWhiteSpace(result))
-                            Attachment.Name = result.Trim();
+                        {
+                            RenameAttachment(result.Trim());
+                        }
                     }
                     catch { }
                 }

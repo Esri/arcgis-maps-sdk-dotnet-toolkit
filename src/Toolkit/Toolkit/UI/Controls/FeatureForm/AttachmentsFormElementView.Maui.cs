@@ -40,6 +40,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
+        private FeatureFormView? GetFeatureFormViewParent()
+        {
+            var parent = this.Parent;
+            while (parent is not null && parent is not FeatureFormView popup)
+            {
+                parent = parent.Parent;
+            }
+            return parent as FeatureFormView;
+        }
+
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement.Attachments), "Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement.IsEditable), "Esri.ArcGISRuntime.Mapping.FeatureForms.AttachmentsFormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement.IsVisible), "Esri.ArcGISRuntime.Mapping.FeatureForms.FormElement", "Esri.ArcGISRuntime")]
@@ -119,7 +129,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             if (_addAttachmentButton is not null)
             {
                 _addAttachmentButton.Clicked -= AddAttachmentButton_Click;
-                FlyoutBase.SetContextFlyout(this, null);
+                FlyoutBase.SetContextFlyout(_addAttachmentButton, null);
             }
             _addAttachmentButton = GetTemplateChild("AddAttachmentButton") as Button;
             if (_addAttachmentButton is not null)
@@ -153,6 +163,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         if (result != null)
                         {
                             Element.AddAttachment(result.FileName, result.ContentType, File.ReadAllBytes(result.FullPath));
+                            EvaluateExpressions();
                             (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                         }
                     }
@@ -190,6 +201,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 if (result != null)
                 {
                     Element.AddAttachment(result.FileName, MimeTypeMap.GetMimeType(new FileInfo(result.FileName).Extension), File.ReadAllBytes(result.FullPath));
+                    EvaluateExpressions();
                     (GetTemplateChild(AttachmentsListViewName) as CollectionView)?.ScrollTo(Element.Attachments.Last());
                 }
             }
