@@ -120,7 +120,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 #else
                 MinimumHeightRequest = 75,
 #endif
-                //VerticalOptions = LayoutOptions.Start,
             };
             itemsView.SetBinding(CollectionView.ItemsSourceProperty, new Binding("Element.Attachments", source: RelativeBindingSource.TemplatedParent));
             root.Children.Add(itemsView);
