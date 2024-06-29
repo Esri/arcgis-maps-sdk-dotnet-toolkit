@@ -84,7 +84,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             try
             {
-                await formViewer.FeatureForm!.Feature.FeatureTable!.UpdateFeatureAsync(formViewer.FeatureForm.Feature);
+                await formViewer.FeatureForm!.FinishEditingAsync();
             }
             catch (Exception ex)
             {
