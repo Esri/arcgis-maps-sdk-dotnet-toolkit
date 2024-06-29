@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.Forms
             }
             try
             {
-                await formViewer.FeatureForm.Feature.FeatureTable.UpdateFeatureAsync(formViewer.FeatureForm.Feature);
+                await formViewer.FeatureForm.FinishEditingAsync();
             }
             catch (Exception ex)
             {
