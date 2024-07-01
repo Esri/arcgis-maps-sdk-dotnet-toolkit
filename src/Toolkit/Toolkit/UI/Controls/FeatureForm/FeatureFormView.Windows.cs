@@ -22,6 +22,11 @@ using System.Diagnostics;
 
 namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 {
+    /// <summary>
+    /// A visual feature editor form controlled by a <see cref="FeatureForm"/> definition.
+    /// </summary>
+    /// <seealso cref="Esri.ArcGISRuntime.Data.ArcGISFeatureTable.FeatureFormDefinition"/>
+    /// <seealso cref="Esri.ArcGISRuntime.Mapping.FeatureLayer.FeatureFormDefinition"/>
     [TemplatePart(Name = FeatureFormContentScrollViewerName, Type = typeof(ScrollViewer))]
     [TemplatePart(Name = ItemsViewName, Type = typeof(ItemsControl))]
     public partial class FeatureFormView : Control

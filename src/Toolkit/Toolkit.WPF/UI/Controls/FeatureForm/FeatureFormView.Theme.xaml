@@ -10,6 +10,7 @@
   <SolidColorBrush x:Key="FeatureFormAccentBrush" Color="#007AC2" />
   <Thickness x:Key="FeatureFormElementInputMargin">0,0,0,5</Thickness>
   <internal:VisibilityConverter x:Key="FeatureFormViewVisibilityConverter"/>
+  <internal:FileSizeConverter x:Key="FeatureFormFileSizeConverter" />
   <Style TargetType="TextBlock" x:Key="FeatureFormViewHeaderStyle">
      <Setter Property="FontSize" Value="16" />
      <Setter Property="FontWeight" Value="Bold" />
@@ -346,8 +347,117 @@
       </Setter.Value>
     </Setter>
   </Style>
-  
-  <Style TargetType="{x:Type controls:FeatureFormView}" >
+    <Style TargetType="{x:Type primitives:FormAttachmentView}">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Width" Value="92" />
+        <Setter Property="Height" Value="75" />
+        <Setter Property="Background" Value="#33000000" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:FormAttachmentView}">
+                    <Border CornerRadius="4" Background="{TemplateBinding Background}" Margin="4">
+                        <Border.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Size, Converter={StaticResource FeatureFormFileSizeConverter}}" />
+                            </StackPanel>
+                        </Border.ToolTip>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="LoadedStates">
+                                <VisualState x:Name="NotLoaded">
+                                </VisualState>
+                                <VisualState x:Name="Loading">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LoadingBar" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DownloadIcon" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Loaded">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DownloadIcon" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileSizeText" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NameBackground" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <SolidColorBrush Color="#33000000" />
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="AttachmentName" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0">
+                                                <DiscreteObjectKeyFrame.Value>
+                                                    <SolidColorBrush Color="White" />
+                                                </DiscreteObjectKeyFrame.Value>
+                                            </DiscreteObjectKeyFrame>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid>
+                            <Image x:Name="ThumbnailImage" />
+                            <Border x:Name="NameBackground" CornerRadius="0,0,4,4" Background="Transparent" VerticalAlignment="Bottom" Padding="2">
+                                <TextBlock x:Name="AttachmentName" Text="{Binding Name}" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="10" TextTrimming="CharacterEllipsis" />
+                            </Border>
+                            <TextBlock x:Name="FileSizeText" Text="{Binding Size, Converter={StaticResource FeatureFormFileSizeConverter}}" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="10" />
+                            <TextBlock x:Name="DownloadIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE896;" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="2" />
+                            <ProgressBar x:Name="LoadingBar" IsIndeterminate="True" Visibility="Collapsed" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type primitives:AttachmentsFormElementView}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type primitives:AttachmentsFormElementView}">
+                    <StackPanel DataContext="{TemplateBinding Element}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                            <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Opacity=".7" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                            <Button x:Name="AddAttachmentButton" BorderThickness="0" Background="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" 
+                                    Visibility="{Binding IsEditable, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Padding="5" Cursor="Hand" Grid.Column="1" Grid.RowSpan="2">
+                                    <TextBlock Text="" FontFamily="Segoe MDL2 Assets" />
+                            </Button>
+                        </Grid>
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" x:Name="ItemsScrollView">
+                            <ItemsControl ItemsSource="{Binding Attachments}" IsEnabled="{Binding IsEditable}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <primitives:FormAttachmentView Attachment="{Binding}" Element="{Binding Element, RelativeSource={RelativeSource AncestorType=primitives:AttachmentsFormElementView}}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+    </Style>
+    <Style TargetType="{x:Type controls:FeatureFormView}" >
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type controls:FeatureFormView}">
@@ -384,34 +494,37 @@
               <TextBlock Text="{Binding Title}" Style="{StaticResource FeatureFormViewHeaderStyle}"
                          Visibility="{Binding Title, Converter={StaticResource FeatureFormViewVisibilityConverter}}" />
               <ScrollViewer VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"  Grid.Row="1" x:Name="FeatureFormContentScrollViewer">
-                <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView" KeyboardNavigation.IsTabStop="False">
-                  <primitives:FormElementItemsControl.FieldFormElementTemplate>
-                    <DataTemplate>
-                      <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
-                    </DataTemplate>
-                  </primitives:FormElementItemsControl.FieldFormElementTemplate>
-                  <primitives:FormElementItemsControl.GroupFormElementTemplate>
-                    <DataTemplate>
-                      <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
-                        <Expander Style="{StaticResource GroupFormElementExpanderStyle}">
-                          <Expander.Header>
-                            <StackPanel VerticalAlignment="Center">
-                              <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
-                              <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
-                            </StackPanel>
-                          </Expander.Header>
-                          <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" KeyboardNavigation.IsTabStop="False">
-                            <primitives:FormElementItemsControl.FieldFormElementTemplate>
-                              <DataTemplate>
-                                <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
-                              </DataTemplate>
-                            </primitives:FormElementItemsControl.FieldFormElementTemplate>
-                          </primitives:FormElementItemsControl>
-                        </Expander>
-                      </StackPanel>
-                    </DataTemplate>
-                  </primitives:FormElementItemsControl.GroupFormElementTemplate>
-                </primitives:FormElementItemsControl>
+                 <StackPanel>
+                  <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" x:Name="ItemsView" KeyboardNavigation.IsTabStop="False">
+                    <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                      <DataTemplate>
+                        <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
+                      </DataTemplate>
+                    </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                    <primitives:FormElementItemsControl.GroupFormElementTemplate>
+                      <DataTemplate>
+                        <StackPanel Visibility="{Binding IsVisible, Converter={StaticResource FeatureFormViewVisibilityConverter}}" >
+                          <Expander Style="{StaticResource GroupFormElementExpanderStyle}">
+                            <Expander.Header>
+                              <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Label}" Visibility="{Binding Label, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewTitleStyle}" />
+                                <TextBlock Text="{Binding Description}" Visibility="{Binding Description, Converter={StaticResource FeatureFormViewVisibilityConverter}}" Style="{StaticResource FeatureFormViewCaptionStyle}" />
+                              </StackPanel>
+                            </Expander.Header>
+                            <primitives:FormElementItemsControl ItemsSource="{Binding Elements}" Margin="0,10" KeyboardNavigation.IsTabStop="False">
+                              <primitives:FormElementItemsControl.FieldFormElementTemplate>
+                                <DataTemplate>
+                                  <primitives:FieldFormElementView Element="{Binding}" FeatureForm="{Binding FeatureForm, RelativeSource={RelativeSource AncestorType=controls:FeatureFormView}}" />
+                                </DataTemplate>
+                              </primitives:FormElementItemsControl.FieldFormElementTemplate>
+                            </primitives:FormElementItemsControl>
+                          </Expander>
+                        </StackPanel>
+                      </DataTemplate>
+                    </primitives:FormElementItemsControl.GroupFormElementTemplate>
+                  </primitives:FormElementItemsControl>
+                  <primitives:AttachmentsFormElementView Element="{Binding DefaultAttachmentsElement}" />
+                </StackPanel>
               </ScrollViewer>
             </Grid>
           </Border>
