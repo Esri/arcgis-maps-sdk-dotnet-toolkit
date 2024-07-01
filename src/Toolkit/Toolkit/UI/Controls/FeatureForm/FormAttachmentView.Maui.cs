@@ -56,6 +56,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             root.Children.Add(sizeLabel);
             var downloadIcon = new Label() { VerticalOptions = LayoutOptions.Start, HorizontalOptions = LayoutOptions.End, FontFamily = "calcite-ui-icons-24", Text = "\uE0CB", Margin = new Thickness(2) };
             root.Children.Add(downloadIcon);
+            var downloadIndicator = new ActivityIndicator() { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, IsRunning = false };
+            root.Children.Add(downloadIndicator);
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(background, nameScope);
@@ -64,6 +66,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("FileSizeText", sizeLabel);
             nameScope.RegisterName("DownloadIcon", downloadIcon);
             nameScope.RegisterName("NameBackground", nameBackground);
+            nameScope.RegisterName("DownloadIndicator", downloadIndicator);
             return background;
         }
 
@@ -133,10 +136,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Label? nameLabel = GetTemplateChild("AttachmentName") as Label;
             VisualElement? downloadIcon = GetTemplateChild("DownloadIcon") as VisualElement;
             VisualElement? nameBackground = GetTemplateChild("NameBackground") as VisualElement;
+            ActivityIndicator? downloadIndicator = GetTemplateChild("DownloadIndicator") as ActivityIndicator;
+            
 
             if (Attachment?.LoadStatus == LoadStatus.Loading)
             {
                 if(downloadIcon != null) downloadIcon.IsVisible = false;
+                if (downloadIndicator != null) downloadIndicator.IsRunning = true;
             }
             else if (Attachment?.LoadStatus == LoadStatus.Loaded)
             {
@@ -145,11 +151,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 if (downloadIcon != null) downloadIcon.IsVisible = false;
                 if (nameLabel != null) nameLabel.TextColor = Colors.White;
                 if (nameBackground != null) nameBackground.BackgroundColor = Color.FromRgba(0, 0, 0, 0x30);
+                if (downloadIndicator != null) downloadIndicator.IsRunning = false;
             }
             else if (Attachment?.LoadStatus == LoadStatus.FailedToLoad)
             {
                 UpdateThumbnail();
                 if (downloadIcon != null) downloadIcon.IsVisible = true;
+                if (downloadIndicator != null) downloadIndicator.IsRunning = false;
             }
             else
             {
@@ -157,6 +165,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 if (downloadIcon != null) downloadIcon.IsVisible = true;
                 if (nameLabel != null) nameLabel.TextColor = null;
                 if (nameBackground != null) nameBackground.BackgroundColor = Colors.Transparent;
+                if (downloadIndicator != null) downloadIndicator.IsRunning = false;
             }
         }
 
