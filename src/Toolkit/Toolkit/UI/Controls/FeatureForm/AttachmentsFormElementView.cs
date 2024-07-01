@@ -20,6 +20,12 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+#if WPF
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#elif MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
+#endif
+
 
 #if MAUI
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
@@ -48,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void EvaluateExpressions()
         {
-            _ = GetFeatureFormViewParent()?.FeatureForm?.EvaluateExpressionsAsync();
+            _ = FeatureFormView.EvaluateExpressions(GetFeatureFormViewParent()?.FeatureForm);
         }
 
         /// <summary>

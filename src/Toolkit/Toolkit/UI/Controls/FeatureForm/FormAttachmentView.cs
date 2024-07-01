@@ -17,11 +17,15 @@
 
 #if WPF || MAUI
 using System.ComponentModel;
+using System.Diagnostics;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if WPF
 using Microsoft.Win32;
 using Microsoft.Win32.SafeHandles;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#elif MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
 #endif
 
 #if MAUI
@@ -57,16 +61,30 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
         }
 
-        private void OnAttachmentClicked()
+        private async void OnAttachmentClicked()
         {
             if (Attachment is null || Attachment.LoadStatus == LoadStatus.Loading) return;
             if (Attachment.LoadStatus == LoadStatus.FailedToLoad)
             {
-                _ = Attachment.RetryLoadAsync();
+                try
+                {
+                    await Attachment.RetryLoadAsync().ConfigureAwait(false);
+                }
+                catch (System.Exception ex)
+                {
+                    Trace.WriteLine("Failed to retry loading attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
+                }
             }
             else if (Attachment.LoadStatus == LoadStatus.NotLoaded)
             {
-                _ = Attachment.LoadAsync();
+                try
+                {
+                    await Attachment.LoadAsync().ConfigureAwait(false);
+                }
+                catch (System.Exception ex)
+                {
+                    Trace.WriteLine("Failed to load attachment: " + ex.Message, "ArcGIS Maps SDK Toolkit");
+                }
             }
             else if (Attachment.LoadStatus == LoadStatus.Loaded)
             {
@@ -80,7 +98,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             {
                 var form = GetFeatureFormViewParent()?.FeatureForm; // Get form before delete, or we won't be able to get to the parent since this instance will be removed from the tree
                 Element.DeleteAttachment(Attachment);
-                _ = form?.EvaluateExpressionsAsync();
+                _ = FeatureFormView.EvaluateExpressions(form);
             }
         }
 
@@ -89,7 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (Attachment != null && Attachment.Name != newName)
             {
                 Attachment.Name = newName;
-                _ = GetFeatureFormViewParent()?.FeatureForm?.EvaluateExpressionsAsync();
+                _ = FeatureFormView.EvaluateExpressions(GetFeatureFormViewParent()?.FeatureForm);
             }
         }
 
