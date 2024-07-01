@@ -225,7 +225,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 Glyph = glyph,
                 FontFamily = "calcite-ui-icons-24",
                 Size = 32,
-                Color = (Attachment.LoadStatus == LoadStatus.FailedToLoad) ? Colors.Red : Colors.Black
+                Color = (Attachment.LoadStatus == LoadStatus.FailedToLoad) ? Colors.Red : IconColor
             };
             image.Aspect = Aspect.Center;
         }
@@ -262,6 +262,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Gets or sets the icon color.
+        /// </summary>
+        public Color? IconColor
+        {
+            get { return (Color)GetValue(IconColorProperty); }
+            set { SetValue(IconColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the <see cref="IconColor"/> dependency property.
+        /// </summary>
+        public static readonly BindableProperty IconColorProperty = BindableProperty.Create(nameof(IconColor), typeof(Color), typeof(FormAttachmentView), Colors.Black, 
+            propertyChanged: (s, oldValue, newValue) => ((FormAttachmentView)s).OnColorPropertyChanged());
+
+        private void OnColorPropertyChanged()
+        {
+            if (Attachment is not null && (Attachment.LoadStatus != LoadStatus.Loaded || Attachment.Type != FormAttachmentType.Image))
+                UpdateThumbnail();
         }
     }
 }
