@@ -29,7 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
     /// <para>To use the camera to capture images for attachments, the corerct permissions must be set on your application.</para>
     /// <para><b>Android:</b><br/>Add the following to Android's AndroidManifest.xml:</para>
     /// <code>
-    /// <uses-permission android:name="android.permission.CAMERA" />
+    /// &lt;uses-permission android:name="android.permission.CAMERA" />
     /// &lt;queries>
     ///     &lt;intent>
     ///         &lt;action android:name="android.media.action.IMAGE_CAPTURE" />
