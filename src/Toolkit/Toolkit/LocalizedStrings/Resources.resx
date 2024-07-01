@@ -123,7 +123,7 @@
   </data>
   <data name="FeatureFormAddAttachmentMenuWithCamera" xml:space="preserve">
     <value>Take Photo</value>
-    <comment>Menu text for an attachment by taking a photo</comment>
+    <comment>Menu text for adding an attachment by taking a photo</comment>
   </data>
   <data name="FeatureFormExceedsMaximumDateTime" xml:space="preserve">
     <value>Date must be on or before {0}</value>
