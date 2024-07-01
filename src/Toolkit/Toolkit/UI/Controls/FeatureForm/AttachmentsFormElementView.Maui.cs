@@ -113,6 +113,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                     view.SetBinding(FormAttachmentView.AttachmentProperty, new Binding());
                     view.SetBinding(FormAttachmentView.ElementProperty, new Binding("Element", source: RelativeBindingSource.TemplatedParent));
                     view.SetAppThemeColor(FormAttachmentView.IconColorProperty, Colors.Black, Colors.White);
+                    view.SetBinding(ToolTipProperties.TextProperty, new Binding("Attachment.Name"));
                     return view;
                 }),
 #if IOS
