@@ -32,6 +32,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static readonly DataTemplate DefaultRadioButtonsFormInputTemplate;
         private static readonly DataTemplate DefaultTextAreaFormInputTemplate;
         private static readonly DataTemplate DefaultTextBoxFormInputTemplate;
+        private static readonly DataTemplate DefaultBarcodeScannerFormInputTemplate;
 
 
         static FieldFormElementView()
@@ -43,6 +44,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultRadioButtonsFormInputTemplate = new DataTemplate(BuildDefaultRadioButtonsFormInputTemplate);
             DefaultTextAreaFormInputTemplate = new DataTemplate(BuildDefaultTextAreaFormInputTemplate);
             DefaultTextBoxFormInputTemplate = new DataTemplate(BuildDefaultTextBoxFormInputTemplate);
+            DefaultBarcodeScannerFormInputTemplate = new DataTemplate(BuildDefaultBarcodeScannerFormInputTemplate);
         }
 
         private static object BuildDefaultComboBoxFormInputTemplate()
@@ -81,6 +83,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         }
 
         private static object BuildDefaultTextBoxFormInputTemplate()
+        {
+            var input = new TextFormInputView();
+            input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);
+            return input;
+        }
+
+        private static object BuildDefaultBarcodeScannerFormInputTemplate()
         {
             var input = new TextFormInputView();
             input.SetBinding(TextFormInputView.ElementProperty, Binding.SelfPath);

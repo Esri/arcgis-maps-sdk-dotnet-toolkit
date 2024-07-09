@@ -47,6 +47,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     RadioButtonsFormInput => _parent.RadioButtonsFormInputTemplate,
                     TextAreaFormInput => _parent.TextAreaFormInputTemplate,
                     TextBoxFormInput => _parent.TextBoxFormInputTemplate,
+                    BarcodeScannerFormInput => _parent.BarcodeScannerFormInputTemplate,
                     _ => base.SelectTemplate(item, container)
                 };
             }

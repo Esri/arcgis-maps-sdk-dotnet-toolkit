@@ -119,6 +119,8 @@
     <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
   </Style>
   <Style TargetType="{x:Type primitives:TextFormInputView}">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="Black" />
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="{x:Type primitives:TextFormInputView}">
@@ -156,14 +158,29 @@
               <TextBlock Text="/" />
               <TextBlock Text="{Binding MaxLength, ElementName=TextInput}" />
             </StackPanel>
-            <TextBox x:Name="TextInput" MaxLines="{TemplateBinding MaxLines}" MinLines="{TemplateBinding MinLines}" /> 
+            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TextInput" MaxLines="{TemplateBinding MaxLines}" MinLines="{TemplateBinding MinLines}" BorderThickness="0" />
+                    <TextBlock Text="!" Background="Transparent" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="ErrorInfo" Grid.Column="1" />
+                    <Button Content="&#xED14;" FontFamily="Segoe MDL2 Assets" Background="Transparent" Grid.Column="2"
+                       Padding="8" Margin="-8,-8,-5,-7" BorderThickness="0" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="BarcodeButton" />
+                </Grid>
+            </Border>
             <TextBlock x:Name="ReadOnlyText" Visibility="Collapsed" />
             <Border x:Name="ErrorBorder" BorderThickness="1" BorderBrush="Red" Visibility="Collapsed" />
-            <TextBlock Text="!" Background="Transparent" Width="10" Foreground="Red" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Center" x:Name="ErrorInfo" />
           </Grid>
           <ControlTemplate.Triggers>
+            <Trigger Property="ShowBarcodeScanner" Value="true">
+              <Setter TargetName="BarcodeButton" Property="Visibility" Value="Visible"/>
+            </Trigger>
             <Trigger Property="IsEnabled" Value="false">
               <Setter TargetName="TextInput" Property="Visibility" Value="Collapsed"/> 
+              <Setter TargetName="BarcodeButton" Property="Visibility" Value="Collapsed"/> 
               <Setter TargetName="ReadOnlyText" Property="Visibility" Value="Visible"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="true">
@@ -176,6 +193,7 @@
             <Trigger Property="ShowCharacterCount" Value="true">
               <Setter TargetName="CharacterCountPanel" Property="Visibility" Value="Visible"/>
             </Trigger>
+
           </ControlTemplate.Triggers>
         </ControlTemplate>
       </Setter.Value>
@@ -213,6 +231,13 @@
       </Setter.Value>
     </Setter>
     <Setter Property="TextBoxFormInputTemplate">
+      <Setter.Value>
+        <DataTemplate>
+          <primitives:TextFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
+        </DataTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="BarcodeScannerFormInputTemplate">
       <Setter.Value>
         <DataTemplate>
           <primitives:TextFormInputView Element="{Binding}" IsEnabled="{Binding IsEditable}" />
