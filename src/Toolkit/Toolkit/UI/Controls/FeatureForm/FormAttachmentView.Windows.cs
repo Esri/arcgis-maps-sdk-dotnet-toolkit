@@ -31,16 +31,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
     public partial class FormAttachmentView : ButtonBase
     {
-        private UI.Controls.FeatureFormView? GetFeatureFormViewParent()
-        {
-            var parent = VisualTreeHelper.GetParent(this);
-            while (parent is not null && parent is not UI.Controls.FeatureFormView popup)
-            {
-                parent = VisualTreeHelper.GetParent(parent);
-            }
-            return parent as UI.Controls.FeatureFormView;
-        }
-
         /// <inheritdoc />
 #if WINDOWS_XAML
         protected override void OnApplyTemplate()

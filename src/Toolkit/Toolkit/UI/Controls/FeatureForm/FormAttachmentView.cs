@@ -96,7 +96,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (Attachment is not null && Element is not null)
             {
-                var form = GetFeatureFormViewParent()?.FeatureForm; // Get form before delete, or we won't be able to get to the parent since this instance will be removed from the tree
+                var form = FeatureFormView.GetFeatureFormViewParent(this)?.FeatureForm; // Get form before delete, or we won't be able to get to the parent since this instance will be removed from the tree
                 Element.DeleteAttachment(Attachment);
                 _ = FeatureFormView.EvaluateExpressions(form);
             }
@@ -107,7 +107,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (Attachment != null && Attachment.Name != newName)
             {
                 Attachment.Name = newName;
-                _ = FeatureFormView.EvaluateExpressions(GetFeatureFormViewParent()?.FeatureForm);
+                _ = FeatureFormView.EvaluateExpressions(FeatureFormView.GetFeatureFormViewParent(this)?.FeatureForm);
             }
         }
 
@@ -190,7 +190,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             FormAttachment? attachment = Attachment;
             if (attachment != null && attachment.IsLocal && attachment.LoadStatus == LoadStatus.Loaded)
             {
-                var viewer = GetFeatureFormViewParent();
+                var viewer = FeatureFormView.GetFeatureFormViewParent(this);
                 if (viewer is not null)
                 {
                     bool handled = viewer.OnFormAttachmentClicked(attachment);

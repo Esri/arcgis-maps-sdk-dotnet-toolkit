@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void EvaluateExpressions()
         {
-            _ = FeatureFormView.EvaluateExpressions(GetFeatureFormViewParent()?.FeatureForm);
+            _ = FeatureFormView.EvaluateExpressions(FeatureFormView.GetFeatureFormViewParent(this)?.FeatureForm);
         }
 
         /// <summary>

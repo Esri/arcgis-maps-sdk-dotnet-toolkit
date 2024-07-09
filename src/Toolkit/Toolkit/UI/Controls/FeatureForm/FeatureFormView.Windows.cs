@@ -51,6 +51,16 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             get { return (bool)GetValue(IsValidProperty); }
             private set { SetValue(IsValidPropertyKey, value); }
         }
+
+        internal static UI.Controls.FeatureFormView? GetFeatureFormViewParent(DependencyObject child)
+        {
+            var parent = VisualTreeHelper.GetParent(child);
+            while (parent is not null && parent is not UI.Controls.FeatureFormView view)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as UI.Controls.FeatureFormView;
+        }
     }
 }
 #endif

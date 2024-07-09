@@ -157,6 +157,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
         internal static Style GetFeatureFormTitleStyle() => GetStyle(FeatureFormTitleStyleName, DefaultFeatureFormTitleStyle);
 
         internal static Style GetFeatureFormCaptionStyle() => GetStyle(FeatureFormCaptionStyleName, DefaultFeatureFormCaptionStyle);
+
+        internal static FeatureFormView? GetFeatureFormViewParent(Element child) => GetParent<FeatureFormView>(child);
+
+        private static T? GetParent<T>(Element child) where T : Element
+        {
+            var parent = child?.Parent;
+            while (parent is not null && parent is not T page)
+            {
+                parent = parent.Parent;
+            }
+            return parent as T;
+        }
     }
 }
 #endif

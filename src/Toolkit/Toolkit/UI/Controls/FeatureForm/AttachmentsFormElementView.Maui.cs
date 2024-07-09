@@ -41,8 +41,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             DefaultControlTemplate = new ControlTemplate(BuildDefaultTemplate);
         }
 
-        private FeatureFormView? GetFeatureFormViewParent() => GetParent<FeatureFormView>();
-
         private T? GetParent<T>() where T : Element
         {
             var parent = this.Parent;

@@ -169,16 +169,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private FeatureFormView? GetFeatureFormViewParent()
-        {
-            var parent = this.Parent;
-            while (parent is not null && parent is not FeatureFormView popup)
-            {
-                parent = parent.Parent;
-            }
-            return parent as FeatureFormView;
-        }
-
         private Page? GetPage()
         {
             var parent = this.Parent;
