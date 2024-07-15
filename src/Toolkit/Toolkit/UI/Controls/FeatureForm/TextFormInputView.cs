@@ -47,27 +47,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
 #if MAUI
                     if (_textLineInput != null) _textLineInput.IsVisible = false;
-                    if (_textAreaInput != null)
-                    {
-                        _textAreaInput.IsVisible = Element.IsEditable;
-                    }
+                    if (_textAreaInput != null) _textAreaInput.IsVisible = Element.IsEditable;
 #else
                     _textInput.AcceptsReturn = true;
 #endif
                     _textInput.MaxLength = (int)area.MaxLength;
                 }
-                else if (Element?.Input is TextBoxFormInput box)
+                else if (Element?.Input is TextBoxFormInput || Element?.Input is BarcodeScannerFormInput)
                 {
 #if MAUI
                     if (_textAreaInput != null) _textAreaInput.IsVisible = false;
-                    if (_textLineInput != null)
-                    {
-                        _textLineInput.IsVisible = Element.IsEditable;
-                    }
+                    if (_textLineInput != null) _textLineInput.IsVisible = Element.IsEditable;
 #else
                     _textInput.AcceptsReturn = false;
 #endif
-                    _textInput.MaxLength = (int)box.MaxLength;
+                    int maxLength = 0;
+                    if (Element?.Input is TextBoxFormInput box)
+                        maxLength = (int)box.MaxLength;
+                    else if (Element?.Input is BarcodeScannerFormInput bar)
+                        maxLength = (int)bar.MaxLength;
+
+                    _textInput.MaxLength = maxLength == 0 ? int.MaxValue : maxLength;
                 }
                 _textInput.Text = Element?.Value?.ToString();
 #if MAUI
@@ -90,14 +90,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _readonlyLabel.Text = Element?.FormattedValue;
             }
 
-            if (Element?.Input is BarcodeScannerFormInput barcode)
-            {
-                ShowBarcodeScanner = Element.IsEditable;
-                if (_textInput != null)
-                    _textInput.MaxLength = (int)barcode.MaxLength;
-            }
-            else
-                ShowBarcodeScanner = false;
+            ShowBarcodeScanner = Element?.Input is BarcodeScannerFormInput && Element.IsEditable;
 
 #if !MAUI
             if (_textInput != null)
