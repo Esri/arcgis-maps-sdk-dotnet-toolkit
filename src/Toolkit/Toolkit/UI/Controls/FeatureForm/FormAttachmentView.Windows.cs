@@ -172,8 +172,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     if (_thumbnailSize.Width == this.ActualWidth || _thumbnailSize.Height == this.ActualHeight)
                         return;
-                    _thumbnailSize = new Size(this.ActualWidth, this.ActualHeight);
                     var source = PresentationSource.FromVisual(this);
+                    if (source is null)
+                        return;
+                    _thumbnailSize = new Size(this.ActualWidth, this.ActualHeight);
                     var thumb = await Attachment.CreateThumbnailAsync((int)(this.ActualWidth * source.CompositionTarget.TransformToDevice.M11), (int)(this.ActualHeight * source.CompositionTarget.TransformToDevice.M22));
                     image.Source = await thumb.ToImageSourceAsync();
                     image.Stretch = Stretch.UniformToFill;
