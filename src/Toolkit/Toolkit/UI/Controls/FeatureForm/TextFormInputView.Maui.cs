@@ -3,6 +3,7 @@ using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -66,7 +67,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
             Grid.SetColumnSpan(errorBorder, 2);
             root.Add(errorBorder);
-            ImageButton barcodeButton = new ImageButton() { IsVisible = false, BorderWidth = 0, Source = new FontImageSource() { FontFamily = "calcite-ui-icons-24", Glyph = "\uE22F", Color = Colors.Black } };
+            Internal.CalciteImageButton barcodeButton = new Internal.CalciteImageButton("\uE22F") { IsVisible = false, BorderWidth = 0 };
             Grid.SetColumn(barcodeButton, 2);
             barcodeButton.SetBinding(View.IsVisibleProperty, new Binding(nameof(TextFormInputView.ShowBarcodeScanner), source: RelativeBindingSource.TemplatedParent));
             root.Add(barcodeButton);
