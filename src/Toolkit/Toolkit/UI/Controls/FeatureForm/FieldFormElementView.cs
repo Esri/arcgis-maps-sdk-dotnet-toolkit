@@ -54,7 +54,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             RadioButtonsFormInputTemplate = DefaultRadioButtonsFormInputTemplate;
             TextAreaFormInputTemplate = DefaultTextAreaFormInputTemplate;
             TextBoxFormInputTemplate = DefaultTextBoxFormInputTemplate;
-            BarcodeScannerFormInputTemplate = BarcodeScannerFormInputTemplate;
+            BarcodeScannerFormInputTemplate = DefaultBarcodeScannerFormInputTemplate;
 #else
             DefaultStyleKey = typeof(FieldFormElementView);
 #endif
