@@ -14,19 +14,19 @@
                           Map="https://www.arcgis.com/home/item.html?id=f72207ac170a40d8992b7a3507b44fad"
                           GeoViewTapped="mapView_GeoViewTapped" />
 
-            <Border HorizontalOptions="Center" VerticalOptions="Start" Background="#99ffffff" Padding="5" Margin="10" StrokeThickness="1" Stroke="Black">
+            <Border HorizontalOptions="Center" VerticalOptions="Start" Background="{AppThemeBinding Dark=#99000000, Light=#99ffffff}" Padding="5" Margin="10" StrokeThickness="1" Stroke="Black">
                 <Label Text="Click a feature to open its FeatureFormView" FontSize="18" />
             </Border>
 
             <Border x:Name="SidePanel" IsVisible="False" Grid.Column="1" WidthRequest="300">
-                <Border Background="{AppThemeBinding Dark=Black, Light=White}">
+                <Border Background="{AppThemeBinding Dark=#333333, Light=White}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <esri:FeatureFormView Background="Transparent" x:Name="formViewer" Padding="12" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Default"/>
-                        <Border Grid.Row="1" StrokeThickness="0" Padding="5" Background="#eeeeee">
+                        <Border Grid.Row="1" StrokeThickness="0" Padding="5" Background="{AppThemeBinding Dark=Black, Light=White}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
