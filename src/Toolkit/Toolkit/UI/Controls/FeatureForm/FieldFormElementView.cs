@@ -299,8 +299,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public DataTemplate? BarcodeScannerFormInputTemplate
         {
-            get { return (DataTemplate)GetValue(TextBoxFormInputTemplateProperty); }
-            set { SetValue(TextBoxFormInputTemplateProperty, value); }
+            get { return (DataTemplate)GetValue(BarcodeScannerFormInputTemplateProperty); }
+            set { SetValue(BarcodeScannerFormInputTemplateProperty, value); }
         }
 
         /// <summary>
