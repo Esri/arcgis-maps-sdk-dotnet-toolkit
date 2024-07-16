@@ -22,7 +22,6 @@ using System.ComponentModel;
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
-using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 #else
 using Esri.ArcGISRuntime.Toolkit.Primitives;
@@ -244,10 +243,33 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             if (handler is not null)
             {
                 var args = new PopupAttachmentClickedEventArgs(attachment);
-                PopupAttachmentClicked?.Invoke(this, args);
+                handler.Invoke(this, args);
                 return args.Handled;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Raised when a link is clicked
+        /// </summary>
+        /// <remarks>
+        /// <para>By default, when an link is clicked, the default application (Browser) for the file type (if any) is launched. To override this,
+        /// listen to this event, set the <see cref="HyperlinkClickedEventArgs.Handled"/> property to <c>true</c> and perform
+        /// your own logic. </para>
+        /// </remarks>
+        public event EventHandler<HyperlinkClickedEventArgs>? HyperlinkClicked;
+
+        internal void OnHyperlinkClicked(Uri uri)
+        {
+            var handler = HyperlinkClicked;
+            if (handler is not null)
+            {
+                var args = new HyperlinkClickedEventArgs(uri);
+                handler.Invoke(this, args);
+                if (args.Handled)
+                    return;
+            }
+            Launcher.LaunchUriAsync(uri);
         }
     }
 
@@ -270,6 +292,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets the attachment that was clicked.
         /// </summary>
         public PopupAttachment Attachment { get; }
+    }
+
+    /// <summary>
+    /// Event argument for the <see cref="PopupViewer.HyperlinkClicked"/> event.
+    /// </summary>
+    public sealed class HyperlinkClickedEventArgs : EventArgs
+    {
+        internal HyperlinkClickedEventArgs(Uri uri)
+        {
+            Uri = uri;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the event handler has handled the event and the default action should be prevented.
+        /// </summary>
+        public bool Handled { get; set; }
+
+        /// <summary>
+        /// Gets the URI that was clicked.
+        /// </summary>
+        public Uri Uri { get; }
     }
 }
 #endif

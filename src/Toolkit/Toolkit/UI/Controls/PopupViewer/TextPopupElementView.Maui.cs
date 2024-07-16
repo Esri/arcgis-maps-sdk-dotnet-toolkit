@@ -245,11 +245,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         var tapRecognizer = new TapGestureRecognizer();
                         tapRecognizer.Tapped += (s, e) =>
                         {
-                            try
+                            if (s is Element element)
                             {
-                                Browser.OpenAsync(node.Content, BrowserLaunchMode.SystemPreferred);
+                                PopupViewer.GetPopupViewerParent(element)?.OnHyperlinkClicked(linkUri);
                             }
-                            catch { }
                         };
                         foreach (var subNode in node.Children)
                         {

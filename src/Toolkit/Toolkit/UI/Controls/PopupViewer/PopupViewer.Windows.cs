@@ -56,6 +56,34 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             ((PopupViewer)d).Popup = ((PopupViewer)d).PopupManager?.Popup;
 #pragma warning restore CS0618 // Type or member is obsolete
         }
+
+        internal static PopupViewer? GetPopupViewerParent(DependencyObject? child) => GetParent<PopupViewer>(child);
+
+        private static T? GetParent<T>(DependencyObject? child) where T : DependencyObject
+        {
+            if (child is FrameworkContentElement elm)
+            {
+                child = GetVisualParent(elm);
+            }
+            if (child is null)
+                return default;
+            var parent = VisualTreeHelper.GetParent(child);
+            while (parent is not null and not T)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as T;
+        }
+
+        private static Visual? GetVisualParent(FrameworkContentElement child)
+        {
+            var parent = child.Parent;
+            while (parent is FrameworkContentElement elm)
+            {
+                parent = elm.Parent;
+            }
+            return parent as Visual;
+        }
     }
 }
 #endif

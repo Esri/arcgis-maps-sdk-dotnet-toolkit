@@ -5,6 +5,7 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -153,6 +154,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
                     MessageBox.Show("Failed to download attachment", ex.Message);
                 }
             }
+        }
+
+        private void popupViewer_LinkClicked(object sender, UI.Controls.HyperlinkClickedEventArgs e)
+        {
+            // Include below line if you want to prevent the default action
+            // e.Handled = true;
+
+            // Perform custom action when a link is clicked
+            Debug.WriteLine(e.Uri);
         }
     }
 }

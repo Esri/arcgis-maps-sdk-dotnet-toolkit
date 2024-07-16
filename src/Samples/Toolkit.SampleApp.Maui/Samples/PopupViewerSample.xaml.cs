@@ -1,9 +1,7 @@
 ﻿using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Maui;
-using Esri.ArcGISRuntime.Security;
-using Esri.ArcGISRuntime.UI;
-using Microsoft.Maui.Controls.Shapes;
+using System.Diagnostics;
 
 namespace Toolkit.SampleApp.Maui.Samples
 {
@@ -116,6 +114,15 @@ namespace Toolkit.SampleApp.Maui.Samples
             // Open default file handler
             _ = Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
                  new Microsoft.Maui.ApplicationModel.OpenFileRequest(e.Attachment.Name, new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
+        }
+
+        private void popupViewer_HyperlinkClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.HyperlinkClickedEventArgs e)
+        {
+            // Include below line if you want to prevent the default action
+            // e.Handled = true;
+
+            // Perform custom action when a link is clicked
+            Debug.WriteLine(e.Uri);
         }
     }
 }
