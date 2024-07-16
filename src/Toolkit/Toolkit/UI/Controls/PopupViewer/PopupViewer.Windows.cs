@@ -69,9 +69,9 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                     // Use the logical parent for FrameworkContentElement instances
                     child = contentElement.Parent ?? VisualTreeHelper.GetParent(contentElement);
                 }
-                else
+                else if (child is Visual visual)
                 {
-                    child = VisualTreeHelper.GetParent(child);
+                    child = VisualTreeHelper.GetParent(visual);
                 }
 
                 if (child is T popupViewer)
@@ -81,7 +81,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             return default; // No parent found
         }
-
     }
 }
 #endif

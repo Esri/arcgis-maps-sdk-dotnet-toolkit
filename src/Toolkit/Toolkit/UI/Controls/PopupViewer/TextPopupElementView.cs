@@ -19,13 +19,9 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 #if WPF
-using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
-#elif MAUI
-using Esri.ArcGISRuntime.Toolkit.Maui;
-using Microsoft.Maui.ApplicationModel;
 #endif
 
 
