@@ -58,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private IEnumerable<Block> VisitAndAddBlocks(IEnumerable<MarkupNode> nodes)
+        private static IEnumerable<Block> VisitAndAddBlocks(IEnumerable<MarkupNode> nodes)
         {
             Paragraph? inlineHolder = null;
             foreach (var node in nodes)
@@ -82,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 yield return inlineHolder;
         }
 
-        private IEnumerable<Inline> VisitAndAddInlines(IEnumerable<MarkupNode> nodes)
+        private static IEnumerable<Inline> VisitAndAddInlines(IEnumerable<MarkupNode> nodes)
         {
             foreach (var node in nodes)
             {
@@ -97,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Block VisitBlock(MarkupNode node)
+        private static Block VisitBlock(MarkupNode node)
         {
             switch (node.Type)
             {
@@ -177,7 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private Inline VisitInline(MarkupNode node)
+        private static Inline VisitInline(MarkupNode node)
         {
             switch (node.Type)
             {
@@ -288,19 +288,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             _ => TextAlignment.Left,
         };
 
-        private void NavigateToUri(object sender, RequestNavigateEventArgs ea)
+        private static void NavigateToUri(object sender, RequestNavigateEventArgs ea)
         {
-            OnHyperlinkClicked(ea.Uri);
-        }
-
-        private PopupViewer? GetPopupViewerParent()
-        {
-            var parent = VisualTreeHelper.GetParent(this);
-            while (parent is not null and not PopupViewer)
-            {
-                parent = VisualTreeHelper.GetParent(parent);
-            }
-            return parent as PopupViewer;
+            PopupViewer.GetPopupViewerParent(sender as DependencyObject)?.OnHyperlinkClicked(ea.Uri);
         }
     }
 }

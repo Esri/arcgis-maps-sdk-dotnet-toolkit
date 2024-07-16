@@ -22,7 +22,6 @@ using System.ComponentModel;
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
-using DependencyObject = Microsoft.Maui.Controls.BindableObject;
 using ScrollViewer = Microsoft.Maui.Controls.ScrollView;
 #else
 using Esri.ArcGISRuntime.Toolkit.Primitives;
@@ -255,21 +254,22 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// </summary>
         /// <remarks>
         /// <para>By default, when an link is clicked, the default application (Browser) for the file type (if any) is launched. To override this,
-        /// listen to this event, set the <see cref="HyperLinkClickedEventArgs.Handled"/> property to <c>true</c> and perform
+        /// listen to this event, set the <see cref="HyperlinkClickedEventArgs.Handled"/> property to <c>true</c> and perform
         /// your own logic. </para>
         /// </remarks>
-        public event EventHandler<HyperLinkClickedEventArgs>? HyperLinkClicked;
+        public event EventHandler<HyperlinkClickedEventArgs>? HyperlinkClicked;
 
-        internal bool OnHyperLinkClicked(Uri uri)
+        internal void OnHyperlinkClicked(Uri uri)
         {
-            var handler = HyperLinkClicked;
+            var handler = HyperlinkClicked;
             if (handler is not null)
             {
-                var args = new HyperLinkClickedEventArgs(uri);
+                var args = new HyperlinkClickedEventArgs(uri);
                 handler.Invoke(this, args);
-                return args.Handled;
+                if (args.Handled)
+                    return;
             }
-            return false;
+            Launcher.LaunchUriAsync(uri);
         }
     }
 
@@ -295,11 +295,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     }
 
     /// <summary>
-    /// Event argument for the <see cref="PopupViewer.HyperLinkClicked"/> event.
+    /// Event argument for the <see cref="PopupViewer.HyperlinkClicked"/> event.
     /// </summary>
-    public class HyperLinkClickedEventArgs : EventArgs
+    public sealed class HyperlinkClickedEventArgs : EventArgs
     {
-        internal HyperLinkClickedEventArgs(Uri uri)
+        internal HyperlinkClickedEventArgs(Uri uri)
         {
             Uri = uri;
         }
