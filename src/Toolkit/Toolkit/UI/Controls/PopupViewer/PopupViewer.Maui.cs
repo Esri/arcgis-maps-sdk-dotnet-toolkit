@@ -108,14 +108,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui
 
         internal static Style GetPopupViewerCaptionStyle() => GetStyle(PopupViewerCaptionStyleName, DefaultPopupViewerCaptionStyle);
 
-        internal static PopupViewer? GetPopupViewerParent(VisualElement element)
+        internal static PopupViewer? GetPopupViewerParent(Element element) => GetParent<PopupViewer>(element);
+
+        private static T? GetParent<T>(Element element) where T : Element
         {
             var parent = element.Parent;
-            while (parent is not null and not PopupViewer)
+            while (parent is not null and not T)
             {
                 parent = parent.Parent;
             }
-            return parent as PopupViewer;
+            return parent as T;
         }
     }
 }
