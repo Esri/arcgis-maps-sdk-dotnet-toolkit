@@ -47,27 +47,27 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
 #if MAUI
                     if (_textLineInput != null) _textLineInput.IsVisible = false;
-                    if (_textAreaInput != null)
-                    {
-                        _textAreaInput.IsVisible = Element.IsEditable;
-                    }
+                    if (_textAreaInput != null) _textAreaInput.IsVisible = Element.IsEditable;
 #else
                     _textInput.AcceptsReturn = true;
 #endif
                     _textInput.MaxLength = (int)area.MaxLength;
                 }
-                else if (Element?.Input is TextBoxFormInput box)
+                else if (Element?.Input is TextBoxFormInput || Element?.Input is BarcodeScannerFormInput)
                 {
 #if MAUI
                     if (_textAreaInput != null) _textAreaInput.IsVisible = false;
-                    if (_textLineInput != null)
-                    {
-                        _textLineInput.IsVisible = Element.IsEditable;
-                    }
+                    if (_textLineInput != null) _textLineInput.IsVisible = Element.IsEditable;
 #else
                     _textInput.AcceptsReturn = false;
 #endif
-                    _textInput.MaxLength = (int)box.MaxLength;
+                    int maxLength = 0;
+                    if (Element?.Input is TextBoxFormInput box)
+                        maxLength = (int)box.MaxLength;
+                    else if (Element?.Input is BarcodeScannerFormInput bar)
+                        maxLength = (int)bar.MaxLength;
+
+                    _textInput.MaxLength = maxLength == 0 ? int.MaxValue : maxLength;
                 }
                 _textInput.Text = Element?.Value?.ToString();
 #if MAUI
@@ -89,8 +89,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #endif
                 _readonlyLabel.Text = Element?.FormattedValue;
             }
+
+            ShowBarcodeScanner = Element?.Input is BarcodeScannerFormInput && Element.IsEditable;
+
 #if !MAUI
-            if(_textInput != null)
+            if (_textInput != null)
                 _textInput.Visibility = Element?.IsEditable == false ? Visibility.Collapsed : Visibility.Visible;
 #endif
         }
@@ -187,7 +190,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public bool ShowCharacterCount
         {
-            get {
+            get
+            {
 #if MAUI
                 return _showCharacterCount;
 #else
@@ -197,7 +201,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             private set
             {
 #if MAUI
-                if(_showCharacterCount != value)
+                if (_showCharacterCount != value)
                 {
                     _showCharacterCount = value;
                     OnPropertyChanged(nameof(ShowCharacterCount));
@@ -213,6 +217,40 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 #else
         private static readonly DependencyPropertyKey ShowCharacterCountPropertyKey =
             DependencyProperty.RegisterReadOnly(nameof(ShowCharacterCount), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
+#endif
+
+        /// <summary>
+        /// Gets a value indicating whether the bar code scanner button is visible.
+        /// </summary>
+        public bool ShowBarcodeScanner
+        {
+            get
+            {
+#if MAUI
+                return _ShowBarcodeScanner;
+#else
+                return (bool)GetValue(ShowBarcodeScannerPropertyKey.DependencyProperty);
+#endif
+            }
+            private set
+            {
+#if MAUI
+                if (_ShowBarcodeScanner != value)
+                {
+                    _ShowBarcodeScanner = value;
+                    OnPropertyChanged(nameof(ShowBarcodeScanner));
+                }
+#else
+                SetValue(ShowBarcodeScannerPropertyKey, value);
+#endif
+            }
+        }
+
+#if MAUI
+        private bool _ShowBarcodeScanner = false;
+#else
+        private static readonly DependencyPropertyKey ShowBarcodeScannerPropertyKey =
+            DependencyProperty.RegisterReadOnly(nameof(ShowBarcodeScanner), typeof(bool), typeof(TextFormInputView), new PropertyMetadata(false));
 #endif
 
         /// <summary>

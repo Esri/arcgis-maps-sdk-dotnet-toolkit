@@ -272,6 +272,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 uint min = 0;
                 if (element.Input is TextAreaFormInput area) { max = area.MaxLength; min = area.MinLength; }
                 else if (element.Input is TextBoxFormInput tb) { max = tb.MaxLength; min = tb.MinLength; }
+                else if (element.Input is BarcodeScannerFormInput bar) { max = bar.MaxLength; min = bar.MinLength; }
                 if (max > 0 && min > 0)
                     return string.Format(Properties.Resources.GetString("FeatureFormOutsideLengthRange")!, min, max);
                 if (max > 0)
@@ -357,6 +358,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             return false;
         }
+
+        /// <summary>
+        /// Raised when the Barcode Icon in a barcode element is clicked.
+        /// </summary>
+        /// <remarks>
+        /// <para>Set the <see cref="BarcodeButtonClickedEventArgs.Handled"/> property to <c>true</c> to prevent
+        /// any default code and perform your own logic.</para>
+        /// </remarks>
+        public event EventHandler<BarcodeButtonClickedEventArgs>? BarcodeButtonClicked;
+
+        internal bool OnBarcodeButtonClicked(FieldFormElement element)
+        {
+            var handler = BarcodeButtonClicked;
+            if (handler is not null)
+            {
+                var args = new BarcodeButtonClickedEventArgs(element);
+                
+                handler.Invoke(this, args);
+                return args.Handled;
+            }
+            return false;
+        }
     }
 
     /// <summary>
@@ -378,6 +401,27 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// Gets the attachment that was clicked.
         /// </summary>
         public FormAttachment Attachment { get; }
+    }
+
+    /// <summary>
+    /// Event argument for the <see cref="FeatureFormView.BarcodeButtonClicked"/> event.
+    /// </summary>
+    public class BarcodeButtonClickedEventArgs : EventArgs
+    {
+        internal BarcodeButtonClickedEventArgs(FieldFormElement element)
+        {
+            FormElement = element;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the event handler has handled the event and the default action should be prevented.
+        /// </summary>
+        public bool Handled { get; set; }
+
+        /// <summary>
+        /// Gets the element that was clicked.
+        /// </summary>
+        public FieldFormElement FormElement { get; }
     }
 }
 #endif

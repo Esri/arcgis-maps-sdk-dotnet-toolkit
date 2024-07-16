@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -16,6 +17,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
     {
         private TextBox? _textInput;
         private TextBlock? _readonlyLabel;
+        private ButtonBase? _barcodeButton;
 
 
         /// <inheritdoc />
@@ -34,8 +36,23 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 _textInput.TextChanged += TextInput_TextChanged;
             }
             _readonlyLabel = GetTemplateChild("ReadOnlyText") as TextBlock;
+            if (_barcodeButton != null)
+            {
+                _barcodeButton.Click -= BarcodeButton_Click;
+            }
+            _barcodeButton = GetTemplateChild("BarcodeButton") as ButtonBase;
+            if (_barcodeButton != null)
+            {
+                _barcodeButton.Click += BarcodeButton_Click;
+            }
             ConfigureTextBox();
             UpdateValidationState();
+        }
+
+        private void BarcodeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Element != null)
+                FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element);
         }
     }
 }

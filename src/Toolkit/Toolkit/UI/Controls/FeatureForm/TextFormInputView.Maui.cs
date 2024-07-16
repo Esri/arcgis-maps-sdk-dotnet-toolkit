@@ -3,6 +3,7 @@ using Microsoft.Maui.Controls.Internals;
 using Esri.ArcGISRuntime.Mapping.FeatureForms;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
 {
@@ -30,11 +31,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement.Value), "Esri.ArcGISRuntime.Mapping.FeatureForms.FieldFormElement", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextAreaFormInput", "Esri.ArcGISRuntime")]
         [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.TextBoxFormInput", "Esri.ArcGISRuntime")]
+        [DynamicDependency(nameof(Esri.ArcGISRuntime.Mapping.FeatureForms.BarcodeScannerFormInput.MaxLength), "Esri.ArcGISRuntime.Mapping.FeatureForms.BarcodeScannerFormInput", "Esri.ArcGISRuntime")]
         private static object BuildDefaultTemplate()
         {
             
             Grid root = new Grid();
             root.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            root.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             root.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             HorizontalStackLayout horizontalStackLayout = new HorizontalStackLayout();
             horizontalStackLayout.Margin = new Thickness(0, -17, 0, 0);
@@ -47,6 +50,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             maxCountLabel.SetBinding(Label.TextProperty, new Binding("Element.Input.MaxLength", source: RelativeBindingSource.TemplatedParent));
             horizontalStackLayout.Children.Add(maxCountLabel);
             Grid.SetColumn(horizontalStackLayout, 1);
+            Grid.SetColumnSpan(horizontalStackLayout, 2);
             root.Add(horizontalStackLayout);
             Entry textInput = new Entry();
             Grid.SetColumnSpan(textInput, 2);
@@ -63,6 +67,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
             Grid.SetColumnSpan(errorBorder, 2);
             root.Add(errorBorder);
+            Internal.CalciteImageButton barcodeButton = new Internal.CalciteImageButton("\uE22F") { IsVisible = false, BorderWidth = 0 };
+            Grid.SetColumn(barcodeButton, 2);
+            barcodeButton.SetBinding(View.IsVisibleProperty, new Binding(nameof(TextFormInputView.ShowBarcodeScanner), source: RelativeBindingSource.TemplatedParent));
+            root.Add(barcodeButton);
 
             INameScope nameScope = new NameScope();
             NameScope.SetNameScope(root, nameScope);
@@ -70,6 +78,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             nameScope.RegisterName("TextInput", textInput);
             nameScope.RegisterName("TextAreaInput", textArea);
             nameScope.RegisterName("ReadOnlyText", readonlyText);
+            nameScope.RegisterName("BarcodeButton", barcodeButton);
             return root;
         }
 
@@ -100,8 +109,22 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                 _textAreaInput.TextChanged += TextInput_TextChanged;
             }
             _readonlyLabel = GetTemplateChild("ReadOnlyText") as Label;
+            if (GetTemplateChild("BarcodeButton") is ImageButton imageButton)
+            {
+                imageButton.Clicked += BarcodeButton_Clicked;
+            }
+            else if (GetTemplateChild("BarcodeButton") is Button button)
+            {
+                button.Clicked += BarcodeButton_Clicked;
+            }
             ConfigureTextBox();
             UpdateValidationState();
+        }
+
+        private void BarcodeButton_Clicked(object? sender, EventArgs e)
+        {
+            if (Element != null)
+                FeatureFormView.GetFeatureFormViewParent(this)?.OnBarcodeButtonClicked(Element);
         }
     }
 }
