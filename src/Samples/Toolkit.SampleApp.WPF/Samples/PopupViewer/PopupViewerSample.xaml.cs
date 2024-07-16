@@ -1,4 +1,3 @@
-using ABI.System;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
@@ -6,10 +5,10 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Windows.System;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 {
@@ -150,18 +149,20 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
                         e.Attachment.CancelLoad();
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show("Failed to download attachment", ex.Message);
                 }
             }
         }
 
-        private async void popupViewer_LinkClicked(object sender, UI.Controls.HyperLinkClickedEventArgs e)
+        private void popupViewer_LinkClicked(object sender, UI.Controls.HyperlinkClickedEventArgs e)
         {
-            e.Handled = true;
-            // Open default browser, this could be custom action
-            await Launcher.LaunchUriAsync(e.Uri);
+            // Include below line if you want to prevent the default action
+            // e.Handled = true;
+
+            // Perform custom action when a link is clicked
+            Debug.WriteLine(e.Uri);
         }
     }
 }

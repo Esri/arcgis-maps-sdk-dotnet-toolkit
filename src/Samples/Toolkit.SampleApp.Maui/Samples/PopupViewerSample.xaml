@@ -12,7 +12,7 @@
             <Border Background="#99ffffff" x:Name="popupPanel" IsVisible="False">
                 <Border HorizontalOptions="Center" VerticalOptions="Center" Background="{AppThemeBinding Dark=Black, Light=White}" Margin="0,32" Padding="12">
                     <Grid>
-                        <esriTK:PopupViewer x:Name="popupViewer" Padding="12" MaximumWidthRequest="400" MaximumHeightRequest="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperLinkClicked="popupViewer_HyperLinkClicked" />
+                        <esriTK:PopupViewer x:Name="popupViewer" Padding="12" MaximumWidthRequest="400" MaximumHeightRequest="400" PopupAttachmentClicked="popupViewer_PopupAttachmentClicked" HyperlinkClicked="popupViewer_HyperlinkClicked" />
                         <Button BorderWidth="0" Text="X" HorizontalOptions="End" VerticalOptions="Start" Clicked="CloseButton_Click" BackgroundColor="Transparent" TextColor="{AppThemeBinding Dark=White, Light=Black}" Margin="5" />
                     </Grid>
                 </Border>
