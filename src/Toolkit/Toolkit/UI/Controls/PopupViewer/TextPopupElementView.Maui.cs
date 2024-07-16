@@ -83,7 +83,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private static IEnumerable<View> VisitChildren(MarkupNode parent)
+        private IEnumerable<View> VisitChildren(MarkupNode parent)
         {
             // Create views for all the children of a given node.
             // Nodes with blocks are converted individually, but consecutive inline-only nodes are grouped into labels.
@@ -116,7 +116,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private static View CreateBlock(MarkupNode node)
+        private View CreateBlock(MarkupNode node)
         {
             // Create a view for a single block node.
             switch (node.Type)
@@ -218,7 +218,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private static Label CreateFormattedText(IEnumerable<MarkupNode> nodes)
+        private Label CreateFormattedText(IEnumerable<MarkupNode> nodes)
         {
             // Flattens given tree of inline nodes into a single label.
             var str = new FormattedString();
@@ -232,7 +232,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             return new Label { FormattedText = str, LineBreakMode = LineBreakMode.WordWrap };
         }
 
-        private static IEnumerable<Span> VisitInline(MarkupNode node)
+        private IEnumerable<Span> VisitInline(MarkupNode node)
         {
             // Converts a single inline node into a sequence of spans.
             // The whole tree is expected to only contain inline nodes. Other nodes are handled by VisitBlock.
@@ -245,11 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         var tapRecognizer = new TapGestureRecognizer();
                         tapRecognizer.Tapped += (s, e) =>
                         {
-                            try
-                            {
-                                Browser.OpenAsync(node.Content, BrowserLaunchMode.SystemPreferred);
-                            }
-                            catch { }
+                            OnHyperlinkClicked(linkUri);
                         };
                         foreach (var subNode in node.Children)
                         {
@@ -298,7 +294,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             }
         }
 
-        private static Grid ConvertTableToGrid(MarkupNode table)
+        private Grid ConvertTableToGrid(MarkupNode table)
         {
             // Determines the dimensions of a grid necessary to hold a given table.
             // Utilizes a dynamically-sized 2D bitmap (`gridMap`) to mark occupied cells while iterating over the table.
@@ -454,6 +450,16 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
         private static bool MapsToBlock(MarkupNode node)
         {
             return node.Type is MarkupType.List or MarkupType.Table or MarkupType.Block or MarkupType.Divider or MarkupType.Image;
+        }
+
+        private PopupViewer? GetPopupViewerParent()
+        {
+            var parent = this.Parent;
+            while (parent is not null && parent is not PopupViewer popup)
+            {
+                parent = parent.Parent;
+            }
+            return parent as PopupViewer;
         }
     }
 }

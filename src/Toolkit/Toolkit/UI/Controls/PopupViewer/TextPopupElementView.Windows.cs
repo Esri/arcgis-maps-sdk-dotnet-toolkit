@@ -17,6 +17,7 @@
 #if WPF
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using Esri.ArcGISRuntime.UI;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -57,7 +58,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private static IEnumerable<Block> VisitAndAddBlocks(IEnumerable<MarkupNode> nodes)
+        private IEnumerable<Block> VisitAndAddBlocks(IEnumerable<MarkupNode> nodes)
         {
             Paragraph? inlineHolder = null;
             foreach (var node in nodes)
@@ -81,7 +82,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 yield return inlineHolder;
         }
 
-        private static IEnumerable<Inline> VisitAndAddInlines(IEnumerable<MarkupNode> nodes)
+        private IEnumerable<Inline> VisitAndAddInlines(IEnumerable<MarkupNode> nodes)
         {
             foreach (var node in nodes)
             {
@@ -96,7 +97,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private static Block VisitBlock(MarkupNode node)
+        private Block VisitBlock(MarkupNode node)
         {
             switch (node.Type)
             {
@@ -176,7 +177,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             }
         }
 
-        private static Inline VisitInline(MarkupNode node)
+        private Inline VisitInline(MarkupNode node)
         {
             switch (node.Type)
             {
@@ -287,9 +288,19 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             _ => TextAlignment.Left,
         };
 
-        private static async void NavigateToUri(object sender, RequestNavigateEventArgs ea)
+        private void NavigateToUri(object sender, RequestNavigateEventArgs ea)
         {
-            await Launcher.LaunchUriAsync(ea.Uri);
+            OnHyperlinkClicked(ea.Uri);
+        }
+
+        private PopupViewer? GetPopupViewerParent()
+        {
+            var parent = VisualTreeHelper.GetParent(this);
+            while (parent is not null and not PopupViewer)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as PopupViewer;
         }
     }
 }

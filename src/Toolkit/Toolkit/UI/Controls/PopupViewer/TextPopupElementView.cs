@@ -19,9 +19,13 @@ using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using Esri.ArcGISRuntime.UI;
 #if WPF
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Navigation;
+#elif MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
+using Microsoft.Maui.ApplicationModel;
 #endif
 
 
@@ -70,6 +74,41 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// </summary>
         public static readonly DependencyProperty ElementProperty =
             PropertyHelper.CreateProperty<TextPopupElement, TextPopupElementView>(nameof(Element), null, (s, oldValue, newValue) => s.OnElementPropertyChanged());
+
+        /// <summary>
+        /// Occurs when an URL is clicked.
+        /// </summary>
+        /// <remarks>
+        ///  <para>Override this to prevent the default open action.</para>
+        /// </remarks>
+        /// <param name="uri">Clicked URL</param>
+        public virtual async void OnHyperlinkClicked(Uri uri)
+        {
+            if (uri is not null)
+            {
+                var viewer = GetPopupViewerParent();
+                if (viewer is not null)
+                {
+                    var handled = viewer.OnHyperLinkClicked(uri);
+                    if (handled)
+                        return;
+                }
+
+                try
+                {
+#if WPF
+                    await Launcher.LaunchUriAsync(uri);
+#elif MAUI
+                    await Browser.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+#endif
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Failed to open URL: " + ex.Message);
+                }
+            }
+
+        }
     }
 }
 #endif
