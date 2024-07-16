@@ -59,7 +59,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         internal static PopupViewer? GetPopupViewerParent(DependencyObject? child) => GetParent<PopupViewer>(child);
 
-        private static T? GetParent<T>(DependencyObject? child) where T : FrameworkElement
+        private static T? GetParent<T>(DependencyObject? child) where T : DependencyObject
         {
             // Traverse up the visual tree to find the PopupViewer parent
             while (child is not null)
