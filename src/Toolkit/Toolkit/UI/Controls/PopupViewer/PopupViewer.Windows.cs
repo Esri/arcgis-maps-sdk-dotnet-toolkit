@@ -61,25 +61,28 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static T? GetParent<T>(DependencyObject? child) where T : DependencyObject
         {
-            // Traverse up the visual tree to find the PopupViewer parent
-            while (child is not null)
+            if (child is FrameworkContentElement elm)
             {
-                if (child is FrameworkContentElement contentElement)
-                {
-                    // Use the logical parent for FrameworkContentElement instances
-                    child = contentElement.Parent ?? VisualTreeHelper.GetParent(contentElement);
-                }
-                else if (child is Visual visual)
-                {
-                    child = VisualTreeHelper.GetParent(visual);
-                }
-
-                if (child is T popupViewer)
-                {
-                    return popupViewer;
-                }
+                child = GetVisualParent(elm);
             }
-            return default; // No parent found
+            if (child is null)
+                return default;
+            var parent = VisualTreeHelper.GetParent(child);
+            while (parent is not null and not T)
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as T;
+        }
+
+        private static Visual? GetVisualParent(FrameworkContentElement child)
+        {
+            var parent = child.Parent;
+            while (parent is FrameworkContentElement elm)
+            {
+                parent = elm.Parent;
+            }
+            return parent as Visual;
         }
     }
 }
