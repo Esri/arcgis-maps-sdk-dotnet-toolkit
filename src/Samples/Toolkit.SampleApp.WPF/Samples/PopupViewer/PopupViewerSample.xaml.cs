@@ -1,3 +1,4 @@
+using ABI.System;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Windows.System;
 
 namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
 {
@@ -148,11 +150,18 @@ namespace Esri.ArcGISRuntime.Toolkit.Samples.PopupViewer
                         e.Attachment.CancelLoad();
                     }
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
                     MessageBox.Show("Failed to download attachment", ex.Message);
                 }
             }
+        }
+
+        private async void popupViewer_LinkClicked(object sender, UI.Controls.HyperLinkClickedEventArgs e)
+        {
+            e.Handled = true;
+            // Open default browser, this could be custom action
+            await Launcher.LaunchUriAsync(e.Uri);
         }
     }
 }

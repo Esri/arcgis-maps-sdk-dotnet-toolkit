@@ -117,5 +117,12 @@ namespace Toolkit.SampleApp.Maui.Samples
             _ = Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(
                  new Microsoft.Maui.ApplicationModel.OpenFileRequest(e.Attachment.Name, new ReadOnlyFile(e.Attachment.Filename!, e.Attachment.ContentType)));
         }
+
+        private void popupViewer_HyperLinkClicked(object sender, Esri.ArcGISRuntime.Toolkit.Maui.HyperLinkClickedEventArgs e)
+        {
+            e.Handled = true; // Prevent default launch action
+            // Open default browser, this could be custom action
+            _ = Microsoft.Maui.ApplicationModel.Launcher.Default.OpenAsync(e.Uri);
+        }
     }
 }
