@@ -245,7 +245,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
                         var tapRecognizer = new TapGestureRecognizer();
                         tapRecognizer.Tapped += (s, e) =>
                         {
-                            if (s is VisualElement element)
+                            if (s is Element element)
                             {
                                 PopupViewer.GetPopupViewerParent(element)?.OnHyperlinkClicked(linkUri);
                             }
