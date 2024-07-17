@@ -96,9 +96,10 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         {
             if (Attachment is not null && Element is not null)
             {
-                var form = FeatureFormView.GetFeatureFormViewParent(this)?.FeatureForm; // Get form before delete, or we won't be able to get to the parent since this instance will be removed from the tree
+                var view = FeatureFormView.GetFeatureFormViewParent(this);
+                var form = view?.FeatureForm; // Get form before delete, or we won't be able to get to the parent since this instance will be removed from the tree
                 Element.DeleteAttachment(Attachment);
-                _ = FeatureFormView.EvaluateExpressions(form);
+                _ = view?.EvaluateExpressions(form);
             }
         }
 
@@ -107,7 +108,8 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
             if (Attachment != null && Attachment.Name != newName)
             {
                 Attachment.Name = newName;
-                _ = FeatureFormView.EvaluateExpressions(FeatureFormView.GetFeatureFormViewParent(this)?.FeatureForm);
+                var view = FeatureFormView.GetFeatureFormViewParent(this);
+                _ = view?.EvaluateExpressions(view?.FeatureForm);
             }
         }
 

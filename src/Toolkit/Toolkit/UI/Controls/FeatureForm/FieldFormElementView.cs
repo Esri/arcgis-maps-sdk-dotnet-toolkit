@@ -121,7 +121,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
 
         private void OnValuePropertyChanged()
         {
-            _ = FeatureFormView.EvaluateExpressions(FeatureForm);
+            _ = FeatureFormView.GetFeatureFormViewParent(this)?.EvaluateExpressions(FeatureForm);
         }
         
         private void FieldFormElement_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -114,10 +114,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static object pendingExpressionsLock = new object();
         private static List<FeatureForm> pendingExpressions = new List<FeatureForm>();
+        private bool _isDiscarding = false;
 
-        internal static async Task EvaluateExpressions(FeatureForm? form)
+        internal async Task EvaluateExpressions(FeatureForm? form)
         {
-            if (form is null)
+            if (form is null || _isDiscarding)
                 return;
             // Don't evaluate expressions if we're already in the process of evaluating
             // If that's the case, the value changed event triggering this code was
@@ -214,10 +215,13 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <seealso cref="FeatureForm.EvaluateExpressionsAsync"/>
         public async Task DiscardEditsAsync()
         {
-            if (FeatureForm is not null)
+            var form = FeatureForm;
+            if (form is not null)
             {
-                FeatureForm.DiscardEdits();
-                await EvaluateExpressions(FeatureForm).ConfigureAwait(false);
+                _isDiscarding = true;
+                form.DiscardEdits();
+                _isDiscarding = false;
+                await EvaluateExpressions(form).ConfigureAwait(false);
             }
         }
 
