@@ -208,6 +208,32 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         }
 
         /// <summary>
+        /// Discards edits to all elements, refreshes any pending expressions and restores attachment list.
+        /// </summary>
+        /// <seealso cref="FeatureForm.DiscardEdits"/>
+        /// <seealso cref="FeatureForm.EvaluateExpressionsAsync"/>
+        public async Task DiscardEditsAsync()
+        {
+            if (FeatureForm is not null)
+            {
+                FeatureForm.DiscardEdits();
+                await EvaluateExpressions(FeatureForm).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        ///  Saves edits made using the <see cref="FeatureForm"/> to the database.
+        /// </summary>
+        /// <seealso cref="FeatureForm.FinishEditingAsync"/>
+        public async Task FinishEditingAsync()
+        {
+            if (FeatureForm is not null)
+            {
+                await FeatureForm.FinishEditingAsync().ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the vertical scrollbar visibility of the scrollviewer below the title.
         /// </summary>
         public ScrollBarVisibility VerticalScrollBarVisibility

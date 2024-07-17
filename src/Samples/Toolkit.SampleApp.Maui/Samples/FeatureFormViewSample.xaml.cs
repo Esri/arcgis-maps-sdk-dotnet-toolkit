@@ -60,7 +60,14 @@ namespace Toolkit.SampleApp.Maui.Samples
             var result = await DisplayAlert("Confirm", "Discard edits?", "Yes", "Cancel");
             if (result)
             {
-                formViewer.FeatureForm?.DiscardEdits();
+
+                ((Button)sender).IsEnabled = false;
+                try
+                {
+                    await formViewer.DiscardEditsAsync();
+                } catch { }
+
+                ((Button)sender).IsEnabled = true;
             }
         }
 
@@ -84,7 +91,7 @@ namespace Toolkit.SampleApp.Maui.Samples
             }
             try
             {
-                await formViewer.FeatureForm!.FinishEditingAsync();
+                await formViewer.FinishEditingAsync();
             }
             catch (Exception ex)
             {
