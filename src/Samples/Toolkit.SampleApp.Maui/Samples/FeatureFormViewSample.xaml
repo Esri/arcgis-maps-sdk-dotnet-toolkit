@@ -25,7 +25,9 @@
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <esri:FeatureFormView Background="Transparent" x:Name="formViewer" Padding="12" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Default"/>
+                        <esri:FeatureFormView Background="Transparent" x:Name="formViewer" Padding="12" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Default"
+                                              BarcodeButtonClicked="BarcodeButtonClicked" FormAttachmentClicked="FormAttachmentClicked"
+                                              />
                         <Border Grid.Row="1" StrokeThickness="0" Padding="5" Background="{AppThemeBinding Dark=Black, Light=White}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
