@@ -52,6 +52,9 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             Grid.SetColumn(horizontalStackLayout, 1);
             Grid.SetColumnSpan(horizontalStackLayout, 2);
             root.Add(horizontalStackLayout);
+            Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
+            Grid.SetColumnSpan(errorBorder, 2);
+            root.Add(errorBorder);
             Entry textInput = new Entry();
             Grid.SetColumnSpan(textInput, 2);
             root.Add(textInput);
@@ -64,9 +67,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Maui.Primitives
             readonlyText.SetBinding(Label.TextProperty, new Binding("Element.Value",source:RelativeBindingSource.TemplatedParent));
             Grid.SetColumnSpan(readonlyText, 2);
             root.Add(readonlyText);
-            Border errorBorder = new Border() { StrokeThickness = 1, Stroke = new SolidColorBrush(Colors.Red), IsVisible = false };
-            Grid.SetColumnSpan(errorBorder, 2);
-            root.Add(errorBorder);
             Internal.CalciteImageButton barcodeButton = new Internal.CalciteImageButton("\uE22F") { IsVisible = false, BorderWidth = 0 };
             Grid.SetColumn(barcodeButton, 2);
             barcodeButton.SetBinding(View.IsVisibleProperty, new Binding(nameof(TextFormInputView.ShowBarcodeScanner), source: RelativeBindingSource.TemplatedParent));
