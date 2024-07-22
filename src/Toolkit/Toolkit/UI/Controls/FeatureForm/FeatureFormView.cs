@@ -221,6 +221,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
                 _isDiscarding = true;
                 form.DiscardEdits();
                 _isDiscarding = false;
+                if (FeatureForm.DefaultAttachmentsElement is not null)
+                    await FeatureForm.DefaultAttachmentsElement.FetchAttachmentsAsync();
                 await EvaluateExpressions(form).ConfigureAwait(false);
             }
         }
