@@ -34,6 +34,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
     public partial class BasemapGallery : Control
     {
         private readonly BasemapGalleryController _controller;
+        private bool isAvailableBasemapCollectionInitialized;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BasemapGallery"/> class.
@@ -43,6 +44,8 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller = new BasemapGalleryController();
             DefaultStyleKey = typeof(BasemapGallery);
             SizeChanged += BasemapGallerySizeChanged;
+            AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>();
+            isAvailableBasemapCollectionInitialized = true;
             _controller.PropertyChanged += HandleControllerPropertyChanged;
             Loaded += BasemapGallery_Loaded;
         }
@@ -52,7 +55,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             // Unsubscribe from the Loaded event to ensure this only runs once.
             Loaded -= BasemapGallery_Loaded;
 
-            if (AvailableBasemaps is null)
+            if ((AvailableBasemaps is null || !AvailableBasemaps.Any()) && isAvailableBasemapCollectionInitialized)
             {
                 await _controller.LoadFromDefaultPortal();
             }
@@ -140,6 +143,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             if (d is BasemapGallery gallery)
             {
+                gallery.isAvailableBasemapCollectionInitialized = false;
                 if (e.NewValue != gallery._controller.AvailableBasemaps)
                 {
                     gallery._controller.AvailableBasemaps = e.NewValue as IList<BasemapGalleryItem>;
