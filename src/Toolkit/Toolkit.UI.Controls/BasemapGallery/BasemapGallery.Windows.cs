@@ -43,7 +43,6 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             _controller = new BasemapGalleryController();
             DefaultStyleKey = typeof(BasemapGallery);
             SizeChanged += BasemapGallerySizeChanged;
-            AvailableBasemaps = new ObservableCollection<BasemapGalleryItem>();
             _controller.PropertyChanged += HandleControllerPropertyChanged;
             Loaded += BasemapGallery_Loaded;
         }
@@ -52,7 +51,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         {
             // Unsubscribe from the Loaded event to ensure this only runs once.
             Loaded -= BasemapGallery_Loaded;
-            
+
             if (AvailableBasemaps is null)
             {
                 await _controller.LoadFromDefaultPortal();
