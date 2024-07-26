@@ -22,6 +22,8 @@
                              Width="300"
                              Visibility="Collapsed"
                              HorizontalAlignment="Stretch" 
-                             VerticalAlignment="Stretch" />
+                             VerticalAlignment="Stretch"
+                             PopupAttachmentClicked="popupViewer_PopupAttachmentClicked"
+                             HyperlinkClicked="popupViewer_LinkClicked" />
     </Grid>
 </Page>

@@ -14,15 +14,23 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
+
 #if WPF
 using Esri.ArcGISRuntime.UI;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xaml;
+#elif WINDOWS_XAML
+using Esri.ArcGISRuntime.UI;
+using Windows.Foundation;
+#if WINUI
+using Microsoft.UI.Xaml.Media.Imaging;
+#elif WINDOWS_UWP
+using Windows.UI.Xaml.Media.Imaging;
+#endif
 #endif
 
 #if MAUI
@@ -102,11 +110,15 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     img.GestureRecognizers.Add(tapGesture);
 #else
                     img.Tag = linkUrl;
+#if WPF
                     if(img.Cursor != Cursors.Hand)
                     {
                         img.Cursor = Cursors.Hand;
                         img.MouseLeftButtonDown += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
                     }
+#elif WINDOWS_XAML
+                        img.Tapped += (s, e) => _ = Launcher.LaunchUriAsync((s as Image)?.Tag as Uri);
+#endif
 #endif
                 }
                 Content = img;
@@ -139,8 +151,12 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     {
 #if MAUI
                         Content = await GenerateChartAsync(desiredWidth, desiredWidth, DeviceDisplay.Current.MainDisplayInfo.Density * 96);
-#else
+#elif WPF
                         Content = await GenerateChartAsync(desiredWidth, desiredWidth, VisualTreeHelper.GetDpi(this).PixelsPerInchX);
+#elif WINUI
+                        Content = await GenerateChartAsync(desiredWidth, desiredWidth, (XamlRoot?.RasterizationScale ?? 1) * 96);
+#elif WINDOWS_UWP
+                        Content = await GenerateChartAsync(desiredWidth, desiredWidth, Windows.Graphics.Display.DisplayInformation.GetForCurrentView()?.LogicalDpi ?? 96);
 #endif
                     }
                     catch
@@ -164,6 +180,13 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                 {
                     case Microsoft.Maui.ApplicationModel.AppTheme.Dark: style = Mapping.ChartImageStyle.Dark; break;
                     case Microsoft.Maui.ApplicationModel.AppTheme.Light: style = Mapping.ChartImageStyle.Light; break;
+                    default: style = Mapping.ChartImageStyle.Neutral; break;
+                }
+#elif WINDOWS_XAML
+                switch (ActualTheme)
+                {
+                    case ElementTheme.Dark: style = Mapping.ChartImageStyle.Dark; break;
+                    case ElementTheme.Light: style = Mapping.ChartImageStyle.Light; break;
                     default: style = Mapping.ChartImageStyle.Neutral; break;
                 }
 #endif
@@ -218,11 +241,14 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                         var data = Convert.FromBase64String(base64data);
 #if MAUI
                         var newSource = new StreamImageSource { Stream = (token) => Task.FromResult<Stream>(new MemoryStream(data)) };
-#else
+#elif WPF
                         var newSource = new BitmapImage();
                         newSource.BeginInit();
                         newSource.StreamSource = new MemoryStream(data);
                         newSource.EndInit();
+#else
+                        var newSource = new BitmapImage();
+                        newSource.SetSource(new MemoryStream(data).AsRandomAccessStream());
 #endif
                         source = newSource;
                         return true;
@@ -244,4 +270,3 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         }
     }
 }
-#endif

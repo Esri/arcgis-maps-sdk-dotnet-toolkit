@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || WINDOWS_XAML
 using System.Diagnostics;
 using Esri.ArcGISRuntime.Mapping.Popups;
 
@@ -29,6 +29,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         /// <inheritdoc />
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
+            base.PrepareContainerForItemOverride(element, item);
             if (element is ContentPresenter presenter)
             {
                 if (item is TextPopupElement)
@@ -59,7 +60,6 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     Debug.Assert(false);
                 }
             }
-            base.PrepareContainerForItemOverride(element, item);
         }
 
         /// <summary>

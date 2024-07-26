@@ -14,11 +14,12 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF || MAUI
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 using System.ComponentModel;
+using Popup = Esri.ArcGISRuntime.Mapping.Popups.Popup;
+
 
 #if MAUI
 using Esri.ArcGISRuntime.Toolkit.Maui.Primitives;
@@ -83,7 +84,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         /// <inheritdoc/>
 #if WINDOWS_XAML || MAUI
         protected override void OnApplyTemplate()
-#else
+#elif WPF
         public override void OnApplyTemplate()
 #endif
         {
@@ -110,8 +111,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
 #if MAUI
             Dispatcher.Dispatch(async () =>
-#else
+#elif WPF
             _ = Dispatcher.InvokeAsync(async () =>
+#elif WINUI
+            DispatcherQueue.TryEnqueue(async () =>
+#elif WINDOWS_UWP
+            _ = Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
 #endif
             {
                 try
@@ -132,7 +137,11 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 #else
                         var ctrl = GetTemplateChild(ItemsViewName) as ItemsControl;
                         var binding = ctrl?.GetBindingExpression(ItemsControl.ItemsSourceProperty);
+#if WPF
                         binding?.UpdateTarget();
+#elif WINDOWS_XAML
+                        ctrl?.SetBinding(ItemsControl.ItemsSourceProperty, new Binding { Path = new PropertyPath("Popup.EvaluatedElements"), Source = this });
+#endif
 #endif
                     }
                 }
@@ -191,8 +200,10 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             InvalidatePopup();
 #if MAUI
             (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToAsync(0,0,false);
-#else
+#elif WPF
             (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ScrollToHome();
+#elif WINDOWS_XAML
+            (GetTemplateChild(PopupContentScrollViewerName) as ScrollViewer)?.ChangeView(null, 0, null, disableAnimation: true);
 #endif
         }
 
@@ -315,4 +326,3 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
         public Uri Uri { get; }
     }
 }
-#endif

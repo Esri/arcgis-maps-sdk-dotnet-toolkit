@@ -14,7 +14,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************/
 
-#if WPF
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.RealTime;
 using Esri.ArcGISRuntime.Toolkit.Internal;
@@ -61,10 +61,12 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
 
         private static T? GetParent<T>(DependencyObject? child) where T : DependencyObject
         {
+#if WPF
             if (child is FrameworkContentElement elm)
             {
                 child = GetVisualParent(elm);
             }
+#endif
             if (child is null)
                 return default;
             var parent = VisualTreeHelper.GetParent(child);
@@ -75,6 +77,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             return parent as T;
         }
 
+#if WPF
         private static Visual? GetVisualParent(FrameworkContentElement child)
         {
             var parent = child.Parent;
@@ -84,6 +87,7 @@ namespace Esri.ArcGISRuntime.Toolkit.UI.Controls
             }
             return parent as Visual;
         }
+#endif
     }
 }
 #endif

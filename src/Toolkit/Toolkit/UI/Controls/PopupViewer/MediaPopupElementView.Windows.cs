@@ -13,11 +13,12 @@
 //  *   See the License for the specific language governing permissions and
 //  *   limitations under the License.
 //  ******************************************************************************/
-#if WPF
-
+#if WPF || WINDOWS_XAML
 using Esri.ArcGISRuntime.Mapping.Popups;
 using System.Collections;
+#if WPF
 using System.Windows.Controls.Primitives;
+#endif
 
 namespace Esri.ArcGISRuntime.Toolkit.Primitives
 {
@@ -34,7 +35,11 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
         private int selectedIndex = 0;
 
         /// <inheritdoc />
+#if WPF
         public override void OnApplyTemplate()
+#else
+        protected override void OnApplyTemplate()
+#endif
         {
             if (_previousButton != null)
             {
