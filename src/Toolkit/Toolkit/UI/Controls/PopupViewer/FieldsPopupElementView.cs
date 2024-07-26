@@ -19,6 +19,12 @@ using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Mapping.Popups;
 using Esri.ArcGISRuntime.Toolkit.Internal;
 #if MAUI
+using Esri.ArcGISRuntime.Toolkit.Maui;
+#else
+using Esri.ArcGISRuntime.Toolkit.UI.Controls;
+#endif
+
+#if MAUI
 using TextBlock = Microsoft.Maui.Controls.Label;
 #else
 using System.Windows.Documents;
@@ -134,7 +140,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     gestureRecognizer.Tapped += (s, e) =>
                     {
                         if (uri is not null)
-                            _ = Launcher.LaunchUriAsync(uri);
+                            PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri);
                     };
                     t.GestureRecognizers.Add(gestureRecognizer);
                     t.FormattedText = new FormattedString();
@@ -144,7 +150,7 @@ namespace Esri.ArcGISRuntime.Toolkit.Primitives
                     hl.Click += (s, e) =>
                     {
                         if (uri is not null)
-                            _ = Launcher.LaunchUriAsync(uri);
+                            PopupViewer.GetPopupViewerParent(this)?.OnHyperlinkClicked(uri);
                     };
                     hl.Inlines.Add("View");
                     t.Inlines.Add(hl);
